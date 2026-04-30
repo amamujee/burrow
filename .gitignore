@@ -25,6 +25,7 @@
 *.pem
 *-screenshot.png
 *-image-check.png
+burrow-icon-check*.png
 rabbit-hole-*.png
 
 # debug

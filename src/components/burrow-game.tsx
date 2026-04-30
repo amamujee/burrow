@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { heatBands, heatProfiles, topicCatalog, type Difficulty, type HeatBand, type TopicId } from "@/lib/game-data";
 import {
@@ -199,7 +200,8 @@ const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficu
 const difficultyLabel = (difficulty: Difficulty) => difficultyOptions.find((item) => item.id === difficulty)?.label ?? "Easy";
 
 export function BurrowGame() {
-  const [profilesState, setProfilesState] = useState<ProfilesState>(loadProfiles);
+  const [profilesState, setProfilesState] = useState<ProfilesState>(() => defaultProfiles());
+  const [profilesReady, setProfilesReady] = useState(false);
   const activeProfile = profilesState.profiles.find((profile) => profile.id === profilesState.activeProfileId) ?? profilesState.profiles[0];
   const activeInterests = normalizeInterests(activeProfile.interests);
   const progress = activeProfile.progress;
@@ -232,8 +234,25 @@ export function BurrowGame() {
   const currentTopicScope = adaptiveTopicScopeFor(topic, activeInterests, progress);
 
   useEffect(() => {
+    const loadSavedProfiles = window.setTimeout(() => {
+      const loadedProfiles = loadProfiles();
+      const loadedProfile = loadedProfiles.profiles.find((profile) => profile.id === loadedProfiles.activeProfileId) ?? loadedProfiles.profiles[0];
+      const loadedInterests = normalizeInterests(loadedProfile.interests);
+      const loadedScope = adaptiveTopicScopeFor("mixed", loadedInterests, loadedProfile.progress);
+      setProfilesState(loadedProfiles);
+      setQuestions(buildQuestionRun(loadedScope, "quiz", loadedProfile.progress.difficulty, 20260430, loadedProfile.progress.seenIds));
+      setSortRound(buildSortRound(loadedScope, loadedProfile.progress.difficulty, 20260461));
+      setFactRound(buildFactRound(loadedScope, loadedProfile.progress.difficulty, 20260477));
+      setProfilesReady(true);
+    }, 0);
+
+    return () => window.clearTimeout(loadSavedProfiles);
+  }, []);
+
+  useEffect(() => {
+    if (!profilesReady) return;
     window.localStorage.setItem(profilesKey, JSON.stringify(profilesState));
-  }, [profilesState]);
+  }, [profilesReady, profilesState]);
 
   const setProgress = (update: Progress | ((current: Progress) => Progress)) => {
     const activeProfileId = activeProfile.id;
@@ -505,12 +524,22 @@ export function BurrowGame() {
   return (
     <main className="min-h-dvh bg-[#0f2e35] text-[#1d2528] lg:h-dvh lg:overflow-hidden">
       <section className="flex min-h-dvh flex-col gap-1.5 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-1.5 md:p-2 lg:h-full lg:min-h-0">
-        <header className="shrink-0 rounded-lg border-2 border-[#082329] bg-[#fff4df] p-1.5 shadow-[3px_3px_0_#082329] md:p-2">
+        <header className="shrink-0 rounded-lg border-2 border-[#082329] bg-[#fff2d7] p-1.5 shadow-[3px_3px_0_#082329] md:p-2">
           <div className="grid gap-1.5 lg:grid-cols-[minmax(210px,.72fr)_minmax(300px,1fr)_minmax(300px,.76fr)] lg:items-center">
             <div className="flex items-center justify-between gap-3 lg:block">
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#b5412b]">Let your Kid go deep</p>
-                <h1 className="text-2xl font-black leading-none text-[#102f36] md:text-3xl">Burrow</h1>
+              <div className="flex items-center gap-2.5">
+                <Image
+                  src="/icons/burrow-icon-64.png"
+                  alt=""
+                  aria-hidden="true"
+                  width={64}
+                  height={64}
+                  className="h-12 w-12 shrink-0 rounded-2xl border-2 border-[#082329] bg-[#f5d39c] shadow-[2px_2px_0_#082329]"
+                />
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#81533b]">Let your Kid go deep</p>
+                  <h1 className="text-2xl font-black leading-none text-[#321e16] md:text-3xl">Burrow</h1>
+                </div>
               </div>
               <p className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-3 py-1 text-sm font-black lg:hidden">
                 {difficultyLabel(progress.difficulty)}

@@ -3,14 +3,58 @@
   "short_name": "Burrow",
   "description": "Let your Kid go deep with bite-size learning sessions.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#f7f1e6",
-  "theme_color": "#20383d",
+  "background_color": "#fff4df",
+  "theme_color": "#0f2e35",
   "icons": [
     {
       "src": "/favicon.ico",
-      "sizes": "48x48",
+      "sizes": "16x16 32x32 48x48",
       "type": "image/x-icon"
+    },
+    {
+      "src": "/icons/burrow-icon-16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/burrow-icon-32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/burrow-icon-64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/burrow-icon-120.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/burrow-icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/burrow-icon-167.png",
+      "sizes": "167x167",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/burrow-icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/burrow-ipad-icon-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
