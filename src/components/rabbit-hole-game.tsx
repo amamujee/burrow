@@ -481,6 +481,15 @@ function QuestionRun({
   onAnswer: (choice: string) => void;
   onNext: () => void;
 }) {
+  const isDifferenceQuestion = question.kind === "building-difference" || question.kind === "shark-difference";
+  const showNumberLine = Boolean(question.numberLine) && (answered || (Boolean(question.comparison) && !isDifferenceQuestion));
+  const showComparisonTable = Boolean(question.comparison) && (answered || !isDifferenceQuestion);
+  const stageHint = question.comparison
+    ? isDifferenceQuestion
+      ? "Use the numbers in the question. Subtract smaller from bigger."
+      : "Look at both cards. Bigger number wins."
+    : `Image: ${question.imageCredit}`;
+
   return (
     <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.04fr)_minmax(330px,.96fr)]">
       <article className="relative min-h-[30dvh] overflow-hidden rounded-lg border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] md:min-h-0">
@@ -490,7 +499,7 @@ function QuestionRun({
         </div>
         <div className="absolute bottom-2 left-2 right-2 grid gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
           <div className="rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">
-            {question.comparison ? "Look at both cards. Bigger number wins." : `Image: ${question.imageCredit}`}
+            {stageHint}
           </div>
           <div className="rounded-lg border-2 border-[#082329] bg-[#f3c647] px-3 py-1.5 text-center text-sm font-black text-[#102f36] shadow-[2px_2px_0_#082329]">
             {sessionCorrect}/{sessionAnswered} this run
@@ -511,9 +520,9 @@ function QuestionRun({
             {question.prompt}
           </h2>
 
-          {question.numberLine && (answered || question.comparison) && <NumberLine line={question.numberLine} />}
+          {question.numberLine && showNumberLine && <NumberLine line={question.numberLine} />}
           {question.heatMeter && answered && <PepperHeatMeter meter={question.heatMeter} />}
-          {question.comparison && <ComparisonTable cards={question.comparison} />}
+          {question.comparison && showComparisonTable && <ComparisonTable cards={question.comparison} />}
         </div>
 
         <div className="mt-3 grid shrink-0 gap-2 sm:grid-cols-2">
