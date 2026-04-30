@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { topicCatalog, topicOptions, type Difficulty, type TopicId } from "@/lib/game-data";
+import { topicCatalog, type Difficulty, type TopicId } from "@/lib/game-data";
 import {
   buildFactRound,
   buildSortRound,
@@ -12,6 +12,7 @@ import {
   type KnowledgeCard,
   type KnowledgeTopic,
   type SortRound,
+  type TopicScope,
 } from "@/lib/game-modes";
 import { buildSession, type ComparisonCard, type Question } from "@/lib/questions";
 
@@ -27,7 +28,20 @@ type Progress = {
   seenIds: string[];
   unlockedCards: string[];
   topicWins: Record<KnowledgeTopic, number>;
+  topicStats: Record<KnowledgeTopic, { correct: number; answered: number }>;
   modeWins: Record<Exclude<GameMode, "collection">, number>;
+};
+
+type LearnerProfile = {
+  id: string;
+  name: string;
+  interests: KnowledgeTopic[];
+  progress: Progress;
+};
+
+type ProfilesState = {
+  activeProfileId: string;
+  profiles: LearnerProfile[];
 };
 
 type ResultState = {
@@ -48,20 +62,116 @@ const initialProgress: Progress = {
   seenIds: [],
   unlockedCards: [],
   topicWins: { peppers: 0, buildings: 0, sharks: 0 },
+  topicStats: {
+    peppers: { correct: 0, answered: 0 },
+    buildings: { correct: 0, answered: 0 },
+    sharks: { correct: 0, answered: 0 },
+  },
   modeWins: { quiz: 0, versus: 0, sort: 0, fact: 0 },
 };
 
-const progressKey = "rabbit-hole-progress-v1";
+const profilesKey = "rabbit-hole-profiles-v1";
+const legacyProgressKey = "rabbit-hole-progress-v1";
+const allKnowledgeTopics: KnowledgeTopic[] = ["peppers", "buildings", "sharks"];
 const levelFromXp = (xp: number) => Math.max(1, Math.floor(xp / 120) + 1);
 const praise = ["Nice reading!", "Big brain move!", "You measured it!", "Hot answer!", "Sky-high thinking!", "Sharp thinking!"];
 const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
+
+const freshProgress = (): Progress => ({
+  ...initialProgress,
+  topicWins: { ...initialProgress.topicWins },
+  modeWins: { ...initialProgress.modeWins },
+  seenIds: [],
+  unlockedCards: [],
+});
+
+const normalizeProgress = (progress?: Partial<Progress>): Progress => ({
+  ...freshProgress(),
+  ...progress,
+  topicWins: { ...initialProgress.topicWins, ...progress?.topicWins },
+  topicStats: {
+    peppers: { ...initialProgress.topicStats.peppers, ...progress?.topicStats?.peppers },
+    buildings: { ...initialProgress.topicStats.buildings, ...progress?.topicStats?.buildings },
+    sharks: { ...initialProgress.topicStats.sharks, ...progress?.topicStats?.sharks },
+  },
+  modeWins: { ...initialProgress.modeWins, ...progress?.modeWins },
+  seenIds: progress?.seenIds ?? [],
+  unlockedCards: progress?.unlockedCards ?? [],
+});
+
+const normalizeInterests = (interests?: KnowledgeTopic[]) => {
+  const cleaned = (interests ?? allKnowledgeTopics).filter((topic): topic is KnowledgeTopic => allKnowledgeTopics.includes(topic as KnowledgeTopic));
+  return cleaned.length ? Array.from(new Set(cleaned)) : [...allKnowledgeTopics];
+};
+
+const defaultProfiles = (legacyProgress?: Partial<Progress>): ProfilesState => ({
+  activeProfileId: "kal",
+  profiles: [
+    { id: "kal", name: "Kal", interests: [...allKnowledgeTopics], progress: normalizeProgress(legacyProgress) },
+    { id: "remy", name: "Remy", interests: [...allKnowledgeTopics], progress: freshProgress() },
+  ],
+});
+
+const loadProfiles = (): ProfilesState => {
+  if (typeof window === "undefined") return defaultProfiles();
+
+  const savedProfiles = window.localStorage.getItem(profilesKey);
+  if (savedProfiles) {
+    try {
+      const parsed = JSON.parse(savedProfiles) as Partial<ProfilesState>;
+      const profiles = (parsed.profiles ?? []).map((profile, index) => ({
+        id: profile.id ?? `profile-${index}`,
+        name: profile.name ?? `Player ${index + 1}`,
+        interests: normalizeInterests(profile.interests),
+        progress: normalizeProgress(profile.progress),
+      }));
+      if (profiles.length) {
+        return {
+          activeProfileId: profiles.some((profile) => profile.id === parsed.activeProfileId) ? parsed.activeProfileId ?? profiles[0].id : profiles[0].id,
+          profiles,
+        };
+      }
+    } catch {
+      // Fall through to legacy progress migration.
+    }
+  }
+
+  const savedProgress = window.localStorage.getItem(legacyProgressKey);
+  if (!savedProgress) return defaultProfiles();
+  try {
+    return defaultProfiles(JSON.parse(savedProgress) as Partial<Progress>);
+  } catch {
+    return defaultProfiles();
+  }
+};
 
 const addUnique = (items: string[], additions: string[]) => {
   const next = [...additions.filter(Boolean), ...items];
   return Array.from(new Set(next)).slice(0, 120);
 };
 
-const buildQuestionRun = (topic: TopicId, mode: GameMode, difficulty: Difficulty, sessionSeed: number, seenIds: string[]) => {
+const isKnowledgeTopic = (topic: TopicId): topic is KnowledgeTopic => topic !== "mixed";
+
+const playableTopic = (topic: TopicId, interests: KnowledgeTopic[]): TopicId => (isKnowledgeTopic(topic) && !interests.includes(topic) ? "mixed" : topic);
+
+const topicScopeFor = (topic: TopicId, interests: KnowledgeTopic[]): TopicScope => {
+  const activeInterests = normalizeInterests(interests);
+  return topic === "mixed" ? activeInterests : topic;
+};
+
+const adaptiveTopicScopeFor = (topic: TopicId, interests: KnowledgeTopic[], progress: Progress): TopicScope => {
+  const baseScope = topicScopeFor(topic, interests);
+  if (topic !== "mixed" || typeof baseScope === "string") return baseScope;
+
+  return baseScope.flatMap((item) => {
+    const stats = progress.topicStats[item];
+    const accuracy = stats.answered ? stats.correct / stats.answered : 0;
+    const weight = stats.answered < 3 ? 2 : accuracy < 0.62 ? 3 : accuracy < 0.78 ? 2 : 1;
+    return Array.from({ length: weight }, () => item);
+  });
+};
+
+const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficulty, sessionSeed: number, seenIds: string[]) => {
   if (mode !== "versus") {
     return buildSession(topic, difficulty, sessionSeed, seenIds);
   }
@@ -81,34 +191,20 @@ const buildQuestionRun = (topic: TopicId, mode: GameMode, difficulty: Difficulty
 };
 
 export function RabbitHoleGame() {
-  const [progress, setProgress] = useState<Progress>(() => {
-    if (typeof window === "undefined") return initialProgress;
-    const saved = window.localStorage.getItem(progressKey);
-    if (!saved) return initialProgress;
-    try {
-      const parsed = JSON.parse(saved) as Partial<Progress>;
-      return {
-        ...initialProgress,
-        ...parsed,
-        topicWins: { ...initialProgress.topicWins, ...parsed.topicWins },
-        modeWins: { ...initialProgress.modeWins, ...parsed.modeWins },
-        unlockedCards: parsed.unlockedCards ?? [],
-      };
-    } catch {
-      return initialProgress;
-    }
-  });
-
+  const [profilesState, setProfilesState] = useState<ProfilesState>(loadProfiles);
+  const activeProfile = profilesState.profiles.find((profile) => profile.id === profilesState.activeProfileId) ?? profilesState.profiles[0];
+  const activeInterests = normalizeInterests(activeProfile.interests);
+  const progress = activeProfile.progress;
   const [topic, setTopic] = useState<TopicId>("mixed");
   const [mode, setMode] = useState<GameMode>("quiz");
-  const [questions, setQuestions] = useState(() => buildQuestionRun("mixed", "quiz", progress.difficulty, 20260430, progress.seenIds));
+  const [questions, setQuestions] = useState(() => buildQuestionRun(adaptiveTopicScopeFor("mixed", activeInterests, progress), "quiz", progress.difficulty, 20260430, progress.seenIds));
   const [seedCounter, setSeedCounter] = useState(20260430);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
-  const [sortRound, setSortRound] = useState<SortRound>(() => buildSortRound("mixed", progress.difficulty, 20260430));
+  const [sortRound, setSortRound] = useState<SortRound>(() => buildSortRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
   const [sortPicked, setSortPicked] = useState<string[]>([]);
   const [sortChecked, setSortChecked] = useState(false);
-  const [factRound, setFactRound] = useState<FactRound>(() => buildFactRound("mixed", progress.difficulty, 20260430));
+  const [factRound, setFactRound] = useState<FactRound>(() => buildFactRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
   const [factSelected, setFactSelected] = useState<"Fact" | "Fake" | null>(null);
   const [sessionCorrect, setSessionCorrect] = useState(0);
   const [miniRunAnswered, setMiniRunAnswered] = useState(0);
@@ -126,10 +222,23 @@ export function RabbitHoleGame() {
   const levelProgress = Math.min(100, Math.round(((progress.xp % 120) / 120) * 100));
   const sessionAnswered = questionIndex + (answered ? 1 : 0);
   const unlockedCount = allCards.filter((card) => progress.unlockedCards.includes(card.title)).length;
+  const currentTopicScope = adaptiveTopicScopeFor(topic, activeInterests, progress);
 
   useEffect(() => {
-    window.localStorage.setItem(progressKey, JSON.stringify(progress));
-  }, [progress]);
+    window.localStorage.setItem(profilesKey, JSON.stringify(profilesState));
+  }, [profilesState]);
+
+  const setProgress = (update: Progress | ((current: Progress) => Progress)) => {
+    const activeProfileId = activeProfile.id;
+    setProfilesState((current) => ({
+      ...current,
+      profiles: current.profiles.map((profile) => {
+        if (profile.id !== activeProfileId) return profile;
+        const nextProgress = typeof update === "function" ? update(profile.progress) : update;
+        return { ...profile, progress: normalizeProgress(nextProgress) };
+      }),
+    }));
+  };
 
   const reward = ({
     correct,
@@ -166,6 +275,15 @@ export function RabbitHoleGame() {
         buildings: current.topicWins.buildings + (correct && topicName === "buildings" ? 1 : 0),
         sharks: current.topicWins.sharks + (correct && topicName === "sharks" ? 1 : 0),
       },
+      topicStats: topicName
+        ? {
+            ...current.topicStats,
+            [topicName]: {
+              correct: current.topicStats[topicName].correct + (correct ? 1 : 0),
+              answered: current.topicStats[topicName].answered + 1,
+            },
+          }
+        : current.topicStats,
       modeWins: modeName
         ? {
             ...current.modeWins,
@@ -196,22 +314,70 @@ export function RabbitHoleGame() {
     return seed;
   };
 
-  const startTopic = (nextTopic: TopicId) => {
-    const seed = freshSeed(nextTopic.length);
-    setTopic(nextTopic);
-    resetRunState();
-    setQuestions(buildQuestionRun(nextTopic, mode, progress.difficulty, seed, progress.seenIds));
-    setSortRound(buildSortRound(nextTopic, progress.difficulty, seed + 31));
-    setFactRound(buildFactRound(nextTopic, progress.difficulty, seed + 47));
+  const restartPlay = (nextTopic: TopicId, nextMode: GameMode, nextProfile: LearnerProfile, seed: number) => {
+    const nextInterests = normalizeInterests(nextProfile.interests);
+    const safeTopic = playableTopic(nextTopic, nextInterests);
+    const scope = adaptiveTopicScopeFor(safeTopic, nextInterests, nextProfile.progress);
+    setTopic(safeTopic);
+    resetRunState(nextMode);
+    setQuestions(buildQuestionRun(scope, nextMode, nextProfile.progress.difficulty, seed, nextProfile.progress.seenIds));
+    setSortRound(buildSortRound(scope, nextProfile.progress.difficulty, seed + 31));
+    setFactRound(buildFactRound(scope, nextProfile.progress.difficulty, seed + 47));
   };
 
   const startMode = (nextMode: GameMode) => {
     const seed = freshSeed(nextMode.length);
     setMode(nextMode);
     resetRunState(nextMode);
-    setQuestions(buildQuestionRun(topic, nextMode, progress.difficulty, seed, progress.seenIds));
-    setSortRound(buildSortRound(topic, progress.difficulty, seed + 59));
-    setFactRound(buildFactRound(topic, progress.difficulty, seed + 71));
+    setQuestions(buildQuestionRun(currentTopicScope, nextMode, progress.difficulty, seed, progress.seenIds));
+    setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 59));
+    setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 71));
+  };
+
+  const switchProfile = (profileId: string) => {
+    const nextProfile = profilesState.profiles.find((profile) => profile.id === profileId);
+    if (!nextProfile || nextProfile.id === activeProfile.id) return;
+    const seed = freshSeed(profileId.length + 17);
+    setProfilesState((current) => ({ ...current, activeProfileId: profileId }));
+    restartPlay(topic, mode, nextProfile, seed);
+    setCelebration(`${nextProfile.name}'s turn.`);
+  };
+
+  const createProfile = () => {
+    const name = window.prompt("Profile name");
+    const cleanName = name?.trim();
+    if (!cleanName) return;
+    const newProfile: LearnerProfile = {
+      id: `profile-${Date.now()}`,
+      name: cleanName.slice(0, 18),
+      interests: [...allKnowledgeTopics],
+      progress: freshProgress(),
+    };
+    const seed = freshSeed(cleanName.length + 29);
+    setProfilesState((current) => ({
+      activeProfileId: newProfile.id,
+      profiles: [...current.profiles, newProfile],
+    }));
+    restartPlay("mixed", mode, newProfile, seed);
+    setCelebration(`${newProfile.name} is ready.`);
+  };
+
+  const toggleInterest = (interest: KnowledgeTopic) => {
+    const nextInterests = activeInterests.includes(interest)
+      ? activeInterests.length === 1
+        ? activeInterests
+        : activeInterests.filter((item) => item !== interest)
+      : [...activeInterests, interest];
+    const nextProfile = { ...activeProfile, interests: nextInterests };
+    const nextTopic = playableTopic(topic, nextInterests);
+    const seed = freshSeed(interest.length + nextInterests.length * 41);
+
+    setProfilesState((current) => ({
+      ...current,
+      profiles: current.profiles.map((profile) => (profile.id === activeProfile.id ? nextProfile : profile)),
+    }));
+    restartPlay(nextTopic, mode, nextProfile, seed);
+    setCelebration(`${activeProfile.name}'s mix updated.`);
   };
 
   const answer = (choice: string) => {
@@ -241,7 +407,7 @@ export function RabbitHoleGame() {
       setSessionCorrect(0);
       setSelected(null);
       setLastResult(null);
-      setQuestions(buildQuestionRun(topic, mode, progress.difficulty, seed, progress.seenIds));
+      setQuestions(buildQuestionRun(currentTopicScope, mode, progress.difficulty, seed, progress.seenIds));
       setCelebration("New mini-session. Fresh challenges.");
       return;
     }
@@ -273,7 +439,7 @@ export function RabbitHoleGame() {
 
   const nextSortRound = () => {
     const seed = freshSeed(miniRunAnswered * 13);
-    setSortRound(buildSortRound(topic, progress.difficulty, seed));
+    setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed));
     setSortPicked([]);
     setSortChecked(false);
     setLastResult(null);
@@ -301,7 +467,7 @@ export function RabbitHoleGame() {
 
   const nextFactRound = () => {
     const seed = freshSeed(miniRunAnswered * 19);
-    setFactRound(buildFactRound(topic, progress.difficulty, seed));
+    setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed));
     setFactSelected(null);
     setLastResult(null);
     setCelebration("New fact card.");
@@ -309,10 +475,11 @@ export function RabbitHoleGame() {
 
   const resetProgress = () => {
     const seed = freshSeed(211);
-    setProgress(initialProgress);
-    setQuestions(buildQuestionRun(topic, mode, initialProgress.difficulty, seed, initialProgress.seenIds));
-    setSortRound(buildSortRound(topic, initialProgress.difficulty, seed + 29));
-    setFactRound(buildFactRound(topic, initialProgress.difficulty, seed + 37));
+    const reset = freshProgress();
+    setProgress(reset);
+    setQuestions(buildQuestionRun(currentTopicScope, mode, reset.difficulty, seed, reset.seenIds));
+    setSortRound(buildSortRound(currentTopicScope, reset.difficulty, seed + 29));
+    setFactRound(buildFactRound(currentTopicScope, reset.difficulty, seed + 37));
     resetRunState(mode);
     setCelebration("Progress reset. Fresh start.");
   };
@@ -321,32 +488,70 @@ export function RabbitHoleGame() {
     <main className="min-h-dvh bg-[#0f2e35] text-[#1d2528] lg:h-dvh lg:overflow-hidden">
       <section className="flex min-h-dvh flex-col gap-2 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-2 md:p-3 lg:h-full lg:min-h-0">
         <header className="shrink-0 rounded-lg border-2 border-[#082329] bg-[#fff4df] p-2 shadow-[4px_4px_0_#082329] md:p-3">
-          <div className="grid gap-2 lg:grid-cols-[145px_minmax(410px,1fr)_minmax(330px,.7fr)] lg:items-center">
+          <div className="grid gap-2 lg:grid-cols-[minmax(210px,.72fr)_minmax(300px,1fr)_minmax(300px,.76fr)] lg:items-center">
             <div className="flex items-center justify-between gap-3 lg:block">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.24em] text-[#b5412b]">Rabbit Hole</p>
-                <h1 className="text-2xl font-black leading-none text-[#102f36] md:text-3xl">Game Lab</h1>
+                <h1 className="text-2xl font-black leading-none text-[#102f36] md:text-3xl">{activeProfile.name}&apos;s Lab</h1>
               </div>
               <p className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-3 py-1 text-sm font-black lg:hidden">
                 Level {progress.level}
               </p>
+              <div className="mt-2 hidden flex-wrap gap-1.5 lg:flex">
+                {profilesState.profiles.map((profile) => (
+                  <button
+                    key={profile.id}
+                    onClick={() => switchProfile(profile.id)}
+                    className={`rounded-lg border-2 px-2.5 py-1 text-xs font-black transition active:translate-y-0.5 ${
+                      profile.id === activeProfile.id ? "border-[#082329] bg-[#f3c647] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329]"
+                    }`}
+                  >
+                    {profile.name}
+                  </button>
+                ))}
+                <button onClick={createProfile} className="rounded-lg border-2 border-[#082329] bg-white px-2.5 py-1 text-xs font-black hover:bg-[#eaf3f0]">
+                  + Profile
+                </button>
+              </div>
             </div>
 
-            <div className="grid grid-cols-4 gap-1.5">
-              {topicOptions.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => startTopic(item.id)}
-                  className={`min-h-11 rounded-lg border-2 px-2 py-1.5 text-center transition active:translate-y-0.5 ${
-                    topic === item.id
-                      ? "border-[#082329] bg-[#f3c647] shadow-[2px_2px_0_#082329]"
-                      : "border-[#cfbfae] bg-white hover:border-[#082329]"
-                  }`}
-                >
-                  <span className="block text-[8px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{item.eyebrow}</span>
-                  <span className="block text-[13px] font-black leading-tight md:text-sm">{item.label}</span>
+            <div>
+              <div className="flex flex-wrap gap-1.5 lg:hidden">
+                {profilesState.profiles.map((profile) => (
+                  <button
+                    key={profile.id}
+                    onClick={() => switchProfile(profile.id)}
+                    className={`rounded-lg border-2 px-2.5 py-1 text-xs font-black transition active:translate-y-0.5 ${
+                      profile.id === activeProfile.id ? "border-[#082329] bg-[#f3c647] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329]"
+                    }`}
+                  >
+                    {profile.name}
+                  </button>
+                ))}
+                <button onClick={createProfile} className="rounded-lg border-2 border-[#082329] bg-white px-2.5 py-1 text-xs font-black hover:bg-[#eaf3f0]">
+                  + Profile
                 </button>
-              ))}
+              </div>
+              <div className="mt-2 grid grid-cols-3 gap-1.5 lg:mt-0">
+                {allKnowledgeTopics.map((item) => {
+                  const details = topicCatalog[item];
+                  const enabled = activeInterests.includes(item);
+                  return (
+                    <button
+                      key={item}
+                      onClick={() => toggleInterest(item)}
+                      className={`min-h-11 rounded-lg border-2 px-2 py-1.5 text-center transition active:translate-y-0.5 ${
+                        enabled
+                          ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]"
+                          : "border-[#cfbfae] bg-white opacity-70 hover:border-[#082329]"
+                      }`}
+                    >
+                      <span className="block text-[8px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{enabled ? "in mix" : "off"}</span>
+                      <span className="block text-[13px] font-black leading-tight md:text-sm">{details.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="grid grid-cols-5 gap-1.5">
@@ -358,7 +563,7 @@ export function RabbitHoleGame() {
             </div>
           </div>
 
-          <div className="mt-2 grid gap-2 lg:grid-cols-[1fr_minmax(420px,.95fr)_auto] lg:items-center">
+          <div className="mt-2 grid gap-2 lg:grid-cols-[minmax(180px,.55fr)_minmax(390px,1fr)_auto] lg:items-center">
             <div>
               <div className="mb-1 flex items-center justify-between gap-3 text-[10px] font-black uppercase tracking-[0.14em] text-[#6f5a4b]">
                 <span>{Math.max(0, nextLevelXp - progress.xp)} XP to next level</span>
@@ -387,7 +592,7 @@ export function RabbitHoleGame() {
             </div>
 
             <button onClick={resetProgress} className="rounded-lg border-2 border-[#082329] bg-white px-3 py-2 text-sm font-black hover:bg-[#ffd7ce]">
-              Reset
+              Reset Profile
             </button>
           </div>
         </header>

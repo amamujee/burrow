@@ -1,4 +1,5 @@
 export type TopicId = "peppers" | "buildings" | "sharks" | "mixed";
+export type KnowledgeTopic = Exclude<TopicId, "mixed">;
 export type Difficulty = 1 | 2 | 3;
 export type HeatBand = "not spicy" | "mild" | "hot" | "very hot" | "insane";
 

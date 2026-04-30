@@ -7,10 +7,13 @@ import {
   type Building,
   type Difficulty,
   type HeatBand,
+  type KnowledgeTopic,
   type Pepper,
   type Shark,
   type TopicId,
 } from "./game-data";
+
+export type TopicScope = TopicId | readonly KnowledgeTopic[];
 
 export type QuestionKind =
   | "pepper-heat"
@@ -79,6 +82,7 @@ const maxHeight = 3281;
 const maxSharkLength = 40;
 const maxSharkSpeed = 45;
 const maxSharkPower = 5;
+const allTopics: KnowledgeTopic[] = ["peppers", "buildings", "sharks"];
 
 const choiceCountForDifficulty = (difficulty: Difficulty) => (difficulty === 1 ? 3 : 4);
 
@@ -89,6 +93,11 @@ const shuffle = <T,>(items: T[], seed: number) => {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
+};
+
+const topicsForScope = (topic: TopicScope): KnowledgeTopic[] => {
+  if (typeof topic !== "string") return topic.length ? [...topic] : allTopics;
+  return topic === "mixed" ? allTopics : [topic];
 };
 
 const seedRandom = (seed: number) => {
@@ -523,9 +532,9 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
   };
 };
 
-export const buildSession = (topic: TopicId, difficulty: Difficulty, sessionSeed: number, seenIds: string[]) => {
+export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionSeed: number, seenIds: string[]) => {
   const questions: Question[] = [];
-  const topicOrder = topic === "mixed" ? ["peppers", "buildings", "sharks"] as const : [topic] as const;
+  const topicOrder = topicsForScope(topic);
   let attempt = 0;
 
   while (questions.length < sessionLength && attempt < 160) {

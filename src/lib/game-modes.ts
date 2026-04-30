@@ -5,6 +5,7 @@ import {
   sharks,
   type Building,
   type Difficulty,
+  type KnowledgeTopic,
   type Pepper,
   type Shark,
   type TopicId,
@@ -25,7 +26,8 @@ export const modeOptions: {
   { id: "collection", label: "Collection", eyebrow: "unlocks", loop: "progress book" },
 ];
 
-export type KnowledgeTopic = "peppers" | "buildings" | "sharks";
+export type { KnowledgeTopic } from "./game-data";
+export type TopicScope = TopicId | readonly KnowledgeTopic[];
 
 export type KnowledgeCard = {
   id: string;
@@ -82,8 +84,15 @@ const shuffle = <T,>(items: T[], seed: number) => {
 
 const sample = <T,>(items: T[], seed: number) => items[Math.floor(seedRandom(seed) * items.length) % items.length];
 
-const topicOrder = (topic: TopicId, seed: number): KnowledgeTopic => {
-  const topics: KnowledgeTopic[] = topic === "mixed" ? ["peppers", "buildings", "sharks"] : [topic];
+const allTopics: KnowledgeTopic[] = ["peppers", "buildings", "sharks"];
+
+const topicsForScope = (topic: TopicScope): KnowledgeTopic[] => {
+  if (typeof topic !== "string") return topic.length ? [...topic] : allTopics;
+  return topic === "mixed" ? allTopics : [topic];
+};
+
+const topicOrder = (topic: TopicScope, seed: number): KnowledgeTopic => {
+  const topics = topicsForScope(topic);
   return topics[Math.floor(seedRandom(seed) * topics.length) % topics.length];
 };
 
@@ -138,7 +147,7 @@ export const collectionCards = (): KnowledgeCard[] => [
   ...sharks.map((shark) => sharkCard(shark)),
 ];
 
-export const buildSortRound = (topic: TopicId, difficulty: Difficulty, seed: number): SortRound => {
+export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: number): SortRound => {
   const currentTopic = topicOrder(topic, seed);
   const count = difficulty === 1 ? 3 : 4;
 
@@ -184,7 +193,7 @@ export const buildSortRound = (topic: TopicId, difficulty: Difficulty, seed: num
   };
 };
 
-export const buildFactRound = (topic: TopicId, difficulty: Difficulty, seed: number): FactRound => {
+export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: number): FactRound => {
   const currentTopic = topicOrder(topic, seed);
   const truthful = seedRandom(seed + 11) > 0.46;
 
