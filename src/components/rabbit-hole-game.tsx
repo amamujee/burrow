@@ -511,8 +511,8 @@ function QuestionRun({
             {question.prompt}
           </h2>
 
-          {question.numberLine && <NumberLine line={question.numberLine} />}
-          {question.heatMeter && <PepperHeatMeter meter={question.heatMeter} />}
+          {question.numberLine && (answered || question.comparison) && <NumberLine line={question.numberLine} />}
+          {question.heatMeter && answered && <PepperHeatMeter meter={question.heatMeter} />}
           {question.comparison && <ComparisonTable cards={question.comparison} />}
         </div>
 

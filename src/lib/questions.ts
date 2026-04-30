@@ -98,6 +98,54 @@ const formatShu = (value: number) => `${formatNumber(value)} SHU`;
 const range = (pepper: Pepper) => pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
 const feet = (value: number) => `${formatNumber(value)} ft`;
 const heatMeter = (heat: HeatBand) => ({ label: heat, icons: heatProfiles[heat].icons, line: heatProfiles[heat].kidLine });
+const roundTo = (value: number, step: number) => Math.max(step, Math.round(value / step) * step);
+
+const displayHeightChoice = (value: number, difficulty: Difficulty) => {
+  if (difficulty === 3) return feet(value);
+  return `about ${formatNumber(roundTo(value, difficulty === 1 ? 500 : 100))} ft`;
+};
+
+const buildingHeightChoices = (building: Building, difficulty: Difficulty, seed: number) => {
+  const correct = displayHeightChoice(building.heightFt, difficulty);
+  const correctValue = difficulty === 3 ? building.heightFt : roundTo(building.heightFt, difficulty === 1 ? 500 : 100);
+  const minGap = difficulty === 1 ? 500 : difficulty === 2 ? 250 : 160;
+  const generated = [
+    correctValue - minGap * 2,
+    correctValue - minGap,
+    correctValue + minGap,
+    correctValue + minGap * 2,
+    1000,
+    1500,
+    2000,
+    2500,
+    3000,
+  ];
+  const fromBuildings = buildings
+    .filter((item) => item.id !== building.id)
+    .map((item) => (difficulty === 3 ? item.heightFt : roundTo(item.heightFt, difficulty === 1 ? 500 : 100)));
+  const labels = [...fromBuildings, ...generated]
+    .filter((value) => value >= 300 && value <= maxHeight + 250)
+    .filter((value) => Math.abs(value - correctValue) >= minGap)
+    .map((value) => (difficulty === 3 ? feet(value) : `about ${formatNumber(value)} ft`))
+    .filter((label) => label !== correct);
+  const distractors = Array.from(new Set(shuffle(labels, seed + 1))).slice(0, choiceCountForDifficulty(difficulty) - 1);
+  return shuffle([correct, ...distractors], seed + 2);
+};
+
+const buildingDifferenceChoices = (diff: number, difficulty: Difficulty, seed: number) => {
+  const gap = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
+  const values = [
+    diff,
+    diff + gap,
+    diff + gap * 2,
+    Math.max(gap, diff - gap),
+    Math.max(gap, diff - gap * 2),
+  ];
+  const labels = Array.from(new Set(values.map((value) => `${formatNumber(value)} ft`)));
+  const correct = `${formatNumber(diff)} ft`;
+  const distractors = shuffle(labels.filter((label) => label !== correct), seed + 1).slice(0, choiceCountForDifficulty(difficulty) - 1);
+  return shuffle([correct, ...distractors], seed + 2);
+};
 
 const pepperCard = (pepper: Pepper, label: "A" | "B"): ComparisonCard => ({
   label,
@@ -279,13 +327,7 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
     const shorter = building.heightFt > challenger.heightFt ? challenger : building;
     const diff = taller.heightFt - shorter.heightFt;
     const correct = `${formatNumber(diff)} ft`;
-    const options = shuffle([
-      `${formatNumber(diff)} ft`,
-      `${formatNumber(Math.abs(diff - 50))} ft`,
-      `${formatNumber(diff + 100)} ft`,
-      `${formatNumber(Math.max(10, diff - 100))} ft`,
-    ], seed + 29).slice(0, choiceCountForDifficulty(difficulty));
-    const choices = shuffle(options.includes(correct) ? options : [correct, ...options.slice(1)], seed + 34);
+    const choices = buildingDifferenceChoices(diff, difficulty, seed + 29);
     const cards = shuffle([buildingCard(taller, "A"), buildingCard(shorter, "B")], seed + 30);
     return {
       id: `${seed}-building-difference-${taller.id}-${shorter.id}`,
@@ -326,19 +368,18 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
     };
   }
 
-  const correct = feet(building.heightFt);
-  const options = shuffle(buildings.filter((item) => item.id !== building.id).map((item) => feet(item.heightFt)), seed + 32).slice(0, choiceCountForDifficulty(difficulty) - 1);
+  const correct = displayHeightChoice(building.heightFt, difficulty);
   return {
     id: `${seed}-building-height-${building.id}`,
     topic: "buildings",
     kind: "building-height",
-    prompt: `How tall is ${building.name}?`,
+    prompt: difficulty === 3 ? `How tall is ${building.name}?` : `About how tall is ${building.name}?`,
     image: building.image,
     imageAlt: building.name,
     imageCredit: building.imageCredit,
-    choices: shuffle([correct, ...options], seed + 33),
+    choices: buildingHeightChoices(building, difficulty, seed + 32),
     answer: correct,
-    explanation: `${building.name} is ${correct} tall. It is in ${building.city}, ${building.country}.`,
+    explanation: `${building.name} is ${feet(building.heightFt)} tall. It is in ${building.city}, ${building.country}.`,
     numberLine: { label: "Height", value: building.heightFt, max: maxHeight, unit: "ft" },
   };
 };
