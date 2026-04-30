@@ -109,7 +109,7 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   statLabel: "Scoville",
   statValue: pepper.shuMax,
   statDisplay: `${formatNumber(pepper.shuMax)} SHU`,
-  subStat: `${heatProfiles[pepper.heat].label} · ${"🌶️".repeat(heatProfiles[pepper.heat].icons) || "0 heat"}`,
+  subStat: `${heatProfiles[pepper.heat].label} · ${heatProfiles[pepper.heat].emoji}`,
   fact: pepper.fact,
 });
 

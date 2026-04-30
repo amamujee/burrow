@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { topicCatalog, type Difficulty, type TopicId } from "@/lib/game-data";
+import { heatBands, heatProfiles, topicCatalog, type Difficulty, type HeatBand, type TopicId } from "@/lib/game-data";
 import {
   buildFactRound,
   buildSortRound,
@@ -734,7 +734,10 @@ function QuestionRun({
           {question.choices.map((choice) => {
             const chosen = selected === choice;
             const correctChoice = answered && choice === question.answer;
-            const media = question.choiceMedia?.[choice];
+            const heatChoice =
+              (question.kind === "pepper-heat" || question.kind === "pepper-reading") && heatBands.includes(choice as HeatBand)
+                ? (choice as HeatBand)
+                : null;
             return (
               <button
                 key={`${question.id}-${choice}`}
@@ -752,14 +755,7 @@ function QuestionRun({
                   {correctChoice && <span className="text-2xl leading-none">+</span>}
                   {chosen && !correctChoice && <span className="text-2xl leading-none">x</span>}
                 </span>
-                {media && (
-                  <div className="mt-2 grid grid-cols-[72px_1fr] items-center gap-2">
-                    <ChoiceThumb image={media.image} imageAlt={media.imageAlt} />
-                    <span className="text-xs font-black uppercase tracking-[0.12em] text-[#7a5d4b] md:text-sm">
-                      {media.caption}
-                    </span>
-                  </div>
-                )}
+                {heatChoice && <HeatChoiceEmoji heat={heatChoice} />}
               </button>
             );
           })}
@@ -1135,10 +1131,24 @@ function PepperHeatMeter({ meter }: { meter: NonNullable<Question["heatMeter"]> 
           <p className="text-lg font-black leading-none text-[#102f36]">{meter.label}</p>
         </div>
         <div className="text-2xl leading-none" aria-label={`${meter.icons} pepper heat`}>
-          {meter.icons === 0 ? "0" : "🌶️".repeat(meter.icons)}
+          {meter.emoji}
         </div>
       </div>
       <p className="mt-1 text-xs font-bold text-[#405257]">{meter.line}</p>
+    </div>
+  );
+}
+
+function HeatChoiceEmoji({ heat }: { heat: HeatBand }) {
+  const profile = heatProfiles[heat];
+  return (
+    <div className="mt-2 min-h-9 rounded-md border-2 border-[#cfbfae] bg-white/75 px-2.5 py-1.5">
+      <span className="block text-[10px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">
+        {profile.icons === 0 ? "no peppers" : `${profile.icons} pepper${profile.icons === 1 ? "" : "s"}`}
+      </span>
+      <span className="mt-1 block whitespace-nowrap text-xl leading-none md:text-2xl" aria-label={`${profile.icons} pepper heat`}>
+        {profile.emoji}
+      </span>
     </div>
   );
 }
@@ -1219,29 +1229,6 @@ function FeedbackPanel({
 
 function QuestionImage({ question }: { question: Pick<Question, "image" | "imageAlt" | "topic"> }) {
   return <MediaImage image={question.image} imageAlt={question.imageAlt} topic={question.topic} />;
-}
-
-function ChoiceThumb({ image, imageAlt }: { image: string; imageAlt: string }) {
-  const [failedImage, setFailedImage] = useState<string | null>(null);
-  const failed = failedImage === image;
-
-  if (failed) {
-    return (
-      <div className="flex h-14 w-[72px] items-center justify-center rounded-md border-2 border-[#082329] bg-[#f3c647] text-xl font-black">
-        ?
-      </div>
-    );
-  }
-
-  return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={image}
-      alt={imageAlt}
-      onError={() => setFailedImage(image)}
-      className="h-14 w-[72px] rounded-md border-2 border-[#082329] object-cover"
-    />
-  );
 }
 
 function MediaImage({ image, imageAlt, topic }: { image: string; imageAlt: string; topic: KnowledgeTopic }) {

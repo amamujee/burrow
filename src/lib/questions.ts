@@ -55,17 +55,13 @@ export type Question = {
   imageAlt: string;
   imageCredit: string;
   choices: string[];
-  choiceMedia?: Record<string, {
-    image: string;
-    imageAlt: string;
-    caption: string;
-  }>;
   answer: string;
   explanation: string;
   comparison?: ComparisonCard[];
   heatMeter?: {
     label: HeatBand;
     icons: number;
+    emoji: string;
     line: string;
   };
   numberLine?: {
@@ -111,32 +107,11 @@ const formatNumber = (value: number) => value.toLocaleString("en-US");
 const formatShu = (value: number) => `${formatNumber(value)} SHU`;
 const range = (pepper: Pepper) => pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
 const feet = (value: number) => `${formatNumber(value)} ft`;
-const heatMeter = (heat: HeatBand) => ({ label: heat, icons: heatProfiles[heat].icons, line: heatProfiles[heat].kidLine });
+const heatMeter = (heat: HeatBand) => ({ label: heat, icons: heatProfiles[heat].icons, emoji: heatProfiles[heat].emoji, line: heatProfiles[heat].kidLine });
 const choiceSet = <T,>(correct: T, options: T[], seed: number, count: number) => {
   const distractors = shuffle(options.filter((option) => option !== correct), seed).slice(0, count - 1);
   return shuffle([correct, ...distractors], seed + 1);
 };
-const heatExamples: Record<HeatBand, string> = {
-  "not spicy": "bell-pepper",
-  mild: "jalapeno",
-  hot: "cayenne",
-  "very hot": "habanero",
-  insane: "carolina-reaper",
-};
-const heatChoiceMedia = (choices: HeatBand[]) =>
-  Object.fromEntries(
-    choices.map((heat) => {
-      const pepper = peppers.find((item) => item.id === heatExamples[heat]) ?? peppers.find((item) => item.heat === heat) ?? peppers[0];
-      return [
-        heat,
-        {
-          image: pepper.image,
-          imageAlt: pepper.name,
-          caption: pepper.name,
-        },
-      ];
-    }),
-  );
 const roundTo = (value: number, step: number) => Math.max(step, Math.round(value / step) * step);
 
 const displayHeightChoice = (value: number, difficulty: Difficulty) => {
@@ -245,7 +220,6 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
       imageAlt: pepper.name,
       imageCredit: pepper.imageCredit,
       choices,
-      choiceMedia: heatChoiceMedia(choices),
       answer: pepper.heat,
       explanation: `${pepper.name} is ${pepper.heat}: ${heatProfiles[pepper.heat].kidLine} It can reach about ${range(pepper)} SHU.`,
       heatMeter: heatMeter(pepper.heat),
@@ -277,6 +251,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
     const words: Record<HeatBand, string> = {
       "not spicy": "Not spicy means no pepper burn.",
       mild: "Mild means a tiny spicy spark.",
+      warm: "Warm means two-pepper heat.",
       hot: "Hot means a real spicy kick.",
       "very hot": "Very hot means tiny bites only.",
       insane: "Insane means super-hot legend zone.",
@@ -291,7 +266,6 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
       imageAlt: pepper.name,
       imageCredit: pepper.imageCredit,
       choices,
-      choiceMedia: heatChoiceMedia(choices),
       answer: pepper.heat,
       explanation: `${pepper.name} belongs in the "${pepper.heat}" group.`,
       heatMeter: heatMeter(pepper.heat),

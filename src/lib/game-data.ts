@@ -1,7 +1,7 @@
 export type TopicId = "peppers" | "buildings" | "sharks" | "mixed";
 export type KnowledgeTopic = Exclude<TopicId, "mixed">;
 export type Difficulty = 1 | 2 | 3;
-export type HeatBand = "not spicy" | "mild" | "hot" | "very hot" | "insane";
+export type HeatBand = "not spicy" | "mild" | "warm" | "hot" | "very hot" | "insane";
 
 export type VisualFit = "cover" | "contain";
 
@@ -70,14 +70,15 @@ const contentImage = (topic: KnowledgeTopic, id: string, sourceFile: string) => 
   imageSourceUrl: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(sourceFile).replaceAll("%20", "_")}`,
 });
 
-export const heatBands: HeatBand[] = ["not spicy", "mild", "hot", "very hot", "insane"];
+export const heatBands: HeatBand[] = ["not spicy", "mild", "warm", "hot", "very hot", "insane"];
 
-export const heatProfiles: Record<HeatBand, { label: string; icons: number; kidLine: string }> = {
-  "not spicy": { label: "not spicy", icons: 0, kidLine: "No burn. Easy mode." },
-  mild: { label: "mild", icons: 1, kidLine: "A tiny spicy spark." },
-  hot: { label: "hot", icons: 2, kidLine: "A real spicy kick." },
-  "very hot": { label: "very hot", icons: 3, kidLine: "Tiny bites only." },
-  insane: { label: "insane", icons: 4, kidLine: "Super-hot legend zone." },
+export const heatProfiles: Record<HeatBand, { label: string; icons: number; emoji: string; kidLine: string }> = {
+  "not spicy": { label: "not spicy", icons: 0, emoji: "no spice", kidLine: "No burn. Easy mode." },
+  mild: { label: "mild", icons: 1, emoji: "🌶️", kidLine: "A tiny spicy spark." },
+  warm: { label: "warm", icons: 2, emoji: "🌶️🌶️", kidLine: "A friendly spicy kick." },
+  hot: { label: "hot", icons: 3, emoji: "🌶️🌶️🌶️", kidLine: "A real spicy kick." },
+  "very hot": { label: "very hot", icons: 4, emoji: "🌶️🌶️🌶️🌶️", kidLine: "Tiny bites only." },
+  insane: { label: "insane", icons: 5, emoji: "🌶️🌶️🌶️🌶️🌶️🔥", kidLine: "Super-hot legend zone." },
 };
 
 export const peppers: Pepper[] = [
@@ -139,7 +140,7 @@ export const peppers: Pepper[] = [
   {
     id: "jalapeno",
     name: "Jalapeno",
-    heat: "mild",
+    heat: "warm",
     shuMin: 2500,
     shuMax: 8000,
     color: "green",
@@ -150,7 +151,7 @@ export const peppers: Pepper[] = [
   {
     id: "fresno",
     name: "Fresno",
-    heat: "mild",
+    heat: "warm",
     shuMin: 2500,
     shuMax: 10000,
     color: "red",
@@ -161,7 +162,7 @@ export const peppers: Pepper[] = [
   {
     id: "serrano",
     name: "Serrano",
-    heat: "hot",
+    heat: "warm",
     shuMin: 10000,
     shuMax: 23000,
     color: "green",
