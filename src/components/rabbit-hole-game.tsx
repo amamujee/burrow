@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { buildings, peppers, sourceNotes, type Difficulty, type TopicId } from "@/lib/game-data";
-import { buildSession } from "@/lib/questions";
+import { useEffect, useState } from "react";
+import { topicCatalog, topicOptions, type Difficulty, type TopicId } from "@/lib/game-data";
+import { buildSession, type ComparisonCard, type Question } from "@/lib/questions";
 
 type Progress = {
   xp: number;
@@ -14,7 +14,7 @@ type Progress = {
   answered: number;
   difficulty: Difficulty;
   seenIds: string[];
-  topicWins: Record<"peppers" | "buildings", number>;
+  topicWins: Record<"peppers" | "buildings" | "sharks", number>;
 };
 
 const initialProgress: Progress = {
@@ -27,18 +27,14 @@ const initialProgress: Progress = {
   answered: 0,
   difficulty: 1,
   seenIds: [],
-  topicWins: { peppers: 0, buildings: 0 },
+  topicWins: { peppers: 0, buildings: 0, sharks: 0 },
 };
 
 const progressKey = "rabbit-hole-progress-v1";
-const topics: { id: TopicId; label: string; eyebrow: string }[] = [
-  { id: "mixed", label: "Mix it up", eyebrow: "Peppers + towers" },
-  { id: "peppers", label: "Spicy Peppers", eyebrow: `${peppers.length} peppers` },
-  { id: "buildings", label: "Tall Buildings", eyebrow: `${buildings.length} towers` },
-];
 
 const levelFromXp = (xp: number) => Math.max(1, Math.floor(xp / 120) + 1);
 const praise = ["Nice reading!", "Big brain move!", "You measured it!", "Hot answer!", "Sky-high thinking!"];
+const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
 
 export function RabbitHoleGame() {
   const [progress, setProgress] = useState<Progress>(() => {
@@ -46,32 +42,39 @@ export function RabbitHoleGame() {
     const saved = window.localStorage.getItem(progressKey);
     if (!saved) return initialProgress;
     try {
-      return { ...initialProgress, ...JSON.parse(saved) };
+      const parsed = JSON.parse(saved) as Partial<Progress>;
+      return {
+        ...initialProgress,
+        ...parsed,
+        topicWins: { ...initialProgress.topicWins, ...parsed.topicWins },
+      };
     } catch {
       return initialProgress;
     }
   });
   const [topic, setTopic] = useState<TopicId>("mixed");
-  const [sessionSeed, setSessionSeed] = useState(20260430);
+  const [questions, setQuestions] = useState(() => buildSession("mixed", progress.difficulty, 20260430, progress.seenIds));
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [sessionCorrect, setSessionCorrect] = useState(0);
   const [celebration, setCelebration] = useState("Ready for a 5-minute rabbit hole?");
+  const [lastResult, setLastResult] = useState<{
+    correct: boolean;
+    xpGain: number;
+    leveledUp: boolean;
+  } | null>(null);
 
   useEffect(() => {
     window.localStorage.setItem(progressKey, JSON.stringify(progress));
   }, [progress]);
 
-  const questions = useMemo(
-    () => buildSession(topic, progress.difficulty, sessionSeed, progress.seenIds),
-    [topic, progress.difficulty, progress.seenIds, sessionSeed],
-  );
   const question = questions[questionIndex];
   const answered = selected !== null;
   const isCorrect = selected === question.answer;
   const accuracy = progress.answered ? Math.round((progress.correct / progress.answered) * 100) : 0;
   const nextLevelXp = progress.level * 120;
   const levelProgress = Math.min(100, Math.round(((progress.xp % 120) / 120) * 100));
+  const sessionAnswered = questionIndex + (answered ? 1 : 0);
 
   const answer = (choice: string) => {
     if (answered) return;
@@ -80,14 +83,20 @@ export function RabbitHoleGame() {
     const nextXp = progress.xp + xpGain;
     const nextStreak = correct ? progress.streak + 1 : 0;
     const nextDifficulty = autoDifficulty(progress.difficulty, correct, nextStreak, progress.answered + 1, progress.correct + (correct ? 1 : 0));
+    const nextLevel = levelFromXp(nextXp);
 
     setSelected(choice);
     setSessionCorrect((value) => value + (correct ? 1 : 0));
     setCelebration(correct ? praise[(questionIndex + progress.streak) % praise.length] : "Good try. The clue below helps.");
+    setLastResult({
+      correct,
+      xpGain,
+      leveledUp: nextLevel > progress.level,
+    });
     setProgress((current) => ({
       ...current,
       xp: nextXp,
-      level: levelFromXp(nextXp),
+      level: nextLevel,
       streak: nextStreak,
       bestStreak: Math.max(current.bestStreak, nextStreak),
       correct: current.correct + (correct ? 1 : 0),
@@ -97,6 +106,7 @@ export function RabbitHoleGame() {
       topicWins: {
         peppers: current.topicWins.peppers + (correct && question.topic === "peppers" ? 1 : 0),
         buildings: current.topicWins.buildings + (correct && question.topic === "buildings" ? 1 : 0),
+        sharks: current.topicWins.sharks + (correct && question.topic === "sharks" ? 1 : 0),
       },
     }));
   };
@@ -107,12 +117,14 @@ export function RabbitHoleGame() {
       setQuestionIndex(0);
       setSessionCorrect(0);
       setSelected(null);
-      setSessionSeed(Date.now());
+      setLastResult(null);
+      setQuestions(buildSession(topic, progress.difficulty, Date.now(), progress.seenIds));
       setCelebration("New mini-session. Fresh questions.");
       return;
     }
     setQuestionIndex((value) => value + 1);
     setSelected(null);
+    setLastResult(null);
     setCelebration("Next bite.");
   };
 
@@ -120,230 +132,331 @@ export function RabbitHoleGame() {
     setProgress(initialProgress);
     setQuestionIndex(0);
     setSelected(null);
+    setLastResult(null);
     setSessionCorrect(0);
-    setSessionSeed(Date.now());
+    setQuestions(buildSession(topic, initialProgress.difficulty, Date.now(), initialProgress.seenIds));
     setCelebration("Progress reset. Fresh start.");
   };
 
   return (
-    <main className="min-h-screen bg-[#f7f1e6] text-[#1d2528]">
-      <section className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 py-4 sm:px-6 lg:px-8">
-        <header className="grid gap-3 py-3 lg:grid-cols-[1fr_auto] lg:items-end">
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.24em] text-[#b5412b]">Rabbit Hole</p>
-            <h1 className="max-w-3xl text-4xl font-black leading-none text-[#192f35] sm:text-6xl">
-              Tiny lessons for giant curiosity.
-            </h1>
-          </div>
-          <div className="grid grid-cols-4 gap-2 rounded-lg border-2 border-[#20383d] bg-white p-2 shadow-[6px_6px_0_#20383d]">
-            <Stat label="Level" value={progress.level.toString()} />
-            <Stat label="XP" value={progress.xp.toString()} />
-            <Stat label="Streak" value={progress.streak.toString()} />
-            <Stat label="Best" value={progress.bestStreak.toString()} />
-          </div>
-        </header>
-
-        <div className="grid flex-1 gap-4 lg:grid-cols-[300px_1fr]">
-          <aside className="space-y-4 rounded-lg border-2 border-[#20383d] bg-[#fffaf0] p-4 shadow-[6px_6px_0_#20383d]">
-            <div>
-              <p className="text-sm font-black uppercase tracking-[0.18em] text-[#3b6d62]">Pick a session</p>
-              <div className="mt-3 grid gap-2">
-                {topics.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      setTopic(item.id);
-                      setQuestionIndex(0);
-                      setSelected(null);
-                      setSessionSeed(Date.now() + item.id.length);
-                    }}
-                    className={`rounded-md border-2 px-3 py-3 text-left transition active:translate-y-0.5 ${
-                      topic === item.id
-                        ? "border-[#20383d] bg-[#f3c647] shadow-[3px_3px_0_#20383d]"
-                        : "border-[#b8aaa0] bg-white hover:border-[#20383d]"
-                    }`}
-                  >
-                    <span className="block text-xs font-black uppercase tracking-[0.16em] text-[#7a5d4b]">{item.eyebrow}</span>
-                    <span className="block text-lg font-black">{item.label}</span>
-                  </button>
-                ))}
+    <main className="min-h-dvh bg-[#0f2e35] text-[#1d2528] lg:h-dvh lg:overflow-hidden">
+      <section className="flex min-h-dvh flex-col gap-2 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-2 md:p-3 lg:h-full lg:min-h-0">
+        <header className="shrink-0 rounded-lg border-2 border-[#082329] bg-[#fff4df] p-2 shadow-[4px_4px_0_#082329] md:p-3">
+          <div className="grid gap-2 lg:grid-cols-[140px_minmax(360px,1fr)_minmax(310px,.75fr)] lg:items-center">
+            <div className="flex items-center justify-between gap-3 lg:block">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.24em] text-[#b5412b]">Rabbit Hole</p>
+                <h1 className="text-2xl font-black leading-none text-[#102f36] md:text-3xl">Game Lab</h1>
               </div>
-            </div>
-
-            <div className="rounded-md bg-[#20383d] p-3 text-white">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#ffd76d]">Adaptive mode</p>
-              <p className="mt-1 text-3xl font-black">Level {progress.difficulty}</p>
-              <p className="text-sm leading-5 text-[#d8e8e5]">
-                It adds harder reading, comparing, and rounding when answers come fast.
+              <p className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-3 py-1 text-sm font-black lg:hidden">
+                Level {progress.level}
               </p>
             </div>
 
+            <div className="grid grid-cols-4 gap-1.5">
+              {topicOptions.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setTopic(item.id);
+                    setQuestionIndex(0);
+                    setSessionCorrect(0);
+                    setSelected(null);
+                    setLastResult(null);
+                    setQuestions(buildSession(item.id, progress.difficulty, Date.now() + item.id.length, progress.seenIds));
+                    setCelebration("Fresh round.");
+                  }}
+                  className={`min-h-12 rounded-lg border-2 px-2 py-1.5 text-center transition active:translate-y-0.5 ${
+                    topic === item.id
+                      ? "border-[#082329] bg-[#f3c647] shadow-[2px_2px_0_#082329]"
+                      : "border-[#cfbfae] bg-white hover:border-[#082329]"
+                  }`}
+                >
+                  <span className="block text-[9px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{item.eyebrow}</span>
+                  <span className="block text-sm font-black leading-tight">{item.label}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-5 gap-1.5">
+              <HudStat label="Lvl" value={progress.level.toString()} />
+              <HudStat label="XP" value={progress.xp.toString()} />
+              <HudStat label="Streak" value={progress.streak.toString()} />
+              <HudStat label="Best" value={progress.bestStreak.toString()} />
+              <HudStat label="Hit" value={`${accuracy}%`} />
+            </div>
+          </div>
+
+          <div className="mt-2 grid gap-2 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
-              <div className="flex items-center justify-between text-sm font-bold">
-                <span>Next level</span>
-                <span>{nextLevelXp - progress.xp > 0 ? `${nextLevelXp - progress.xp} XP` : "Ready"}</span>
+              <div className="mb-1 flex items-center justify-between gap-3 text-[10px] font-black uppercase tracking-[0.14em] text-[#6f5a4b]">
+                <span>{Math.max(0, nextLevelXp - progress.xp)} XP to next level</span>
+                <span>Difficulty {progress.difficulty}</span>
               </div>
-              <div className="mt-2 h-4 overflow-hidden rounded-full border-2 border-[#20383d] bg-white">
+              <div className="h-3 overflow-hidden rounded-full border-2 border-[#082329] bg-white">
                 <div className="h-full bg-[#4fb286]" style={{ width: `${levelProgress}%` }} />
               </div>
             </div>
-
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <MiniStat label="Accuracy" value={`${accuracy}%`} />
-              <MiniStat label="Sessions" value={progress.sessions.toString()} />
-              <MiniStat label="Pepper wins" value={progress.topicWins.peppers.toString()} />
-              <MiniStat label="Tower wins" value={progress.topicWins.buildings.toString()} />
-            </div>
-
-            <button onClick={resetProgress} className="w-full rounded-md border-2 border-[#20383d] bg-white px-3 py-2 text-sm font-black hover:bg-[#f7d8d0]">
-              Reset progress
+            <button onClick={resetProgress} className="rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-sm font-black hover:bg-[#ffd7ce]">
+              Reset
             </button>
-          </aside>
+          </div>
+        </header>
 
-          <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
-            <article className="overflow-hidden rounded-lg border-2 border-[#20383d] bg-white shadow-[6px_6px_0_#20383d]">
-              <div className="grid gap-0 xl:grid-cols-[minmax(330px,0.95fr)_1fr]">
-                <div className="relative min-h-[340px] bg-[#d8e8e5]">
-                  <QuestionImage question={question} />
-                  <div className="absolute left-3 top-3 rounded-md bg-white/95 px-3 py-2 text-xs font-black uppercase tracking-[0.16em] text-[#20383d]">
-                    {question.topic === "peppers" ? "Pepper lab" : "Skyline lab"}
-                  </div>
-                  <div className="absolute bottom-2 left-2 right-2 rounded bg-black/65 px-2 py-1 text-[11px] font-semibold text-white">
-                    Image: {question.imageCredit}
-                  </div>
-                </div>
-
-                <div className="flex min-h-[520px] flex-col p-4 sm:p-6">
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="rounded-full bg-[#eaf3f0] px-3 py-1 text-sm font-black">
-                      Question {questionIndex + 1} of {questions.length}
-                    </p>
-                    <p className="rounded-full bg-[#fff0c2] px-3 py-1 text-sm font-black">
-                      Session {sessionCorrect}/{questionIndex + (answered ? 1 : 0)}
-                    </p>
-                  </div>
-
-                  <h2 className="mt-6 text-3xl font-black leading-tight text-[#192f35] sm:text-4xl">{question.prompt}</h2>
-
-                  {question.numberLine && (
-                    <div className="mt-5 rounded-md border-2 border-[#d6c8b8] bg-[#fffaf0] p-3">
-                      <div className="flex justify-between text-sm font-black">
-                        <span>{question.numberLine.label}</span>
-                        <span>{question.numberLine.value.toLocaleString("en-US")} {question.numberLine.unit}</span>
-                      </div>
-                      <div className="mt-2 h-3 overflow-hidden rounded-full bg-[#eadfce]">
-                        <div
-                          className="h-full bg-[#b5412b]"
-                          style={{ width: `${Math.max(2, Math.min(100, (question.numberLine.value / question.numberLine.max) * 100))}%` }}
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="mt-6 grid gap-3">
-                    {question.choices.map((choice) => {
-                      const chosen = selected === choice;
-                      const correctChoice = answered && choice === question.answer;
-                      return (
-                        <button
-                          key={choice}
-                          onClick={() => answer(choice)}
-                          className={`min-h-16 rounded-lg border-2 px-4 py-3 text-left text-xl font-black leading-snug transition active:translate-y-0.5 ${
-                            correctChoice
-                              ? "border-[#20383d] bg-[#78d99a] shadow-[4px_4px_0_#20383d]"
-                              : chosen
-                                ? "border-[#20383d] bg-[#ff9f8d] shadow-[4px_4px_0_#20383d]"
-                                : "border-[#b8aaa0] bg-white hover:border-[#20383d] hover:bg-[#f8f0df]"
-                          }`}
-                        >
-                          {choice}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <div className="mt-auto pt-5">
-                    {answered ? (
-                      <div className={`rounded-lg border-2 p-4 ${isCorrect ? "border-[#28764a] bg-[#e9ffe9]" : "border-[#b5412b] bg-[#fff0ea]"}`}>
-                        <p className="text-2xl font-black">{isCorrect ? celebration : "Not quite yet."}</p>
-                        <p className="mt-1 text-lg font-semibold leading-7">{question.explanation}</p>
-                        <button onClick={advance} className="mt-4 w-full rounded-md border-2 border-[#20383d] bg-[#20383d] px-4 py-3 text-xl font-black text-white hover:bg-[#31555c]">
-                          {questionIndex === questions.length - 1 ? "Start next mini-session" : "Next question"}
-                        </button>
-                      </div>
-                    ) : (
-                      <p className="rounded-lg bg-[#eaf3f0] p-3 text-lg font-black text-[#20383d]">{celebration}</p>
-                    )}
-                  </div>
-                </div>
+        <section className="grid min-h-0 flex-1 gap-2 lg:grid-cols-[minmax(0,1.08fr)_minmax(355px,.92fr)]">
+          <article className="relative min-h-[34dvh] overflow-hidden rounded-lg border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] lg:min-h-0">
+            {question.comparison ? <ComparisonStage cards={question.comparison} /> : <QuestionImage question={question} />}
+            <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
+              {topicCatalog[question.topic].roundLabel}
+            </div>
+            <div className="absolute bottom-2 left-2 right-2 grid gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
+              <div className="rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">
+                {question.comparison ? "Look at both cards. Bigger number wins." : `Image: ${question.imageCredit}`}
               </div>
-            </article>
+              <div className="rounded-lg border-2 border-[#082329] bg-[#f3c647] px-3 py-1.5 text-center text-sm font-black text-[#102f36] shadow-[2px_2px_0_#082329]">
+                {sessionCorrect}/{sessionAnswered} this run
+              </div>
+            </div>
+          </article>
 
-            <aside className="space-y-4">
-              <div className="rounded-lg border-2 border-[#20383d] bg-[#20383d] p-4 text-white shadow-[6px_6px_0_#20383d]">
-                <p className="text-sm font-black uppercase tracking-[0.18em] text-[#ffd76d]">5-10 minute loop</p>
-                <h3 className="mt-2 text-2xl font-black">8 quick bites</h3>
-                <p className="mt-2 text-sm leading-6 text-[#d8e8e5]">
-                  Photos first, then reading, number sense, and comparisons. Correct answers earn more XP, but every try moves forward.
+          <article className="flex min-h-[48dvh] flex-col overflow-hidden rounded-lg border-2 border-[#082329] bg-white p-3 shadow-[4px_4px_0_#082329] md:p-4 lg:min-h-0">
+            <div className="shrink-0">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex flex-wrap gap-1">
+                  {questions.map((item, index) => (
+                    <span
+                      key={item.id}
+                      className={`h-3 w-3 rounded-sm border-2 border-[#082329] ${
+                        index < questionIndex
+                          ? "bg-[#4fb286]"
+                          : index === questionIndex
+                            ? "bg-[#f3c647]"
+                            : "bg-[#eadfce]"
+                      }`}
+                    />
+                  ))}
+                </div>
+                <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">
+                  {questionIndex + 1}/{questions.length}
                 </p>
               </div>
 
-              <div className="rounded-lg border-2 border-[#20383d] bg-white p-4 shadow-[6px_6px_0_#20383d]">
-                <p className="text-sm font-black uppercase tracking-[0.18em] text-[#b5412b]">What he is learning</p>
-                <div className="mt-3 space-y-3 text-sm font-semibold leading-5">
-                  <p>Reading: short facts, heat words, city names, finished vs. under construction.</p>
-                  <p>Math: bigger numbers, rounding to hundreds, Scoville scores, tower heights.</p>
-                  <p>Memory: questions rotate and recent question IDs are saved locally.</p>
-                </div>
-              </div>
+              <h2 className="mt-3 text-[clamp(1.45rem,3.6vw,3rem)] font-black leading-[1.05] text-[#102f36] lg:text-[clamp(1.55rem,3vw,3.2rem)]">
+                {question.prompt}
+              </h2>
 
-              <div className="rounded-lg border-2 border-[#20383d] bg-[#fffaf0] p-4 shadow-[6px_6px_0_#20383d]">
-                <p className="text-sm font-black uppercase tracking-[0.18em] text-[#3b6d62]">Seed sources</p>
-                <ul className="mt-3 space-y-2 text-sm font-semibold leading-5">
-                  {sourceNotes.map((note) => <li key={note}>{note}</li>)}
-                </ul>
-              </div>
-            </aside>
-          </section>
-        </div>
+              {question.numberLine && (
+                <div className="mt-3 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2.5">
+                  <div className="flex justify-between gap-3 text-xs font-black md:text-sm">
+                    <span>{question.numberLine.label}</span>
+                    <span>{question.numberLine.value.toLocaleString("en-US")} {question.numberLine.unit}</span>
+                  </div>
+                  <div className="mt-2 h-3 overflow-hidden rounded-full bg-[#eadfce]">
+                    <div
+                      className="h-full bg-[#b5412b]"
+                      style={{ width: `${Math.max(2, Math.min(100, (question.numberLine.value / question.numberLine.max) * 100))}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {question.heatMeter && <PepperHeatMeter meter={question.heatMeter} />}
+
+              {question.comparison && <ComparisonTable cards={question.comparison} />}
+            </div>
+
+            <div className="mt-3 grid shrink-0 gap-2 sm:grid-cols-2">
+              {question.choices.map((choice) => {
+                const chosen = selected === choice;
+                const correctChoice = answered && choice === question.answer;
+                return (
+                  <button
+                    key={choice}
+                    onClick={() => answer(choice)}
+                    className={`min-h-14 rounded-lg border-2 px-3 py-2.5 text-left text-lg font-black leading-snug transition active:translate-y-0.5 md:min-h-16 md:text-xl ${
+                      correctChoice
+                        ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
+                        : chosen
+                          ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
+                          : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2] hover:shadow-[2px_2px_0_#082329]"
+                    }`}
+                  >
+                    <span className="flex items-center justify-between gap-2">
+                      <span>{choice}</span>
+                      {correctChoice && <span className="text-2xl leading-none">+</span>}
+                      {chosen && !correctChoice && <span className="text-2xl leading-none">x</span>}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {answered && lastResult && (
+              <FeedbackPanel
+                isCorrect={isCorrect}
+                xpGain={lastResult.xpGain}
+                leveledUp={lastResult.leveledUp}
+                celebration={celebration}
+                correctAnswer={question.answer}
+                explanation={question.explanation}
+                note={tryAgainNotes[(questionIndex + progress.answered) % tryAgainNotes.length]}
+                isLast={questionIndex === questions.length - 1}
+                onNext={advance}
+              />
+            )}
+          </article>
+        </section>
       </section>
     </main>
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function HudStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="min-w-16 rounded bg-[#f8f0df] px-2 py-2 text-center">
-      <p className="text-[11px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">{label}</p>
-      <p className="text-2xl font-black leading-none">{value}</p>
+    <div className="rounded-lg border-2 border-[#cfbfae] bg-white px-1.5 py-1 text-center">
+      <p className="text-[9px] font-black uppercase tracking-[0.1em] text-[#7a5d4b]">{label}</p>
+      <p className="text-xl font-black leading-none text-[#102f36] md:text-2xl">{value}</p>
     </div>
   );
 }
 
-function MiniStat({ label, value }: { label: string; value: string }) {
+function ComparisonStage({ cards }: { cards: ComparisonCard[] }) {
   return (
-    <div className="rounded-md border-2 border-[#d6c8b8] bg-white p-2">
-      <p className="text-[11px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{label}</p>
-      <p className="text-xl font-black">{value}</p>
+    <div className="grid h-full min-h-[260px] grid-cols-2 gap-2 bg-[#102f36] p-2">
+      {cards.map((card) => (
+        <div key={`${card.label}-${card.title}`} className="relative overflow-hidden rounded-lg border-2 border-[#082329] bg-[#fff8ec]">
+          <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#082329] bg-[#f3c647] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#082329]">
+            {card.label}
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={card.image} alt={card.imageAlt} className="h-full min-h-[260px] w-full object-cover" />
+          <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#082329] bg-white/95 p-2 shadow-[2px_2px_0_#082329]">
+            <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
+            <div className="mt-1 flex items-end justify-between gap-2">
+              <div>
+                <p className="text-[9px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{card.statLabel}</p>
+                <p className="text-lg font-black leading-none text-[#b5412b]">{card.statValue}</p>
+              </div>
+              <p className="text-right text-[11px] font-bold leading-tight text-[#405257]">{card.subStat}</p>
+            </div>
+            <div className="mt-1 h-2 overflow-hidden rounded-full bg-[#eadfce]">
+              <div className="h-full bg-[#b5412b]" style={{ width: `${Math.max(2, Math.min(100, (card.meterValue / card.meterMax) * 100))}%` }} />
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
 
-function QuestionImage({ question }: { question: { image: string; imageAlt: string; topic: "peppers" | "buildings" } }) {
+function ComparisonTable({ cards }: { cards: ComparisonCard[] }) {
+  return (
+    <div className="mt-3 grid gap-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2 sm:grid-cols-2">
+      {cards.map((card) => (
+        <div key={`${card.label}-table-${card.title}`} className="rounded-md bg-white px-2 py-1.5">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm font-black text-[#102f36]">{card.label}: {card.title}</p>
+            <p className="text-sm font-black text-[#b5412b]">{card.statValue}</p>
+          </div>
+          <p className="text-xs font-semibold text-[#59686b]">{card.subStat}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PepperHeatMeter({ meter }: { meter: NonNullable<Question["heatMeter"]> }) {
+  return (
+    <div className="mt-3 rounded-lg border-2 border-[#cfbfae] bg-[#fff0c2] p-2.5">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">Pepper meter</p>
+          <p className="text-lg font-black leading-none text-[#102f36]">{meter.label}</p>
+        </div>
+        <div className="text-2xl leading-none" aria-label={`${meter.icons} pepper heat`}>
+          {meter.icons === 0 ? "0" : "🌶️".repeat(meter.icons)}
+        </div>
+      </div>
+      <p className="mt-1 text-xs font-bold text-[#405257]">{meter.line}</p>
+    </div>
+  );
+}
+
+function FeedbackPanel({
+  isCorrect,
+  xpGain,
+  leveledUp,
+  celebration,
+  correctAnswer,
+  explanation,
+  note,
+  isLast,
+  onNext,
+}: {
+  isCorrect: boolean;
+  xpGain: number;
+  leveledUp: boolean;
+  celebration: string;
+  correctAnswer: string;
+  explanation: string;
+  note: string;
+  isLast: boolean;
+  onNext: () => void;
+}) {
+  return (
+    <div className="mt-auto pt-3">
+      <div className={`rounded-lg border-2 p-3 ${isCorrect ? "border-[#28764a] bg-[#e9ffe9]" : "border-[#b5412b] bg-[#fff0ea]"}`}>
+        <div className="grid gap-3 md:grid-cols-[auto_1fr] md:items-start">
+          <div className={`flex h-14 w-14 items-center justify-center rounded-lg border-2 border-[#082329] text-3xl font-black shadow-[2px_2px_0_#082329] ${isCorrect ? "bg-[#78d99a]" : "bg-[#ff9f8d]"}`}>
+            {isCorrect ? "+" : "!"}
+          </div>
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="text-xl font-black leading-tight text-[#102f36] md:text-2xl">
+                {isCorrect ? celebration : note}
+              </p>
+              <span className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-2 py-0.5 text-sm font-black text-[#102f36]">
+                +{xpGain} XP
+              </span>
+              {leveledUp && (
+                <span className="rounded-full border-2 border-[#082329] bg-[#78d99a] px-2 py-0.5 text-sm font-black text-[#102f36]">
+                  Level up
+                </span>
+              )}
+            </div>
+            {!isCorrect && (
+              <p className="mt-1 text-base font-black text-[#b5412b]">
+                Answer: {correctAnswer}
+              </p>
+            )}
+            <p className="mt-1 text-sm font-semibold leading-5 text-[#24373b] md:text-base md:leading-6">
+              {explanation}
+            </p>
+          </div>
+        </div>
+        <button onClick={onNext} className="mt-3 w-full rounded-lg border-2 border-[#082329] bg-[#102f36] px-4 py-3 text-lg font-black text-white shadow-[3px_3px_0_#082329] hover:bg-[#23515a]">
+          {isLast ? "Finish round" : "Next challenge"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function QuestionImage({ question }: { question: Pick<Question, "image" | "imageAlt" | "topic"> }) {
   const [failedImage, setFailedImage] = useState<string | null>(null);
   const failed = failedImage === question.image;
 
   if (failed) {
     return (
-      <div className={`flex h-full min-h-[340px] w-full items-center justify-center p-8 ${question.topic === "peppers" ? "bg-[#f7d8d0]" : "bg-[#d8e8e5]"}`}>
-        <div className="w-full max-w-sm rounded-lg border-2 border-[#20383d] bg-white p-6 text-center shadow-[6px_6px_0_#20383d]">
-          <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-full border-2 border-[#20383d] bg-[#f3c647] text-6xl">
+      <div className={`flex h-full min-h-[260px] w-full items-center justify-center p-6 ${question.topic === "peppers" ? "bg-[#f7d8d0]" : "bg-[#d8e8e5]"}`}>
+        <div className="w-full max-w-sm rounded-lg border-2 border-[#20383d] bg-white p-5 text-center shadow-[4px_4px_0_#20383d]">
+          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#20383d] bg-[#f3c647] text-5xl">
             {question.topic === "peppers" ? "!" : "^"}
           </div>
-          <p className="mt-5 text-sm font-black uppercase tracking-[0.18em] text-[#b5412b]">
+          <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-[#b5412b]">
             Picture clue
           </p>
-          <p className="mt-1 text-4xl font-black leading-tight text-[#192f35]">{question.imageAlt}</p>
+          <p className="mt-1 text-3xl font-black leading-tight text-[#192f35]">{question.imageAlt}</p>
         </div>
       </div>
     );
@@ -355,7 +468,7 @@ function QuestionImage({ question }: { question: { image: string; imageAlt: stri
       src={question.image}
       alt={question.imageAlt}
       onError={() => setFailedImage(question.image)}
-      className="h-full min-h-[340px] w-full object-cover"
+      className="h-full min-h-[260px] w-full object-cover"
     />
   );
 }

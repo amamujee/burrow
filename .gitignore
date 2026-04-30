@@ -24,6 +24,7 @@
 .DS_Store
 *.pem
 *-screenshot.png
+rabbit-hole-*.png
 
 # debug
 npm-debug.log*
