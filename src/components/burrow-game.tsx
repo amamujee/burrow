@@ -799,12 +799,14 @@ function QuestionRun({
                       : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2] hover:shadow-[2px_2px_0_#082329]"
                 }`}
               >
-                <span className="flex items-center justify-between gap-2">
-                  <span>{choice}</span>
-                  {correctChoice && <span className="text-2xl leading-none">+</span>}
-                  {chosen && !correctChoice && <span className="text-2xl leading-none">x</span>}
+                <span className="flex items-center justify-between gap-3">
+                  <span className="flex min-w-0 items-center gap-2">
+                    <span>{choice}</span>
+                    {heatChoice && <HeatChoiceEmoji heat={heatChoice} />}
+                  </span>
+                  {correctChoice && <span className="shrink-0 text-2xl leading-none">+</span>}
+                  {chosen && !correctChoice && <span className="shrink-0 text-2xl leading-none">x</span>}
                 </span>
-                {heatChoice && <HeatChoiceEmoji heat={heatChoice} />}
               </button>
             );
           })}
@@ -1230,15 +1232,12 @@ function PepperHeatMeter({ meter }: { meter: NonNullable<Question["heatMeter"]> 
 
 function HeatChoiceEmoji({ heat }: { heat: HeatBand }) {
   const profile = heatProfiles[heat];
+  if (profile.icons === 0) return null;
+
   return (
-    <div className="mt-2 min-h-9 rounded-md border-2 border-[#cfbfae] bg-white/75 px-2.5 py-1.5">
-      <span className="block text-[10px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">
-        {profile.icons === 0 ? "no peppers" : `${profile.icons} pepper${profile.icons === 1 ? "" : "s"}`}
-      </span>
-      <span className="mt-1 block text-lg leading-none md:text-xl" aria-label={`${profile.icons} pepper heat`}>
-        {profile.emoji}
-      </span>
-    </div>
+    <span className="shrink-0 text-lg leading-none md:text-xl" aria-label={`${profile.label} heat`}>
+      {profile.emoji}
+    </span>
   );
 }
 
