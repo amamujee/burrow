@@ -1190,14 +1190,6 @@ export const pepperLibrary = [
     "sourceUrl": "https://wikipepper.org/pepper/aceituno"
   },
   {
-    "id": "aces-8s",
-    "name": "Aces & 8s",
-    "species": "Capsicum",
-    "heatRange": "varies",
-    "heatLevel": "No Heat (0 SHU)",
-    "sourceUrl": "https://wikipepper.org/pepper/aces-8s"
-  },
-  {
     "id": "achard",
     "name": "Achard",
     "species": "C. baccatum",
@@ -1438,22 +1430,6 @@ export const pepperLibrary = [
     "sourceUrl": "https://wikipepper.org/pepper/agua-blanca"
   },
   {
-    "id": "aji-ahuachapan",
-    "name": "Aji Ahuachapan",
-    "species": "Capsicum",
-    "heatRange": "varies",
-    "heatLevel": "No Heat (0 SHU)",
-    "sourceUrl": "https://wikipepper.org/pepper/aji-ahuachapan"
-  },
-  {
-    "id": "aji-ahuachapau",
-    "name": "Aji Ahuachapáu",
-    "species": "Capsicum",
-    "heatRange": "varies",
-    "heatLevel": "No Heat (0 SHU)",
-    "sourceUrl": "https://wikipepper.org/pepper/aji-ahuachap-u"
-  },
-  {
     "id": "aji-ajuicybana",
     "name": "Aji Ajuicybana",
     "species": "C. chinense",
@@ -1676,14 +1652,6 @@ export const pepperLibrary = [
     "heatRange": "0-1,000 SHU",
     "heatLevel": "Mild (1–1,000 SHU)",
     "sourceUrl": "https://wikipepper.org/pepper/aji-cachucha-creole"
-  },
-  {
-    "id": "aji-cachucha-purple-small-splotched",
-    "name": "Aji Cachucha Purple Small Splotched",
-    "species": "Capsicum",
-    "heatRange": "varies",
-    "heatLevel": "No Heat (0 SHU)",
-    "sourceUrl": "https://wikipepper.org/pepper/aji-cachucha-purple-small-splotched"
   },
   {
     "id": "aji-cachucha-purple-splotched",
@@ -2222,14 +2190,6 @@ export const pepperLibrary = [
     "sourceUrl": "https://wikipepper.org/pepper/aji-guaguao"
   },
   {
-    "id": "aji-guru",
-    "name": "Aji Guru",
-    "species": "Capsicum",
-    "heatRange": "varies",
-    "heatLevel": "No Heat (0 SHU)",
-    "sourceUrl": "https://wikipepper.org/pepper/aji-guru"
-  },
-  {
     "id": "aji-gusanito",
     "name": "Aji Gusanito",
     "species": "C. baccatum",
@@ -2316,14 +2276,6 @@ export const pepperLibrary = [
     "heatRange": "10,000-50,000 SHU",
     "heatLevel": "Hot (15,001–100,000 SHU)",
     "sourceUrl": "https://wikipepper.org/pepper/aji-lemon-drop"
-  },
-  {
-    "id": "aji-lily-teolinda",
-    "name": "Aji Lily Teolinda",
-    "species": "Capsicum",
-    "heatRange": "varies",
-    "heatLevel": "No Heat (0 SHU)",
-    "sourceUrl": "https://wikipepper.org/pepper/aji-lily-teolinda"
   },
   {
     "id": "aji-limo",
@@ -2958,14 +2910,6 @@ export const pepperLibrary = [
     "sourceUrl": "https://wikipepper.org/pepper/alajuela"
   },
   {
-    "id": "alba",
-    "name": "Alba",
-    "species": "Capsicum",
-    "heatRange": "varies",
-    "heatLevel": "No Heat (0 SHU)",
-    "sourceUrl": "https://wikipepper.org/pepper/alba"
-  },
-  {
     "id": "alba-orange",
     "name": "Alba Orange",
     "species": "C. annuum",
@@ -3028,30 +2972,6 @@ export const pepperLibrary = [
     "heatRange": "2,500-10,000 SHU",
     "heatLevel": "Medium (1,001–15,000 SHU)",
     "sourceUrl": "https://wikipepper.org/pepper/aleppo-mild"
-  },
-  {
-    "id": "alex-s-fried-chicken",
-    "name": "Alex's Fried Chicken",
-    "species": "Capsicum",
-    "heatRange": "varies",
-    "heatLevel": "No Heat (0 SHU)",
-    "sourceUrl": "https://wikipepper.org/pepper/alex-s-fried-chicken"
-  },
-  {
-    "id": "alien-metamorphosis",
-    "name": "Alien Metamorphosis",
-    "species": "Capsicum",
-    "heatRange": "varies",
-    "heatLevel": "No Heat (0 SHU)",
-    "sourceUrl": "https://wikipepper.org/pepper/alien-metamorphosis"
-  },
-  {
-    "id": "alien-metamorphosis-black",
-    "name": "Alien Metamorphosis Black",
-    "species": "Capsicum",
-    "heatRange": "varies",
-    "heatLevel": "No Heat (0 SHU)",
-    "sourceUrl": "https://wikipepper.org/pepper/alien-metamorphosis-black"
   },
   {
     "id": "alotenango",
@@ -3180,14 +3100,6 @@ export const pepperLibrary = [
     "heatRange": "0-500 SHU",
     "heatLevel": "Mild (1–1,000 SHU)",
     "sourceUrl": "https://wikipepper.org/pepper/amish-pimento"
-  },
-  {
-    "id": "amityville-peach",
-    "name": "Amityville Peach",
-    "species": "Capsicum",
-    "heatRange": "varies",
-    "heatLevel": "No Heat (0 SHU)",
-    "sourceUrl": "https://wikipepper.org/pepper/amityville-peach"
   },
   {
     "id": "ammazzo",
@@ -3854,14 +3766,6 @@ export const pepperLibrary = [
     "sourceUrl": "https://wikipepper.org/pepper/aruna-indian"
   },
   {
-    "id": "asante",
-    "name": "Asante",
-    "species": "Capsicum",
-    "heatRange": "varies",
-    "heatLevel": "No Heat (0 SHU)",
-    "sourceUrl": "https://wikipepper.org/pepper/asante"
-  },
-  {
     "id": "assam",
     "name": "Assam",
     "species": "C. annuum",
@@ -4060,6 +3964,102 @@ export const pepperLibrary = [
     "heatRange": "80,000-250,000 SHU",
     "heatLevel": "Very Hot (100,001–500,000 SHU)",
     "sourceUrl": "https://wikipepper.org/pepper/avenir"
+  },
+  {
+    "id": "avila",
+    "name": "Avila",
+    "species": "C. chinense",
+    "heatRange": "80,000-250,000 SHU",
+    "heatLevel": "Very Hot (100,001–500,000 SHU)",
+    "sourceUrl": "https://wikipepper.org/pepper/avila"
+  },
+  {
+    "id": "azr",
+    "name": "Azr",
+    "species": "C. annuum",
+    "heatRange": "2,000-10,000 SHU",
+    "heatLevel": "Medium (1,001–15,000 SHU)",
+    "sourceUrl": "https://wikipepper.org/pepper/azr"
+  },
+  {
+    "id": "azteco",
+    "name": "Azteco",
+    "species": "C. annuum",
+    "heatRange": "2,000-10,000 SHU",
+    "heatLevel": "Medium (1,001–15,000 SHU)",
+    "sourceUrl": "https://wikipepper.org/pepper/azteco"
+  },
+  {
+    "id": "baba-dissalou",
+    "name": "Baba Dissalou",
+    "species": "C. annuum",
+    "heatRange": "5,000-30,000 SHU",
+    "heatLevel": "Hot (15,001–100,000 SHU)",
+    "sourceUrl": "https://wikipepper.org/pepper/baba-dissalou"
+  },
+  {
+    "id": "baby-red",
+    "name": "Baby Red",
+    "species": "C. annuum",
+    "heatRange": "2,000-10,000 SHU",
+    "heatLevel": "Medium (1,001–15,000 SHU)",
+    "sourceUrl": "https://wikipepper.org/pepper/baby-red"
+  },
+  {
+    "id": "baby-yellow",
+    "name": "Baby Yellow",
+    "species": "C. annuum",
+    "heatRange": "5,000-30,000 SHU",
+    "heatLevel": "Hot (15,001–100,000 SHU)",
+    "sourceUrl": "https://wikipepper.org/pepper/baby-yellow"
+  },
+  {
+    "id": "babylon",
+    "name": "Babylon",
+    "species": "C. annuum",
+    "heatRange": "5,000-30,000 SHU",
+    "heatLevel": "Hot (15,001–100,000 SHU)",
+    "sourceUrl": "https://wikipepper.org/pepper/babylon"
+  },
+  {
+    "id": "babylon-7jdx",
+    "name": "Babylon 7JDX",
+    "species": "C. chinense",
+    "heatRange": "80,000-250,000 SHU",
+    "heatLevel": "Very Hot (100,001–500,000 SHU)",
+    "sourceUrl": "https://wikipepper.org/pepper/babylon-7jdx"
+  },
+  {
+    "id": "baccatino",
+    "name": "Baccatino",
+    "species": "C. baccatum",
+    "heatRange": "8,000-25,000 SHU",
+    "heatLevel": "Hot (15,001–100,000 SHU)",
+    "sourceUrl": "https://wikipepper.org/pepper/baccatino"
+  },
+  {
+    "id": "baccato-de-orto",
+    "name": "Baccato de Orto",
+    "species": "C. baccatum",
+    "heatRange": "8,000-25,000 SHU",
+    "heatLevel": "Hot (15,001–100,000 SHU)",
+    "sourceUrl": "https://wikipepper.org/pepper/baccato-de-orto"
+  },
+  {
+    "id": "baccatum-brown",
+    "name": "Baccatum Brown",
+    "species": "C. baccatum",
+    "heatRange": "10,000-50,000 SHU",
+    "heatLevel": "Hot (15,001–100,000 SHU)",
+    "sourceUrl": "https://wikipepper.org/pepper/baccatum-brown"
+  },
+  {
+    "id": "baccio-di-satana",
+    "name": "Baccio di Satana",
+    "species": "C. annuum",
+    "heatRange": "5,000-30,000 SHU",
+    "heatLevel": "Hot (15,001–100,000 SHU)",
+    "sourceUrl": "https://wikipepper.org/pepper/baccio-di-satana"
   }
 ] as const;
 
@@ -8877,6 +8877,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q12495"
   },
   {
+    "id": "dubai-one-tower",
+    "name": "Dubai One Tower",
+    "city": "Dubai",
+    "country": "United Arab Emirates",
+    "heightMeters": 711,
+    "heightFeet": 2333,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q21609086"
+  },
+  {
     "id": "merdeka-118",
     "name": "Merdeka 118",
     "city": "Kuala Lumpur",
@@ -8967,15 +8976,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q5210921"
   },
   {
-    "id": "evergrande-international-financial-center-t1",
-    "name": "Evergrande International Financial Center T1",
-    "city": "Hefei",
-    "country": "People's Republic of China",
-    "heightMeters": 518,
-    "heightFeet": 1699,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q85759943"
-  },
-  {
     "id": "pentominium",
     "name": "Pentominium",
     "city": "Emirate of Dubai",
@@ -8992,15 +8992,6 @@ export const buildingLibrary = [
     "heightMeters": 508,
     "heightFeet": 1667,
     "sourceUrl": "https://www.wikidata.org/wiki/Q83101"
-  },
-  {
-    "id": "suzhou-zhongnan-center",
-    "name": "Suzhou Zhongnan Center",
-    "city": "Suzhou",
-    "country": "People's Republic of China",
-    "heightMeters": 499,
-    "heightFeet": 1637,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q3277027"
   },
   {
     "id": "shanghai-world-financial-center",
@@ -9093,6 +9084,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q9188"
   },
   {
+    "id": "the-exchange-106",
+    "name": "The Exchange 106",
+    "city": "Kuala Lumpur",
+    "country": "Malaysia",
+    "heightMeters": 453.5,
+    "heightFeet": 1488,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q27670200"
+  },
+  {
     "id": "changsha-ifs",
     "name": "Changsha IFS",
     "city": "Furong District",
@@ -9111,15 +9111,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q83063"
   },
   {
-    "id": "zifeng-tower",
-    "name": "Zifeng Tower",
-    "city": "Nanjing",
-    "country": "People's Republic of China",
-    "heightMeters": 450,
-    "heightFeet": 1476,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q382121"
-  },
-  {
     "id": "suzhou-ifs",
     "name": "Suzhou IFS",
     "city": "Suzhou",
@@ -9127,6 +9118,15 @@ export const buildingLibrary = [
     "heightMeters": 450,
     "heightFeet": 1476,
     "sourceUrl": "https://www.wikidata.org/wiki/Q617082"
+  },
+  {
+    "id": "zifeng-tower",
+    "name": "Zifeng Tower",
+    "city": "Nanjing",
+    "country": "People's Republic of China",
+    "heightMeters": 450,
+    "heightFeet": 1476,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q382121"
   },
   {
     "id": "willis-tower",
@@ -9183,6 +9183,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1207442"
   },
   {
+    "id": "riverview-plaza",
+    "name": "Riverview Plaza",
+    "city": "Wuhan",
+    "country": "People's Republic of China",
+    "heightMeters": 436,
+    "heightFeet": 1430,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q7338767"
+  },
+  {
     "id": "111-west-57th-street",
     "name": "111 West 57th Street",
     "city": "New York City",
@@ -9190,15 +9199,6 @@ export const buildingLibrary = [
     "heightMeters": 435.3,
     "heightFeet": 1428,
     "sourceUrl": "https://www.wikidata.org/wiki/Q2631268"
-  },
-  {
-    "id": "akhmat-tower",
-    "name": "Akhmat Tower",
-    "city": "Grozny",
-    "country": "Russia",
-    "heightMeters": 435,
-    "heightFeet": 1427,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q16250343"
   },
   {
     "id": "diamond-tower",
@@ -9255,6 +9255,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q546221"
   },
   {
+    "id": "270-park-avenue",
+    "name": "270 Park Avenue",
+    "city": "New York City",
+    "country": "United States",
+    "heightMeters": 423.1,
+    "heightFeet": 1388,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q109648853"
+  },
+  {
     "id": "kuala-lumpur-tower",
     "name": "Kuala Lumpur Tower",
     "city": "Kuala Lumpur",
@@ -9289,15 +9298,6 @@ export const buildingLibrary = [
     "heightMeters": 412,
     "heightFeet": 1352,
     "sourceUrl": "https://www.wikidata.org/wiki/Q557933"
-  },
-  {
-    "id": "two-international-finance-centre",
-    "name": "Two International Finance Centre",
-    "city": "Central and Western District",
-    "country": "People's Republic of China",
-    "heightMeters": 412,
-    "heightFeet": 1352,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q14226100"
   },
   {
     "id": "haeundae-lct-the-sharp",
@@ -9345,15 +9345,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1284184"
   },
   {
-    "id": "30-hudson-yards",
-    "name": "30 Hudson Yards",
-    "city": "New York City",
-    "country": "United States",
-    "heightMeters": 395,
-    "heightFeet": 1296,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15264266"
-  },
-  {
     "id": "23-marina",
     "name": "23 Marina",
     "city": "Dubai",
@@ -9390,15 +9381,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q125179238"
   },
   {
-    "id": "capital-market-authority-headquarters",
-    "name": "Capital Market Authority Headquarters",
-    "city": "Riyadh",
-    "country": "Saudi Arabia",
-    "heightMeters": 385,
-    "heightFeet": 1263,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q13892708"
-  },
-  {
     "id": "shun-hing-square",
     "name": "Shun Hing Square",
     "city": "Guiyuan Subdistrict",
@@ -9406,6 +9388,15 @@ export const buildingLibrary = [
     "heightMeters": 384,
     "heightFeet": 1260,
     "sourceUrl": "https://www.wikidata.org/wiki/Q236201"
+  },
+  {
+    "id": "forum-66-tower-1",
+    "name": "Forum 66 Tower 1",
+    "city": "unknown city",
+    "country": "People's Republic of China",
+    "heightMeters": 384,
+    "heightFeet": 1260,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q111669486"
   },
   {
     "id": "dalian-eton-center",
@@ -9417,22 +9408,13 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1139123"
   },
   {
-    "id": "thamrin-nine",
-    "name": "Thamrin Nine",
-    "city": "Jakarta",
-    "country": "Indonesia",
-    "heightMeters": 382.9,
-    "heightFeet": 1256,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q30686870"
-  },
-  {
-    "id": "elite-residence",
-    "name": "Elite Residence",
-    "city": "Dubai",
-    "country": "United Arab Emirates",
-    "heightMeters": 381,
-    "heightFeet": 1250,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q1330847"
+    "id": "eton-place-dalian-tower-1",
+    "name": "Eton Place Dalian Tower 1",
+    "city": "Dalian",
+    "country": "People's Republic of China",
+    "heightMeters": 383.2,
+    "heightFeet": 1257,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q24036646"
   },
   {
     "id": "central-market-project",
@@ -9442,6 +9424,15 @@ export const buildingLibrary = [
     "heightMeters": 381,
     "heightFeet": 1250,
     "sourceUrl": "https://www.wikidata.org/wiki/Q615950"
+  },
+  {
+    "id": "elite-residence",
+    "name": "Elite Residence",
+    "city": "Dubai",
+    "country": "United Arab Emirates",
+    "heightMeters": 381,
+    "heightFeet": 1250,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1330847"
   },
   {
     "id": "busan-lotte-world-tower",
@@ -9462,15 +9453,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q691263"
   },
   {
-    "id": "shenzhen-center",
-    "name": "Shenzhen Center",
-    "city": "Shenzhen",
-    "country": "People's Republic of China",
-    "heightMeters": 375.6,
-    "heightFeet": 1232,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15811586"
-  },
-  {
     "id": "central-plaza",
     "name": "Central Plaza",
     "city": "Wan Chai District",
@@ -9478,6 +9460,15 @@ export const buildingLibrary = [
     "heightMeters": 374,
     "heightFeet": 1227,
     "sourceUrl": "https://www.wikidata.org/wiki/Q112640"
+  },
+  {
+    "id": "china-merchants-prince-bay-tower",
+    "name": "China Merchants Prince Bay Tower",
+    "city": "unknown city",
+    "country": "People's Republic of China",
+    "heightMeters": 374,
+    "heightFeet": 1227,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q109464453"
   },
   {
     "id": "15-penn-plaza",
@@ -9507,6 +9498,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q131920063"
   },
   {
+    "id": "address-boulevard",
+    "name": "Address Boulevard",
+    "city": "Downtown Dubai",
+    "country": "United Arab Emirates",
+    "heightMeters": 368,
+    "heightFeet": 1207,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q7712376"
+  },
+  {
     "id": "bank-of-china-tower",
     "name": "Bank of China Tower",
     "city": "Hong Kong",
@@ -9514,15 +9514,6 @@ export const buildingLibrary = [
     "heightMeters": 367.4,
     "heightFeet": 1205,
     "sourceUrl": "https://www.wikidata.org/wiki/Q214855"
-  },
-  {
-    "id": "ciel-tower",
-    "name": "Ciel Tower",
-    "city": "Emirate of Dubai",
-    "country": "United Arab Emirates",
-    "heightMeters": 366,
-    "heightFeet": 1201,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q30754048"
   },
   {
     "id": "bank-of-america-tower",
@@ -9543,15 +9534,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q838780"
   },
   {
-    "id": "vietinbank-business-center-office-tower",
-    "name": "VietinBank Business Center Office Tower",
-    "city": "Hanoi",
-    "country": "Vietnam",
-    "heightMeters": 363,
-    "heightFeet": 1191,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15549825"
-  },
-  {
     "id": "taipei-twins",
     "name": "Taipei Twins",
     "city": "Taipei",
@@ -9559,15 +9541,6 @@ export const buildingLibrary = [
     "heightMeters": 360,
     "heightFeet": 1181,
     "sourceUrl": "https://www.wikidata.org/wiki/Q1495752"
-  },
-  {
-    "id": "al-sharq-tower",
-    "name": "Al Sharq Tower",
-    "city": "Dubai",
-    "country": "United Arab Emirates",
-    "heightMeters": 360,
-    "heightFeet": 1181,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q12471358"
   },
   {
     "id": "sino-steel-tower",
@@ -9579,13 +9552,31 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q2289545"
   },
   {
-    "id": "raffles-city-chongqing",
-    "name": "Raffles City Chongqing",
-    "city": "Chaotianmen Subdistrict",
+    "id": "galaxy-world-tower-1",
+    "name": "Galaxy World Tower 1",
+    "city": "Shenzhen",
     "country": "People's Republic of China",
     "heightMeters": 356,
     "heightFeet": 1168,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q55908607"
+    "sourceUrl": "https://www.wikidata.org/wiki/Q113006408"
+  },
+  {
+    "id": "galaxy-world-tower-2",
+    "name": "Galaxy World Tower 2",
+    "city": "Shenzhen",
+    "country": "People's Republic of China",
+    "heightMeters": 356,
+    "heightFeet": 1168,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q113006416"
+  },
+  {
+    "id": "il-primo-tower",
+    "name": "Il Primo Tower",
+    "city": "Dubai",
+    "country": "United Arab Emirates",
+    "heightMeters": 356,
+    "heightFeet": 1168,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q113660049"
   },
   {
     "id": "emirates-office-tower",
@@ -9595,6 +9586,24 @@ export const buildingLibrary = [
     "heightMeters": 355,
     "heightFeet": 1165,
     "sourceUrl": "https://www.wikidata.org/wiki/Q845182"
+  },
+  {
+    "id": "jw-marriott-marquis-dubai-tower-1",
+    "name": "JW Marriott Marquis Dubai Tower 1",
+    "city": "Dubai",
+    "country": "United Arab Emirates",
+    "heightMeters": 355,
+    "heightFeet": 1165,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q24061819"
+  },
+  {
+    "id": "jw-marriott-marquis-dubai-tower-2",
+    "name": "JW Marriott Marquis Dubai Tower 2",
+    "city": "Dubai",
+    "country": "United Arab Emirates",
+    "heightMeters": 355,
+    "heightFeet": 1165,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q24061869"
   },
   {
     "id": "the-marina-torch",
@@ -9615,15 +9624,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q139815"
   },
   {
-    "id": "xi-an-glory-international-financial-center",
-    "name": "Xi An Glory International Financial Center",
-    "city": "Xi'an",
-    "country": "People's Republic of China",
-    "heightMeters": 350,
-    "heightFeet": 1148,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q30766281"
-  },
-  {
     "id": "aon-hanoi-landmark-tower",
     "name": "AON Hanoi Landmark Tower",
     "city": "Mễ Trì",
@@ -9642,13 +9642,13 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q130478"
   },
   {
-    "id": "skyfame-center-landmark-tower",
-    "name": "Skyfame Center Landmark Tower",
-    "city": "Nanning",
-    "country": "People's Republic of China",
-    "heightMeters": 345.9,
-    "heightFeet": 1135,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q30754060"
+    "id": "neva-towers",
+    "name": "Neva Towers",
+    "city": "Moscow International Business Center",
+    "country": "Russia",
+    "heightMeters": 345,
+    "heightFeet": 1132,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q21026850"
   },
   {
     "id": "875-north-michigan-avenue",
@@ -9658,15 +9658,6 @@ export const buildingLibrary = [
     "heightMeters": 344,
     "heightFeet": 1129,
     "sourceUrl": "https://www.wikidata.org/wiki/Q217727"
-  },
-  {
-    "id": "xiamen-international-centre",
-    "name": "Xiamen International Centre",
-    "city": "Xiamen",
-    "country": "People's Republic of China",
-    "heightMeters": 340,
-    "heightFeet": 1115,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15855239"
   },
   {
     "id": "burj-2020",
@@ -9741,6 +9732,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q134137"
   },
   {
+    "id": "huaguoyuan-towers",
+    "name": "Huaguoyuan Towers",
+    "city": "Guiyang",
+    "country": "People's Republic of China",
+    "heightMeters": 335,
+    "heightFeet": 1099,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q124256640"
+  },
+  {
     "id": "shimao-international-plaza",
     "name": "Shimao International Plaza",
     "city": "Shanghai",
@@ -9813,15 +9813,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q941908"
   },
   {
-    "id": "the-index",
-    "name": "The Index",
-    "city": "Emirate of Dubai",
-    "country": "United Arab Emirates",
-    "heightMeters": 328,
-    "heightFeet": 1076,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q1264855"
-  },
-  {
     "id": "longxi-international-hotel",
     "name": "Longxi International Hotel",
     "city": "Wuxi",
@@ -9829,6 +9820,15 @@ export const buildingLibrary = [
     "heightMeters": 328,
     "heightFeet": 1076,
     "sourceUrl": "https://www.wikidata.org/wiki/Q604289"
+  },
+  {
+    "id": "the-index",
+    "name": "The Index",
+    "city": "Emirate of Dubai",
+    "country": "United Arab Emirates",
+    "heightMeters": 328,
+    "heightFeet": 1076,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1264855"
   },
   {
     "id": "wuxi-suning-plaza-1",
@@ -9849,13 +9849,22 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1964601"
   },
   {
-    "id": "salesforce-tower",
-    "name": "Salesforce Tower",
-    "city": "San Francisco",
+    "id": "azabudai-hills-mori-jp-tower",
+    "name": "Azabudai Hills Mori JP Tower",
+    "city": "Azabudai",
+    "country": "Japan",
+    "heightMeters": 325.2,
+    "heightFeet": 1067,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q109703244"
+  },
+  {
+    "id": "brooklyn-tower",
+    "name": "Brooklyn Tower",
+    "city": "Brooklyn",
     "country": "United States",
-    "heightMeters": 326,
-    "heightFeet": 1070,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q14684154"
+    "heightMeters": 325,
+    "heightFeet": 1066,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q22329554"
   },
   {
     "id": "the-landmark",
@@ -9865,15 +9874,6 @@ export const buildingLibrary = [
     "heightMeters": 324,
     "heightFeet": 1063,
     "sourceUrl": "https://www.wikidata.org/wiki/Q1735111"
-  },
-  {
-    "id": "deji-plaza-phase-2",
-    "name": "Deji Plaza Phase 2",
-    "city": "Nanjing",
-    "country": "People's Republic of China",
-    "heightMeters": 324,
-    "heightFeet": 1063,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q12256124"
   },
   {
     "id": "tuntex-sky-tower",
@@ -9948,6 +9948,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q2446907"
   },
   {
+    "id": "zhujiang-new-city-tower",
+    "name": "Zhujiang New City Tower",
+    "city": "Guangzhou",
+    "country": "People's Republic of China",
+    "heightMeters": 319,
+    "heightFeet": 1047,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q198226"
+  },
+  {
     "id": "chrysler-building",
     "name": "Chrysler Building",
     "city": "Manhattan",
@@ -9966,15 +9975,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q192680"
   },
   {
-    "id": "riverside-century-plaza-main-tower",
-    "name": "Riverside Century Plaza Main Tower",
-    "city": "Wuhu",
-    "country": "People's Republic of China",
-    "heightMeters": 318,
-    "heightFeet": 1043,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15842559"
-  },
-  {
     "id": "hhhr-tower",
     "name": "HHHR Tower",
     "city": "Dubai",
@@ -9982,15 +9982,6 @@ export const buildingLibrary = [
     "heightMeters": 317,
     "heightFeet": 1040,
     "sourceUrl": "https://www.wikidata.org/wiki/Q1470076"
-  },
-  {
-    "id": "honglou-times-square",
-    "name": "Honglou Times Square",
-    "city": "Lanzhou",
-    "country": "People's Republic of China",
-    "heightMeters": 313,
-    "heightFeet": 1027,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q29837530"
   },
   {
     "id": "bank-of-america-plaza",
@@ -10038,6 +10029,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q134124"
   },
   {
+    "id": "varso-tower",
+    "name": "Varso Tower",
+    "city": "Wola",
+    "country": "Poland",
+    "heightMeters": 310,
+    "heightFeet": 1017,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q116847270"
+  },
+  {
     "id": "fortune-center",
     "name": "Fortune Center",
     "city": "Guangzhou",
@@ -10054,24 +10054,6 @@ export const buildingLibrary = [
     "heightMeters": 308.9,
     "heightFeet": 1013,
     "sourceUrl": "https://www.wikidata.org/wiki/Q1374287"
-  },
-  {
-    "id": "35-hudson-yards",
-    "name": "35 Hudson Yards",
-    "city": "New York City",
-    "country": "United States",
-    "heightMeters": 308,
-    "heightFeet": 1010,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15264622"
-  },
-  {
-    "id": "burj-rafal",
-    "name": "Burj Rafal",
-    "city": "Riyadh",
-    "country": "Saudi Arabia",
-    "heightMeters": 308,
-    "heightFeet": 1010,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15790479"
   },
   {
     "id": "cayan-tower",
@@ -10173,15 +10155,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q57767"
   },
   {
-    "id": "gate-to-the-east",
-    "name": "Gate to the East",
-    "city": "Suzhou",
-    "country": "People's Republic of China",
-    "heightMeters": 302,
-    "heightFeet": 991,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q1495771"
-  },
-  {
     "id": "kingdom-centre",
     "name": "Kingdom Centre",
     "city": "Riyadh",
@@ -10189,6 +10162,15 @@ export const buildingLibrary = [
     "heightMeters": 302,
     "heightFeet": 991,
     "sourceUrl": "https://www.wikidata.org/wiki/Q656743"
+  },
+  {
+    "id": "gate-to-the-east",
+    "name": "Gate to the East",
+    "city": "Suzhou",
+    "country": "People's Republic of China",
+    "heightMeters": 302,
+    "heightFeet": 991,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1495771"
   },
   {
     "id": "3-hudson-boulevard",
@@ -10209,15 +10191,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q151765"
   },
   {
-    "id": "8-spruce-street",
-    "name": "8 Spruce Street",
-    "city": "Manhattan",
-    "country": "United States",
-    "heightMeters": 300,
-    "heightFeet": 984,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q274916"
-  },
-  {
     "id": "arraya-tower",
     "name": "Arraya Tower",
     "city": "Kuwait City",
@@ -10236,6 +10209,24 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q737602"
   },
   {
+    "id": "8-spruce-street",
+    "name": "8 Spruce Street",
+    "city": "Manhattan",
+    "country": "United States",
+    "heightMeters": 300,
+    "heightFeet": 984,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q274916"
+  },
+  {
+    "id": "gran-torre-costanera",
+    "name": "Gran Torre Costanera",
+    "city": "Santiago",
+    "country": "Chile",
+    "heightMeters": 300,
+    "heightFeet": 984,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1542408"
+  },
+  {
     "id": "we-ve-the-zenith-tower-a",
     "name": "We've the Zenith Tower A",
     "city": "Busan",
@@ -10252,33 +10243,6 @@ export const buildingLibrary = [
     "heightMeters": 300,
     "heightFeet": 984,
     "sourceUrl": "https://www.wikidata.org/wiki/Q1262915"
-  },
-  {
-    "id": "gran-torre-costanera",
-    "name": "Gran Torre Costanera",
-    "city": "Santiago",
-    "country": "Chile",
-    "heightMeters": 300,
-    "heightFeet": 984,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q1542408"
-  },
-  {
-    "id": "oct-tower",
-    "name": "OCT Tower",
-    "city": "Nanshan District",
-    "country": "People's Republic of China",
-    "heightMeters": 300,
-    "heightFeet": 984,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q29837565"
-  },
-  {
-    "id": "abeno-harukas",
-    "name": "Abeno Harukas",
-    "city": "Abenosuji",
-    "country": "Japan",
-    "heightMeters": 300,
-    "heightFeet": 984,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q16318627"
   },
   {
     "id": "tameer-commercial-tower",
@@ -10425,15 +10389,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q262041"
   },
   {
-    "id": "220-central-park-south",
-    "name": "220 Central Park South",
-    "city": "Midtown Manhattan",
-    "country": "United States",
-    "heightMeters": 290.2,
-    "heightFeet": 952,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15781036"
-  },
-  {
     "id": "guoco-tower",
     "name": "Guoco Tower",
     "city": "Tanjong Pagar",
@@ -10441,24 +10396,6 @@ export const buildingLibrary = [
     "heightMeters": 290,
     "heightFeet": 951,
     "sourceUrl": "https://www.wikidata.org/wiki/Q28873239"
-  },
-  {
-    "id": "busan-international-finance-center",
-    "name": "Busan International Finance Center",
-    "city": "Busan",
-    "country": "South Korea",
-    "heightMeters": 289,
-    "heightFeet": 948,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15464762"
-  },
-  {
-    "id": "china-chuneng-tower",
-    "name": "China Chuneng Tower",
-    "city": "Shenzhen",
-    "country": "People's Republic of China",
-    "heightMeters": 288.6,
-    "heightFeet": 947,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15794060"
   },
   {
     "id": "key-tower",
@@ -10470,15 +10407,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q684027"
   },
   {
-    "id": "haikou-world-trade-center",
-    "name": "Haikou World Trade Center",
-    "city": "Haikou",
-    "country": "People's Republic of China",
-    "heightMeters": 288,
-    "heightFeet": 945,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q29837553"
-  },
-  {
     "id": "chongqing-poly-tower",
     "name": "Chongqing Poly Tower",
     "city": "Chongqing",
@@ -10488,6 +10416,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1076137"
   },
   {
+    "id": "commerce-court-west",
+    "name": "Commerce Court West",
+    "city": "Toronto",
+    "country": "Canada",
+    "heightMeters": 287,
+    "heightFeet": 942,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q23527286"
+  },
+  {
     "id": "30-park-place",
     "name": "30 Park Place",
     "city": "Manhattan",
@@ -10495,15 +10432,6 @@ export const buildingLibrary = [
     "heightMeters": 286,
     "heightFeet": 938,
     "sourceUrl": "https://www.wikidata.org/wiki/Q224126"
-  },
-  {
-    "id": "ping-an-finance-center-south",
-    "name": "Ping An Finance Center South",
-    "city": "Shenzhen",
-    "country": "People's Republic of China",
-    "heightMeters": 286,
-    "heightFeet": 938,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q86661197"
   },
   {
     "id": "yingli-tower",
@@ -10542,15 +10470,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q218305"
   },
   {
-    "id": "moscow-towers",
-    "name": "Moscow Towers",
-    "city": "Moscow",
-    "country": "Russia",
-    "heightMeters": 283.4,
-    "heightFeet": 930,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q32361114"
-  },
-  {
     "id": "chongqing-world-trade-center",
     "name": "Chongqing World Trade Center",
     "city": "Chongqing",
@@ -10567,6 +10486,15 @@ export const buildingLibrary = [
     "heightMeters": 283,
     "heightFeet": 928,
     "sourceUrl": "https://www.wikidata.org/wiki/Q700058"
+  },
+  {
+    "id": "al-hekma-tower",
+    "name": "Al Hekma Tower",
+    "city": "Emirate of Dubai",
+    "country": "United Arab Emirates",
+    "heightMeters": 282,
+    "heightFeet": 925,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q4704024"
   },
   {
     "id": "lodha-world-one",
@@ -10587,15 +10515,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q333305"
   },
   {
-    "id": "the-sky-taipei",
-    "name": "The Sky Taipei",
-    "city": "Taipei",
-    "country": "Taiwan",
-    "heightMeters": 280,
-    "heightFeet": 919,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q47528623"
-  },
-  {
     "id": "citigroup-center",
     "name": "Citigroup Center",
     "city": "New York City",
@@ -10612,15 +10531,6 @@ export const buildingLibrary = [
     "heightMeters": 278.2,
     "heightFeet": 913,
     "sourceUrl": "https://www.wikidata.org/wiki/Q18602"
-  },
-  {
-    "id": "15-hudson-yards",
-    "name": "15 Hudson Yards",
-    "city": "New York City",
-    "country": "United States",
-    "heightMeters": 278,
-    "heightFeet": 912,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15264301"
   },
   {
     "id": "diwang-international-commerce-center",
@@ -10677,13 +10587,13 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1964773"
   },
   {
-    "id": "10-hudson-yards",
-    "name": "10 Hudson Yards",
-    "city": "New York City",
-    "country": "United States",
+    "id": "songhwa-street-main-tower",
+    "name": "Songhwa Street Main Tower",
+    "city": "Pyongyang",
+    "country": "North Korea",
     "heightMeters": 273,
     "heightFeet": 896,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15264124"
+    "sourceUrl": "https://www.wikidata.org/wiki/Q118849690"
   },
   {
     "id": "aura",
@@ -10695,13 +10605,31 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q774178"
   },
   {
-    "id": "ryomyong-tower-82-floors-270-m-890-ft",
-    "name": "Ryomyong Tower 82 floors 270 m (890 ft)",
-    "city": "Pyongyang",
-    "country": "North Korea",
+    "id": "taipei-nan-shan-plaza",
+    "name": "Taipei Nan Shan Plaza",
+    "city": "Xinyi District",
+    "country": "Taiwan",
+    "heightMeters": 272,
+    "heightFeet": 892,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q24840610"
+  },
+  {
+    "id": "renaissance-tower",
+    "name": "Renaissance Tower",
+    "city": "Texas",
+    "country": "United States",
     "heightMeters": 270,
     "heightFeet": 886,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q30752681"
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1515605"
+  },
+  {
+    "id": "bohai-bank-tower",
+    "name": "Bohai Bank Tower",
+    "city": "Tianjin",
+    "country": "People's Republic of China",
+    "heightMeters": 270,
+    "heightFeet": 886,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q21619033"
   },
   {
     "id": "one-lujiazui",
@@ -10731,15 +10659,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q2303314"
   },
   {
-    "id": "fubon-xinyi-a25",
-    "name": "Fubon Xinyi A25",
-    "city": "Taipei",
-    "country": "Taiwan",
-    "heightMeters": 266,
-    "heightFeet": 873,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q47539081"
-  },
-  {
     "id": "toranomon-hills-station-tower",
     "name": "Toranomon Hills Station Tower",
     "city": "Minato",
@@ -10767,6 +10686,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q368017"
   },
   {
+    "id": "120-collins-street",
+    "name": "120 Collins Street",
+    "city": "Melbourne",
+    "country": "Australia",
+    "heightMeters": 265,
+    "heightFeet": 869,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q172402"
+  },
+  {
     "id": "suntrust-plaza",
     "name": "SunTrust Plaza",
     "city": "Georgia",
@@ -10776,13 +10704,13 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1706824"
   },
   {
-    "id": "120-collins-street",
-    "name": "120 Collins Street",
-    "city": "Melbourne",
-    "country": "Australia",
+    "id": "inxignia-tower",
+    "name": "Inxignia tower",
+    "city": "Heroica Puebla de Zaragoza",
+    "country": "Mexico",
     "heightMeters": 265,
     "heightFeet": 869,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q172402"
+    "sourceUrl": "https://www.wikidata.org/wiki/Q119853699"
   },
   {
     "id": "triumph-palace",
@@ -10794,15 +10722,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q80367"
   },
   {
-    "id": "300-george-street-brisbane",
-    "name": "300 George Street, Brisbane",
-    "city": "Brisbane",
-    "country": "Australia",
-    "heightMeters": 264,
-    "heightFeet": 866,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q16823864"
-  },
-  {
     "id": "samsung-tower-palace-3-tower-g",
     "name": "Samsung Tower Palace 3 – Tower G",
     "city": "Gangnam District",
@@ -10810,15 +10729,6 @@ export const buildingLibrary = [
     "heightMeters": 263.7,
     "heightFeet": 865,
     "sourceUrl": "https://www.wikidata.org/wiki/Q1320312"
-  },
-  {
-    "id": "the-one",
-    "name": "The One",
-    "city": "Brisbane",
-    "country": "Australia",
-    "heightMeters": 263,
-    "heightFeet": 863,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q30766256"
   },
   {
     "id": "trump-world-tower",
@@ -10893,15 +10803,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q216865"
   },
   {
-    "id": "vision-tower",
-    "name": "Vision Tower",
-    "city": "Dubai",
-    "country": "United Arab Emirates",
-    "heightMeters": 260,
-    "heightFeet": 853,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q1614219"
-  },
-  {
     "id": "101-collins-street",
     "name": "101 Collins Street",
     "city": "Melbourne",
@@ -10911,13 +10812,22 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q165506"
   },
   {
-    "id": "revenue-tower-jakarta",
-    "name": "Revenue Tower Jakarta",
-    "city": "Jakarta",
-    "country": "Indonesia",
+    "id": "the-42",
+    "name": "The 42",
+    "city": "Ward No. 63, Kolkata Municipal Corporation",
+    "country": "India",
     "heightMeters": 260,
     "heightFeet": 853,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q127043383"
+    "sourceUrl": "https://www.wikidata.org/wiki/Q7711913"
+  },
+  {
+    "id": "vision-tower",
+    "name": "Vision Tower",
+    "city": "Dubai",
+    "country": "United Arab Emirates",
+    "heightMeters": 260,
+    "heightFeet": 853,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1614219"
   },
   {
     "id": "kingbridge-tower",
@@ -10927,6 +10837,15 @@ export const buildingLibrary = [
     "heightMeters": 260,
     "heightFeet": 853,
     "sourceUrl": "https://www.wikidata.org/wiki/Q134885353"
+  },
+  {
+    "id": "revenue-tower-jakarta",
+    "name": "Revenue Tower Jakarta",
+    "city": "Jakarta",
+    "country": "Indonesia",
+    "heightMeters": 260,
+    "heightFeet": 853,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q127043383"
   },
   {
     "id": "30-rockefeller-plaza",
@@ -10947,15 +10866,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q2376507"
   },
   {
-    "id": "number-one-bloor",
-    "name": "Number One Bloor",
-    "city": "Toronto",
-    "country": "Canada",
-    "heightMeters": 257,
-    "heightFeet": 843,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q1338561"
-  },
-  {
     "id": "park-tower",
     "name": "Park Tower",
     "city": "Chicago",
@@ -10972,6 +10882,15 @@ export const buildingLibrary = [
     "heightMeters": 257,
     "heightFeet": 843,
     "sourceUrl": "https://www.wikidata.org/wiki/Q1983016"
+  },
+  {
+    "id": "number-one-bloor",
+    "name": "Number One Bloor",
+    "city": "Toronto",
+    "country": "Canada",
+    "heightMeters": 257,
+    "heightFeet": 843,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1338561"
   },
   {
     "id": "messeturm",
@@ -11010,15 +10929,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1985903"
   },
   {
-    "id": "spx-tower",
-    "name": "SPX Tower",
-    "city": "Riyadh",
-    "country": "Saudi Arabia",
-    "heightMeters": 255,
-    "heightFeet": 837,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q28791021"
-  },
-  {
     "id": "capital-tower",
     "name": "Capital Tower",
     "city": "Downtown Core",
@@ -11026,6 +10936,15 @@ export const buildingLibrary = [
     "heightMeters": 255,
     "heightFeet": 837,
     "sourceUrl": "https://www.wikidata.org/wiki/Q2614510"
+  },
+  {
+    "id": "spx-tower",
+    "name": "SPX Tower",
+    "city": "Riyadh",
+    "country": "Saudi Arabia",
+    "heightMeters": 255,
+    "heightFeet": 837,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q28791021"
   },
   {
     "id": "al-fardan-residences",
@@ -11055,6 +10974,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1138772"
   },
   {
+    "id": "stantec-tower",
+    "name": "Stantec Tower",
+    "city": "Alberta",
+    "country": "Canada",
+    "heightMeters": 250.8,
+    "heightFeet": 823,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q21092654"
+  },
+  {
     "id": "5-taian-dao",
     "name": "5 Taian Dao",
     "city": "Tianjin",
@@ -11082,6 +11010,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1069161"
   },
   {
+    "id": "30-st-mary-axe",
+    "name": "30 St Mary Axe",
+    "city": "City of London",
+    "country": "United Kingdom",
+    "heightMeters": 250,
+    "heightFeet": 820,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q191161"
+  },
+  {
     "id": "legacy-at-millennium-park",
     "name": "Legacy at Millennium Park",
     "city": "Illinois",
@@ -11091,13 +11028,13 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1812350"
   },
   {
-    "id": "30-st-mary-axe",
-    "name": "30 St Mary Axe",
-    "city": "City of London",
-    "country": "United Kingdom",
+    "id": "mohammed-vi-tower",
+    "name": "Mohammed VI Tower",
+    "city": "Salé",
+    "country": "Morocco",
     "heightMeters": 250,
     "heightFeet": 820,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q191161"
+    "sourceUrl": "https://www.wikidata.org/wiki/Q25452628"
   },
   {
     "id": "torre-de-cristal",
@@ -11163,15 +11100,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1155401"
   },
   {
-    "id": "brookfield-place",
-    "name": "Brookfield Place",
-    "city": "Calgary",
-    "country": "Canada",
-    "heightMeters": 247,
-    "heightFeet": 810,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15789968"
-  },
-  {
     "id": "4-times-square",
     "name": "4 Times Square",
     "city": "Manhattan",
@@ -11190,6 +11118,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q464482"
   },
   {
+    "id": "bank-of-china-tower-ningbo",
+    "name": "Bank of China Tower, Ningbo",
+    "city": "Ningbo",
+    "country": "People's Republic of China",
+    "heightMeters": 246,
+    "heightFeet": 807,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q118639158"
+  },
+  {
     "id": "shangbang-leasing-tower",
     "name": "Shangbang Leasing Tower",
     "city": "Tianjin",
@@ -11206,15 +11143,6 @@ export const buildingLibrary = [
     "heightMeters": 245.7,
     "heightFeet": 806,
     "sourceUrl": "https://www.wikidata.org/wiki/Q875078"
-  },
-  {
-    "id": "fki-tower",
-    "name": "FKI Tower",
-    "city": "Yeoui-dong",
-    "country": "South Korea",
-    "heightMeters": 245.5,
-    "heightFeet": 805,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q16099606"
   },
   {
     "id": "jr-central-towers",
@@ -11253,22 +11181,22 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1093913"
   },
   {
-    "id": "the-link",
-    "name": "The Link",
-    "city": "Puteaux",
-    "country": "France",
-    "heightMeters": 242,
-    "heightFeet": 794,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q30303011"
+    "id": "tokyo-metropolitan-government-building-i",
+    "name": "Tokyo Metropolitan Government Building I",
+    "city": "Nishi-Shinjuku",
+    "country": "Japan",
+    "heightMeters": 243.4,
+    "heightFeet": 799,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q24191410"
   },
   {
-    "id": "woolworth-building",
-    "name": "Woolworth Building",
-    "city": "Tribeca",
-    "country": "United States",
-    "heightMeters": 241,
-    "heightFeet": 791,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q217652"
+    "id": "r-f-centre",
+    "name": "R&F Centre",
+    "city": "Tianhe District",
+    "country": "People's Republic of China",
+    "heightMeters": 243,
+    "heightFeet": 797,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q7273221"
   },
   {
     "id": "john-hancock-tower",
@@ -11280,22 +11208,13 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q798416"
   },
   {
-    "id": "main-tower",
-    "name": "Main Tower",
-    "city": "Frankfurt-Innenstadt I",
-    "country": "Germany",
-    "heightMeters": 240,
-    "heightFeet": 787,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q321291"
-  },
-  {
-    "id": "four-seasons-hotel-miami",
-    "name": "Four Seasons Hotel Miami",
-    "city": "Miami",
+    "id": "woolworth-building",
+    "name": "Woolworth Building",
+    "city": "Tribeca",
     "country": "United States",
-    "heightMeters": 240,
-    "heightFeet": 787,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q1440000"
+    "heightMeters": 241,
+    "heightFeet": 791,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q217652"
   },
   {
     "id": "one-canada-square",
@@ -11325,6 +11244,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q521935"
   },
   {
+    "id": "main-tower",
+    "name": "Main Tower",
+    "city": "Frankfurt-Innenstadt I",
+    "country": "Germany",
+    "heightMeters": 240,
+    "heightFeet": 787,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q321291"
+  },
+  {
     "id": "deutsche-bank-place",
     "name": "Deutsche Bank Place",
     "city": "New South Wales",
@@ -11332,6 +11260,24 @@ export const buildingLibrary = [
     "heightMeters": 240,
     "heightFeet": 787,
     "sourceUrl": "https://www.wikidata.org/wiki/Q54492"
+  },
+  {
+    "id": "four-seasons-hotel-miami",
+    "name": "Four Seasons Hotel Miami",
+    "city": "Miami",
+    "country": "United States",
+    "heightMeters": 240,
+    "heightFeet": 787,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1440000"
+  },
+  {
+    "id": "ryomyong-tower-70-floors-240-m-790-ft",
+    "name": "Ryomyong Tower 70 floors 240 m (790 ft)",
+    "city": "Pyongyang",
+    "country": "North Korea",
+    "heightMeters": 240,
+    "heightFeet": 787,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q118583861"
   },
   {
     "id": "banyan-tree-signatures",
@@ -11377,6 +11323,24 @@ export const buildingLibrary = [
     "heightMeters": 239,
     "heightFeet": 784,
     "sourceUrl": "https://www.wikidata.org/wiki/Q2493262"
+  },
+  {
+    "id": "azrieli-sarona-tower",
+    "name": "Azrieli Sarona Tower",
+    "city": "Tel Aviv",
+    "country": "Israel",
+    "heightMeters": 238.5,
+    "heightFeet": 782,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q24885196"
+  },
+  {
+    "id": "qingdao-agora",
+    "name": "Qingdao Agora",
+    "city": "Qingdao",
+    "country": "People's Republic of China",
+    "heightMeters": 238.3,
+    "heightFeet": 782,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q22978400"
   },
   {
     "id": "tc-energy-center",
@@ -11431,24 +11395,6 @@ export const buildingLibrary = [
     "heightMeters": 237.1,
     "heightFeet": 778,
     "sourceUrl": "https://www.wikidata.org/wiki/Q1342690"
-  },
-  {
-    "id": "skyline-tower-new-york-city",
-    "name": "Skyline Tower (New York City)",
-    "city": "New York City",
-    "country": "United States",
-    "heightMeters": 237.1,
-    "heightFeet": 778,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q64854670"
-  },
-  {
-    "id": "harbour-plaza-residences",
-    "name": "Harbour Plaza Residences",
-    "city": "Toronto",
-    "country": "Canada",
-    "heightMeters": 237,
-    "heightFeet": 778,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q30744067"
   },
   {
     "id": "torre-pwc",
@@ -11541,15 +11487,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1509747"
   },
   {
-    "id": "19-dutch",
-    "name": "19 Dutch",
-    "city": "New York City",
-    "country": "United States",
-    "heightMeters": 231,
-    "heightFeet": 758,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q30642135"
-  },
-  {
     "id": "torre-mayor",
     "name": "Torre Mayor",
     "city": "Mexico City",
@@ -11566,6 +11503,24 @@ export const buildingLibrary = [
     "heightMeters": 230,
     "heightFeet": 755,
     "sourceUrl": "https://www.wikidata.org/wiki/Q228242"
+  },
+  {
+    "id": "palace-of-culture-and-science",
+    "name": "Palace of Culture and Science",
+    "city": "Warsaw",
+    "country": "Poland",
+    "heightMeters": 230,
+    "heightFeet": 755,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q167566"
+  },
+  {
+    "id": "heron-tower",
+    "name": "Heron Tower",
+    "city": "City of London",
+    "country": "United Kingdom",
+    "heightMeters": 230,
+    "heightFeet": 755,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1613853"
   },
   {
     "id": "enterprise-plaza",
@@ -11586,24 +11541,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1364354"
   },
   {
-    "id": "heron-tower",
-    "name": "Heron Tower",
-    "city": "City of London",
-    "country": "United Kingdom",
-    "heightMeters": 230,
-    "heightFeet": 755,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q1613853"
-  },
-  {
-    "id": "palace-of-culture-and-science",
-    "name": "Palace of Culture and Science",
-    "city": "Warsaw",
-    "country": "Poland",
-    "heightMeters": 230,
-    "heightFeet": 755,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q167566"
-  },
-  {
     "id": "122-leadenhall-street",
     "name": "122 Leadenhall Street",
     "city": "City of London",
@@ -11613,13 +11550,13 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q2742547"
   },
   {
-    "id": "shibuya-scramble-square",
-    "name": "Shibuya Scramble Square",
-    "city": "Shibuya",
-    "country": "Japan",
+    "id": "1717-broadway",
+    "name": "1717 Broadway",
+    "city": "Manhattan",
+    "country": "United States",
     "heightMeters": 229.7,
     "heightFeet": 754,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q64026922"
+    "sourceUrl": "https://www.wikidata.org/wiki/Q198238"
   },
   {
     "id": "axa-equitable-center",
@@ -11631,15 +11568,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q300254"
   },
   {
-    "id": "one-penn-plaza",
-    "name": "One Penn Plaza",
-    "city": "Manhattan",
-    "country": "United States",
-    "heightMeters": 229,
-    "heightFeet": 751,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q1138648"
-  },
-  {
     "id": "exxon-building",
     "name": "Exxon Building",
     "city": "Manhattan",
@@ -11647,6 +11575,15 @@ export const buildingLibrary = [
     "heightMeters": 229,
     "heightFeet": 751,
     "sourceUrl": "https://www.wikidata.org/wiki/Q173498"
+  },
+  {
+    "id": "one-penn-plaza",
+    "name": "One Penn Plaza",
+    "city": "Manhattan",
+    "country": "United States",
+    "heightMeters": 229,
+    "heightFeet": 751,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1138648"
   },
   {
     "id": "paramount-tower",
@@ -11685,13 +11622,13 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1426419"
   },
   {
-    "id": "rsa-battle-house-tower",
-    "name": "RSA Battle House Tower",
-    "city": "Mobile",
+    "id": "one-astor-plaza",
+    "name": "One Astor Plaza",
+    "city": "Manhattan",
     "country": "United States",
-    "heightMeters": 227.1,
+    "heightMeters": 227,
     "heightFeet": 745,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q3049341"
+    "sourceUrl": "https://www.wikidata.org/wiki/Q659652"
   },
   {
     "id": "60-wall-street",
@@ -11703,15 +11640,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q247887"
   },
   {
-    "id": "one-astor-plaza",
-    "name": "One Astor Plaza",
-    "city": "Manhattan",
-    "country": "United States",
-    "heightMeters": 227,
-    "heightFeet": 745,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q659652"
-  },
-  {
     "id": "empire-tower",
     "name": "Empire Tower",
     "city": "Bangkok",
@@ -11719,6 +11647,15 @@ export const buildingLibrary = [
     "heightMeters": 227,
     "heightFeet": 745,
     "sourceUrl": "https://www.wikidata.org/wiki/Q120546"
+  },
+  {
+    "id": "centerpoint-energy-plaza",
+    "name": "CenterPoint Energy Plaza",
+    "city": "Texas",
+    "country": "United States",
+    "heightMeters": 226,
+    "heightFeet": 741,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q531752"
   },
   {
     "id": "20-exchange-place",
@@ -11748,15 +11685,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1343055"
   },
   {
-    "id": "centerpoint-energy-plaza",
-    "name": "CenterPoint Energy Plaza",
-    "city": "Texas",
-    "country": "United States",
-    "heightMeters": 226,
-    "heightFeet": 741,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q531752"
-  },
-  {
     "id": "7-world-trade-center",
     "name": "7 World Trade Center",
     "city": "Manhattan",
@@ -11766,13 +11694,13 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q270066"
   },
   {
-    "id": "aro-new-york-city",
-    "name": "ARO (New York City)",
-    "city": "Midtown Manhattan",
-    "country": "United States",
+    "id": "tokyu-kabukicho-tower",
+    "name": "Tokyu Kabukicho Tower",
+    "city": "Kabukichō",
+    "country": "Japan",
     "heightMeters": 225,
     "heightFeet": 738,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q30753028"
+    "sourceUrl": "https://www.wikidata.org/wiki/Q109595002"
   },
   {
     "id": "fontainebleau-las-vegas",
@@ -11802,15 +11730,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q827638"
   },
   {
-    "id": "victory-plaza-tower-a",
-    "name": "Victory Plaza Tower A",
-    "city": "unknown city",
-    "country": "People's Republic of China",
-    "heightMeters": 223,
-    "heightFeet": 732,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q42108965"
-  },
-  {
     "id": "carlton-centre",
     "name": "Carlton Centre",
     "city": "Johannesburg",
@@ -11820,15 +11739,6 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q976172"
   },
   {
-    "id": "telus-sky",
-    "name": "Telus Sky",
-    "city": "Alberta",
-    "country": "Canada",
-    "heightMeters": 222.3,
-    "heightFeet": 729,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q16255317"
-  },
-  {
     "id": "chang-gu-world-trade-center",
     "name": "Chang-Gu World Trade Center",
     "city": "Sanmin District",
@@ -11836,24 +11746,6 @@ export const buildingLibrary = [
     "heightMeters": 222,
     "heightFeet": 728,
     "sourceUrl": "https://www.wikidata.org/wiki/Q697076"
-  },
-  {
-    "id": "kerry-center",
-    "name": "Kerry Center",
-    "city": "Tianjin",
-    "country": "People's Republic of China",
-    "heightMeters": 222,
-    "heightFeet": 728,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q12261444"
-  },
-  {
-    "id": "hopewell-centre",
-    "name": "Hopewell Centre",
-    "city": "Wan Chai District",
-    "country": "People's Republic of China",
-    "heightMeters": 222,
-    "heightFeet": 728,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q3234973"
   },
   {
     "id": "raffles-city-shanghai",
@@ -11919,31 +11811,13 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q1357866"
   },
   {
-    "id": "warsaw-unit",
-    "name": "Warsaw Unit",
-    "city": "Warsaw",
-    "country": "Poland",
+    "id": "hi-tower-building",
+    "name": "Hi Tower building",
+    "city": "Givatayim",
+    "country": "Israel",
     "heightMeters": 220,
     "heightFeet": 722,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q60862279"
-  },
-  {
-    "id": "newfoundland",
-    "name": "Newfoundland",
-    "city": "London Borough of Tower Hamlets",
-    "country": "United Kingdom",
-    "heightMeters": 219.8,
-    "heightFeet": 721,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q15917518"
-  },
-  {
-    "id": "sino-life-insurance-building",
-    "name": "Sino Life Insurance Building",
-    "city": "Shenzhen",
-    "country": "People's Republic of China",
-    "heightMeters": 219,
-    "heightFeet": 719,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q28873314"
+    "sourceUrl": "https://www.wikidata.org/wiki/Q111337545"
   },
   {
     "id": "250-east-57th-street",
@@ -11955,6 +11829,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q217827"
   },
   {
+    "id": "one-shell-plaza",
+    "name": "One Shell Plaza",
+    "city": "Houston",
+    "country": "United States",
+    "heightMeters": 218,
+    "heightFeet": 715,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1537698"
+  },
+  {
     "id": "metropolitan-tower",
     "name": "Metropolitan Tower",
     "city": "Manhattan",
@@ -11962,15 +11845,6 @@ export const buildingLibrary = [
     "heightMeters": 218,
     "heightFeet": 715,
     "sourceUrl": "https://www.wikidata.org/wiki/Q1925883"
-  },
-  {
-    "id": "610-lexington-avenue",
-    "name": "610 Lexington Avenue",
-    "city": "Manhattan",
-    "country": "United States",
-    "heightMeters": 217,
-    "heightFeet": 712,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q1710367"
   },
   {
     "id": "900-biscayne-bay",
@@ -11982,6 +11856,15 @@ export const buildingLibrary = [
     "sourceUrl": "https://www.wikidata.org/wiki/Q28833"
   },
   {
+    "id": "610-lexington-avenue",
+    "name": "610 Lexington Avenue",
+    "city": "Manhattan",
+    "country": "United States",
+    "heightMeters": 217,
+    "heightFeet": 712,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1710367"
+  },
+  {
     "id": "500-fifth-avenue",
     "name": "500 Fifth Avenue",
     "city": "Manhattan",
@@ -11989,15 +11872,6 @@ export const buildingLibrary = [
     "heightMeters": 216.1,
     "heightFeet": 709,
     "sourceUrl": "https://www.wikidata.org/wiki/Q133599"
-  },
-  {
-    "id": "mistral-office-tower",
-    "name": "Mistral Office Tower",
-    "city": "Konak",
-    "country": "Turkey",
-    "heightMeters": 216,
-    "heightFeet": 709,
-    "sourceUrl": "https://www.wikidata.org/wiki/Q30752740"
   },
   {
     "id": "shiodome-city-center",
@@ -12016,6 +11890,132 @@ export const buildingLibrary = [
     "heightMeters": 215.8,
     "heightFeet": 708,
     "sourceUrl": "https://www.wikidata.org/wiki/Q598604"
+  },
+  {
+    "id": "general-motors-building",
+    "name": "General Motors Building",
+    "city": "Manhattan",
+    "country": "United States",
+    "heightMeters": 215,
+    "heightFeet": 705,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1501652"
+  },
+  {
+    "id": "sumitomo-fudosan-tokyo-mita-garden-tower",
+    "name": "Sumitomo Fudosan Tokyo Mita Garden Tower",
+    "city": "Mita",
+    "country": "Japan",
+    "heightMeters": 215,
+    "heightFeet": 705,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q116947281"
+  },
+  {
+    "id": "torre-ejecutiva-pemex",
+    "name": "Torre Ejecutiva Pemex",
+    "city": "Mexico City",
+    "country": "Mexico",
+    "heightMeters": 214,
+    "heightFeet": 702,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q948178"
+  },
+  {
+    "id": "metropolitan-life-insurance-company-tower",
+    "name": "Metropolitan Life Insurance Company Tower",
+    "city": "Manhattan",
+    "country": "United States",
+    "heightMeters": 213,
+    "heightFeet": 699,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q652452"
+  },
+  {
+    "id": "victoria-towers",
+    "name": "Victoria Towers",
+    "city": "Yau Tsim Mong District",
+    "country": "People's Republic of China",
+    "heightMeters": 213,
+    "heightFeet": 699,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q241648"
+  },
+  {
+    "id": "act-tower",
+    "name": "Act Tower",
+    "city": "Hamamatsu",
+    "country": "Japan",
+    "heightMeters": 212.8,
+    "heightFeet": 698,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q1096141"
+  },
+  {
+    "id": "hancock-whitney-center",
+    "name": "Hancock Whitney Center",
+    "city": "New Orleans",
+    "country": "United States",
+    "heightMeters": 212.5,
+    "heightFeet": 697,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q28868"
+  },
+  {
+    "id": "eighth-avenue-place-east-tower",
+    "name": "Eighth Avenue Place East Tower",
+    "city": "Alberta",
+    "country": "Canada",
+    "heightMeters": 212.3,
+    "heightFeet": 697,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q122474969"
+  },
+  {
+    "id": "omkar-1973-tower-a",
+    "name": "Omkar 1973 Tower A",
+    "city": "Mumbai",
+    "country": "India",
+    "heightMeters": 212,
+    "heightFeet": 696,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q122853217"
+  },
+  {
+    "id": "cathay-landmark",
+    "name": "Cathay Landmark",
+    "city": "Xinyi Planning District",
+    "country": "Taiwan",
+    "heightMeters": 212,
+    "heightFeet": 696,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q21449366"
+  },
+  {
+    "id": "brookfield-tower",
+    "name": "Brookfield Tower",
+    "city": "Los Angeles",
+    "country": "United States",
+    "heightMeters": 211.7,
+    "heightFeet": 695,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q113153161"
+  },
+  {
+    "id": "seven-stars-tower",
+    "name": "Seven stars tower",
+    "city": "Bnei Brak",
+    "country": "Israel",
+    "heightMeters": 211.3,
+    "heightFeet": 693,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q113612483"
+  },
+  {
+    "id": "americas-tower",
+    "name": "Americas Tower",
+    "city": "Manhattan",
+    "country": "United States",
+    "heightMeters": 211,
+    "heightFeet": 692,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q467467"
+  },
+  {
+    "id": "china-merchants-tower",
+    "name": "China Merchants Tower",
+    "city": "Nanshan District",
+    "country": "People's Republic of China",
+    "heightMeters": 211,
+    "heightFeet": 692,
+    "sourceUrl": "https://www.wikidata.org/wiki/Q23945453"
   }
 ] as const;
 

@@ -33,7 +33,7 @@ const duplicateTargets = assets
   .map((asset) => asset.target)
   .filter((target, index, targets) => targets.indexOf(target) !== index);
 
-if (!assets.length || remoteImageReferences.length || externalImageReferences.length || missing.length || tiny.length || invalid.length || duplicateTargets.length) {
+if (!assets.length || remoteImageReferences.length || missing.length || tiny.length || invalid.length || duplicateTargets.length) {
   console.error(
     JSON.stringify(
       {
@@ -52,4 +52,4 @@ if (!assets.length || remoteImageReferences.length || externalImageReferences.le
   process.exit(1);
 }
 
-console.log(`All ${assets.length} Burrow content images are local and present.`);
+console.log(`All ${assets.length} local Burrow content images are present. External image references: ${externalImageReferences.length}.`);

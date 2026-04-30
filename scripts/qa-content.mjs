@@ -1,0 +1,214 @@
+import fs from "node:fs";
+import path from "node:path";
+import { createJiti } from "jiti";
+
+const jiti = createJiti(`${process.cwd()}/`);
+const data = jiti("./src/lib/game-data.ts");
+const library = jiti("./src/lib/content-library.ts");
+const {
+  buildBuildFactRound,
+  buildFactRound,
+  buildNumberRound,
+  buildOddRound,
+  buildRevealRound,
+  buildSortRound,
+  collectionCards,
+} = jiti("./src/lib/game-modes.ts");
+const { buildSession } = jiti("./src/lib/questions.ts");
+
+const userAgent = "BurrowContentQA/1.0";
+const critical = [];
+const warnings = [];
+
+const isImageFile = (target) => {
+  const buffer = fs.readFileSync(target);
+  const textStart = buffer.subarray(0, 120).toString("utf8").trimStart().toLowerCase();
+  return (
+    (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) ||
+    (buffer[0] === 0x89 && buffer.subarray(1, 4).toString("ascii") === "PNG") ||
+    buffer.subarray(0, 6).toString("ascii") === "GIF87a" ||
+    buffer.subarray(0, 6).toString("ascii") === "GIF89a" ||
+    (buffer.subarray(0, 4).toString("ascii") === "RIFF" && buffer.subarray(8, 12).toString("ascii") === "WEBP") ||
+    textStart.startsWith("<svg")
+  );
+};
+
+const checkRemoteImage = async (url) => {
+  const response = await fetch(url, {
+    headers: {
+      Range: "bytes=0-2048",
+      "User-Agent": userAgent,
+    },
+  });
+  const contentType = response.headers.get("content-type") ?? "";
+  return response.ok && (contentType.startsWith("image/") || url.includes("Special:FilePath"));
+};
+
+const checkImage = async (item) => {
+  if (!item.image) {
+    critical.push(`${item.topic}/${item.id}: missing image`);
+    return;
+  }
+
+  if (item.image.startsWith("http")) {
+    try {
+      if (!(await checkRemoteImage(item.image))) {
+        critical.push(`${item.topic}/${item.id}: remote image did not return an image response`);
+      }
+    } catch (error) {
+      critical.push(`${item.topic}/${item.id}: remote image failed (${error.message})`);
+    }
+    return;
+  }
+
+  const target = path.join("public", item.image.replace(/^\//, ""));
+  if (!fs.existsSync(target)) {
+    critical.push(`${item.topic}/${item.id}: missing local image ${target}`);
+    return;
+  }
+  if (fs.statSync(target).size < 1024) {
+    critical.push(`${item.topic}/${item.id}: image is too small`);
+    return;
+  }
+  if (!isImageFile(target)) {
+    critical.push(`${item.topic}/${item.id}: image file does not look like an image`);
+  }
+};
+
+const requireText = (item, field, min = 2) => {
+  const value = item[field];
+  if (typeof value !== "string" || value.trim().length < min) critical.push(`${item.topic}/${item.id}: missing ${field}`);
+};
+
+const checkFeaturedMetadata = (item) => {
+  requireText(item, "name");
+  requireText(item, "fact", 24);
+  requireText(item, "imageCredit");
+  requireText(item, "imageSourceUrl", 8);
+
+  if (item.topic === "peppers" && !(item.shuMin <= item.shuMax && item.shuMax >= 0)) critical.push(`${item.topic}/${item.id}: bad Scoville range`);
+  if (item.topic === "buildings" && !(item.heightFt > 250 && item.city && item.country)) critical.push(`${item.topic}/${item.id}: bad building metadata`);
+  if (item.topic === "sharks" && !(item.lengthFt > 0 && item.speedMph > 0 && item.power > 0 && item.family)) critical.push(`${item.topic}/${item.id}: bad shark metadata`);
+  if (item.topic === "space") {
+    if (item.kind === "planet" && !(item.diameterMiles && item.distanceFromSunMillionMiles !== undefined && item.meanSurfaceTempF !== undefined)) critical.push(`${item.topic}/${item.id}: bad planet metadata`);
+    if (item.kind === "star" && !(item.surfaceTempK && item.radiusSolar && item.distanceLightYears)) warnings.push(`${item.topic}/${item.id}: star has thin numeric metadata`);
+    if (item.kind === "concept" && !(item.conceptQuestion && item.conceptAnswer)) critical.push(`${item.topic}/${item.id}: concept needs question and answer`);
+  }
+};
+
+const featuredItems = [
+  ...data.peppers.map((item) => ({ ...item, topic: "peppers" })),
+  ...data.buildings.map((item) => ({ ...item, topic: "buildings" })),
+  ...data.sharks.map((item) => ({ ...item, topic: "sharks" })),
+  ...data.spaceCards.map((item) => ({ ...item, topic: "space" })),
+];
+
+for (const item of featuredItems) {
+  checkFeaturedMetadata(item);
+  await checkImage(item);
+}
+
+const cards = collectionCards();
+const lowConfidence = cards.filter((card) => card.qualityScore < 75);
+for (const card of lowConfidence) {
+  warnings.push(`${card.topic}/${card.id}: low confidence ${card.qualityScore} (${card.qualityFlags.join(", ")})`);
+}
+
+const assertRoundCardImages = async (roundName, round) => {
+  const cardsToCheck = [];
+  if (round.card) cardsToCheck.push(round.card);
+  if (round.cards) cardsToCheck.push(...round.cards);
+  for (const card of cardsToCheck) {
+    await checkImage({ ...card, topic: card.topic ?? round.topic });
+  }
+  if (round.image) await checkImage({ id: round.id, topic: round.topic, image: round.image });
+  if (!cardsToCheck.length && !round.image) critical.push(`${roundName}/${round.id}: no image-bearing content`);
+};
+
+const checkRoundBuilders = async () => {
+  const difficulties = [1, 2, 3];
+  for (const topic of data.topicIds) {
+    for (const difficulty of difficulties) {
+      const seed = 20260430 + difficulty * 100 + topic.length;
+      const session = buildSession(topic, difficulty, seed, []);
+      if (session.length < 12) critical.push(`${topic}/quiz/d${difficulty}: short session`);
+      for (const question of session) {
+        if (!question.id || !question.prompt || !question.answer) critical.push(`${topic}/question/${question.id ?? "missing"}: incomplete question`);
+        await checkImage({ id: question.id, topic: question.topic, image: question.image });
+        for (const comparison of question.comparison ?? []) {
+          await checkImage({ id: comparison.title, topic: comparison.topic, image: comparison.image });
+        }
+      }
+
+      const sortRound = buildSortRound(topic, difficulty, seed + 10);
+      if (sortRound.cards.length < 3 || sortRound.cards.length !== sortRound.answerIds.length) critical.push(`${topic}/sort/d${difficulty}: bad card count`);
+      await assertRoundCardImages(`${topic}/sort/d${difficulty}`, sortRound);
+
+      const factRound = buildFactRound(topic, difficulty, seed + 20);
+      if (!["True", "False"].includes(factRound.answer)) critical.push(`${topic}/fact/d${difficulty}: bad answer`);
+      await assertRoundCardImages(`${topic}/fact/d${difficulty}`, factRound);
+
+      const revealRound = buildRevealRound(topic, difficulty, seed + 30);
+      if (!revealRound.choices.includes(revealRound.answer)) critical.push(`${topic}/peek/d${difficulty}: answer missing from choices`);
+      await assertRoundCardImages(`${topic}/peek/d${difficulty}`, revealRound);
+
+      const buildRound = buildBuildFactRound(topic, difficulty, seed + 40);
+      if (buildRound.tokens.length !== buildRound.answerIds.length || !buildRound.answerText) critical.push(`${topic}/build/d${difficulty}: bad token set`);
+      await assertRoundCardImages(`${topic}/build/d${difficulty}`, buildRound);
+
+      const numberRound = buildNumberRound(topic, difficulty, seed + 50);
+      if (!numberRound.choices.includes(numberRound.answer) || numberRound.cards.length !== 2) critical.push(`${topic}/number/d${difficulty}: bad number choices`);
+      await assertRoundCardImages(`${topic}/number/d${difficulty}`, numberRound);
+
+      const oddRound = buildOddRound(topic, difficulty, seed + 60);
+      if (oddRound.cards.length !== 4 || !oddRound.cards.some((card) => card.id === oddRound.answerId)) critical.push(`${topic}/odd/d${difficulty}: bad odd-one-out set`);
+      await assertRoundCardImages(`${topic}/odd/d${difficulty}`, oddRound);
+    }
+  }
+};
+
+await checkRoundBuilders();
+
+for (const pepper of library.pepperLibrary) {
+  if (!pepper.id || !pepper.name || !pepper.sourceUrl) critical.push(`pepperLibrary/${pepper.id ?? "missing"}: missing identity/source`);
+  if (!pepper.species || !pepper.heatRange || pepper.heatRange === "varies") warnings.push(`pepperLibrary/${pepper.id}: thin pepper metadata`);
+}
+
+for (const shark of library.sharkLibrary) {
+  if (!shark.id || !shark.name || !shark.scientificName || !shark.sourceUrl) critical.push(`sharkLibrary/${shark.id ?? "missing"}: missing taxonomy/source`);
+}
+
+for (const building of library.buildingLibrary) {
+  if (!building.id || !building.name || !building.sourceUrl) critical.push(`buildingLibrary/${building.id ?? "missing"}: missing identity/source`);
+  if (!(building.heightMeters > 100 && building.heightFeet > 300)) critical.push(`buildingLibrary/${building.id}: bad height`);
+}
+
+const byTopic = Object.fromEntries(data.topicIds.map((topic) => [
+  topic,
+  cards.filter((card) => card.topic === topic),
+]));
+const confidence = Object.fromEntries(Object.entries(byTopic).map(([topic, topicCards]) => [
+  topic,
+  Math.round(topicCards.reduce((total, card) => total + card.qualityScore, 0) / topicCards.length),
+]));
+
+const result = {
+  featuredItems: featuredItems.length,
+  collectionCards: cards.length,
+  confidence,
+  researchLibrary: {
+    peppers: library.pepperLibrary.length,
+    sharks: library.sharkLibrary.length,
+    buildings: library.buildingLibrary.length,
+  },
+  warnings: warnings.slice(0, 30),
+  warningCount: warnings.length,
+  critical,
+};
+
+if (critical.length) {
+  console.error(JSON.stringify(result, null, 2));
+  process.exit(1);
+}
+
+console.log(JSON.stringify(result, null, 2));

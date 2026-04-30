@@ -4,15 +4,21 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand, type TopicId } from "@/lib/game-data";
 import {
+  buildBuildFactRound,
   buildFactRound,
+  buildNumberRound,
+  buildOddRound,
   buildRevealRound,
   buildSortRound,
   collectionCards,
   modeOptions,
+  type BuildFactRound,
   type FactRound,
   type GameMode,
   type KnowledgeCard,
   type KnowledgeTopic,
+  type NumberRound,
+  type OddRound,
   type RevealRound,
   type SortRound,
   type TopicScope,
@@ -53,6 +59,18 @@ type ResultState = {
   leveledUp: boolean;
 };
 
+type ContentIssueReport = {
+  id: string;
+  createdAt: string;
+  profileId: string;
+  mode: string;
+  topic: TopicId | KnowledgeTopic;
+  itemId: string;
+  title: string;
+  prompt: string;
+  image?: string;
+};
+
 const allKnowledgeTopics: KnowledgeTopic[] = [...topicIds];
 const emptyTopicCounts = () => Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, 0])) as Record<KnowledgeTopic, number>;
 const emptyTopicStats = () => Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, { correct: 0, answered: 0 }])) as Record<KnowledgeTopic, { correct: number; answered: number }>;
@@ -70,12 +88,13 @@ const initialProgress: Progress = {
   unlockedCards: [],
   topicWins: emptyTopicCounts(),
   topicStats: emptyTopicStats(),
-  modeWins: { mix: 0, quiz: 0, versus: 0, sort: 0, fact: 0, peek: 0 },
+  modeWins: { mix: 0, quiz: 0, versus: 0, sort: 0, fact: 0, peek: 0, build: 0, number: 0, odd: 0 },
 };
 
 const profilesKey = "burrow-profiles-v1";
 const legacyProfilesKey = "rabbit-hole-profiles-v1";
 const legacyProgressKey = "rabbit-hole-progress-v1";
+const contentIssuesKey = "burrow-content-issues-v1";
 const difficultyOptions: { id: Difficulty; label: string }[] = [
   { id: 1, label: "Easy" },
   { id: 2, label: "Med" },
@@ -84,6 +103,9 @@ const difficultyOptions: { id: Difficulty; label: string }[] = [
 const levelFromXp = (xp: number) => Math.max(1, Math.floor(xp / 120) + 1);
 const praise = ["Nice reading!", "Big brain move!", "You measured it!", "Hot answer!", "Sky-high thinking!", "Sharp thinking!"];
 const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
+type ChallengeMode = Exclude<GameMode, "mix">;
+const allChallengeModes: ChallengeMode[] = ["quiz", "versus", "sort", "fact", "peek", "build", "number", "odd"];
+const defaultMixPattern: ChallengeMode[] = ["quiz", "peek", "versus", "number", "build", "odd", "sort", "fact"];
 
 const freshProgress = (): Progress => ({
   ...initialProgress,
@@ -150,6 +172,16 @@ const loadProfiles = (): ProfilesState => {
   }
 };
 
+const loadContentIssues = (): ContentIssueReport[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(contentIssuesKey) ?? "[]") as ContentIssueReport[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
 const addUnique = (items: string[], additions: string[]) => {
   const next = [...additions.filter(Boolean), ...items];
   return Array.from(new Set(next)).slice(0, 120);
@@ -176,13 +208,14 @@ const adaptiveTopicScopeFor = (topic: TopicId, interests: KnowledgeTopic[], prog
   });
 };
 
-const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficulty, sessionSeed: number, seenIds: string[]): Question[] => {
+const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficulty, sessionSeed: number, seenIds: string[], mixModes = defaultMixPattern): Question[] => {
   if (mode === "mix") {
+    const pattern = mixModes.length ? mixModes : defaultMixPattern;
     const base = buildSession(topic, difficulty, sessionSeed, seenIds);
     const versusQuestions = buildQuestionRun(topic, "versus", difficulty, sessionSeed + 503, seenIds);
     let versusIndex = 0;
     return base.map((question, index) => {
-      if (mixPattern[index % mixPattern.length] !== "versus") return question;
+      if (pattern[index % pattern.length] !== "versus") return question;
       const nextVersus = versusQuestions[versusIndex];
       versusIndex += 1;
       return nextVersus ?? question;
@@ -208,8 +241,6 @@ const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficu
 };
 
 const difficultyLabel = (difficulty: Difficulty) => difficultyOptions.find((item) => item.id === difficulty)?.label ?? "Easy";
-type ChallengeMode = Exclude<GameMode, "mix">;
-const mixPattern: ChallengeMode[] = ["quiz", "peek", "versus", "sort", "fact", "quiz"];
 const isQuestionAnswerCorrect = (question: Question, choice: string) => {
   if (!question.estimate) return choice === question.answer;
   const value = Number(choice);
@@ -227,6 +258,7 @@ export function BurrowGame() {
   const progress = activeProfile.progress;
   const [topic, setTopic] = useState<TopicId>("mixed");
   const [mode, setMode] = useState<GameMode>("mix");
+  const [mixModes, setMixModes] = useState<ChallengeMode[]>(() => [...defaultMixPattern]);
   const [showCollection, setShowCollection] = useState(false);
   const [questions, setQuestions] = useState(() => buildQuestionRun(adaptiveTopicScopeFor("mixed", activeInterests, progress), "mix", progress.difficulty, 20260430, progress.seenIds));
   const [seedCounter, setSeedCounter] = useState(20260430);
@@ -239,21 +271,44 @@ export function BurrowGame() {
   const [factSelected, setFactSelected] = useState<"True" | "False" | null>(null);
   const [revealRound, setRevealRound] = useState<RevealRound>(() => buildRevealRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
   const [revealSelected, setRevealSelected] = useState<string | null>(null);
+  const [buildRound, setBuildRound] = useState<BuildFactRound>(() => buildBuildFactRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
+  const [buildPicked, setBuildPicked] = useState<string[]>([]);
+  const [buildChecked, setBuildChecked] = useState(false);
+  const [numberRound, setNumberRound] = useState<NumberRound>(() => buildNumberRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
+  const [numberSelected, setNumberSelected] = useState<number | null>(null);
+  const [oddRound, setOddRound] = useState<OddRound>(() => buildOddRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
+  const [oddSelected, setOddSelected] = useState<string | null>(null);
   const [sessionCorrect, setSessionCorrect] = useState(0);
   const [miniRunAnswered, setMiniRunAnswered] = useState(0);
   const [miniRunCorrect, setMiniRunCorrect] = useState(0);
   const [celebration, setCelebration] = useState("Pick a mode and jump in.");
   const [lastResult, setLastResult] = useState<ResultState | null>(null);
+  const [issueCount, setIssueCount] = useState(0);
+  const [issueFlash, setIssueFlash] = useState(false);
 
   const allCards = useMemo(() => collectionCards(), []);
   const question = questions[questionIndex];
-  const activeChallengeMode: ChallengeMode = mode === "mix" ? mixPattern[questionIndex % mixPattern.length] : mode;
+  const selectedMixModes = mixModes.length ? mixModes : defaultMixPattern;
+  const activeChallengeMode: ChallengeMode = mode === "mix" ? selectedMixModes[questionIndex % selectedMixModes.length] : mode;
   const isQuestionMode = !showCollection && (activeChallengeMode === "quiz" || activeChallengeMode === "versus");
   const answered = isQuestionMode && selected !== null;
   const isCorrect = isQuestionMode && question ? selected !== null && isQuestionAnswerCorrect(question, selected) : false;
   const nextLevelXp = progress.level * 120;
   const levelProgress = Math.min(100, Math.round(((progress.xp % 120) / 120) * 100));
-  const activeChallengeAnswered = activeChallengeMode === "sort" ? sortChecked : activeChallengeMode === "fact" ? factSelected !== null : activeChallengeMode === "peek" ? revealSelected !== null : answered;
+  const activeChallengeAnswered =
+    activeChallengeMode === "sort"
+      ? sortChecked
+      : activeChallengeMode === "fact"
+        ? factSelected !== null
+        : activeChallengeMode === "peek"
+          ? revealSelected !== null
+          : activeChallengeMode === "build"
+            ? buildChecked
+            : activeChallengeMode === "number"
+              ? numberSelected !== null
+              : activeChallengeMode === "odd"
+                ? oddSelected !== null
+                : answered;
   const sessionAnswered = mode === "mix" ? questionIndex + (activeChallengeAnswered ? 1 : 0) : questionIndex + (answered ? 1 : 0);
   const unlockedCount = allCards.filter((card) => progress.unlockedCards.includes(card.title)).length;
   const currentTopicScope = adaptiveTopicScopeFor(topic, activeInterests, progress);
@@ -270,6 +325,10 @@ export function BurrowGame() {
       setSortRound(buildSortRound(loadedScope, loadedProfile.progress.difficulty, 20260461));
       setFactRound(buildFactRound(loadedScope, loadedProfile.progress.difficulty, 20260477));
       setRevealRound(buildRevealRound(loadedScope, loadedProfile.progress.difficulty, 20260493));
+      setBuildRound(buildBuildFactRound(loadedScope, loadedProfile.progress.difficulty, 20260503));
+      setNumberRound(buildNumberRound(loadedScope, loadedProfile.progress.difficulty, 20260513));
+      setOddRound(buildOddRound(loadedScope, loadedProfile.progress.difficulty, 20260523));
+      setIssueCount(loadContentIssues().length);
       setProfilesReady(true);
     }, 0);
 
@@ -280,6 +339,49 @@ export function BurrowGame() {
     if (!profilesReady) return;
     window.localStorage.setItem(profilesKey, JSON.stringify(profilesState));
   }, [profilesReady, profilesState]);
+
+  const currentIssueTarget = (): Omit<ContentIssueReport, "id" | "createdAt" | "profileId"> => {
+    if (showCollection) {
+      return {
+        mode: "collection",
+        topic,
+        itemId: "collection",
+        title: "Collection",
+        prompt: "Collection card or source issue",
+      };
+    }
+
+    if (activeChallengeMode === "sort") return { mode: activeChallengeMode, topic: sortRound.topic, itemId: sortRound.id, title: "Sort round", prompt: sortRound.prompt, image: sortRound.cards[0]?.image };
+    if (activeChallengeMode === "fact") return { mode: activeChallengeMode, topic: factRound.topic, itemId: factRound.id, title: factRound.imageAlt, prompt: factRound.statement, image: factRound.image };
+    if (activeChallengeMode === "peek") return { mode: activeChallengeMode, topic: revealRound.topic, itemId: revealRound.id, title: revealRound.card.title, prompt: revealRound.prompt, image: revealRound.card.image };
+    if (activeChallengeMode === "build") return { mode: activeChallengeMode, topic: buildRound.topic, itemId: buildRound.id, title: buildRound.card.title, prompt: buildRound.prompt, image: buildRound.card.image };
+    if (activeChallengeMode === "number") return { mode: activeChallengeMode, topic: numberRound.topic, itemId: numberRound.id, title: numberRound.biggerLabel, prompt: numberRound.prompt, image: numberRound.cards[0]?.image };
+    if (activeChallengeMode === "odd") return { mode: activeChallengeMode, topic: oddRound.topic, itemId: oddRound.id, title: "Odd one round", prompt: oddRound.prompt, image: oddRound.cards[0]?.image };
+
+    return {
+      mode: activeChallengeMode,
+      topic: question?.topic ?? topic,
+      itemId: question?.id ?? "unknown",
+      title: question?.imageAlt ?? "Question",
+      prompt: question?.prompt ?? "Question issue",
+      image: question?.image,
+    };
+  };
+
+  const flagCurrentIssue = () => {
+    const report: ContentIssueReport = {
+      id: `issue-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      profileId: activeProfile.id,
+      ...currentIssueTarget(),
+    };
+    const nextReports = [report, ...loadContentIssues()].slice(0, 80);
+    window.localStorage.setItem(contentIssuesKey, JSON.stringify(nextReports));
+    setIssueCount(nextReports.length);
+    setIssueFlash(true);
+    window.setTimeout(() => setIssueFlash(false), 1800);
+    setCelebration("Flagged for content review.");
+  };
 
   const setProgress = (update: Progress | ((current: Progress) => Progress)) => {
     const activeProfileId = activeProfile.id;
@@ -351,6 +453,10 @@ export function BurrowGame() {
     setSortChecked(false);
     setFactSelected(null);
     setRevealSelected(null);
+    setBuildPicked([]);
+    setBuildChecked(false);
+    setNumberSelected(null);
+    setOddSelected(null);
     setLastResult(null);
     setSessionCorrect(0);
     setMiniRunAnswered(0);
@@ -370,10 +476,13 @@ export function BurrowGame() {
     const scope = adaptiveTopicScopeFor(safeTopic, nextInterests, nextProfile.progress);
     setTopic(safeTopic);
     resetRunState();
-    setQuestions(buildQuestionRun(scope, nextMode, nextProfile.progress.difficulty, seed, nextProfile.progress.seenIds));
+    setQuestions(buildQuestionRun(scope, nextMode, nextProfile.progress.difficulty, seed, nextProfile.progress.seenIds, selectedMixModes));
     setSortRound(buildSortRound(scope, nextProfile.progress.difficulty, seed + 31));
     setFactRound(buildFactRound(scope, nextProfile.progress.difficulty, seed + 47));
     setRevealRound(buildRevealRound(scope, nextProfile.progress.difficulty, seed + 61));
+    setBuildRound(buildBuildFactRound(scope, nextProfile.progress.difficulty, seed + 73));
+    setNumberRound(buildNumberRound(scope, nextProfile.progress.difficulty, seed + 89));
+    setOddRound(buildOddRound(scope, nextProfile.progress.difficulty, seed + 97));
   };
 
   const startMode = (nextMode: GameMode) => {
@@ -381,10 +490,13 @@ export function BurrowGame() {
     setShowCollection(false);
     setMode(nextMode);
     resetRunState();
-    setQuestions(buildQuestionRun(currentTopicScope, nextMode, progress.difficulty, seed, progress.seenIds));
+    setQuestions(buildQuestionRun(currentTopicScope, nextMode, progress.difficulty, seed, progress.seenIds, selectedMixModes));
     setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 59));
     setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 71));
     setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 83));
+    setBuildRound(buildBuildFactRound(currentTopicScope, progress.difficulty, seed + 91));
+    setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 103));
+    setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 109));
   };
 
   const setQuestionDifficulty = (nextDifficulty: Difficulty) => {
@@ -392,10 +504,13 @@ export function BurrowGame() {
     const seed = freshSeed(nextDifficulty * 53);
     setProgress((current) => ({ ...current, difficulty: nextDifficulty }));
     resetRunState();
-    setQuestions(buildQuestionRun(currentTopicScope, mode, nextDifficulty, seed, progress.seenIds));
+    setQuestions(buildQuestionRun(currentTopicScope, mode, nextDifficulty, seed, progress.seenIds, selectedMixModes));
     setSortRound(buildSortRound(currentTopicScope, nextDifficulty, seed + 41));
     setFactRound(buildFactRound(currentTopicScope, nextDifficulty, seed + 47));
     setRevealRound(buildRevealRound(currentTopicScope, nextDifficulty, seed + 53));
+    setBuildRound(buildBuildFactRound(currentTopicScope, nextDifficulty, seed + 59));
+    setNumberRound(buildNumberRound(currentTopicScope, nextDifficulty, seed + 67));
+    setOddRound(buildOddRound(currentTopicScope, nextDifficulty, seed + 71));
     setCelebration(`${difficultyLabel(nextDifficulty)} questions.`);
   };
 
@@ -451,6 +566,29 @@ export function BurrowGame() {
     setCelebration(`${activeProfile.name}'s mix updated.`);
   };
 
+  const toggleMixMode = (challengeMode: ChallengeMode) => {
+    const currentModes = selectedMixModes;
+    const nextModes = currentModes.includes(challengeMode)
+      ? currentModes.length === 1
+        ? currentModes
+        : currentModes.filter((item) => item !== challengeMode)
+      : defaultMixPattern.filter((item) => currentModes.includes(item) || item === challengeMode);
+    const seed = freshSeed(challengeMode.length + nextModes.length * 31);
+
+    setMixModes(nextModes);
+    if (mode === "mix") {
+      resetRunState();
+      setQuestions(buildQuestionRun(currentTopicScope, "mix", progress.difficulty, seed, progress.seenIds, nextModes));
+      setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 29));
+      setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 37));
+      setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 43));
+      setBuildRound(buildBuildFactRound(currentTopicScope, progress.difficulty, seed + 49));
+      setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 53));
+      setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 59));
+    }
+    setCelebration(`${nextModes.length} games in Mix.`);
+  };
+
   const answer = (choice: string) => {
     if (!question || selected !== null) return;
     const correct = isQuestionAnswerCorrect(question, choice);
@@ -476,7 +614,7 @@ export function BurrowGame() {
       setProgress((current) => ({ ...current, sessions: current.sessions + 1 }));
       setQuestionIndex(0);
       setSessionCorrect(0);
-      setQuestions(buildQuestionRun(currentTopicScope, mode, progress.difficulty, seed, progress.seenIds));
+      setQuestions(buildQuestionRun(currentTopicScope, mode, progress.difficulty, seed, progress.seenIds, selectedMixModes));
       setCelebration("New mixed run. Fresh shuffle.");
     } else {
       setQuestionIndex((value) => value + 1);
@@ -488,9 +626,16 @@ export function BurrowGame() {
     setSortChecked(false);
     setFactSelected(null);
     setRevealSelected(null);
+    setBuildPicked([]);
+    setBuildChecked(false);
+    setNumberSelected(null);
+    setOddSelected(null);
     setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 29));
     setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 37));
     setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 43));
+    setBuildRound(buildBuildFactRound(currentTopicScope, progress.difficulty, seed + 49));
+    setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 53));
+    setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 59));
   };
 
   const advance = () => {
@@ -506,7 +651,7 @@ export function BurrowGame() {
       setSessionCorrect(0);
       setSelected(null);
       setLastResult(null);
-      setQuestions(buildQuestionRun(currentTopicScope, mode, progress.difficulty, seed, progress.seenIds));
+      setQuestions(buildQuestionRun(currentTopicScope, mode, progress.difficulty, seed, progress.seenIds, selectedMixModes));
       setCelebration("New mini-session. Fresh challenges.");
       return;
     }
@@ -604,15 +749,103 @@ export function BurrowGame() {
     setCelebration("New picture peek.");
   };
 
+  const checkBuild = () => {
+    if (buildChecked || buildPicked.length !== buildRound.answerIds.length) return;
+    const correct = buildPicked.every((id, index) => id === buildRound.answerIds[index]);
+    const xpGain = correct ? 24 + progress.difficulty * 6 : 7;
+    const result = reward({
+      correct,
+      xpGain,
+      topicName: buildRound.topic,
+      modeName: mode === "mix" ? "mix" : "build",
+      seenId: buildRound.id,
+      unlockTitles: [buildRound.card.title],
+    });
+    setBuildChecked(true);
+    setMiniRunAnswered((value) => value + 1);
+    setMiniRunCorrect((value) => value + (correct ? 1 : 0));
+    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
+    setCelebration(correct ? "Sentence builder!" : "Good try. Read it in order.");
+    setLastResult(result);
+  };
+
+  const nextBuildRound = () => {
+    const seed = freshSeed(miniRunAnswered * 29);
+    setBuildRound(buildBuildFactRound(currentTopicScope, progress.difficulty, seed));
+    setBuildPicked([]);
+    setBuildChecked(false);
+    setLastResult(null);
+    setCelebration("New fact build.");
+  };
+
+  const answerNumber = (choice: number) => {
+    if (numberSelected !== null) return;
+    const correct = choice === numberRound.answer;
+    const xpGain = correct ? 28 + progress.difficulty * 6 : 8;
+    const result = reward({
+      correct,
+      xpGain,
+      topicName: numberRound.topic,
+      modeName: mode === "mix" ? "mix" : "number",
+      seenId: numberRound.id,
+      unlockTitles: numberRound.cards.map((card) => card.title),
+    });
+    setNumberSelected(choice);
+    setMiniRunAnswered((value) => value + 1);
+    setMiniRunCorrect((value) => value + (correct ? 1 : 0));
+    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
+    setCelebration(correct ? "Number detective!" : "Good try. Check the subtraction.");
+    setLastResult(result);
+  };
+
+  const nextNumberRound = () => {
+    const seed = freshSeed(miniRunAnswered * 31);
+    setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed));
+    setNumberSelected(null);
+    setLastResult(null);
+    setCelebration("New number case.");
+  };
+
+  const answerOdd = (cardId: string) => {
+    if (oddSelected !== null) return;
+    const correct = cardId === oddRound.answerId;
+    const xpGain = correct ? 26 + progress.difficulty * 5 : 7;
+    const result = reward({
+      correct,
+      xpGain,
+      topicName: oddRound.topic,
+      modeName: mode === "mix" ? "mix" : "odd",
+      seenId: oddRound.id,
+      unlockTitles: oddRound.cards.map((card) => card.title),
+    });
+    setOddSelected(cardId);
+    setMiniRunAnswered((value) => value + 1);
+    setMiniRunCorrect((value) => value + (correct ? 1 : 0));
+    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
+    setCelebration(correct ? "Rule spotted!" : "Good try. The rule is hiding in the cards.");
+    setLastResult(result);
+  };
+
+  const nextOddRound = () => {
+    const seed = freshSeed(miniRunAnswered * 37);
+    setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed));
+    setOddSelected(null);
+    setLastResult(null);
+    setCelebration("New logic set.");
+  };
+
   const resetProgress = () => {
     const seed = freshSeed(211);
     const reset = freshProgress();
     setProgress(reset);
     setShowCollection(false);
-    setQuestions(buildQuestionRun(currentTopicScope, mode, reset.difficulty, seed, reset.seenIds));
+    setQuestions(buildQuestionRun(currentTopicScope, mode, reset.difficulty, seed, reset.seenIds, selectedMixModes));
     setSortRound(buildSortRound(currentTopicScope, reset.difficulty, seed + 29));
     setFactRound(buildFactRound(currentTopicScope, reset.difficulty, seed + 37));
     setRevealRound(buildRevealRound(currentTopicScope, reset.difficulty, seed + 43));
+    setBuildRound(buildBuildFactRound(currentTopicScope, reset.difficulty, seed + 49));
+    setNumberRound(buildNumberRound(currentTopicScope, reset.difficulty, seed + 53));
+    setOddRound(buildOddRound(currentTopicScope, reset.difficulty, seed + 59));
     resetRunState();
     setCelebration("Progress reset. Fresh start.");
   };
@@ -666,11 +899,17 @@ export function BurrowGame() {
             </div>
           </div>
 
-          <div className="mt-2 grid w-full max-w-full min-w-0 gap-2 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
-            <ModeTabs mode={mode} onChange={startMode} />
-            <button onClick={resetProgress} className="min-h-10 rounded-lg border-2 border-[#082329] bg-white px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#ffd7ce] active:translate-y-0.5">
-              Reset
-            </button>
+          <div className="mt-2 grid w-full max-w-full min-w-0 gap-2 md:grid-cols-[minmax(180px,.7fr)_minmax(220px,.9fr)_auto] md:items-center">
+            <PlayModePicker mode={mode} onChange={startMode} />
+            <MixModeMenu activeModes={selectedMixModes} onToggle={toggleMixMode} />
+            <div className="grid gap-1.5 sm:grid-cols-2 md:grid-cols-1">
+              <button onClick={flagCurrentIssue} className="min-h-10 rounded-lg border-2 border-[#082329] bg-[#fff8ec] px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#fff0c2] active:translate-y-0.5">
+                {issueFlash ? "Flagged" : "Flag issue"}{issueCount ? ` (${issueCount})` : ""}
+              </button>
+              <button onClick={resetProgress} className="min-h-10 rounded-lg border-2 border-[#082329] bg-white px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#ffd7ce] active:translate-y-0.5">
+                Reset
+              </button>
+            </div>
           </div>
         </header>
 
@@ -748,6 +987,59 @@ export function BurrowGame() {
             onAnswer={answerReveal}
             onNext={mode === "mix" ? advanceMix : nextRevealRound}
             onSkip={mode === "mix" ? advanceMix : nextRevealRound}
+          />
+        )}
+
+        {!showCollection && activeChallengeMode === "build" && (
+          <BuildFactMode
+            round={buildRound}
+            picked={buildPicked}
+            checked={buildChecked}
+            result={lastResult}
+            miniRunAnswered={miniRunAnswered}
+            miniRunCorrect={miniRunCorrect}
+            celebration={celebration}
+            difficulty={progress.difficulty}
+            onPick={(id) => {
+              if (buildChecked || buildPicked.includes(id)) return;
+              setBuildPicked((value) => [...value, id]);
+            }}
+            onUndo={() => {
+              if (!buildChecked) setBuildPicked((value) => value.slice(0, -1));
+            }}
+            onCheck={checkBuild}
+            onNext={mode === "mix" ? advanceMix : nextBuildRound}
+            onSkip={mode === "mix" ? advanceMix : nextBuildRound}
+          />
+        )}
+
+        {!showCollection && activeChallengeMode === "number" && (
+          <NumberMode
+            round={numberRound}
+            selected={numberSelected}
+            result={lastResult}
+            miniRunAnswered={miniRunAnswered}
+            miniRunCorrect={miniRunCorrect}
+            celebration={celebration}
+            difficulty={progress.difficulty}
+            onAnswer={answerNumber}
+            onNext={mode === "mix" ? advanceMix : nextNumberRound}
+            onSkip={mode === "mix" ? advanceMix : nextNumberRound}
+          />
+        )}
+
+        {!showCollection && activeChallengeMode === "odd" && (
+          <OddOneMode
+            round={oddRound}
+            selected={oddSelected}
+            result={lastResult}
+            miniRunAnswered={miniRunAnswered}
+            miniRunCorrect={miniRunCorrect}
+            celebration={celebration}
+            difficulty={progress.difficulty}
+            onAnswer={answerOdd}
+            onNext={mode === "mix" ? advanceMix : nextOddRound}
+            onSkip={mode === "mix" ? advanceMix : nextOddRound}
           />
         )}
       </section>
@@ -1255,6 +1547,305 @@ function RevealMode({
   );
 }
 
+function BuildFactMode({
+  round,
+  picked,
+  checked,
+  result,
+  miniRunAnswered,
+  miniRunCorrect,
+  celebration,
+  difficulty,
+  onPick,
+  onUndo,
+  onCheck,
+  onNext,
+  onSkip,
+}: {
+  round: BuildFactRound;
+  picked: string[];
+  checked: boolean;
+  result: ResultState | null;
+  miniRunAnswered: number;
+  miniRunCorrect: number;
+  celebration: string;
+  difficulty: Difficulty;
+  onPick: (id: string) => void;
+  onUndo: () => void;
+  onCheck: () => void;
+  onNext: () => void;
+  onSkip: () => void;
+}) {
+  const pickedSet = new Set(picked);
+  const pickedTokens = picked.map((id) => round.tokens.find((token) => token.id === id)).filter(Boolean) as BuildFactRound["tokens"];
+
+  return (
+    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+      <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] md:min-h-0">
+        <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
+        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
+          Build round
+        </div>
+        <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#082329] bg-white/95 p-2 shadow-[2px_2px_0_#082329]">
+          <p className="text-lg font-black leading-tight text-[#102f36]">{round.card.title}</p>
+          <p className="text-sm font-bold text-[#59686b]">{round.card.subStat}</p>
+        </div>
+      </article>
+
+      <article className="flex min-h-[42dvh] flex-col rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329] md:min-h-0">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex min-w-0 items-center gap-2">
+            <DifficultyPill difficulty={difficulty} />
+            <p className="rounded-lg border-2 border-[#082329] bg-[#78d99a] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+              Make a fact
+            </p>
+          </div>
+          <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} built</p>
+        </div>
+
+        <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+
+        <div className="mt-3 grid gap-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
+          {round.answerIds.map((id, index) => {
+            const token = pickedTokens[index];
+            const good = checked && token?.id === id;
+            const bad = checked && token && token.id !== id;
+            return (
+              <div
+                key={`${round.id}-slot-${id}`}
+                className={`min-h-11 rounded-lg border-2 px-3 py-2 text-lg font-black ${
+                  good ? "border-[#28764a] bg-[#e9ffe9]" : bad ? "border-[#b5412b] bg-[#fff0ea]" : "border-[#cfbfae] bg-white"
+                }`}
+              >
+                {token?.text ?? "Tap a word chunk"}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-3 flex flex-wrap gap-2">
+          {round.tokens.map((token) => (
+            <button
+              key={token.id}
+              onClick={() => onPick(token.id)}
+              disabled={pickedSet.has(token.id) || checked}
+              className="min-h-11 rounded-lg border-2 border-[#082329] bg-[#fffaf4] px-3 py-2 text-base font-black transition hover:bg-[#fff0c2] active:translate-y-0.5 disabled:opacity-35"
+            >
+              {token.text}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <button onClick={onUndo} className="rounded-lg border-2 border-[#082329] bg-white px-3 py-3 text-base font-black hover:bg-[#fff0c2]">
+            Undo
+          </button>
+          <button
+            onClick={onCheck}
+            disabled={picked.length !== round.answerIds.length || checked}
+            className="rounded-lg border-2 border-[#082329] bg-[#102f36] px-3 py-3 text-base font-black text-white shadow-[3px_3px_0_#082329] disabled:opacity-45"
+          >
+            Check fact
+          </button>
+        </div>
+
+        {checked && result && (
+          <FeedbackPanel
+            isCorrect={result.correct}
+            xpGain={result.xpGain}
+            leveledUp={result.leveledUp}
+            celebration={celebration}
+            correctAnswer={round.answerText}
+            explanation={round.explanation}
+            note="Good try."
+            isLast={false}
+            onNext={onNext}
+          />
+        )}
+
+        {!checked && <SkipButton onClick={onSkip} />}
+      </article>
+    </section>
+  );
+}
+
+function NumberMode({
+  round,
+  selected,
+  result,
+  miniRunAnswered,
+  miniRunCorrect,
+  celebration,
+  difficulty,
+  onAnswer,
+  onNext,
+  onSkip,
+}: {
+  round: NumberRound;
+  selected: number | null;
+  result: ResultState | null;
+  miniRunAnswered: number;
+  miniRunCorrect: number;
+  celebration: string;
+  difficulty: Difficulty;
+  onAnswer: (choice: number) => void;
+  onNext: () => void;
+  onSkip: () => void;
+}) {
+  const answered = selected !== null;
+  const answerLabel = `${round.answer.toLocaleString("en-US")} ${round.unit}`;
+
+  return (
+    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+      <KnowledgeCardsStage cards={round.cards} badge="Number case" footer={`${round.biggerLabel} minus ${round.smallerLabel}`} />
+
+      <article className="flex min-h-[42dvh] flex-col rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329] md:min-h-0">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex min-w-0 items-center gap-2">
+            <DifficultyPill difficulty={difficulty} />
+            <p className="rounded-lg border-2 border-[#082329] bg-[#f3c647] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+              Math clue
+            </p>
+          </div>
+          <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
+        </div>
+
+        <h2 className="mt-2 text-[clamp(1.2rem,2.6vw,2.25rem)] font-black leading-[1.06] text-[#102f36]">{round.prompt}</h2>
+
+        <div className="mt-3 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-3">
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">{round.statLabel}</p>
+          <p className="mt-1 text-3xl font-black leading-none text-[#102f36]">
+            {round.biggerValue.toLocaleString("en-US")} - {round.smallerValue.toLocaleString("en-US")} = ?
+          </p>
+        </div>
+
+        <div className="mt-3 grid shrink-0 gap-2 xl:grid-cols-2">
+          {round.choices.map((choice) => {
+            const correctChoice = answered && choice === round.answer;
+            const chosenWrong = selected === choice && choice !== round.answer;
+            return (
+              <button
+                key={`${round.id}-${choice}`}
+                onClick={() => onAnswer(choice)}
+                className={`min-h-14 rounded-lg border-2 px-3 py-2 text-left text-xl font-black leading-snug transition active:translate-y-0.5 ${
+                  correctChoice
+                    ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
+                    : chosenWrong
+                      ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
+                      : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2]"
+                }`}
+              >
+                {choice.toLocaleString("en-US")} {round.unit}
+              </button>
+            );
+          })}
+        </div>
+
+        {answered && result && (
+          <FeedbackPanel
+            isCorrect={result.correct}
+            xpGain={result.xpGain}
+            leveledUp={result.leveledUp}
+            celebration={celebration}
+            correctAnswer={answerLabel}
+            explanation={round.explanation}
+            note="Good try."
+            isLast={false}
+            onNext={onNext}
+          />
+        )}
+
+        {!answered && <SkipButton onClick={onSkip} />}
+      </article>
+    </section>
+  );
+}
+
+function OddOneMode({
+  round,
+  selected,
+  result,
+  miniRunAnswered,
+  miniRunCorrect,
+  celebration,
+  difficulty,
+  onAnswer,
+  onNext,
+  onSkip,
+}: {
+  round: OddRound;
+  selected: string | null;
+  result: ResultState | null;
+  miniRunAnswered: number;
+  miniRunCorrect: number;
+  celebration: string;
+  difficulty: Difficulty;
+  onAnswer: (cardId: string) => void;
+  onNext: () => void;
+  onSkip: () => void;
+}) {
+  const answered = selected !== null;
+  const answer = round.cards.find((card) => card.id === round.answerId);
+
+  return (
+    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+      <KnowledgeCardsStage cards={round.cards} badge="Logic set" footer="Find the card that breaks the rule." />
+
+      <article className="flex min-h-[42dvh] flex-col rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329] md:min-h-0">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex min-w-0 items-center gap-2">
+            <DifficultyPill difficulty={difficulty} />
+            <p className="rounded-lg border-2 border-[#082329] bg-[#78d99a] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+              Spot the rule
+            </p>
+          </div>
+          <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} found</p>
+        </div>
+
+        <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+
+        <div className="mt-3 grid shrink-0 gap-2 xl:grid-cols-2">
+          {round.cards.map((card, index) => {
+            const correctChoice = answered && card.id === round.answerId;
+            const chosenWrong = selected === card.id && card.id !== round.answerId;
+            return (
+              <button
+                key={`${round.id}-${card.id}`}
+                onClick={() => onAnswer(card.id)}
+                className={`min-h-14 rounded-lg border-2 px-3 py-2 text-left text-lg font-black leading-snug transition active:translate-y-0.5 ${
+                  correctChoice
+                    ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
+                    : chosenWrong
+                      ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
+                      : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2]"
+                }`}
+              >
+                {String.fromCharCode(65 + index)}: {card.title}
+              </button>
+            );
+          })}
+        </div>
+
+        {answered && result && (
+          <FeedbackPanel
+            isCorrect={result.correct}
+            xpGain={result.xpGain}
+            leveledUp={result.leveledUp}
+            celebration={celebration}
+            correctAnswer={answer?.title ?? "Odd card"}
+            explanation={`${round.reason} ${round.explanation}`}
+            note="Good try."
+            isLast={false}
+            onNext={onNext}
+          />
+        )}
+
+        {!answered && <SkipButton onClick={onSkip} />}
+      </article>
+    </section>
+  );
+}
+
 function CollectionBook({
   cards,
   unlockedCards,
@@ -1300,6 +1891,9 @@ function CollectionBook({
           <HudStat label="Sort" value={modeWins.sort.toString()} />
           <HudStat label="Fact" value={modeWins.fact.toString()} />
           <HudStat label="Peek" value={modeWins.peek.toString()} />
+          <HudStat label="Build" value={modeWins.build.toString()} />
+          <HudStat label="Numbers" value={modeWins.number.toString()} />
+          <HudStat label="Odd" value={modeWins.odd.toString()} />
         </div>
         <div className="mt-4 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
           <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">Research library</p>
@@ -1326,6 +1920,11 @@ function CollectionBook({
                 <div className="p-2">
                   <p className="text-base font-black leading-tight text-[#102f36]">{isUnlocked ? card.title : "Locked card"}</p>
                   <p className="mt-1 text-sm font-black text-[#b5412b]">{isUnlocked ? card.statDisplay : "Win a round"}</p>
+                  {isUnlocked && (
+                    <p className={`mt-1 text-[10px] font-black uppercase tracking-[0.1em] ${card.qualityScore >= 85 ? "text-[#28764a]" : card.qualityScore >= 70 ? "text-[#a36b00]" : "text-[#b5412b]"}`}>
+                      Quality {card.qualityScore}
+                    </p>
+                  )}
                   <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#59686b]">{isUnlocked ? card.fact : "Answer correctly to add it here."}</p>
                 </div>
               </div>
@@ -1515,26 +2114,74 @@ function TopicMixMenu({ activeInterests, onToggle }: { activeInterests: Knowledg
   );
 }
 
-function ModeTabs({ mode, onChange }: { mode: GameMode; onChange: (mode: GameMode) => void }) {
+function PlayModePicker({ mode, onChange }: { mode: GameMode; onChange: (mode: GameMode) => void }) {
+  const active = modeOptions.find((item) => item.id === mode) ?? modeOptions[0];
+
   return (
-    <div className="w-full min-w-0 overflow-x-auto pb-1">
-      <div className="grid min-w-0 grid-cols-1 gap-1.5 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-1 min-[520px]:grid-cols-2 md:grid-cols-6">
-        {modeOptions.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => onChange(item.id)}
-            className={`min-h-11 min-w-0 rounded-md border-2 px-2 py-1 text-center transition active:translate-y-0.5 ${
-              mode === item.id
-                ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]"
-                : "border-transparent bg-transparent hover:border-[#cfbfae] hover:bg-white"
-            }`}
-          >
-            <span className="block truncate text-[8px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{item.eyebrow}</span>
-            <span className="block truncate text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
-          </button>
-        ))}
+    <details className="group relative min-w-0">
+      <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 rounded-lg border-2 border-[#082329] bg-[#78d99a] px-3 py-2 text-left shadow-[2px_2px_0_#082329] transition hover:bg-[#91e0a9] group-open:bg-[#91e0a9] [&::-webkit-details-marker]:hidden">
+        <span className="min-w-0">
+          <span className="block text-[9px] font-black uppercase tracking-[0.16em] text-[#315a40]">Play mode</span>
+          <span className="block truncate text-base font-black leading-tight text-[#102f36]">{active.label}</span>
+        </span>
+        <span className="shrink-0 text-lg font-black leading-none text-[#102f36]">⌄</span>
+      </summary>
+      <div className="absolute left-0 z-30 mt-2 w-full min-w-64 rounded-lg border-2 border-[#082329] bg-[#fffaf4] p-2 shadow-[4px_4px_0_#082329]">
+        <div className="grid gap-1.5">
+          {modeOptions.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => onChange(item.id)}
+              className={`flex min-h-11 items-center justify-between gap-3 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
+                mode === item.id ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329] hover:bg-[#fff0c2]"
+              }`}
+            >
+              <span className="min-w-0">
+                <span className="block truncate text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
+                <span className="block truncate text-[10px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{item.eyebrow}</span>
+              </span>
+              <span className="shrink-0 text-xl font-black text-[#102f36]">{mode === item.id ? "✓" : "+"}</span>
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
+    </details>
+  );
+}
+
+function MixModeMenu({ activeModes, onToggle }: { activeModes: ChallengeMode[]; onToggle: (mode: ChallengeMode) => void }) {
+  const activeSet = new Set(activeModes);
+  const label = activeModes.length === allChallengeModes.length ? "All games" : `${activeModes.length} games`;
+
+  return (
+    <details className="group relative min-w-0">
+      <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 rounded-lg border-2 border-[#082329] bg-white px-3 py-2 text-left shadow-[2px_2px_0_#082329] transition hover:bg-[#fff0c2] group-open:bg-[#fff0c2] [&::-webkit-details-marker]:hidden">
+        <span className="min-w-0">
+          <span className="block text-[9px] font-black uppercase tracking-[0.16em] text-[#7a5d4b]">Mix includes</span>
+          <span className="block truncate text-base font-black leading-tight text-[#102f36]">{label}</span>
+        </span>
+        <span className="shrink-0 text-lg font-black leading-none text-[#102f36]">⌄</span>
+      </summary>
+      <div className="absolute left-0 z-30 mt-2 w-full min-w-72 rounded-lg border-2 border-[#082329] bg-[#fffaf4] p-2 shadow-[4px_4px_0_#082329]">
+        <div className="grid gap-1.5 sm:grid-cols-2">
+          {allChallengeModes.map((challengeMode) => {
+            const item = modeOptions.find((option) => option.id === challengeMode) ?? modeOptions[0];
+            return (
+            <button
+              key={challengeMode}
+              onClick={() => onToggle(challengeMode)}
+              className={`min-h-11 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
+                activeSet.has(challengeMode) ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329]"
+              }`}
+            >
+              <span className="block text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
+              <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{activeSet.has(challengeMode) ? "in mix" : "tap to add"}</span>
+            </button>
+            );
+          })}
+        </div>
+      </div>
+    </details>
   );
 }
 
@@ -1632,6 +2279,36 @@ function CollectionStat({ label, value, libraryValue, wins, samples }: { label: 
       <p className="mt-1 text-xs font-bold text-[#59686b]">{wins} correct answers · {libraryValue} research records</p>
       <p className="mt-1 line-clamp-2 text-[11px] font-semibold leading-tight text-[#59686b]">{samples.join(" | ")}</p>
     </div>
+  );
+}
+
+function KnowledgeCardsStage({ cards, badge, footer }: { cards: KnowledgeCard[]; badge: string; footer: string }) {
+  return (
+    <article className="overflow-hidden rounded-xl border-2 border-[#082329] bg-[#102f36] p-2 shadow-[4px_4px_0_#082329]">
+      <div className="grid h-full min-h-[390px] grid-cols-2 gap-2 lg:min-h-0">
+        {cards.map((card, index) => (
+          <div key={`${badge}-${card.topic}-${card.id}`} className="relative overflow-hidden rounded-lg border-2 border-[#082329] bg-[#fff8ec]">
+            <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#082329] bg-[#f3c647] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#082329]">
+              {String.fromCharCode(65 + index)}
+            </div>
+            <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} />
+            <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#082329] bg-white/95 p-1.5 shadow-[2px_2px_0_#082329]">
+              <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
+              <div className="mt-1 flex items-end justify-between gap-2">
+                <p className="text-lg font-black leading-none text-[#b5412b]">{card.statDisplay}</p>
+                <p className="text-right text-[11px] font-bold leading-tight text-[#405257]">{card.subStat}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 grid gap-2 sm:grid-cols-[auto_1fr] sm:items-center">
+        <div className="rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+          {badge}
+        </div>
+        <p className="rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">{footer}</p>
+      </div>
+    </article>
   );
 }
 

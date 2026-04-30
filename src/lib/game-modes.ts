@@ -14,8 +14,9 @@ import {
   type SpaceCard,
   type TopicId,
 } from "./game-data";
+import { scoreFeaturedContent } from "./content-quality";
 
-export type GameMode = "mix" | "quiz" | "versus" | "sort" | "fact" | "peek";
+export type GameMode = "mix" | "quiz" | "versus" | "sort" | "fact" | "peek" | "build" | "number" | "odd";
 
 export const modeOptions: {
   id: GameMode;
@@ -29,6 +30,9 @@ export const modeOptions: {
   { id: "sort", label: "Sort", eyebrow: "order cards", loop: "tap order" },
   { id: "fact", label: "True/False", eyebrow: "read fast", loop: "true or not" },
   { id: "peek", label: "Peek", eyebrow: "picture clue", loop: "reveal guess" },
+  { id: "build", label: "Build", eyebrow: "make a fact", loop: "tap words" },
+  { id: "number", label: "Numbers", eyebrow: "math clue", loop: "solve gap" },
+  { id: "odd", label: "Odd One", eyebrow: "spot rule", loop: "logic pick" },
 ];
 
 export type { KnowledgeTopic } from "./game-data";
@@ -46,6 +50,8 @@ export type KnowledgeCard = {
   statDisplay: string;
   subStat: string;
   fact: string;
+  qualityScore: number;
+  qualityFlags: string[];
 };
 
 export type SortRound = {
@@ -80,8 +86,52 @@ export type RevealRound = {
   explanation: string;
 };
 
+export type FactToken = {
+  id: string;
+  text: string;
+};
+
+export type BuildFactRound = {
+  id: string;
+  topic: KnowledgeTopic;
+  prompt: string;
+  card: KnowledgeCard;
+  tokens: FactToken[];
+  answerIds: string[];
+  answerText: string;
+  explanation: string;
+};
+
+export type NumberRound = {
+  id: string;
+  topic: KnowledgeTopic;
+  prompt: string;
+  cards: KnowledgeCard[];
+  statLabel: string;
+  unit: string;
+  biggerLabel: string;
+  smallerLabel: string;
+  biggerValue: number;
+  smallerValue: number;
+  answer: number;
+  choices: number[];
+  explanation: string;
+};
+
+export type OddRound = {
+  id: string;
+  topic: KnowledgeTopic;
+  prompt: string;
+  cards: KnowledgeCard[];
+  answerId: string;
+  reason: string;
+  explanation: string;
+};
+
 const formatNumber = (value: number) => value.toLocaleString("en-US");
+const formatShu = (value: number) => `${formatNumber(value)} SHU`;
 const feet = (value: number) => `${formatNumber(value)} ft`;
+const numberWithUnit = (value: number, unit: string) => `${formatNumber(value)} ${unit}`;
 
 const seedRandom = (seed: number) => {
   const x = Math.sin(seed * 999) * 10000;
@@ -98,6 +148,8 @@ const shuffle = <T,>(items: T[], seed: number) => {
 };
 
 const sample = <T,>(items: T[], seed: number) => items[Math.floor(seedRandom(seed) * items.length) % items.length];
+const sampleSafe = <T,>(items: T[], fallback: T[], seed: number) => sample(items.length ? items : fallback, seed);
+const roundTo = (value: number, step: number) => Math.round(value / step) * step;
 
 const allTopics: KnowledgeTopic[] = [...topicIds];
 
@@ -126,6 +178,8 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   statDisplay: `${formatNumber(pepper.shuMax)} SHU`,
   subStat: `${heatProfiles[pepper.heat].label} · ${heatBandRangeLabel(pepper.heat)} · ${heatProfiles[pepper.heat].emoji}`,
   fact: pepper.fact,
+  qualityScore: scoreFeaturedContent({ ...pepper, statValue: pepper.shuMax }).score,
+  qualityFlags: scoreFeaturedContent({ ...pepper, statValue: pepper.shuMax }).flags,
 });
 
 const buildingCard = (building: Building): KnowledgeCard => ({
@@ -140,6 +194,8 @@ const buildingCard = (building: Building): KnowledgeCard => ({
   statDisplay: feet(building.heightFt),
   subStat: `${building.city}, ${building.country}`,
   fact: building.fact,
+  qualityScore: scoreFeaturedContent({ ...building, statValue: building.heightFt }).score,
+  qualityFlags: scoreFeaturedContent({ ...building, statValue: building.heightFt }).flags,
 });
 
 const sharkCard = (shark: Shark, metric: "length" | "speed" | "power" = "length"): KnowledgeCard => ({
@@ -154,6 +210,8 @@ const sharkCard = (shark: Shark, metric: "length" | "speed" | "power" = "length"
   statDisplay: metric === "length" ? feet(shark.lengthFt) : metric === "speed" ? `${formatNumber(shark.speedMph)} mph` : `${shark.power}/5`,
   subStat: `${shark.family} · eats ${shark.diet}`,
   fact: shark.fact,
+  qualityScore: scoreFeaturedContent({ ...shark, statValue: metric === "length" ? shark.lengthFt : metric === "speed" ? shark.speedMph : shark.power }).score,
+  qualityFlags: scoreFeaturedContent({ ...shark, statValue: metric === "length" ? shark.lengthFt : metric === "speed" ? shark.speedMph : shark.power }).flags,
 });
 
 const spaceMetricValue = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons") => {
@@ -183,6 +241,16 @@ const spaceCard = (space: SpaceCard, metric: "distance" | "temperature" | "size"
   statDisplay: spaceMetricDisplay(space, metric),
   subStat: `${space.group} · ${space.kind}`,
   fact: space.fact,
+  qualityScore: scoreFeaturedContent({
+    ...space,
+    statValue: spaceMetricValue(space, metric),
+    sourceCaution: space.statNote ? "estimated stat" : undefined,
+  }).score,
+  qualityFlags: scoreFeaturedContent({
+    ...space,
+    statValue: spaceMetricValue(space, metric),
+    sourceCaution: space.statNote ? "estimated stat" : undefined,
+  }).flags,
 });
 
 export const collectionCards = (): KnowledgeCard[] => [
@@ -208,6 +276,273 @@ export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed
     choices: shuffle([card.title, ...distractors], seed + 3),
     answer: card.title,
     explanation: `${card.title}: ${card.fact}`,
+  };
+};
+
+const factTokens = (seed: number, parts: string[]) => {
+  const answer = parts.map((text, index) => ({ id: `${seed}-token-${index}`, text }));
+  return {
+    answer,
+    shuffled: shuffle(answer, seed + 19),
+    sentence: parts.join(" ").replace(/\s+([.,])/g, "$1"),
+  };
+};
+
+export const buildBuildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: number): BuildFactRound => {
+  const currentTopic = topicOrder(topic, seed);
+
+  if (currentTopic === "peppers") {
+    const pepper = sample(peppers, seed + 1);
+    const card = pepperCard(pepper);
+    const parts =
+      difficulty === 1
+        ? [pepper.name, "is", pepper.heat, "heat."]
+        : difficulty === 2
+          ? [pepper.name, "can reach", formatShu(pepper.shuMax), "and is", pepper.heat, "."]
+          : [pepper.name, "fits", heatBandRangeLabel(pepper.heat), "because it can reach", formatShu(pepper.shuMax), "."];
+    const tokens = factTokens(seed, parts);
+    return {
+      id: `${seed}-build-pepper-${pepper.id}`,
+      topic: currentTopic,
+      prompt: "Build the pepper fact.",
+      card,
+      tokens: tokens.shuffled,
+      answerIds: tokens.answer.map((token) => token.id),
+      answerText: tokens.sentence,
+      explanation: `${pepper.name}: ${pepper.fact}`,
+    };
+  }
+
+  if (currentTopic === "buildings") {
+    const building = sample(buildings, seed + 2);
+    const card = buildingCard(building);
+    const parts =
+      difficulty === 1
+        ? [building.name, "is in", building.city, "."]
+        : difficulty === 2
+          ? [building.name, "is", feet(building.heightFt), "tall", "in", building.city, "."]
+          : [building.name, "is", building.status, "and rises", feet(building.heightFt), "in", building.city, "."];
+    const tokens = factTokens(seed, parts);
+    return {
+      id: `${seed}-build-building-${building.id}`,
+      topic: currentTopic,
+      prompt: "Build the building fact.",
+      card,
+      tokens: tokens.shuffled,
+      answerIds: tokens.answer.map((token) => token.id),
+      answerText: tokens.sentence,
+      explanation: `${building.name}: ${building.fact}`,
+    };
+  }
+
+  if (currentTopic === "space") {
+    const space = sample(spaceCards, seed + 3);
+    const card = spaceCard(space, space.kind === "star" ? "temperature" : space.kind === "planet" ? "distance" : "size");
+    const parts =
+      difficulty === 1
+        ? [space.name, "is a", space.kind, "."]
+        : difficulty === 2
+          ? [space.name, "belongs in", space.group, "and is a", space.kind, "."]
+          : [space.name, "is a", space.kind, "from", space.group, "with a big space clue."];
+    const tokens = factTokens(seed, parts);
+    return {
+      id: `${seed}-build-space-${space.id}`,
+      topic: currentTopic,
+      prompt: "Build the space fact.",
+      card,
+      tokens: tokens.shuffled,
+      answerIds: tokens.answer.map((token) => token.id),
+      answerText: tokens.sentence,
+      explanation: `${space.name}: ${space.fact}`,
+    };
+  }
+
+  const shark = sample(sharks, seed + 4);
+  const card = sharkCard(shark);
+  const parts =
+    difficulty === 1
+      ? [shark.name, "is a", shark.family, "."]
+      : difficulty === 2
+        ? [shark.name, "can grow to", feet(shark.lengthFt), "and eats", shark.diet, "."]
+        : [shark.name, "is a", shark.family, "that can swim", `${formatNumber(shark.speedMph)} mph`, "."];
+  const tokens = factTokens(seed, parts);
+  return {
+    id: `${seed}-build-shark-${shark.id}`,
+    topic: currentTopic,
+    prompt: "Build the shark fact.",
+    card,
+    tokens: tokens.shuffled,
+    answerIds: tokens.answer.map((token) => token.id),
+    answerText: tokens.sentence,
+    explanation: `${shark.name}: ${shark.fact}`,
+  };
+};
+
+const numberChoices = (answer: number, step: number, seed: number) => {
+  const candidates = [answer, Math.max(step, answer - step), answer + step, answer + step * 2, Math.max(step, answer - step * 2)];
+  const uniqueDistractors = Array.from(new Set(candidates.filter((item) => item >= 0 && item !== answer)));
+  return shuffle([answer, ...shuffle(uniqueDistractors, seed + 1).slice(0, 3)], seed);
+};
+
+export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed: number): NumberRound => {
+  const currentTopic = topicOrder(topic, seed);
+
+  if (currentTopic === "peppers") {
+    const hotter = sampleSafe(peppers.filter((pepper) => pepper.shuMax >= 50000), peppers, seed + 1);
+    const milder = sampleSafe(peppers.filter((pepper) => pepper.id !== hotter.id && pepper.shuMax <= hotter.shuMax * 0.35), peppers.filter((pepper) => pepper.id !== hotter.id), seed + 2);
+    const step = difficulty === 1 ? 10000 : difficulty === 2 ? 5000 : 1000;
+    const biggerValue = roundTo(hotter.shuMax, step);
+    const smallerValue = roundTo(milder.shuMax, step);
+    const answer = Math.abs(biggerValue - smallerValue);
+    return {
+      id: `${seed}-number-peppers-${hotter.id}-${milder.id}`,
+      topic: currentTopic,
+      prompt: `${hotter.name} can reach ${numberWithUnit(biggerValue, "SHU")}. ${milder.name} can reach ${numberWithUnit(smallerValue, "SHU")}. How much spicier is ${hotter.name}?`,
+      cards: [pepperCard(hotter), pepperCard(milder)],
+      statLabel: "Scoville",
+      unit: "SHU",
+      biggerLabel: hotter.name,
+      smallerLabel: milder.name,
+      biggerValue,
+      smallerValue,
+      answer,
+      choices: numberChoices(answer, Math.max(step, answer > 100000 ? 50000 : step * 2), seed + 3),
+      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} SHU.`,
+    };
+  }
+
+  if (currentTopic === "buildings") {
+    const taller = sampleSafe(buildings.filter((building) => building.heightFt >= 1800), buildings, seed + 4);
+    const shorter = sampleSafe(buildings.filter((building) => building.id !== taller.id && building.heightFt <= taller.heightFt - 150), buildings.filter((building) => building.id !== taller.id), seed + 5);
+    const step = difficulty === 1 ? 50 : difficulty === 2 ? 25 : 1;
+    const biggerValue = roundTo(taller.heightFt, step);
+    const smallerValue = roundTo(shorter.heightFt, step);
+    const answer = Math.abs(biggerValue - smallerValue);
+    return {
+      id: `${seed}-number-buildings-${taller.id}-${shorter.id}`,
+      topic: currentTopic,
+      prompt: `${taller.name} is ${feet(biggerValue)}. ${shorter.name} is ${feet(smallerValue)}. How much taller is ${taller.name}?`,
+      cards: [buildingCard(taller), buildingCard(shorter)],
+      statLabel: "Height",
+      unit: "ft",
+      biggerLabel: taller.name,
+      smallerLabel: shorter.name,
+      biggerValue,
+      smallerValue,
+      answer,
+      choices: numberChoices(answer, difficulty === 1 ? 100 : 50, seed + 6),
+      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} feet.`,
+    };
+  }
+
+  if (currentTopic === "space") {
+    const moreMoons = sampleSafe(spaceCards.filter((space) => (space.moons ?? 0) >= 10), spaceCards.filter((space) => space.moons !== undefined), seed + 7);
+    const fewerMoons = sampleSafe(spaceCards.filter((space) => space.id !== moreMoons.id && (space.moons ?? 0) < (moreMoons.moons ?? 0)), spaceCards.filter((space) => space.id !== moreMoons.id && space.moons !== undefined), seed + 8);
+    const biggerValue = moreMoons.moons ?? 0;
+    const smallerValue = fewerMoons.moons ?? 0;
+    const answer = Math.abs(biggerValue - smallerValue);
+    return {
+      id: `${seed}-number-space-${moreMoons.id}-${fewerMoons.id}`,
+      topic: currentTopic,
+      prompt: `${moreMoons.name} has ${formatNumber(biggerValue)} moons. ${fewerMoons.name} has ${formatNumber(smallerValue)} moons. How many more moons does ${moreMoons.name} have?`,
+      cards: [spaceCard(moreMoons, "moons"), spaceCard(fewerMoons, "moons")],
+      statLabel: "Moons",
+      unit: "moons",
+      biggerLabel: moreMoons.name,
+      smallerLabel: fewerMoons.name,
+      biggerValue,
+      smallerValue,
+      answer,
+      choices: numberChoices(answer, difficulty === 1 ? 5 : 3, seed + 9),
+      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} moons.`,
+    };
+  }
+
+  const bigger = sampleSafe(sharks.filter((shark) => shark.lengthFt >= 15), sharks, seed + 10);
+  const smaller = sampleSafe(sharks.filter((shark) => shark.id !== bigger.id && shark.lengthFt <= bigger.lengthFt - 5), sharks.filter((shark) => shark.id !== bigger.id), seed + 11);
+  const biggerValue = bigger.lengthFt;
+  const smallerValue = smaller.lengthFt;
+  const answer = Math.abs(biggerValue - smallerValue);
+  return {
+    id: `${seed}-number-sharks-${bigger.id}-${smaller.id}`,
+    topic: currentTopic,
+    prompt: `${bigger.name} can be ${feet(biggerValue)}. ${smaller.name} can be ${feet(smallerValue)}. How much longer is ${bigger.name}?`,
+    cards: [sharkCard(bigger), sharkCard(smaller)],
+    statLabel: "Length",
+    unit: "ft",
+    biggerLabel: bigger.name,
+    smallerLabel: smaller.name,
+    biggerValue,
+    smallerValue,
+    answer,
+    choices: numberChoices(answer, difficulty === 1 ? 5 : 3, seed + 12),
+    explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} feet.`,
+  };
+};
+
+export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: number): OddRound => {
+  const currentTopic = topicOrder(topic, seed);
+
+  if (currentTopic === "peppers") {
+    const heat = sample(["not spicy", "warm", "very hot", "insane"] as const, seed + 1);
+    const same = shuffle(peppers.filter((pepper) => pepper.heat === heat), seed + 2).slice(0, 3);
+    const odd = sampleSafe(peppers.filter((pepper) => pepper.heat !== heat), peppers, seed + 3);
+    const cards = shuffle([...same.map(pepperCard), pepperCard(odd)], seed + 4);
+    return {
+      id: `${seed}-odd-peppers-${heat}-${odd.id}`,
+      topic: currentTopic,
+      prompt: "Which pepper does not fit the heat rule?",
+      cards,
+      answerId: odd.id,
+      reason: `${odd.name} is ${odd.heat}; the others are ${heat}.`,
+      explanation: `The rule is heat zone. ${odd.name} is the odd one out because it is ${odd.heat}.`,
+    };
+  }
+
+  if (currentTopic === "buildings") {
+    const same = shuffle(buildings.filter((building) => building.status === "finished"), seed + 5).slice(0, 3);
+    const odd = sampleSafe(buildings.filter((building) => building.status !== "finished"), buildings, seed + 6);
+    const cards = shuffle([...same.map(buildingCard), buildingCard(odd)], seed + 7);
+    return {
+      id: `${seed}-odd-buildings-${odd.id}`,
+      topic: currentTopic,
+      prompt: "Which building does not fit?",
+      cards,
+      answerId: odd.id,
+      reason: `${odd.name} is ${odd.status}; the others are finished.`,
+      explanation: `The rule is building status. ${odd.name} is the odd one out because it is ${odd.status}.`,
+    };
+  }
+
+  if (currentTopic === "space") {
+    const kind = sample(["planet", "star", "concept"] as const, seed + 8);
+    const same = shuffle(spaceCards.filter((space) => space.kind === kind), seed + 9).slice(0, 3);
+    const odd = sampleSafe(spaceCards.filter((space) => space.kind !== kind), spaceCards, seed + 10);
+    const cards = shuffle([...same.map((space) => spaceCard(space)), spaceCard(odd)], seed + 11);
+    return {
+      id: `${seed}-odd-space-${kind}-${odd.id}`,
+      topic: currentTopic,
+      prompt: "Which space card does not fit?",
+      cards,
+      answerId: odd.id,
+      reason: `${odd.name} is a ${odd.kind}; the others are ${kind}s.`,
+      explanation: `The rule is space type. ${odd.name} is the odd one out because it is a ${odd.kind}.`,
+    };
+  }
+
+  const families = Array.from(new Set(sharks.map((shark) => shark.family)));
+  const family = sampleSafe(families.filter((item) => sharks.filter((shark) => shark.family === item).length >= 3), families, seed + 12);
+  const same = shuffle(sharks.filter((shark) => shark.family === family), seed + 13).slice(0, 3);
+  const odd = sampleSafe(sharks.filter((shark) => shark.family !== family), sharks, seed + 14);
+  const cards = shuffle([...same.map((shark) => sharkCard(shark)), sharkCard(odd)], seed + 15);
+  return {
+    id: `${seed}-odd-sharks-${family}-${odd.id}`,
+    topic: currentTopic,
+    prompt: "Which shark does not fit the family rule?",
+    cards,
+    answerId: odd.id,
+    reason: `${odd.name} is a ${odd.family}; the others are ${family}s.`,
+    explanation: `The rule is shark family. ${odd.name} is the odd one out because it is a ${odd.family}.`,
   };
 };
 

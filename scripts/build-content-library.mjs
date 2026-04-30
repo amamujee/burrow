@@ -75,20 +75,22 @@ const pepperDetail = async ({ slug, name }) => {
 };
 
 const buildPeppers = async () => {
-  const pageUrls = ["https://wikipepper.org/peppers", ...Array.from({ length: 5 }, (_, index) => `https://wikipepper.org/peppers?page=${index + 2}`)];
+  const pageUrls = ["https://wikipepper.org/peppers", ...Array.from({ length: 8 }, (_, index) => `https://wikipepper.org/peppers?page=${index + 2}`)];
   const pages = [];
   for (const url of pageUrls) {
     pages.push(await fetchText(url));
     await sleep(120);
   }
 
-  const links = uniqueBy(pages.flatMap(extractPepperLinks), (item) => item.slug).slice(0, 520);
+  const links = uniqueBy(pages.flatMap(extractPepperLinks), (item) => item.slug).slice(0, 760);
   const peppers = [];
   for (let index = 0; index < links.length; index += 20) {
     peppers.push(...(await Promise.all(links.slice(index, index + 20).map(pepperDetail))));
     await sleep(200);
   }
-  return uniqueBy(peppers, (item) => item.id).slice(0, 500);
+  return uniqueBy(peppers, (item) => item.id)
+    .filter((item) => item.heatRange !== "varies" && item.species !== "Capsicum")
+    .slice(0, 500);
 };
 
 const buildSharks = async () => {
