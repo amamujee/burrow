@@ -5,7 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   applicationName: "Burrow",
   title: "Burrow",
-  description: "Let your Kid go deep with bite-size learning games about peppers, tall buildings, sharks, reading, and math.",
+  description: "Let your kid go deep with bite-size learning games about peppers, tall buildings, sharks, reading, and math.",
   manifest: "/manifest.json",
   icons: {
     icon: [

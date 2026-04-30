@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { buildingLibrary, contentLibrarySources, contentLibraryStats, pepperLibrary, sharkLibrary } from "@/lib/content-library";
 import { heatBands, heatProfiles, topicCatalog, type Difficulty, type HeatBand, type TopicId } from "@/lib/game-data";
 import {
   buildFactRound,
@@ -523,10 +524,10 @@ export function BurrowGame() {
   };
 
   return (
-    <main className="min-h-dvh bg-[#0f2e35] text-[#1d2528] lg:h-dvh lg:overflow-hidden">
+    <main className="min-h-dvh overflow-x-hidden bg-[#0f2e35] text-[#1d2528] lg:h-dvh lg:overflow-hidden">
       <section className="flex min-h-dvh flex-col gap-1.5 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-1.5 md:p-2 lg:h-full lg:min-h-0">
-        <header className="shrink-0 rounded-xl border-2 border-[#082329] bg-[#fff2d7] p-2 shadow-[3px_3px_0_#082329]">
-          <div className="grid gap-2 lg:grid-cols-[minmax(240px,.72fr)_minmax(360px,1.08fr)_minmax(260px,.8fr)] lg:items-center">
+        <header className="w-full max-w-full min-w-0 shrink-0 rounded-xl border-2 border-[#082329] bg-[#fff2d7] p-2 shadow-[3px_3px_0_#082329]">
+          <div className="grid w-full max-w-full min-w-0 gap-2 lg:grid-cols-[minmax(240px,.72fr)_minmax(360px,1.08fr)_minmax(260px,.8fr)] lg:items-center">
             <div className="grid min-w-0 gap-2">
               <div className="flex min-w-0 items-center gap-2.5">
                 <Image
@@ -545,7 +546,7 @@ export function BurrowGame() {
               <ProfilePicker profiles={profilesState.profiles} activeProfileId={activeProfile.id} onChange={switchProfile} onCreate={createProfile} />
             </div>
 
-            <div className="rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-2">
+            <div className="min-w-0 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-2">
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#7a5d4b]">Level {progress.level}</p>
@@ -558,20 +559,20 @@ export function BurrowGame() {
               <div className="mt-2 h-2.5 overflow-hidden rounded-full border-2 border-[#082329] bg-white">
                 <div className="h-full bg-[#4fb286] transition-[width] duration-500 ease-out" style={{ width: `${levelProgress}%` }} />
               </div>
-              <div className="mt-2 grid grid-cols-3 gap-1.5">
+              <div className="mt-2 grid min-w-0 grid-cols-2 gap-1.5 md:grid-cols-3">
                 <MiniStat label="Unlocked" value={`${unlockedCount}/${allCards.length}`} />
                 <MiniStat label="Streak" value={progress.streak.toString()} />
                 <MiniStat label="Hit" value={`${accuracy}%`} />
               </div>
             </div>
 
-            <div className="grid gap-2 sm:grid-cols-[1fr_auto] lg:grid-cols-1">
+            <div className="grid min-w-0 gap-2 sm:grid-cols-[1fr_auto] lg:grid-cols-1">
               <TopicMixMenu activeInterests={activeInterests} onToggle={toggleInterest} />
               <DifficultySelector difficulty={progress.difficulty} onChange={setQuestionDifficulty} />
             </div>
           </div>
 
-          <div className="mt-2 grid gap-2 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+          <div className="mt-2 grid w-full max-w-full min-w-0 gap-2 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
             <ModeTabs mode={mode} onChange={startMode} />
             <button onClick={resetProgress} className="min-h-10 rounded-lg border-2 border-[#082329] bg-white px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#ffd7ce] active:translate-y-0.5">
               Reset
@@ -997,6 +998,11 @@ function CollectionBook({
 }) {
   const filtered = topic === "mixed" ? cards : cards.filter((card) => card.topic === topic);
   const unlocked = filtered.filter((card) => unlockedCards.includes(card.title));
+  const researchSamples = {
+    peppers: pepperLibrary.slice(0, 4).map((item) => `${item.name} (${item.heatRange})`),
+    buildings: buildingLibrary.slice(0, 4).map((item) => `${item.name}, ${item.city} (${item.heightFeet.toLocaleString("en-US")} ft)`),
+    sharks: sharkLibrary.slice(0, 4).map((item) => `${item.name} (${item.genus})`),
+  };
   const topicCounts = {
     peppers: cards.filter((card) => card.topic === "peppers" && unlockedCards.includes(card.title)).length,
     buildings: cards.filter((card) => card.topic === "buildings" && unlockedCards.includes(card.title)).length,
@@ -1009,15 +1015,26 @@ function CollectionBook({
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#b5412b]">Collection</p>
         <h2 className="mt-1 text-3xl font-black leading-none text-[#102f36]">{unlocked.length}/{filtered.length} cards</h2>
         <div className="mt-4 grid gap-2">
-          <CollectionStat label="Peppers" value={`${topicCounts.peppers} / ${cards.filter((card) => card.topic === "peppers").length}`} wins={topicWins.peppers} />
-          <CollectionStat label="Buildings" value={`${topicCounts.buildings} / ${cards.filter((card) => card.topic === "buildings").length}`} wins={topicWins.buildings} />
-          <CollectionStat label="Sharks" value={`${topicCounts.sharks} / ${cards.filter((card) => card.topic === "sharks").length}`} wins={topicWins.sharks} />
+          <CollectionStat label="Peppers" value={`${topicCounts.peppers} / ${cards.filter((card) => card.topic === "peppers").length}`} libraryValue={contentLibraryStats.peppers.toString()} wins={topicWins.peppers} samples={researchSamples.peppers} />
+          <CollectionStat label="Buildings" value={`${topicCounts.buildings} / ${cards.filter((card) => card.topic === "buildings").length}`} libraryValue={contentLibraryStats.buildings.toString()} wins={topicWins.buildings} samples={researchSamples.buildings} />
+          <CollectionStat label="Sharks" value={`${topicCounts.sharks} / ${cards.filter((card) => card.topic === "sharks").length}`} libraryValue={contentLibraryStats.sharks.toString()} wins={topicWins.sharks} samples={researchSamples.sharks} />
         </div>
         <div className="mt-4 grid grid-cols-2 gap-2">
           <HudStat label="Quiz" value={modeWins.quiz.toString()} />
           <HudStat label="Versus" value={modeWins.versus.toString()} />
           <HudStat label="Sort" value={modeWins.sort.toString()} />
           <HudStat label="Fact" value={modeWins.fact.toString()} />
+        </div>
+        <div className="mt-4 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
+          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">Research library</p>
+          <p className="mt-1 text-xl font-black leading-none text-[#102f36]">{contentLibraryStats.total.toLocaleString("en-US")} records</p>
+          <div className="mt-2 grid gap-1.5">
+            {contentLibrarySources.map((source) => (
+              <a key={source.id} href={source.url} target="_blank" rel="noreferrer" className="rounded-md bg-white px-2 py-1.5 text-xs font-bold leading-tight text-[#405257] underline-offset-2 hover:underline">
+                {source.label}
+              </a>
+            ))}
+          </div>
         </div>
       </aside>
 
@@ -1071,7 +1088,7 @@ function ProfilePicker({
   onCreate: () => void;
 }) {
   return (
-    <div className="flex shrink-0 items-center gap-1.5">
+    <div className="flex min-w-0 shrink-0 items-center gap-1.5">
       <label className="sr-only" htmlFor="profile-picker">Player</label>
       <select
         id="profile-picker"
@@ -1099,11 +1116,14 @@ function TopicMixMenu({ activeInterests, onToggle }: { activeInterests: Knowledg
   const activeLabels = activeInterests.map((item) => topicCatalog[item].label);
 
   return (
-    <details className="group relative">
+    <details className="group relative min-w-0">
       <summary className="flex min-h-10 cursor-pointer list-none items-center justify-between gap-3 rounded-lg border-2 border-[#082329] bg-white px-3 py-2 text-left shadow-[2px_2px_0_#082329] transition hover:bg-[#fff0c2] group-open:bg-[#fff0c2] [&::-webkit-details-marker]:hidden">
         <span className="min-w-0">
           <span className="block text-[9px] font-black uppercase tracking-[0.16em] text-[#7a5d4b]">Topics</span>
-          <span className="block truncate text-sm font-black leading-tight text-[#102f36]">{activeLabels.join(", ")}</span>
+          <span className="block truncate text-sm font-black leading-tight text-[#102f36]">
+            <span className="sm:hidden">{activeInterests.length} topics in mix</span>
+            <span className="hidden sm:inline">{activeLabels.join(", ")}</span>
+          </span>
         </span>
         <span className="shrink-0 text-lg font-black leading-none text-[#102f36]">⌄</span>
       </summary>
@@ -1136,20 +1156,20 @@ function TopicMixMenu({ activeInterests, onToggle }: { activeInterests: Knowledg
 
 function ModeTabs({ mode, onChange }: { mode: GameMode; onChange: (mode: GameMode) => void }) {
   return (
-    <div className="min-w-0 overflow-x-auto pb-1">
-      <div className="grid min-w-[620px] grid-cols-5 gap-1.5 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-1">
+    <div className="w-full min-w-0 overflow-x-auto pb-1">
+      <div className="grid min-w-0 grid-cols-1 gap-1.5 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-1 min-[520px]:grid-cols-2 md:grid-cols-5">
         {modeOptions.map((item) => (
           <button
             key={item.id}
             onClick={() => onChange(item.id)}
-            className={`min-h-11 rounded-md border-2 px-2 py-1 text-center transition active:translate-y-0.5 ${
+            className={`min-h-11 min-w-0 rounded-md border-2 px-2 py-1 text-center transition active:translate-y-0.5 ${
               mode === item.id
                 ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]"
                 : "border-transparent bg-transparent hover:border-[#cfbfae] hover:bg-white"
             }`}
           >
-            <span className="block text-[8px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{item.eyebrow}</span>
-            <span className="block text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
+            <span className="block truncate text-[8px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{item.eyebrow}</span>
+            <span className="block truncate text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
           </button>
         ))}
       </div>
@@ -1159,19 +1179,19 @@ function ModeTabs({ mode, onChange }: { mode: GameMode; onChange: (mode: GameMod
 
 function DifficultySelector({ difficulty, onChange }: { difficulty: Difficulty; onChange: (difficulty: Difficulty) => void }) {
   return (
-    <div className="grid grid-cols-3 gap-1 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-1">
+    <div className="grid min-w-0 grid-cols-1 gap-1 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-1 min-[520px]:grid-cols-3">
       {difficultyOptions.map((item) => (
         <button
           key={item.id}
           onClick={() => onChange(item.id)}
-          className={`min-h-10 rounded-md border-2 px-2 py-1 text-center transition active:translate-y-0.5 ${
+          className={`min-h-10 min-w-0 rounded-md border-2 px-2 py-1 text-center transition active:translate-y-0.5 ${
             difficulty === item.id
               ? "border-[#082329] bg-[#f3c647] shadow-[2px_2px_0_#082329]"
               : "border-transparent bg-transparent hover:border-[#cfbfae] hover:bg-white"
           }`}
         >
-          <span className="block text-[8px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">Questions</span>
-          <span className="block text-base font-black leading-none text-[#102f36]">{item.label}</span>
+          <span className="block truncate text-[8px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">Questions</span>
+          <span className="block truncate text-base font-black leading-none text-[#102f36]">{item.label}</span>
         </button>
       ))}
     </div>
@@ -1180,9 +1200,9 @@ function DifficultySelector({ difficulty, onChange }: { difficulty: Difficulty; 
 
 function MiniStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md bg-white px-2 py-1 text-center">
-      <p className="text-[8px] font-black uppercase tracking-[0.1em] text-[#7a5d4b]">{label}</p>
-      <p className="text-sm font-black leading-none text-[#102f36]">{value}</p>
+    <div className="min-w-0 rounded-md bg-white px-2 py-1 text-center">
+      <p className="truncate text-[8px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">{label}</p>
+      <p className="truncate text-sm font-black leading-none text-[#102f36]">{value}</p>
     </div>
   );
 }
@@ -1205,14 +1225,15 @@ function HudStat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function CollectionStat({ label, value, wins }: { label: string; value: string; wins: number }) {
+function CollectionStat({ label, value, libraryValue, wins, samples }: { label: string; value: string; libraryValue: string; wins: number; samples: readonly string[] }) {
   return (
     <div className="rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-black text-[#102f36]">{label}</p>
         <p className="text-sm font-black text-[#b5412b]">{value}</p>
       </div>
-      <p className="mt-1 text-xs font-bold text-[#59686b]">{wins} correct answers</p>
+      <p className="mt-1 text-xs font-bold text-[#59686b]">{wins} correct answers · {libraryValue} research records</p>
+      <p className="mt-1 line-clamp-2 text-[11px] font-semibold leading-tight text-[#59686b]">{samples.join(" | ")}</p>
     </div>
   );
 }
@@ -1283,7 +1304,7 @@ function HeatChoiceEmoji({ heat }: { heat: HeatBand }) {
   if (profile.icons === 0) return null;
 
   return (
-    <span className="shrink-0 text-lg leading-none md:text-xl" aria-label={`${profile.label} heat`}>
+    <span className="shrink-0 whitespace-nowrap text-sm leading-none md:text-base" aria-label={`${profile.label} heat`}>
       {profile.emoji}
     </span>
   );

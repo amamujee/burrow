@@ -1,3 +1,5 @@
+import { contentLibraryStats } from "./content-library";
+
 export type TopicId = "peppers" | "buildings" | "sharks" | "mixed";
 export type KnowledgeTopic = Exclude<TopicId, "mixed">;
 export type Difficulty = 1 | 2 | 3;
@@ -786,9 +788,9 @@ export const topicCatalog: Record<Exclude<TopicId, "mixed">, {
   eyebrow: string;
   roundLabel: string;
 }> = {
-  peppers: { label: "Spicy Peppers", eyebrow: `${peppers.length} peppers`, roundLabel: "Pepper round" },
-  buildings: { label: "Tall Buildings", eyebrow: `${buildings.length} towers`, roundLabel: "Tower round" },
-  sharks: { label: "Shark Lab", eyebrow: `${sharks.length} sharks`, roundLabel: "Shark round" },
+  peppers: { label: "Spicy Peppers", eyebrow: `${contentLibraryStats.peppers}+ peppers`, roundLabel: "Pepper round" },
+  buildings: { label: "Tall Buildings", eyebrow: `${contentLibraryStats.buildings}+ towers`, roundLabel: "Tower round" },
+  sharks: { label: "Shark Lab", eyebrow: `${contentLibraryStats.sharks}+ sharks`, roundLabel: "Shark round" },
 };
 
 export const topicOptions: { id: TopicId; label: string; eyebrow: string }[] = [
