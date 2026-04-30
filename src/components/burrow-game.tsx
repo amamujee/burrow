@@ -1955,8 +1955,25 @@ function EstimateSlider({
   if (!estimate) return null;
 
   const displayValue = selected !== null ? Number(selected) : value;
-  const span = estimate.max - estimate.min;
-  const pct = (item: number) => `${Math.max(0, Math.min(100, ((item - estimate.min) / span) * 100))}%`;
+  const isScoville = estimate.unit === "SHU" && estimate.max >= 1000000;
+  const scalePercent = (item: number) => {
+    if (!isScoville) {
+      const span = estimate.max - estimate.min;
+      return Math.max(0, Math.min(100, ((item - estimate.min) / span) * 100));
+    }
+    const maxLog = Math.log10(estimate.max + 1);
+    return Math.max(0, Math.min(100, (Math.log10(item + 1) / maxLog) * 100));
+  };
+  const pct = (item: number) => `${scalePercent(item)}%`;
+  const sliderValue = isScoville ? Math.round(scalePercent(displayValue) * 10) : displayValue;
+  const sliderMin = isScoville ? 0 : estimate.min;
+  const sliderMax = isScoville ? 1000 : estimate.max;
+  const sliderStep = isScoville ? 1 : estimate.step;
+  const valueFromSlider = (nextValue: number) => {
+    if (!isScoville) return nextValue;
+    const rawValue = Math.pow(estimate.max + 1, nextValue / 1000) - 1;
+    return clampToStep(rawValue, estimate.min, estimate.max, estimate.step);
+  };
   const valueLabel = `${displayValue.toLocaleString("en-US")} ${estimate.unit}`;
   const rangeLabel =
     estimate.correctMin === estimate.correctMax
@@ -1967,58 +1984,95 @@ function EstimateSlider({
     <div className="mt-3 rounded-xl border-2 border-[#cfbfae] bg-[#fff8ec] p-3 shadow-[2px_2px_0_#cfbfae]">
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#7a5d4b]">{estimate.label}</p>
-          <p className="text-3xl font-black leading-none text-[#102f36]">{valueLabel}</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#7a5d4b]">{answered ? "Your guess" : estimate.label}</p>
+          <p className="text-[clamp(1.65rem,4vw,2.35rem)] font-black leading-none text-[#102f36]">{valueLabel}</p>
         </div>
-        <p className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-3 py-1 text-xs font-black uppercase tracking-[0.08em] text-[#102f36]">
-          Slide guess
-        </p>
-      </div>
-
-      <div className="relative mt-5 px-1 pb-7 pt-4">
-        {answered && (
-          <div
-            className={`absolute top-[22px] h-4 rounded-full border-2 border-[#082329] ${isCorrect ? "bg-[#78d99a]" : "bg-[#ffd7ce]"}`}
-            style={{
-              left: pct(estimate.correctMin),
-              width: `calc(${pct(estimate.correctMax)} - ${pct(estimate.correctMin)})`,
-            }}
-          />
-        )}
-        <input
-          type="range"
-          min={estimate.min}
-          max={estimate.max}
-          step={estimate.step}
-          value={displayValue}
-          disabled={answered}
-          onChange={(event) => setValue(Number(event.target.value))}
-          className="relative z-10 h-5 w-full cursor-pointer accent-[#b5412b] disabled:cursor-default"
-          aria-label={estimate.label}
-        />
-        <div className="mt-2 flex justify-between gap-1 text-[10px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">
-          {estimate.marks.map((mark) => (
-            <span key={`${question.id}-${mark.label}`} className="text-center leading-tight">
-              {mark.label}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div className="grid gap-2 sm:grid-cols-[1fr_auto] sm:items-center">
-        <p className="text-sm font-bold leading-snug text-[#405257]">
-          {answered ? `Target zone: ${rangeLabel}` : estimate.helper}
-        </p>
         <button
           onClick={() => onAnswer(String(value))}
           disabled={answered}
-          className="min-h-12 rounded-lg border-2 border-[#082329] bg-[#102f36] px-4 py-2 text-base font-black text-white shadow-[3px_3px_0_#082329] transition hover:bg-[#23515a] active:translate-y-0.5 disabled:opacity-55"
+          className="min-h-11 rounded-full border-2 border-[#082329] bg-[#f3c647] px-4 py-2 text-sm font-black uppercase tracking-[0.08em] text-[#102f36] shadow-[2px_2px_0_#082329] transition hover:bg-[#ffd86b] active:translate-y-0.5 disabled:bg-[#d7ddd9] disabled:text-[#59686b] disabled:shadow-none"
         >
           Lock it in
         </button>
       </div>
+
+      {isScoville && <HeatZoneGuide />}
+
+      <div className="mt-3 rounded-xl border-2 border-[#cfbfae] bg-white p-3">
+        <div className="relative px-1 pb-8 pt-4">
+          <div className="absolute left-1 right-1 top-[27px] h-4 rounded-full bg-[#e9dfcf]" />
+          <div className="absolute left-1 right-1 top-[28px] h-2 rounded-full bg-gradient-to-r from-[#78d99a] via-[#f3c647] to-[#b5412b]" />
+          {answered && (
+            <div
+              className={`absolute top-[20px] h-7 rounded-full border-2 border-[#082329] ${isCorrect ? "bg-[#78d99a]" : "bg-[#ffe0d8]"}`}
+              style={{
+                left: pct(estimate.correctMin),
+                width: `max(28px, calc(${pct(estimate.correctMax)} - ${pct(estimate.correctMin)}))`,
+              }}
+              aria-hidden="true"
+            />
+          )}
+          <input
+            type="range"
+            min={sliderMin}
+            max={sliderMax}
+            step={sliderStep}
+            value={sliderValue}
+            disabled={answered}
+            onChange={(event) => setValue(valueFromSlider(Number(event.target.value)))}
+            className="relative z-10 h-10 w-full cursor-pointer appearance-none bg-transparent disabled:cursor-default [&::-webkit-slider-runnable-track]:h-4 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:-mt-2 [&::-webkit-slider-thumb]:h-9 [&::-webkit-slider-thumb]:w-9 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#082329] [&::-webkit-slider-thumb]:bg-[#f3c647] [&::-webkit-slider-thumb]:shadow-[2px_2px_0_#082329]"
+            aria-label={estimate.label}
+          />
+          <div className="absolute inset-x-1 bottom-0 flex justify-between gap-2 text-[11px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">
+            <span>{estimate.marks[0]?.label}</span>
+            <span>{estimate.marks[estimate.marks.length - 1]?.label}</span>
+          </div>
+          {!isScoville && (
+            <div className="absolute inset-x-1 bottom-4 flex justify-between gap-1 text-[10px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">
+              {estimate.marks.slice(1, -1).map((mark) => (
+                <span key={`${question.id}-${mark.label}`} className="text-center leading-tight">
+                  {mark.label}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-2 rounded-lg border-2 border-[#cfbfae] bg-white px-3 py-2">
+        <p className="text-sm font-black leading-snug text-[#405257]">
+          {answered ? `Target zone: ${rangeLabel}` : estimate.helper}
+        </p>
+      </div>
     </div>
   );
+}
+
+function HeatZoneGuide() {
+  const colors: Record<HeatBand, string> = {
+    "not spicy": "bg-[#f4f1e8]",
+    mild: "bg-[#dff5d9]",
+    warm: "bg-[#fff0b8]",
+    hot: "bg-[#ffd09b]",
+    "very hot": "bg-[#ffb0a0]",
+    insane: "bg-[#ff8f7f]",
+  };
+
+  return (
+    <div className="mt-3 grid grid-cols-3 gap-1.5 sm:grid-cols-6">
+      {heatBands.map((heat) => (
+        <div key={heat} className={`rounded-lg border-2 border-[#cfbfae] px-2 py-1.5 text-center ${colors[heat]}`}>
+          <p className="truncate text-[11px] font-black leading-tight text-[#102f36]">{heatProfiles[heat].label}</p>
+          <p className="mt-0.5 min-h-5 text-sm leading-none">{heatProfiles[heat].icons ? heatProfiles[heat].emoji : "0"}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function clampToStep(value: number, min: number, max: number, step: number) {
+  const clamped = Math.max(min, Math.min(max, value));
+  return Math.round(clamped / step) * step;
 }
 
 function ProgressDots({ questions, questionIndex }: { questions: Question[]; questionIndex: number }) {
