@@ -1,5 +1,6 @@
 import {
   buildings,
+  heatBandRangeLabel,
   heatProfiles,
   peppers,
   sharks,
@@ -109,7 +110,7 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   statLabel: "Scoville",
   statValue: pepper.shuMax,
   statDisplay: `${formatNumber(pepper.shuMax)} SHU`,
-  subStat: `${heatProfiles[pepper.heat].label} · ${heatProfiles[pepper.heat].emoji}`,
+  subStat: `${heatProfiles[pepper.heat].label} · ${heatBandRangeLabel(pepper.heat)} · ${heatProfiles[pepper.heat].emoji}`,
   fact: pepper.fact,
 });
 
@@ -217,7 +218,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       imageAlt: pepper.name,
       imageCredit: pepper.imageCredit,
       answer: truthful ? "True" : "False",
-      explanation: `${pepper.name} is ${pepper.heat} and its range is ${pepperRange(pepper)} SHU.`,
+      explanation: `${pepper.name} can reach ${formatNumber(pepper.shuMax)} SHU, so it is ${pepper.heat} (${heatBandRangeLabel(pepper.heat)}). Its full range is ${pepperRange(pepper)} SHU.`,
     };
   }
 

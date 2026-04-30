@@ -30,6 +30,8 @@ export type Pepper = {
   fact: string;
 };
 
+type PepperSeed = Omit<Pepper, "heat">;
+
 export type Building = {
   id: string;
   name: string;
@@ -81,11 +83,36 @@ export const heatProfiles: Record<HeatBand, { label: string; icons: number; emoj
   insane: { label: "insane", icons: 5, emoji: "🌶️🌶️🌶️🌶️🌶️🔥", kidLine: "Super-hot legend zone." },
 };
 
-export const peppers: Pepper[] = [
+export const heatBandForScoville = (shu: number): HeatBand => {
+  if (shu <= 500) return "not spicy";
+  if (shu <= 2500) return "mild";
+  if (shu <= 25000) return "warm";
+  if (shu <= 50000) return "hot";
+  if (shu <= 500000) return "very hot";
+  return "insane";
+};
+
+export const heatBandRangeLabel = (heat: HeatBand) => {
+  switch (heat) {
+    case "not spicy":
+      return "0-500 SHU";
+    case "mild":
+      return "501-2,500 SHU";
+    case "warm":
+      return "2,501-25,000 SHU";
+    case "hot":
+      return "25,001-50,000 SHU";
+    case "very hot":
+      return "50,001-500,000 SHU";
+    case "insane":
+      return "500,001+ SHU";
+  }
+};
+
+const pepperSeeds: PepperSeed[] = [
   {
     id: "bell-pepper",
     name: "Bell Pepper",
-    heat: "not spicy",
     shuMin: 0,
     shuMax: 0,
     color: "red",
@@ -96,7 +123,6 @@ export const peppers: Pepper[] = [
   {
     id: "banana-pepper",
     name: "Banana Pepper",
-    heat: "not spicy",
     shuMin: 0,
     shuMax: 500,
     color: "yellow",
@@ -107,7 +133,6 @@ export const peppers: Pepper[] = [
   {
     id: "pepperoncini",
     name: "Pepperoncini",
-    heat: "not spicy",
     shuMin: 100,
     shuMax: 500,
     color: "green",
@@ -118,7 +143,6 @@ export const peppers: Pepper[] = [
   {
     id: "poblano",
     name: "Poblano",
-    heat: "mild",
     shuMin: 1000,
     shuMax: 2000,
     color: "dark green",
@@ -129,7 +153,6 @@ export const peppers: Pepper[] = [
   {
     id: "anaheim",
     name: "Anaheim",
-    heat: "mild",
     shuMin: 500,
     shuMax: 2500,
     color: "green",
@@ -140,7 +163,6 @@ export const peppers: Pepper[] = [
   {
     id: "jalapeno",
     name: "Jalapeno",
-    heat: "warm",
     shuMin: 2500,
     shuMax: 8000,
     color: "green",
@@ -151,7 +173,6 @@ export const peppers: Pepper[] = [
   {
     id: "fresno",
     name: "Fresno",
-    heat: "warm",
     shuMin: 2500,
     shuMax: 10000,
     color: "red",
@@ -162,7 +183,6 @@ export const peppers: Pepper[] = [
   {
     id: "serrano",
     name: "Serrano",
-    heat: "warm",
     shuMin: 10000,
     shuMax: 23000,
     color: "green",
@@ -173,7 +193,6 @@ export const peppers: Pepper[] = [
   {
     id: "cayenne",
     name: "Cayenne",
-    heat: "hot",
     shuMin: 30000,
     shuMax: 50000,
     color: "red",
@@ -184,7 +203,6 @@ export const peppers: Pepper[] = [
   {
     id: "tabasco",
     name: "Tabasco",
-    heat: "hot",
     shuMin: 30000,
     shuMax: 50000,
     color: "red",
@@ -195,7 +213,6 @@ export const peppers: Pepper[] = [
   {
     id: "thai-chili",
     name: "Thai Chili",
-    heat: "very hot",
     shuMin: 50000,
     shuMax: 100000,
     color: "red",
@@ -206,7 +223,6 @@ export const peppers: Pepper[] = [
   {
     id: "scotch-bonnet",
     name: "Scotch Bonnet",
-    heat: "very hot",
     shuMin: 100000,
     shuMax: 350000,
     color: "yellow",
@@ -217,7 +233,6 @@ export const peppers: Pepper[] = [
   {
     id: "habanero",
     name: "Habanero",
-    heat: "very hot",
     shuMin: 100000,
     shuMax: 350000,
     color: "orange",
@@ -228,7 +243,6 @@ export const peppers: Pepper[] = [
   {
     id: "fatalii",
     name: "Fatalii",
-    heat: "very hot",
     shuMin: 125000,
     shuMax: 400000,
     color: "yellow",
@@ -239,7 +253,6 @@ export const peppers: Pepper[] = [
   {
     id: "ghost-pepper",
     name: "Ghost Pepper",
-    heat: "insane",
     shuMin: 855000,
     shuMax: 1041427,
     color: "red",
@@ -250,7 +263,6 @@ export const peppers: Pepper[] = [
   {
     id: "seven-pot-primo",
     name: "7 Pot Primo",
-    heat: "insane",
     shuMin: 800000,
     shuMax: 1469000,
     color: "red",
@@ -261,7 +273,6 @@ export const peppers: Pepper[] = [
   {
     id: "trinidad-scorpion",
     name: "Trinidad Moruga Scorpion",
-    heat: "insane",
     shuMin: 1200000,
     shuMax: 2000000,
     color: "red",
@@ -272,7 +283,6 @@ export const peppers: Pepper[] = [
   {
     id: "carolina-reaper",
     name: "Carolina Reaper",
-    heat: "insane",
     shuMin: 1400000,
     shuMax: 2200000,
     color: "red",
@@ -283,7 +293,6 @@ export const peppers: Pepper[] = [
   {
     id: "dragons-breath",
     name: "Dragon's Breath",
-    heat: "insane",
     shuMin: 2400000,
     shuMax: 2480000,
     color: "red",
@@ -294,7 +303,6 @@ export const peppers: Pepper[] = [
   {
     id: "pepper-x",
     name: "Pepper X",
-    heat: "insane",
     shuMin: 2693000,
     shuMax: 2693000,
     color: "greenish yellow",
@@ -303,6 +311,11 @@ export const peppers: Pepper[] = [
     fact: "Pepper X is known for an extremely high Scoville score.",
   },
 ];
+
+export const peppers = pepperSeeds.map((pepper) => ({
+  ...pepper,
+  heat: heatBandForScoville(pepper.shuMax),
+}));
 
 export const buildings: Building[] = [
   {

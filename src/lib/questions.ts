@@ -1,6 +1,7 @@
 import {
   buildings,
   heatBands,
+  heatBandRangeLabel,
   heatProfiles,
   peppers,
   sharks,
@@ -108,6 +109,7 @@ const formatShu = (value: number) => `${formatNumber(value)} SHU`;
 const range = (pepper: Pepper) => pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
 const feet = (value: number) => `${formatNumber(value)} ft`;
 const heatMeter = (heat: HeatBand) => ({ label: heat, icons: heatProfiles[heat].icons, emoji: heatProfiles[heat].emoji, line: heatProfiles[heat].kidLine });
+const heatBandExplanation = (pepper: Pepper) => `${pepper.name} is ${pepper.heat} because its top Scoville score is ${formatShu(pepper.shuMax)}, which fits the ${heatBandRangeLabel(pepper.heat)} band.`;
 const choiceSet = <T,>(correct: T, options: T[], seed: number, count: number) => {
   const distractors = shuffle(options.filter((option) => option !== correct), seed).slice(0, count - 1);
   return shuffle([correct, ...distractors], seed + 1);
@@ -169,7 +171,7 @@ const pepperCard = (pepper: Pepper, label: "A" | "B"): ComparisonCard => ({
   imageCredit: pepper.imageCredit,
   statLabel: "Scoville",
   statValue: formatShu(pepper.shuMax),
-  subStat: `${heatProfiles[pepper.heat].label} heat`,
+  subStat: `${heatProfiles[pepper.heat].label} · ${heatBandRangeLabel(pepper.heat)}`,
   meterValue: pepper.shuMax,
   meterMax: maxShu,
 });
@@ -221,7 +223,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
       imageCredit: pepper.imageCredit,
       choices,
       answer: pepper.heat,
-      explanation: `${pepper.name} is ${pepper.heat}: ${heatProfiles[pepper.heat].kidLine} It can reach about ${range(pepper)} SHU.`,
+      explanation: `${heatBandExplanation(pepper)} ${heatProfiles[pepper.heat].kidLine}`,
       heatMeter: heatMeter(pepper.heat),
       numberLine: { label: "Scoville score", value: pepper.shuMax, max: maxShu, unit: "SHU" },
     };
@@ -267,7 +269,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
       imageCredit: pepper.imageCredit,
       choices,
       answer: pepper.heat,
-      explanation: `${pepper.name} belongs in the "${pepper.heat}" group.`,
+      explanation: heatBandExplanation(pepper),
       heatMeter: heatMeter(pepper.heat),
     };
   }
@@ -284,7 +286,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
     imageCredit: pepper.imageCredit,
     choices: shuffle([correct, ...shuffle(otherRanges, seed + 17).slice(0, choiceCountForDifficulty(difficulty) - 1)], seed + 18),
     answer: correct,
-    explanation: `${pepper.name} is about ${correct}. Scoville numbers measure pepper heat.`,
+    explanation: `${pepper.name} is about ${correct}. Its top score puts it in the ${pepper.heat} band (${heatBandRangeLabel(pepper.heat)}).`,
     heatMeter: heatMeter(pepper.heat),
     numberLine: { label: "Heat", value: pepper.shuMax, max: maxShu, unit: "SHU" },
   };
