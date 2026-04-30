@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Rabbit Hole",
-  description: "Bite-size learning sessions about spicy peppers and tall buildings.",
+  description: "Bite-size learning games about peppers, tall buildings, sharks, reading, and math.",
   manifest: "/manifest.json",
 };
 

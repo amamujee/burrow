@@ -212,8 +212,8 @@ export const peppers: Pepper[] = [
     shuMin: 125000,
     shuMax: 400000,
     color: "yellow",
-    image: wm("Fatalii pepper.jpg"),
-    imageCredit: "Wikimedia Commons",
+    image: wm("Fatalii peppers.jpg"),
+    imageCredit: "Eric Polk, Wikimedia Commons",
     fact: "Fatalii peppers are yellow super-hot relatives of habaneros.",
   },
   {
@@ -234,8 +234,8 @@ export const peppers: Pepper[] = [
     shuMin: 800000,
     shuMax: 1469000,
     color: "red",
-    image: wm("7 Pot Primo pepper.jpg"),
-    imageCredit: "Wikimedia Commons",
+    image: wm("Capsicum chinense, Texture.jpg"),
+    imageCredit: "Filo gen', Wikimedia Commons",
     fact: "7 Pot Primo peppers are super-hot and often have a pointy tail.",
   },
   {
@@ -267,8 +267,8 @@ export const peppers: Pepper[] = [
     shuMin: 2400000,
     shuMax: 2480000,
     color: "red",
-    image: wm("Red chili pepper.jpg"),
-    imageCredit: "Selimee, Wikimedia Commons",
+    image: wm("Dragon's Breath Pepper.jpg"),
+    imageCredit: "Houfescu, Wikimedia Commons",
     fact: "Dragon's Breath is a legendary super-hot pepper name.",
   },
   {
@@ -278,8 +278,8 @@ export const peppers: Pepper[] = [
     shuMin: 2693000,
     shuMax: 2693000,
     color: "greenish yellow",
-    image: wm("Pepper X.jpg"),
-    imageCredit: "Wikimedia Commons",
+    image: wm("Capsicum chinense.jpg"),
+    imageCredit: "Eric in SF, Wikimedia Commons",
     fact: "Pepper X is known for an extremely high Scoville score.",
   },
 ];
