@@ -73,6 +73,11 @@ const initialProgress: Progress = {
 const profilesKey = "rabbit-hole-profiles-v1";
 const legacyProgressKey = "rabbit-hole-progress-v1";
 const allKnowledgeTopics: KnowledgeTopic[] = ["peppers", "buildings", "sharks"];
+const difficultyOptions: { id: Difficulty; label: string }[] = [
+  { id: 1, label: "Easy" },
+  { id: 2, label: "Med" },
+  { id: 3, label: "Hard" },
+];
 const levelFromXp = (xp: number) => Math.max(1, Math.floor(xp / 120) + 1);
 const praise = ["Nice reading!", "Big brain move!", "You measured it!", "Hot answer!", "Sky-high thinking!", "Sharp thinking!"];
 const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
@@ -190,6 +195,8 @@ const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficu
   return picked.length ? picked : buildSession(topic, difficulty, sessionSeed, seenIds);
 };
 
+const difficultyLabel = (difficulty: Difficulty) => difficultyOptions.find((item) => item.id === difficulty)?.label ?? "Easy";
+
 export function RabbitHoleGame() {
   const [profilesState, setProfilesState] = useState<ProfilesState>(loadProfiles);
   const activeProfile = profilesState.profiles.find((profile) => profile.id === profilesState.activeProfileId) ?? profilesState.profiles[0];
@@ -217,7 +224,6 @@ export function RabbitHoleGame() {
   const isQuestionMode = mode === "quiz" || mode === "versus";
   const answered = isQuestionMode && selected !== null;
   const isCorrect = isQuestionMode && selected === question?.answer;
-  const accuracy = progress.answered ? Math.round((progress.correct / progress.answered) * 100) : 0;
   const nextLevelXp = progress.level * 120;
   const levelProgress = Math.min(100, Math.round(((progress.xp % 120) / 120) * 100));
   const sessionAnswered = questionIndex + (answered ? 1 : 0);
@@ -332,6 +338,17 @@ export function RabbitHoleGame() {
     setQuestions(buildQuestionRun(currentTopicScope, nextMode, progress.difficulty, seed, progress.seenIds));
     setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 59));
     setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 71));
+  };
+
+  const setQuestionDifficulty = (nextDifficulty: Difficulty) => {
+    if (nextDifficulty === progress.difficulty) return;
+    const seed = freshSeed(nextDifficulty * 53);
+    setProgress((current) => ({ ...current, difficulty: nextDifficulty }));
+    resetRunState(mode);
+    setQuestions(buildQuestionRun(currentTopicScope, mode, nextDifficulty, seed, progress.seenIds));
+    setSortRound(buildSortRound(currentTopicScope, nextDifficulty, seed + 41));
+    setFactRound(buildFactRound(currentTopicScope, nextDifficulty, seed + 47));
+    setCelebration(`${difficultyLabel(nextDifficulty)} questions.`);
   };
 
   const switchProfile = (profileId: string) => {
@@ -495,7 +512,7 @@ export function RabbitHoleGame() {
                 <h1 className="text-2xl font-black leading-none text-[#102f36] md:text-3xl">{activeProfile.name}&apos;s Lab</h1>
               </div>
               <p className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-3 py-1 text-sm font-black lg:hidden">
-                Level {progress.level}
+                {difficultyLabel(progress.difficulty)}
               </p>
               <div className="mt-1.5 hidden flex-wrap gap-1.5 lg:flex">
                 {profilesState.profiles.map((profile) => (
@@ -554,13 +571,7 @@ export function RabbitHoleGame() {
               </div>
             </div>
 
-            <div className="grid grid-cols-5 gap-1.5">
-              <HudStat label="Lvl" value={progress.level.toString()} />
-              <HudStat label="XP" value={progress.xp.toString()} />
-              <HudStat label="Streak" value={progress.streak.toString()} />
-              <HudStat label="Best" value={progress.bestStreak.toString()} />
-              <HudStat label="Hit" value={`${accuracy}%`} />
-            </div>
+            <DifficultySelector difficulty={progress.difficulty} onChange={setQuestionDifficulty} />
           </div>
 
           <div className="mt-1.5 grid gap-1.5 lg:grid-cols-[minmax(180px,.55fr)_minmax(390px,1fr)_auto] lg:items-center">
@@ -610,6 +621,7 @@ export function RabbitHoleGame() {
             lastResult={lastResult}
             celebration={celebration}
             note={tryAgainNotes[(questionIndex + progress.answered) % tryAgainNotes.length]}
+            difficulty={progress.difficulty}
             onAnswer={answer}
             onNext={advance}
           />
@@ -624,6 +636,7 @@ export function RabbitHoleGame() {
             miniRunAnswered={miniRunAnswered}
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
+            difficulty={progress.difficulty}
             onPick={(id) => {
               if (sortChecked || sortPicked.includes(id)) return;
               setSortPicked((value) => [...value, id]);
@@ -644,6 +657,7 @@ export function RabbitHoleGame() {
             miniRunAnswered={miniRunAnswered}
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
+            difficulty={progress.difficulty}
             onAnswer={answerFact}
             onNext={nextFactRound}
           />
@@ -669,6 +683,7 @@ function QuestionRun({
   lastResult,
   celebration,
   note,
+  difficulty,
   onAnswer,
   onNext,
 }: {
@@ -683,6 +698,7 @@ function QuestionRun({
   lastResult: ResultState | null;
   celebration: string;
   note: string;
+  difficulty: Difficulty;
   onAnswer: (choice: string) => void;
   onNext: () => void;
 }) {
@@ -715,7 +731,10 @@ function QuestionRun({
       <article className="flex min-h-[42dvh] flex-col overflow-hidden rounded-lg border-2 border-[#082329] bg-white p-2.5 shadow-[3px_3px_0_#082329] md:min-h-0 md:p-3">
         <div className="shrink-0">
           <div className="flex items-center justify-between gap-2">
-            <ProgressDots questions={questions} questionIndex={questionIndex} />
+            <div className="flex min-w-0 items-center gap-2">
+              <DifficultyPill difficulty={difficulty} />
+              <ProgressDots questions={questions} questionIndex={questionIndex} />
+            </div>
             <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">
               {questionIndex + 1}/{questions.length}
             </p>
@@ -787,6 +806,7 @@ function SortMode({
   miniRunAnswered,
   miniRunCorrect,
   celebration,
+  difficulty,
   onPick,
   onUndo,
   onCheck,
@@ -799,6 +819,7 @@ function SortMode({
   miniRunAnswered: number;
   miniRunCorrect: number;
   celebration: string;
+  difficulty: Difficulty;
   onPick: (id: string) => void;
   onUndo: () => void;
   onCheck: () => void;
@@ -832,9 +853,12 @@ function SortMode({
 
       <article className="flex min-h-[380px] flex-col rounded-lg border-2 border-[#082329] bg-white p-2.5 shadow-[3px_3px_0_#082329] md:p-3 lg:min-h-0">
         <div className="flex items-center justify-between gap-2">
-          <p className="rounded-lg border-2 border-[#082329] bg-[#f3c647] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
-            Sort board
-          </p>
+          <div className="flex items-center gap-2">
+            <DifficultyPill difficulty={difficulty} />
+            <p className="rounded-lg border-2 border-[#082329] bg-[#f3c647] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+              Sort board
+            </p>
+          </div>
           <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
         </div>
         <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.45rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
@@ -901,6 +925,7 @@ function FactMode({
   miniRunAnswered,
   miniRunCorrect,
   celebration,
+  difficulty,
   onAnswer,
   onNext,
 }: {
@@ -910,6 +935,7 @@ function FactMode({
   miniRunAnswered: number;
   miniRunCorrect: number;
   celebration: string;
+  difficulty: Difficulty;
   onAnswer: (choice: "Fact" | "Fake") => void;
   onNext: () => void;
 }) {
@@ -929,9 +955,12 @@ function FactMode({
 
       <article className="flex min-h-[380px] flex-col rounded-lg border-2 border-[#082329] bg-white p-2.5 shadow-[3px_3px_0_#082329] md:min-h-0 md:p-3">
         <div className="flex items-center justify-between gap-2">
-          <p className="rounded-lg border-2 border-[#082329] bg-[#78d99a] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
-            Read and decide
-          </p>
+          <div className="flex items-center gap-2">
+            <DifficultyPill difficulty={difficulty} />
+            <p className="rounded-lg border-2 border-[#082329] bg-[#78d99a] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+              Read and decide
+            </p>
+          </div>
           <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} caught</p>
         </div>
 
@@ -1057,6 +1086,36 @@ function ProgressDots({ questions, questionIndex }: { questions: Question[]; que
   );
 }
 
+function DifficultySelector({ difficulty, onChange }: { difficulty: Difficulty; onChange: (difficulty: Difficulty) => void }) {
+  return (
+    <div className="grid grid-cols-3 gap-1.5">
+      {difficultyOptions.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => onChange(item.id)}
+          className={`min-h-12 rounded-lg border-2 px-2 py-1 text-center transition active:translate-y-0.5 ${
+            difficulty === item.id
+              ? "border-[#082329] bg-[#f3c647] shadow-[2px_2px_0_#082329]"
+              : "border-[#cfbfae] bg-white hover:border-[#082329] hover:bg-[#fff0c2]"
+          }`}
+        >
+          <span className="block text-[8px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">Questions</span>
+          <span className="block text-lg font-black leading-none text-[#102f36]">{item.label}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function DifficultyPill({ difficulty }: { difficulty: Difficulty }) {
+  const label = difficultyLabel(difficulty);
+  return (
+    <span className="shrink-0 rounded-lg border-2 border-[#082329] bg-[#f3c647] px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#082329]">
+      {label}
+    </span>
+  );
+}
+
 function HudStat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border-2 border-[#cfbfae] bg-white px-1.5 py-1 text-center">
@@ -1146,7 +1205,7 @@ function HeatChoiceEmoji({ heat }: { heat: HeatBand }) {
       <span className="block text-[10px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">
         {profile.icons === 0 ? "no peppers" : `${profile.icons} pepper${profile.icons === 1 ? "" : "s"}`}
       </span>
-      <span className="mt-1 block whitespace-nowrap text-xl leading-none md:text-2xl" aria-label={`${profile.icons} pepper heat`}>
+      <span className="mt-1 block text-lg leading-none md:text-xl" aria-label={`${profile.icons} pepper heat`}>
         {profile.emoji}
       </span>
     </div>
