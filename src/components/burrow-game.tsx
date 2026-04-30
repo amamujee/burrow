@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import { buildingLibrary, contentLibrarySources, contentLibraryStats, pepperLibrary, sharkLibrary } from "@/lib/content-library";
-import { heatBands, heatProfiles, topicCatalog, type Difficulty, type HeatBand, type TopicId } from "@/lib/game-data";
+import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand, type TopicId } from "@/lib/game-data";
 import {
   buildFactRound,
+  buildRevealRound,
   buildSortRound,
   collectionCards,
   modeOptions,
@@ -13,6 +13,7 @@ import {
   type GameMode,
   type KnowledgeCard,
   type KnowledgeTopic,
+  type RevealRound,
   type SortRound,
   type TopicScope,
 } from "@/lib/game-modes";
@@ -31,7 +32,7 @@ type Progress = {
   unlockedCards: string[];
   topicWins: Record<KnowledgeTopic, number>;
   topicStats: Record<KnowledgeTopic, { correct: number; answered: number }>;
-  modeWins: Record<Exclude<GameMode, "collection">, number>;
+  modeWins: Record<GameMode, number>;
 };
 
 type LearnerProfile = {
@@ -52,6 +53,10 @@ type ResultState = {
   leveledUp: boolean;
 };
 
+const allKnowledgeTopics: KnowledgeTopic[] = [...topicIds];
+const emptyTopicCounts = () => Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, 0])) as Record<KnowledgeTopic, number>;
+const emptyTopicStats = () => Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, { correct: 0, answered: 0 }])) as Record<KnowledgeTopic, { correct: number; answered: number }>;
+
 const initialProgress: Progress = {
   xp: 0,
   level: 1,
@@ -63,19 +68,14 @@ const initialProgress: Progress = {
   difficulty: 1,
   seenIds: [],
   unlockedCards: [],
-  topicWins: { peppers: 0, buildings: 0, sharks: 0 },
-  topicStats: {
-    peppers: { correct: 0, answered: 0 },
-    buildings: { correct: 0, answered: 0 },
-    sharks: { correct: 0, answered: 0 },
-  },
-  modeWins: { quiz: 0, versus: 0, sort: 0, fact: 0 },
+  topicWins: emptyTopicCounts(),
+  topicStats: emptyTopicStats(),
+  modeWins: { mix: 0, quiz: 0, versus: 0, sort: 0, fact: 0, peek: 0 },
 };
 
 const profilesKey = "burrow-profiles-v1";
 const legacyProfilesKey = "rabbit-hole-profiles-v1";
 const legacyProgressKey = "rabbit-hole-progress-v1";
-const allKnowledgeTopics: KnowledgeTopic[] = ["peppers", "buildings", "sharks"];
 const difficultyOptions: { id: Difficulty; label: string }[] = [
   { id: 1, label: "Easy" },
   { id: 2, label: "Med" },
@@ -87,7 +87,8 @@ const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
 
 const freshProgress = (): Progress => ({
   ...initialProgress,
-  topicWins: { ...initialProgress.topicWins },
+  topicWins: emptyTopicCounts(),
+  topicStats: emptyTopicStats(),
   modeWins: { ...initialProgress.modeWins },
   seenIds: [],
   unlockedCards: [],
@@ -96,12 +97,8 @@ const freshProgress = (): Progress => ({
 const normalizeProgress = (progress?: Partial<Progress>): Progress => ({
   ...freshProgress(),
   ...progress,
-  topicWins: { ...initialProgress.topicWins, ...progress?.topicWins },
-  topicStats: {
-    peppers: { ...initialProgress.topicStats.peppers, ...progress?.topicStats?.peppers },
-    buildings: { ...initialProgress.topicStats.buildings, ...progress?.topicStats?.buildings },
-    sharks: { ...initialProgress.topicStats.sharks, ...progress?.topicStats?.sharks },
-  },
+  topicWins: { ...emptyTopicCounts(), ...progress?.topicWins },
+  topicStats: Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, { correct: 0, answered: 0, ...progress?.topicStats?.[topic] }])) as Progress["topicStats"],
   modeWins: { ...initialProgress.modeWins, ...progress?.modeWins },
   seenIds: progress?.seenIds ?? [],
   unlockedCards: progress?.unlockedCards ?? [],
@@ -179,7 +176,19 @@ const adaptiveTopicScopeFor = (topic: TopicId, interests: KnowledgeTopic[], prog
   });
 };
 
-const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficulty, sessionSeed: number, seenIds: string[]) => {
+const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficulty, sessionSeed: number, seenIds: string[]): Question[] => {
+  if (mode === "mix") {
+    const base = buildSession(topic, difficulty, sessionSeed, seenIds);
+    const versusQuestions = buildQuestionRun(topic, "versus", difficulty, sessionSeed + 503, seenIds);
+    let versusIndex = 0;
+    return base.map((question, index) => {
+      if (mixPattern[index % mixPattern.length] !== "versus") return question;
+      const nextVersus = versusQuestions[versusIndex];
+      versusIndex += 1;
+      return nextVersus ?? question;
+    });
+  }
+
   if (mode !== "versus") {
     return buildSession(topic, difficulty, sessionSeed, seenIds);
   }
@@ -199,6 +208,16 @@ const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficu
 };
 
 const difficultyLabel = (difficulty: Difficulty) => difficultyOptions.find((item) => item.id === difficulty)?.label ?? "Easy";
+type ChallengeMode = Exclude<GameMode, "mix">;
+const mixPattern: ChallengeMode[] = ["quiz", "peek", "versus", "sort", "fact", "quiz"];
+const isQuestionAnswerCorrect = (question: Question, choice: string) => {
+  if (!question.estimate) return choice === question.answer;
+  const value = Number(choice);
+  return Number.isFinite(value) && value >= question.estimate.correctMin && value <= question.estimate.correctMax;
+};
+const comparisonLabelRank = (value: string) => (value.startsWith("A") ? 0 : value.startsWith("B") ? 1 : 2);
+const orderedComparisonCards = (cards: ComparisonCard[]) => [...cards].sort((a, b) => comparisonLabelRank(a.label) - comparisonLabelRank(b.label));
+const orderedComparisonChoices = (choices: string[]) => [...choices].sort((a, b) => comparisonLabelRank(a) - comparisonLabelRank(b));
 
 export function BurrowGame() {
   const [profilesState, setProfilesState] = useState<ProfilesState>(() => defaultProfiles());
@@ -207,8 +226,9 @@ export function BurrowGame() {
   const activeInterests = normalizeInterests(activeProfile.interests);
   const progress = activeProfile.progress;
   const [topic, setTopic] = useState<TopicId>("mixed");
-  const [mode, setMode] = useState<GameMode>("quiz");
-  const [questions, setQuestions] = useState(() => buildQuestionRun(adaptiveTopicScopeFor("mixed", activeInterests, progress), "quiz", progress.difficulty, 20260430, progress.seenIds));
+  const [mode, setMode] = useState<GameMode>("mix");
+  const [showCollection, setShowCollection] = useState(false);
+  const [questions, setQuestions] = useState(() => buildQuestionRun(adaptiveTopicScopeFor("mixed", activeInterests, progress), "mix", progress.difficulty, 20260430, progress.seenIds));
   const [seedCounter, setSeedCounter] = useState(20260430);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
@@ -217,6 +237,8 @@ export function BurrowGame() {
   const [sortChecked, setSortChecked] = useState(false);
   const [factRound, setFactRound] = useState<FactRound>(() => buildFactRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
   const [factSelected, setFactSelected] = useState<"True" | "False" | null>(null);
+  const [revealRound, setRevealRound] = useState<RevealRound>(() => buildRevealRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
+  const [revealSelected, setRevealSelected] = useState<string | null>(null);
   const [sessionCorrect, setSessionCorrect] = useState(0);
   const [miniRunAnswered, setMiniRunAnswered] = useState(0);
   const [miniRunCorrect, setMiniRunCorrect] = useState(0);
@@ -225,12 +247,14 @@ export function BurrowGame() {
 
   const allCards = useMemo(() => collectionCards(), []);
   const question = questions[questionIndex];
-  const isQuestionMode = mode === "quiz" || mode === "versus";
+  const activeChallengeMode: ChallengeMode = mode === "mix" ? mixPattern[questionIndex % mixPattern.length] : mode;
+  const isQuestionMode = !showCollection && (activeChallengeMode === "quiz" || activeChallengeMode === "versus");
   const answered = isQuestionMode && selected !== null;
-  const isCorrect = isQuestionMode && selected === question?.answer;
+  const isCorrect = isQuestionMode && question ? selected !== null && isQuestionAnswerCorrect(question, selected) : false;
   const nextLevelXp = progress.level * 120;
   const levelProgress = Math.min(100, Math.round(((progress.xp % 120) / 120) * 100));
-  const sessionAnswered = questionIndex + (answered ? 1 : 0);
+  const activeChallengeAnswered = activeChallengeMode === "sort" ? sortChecked : activeChallengeMode === "fact" ? factSelected !== null : activeChallengeMode === "peek" ? revealSelected !== null : answered;
+  const sessionAnswered = mode === "mix" ? questionIndex + (activeChallengeAnswered ? 1 : 0) : questionIndex + (answered ? 1 : 0);
   const unlockedCount = allCards.filter((card) => progress.unlockedCards.includes(card.title)).length;
   const currentTopicScope = adaptiveTopicScopeFor(topic, activeInterests, progress);
   const accuracy = progress.answered ? Math.round((progress.correct / progress.answered) * 100) : 0;
@@ -242,9 +266,10 @@ export function BurrowGame() {
       const loadedInterests = normalizeInterests(loadedProfile.interests);
       const loadedScope = adaptiveTopicScopeFor("mixed", loadedInterests, loadedProfile.progress);
       setProfilesState(loadedProfiles);
-      setQuestions(buildQuestionRun(loadedScope, "quiz", loadedProfile.progress.difficulty, 20260430, loadedProfile.progress.seenIds));
+      setQuestions(buildQuestionRun(loadedScope, "mix", loadedProfile.progress.difficulty, 20260430, loadedProfile.progress.seenIds));
       setSortRound(buildSortRound(loadedScope, loadedProfile.progress.difficulty, 20260461));
       setFactRound(buildFactRound(loadedScope, loadedProfile.progress.difficulty, 20260477));
+      setRevealRound(buildRevealRound(loadedScope, loadedProfile.progress.difficulty, 20260493));
       setProfilesReady(true);
     }, 0);
 
@@ -279,7 +304,7 @@ export function BurrowGame() {
     correct: boolean;
     xpGain: number;
     topicName?: KnowledgeTopic;
-    modeName?: Exclude<GameMode, "collection">;
+    modeName?: GameMode;
     seenId: string;
     unlockTitles?: string[];
   }) => {
@@ -298,11 +323,7 @@ export function BurrowGame() {
       difficulty: autoDifficulty(current.difficulty, correct, correct ? current.streak + 1 : 0, current.answered + 1, current.correct + (correct ? 1 : 0)),
       seenIds: [seenId, ...current.seenIds].slice(0, 80),
       unlockedCards: correct ? addUnique(current.unlockedCards, unlockTitles) : current.unlockedCards,
-      topicWins: {
-        peppers: current.topicWins.peppers + (correct && topicName === "peppers" ? 1 : 0),
-        buildings: current.topicWins.buildings + (correct && topicName === "buildings" ? 1 : 0),
-        sharks: current.topicWins.sharks + (correct && topicName === "sharks" ? 1 : 0),
-      },
+      topicWins: topicName ? { ...current.topicWins, [topicName]: current.topicWins[topicName] + (correct ? 1 : 0) } : current.topicWins,
       topicStats: topicName
         ? {
             ...current.topicStats,
@@ -323,17 +344,18 @@ export function BurrowGame() {
     return { correct, xpGain, leveledUp: nextLevel > progress.level };
   };
 
-  const resetRunState = (nextMode = mode) => {
+  const resetRunState = () => {
     setQuestionIndex(0);
     setSelected(null);
     setSortPicked([]);
     setSortChecked(false);
     setFactSelected(null);
+    setRevealSelected(null);
     setLastResult(null);
     setSessionCorrect(0);
     setMiniRunAnswered(0);
     setMiniRunCorrect(0);
-    setCelebration(nextMode === "collection" ? "Collection opened." : "Fresh round.");
+    setCelebration("Fresh round.");
   };
 
   const freshSeed = (offset = 0) => {
@@ -347,30 +369,40 @@ export function BurrowGame() {
     const safeTopic = playableTopic(nextTopic, nextInterests);
     const scope = adaptiveTopicScopeFor(safeTopic, nextInterests, nextProfile.progress);
     setTopic(safeTopic);
-    resetRunState(nextMode);
+    resetRunState();
     setQuestions(buildQuestionRun(scope, nextMode, nextProfile.progress.difficulty, seed, nextProfile.progress.seenIds));
     setSortRound(buildSortRound(scope, nextProfile.progress.difficulty, seed + 31));
     setFactRound(buildFactRound(scope, nextProfile.progress.difficulty, seed + 47));
+    setRevealRound(buildRevealRound(scope, nextProfile.progress.difficulty, seed + 61));
   };
 
   const startMode = (nextMode: GameMode) => {
     const seed = freshSeed(nextMode.length);
+    setShowCollection(false);
     setMode(nextMode);
-    resetRunState(nextMode);
+    resetRunState();
     setQuestions(buildQuestionRun(currentTopicScope, nextMode, progress.difficulty, seed, progress.seenIds));
     setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 59));
     setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 71));
+    setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 83));
   };
 
   const setQuestionDifficulty = (nextDifficulty: Difficulty) => {
     if (nextDifficulty === progress.difficulty) return;
     const seed = freshSeed(nextDifficulty * 53);
     setProgress((current) => ({ ...current, difficulty: nextDifficulty }));
-    resetRunState(mode);
+    resetRunState();
     setQuestions(buildQuestionRun(currentTopicScope, mode, nextDifficulty, seed, progress.seenIds));
     setSortRound(buildSortRound(currentTopicScope, nextDifficulty, seed + 41));
     setFactRound(buildFactRound(currentTopicScope, nextDifficulty, seed + 47));
+    setRevealRound(buildRevealRound(currentTopicScope, nextDifficulty, seed + 53));
     setCelebration(`${difficultyLabel(nextDifficulty)} questions.`);
+  };
+
+  const openCollection = () => {
+    setShowCollection(true);
+    setLastResult(null);
+    setCelebration("Collection opened.");
   };
 
   const switchProfile = (profileId: string) => {
@@ -421,13 +453,13 @@ export function BurrowGame() {
 
   const answer = (choice: string) => {
     if (!question || selected !== null) return;
-    const correct = choice === question.answer;
-    const xpGain = correct ? (mode === "versus" ? 24 : 18) + progress.difficulty * 4 : 6;
+    const correct = isQuestionAnswerCorrect(question, choice);
+    const xpGain = correct ? (activeChallengeMode === "versus" ? 24 : 18) + progress.difficulty * 4 : 6;
     const result = reward({
       correct,
       xpGain,
       topicName: question.topic,
-      modeName: mode === "versus" ? "versus" : "quiz",
+      modeName: mode === "mix" ? "mix" : activeChallengeMode,
       seenId: question.id,
       unlockTitles: [question.imageAlt],
     });
@@ -438,7 +470,35 @@ export function BurrowGame() {
     setLastResult(result);
   };
 
+  const advanceMix = () => {
+    const seed = freshSeed(101 + questionIndex);
+    if (questionIndex === questions.length - 1) {
+      setProgress((current) => ({ ...current, sessions: current.sessions + 1 }));
+      setQuestionIndex(0);
+      setSessionCorrect(0);
+      setQuestions(buildQuestionRun(currentTopicScope, mode, progress.difficulty, seed, progress.seenIds));
+      setCelebration("New mixed run. Fresh shuffle.");
+    } else {
+      setQuestionIndex((value) => value + 1);
+      setCelebration("Next shuffle.");
+    }
+    setSelected(null);
+    setLastResult(null);
+    setSortPicked([]);
+    setSortChecked(false);
+    setFactSelected(null);
+    setRevealSelected(null);
+    setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 29));
+    setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 37));
+    setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 43));
+  };
+
   const advance = () => {
+    if (mode === "mix") {
+      advanceMix();
+      return;
+    }
+
     if (questionIndex === questions.length - 1) {
       const seed = freshSeed(101);
       setProgress((current) => ({ ...current, sessions: current.sessions + 1 }));
@@ -465,13 +525,14 @@ export function BurrowGame() {
       correct,
       xpGain,
       topicName: sortRound.topic,
-      modeName: "sort",
+      modeName: mode === "mix" ? "mix" : "sort",
       seenId: sortRound.id,
       unlockTitles: unlocked,
     });
     setSortChecked(true);
     setMiniRunAnswered((value) => value + 1);
     setMiniRunCorrect((value) => value + (correct ? 1 : 0));
+    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
     setCelebration(correct ? "Perfect order!" : "Good try. Read the number path.");
     setLastResult(result);
   };
@@ -493,13 +554,14 @@ export function BurrowGame() {
       correct,
       xpGain,
       topicName: factRound.topic,
-      modeName: "fact",
+      modeName: mode === "mix" ? "mix" : "fact",
       seenId: factRound.id,
       unlockTitles: [factRound.imageAlt],
     });
     setFactSelected(choice);
     setMiniRunAnswered((value) => value + 1);
     setMiniRunCorrect((value) => value + (correct ? 1 : 0));
+    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
     setCelebration(correct ? "You caught it!" : "Good try. Check the fact.");
     setLastResult(result);
   };
@@ -512,14 +574,46 @@ export function BurrowGame() {
     setCelebration("New fact card.");
   };
 
+  const answerReveal = (choice: string, revealedCount: number) => {
+    if (revealSelected) return;
+    const correct = choice === revealRound.answer;
+    const speedBonus = Math.max(0, 6 - Math.floor(revealedCount / 3));
+    const xpGain = correct ? 24 + progress.difficulty * 5 + speedBonus : 7;
+    const result = reward({
+      correct,
+      xpGain,
+      topicName: revealRound.topic,
+      modeName: mode === "mix" ? "mix" : "peek",
+      seenId: revealRound.id,
+      unlockTitles: [revealRound.card.title],
+    });
+
+    setRevealSelected(choice);
+    setMiniRunAnswered((value) => value + 1);
+    setMiniRunCorrect((value) => value + (correct ? 1 : 0));
+    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
+    setCelebration(correct ? "Picture solved!" : "Good try. The full picture tells you.");
+    setLastResult(result);
+  };
+
+  const nextRevealRound = () => {
+    const seed = freshSeed(miniRunAnswered * 23);
+    setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed));
+    setRevealSelected(null);
+    setLastResult(null);
+    setCelebration("New picture peek.");
+  };
+
   const resetProgress = () => {
     const seed = freshSeed(211);
     const reset = freshProgress();
     setProgress(reset);
+    setShowCollection(false);
     setQuestions(buildQuestionRun(currentTopicScope, mode, reset.difficulty, seed, reset.seenIds));
     setSortRound(buildSortRound(currentTopicScope, reset.difficulty, seed + 29));
     setFactRound(buildFactRound(currentTopicScope, reset.difficulty, seed + 37));
-    resetRunState(mode);
+    setRevealRound(buildRevealRound(currentTopicScope, reset.difficulty, seed + 43));
+    resetRunState();
     setCelebration("Progress reset. Fresh start.");
   };
 
@@ -560,7 +654,7 @@ export function BurrowGame() {
                 <div className="h-full bg-[#4fb286] transition-[width] duration-500 ease-out" style={{ width: `${levelProgress}%` }} />
               </div>
               <div className="mt-2 grid min-w-0 grid-cols-2 gap-1.5 md:grid-cols-3">
-                <MiniStat label="Unlocked" value={`${unlockedCount}/${allCards.length}`} />
+                <CollectionAction active={showCollection} value={`${unlockedCount}/${allCards.length}`} onClick={openCollection} />
                 <MiniStat label="Streak" value={progress.streak.toString()} />
                 <MiniStat label="Hit" value={`${accuracy}%`} />
               </div>
@@ -580,7 +674,11 @@ export function BurrowGame() {
           </div>
         </header>
 
-        {isQuestionMode && question && (
+        {showCollection && (
+          <CollectionBook cards={allCards} unlockedCards={progress.unlockedCards} topic={topic} topicWins={progress.topicWins} modeWins={progress.modeWins} />
+        )}
+
+        {!showCollection && isQuestionMode && question && (
           <QuestionRun
             question={question}
             questions={questions}
@@ -596,10 +694,11 @@ export function BurrowGame() {
             difficulty={progress.difficulty}
             onAnswer={answer}
             onNext={advance}
+            onSkip={advance}
           />
         )}
 
-        {mode === "sort" && (
+        {!showCollection && activeChallengeMode === "sort" && (
           <SortMode
             round={sortRound}
             picked={sortPicked}
@@ -617,11 +716,12 @@ export function BurrowGame() {
               if (!sortChecked) setSortPicked((value) => value.slice(0, -1));
             }}
             onCheck={checkSort}
-            onNext={nextSortRound}
+            onNext={mode === "mix" ? advanceMix : nextSortRound}
+            onSkip={mode === "mix" ? advanceMix : nextSortRound}
           />
         )}
 
-        {mode === "fact" && (
+        {!showCollection && activeChallengeMode === "fact" && (
           <FactMode
             round={factRound}
             selected={factSelected}
@@ -631,12 +731,24 @@ export function BurrowGame() {
             celebration={celebration}
             difficulty={progress.difficulty}
             onAnswer={answerFact}
-            onNext={nextFactRound}
+            onNext={mode === "mix" ? advanceMix : nextFactRound}
+            onSkip={mode === "mix" ? advanceMix : nextFactRound}
           />
         )}
 
-        {mode === "collection" && (
-          <CollectionBook cards={allCards} unlockedCards={progress.unlockedCards} topic={topic} topicWins={progress.topicWins} modeWins={progress.modeWins} />
+        {!showCollection && activeChallengeMode === "peek" && (
+          <RevealMode
+            round={revealRound}
+            selected={revealSelected}
+            result={lastResult}
+            miniRunAnswered={miniRunAnswered}
+            miniRunCorrect={miniRunCorrect}
+            celebration={celebration}
+            difficulty={progress.difficulty}
+            onAnswer={answerReveal}
+            onNext={mode === "mix" ? advanceMix : nextRevealRound}
+            onSkip={mode === "mix" ? advanceMix : nextRevealRound}
+          />
         )}
       </section>
     </main>
@@ -658,6 +770,7 @@ function QuestionRun({
   difficulty,
   onAnswer,
   onNext,
+  onSkip,
 }: {
   question: Question;
   questions: Question[];
@@ -673,10 +786,12 @@ function QuestionRun({
   difficulty: Difficulty;
   onAnswer: (choice: string) => void;
   onNext: () => void;
+  onSkip: () => void;
 }) {
   const isDifferenceQuestion = question.kind === "building-difference" || question.kind === "shark-difference";
   const showNumberLine = Boolean(question.numberLine) && (answered || (Boolean(question.comparison) && !isDifferenceQuestion));
   const showComparisonTable = Boolean(question.comparison) && (answered || !isDifferenceQuestion);
+  const choices = question.comparison ? orderedComparisonChoices(question.choices) : question.choices;
   const stageHint = question.comparison
     ? isDifferenceQuestion
       ? "Use the numbers in the question. Subtract smaller from bigger."
@@ -716,43 +831,49 @@ function QuestionRun({
             {question.prompt}
           </h2>
 
+          {question.readingClue && <ReadingClue text={question.readingClue} />}
+
           {question.numberLine && showNumberLine && <NumberLine line={question.numberLine} />}
           {question.heatMeter && answered && <PepperHeatMeter meter={question.heatMeter} />}
           {question.comparison && showComparisonTable && <ComparisonTable cards={question.comparison} />}
         </div>
 
-        <div className="mt-2 grid shrink-0 gap-2 xl:grid-cols-2">
-          {question.choices.map((choice) => {
-            const chosen = selected === choice;
-            const correctChoice = answered && choice === question.answer;
-            const heatChoice =
-              (question.kind === "pepper-heat" || question.kind === "pepper-reading") && heatBands.includes(choice as HeatBand)
-                ? (choice as HeatBand)
-                : null;
-            return (
-              <button
-                key={`${question.id}-${choice}`}
-                onClick={() => onAnswer(choice)}
-                className={`min-h-12 rounded-lg border-2 px-3 py-2 text-left text-base font-black leading-snug transition duration-150 ease-out active:translate-y-0.5 md:min-h-14 md:text-lg ${
-                  correctChoice
-                    ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
-                    : chosen
-                      ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
-                      : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2] hover:shadow-[2px_2px_0_#082329]"
-                }`}
-              >
-                <span className="flex items-center justify-between gap-3">
-                  <span className="flex min-w-0 items-center gap-2">
-                    <span>{choice}</span>
-                    {heatChoice && <HeatChoiceEmoji heat={heatChoice} />}
+        {question.estimate ? (
+          <EstimateSlider key={question.id} question={question} selected={selected} answered={answered} isCorrect={isCorrect} onAnswer={onAnswer} />
+        ) : (
+          <div className="mt-2 grid shrink-0 gap-2 xl:grid-cols-2">
+            {choices.map((choice) => {
+              const chosen = selected === choice;
+              const correctChoice = answered && choice === question.answer;
+              const heatChoice =
+                (question.kind === "pepper-heat" || question.kind === "pepper-reading") && heatBands.includes(choice as HeatBand)
+                  ? (choice as HeatBand)
+                  : null;
+              return (
+                <button
+                  key={`${question.id}-${choice}`}
+                  onClick={() => onAnswer(choice)}
+                  className={`min-h-12 rounded-lg border-2 px-3 py-2 text-left text-base font-black leading-snug transition duration-150 ease-out active:translate-y-0.5 md:min-h-14 md:text-lg ${
+                    correctChoice
+                      ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
+                      : chosen
+                        ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
+                        : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2] hover:shadow-[2px_2px_0_#082329]"
+                  }`}
+                >
+                  <span className="flex items-center justify-between gap-3">
+                    <span className="flex min-w-0 items-center gap-2">
+                      <span>{choice}</span>
+                      {heatChoice && <HeatChoiceEmoji heat={heatChoice} />}
+                    </span>
+                    {correctChoice && <span className="shrink-0 text-2xl leading-none">+</span>}
+                    {chosen && !correctChoice && <span className="shrink-0 text-2xl leading-none">x</span>}
                   </span>
-                  {correctChoice && <span className="shrink-0 text-2xl leading-none">+</span>}
-                  {chosen && !correctChoice && <span className="shrink-0 text-2xl leading-none">x</span>}
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
 
         {answered && lastResult && (
           <FeedbackPanel
@@ -767,6 +888,8 @@ function QuestionRun({
             onNext={onNext}
           />
         )}
+
+        {!answered && <SkipButton onClick={onSkip} />}
       </article>
     </section>
   );
@@ -785,6 +908,7 @@ function SortMode({
   onUndo,
   onCheck,
   onNext,
+  onSkip,
 }: {
   round: SortRound;
   picked: string[];
@@ -798,6 +922,7 @@ function SortMode({
   onUndo: () => void;
   onCheck: () => void;
   onNext: () => void;
+  onSkip: () => void;
 }) {
   const answerTitles = round.answerIds.map((id) => round.cards.find((card) => card.id === id)?.title).filter(Boolean).join(" -> ");
   const pickedSet = new Set(picked);
@@ -887,6 +1012,8 @@ function SortMode({
             onNext={onNext}
           />
         )}
+
+        {!checked && <SkipButton onClick={onSkip} />}
       </article>
     </section>
   );
@@ -902,6 +1029,7 @@ function FactMode({
   difficulty,
   onAnswer,
   onNext,
+  onSkip,
 }: {
   round: FactRound;
   selected: "True" | "False" | null;
@@ -912,6 +1040,7 @@ function FactMode({
   difficulty: Difficulty;
   onAnswer: (choice: "True" | "False") => void;
   onNext: () => void;
+  onSkip: () => void;
 }) {
   const answered = selected !== null;
 
@@ -978,6 +1107,149 @@ function FactMode({
             onNext={onNext}
           />
         )}
+
+        {!answered && <SkipButton onClick={onSkip} />}
+      </article>
+    </section>
+  );
+}
+
+function RevealMode({
+  round,
+  selected,
+  result,
+  miniRunAnswered,
+  miniRunCorrect,
+  celebration,
+  difficulty,
+  onAnswer,
+  onNext,
+  onSkip,
+}: {
+  round: RevealRound;
+  selected: string | null;
+  result: ResultState | null;
+  miniRunAnswered: number;
+  miniRunCorrect: number;
+  celebration: string;
+  difficulty: Difficulty;
+  onAnswer: (choice: string, revealedCount: number) => void;
+  onNext: () => void;
+  onSkip: () => void;
+}) {
+  const totalTiles = difficulty === 1 ? 12 : 16;
+  const startReveal = difficulty === 1 ? 4 : difficulty === 2 ? 2 : 1;
+  const intervalMs = difficulty === 1 ? 850 : difficulty === 2 ? 1050 : 1250;
+  const [revealed, setRevealed] = useState(startReveal);
+  const answered = selected !== null;
+  const visibleCount = answered ? totalTiles : revealed;
+  const blurPx = answered ? 0 : Math.max(0, 18 - (visibleCount / totalTiles) * 18);
+  const tileOrder = useMemo(() => {
+    const seed = Array.from(round.id).reduce((total, char) => total + char.charCodeAt(0), 0);
+    return Array.from({ length: totalTiles }, (_, index) => index).sort((a, b) => {
+      const scoreA = Math.sin((seed + a * 17) * 99) * 10000;
+      const scoreB = Math.sin((seed + b * 17) * 99) * 10000;
+      return (scoreA - Math.floor(scoreA)) - (scoreB - Math.floor(scoreB));
+    });
+  }, [round.id, totalTiles]);
+  const revealedTiles = new Set(tileOrder.slice(0, visibleCount));
+
+  useEffect(() => {
+    if (answered || revealed >= totalTiles) return;
+    const timer = window.setTimeout(() => setRevealed((value) => Math.min(totalTiles, value + 1)), intervalMs);
+    return () => window.clearTimeout(timer);
+  }, [answered, intervalMs, revealed, totalTiles]);
+
+  return (
+    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+      <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#102f36] shadow-[4px_4px_0_#082329] md:min-h-0">
+        <div className="h-full transition-[filter] duration-500 ease-out" style={{ filter: `blur(${blurPx}px)` }}>
+          <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
+        </div>
+        <div className="absolute inset-0 grid" style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gridTemplateRows: `repeat(${totalTiles / 4}, minmax(0, 1fr))` }}>
+          {Array.from({ length: totalTiles }, (_, index) => (
+            <div
+              key={`${round.id}-tile-${index}`}
+              className={`border border-[#f3c647]/20 bg-[#102f36] transition duration-500 ${revealedTiles.has(index) ? "opacity-0" : "opacity-95"}`}
+            />
+          ))}
+        </div>
+        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
+          Peek round
+        </div>
+        <div className="absolute bottom-2 left-2 right-2 grid gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
+          <div className="rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">
+            {answered ? `Image: ${round.card.imageCredit}` : "The picture reveals itself. Guess early for style points."}
+          </div>
+          <div className="rounded-lg border-2 border-[#082329] bg-[#f3c647] px-3 py-1.5 text-center text-sm font-black text-[#102f36] shadow-[2px_2px_0_#082329]">
+            {visibleCount}/{totalTiles} open
+          </div>
+        </div>
+      </article>
+
+      <article className="flex min-h-[42dvh] flex-col overflow-hidden rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329] md:min-h-0">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex min-w-0 items-center gap-2">
+            <DifficultyPill difficulty={difficulty} />
+            <p className="rounded-lg border-2 border-[#082329] bg-[#78d99a] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+              Picture clue
+            </p>
+          </div>
+          <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
+        </div>
+
+        <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+        <div className="mt-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
+          <div className="flex items-center justify-between gap-3 text-xs font-black md:text-sm">
+            <span>Picture reveal</span>
+            <span>{Math.round((visibleCount / totalTiles) * 100)}%</span>
+          </div>
+          <div className="mt-2 h-3 overflow-hidden rounded-full bg-[#eadfce]">
+            <div className="h-full bg-[#b5412b] transition-[width] duration-500 ease-out" style={{ width: `${Math.round((visibleCount / totalTiles) * 100)}%` }} />
+          </div>
+        </div>
+
+        <div className="mt-3 grid shrink-0 gap-2 xl:grid-cols-2">
+          {round.choices.map((choice) => {
+            const correctChoice = answered && choice === round.answer;
+            const chosenWrong = selected === choice && choice !== round.answer;
+            return (
+              <button
+                key={`${round.id}-${choice}`}
+                onClick={() => onAnswer(choice, visibleCount)}
+                className={`min-h-12 rounded-lg border-2 px-3 py-2 text-left text-base font-black leading-snug transition active:translate-y-0.5 md:min-h-14 md:text-lg ${
+                  correctChoice
+                    ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
+                    : chosenWrong
+                      ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
+                      : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2] hover:shadow-[2px_2px_0_#082329]"
+                }`}
+              >
+                <span className="flex items-center justify-between gap-3">
+                  <span>{choice}</span>
+                  {correctChoice && <span className="shrink-0 text-2xl leading-none">+</span>}
+                  {chosenWrong && <span className="shrink-0 text-2xl leading-none">x</span>}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {answered && result && (
+          <FeedbackPanel
+            isCorrect={result.correct}
+            xpGain={result.xpGain}
+            leveledUp={result.leveledUp}
+            celebration={celebration}
+            correctAnswer={round.answer}
+            explanation={round.explanation}
+            note="Good try."
+            isLast={false}
+            onNext={onNext}
+          />
+        )}
+
+        {!answered && <SkipButton onClick={onSkip} />}
       </article>
     </section>
   );
@@ -998,16 +1270,11 @@ function CollectionBook({
 }) {
   const filtered = topic === "mixed" ? cards : cards.filter((card) => card.topic === topic);
   const unlocked = filtered.filter((card) => unlockedCards.includes(card.title));
-  const researchSamples = {
-    peppers: pepperLibrary.slice(0, 4).map((item) => `${item.name} (${item.heatRange})`),
-    buildings: buildingLibrary.slice(0, 4).map((item) => `${item.name}, ${item.city} (${item.heightFeet.toLocaleString("en-US")} ft)`),
-    sharks: sharkLibrary.slice(0, 4).map((item) => `${item.name} (${item.genus})`),
-  };
-  const topicCounts = {
-    peppers: cards.filter((card) => card.topic === "peppers" && unlockedCards.includes(card.title)).length,
-    buildings: cards.filter((card) => card.topic === "buildings" && unlockedCards.includes(card.title)).length,
-    sharks: cards.filter((card) => card.topic === "sharks" && unlockedCards.includes(card.title)).length,
-  };
+  const topicCounts = Object.fromEntries(allKnowledgeTopics.map((item) => [
+    item,
+    cards.filter((card) => card.topic === item && unlockedCards.includes(card.title)).length,
+  ])) as Record<KnowledgeTopic, number>;
+  const totalResearchRecords = allKnowledgeTopics.reduce((total, item) => total + topicPacks[item].libraryCount, 0);
 
   return (
     <section className="grid min-h-0 flex-1 gap-2 lg:grid-cols-[300px_1fr]">
@@ -1015,22 +1282,31 @@ function CollectionBook({
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#b5412b]">Collection</p>
         <h2 className="mt-1 text-3xl font-black leading-none text-[#102f36]">{unlocked.length}/{filtered.length} cards</h2>
         <div className="mt-4 grid gap-2">
-          <CollectionStat label="Peppers" value={`${topicCounts.peppers} / ${cards.filter((card) => card.topic === "peppers").length}`} libraryValue={contentLibraryStats.peppers.toString()} wins={topicWins.peppers} samples={researchSamples.peppers} />
-          <CollectionStat label="Buildings" value={`${topicCounts.buildings} / ${cards.filter((card) => card.topic === "buildings").length}`} libraryValue={contentLibraryStats.buildings.toString()} wins={topicWins.buildings} samples={researchSamples.buildings} />
-          <CollectionStat label="Sharks" value={`${topicCounts.sharks} / ${cards.filter((card) => card.topic === "sharks").length}`} libraryValue={contentLibraryStats.sharks.toString()} wins={topicWins.sharks} samples={researchSamples.sharks} />
+          {allKnowledgeTopics.map((item) => (
+            <CollectionStat
+              key={item}
+              label={topicPacks[item].label}
+              value={`${topicCounts[item]} / ${cards.filter((card) => card.topic === item).length}`}
+              libraryValue={topicPacks[item].libraryCount.toString()}
+              wins={topicWins[item]}
+              samples={topicPacks[item].samples}
+            />
+          ))}
         </div>
         <div className="mt-4 grid grid-cols-2 gap-2">
+          <HudStat label="Mix" value={modeWins.mix.toString()} />
           <HudStat label="Quiz" value={modeWins.quiz.toString()} />
           <HudStat label="Versus" value={modeWins.versus.toString()} />
           <HudStat label="Sort" value={modeWins.sort.toString()} />
           <HudStat label="Fact" value={modeWins.fact.toString()} />
+          <HudStat label="Peek" value={modeWins.peek.toString()} />
         </div>
         <div className="mt-4 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
           <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">Research library</p>
-          <p className="mt-1 text-xl font-black leading-none text-[#102f36]">{contentLibraryStats.total.toLocaleString("en-US")} records</p>
+          <p className="mt-1 text-xl font-black leading-none text-[#102f36]">{totalResearchRecords.toLocaleString("en-US")} records</p>
           <div className="mt-2 grid gap-1.5">
-            {contentLibrarySources.map((source) => (
-              <a key={source.id} href={source.url} target="_blank" rel="noreferrer" className="rounded-md bg-white px-2 py-1.5 text-xs font-bold leading-tight text-[#405257] underline-offset-2 hover:underline">
+            {allKnowledgeTopics.flatMap((item) => topicPacks[item].sources.map((source) => ({ ...source, key: `${item}-${source.label}` }))).map((source) => (
+              <a key={source.key} href={source.url} target="_blank" rel="noreferrer" className="rounded-md bg-white px-2 py-1.5 text-xs font-bold leading-tight text-[#405257] underline-offset-2 hover:underline">
                 {source.label}
               </a>
             ))}
@@ -1058,6 +1334,91 @@ function CollectionBook({
         </div>
       </article>
     </section>
+  );
+}
+
+function EstimateSlider({
+  question,
+  selected,
+  answered,
+  isCorrect,
+  onAnswer,
+}: {
+  question: Question;
+  selected: string | null;
+  answered: boolean;
+  isCorrect: boolean;
+  onAnswer: (choice: string) => void;
+}) {
+  const estimate = question.estimate;
+  const [value, setValue] = useState(estimate?.start ?? 0);
+
+  if (!estimate) return null;
+
+  const displayValue = selected !== null ? Number(selected) : value;
+  const span = estimate.max - estimate.min;
+  const pct = (item: number) => `${Math.max(0, Math.min(100, ((item - estimate.min) / span) * 100))}%`;
+  const valueLabel = `${displayValue.toLocaleString("en-US")} ${estimate.unit}`;
+  const rangeLabel =
+    estimate.correctMin === estimate.correctMax
+      ? `${estimate.correctMax.toLocaleString("en-US")} ${estimate.unit}`
+      : `${estimate.correctMin.toLocaleString("en-US")}-${estimate.correctMax.toLocaleString("en-US")} ${estimate.unit}`;
+
+  return (
+    <div className="mt-3 rounded-xl border-2 border-[#cfbfae] bg-[#fff8ec] p-3 shadow-[2px_2px_0_#cfbfae]">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#7a5d4b]">{estimate.label}</p>
+          <p className="text-3xl font-black leading-none text-[#102f36]">{valueLabel}</p>
+        </div>
+        <p className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-3 py-1 text-xs font-black uppercase tracking-[0.08em] text-[#102f36]">
+          Slide guess
+        </p>
+      </div>
+
+      <div className="relative mt-5 px-1 pb-7 pt-4">
+        {answered && (
+          <div
+            className={`absolute top-[22px] h-4 rounded-full border-2 border-[#082329] ${isCorrect ? "bg-[#78d99a]" : "bg-[#ffd7ce]"}`}
+            style={{
+              left: pct(estimate.correctMin),
+              width: `calc(${pct(estimate.correctMax)} - ${pct(estimate.correctMin)})`,
+            }}
+          />
+        )}
+        <input
+          type="range"
+          min={estimate.min}
+          max={estimate.max}
+          step={estimate.step}
+          value={displayValue}
+          disabled={answered}
+          onChange={(event) => setValue(Number(event.target.value))}
+          className="relative z-10 h-5 w-full cursor-pointer accent-[#b5412b] disabled:cursor-default"
+          aria-label={estimate.label}
+        />
+        <div className="mt-2 flex justify-between gap-1 text-[10px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">
+          {estimate.marks.map((mark) => (
+            <span key={`${question.id}-${mark.label}`} className="text-center leading-tight">
+              {mark.label}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid gap-2 sm:grid-cols-[1fr_auto] sm:items-center">
+        <p className="text-sm font-bold leading-snug text-[#405257]">
+          {answered ? `Target zone: ${rangeLabel}` : estimate.helper}
+        </p>
+        <button
+          onClick={() => onAnswer(String(value))}
+          disabled={answered}
+          className="min-h-12 rounded-lg border-2 border-[#082329] bg-[#102f36] px-4 py-2 text-base font-black text-white shadow-[3px_3px_0_#082329] transition hover:bg-[#23515a] active:translate-y-0.5 disabled:opacity-55"
+        >
+          Lock it in
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -1157,7 +1518,7 @@ function TopicMixMenu({ activeInterests, onToggle }: { activeInterests: Knowledg
 function ModeTabs({ mode, onChange }: { mode: GameMode; onChange: (mode: GameMode) => void }) {
   return (
     <div className="w-full min-w-0 overflow-x-auto pb-1">
-      <div className="grid min-w-0 grid-cols-1 gap-1.5 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-1 min-[520px]:grid-cols-2 md:grid-cols-5">
+      <div className="grid min-w-0 grid-cols-1 gap-1.5 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-1 min-[520px]:grid-cols-2 md:grid-cols-6">
         {modeOptions.map((item) => (
           <button
             key={item.id}
@@ -1207,6 +1568,42 @@ function MiniStat({ label, value }: { label: string; value: string }) {
   );
 }
 
+function CollectionAction({ active, value, onClick }: { active: boolean; value: string; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`min-w-0 rounded-md border-2 px-2 py-1 text-center transition active:translate-y-0.5 ${
+        active ? "border-[#082329] bg-[#f3c647] shadow-[2px_2px_0_#082329]" : "border-transparent bg-white hover:border-[#cfbfae] hover:bg-[#fff0c2]"
+      }`}
+    >
+      <span className="block truncate text-[8px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">Collection</span>
+      <span className="block truncate text-sm font-black leading-none text-[#102f36]">{value}</span>
+    </button>
+  );
+}
+
+function ReadingClue({ text }: { text: string }) {
+  return (
+    <div className="mt-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
+      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">Read this</p>
+      <p className="mt-1 text-base font-black leading-snug text-[#102f36] md:text-lg">“{text}”</p>
+    </div>
+  );
+}
+
+function SkipButton({ onClick }: { onClick: () => void }) {
+  return (
+    <div className="mt-auto pt-3">
+      <button
+        onClick={onClick}
+        className="w-full rounded-lg border-2 border-[#cfbfae] bg-white px-4 py-2 text-sm font-black text-[#59686b] transition hover:border-[#082329] hover:bg-[#fff8ec] active:translate-y-0.5"
+      >
+        Skip question
+      </button>
+    </div>
+  );
+}
+
 function DifficultyPill({ difficulty }: { difficulty: Difficulty }) {
   const label = difficultyLabel(difficulty);
   return (
@@ -1239,14 +1636,15 @@ function CollectionStat({ label, value, libraryValue, wins, samples }: { label: 
 }
 
 function ComparisonStage({ cards }: { cards: ComparisonCard[] }) {
+  const displayCards = orderedComparisonCards(cards);
   return (
     <div className="grid h-full min-h-[260px] grid-cols-2 gap-1.5 bg-[#102f36] p-1.5">
-      {cards.map((card) => (
+      {displayCards.map((card) => (
         <div key={`${card.label}-${card.title}`} className="relative overflow-hidden rounded-lg border-2 border-[#082329] bg-[#fff8ec]">
           <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#082329] bg-[#f3c647] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#082329]">
             {card.label}
           </div>
-          <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.statLabel === "Scoville" ? "peppers" : card.statLabel === "Height" ? "buildings" : "sharks"} />
+          <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} />
           <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#082329] bg-white/95 p-1.5 shadow-[2px_2px_0_#082329]">
             <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
             <div className="mt-1 flex items-end justify-between gap-2">
@@ -1267,9 +1665,10 @@ function ComparisonStage({ cards }: { cards: ComparisonCard[] }) {
 }
 
 function ComparisonTable({ cards }: { cards: ComparisonCard[] }) {
+  const displayCards = orderedComparisonCards(cards);
   return (
     <div className="mt-2 grid gap-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2 sm:grid-cols-2">
-      {cards.map((card) => (
+      {displayCards.map((card) => (
         <div key={`${card.label}-table-${card.title}`} className="rounded-md bg-white px-2 py-1.5">
           <div className="flex items-center justify-between gap-2">
             <p className="text-sm font-black text-[#102f36]">{card.label}: {card.title}</p>
@@ -1394,10 +1793,10 @@ function MediaImage({ image, imageAlt, topic }: { image: string; imageAlt: strin
 
   if (failed) {
     return (
-      <div className={`flex h-full min-h-[260px] w-full items-center justify-center p-6 ${topic === "peppers" ? "bg-[#f7d8d0]" : topic === "sharks" ? "bg-[#cfe9ee]" : "bg-[#d8e8e5]"}`}>
+      <div className={`flex h-full min-h-[260px] w-full items-center justify-center p-6 ${topic === "peppers" ? "bg-[#f7d8d0]" : topic === "sharks" ? "bg-[#cfe9ee]" : topic === "space" ? "bg-[#d9ddff]" : "bg-[#d8e8e5]"}`}>
         <div className="w-full max-w-sm rounded-lg border-2 border-[#20383d] bg-white p-5 text-center shadow-[4px_4px_0_#20383d]">
           <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#20383d] bg-[#f3c647] text-5xl">
-            {topic === "peppers" ? "!" : topic === "sharks" ? "~" : "^"}
+            {topic === "peppers" ? "!" : topic === "sharks" ? "~" : topic === "space" ? "*" : "^"}
           </div>
           <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-[#b5412b]">Picture clue</p>
           <p className="mt-1 text-3xl font-black leading-tight text-[#192f35]">{imageAlt}</p>
@@ -1414,7 +1813,7 @@ function MediaImage({ image, imageAlt, topic }: { image: string; imageAlt: strin
 
 function LockedCard({ topic }: { topic: KnowledgeTopic }) {
   return (
-    <div className={`flex h-full min-h-36 items-center justify-center ${topic === "peppers" ? "bg-[#f7d8d0]" : topic === "sharks" ? "bg-[#cfe9ee]" : "bg-[#d8e8e5]"}`}>
+    <div className={`flex h-full min-h-36 items-center justify-center ${topic === "peppers" ? "bg-[#f7d8d0]" : topic === "sharks" ? "bg-[#cfe9ee]" : topic === "space" ? "bg-[#d9ddff]" : "bg-[#d8e8e5]"}`}>
       <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#082329] bg-[#f3c647] text-4xl font-black">?</div>
     </div>
   );

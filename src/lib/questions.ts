@@ -5,12 +5,15 @@ import {
   heatProfiles,
   peppers,
   sharks,
+  spaceCards,
+  topicIds,
   type Building,
   type Difficulty,
   type HeatBand,
   type KnowledgeTopic,
   type Pepper,
   type Shark,
+  type SpaceCard,
   type TopicId,
 } from "./game-data";
 
@@ -19,23 +22,34 @@ export type TopicScope = TopicId | readonly KnowledgeTopic[];
 export type QuestionKind =
   | "pepper-heat"
   | "pepper-shu"
+  | "pepper-estimate"
   | "pepper-hotter"
   | "pepper-reading"
   | "building-name"
   | "building-height"
+  | "building-estimate"
   | "building-taller"
   | "building-difference"
   | "building-reading"
   | "shark-name"
   | "shark-family"
   | "shark-bigger"
+  | "shark-size-estimate"
   | "shark-faster"
   | "shark-difference"
   | "shark-power"
-  | "shark-reading";
+  | "shark-reading"
+  | "space-name"
+  | "space-hotter"
+  | "space-bigger"
+  | "space-farther"
+  | "space-moons"
+  | "space-concept"
+  | "space-reading";
 
 export type ComparisonCard = {
   label: "A" | "B";
+  topic: KnowledgeTopic;
   title: string;
   image: string;
   imageAlt: string;
@@ -49,9 +63,10 @@ export type ComparisonCard = {
 
 export type Question = {
   id: string;
-  topic: "peppers" | "buildings" | "sharks";
+  topic: KnowledgeTopic;
   kind: QuestionKind;
   prompt: string;
+  readingClue?: string;
   image: string;
   imageAlt: string;
   imageCredit: string;
@@ -71,15 +86,29 @@ export type Question = {
     max: number;
     unit: string;
   };
+  estimate?: {
+    label: string;
+    min: number;
+    max: number;
+    step: number;
+    unit: string;
+    start: number;
+    correctMin: number;
+    correctMax: number;
+    answerLabel: string;
+    helper: string;
+    marks: { label: string; value: number }[];
+  };
 };
 
 const sessionLength = 16;
 const maxShu = 2693000;
+const scovilleSliderMax = 5000000;
 const maxHeight = 3281;
 const maxSharkLength = 40;
 const maxSharkSpeed = 45;
 const maxSharkPower = 5;
-const allTopics: KnowledgeTopic[] = ["peppers", "buildings", "sharks"];
+const allTopics: KnowledgeTopic[] = [...topicIds];
 
 const choiceCountForDifficulty = (difficulty: Difficulty) => (difficulty === 1 ? 3 : 4);
 
@@ -115,6 +144,90 @@ const choiceSet = <T,>(correct: T, options: T[], seed: number, count: number) =>
   return shuffle([correct, ...distractors], seed + 1);
 };
 const roundTo = (value: number, step: number) => Math.max(step, Math.round(value / step) * step);
+const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+
+const heatBandBounds: Record<HeatBand, { min: number; max: number }> = {
+  "not spicy": { min: 0, max: 500 },
+  mild: { min: 501, max: 2500 },
+  warm: { min: 2501, max: 25000 },
+  hot: { min: 25001, max: 50000 },
+  "very hot": { min: 50001, max: 500000 },
+  insane: { min: 500001, max: scovilleSliderMax },
+};
+
+const scovilleEstimate = (pepper: Pepper, difficulty: Difficulty) => {
+  const band = heatBandBounds[pepper.heat];
+  const tolerance = difficulty === 1 ? 100000 : difficulty === 2 ? 50000 : 25000;
+  const correctMin = clamp(Math.min(pepper.shuMin, band.min) - tolerance, 0, scovilleSliderMax);
+  const correctMax = clamp(Math.max(pepper.shuMax, band.max === scovilleSliderMax ? pepper.shuMax : band.max) + tolerance, correctMin, scovilleSliderMax);
+
+  return {
+    label: "Scoville score",
+    min: 0,
+    max: scovilleSliderMax,
+    step: 25000,
+    unit: "SHU",
+    start: pepper.heat === "insane" ? 1500000 : pepper.heat === "very hot" ? 250000 : 50000,
+    correctMin,
+    correctMax,
+    answerLabel: `${range(pepper)} SHU`,
+    helper: "Slide into the pepper's Scoville zone.",
+    marks: [
+      { label: "0", value: 0 },
+      { label: "warm", value: 25000 },
+      { label: "hot", value: 50000 },
+      { label: "very hot", value: 500000 },
+      { label: "insane", value: 1000000 },
+      { label: "5M", value: scovilleSliderMax },
+    ],
+  };
+};
+
+const heightEstimate = (building: Building, difficulty: Difficulty) => {
+  const tolerance = difficulty === 1 ? 250 : difficulty === 2 ? 150 : 75;
+  return {
+    label: "Height",
+    min: 0,
+    max: 3500,
+    step: 25,
+    unit: "ft",
+    start: 1800,
+    correctMin: clamp(building.heightFt - tolerance, 0, 3500),
+    correctMax: clamp(building.heightFt + tolerance, 0, 3500),
+    answerLabel: feet(building.heightFt),
+    helper: "Slide close to the real building height.",
+    marks: [
+      { label: "0", value: 0 },
+      { label: "1k", value: 1000 },
+      { label: "2k", value: 2000 },
+      { label: "3k", value: 3000 },
+      { label: "3.5k", value: 3500 },
+    ],
+  };
+};
+
+const sharkSizeEstimate = (shark: Shark, difficulty: Difficulty) => {
+  const tolerance = difficulty === 1 ? 5 : difficulty === 2 ? 3 : 2;
+  return {
+    label: "Length",
+    min: 0,
+    max: 50,
+    step: 1,
+    unit: "ft",
+    start: 20,
+    correctMin: clamp(shark.lengthFt - tolerance, 0, 50),
+    correctMax: clamp(shark.lengthFt + tolerance, 0, 50),
+    answerLabel: feet(shark.lengthFt),
+    helper: "Slide close to the shark's full-grown size.",
+    marks: [
+      { label: "tiny", value: 0 },
+      { label: "10 ft", value: 10 },
+      { label: "20 ft", value: 20 },
+      { label: "40 ft", value: 40 },
+      { label: "50 ft", value: 50 },
+    ],
+  };
+};
 
 const displayHeightChoice = (value: number, difficulty: Difficulty) => {
   if (difficulty === 3) return feet(value);
@@ -165,6 +278,7 @@ const buildingDifferenceChoices = (diff: number, difficulty: Difficulty, seed: n
 
 const pepperCard = (pepper: Pepper, label: "A" | "B"): ComparisonCard => ({
   label,
+  topic: "peppers",
   title: pepper.name,
   image: pepper.image,
   imageAlt: pepper.name,
@@ -178,6 +292,7 @@ const pepperCard = (pepper: Pepper, label: "A" | "B"): ComparisonCard => ({
 
 const buildingCard = (building: Building, label: "A" | "B"): ComparisonCard => ({
   label,
+  topic: "buildings",
   title: building.name,
   image: building.image,
   imageAlt: building.name,
@@ -191,6 +306,7 @@ const buildingCard = (building: Building, label: "A" | "B"): ComparisonCard => (
 
 const sharkCard = (shark: Shark, label: "A" | "B", stat: "length" | "speed" | "power"): ComparisonCard => ({
   label,
+  topic: "sharks",
   title: shark.name,
   image: shark.image,
   imageAlt: shark.name,
@@ -202,13 +318,61 @@ const sharkCard = (shark: Shark, label: "A" | "B", stat: "length" | "speed" | "p
   meterMax: stat === "length" ? maxSharkLength : stat === "speed" ? maxSharkSpeed : maxSharkPower,
 });
 
+const spacePlanets = spaceCards.filter((item) => item.kind === "planet");
+const spaceStars = spaceCards.filter((item) => item.kind === "star");
+const spaceConcepts = spaceCards.filter((item) => item.kind === "concept");
+const maxPlanetDistance = Math.max(...spacePlanets.map((item) => item.distanceFromSunMillionMiles ?? 0));
+const maxPlanetTemp = 900;
+const maxStarTemp = Math.max(...spaceStars.map((item) => item.surfaceTempK ?? 0));
+const maxStarRadius = Math.max(...spaceStars.map((item) => item.radiusSolar ?? 0));
+const maxPlanetMoons = Math.max(...spacePlanets.map((item) => item.moons ?? 0));
+
+const spaceValue = (item: SpaceCard, stat: "temp" | "radius" | "distance" | "moons") => {
+  if (stat === "temp") return item.kind === "star" ? item.surfaceTempK ?? 0 : item.meanSurfaceTempF ?? 0;
+  if (stat === "radius") return item.radiusSolar ?? item.diameterMiles ?? 0;
+  if (stat === "distance") return item.distanceFromSunMillionMiles ?? item.distanceLightYears ?? 0;
+  return item.moons ?? 0;
+};
+
+const spaceStatDisplay = (value: number, stat: "temp" | "radius" | "distance" | "moons", item: SpaceCard) => {
+  if (stat === "temp") return item.kind === "star" ? `${formatNumber(value)} K` : `${formatNumber(value)}°F`;
+  if (stat === "radius") return item.kind === "star" ? `${formatNumber(value)}x Sun radius` : `${formatNumber(value)} mi wide`;
+  if (stat === "distance") return item.kind === "star" ? `${formatNumber(value)} ly` : `${formatNumber(value)}M mi`;
+  return `${formatNumber(value)} moons`;
+};
+
+const spaceMeterMax = (stat: "temp" | "radius" | "distance" | "moons", item: SpaceCard) => {
+  if (stat === "temp") return item.kind === "star" ? maxStarTemp : maxPlanetTemp;
+  if (stat === "radius") return item.kind === "star" ? maxStarRadius : 90000;
+  if (stat === "distance") return item.kind === "star" ? 20000 : maxPlanetDistance;
+  return maxPlanetMoons;
+};
+
+const spaceCard = (item: SpaceCard, label: "A" | "B", stat: "temp" | "radius" | "distance" | "moons"): ComparisonCard => {
+  const value = spaceValue(item, stat);
+  return {
+    label,
+    topic: "space",
+    title: item.name,
+    image: item.image,
+    imageAlt: item.name,
+    imageCredit: item.imageCredit,
+    statLabel: stat === "temp" ? "Temperature" : stat === "radius" ? "Size" : stat === "distance" ? "Distance" : "Moons",
+    statValue: spaceStatDisplay(value, stat, item),
+    subStat: `${item.group}${item.statNote ? ` · ${item.statNote}` : ""}`,
+    meterValue: value,
+    meterMax: spaceMeterMax(stat, item),
+  };
+};
+
 const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
+  const estimateReadyPeppers = peppers.filter((item) => item.shuMax >= 100000);
   const pepper = sample(peppers, seed);
   const kinds: QuestionKind[] = difficulty === 1
-    ? ["pepper-heat", "pepper-shu", "pepper-hotter", "pepper-reading"]
+    ? ["pepper-heat", "pepper-shu", "pepper-estimate", "pepper-hotter", "pepper-reading"]
     : difficulty === 2
-      ? ["pepper-heat", "pepper-shu", "pepper-hotter", "pepper-reading"]
-      : ["pepper-shu", "pepper-hotter", "pepper-reading", "pepper-heat"];
+      ? ["pepper-heat", "pepper-shu", "pepper-estimate", "pepper-hotter", "pepper-reading"]
+      : ["pepper-shu", "pepper-estimate", "pepper-hotter", "pepper-reading", "pepper-heat"];
   const kind = sample(kinds, seed + 3);
 
   if (kind === "pepper-heat") {
@@ -263,7 +427,8 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
       id: `${seed}-pepper-reading-${pepper.id}`,
       topic: "peppers",
       kind,
-      prompt: `Read this: "${words[pepper.heat]}" What word best matches ${pepper.name}?`,
+      prompt: `What word best matches ${pepper.name}?`,
+      readingClue: words[pepper.heat],
       image: pepper.image,
       imageAlt: pepper.name,
       imageCredit: pepper.imageCredit,
@@ -271,6 +436,26 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
       answer: pepper.heat,
       explanation: heatBandExplanation(pepper),
       heatMeter: heatMeter(pepper.heat),
+    };
+  }
+
+  if (kind === "pepper-estimate") {
+    const estimatePepper = estimateReadyPeppers.length ? sample(estimateReadyPeppers, seed + 19) : pepper;
+    const estimate = scovilleEstimate(estimatePepper, difficulty);
+    return {
+      id: `${seed}-pepper-estimate-${estimatePepper.id}`,
+      topic: "peppers",
+      kind,
+      prompt: `Slide to the Scoville zone for ${estimatePepper.name}.`,
+      image: estimatePepper.image,
+      imageAlt: estimatePepper.name,
+      imageCredit: estimatePepper.imageCredit,
+      choices: [],
+      answer: estimate.answerLabel,
+      explanation: `${estimatePepper.name} is about ${estimate.answerLabel}. That puts it in the ${estimatePepper.heat} band (${heatBandRangeLabel(estimatePepper.heat)}).`,
+      heatMeter: heatMeter(estimatePepper.heat),
+      numberLine: { label: "Heat", value: estimatePepper.shuMax, max: scovilleSliderMax, unit: "SHU" },
+      estimate,
     };
   }
 
@@ -295,10 +480,10 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
 const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
   const building = sample(buildings, seed);
   const kinds: QuestionKind[] = difficulty === 1
-    ? ["building-name", "building-height", "building-taller", "building-reading"]
+    ? ["building-name", "building-height", "building-estimate", "building-taller", "building-reading"]
     : difficulty === 2
-      ? ["building-name", "building-height", "building-taller", "building-difference", "building-reading"]
-      : ["building-height", "building-taller", "building-difference", "building-reading"];
+      ? ["building-name", "building-height", "building-estimate", "building-taller", "building-difference", "building-reading"]
+      : ["building-height", "building-estimate", "building-taller", "building-difference", "building-reading"];
   const kind = sample(kinds, seed + 23);
 
   if (kind === "building-name") {
@@ -370,7 +555,8 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
       id: `${seed}-building-reading-${building.id}`,
       topic: "buildings",
       kind,
-      prompt: `Read this: "${sentence}" What is true?`,
+      prompt: "What is true?",
+      readingClue: sentence,
       image: building.image,
       imageAlt: building.name,
       imageCredit: building.imageCredit,
@@ -382,6 +568,24 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
       ], seed + 31).slice(0, choiceCountForDifficulty(difficulty)),
       answer: building.status === "finished" ? "It is finished" : "It is still being built",
       explanation: sentence,
+    };
+  }
+
+  if (kind === "building-estimate") {
+    const estimate = heightEstimate(building, difficulty);
+    return {
+      id: `${seed}-building-estimate-${building.id}`,
+      topic: "buildings",
+      kind,
+      prompt: `Slide to the height of ${building.name}.`,
+      image: building.image,
+      imageAlt: building.name,
+      imageCredit: building.imageCredit,
+      choices: [],
+      answer: estimate.answerLabel,
+      explanation: `${building.name} is ${feet(building.heightFt)} tall. Close estimates count on this slider.`,
+      numberLine: { label: "Height", value: building.heightFt, max: estimate.max, unit: "ft" },
+      estimate,
     };
   }
 
@@ -404,10 +608,10 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
 const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
   const shark = sample(sharks, seed);
   const kinds: QuestionKind[] = difficulty === 1
-    ? ["shark-name", "shark-family", "shark-bigger", "shark-reading"]
+    ? ["shark-name", "shark-family", "shark-bigger", "shark-size-estimate", "shark-reading"]
     : difficulty === 2
-      ? ["shark-name", "shark-family", "shark-bigger", "shark-faster", "shark-difference", "shark-power"]
-      : ["shark-bigger", "shark-faster", "shark-difference", "shark-power", "shark-family"];
+      ? ["shark-name", "shark-family", "shark-bigger", "shark-size-estimate", "shark-faster", "shark-difference", "shark-power"]
+      : ["shark-bigger", "shark-size-estimate", "shark-faster", "shark-difference", "shark-power", "shark-family"];
   const kind = sample(kinds, seed + 41);
 
   if (kind === "shark-name") {
@@ -470,6 +674,24 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
     };
   }
 
+  if (kind === "shark-size-estimate") {
+    const estimate = sharkSizeEstimate(shark, difficulty);
+    return {
+      id: `${seed}-shark-size-estimate-${shark.id}`,
+      topic: "sharks",
+      kind,
+      prompt: `Slide to the size of ${shark.name}.`,
+      image: shark.image,
+      imageAlt: shark.name,
+      imageCredit: shark.imageCredit,
+      choices: [],
+      answer: estimate.answerLabel,
+      explanation: `${shark.name} can be about ${feet(shark.lengthFt)} long. Close estimates count on this slider.`,
+      numberLine: { label: "Size", value: shark.lengthFt, max: estimate.max, unit: "ft" },
+      estimate,
+    };
+  }
+
   if (kind === "shark-difference") {
     const challenger = sample(sharks.filter((item) => item.id !== shark.id && item.lengthFt !== shark.lengthFt), seed + 48);
     const bigger = shark.lengthFt > challenger.lengthFt ? shark : challenger;
@@ -498,13 +720,168 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
     id: `${seed}-shark-reading-${shark.id}`,
     topic: "sharks",
     kind: "shark-reading",
-    prompt: `Read this: "${shark.name} eats ${shark.diet}." What is true?`,
+    prompt: "What is true?",
+    readingClue: `${shark.name} eats ${shark.diet}.`,
     image: shark.image,
     imageAlt: shark.name,
     imageCredit: shark.imageCredit,
     choices: shuffle([`It eats ${shark.diet}`, "It is a pepper", "It is a skyscraper", "It has wheels"], seed + 51).slice(0, choiceCountForDifficulty(difficulty)),
     answer: `It eats ${shark.diet}`,
     explanation: `${shark.name} eats ${shark.diet}. ${shark.fact}`,
+  };
+};
+
+const spaceQuestion = (seed: number, difficulty: Difficulty): Question => {
+  const item = sample(spaceCards, seed);
+  const kinds: QuestionKind[] = difficulty === 1
+    ? ["space-name", "space-farther", "space-concept", "space-reading"]
+    : difficulty === 2
+      ? ["space-name", "space-hotter", "space-bigger", "space-farther", "space-moons", "space-concept", "space-reading"]
+      : ["space-hotter", "space-bigger", "space-farther", "space-moons", "space-concept", "space-reading"];
+  const kind = sample(kinds, seed + 61);
+
+  if (kind === "space-name") {
+    const options = shuffle(spaceCards.filter((card) => card.id !== item.id).map((card) => card.name), seed + 62).slice(0, choiceCountForDifficulty(difficulty) - 1);
+    return {
+      id: `${seed}-space-name-${item.id}`,
+      topic: "space",
+      kind,
+      prompt: `Which space object or idea is this?`,
+      image: item.image,
+      imageAlt: item.name,
+      imageCredit: item.imageCredit,
+      choices: shuffle([item.name, ...options], seed + 63),
+      answer: item.name,
+      explanation: `${item.name}: ${item.fact}`,
+      numberLine: item.kind === "planet" && item.distanceFromSunMillionMiles ? { label: "Distance from Sun", value: item.distanceFromSunMillionMiles, max: maxPlanetDistance, unit: "million mi" } : undefined,
+    };
+  }
+
+  if (kind === "space-hotter") {
+    const pool = seedRandom(seed + 64) > 0.45 ? spaceStars : spacePlanets.filter((card) => card.meanSurfaceTempF !== undefined);
+    const first = sample(pool, seed + 65);
+    const second = sample(pool.filter((card) => card.id !== first.id), seed + 66);
+    const hotter = spaceValue(first, "temp") >= spaceValue(second, "temp") ? first : second;
+    const cards = shuffle([spaceCard(first, "A", "temp"), spaceCard(second, "B", "temp")], seed + 67);
+    return {
+      id: `${seed}-space-hotter-${first.id}-${second.id}`,
+      topic: "space",
+      kind,
+      prompt: first.kind === "star" ? "Which star is hotter on the surface?" : "Which planet is hotter at the surface?",
+      image: hotter.image,
+      imageAlt: hotter.name,
+      imageCredit: hotter.imageCredit,
+      comparison: cards,
+      choices: cards.map((card) => `${card.label}: ${card.title}`),
+      answer: `${cards.find((card) => card.title === hotter.name)?.label}: ${hotter.name}`,
+      explanation: `${hotter.name} wins with ${spaceStatDisplay(spaceValue(hotter, "temp"), "temp", hotter)}. ${hotter.fact}`,
+      numberLine: { label: "Temperature", value: spaceValue(hotter, "temp"), max: spaceMeterMax("temp", hotter), unit: hotter.kind === "star" ? "K" : "°F" },
+    };
+  }
+
+  if (kind === "space-bigger") {
+    const pool = seedRandom(seed + 68) > 0.5 ? spaceStars : spacePlanets;
+    const first = sample(pool, seed + 69);
+    const second = sample(pool.filter((card) => card.id !== first.id), seed + 70);
+    const bigger = spaceValue(first, "radius") >= spaceValue(second, "radius") ? first : second;
+    const cards = shuffle([spaceCard(first, "A", "radius"), spaceCard(second, "B", "radius")], seed + 71);
+    return {
+      id: `${seed}-space-bigger-${first.id}-${second.id}`,
+      topic: "space",
+      kind,
+      prompt: first.kind === "star" ? "Which star is bigger?" : "Which planet is bigger?",
+      image: bigger.image,
+      imageAlt: bigger.name,
+      imageCredit: bigger.imageCredit,
+      comparison: cards,
+      choices: cards.map((card) => `${card.label}: ${card.title}`),
+      answer: `${cards.find((card) => card.title === bigger.name)?.label}: ${bigger.name}`,
+      explanation: `${bigger.name} is larger by this stat. ${bigger.statNote ?? bigger.fact}`,
+      numberLine: { label: "Size", value: spaceValue(bigger, "radius"), max: spaceMeterMax("radius", bigger), unit: bigger.kind === "star" ? "x Sun" : "mi" },
+    };
+  }
+
+  if (kind === "space-farther") {
+    const first = sample(spacePlanets, seed + 72);
+    const second = sample(spacePlanets.filter((card) => card.id !== first.id), seed + 73);
+    const farther = spaceValue(first, "distance") >= spaceValue(second, "distance") ? first : second;
+    const cards = shuffle([spaceCard(first, "A", "distance"), spaceCard(second, "B", "distance")], seed + 74);
+    return {
+      id: `${seed}-space-farther-${first.id}-${second.id}`,
+      topic: "space",
+      kind,
+      prompt: "Which planet is farther from the Sun?",
+      image: farther.image,
+      imageAlt: farther.name,
+      imageCredit: farther.imageCredit,
+      comparison: cards,
+      choices: cards.map((card) => `${card.label}: ${card.title}`),
+      answer: `${cards.find((card) => card.title === farther.name)?.label}: ${farther.name}`,
+      explanation: `${farther.name} is about ${spaceStatDisplay(spaceValue(farther, "distance"), "distance", farther)} from the Sun.`,
+      numberLine: { label: "Distance from Sun", value: spaceValue(farther, "distance"), max: maxPlanetDistance, unit: "million mi" },
+    };
+  }
+
+  if (kind === "space-moons") {
+    const first = sample(spacePlanets, seed + 75);
+    const second = sample(spacePlanets.filter((card) => card.id !== first.id), seed + 76);
+    const winner = spaceValue(first, "moons") >= spaceValue(second, "moons") ? first : second;
+    const cards = shuffle([spaceCard(first, "A", "moons"), spaceCard(second, "B", "moons")], seed + 77);
+    return {
+      id: `${seed}-space-moons-${first.id}-${second.id}`,
+      topic: "space",
+      kind,
+      prompt: "Which planet has more known moons?",
+      image: winner.image,
+      imageAlt: winner.name,
+      imageCredit: winner.imageCredit,
+      comparison: cards,
+      choices: cards.map((card) => `${card.label}: ${card.title}`),
+      answer: `${cards.find((card) => card.title === winner.name)?.label}: ${winner.name}`,
+      explanation: `${winner.name} has ${spaceStatDisplay(spaceValue(winner, "moons"), "moons", winner)} in this dataset.`,
+      numberLine: { label: "Moons", value: spaceValue(winner, "moons"), max: maxPlanetMoons, unit: "moons" },
+    };
+  }
+
+  if (kind === "space-concept") {
+    const concept = sample(spaceConcepts, seed + 78);
+    const options = shuffle(spaceConcepts.filter((card) => card.id !== concept.id).map((card) => card.conceptAnswer ?? card.fact), seed + 79).slice(0, choiceCountForDifficulty(difficulty) - 1);
+    return {
+      id: `${seed}-space-concept-${concept.id}`,
+      topic: "space",
+      kind,
+      prompt: concept.conceptQuestion ?? `What is ${concept.name}?`,
+      image: concept.image,
+      imageAlt: concept.name,
+      imageCredit: concept.imageCredit,
+      choices: shuffle([concept.conceptAnswer ?? concept.fact, ...options], seed + 80),
+      answer: concept.conceptAnswer ?? concept.fact,
+      explanation: concept.fact,
+    };
+  }
+
+  const readable = item.kind === "star"
+    ? `${item.name} is in the ${item.group} set. Some star measurements are estimates.`
+    : item.kind === "planet"
+      ? `${item.name} is about ${spaceStatDisplay(spaceValue(item, "distance"), "distance", item)} from the Sun.`
+      : item.fact;
+  return {
+    id: `${seed}-space-reading-${item.id}`,
+    topic: "space",
+    kind: "space-reading",
+    prompt: "What is true?",
+    readingClue: readable,
+    image: item.image,
+    imageAlt: item.name,
+    imageCredit: item.imageCredit,
+    choices: shuffle([
+      item.kind === "star" ? "Giant star sizes can be estimates" : item.kind === "planet" ? `${item.name} is in the solar system` : item.conceptAnswer ?? item.fact,
+      "It is a pepper",
+      "It is a shark family",
+      "It is a skyscraper",
+    ], seed + 81).slice(0, choiceCountForDifficulty(difficulty)),
+    answer: item.kind === "star" ? "Giant star sizes can be estimates" : item.kind === "planet" ? `${item.name} is in the solar system` : item.conceptAnswer ?? item.fact,
+    explanation: readable,
   };
 };
 
@@ -516,7 +893,7 @@ export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionS
   while (questions.length < sessionLength && attempt < 160) {
     const currentTopic = topicOrder[(questions.length + attempt) % topicOrder.length];
     const seed = sessionSeed + attempt * 17 + questions.length * 31;
-    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : sharkQuestion(seed, difficulty);
+    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : spaceQuestion(seed, difficulty);
     if (!seenIds.includes(question.id) && !questions.some((item) => item.id === question.id)) {
       questions.push(question);
     }
@@ -526,7 +903,7 @@ export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionS
   while (questions.length < sessionLength) {
     const seed = sessionSeed + questions.length * 101 + attempt;
     const currentTopic = topicOrder[questions.length % topicOrder.length];
-    questions.push(currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : sharkQuestion(seed, difficulty));
+    questions.push(currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : spaceQuestion(seed, difficulty));
   }
 
   return questions;
