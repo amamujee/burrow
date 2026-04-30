@@ -520,6 +520,7 @@ function QuestionRun({
           {question.choices.map((choice) => {
             const chosen = selected === choice;
             const correctChoice = answered && choice === question.answer;
+            const media = question.choiceMedia?.[choice];
             return (
               <button
                 key={`${question.id}-${choice}`}
@@ -537,6 +538,14 @@ function QuestionRun({
                   {correctChoice && <span className="text-2xl leading-none">+</span>}
                   {chosen && !correctChoice && <span className="text-2xl leading-none">x</span>}
                 </span>
+                {media && (
+                  <div className="mt-2 grid grid-cols-[72px_1fr] items-center gap-2">
+                    <ChoiceThumb image={media.image} imageAlt={media.imageAlt} />
+                    <span className="text-xs font-black uppercase tracking-[0.12em] text-[#7a5d4b] md:text-sm">
+                      {media.caption}
+                    </span>
+                  </div>
+                )}
               </button>
             );
           })}
@@ -996,6 +1005,29 @@ function FeedbackPanel({
 
 function QuestionImage({ question }: { question: Pick<Question, "image" | "imageAlt" | "topic"> }) {
   return <MediaImage image={question.image} imageAlt={question.imageAlt} topic={question.topic} />;
+}
+
+function ChoiceThumb({ image, imageAlt }: { image: string; imageAlt: string }) {
+  const [failedImage, setFailedImage] = useState<string | null>(null);
+  const failed = failedImage === image;
+
+  if (failed) {
+    return (
+      <div className="flex h-14 w-[72px] items-center justify-center rounded-md border-2 border-[#082329] bg-[#f3c647] text-xl font-black">
+        ?
+      </div>
+    );
+  }
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={image}
+      alt={imageAlt}
+      onError={() => setFailedImage(image)}
+      className="h-14 w-[72px] rounded-md border-2 border-[#082329] object-cover"
+    />
+  );
 }
 
 function MediaImage({ image, imageAlt, topic }: { image: string; imageAlt: string; topic: KnowledgeTopic }) {

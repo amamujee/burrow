@@ -52,6 +52,11 @@ export type Question = {
   imageAlt: string;
   imageCredit: string;
   choices: string[];
+  choiceMedia?: Record<string, {
+    image: string;
+    imageAlt: string;
+    caption: string;
+  }>;
   answer: string;
   explanation: string;
   comparison?: ComparisonCard[];
@@ -102,6 +107,27 @@ const choiceSet = <T,>(correct: T, options: T[], seed: number, count: number) =>
   const distractors = shuffle(options.filter((option) => option !== correct), seed).slice(0, count - 1);
   return shuffle([correct, ...distractors], seed + 1);
 };
+const heatExamples: Record<HeatBand, string> = {
+  "not spicy": "bell-pepper",
+  mild: "jalapeno",
+  hot: "cayenne",
+  "very hot": "habanero",
+  insane: "carolina-reaper",
+};
+const heatChoiceMedia = (choices: HeatBand[]) =>
+  Object.fromEntries(
+    choices.map((heat) => {
+      const pepper = peppers.find((item) => item.id === heatExamples[heat]) ?? peppers.find((item) => item.heat === heat) ?? peppers[0];
+      return [
+        heat,
+        {
+          image: pepper.image,
+          imageAlt: pepper.name,
+          caption: pepper.name,
+        },
+      ];
+    }),
+  );
 const roundTo = (value: number, step: number) => Math.max(step, Math.round(value / step) * step);
 
 const displayHeightChoice = (value: number, difficulty: Difficulty) => {
@@ -200,6 +226,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
   const kind = sample(kinds, seed + 3);
 
   if (kind === "pepper-heat") {
+    const choices = choiceSet(pepper.heat, heatBands, seed + 7, choiceCountForDifficulty(difficulty));
     return {
       id: `${seed}-pepper-heat-${pepper.id}`,
       topic: "peppers",
@@ -208,7 +235,8 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
       image: pepper.image,
       imageAlt: pepper.name,
       imageCredit: pepper.imageCredit,
-      choices: choiceSet(pepper.heat, heatBands, seed + 7, choiceCountForDifficulty(difficulty)),
+      choices,
+      choiceMedia: heatChoiceMedia(choices),
       answer: pepper.heat,
       explanation: `${pepper.name} is ${pepper.heat}: ${heatProfiles[pepper.heat].kidLine} It can reach about ${range(pepper)} SHU.`,
       heatMeter: heatMeter(pepper.heat),
@@ -244,6 +272,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
       "very hot": "Very hot means tiny bites only.",
       insane: "Insane means super-hot legend zone.",
     };
+    const choices = choiceSet(pepper.heat, heatBands, seed + 13, choiceCountForDifficulty(difficulty));
     return {
       id: `${seed}-pepper-reading-${pepper.id}`,
       topic: "peppers",
@@ -252,7 +281,8 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
       image: pepper.image,
       imageAlt: pepper.name,
       imageCredit: pepper.imageCredit,
-      choices: choiceSet(pepper.heat, heatBands, seed + 13, choiceCountForDifficulty(difficulty)),
+      choices,
+      choiceMedia: heatChoiceMedia(choices),
       answer: pepper.heat,
       explanation: `${pepper.name} belongs in the "${pepper.heat}" group.`,
       heatMeter: heatMeter(pepper.heat),
