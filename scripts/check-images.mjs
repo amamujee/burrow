@@ -41,6 +41,7 @@ const requestBatch = (batch) =>
 
 const missing = [];
 const noInfo = [];
+const badRuntimeUrl = [];
 
 for (let index = 0; index < assets.length; index += batchSize) {
   const batch = assets.slice(index, index + batchSize);
@@ -63,9 +64,42 @@ for (let index = 0; index < assets.length; index += batchSize) {
   }
 }
 
-if (missing.length || noInfo.length) {
-  console.error(JSON.stringify({ total: assets.length, missing, noInfo }, null, 2));
+const checkRuntimeUrl = (asset) =>
+  new Promise((resolve) => {
+    const url = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(asset.file)}?width=1200`;
+    https
+      .request(url, { method: "HEAD", headers: { "User-Agent": "RabbitHoleImageAudit/1.0" } }, (response) => {
+        const location = response.headers.location;
+        if (response.statusCode && response.statusCode >= 300 && response.statusCode < 400 && location) {
+          https
+            .request(location, { method: "HEAD", headers: { "User-Agent": "RabbitHoleImageAudit/1.0" } }, (redirectResponse) => {
+              resolve({
+                ok: redirectResponse.statusCode === 200 || (redirectResponse.statusCode && redirectResponse.statusCode >= 300 && redirectResponse.statusCode < 400),
+                status: redirectResponse.statusCode,
+              });
+            })
+            .on("error", () => resolve({ ok: false, status: "redirect-error" }))
+            .end();
+          return;
+        }
+
+        resolve({ ok: response.statusCode === 200, status: response.statusCode });
+      })
+      .on("error", () => resolve({ ok: false, status: "request-error" }))
+      .end();
+  });
+
+for (const asset of assets) {
+  const result = await checkRuntimeUrl(asset);
+  if (!result.ok) {
+    badRuntimeUrl.push({ ...asset, status: result.status });
+  }
+}
+
+if (missing.length || noInfo.length || badRuntimeUrl.length) {
+  console.error(JSON.stringify({ total: assets.length, missing, noInfo, badRuntimeUrl }, null, 2));
   process.exit(1);
 }
 
-console.log(`All ${assets.length} Rabbit Hole image files exist on Wikimedia Commons.`);
+console.log(`All ${assets.length} Rabbit Hole image files exist and resolve through Special:FilePath.`);
+process.exit(0);

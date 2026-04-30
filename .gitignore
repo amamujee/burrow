@@ -24,6 +24,7 @@
 .DS_Store
 *.pem
 *-screenshot.png
+*-image-check.png
 rabbit-hole-*.png
 
 # debug

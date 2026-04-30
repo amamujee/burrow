@@ -730,8 +730,8 @@ export const sharks: Shark[] = [
     speedMph: 2,
     power: 1,
     diet: "worms, crabs, tiny fish",
-    image: wm("Hemiscyllium ocellatum.jpg"),
-    imageCredit: "Richard Ling, Wikimedia Commons",
+    image: wm("Epaulette shark camden.jpg"),
+    imageCredit: "Yzx, Wikimedia Commons",
     fact: "Epaulette sharks can wiggle across shallow reef flats.",
   },
   {
