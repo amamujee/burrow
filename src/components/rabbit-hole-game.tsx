@@ -212,7 +212,7 @@ export function RabbitHoleGame() {
   const [sortPicked, setSortPicked] = useState<string[]>([]);
   const [sortChecked, setSortChecked] = useState(false);
   const [factRound, setFactRound] = useState<FactRound>(() => buildFactRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
-  const [factSelected, setFactSelected] = useState<"Fact" | "Fake" | null>(null);
+  const [factSelected, setFactSelected] = useState<"True" | "False" | null>(null);
   const [sessionCorrect, setSessionCorrect] = useState(0);
   const [miniRunAnswered, setMiniRunAnswered] = useState(0);
   const [miniRunCorrect, setMiniRunCorrect] = useState(0);
@@ -463,7 +463,7 @@ export function RabbitHoleGame() {
     setCelebration("New sort board.");
   };
 
-  const answerFact = (choice: "Fact" | "Fake") => {
+  const answerFact = (choice: "True" | "False") => {
     if (factSelected) return;
     const correct = choice === factRound.answer;
     const xpGain = correct ? 22 + progress.difficulty * 5 : 7;
@@ -930,13 +930,13 @@ function FactMode({
   onNext,
 }: {
   round: FactRound;
-  selected: "Fact" | "Fake" | null;
+  selected: "True" | "False" | null;
   result: ResultState | null;
   miniRunAnswered: number;
   miniRunCorrect: number;
   celebration: string;
   difficulty: Difficulty;
-  onAnswer: (choice: "Fact" | "Fake") => void;
+  onAnswer: (choice: "True" | "False") => void;
   onNext: () => void;
 }) {
   const answered = selected !== null;
@@ -970,7 +970,7 @@ function FactMode({
         </div>
 
         <div className="mt-3 grid grid-cols-2 gap-2">
-          {(["Fact", "Fake"] as const).map((choice) => {
+          {(["True", "False"] as const).map((choice) => {
             const correctChoice = answered && choice === round.answer;
             const chosenWrong = selected === choice && choice !== round.answer;
             return (

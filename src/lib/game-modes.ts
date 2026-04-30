@@ -22,7 +22,7 @@ export const modeOptions: {
   { id: "quiz", label: "Quiz Run", eyebrow: "mixed skills", loop: "15-20 bites" },
   { id: "versus", label: "Versus", eyebrow: "pick winner", loop: "fast duels" },
   { id: "sort", label: "Sort", eyebrow: "order cards", loop: "tap order" },
-  { id: "fact", label: "Fact/Fake", eyebrow: "read fast", loop: "true or not" },
+  { id: "fact", label: "True/False", eyebrow: "read fast", loop: "true or not" },
   { id: "collection", label: "Collection", eyebrow: "unlocks", loop: "progress book" },
 ];
 
@@ -61,7 +61,7 @@ export type FactRound = {
   image: string;
   imageAlt: string;
   imageCredit: string;
-  answer: "Fact" | "Fake";
+  answer: "True" | "False";
   explanation: string;
 };
 
@@ -211,12 +211,12 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     return {
       id: `${seed}-fact-pepper-${pepper.id}`,
       topic: currentTopic,
-      prompt: "Fact or fake?",
+      prompt: "True or false?",
       statement,
       image: pepper.image,
       imageAlt: pepper.name,
       imageCredit: pepper.imageCredit,
-      answer: truthful ? "Fact" : "Fake",
+      answer: truthful ? "True" : "False",
       explanation: `${pepper.name} is ${pepper.heat} and its range is ${pepperRange(pepper)} SHU.`,
     };
   }
@@ -239,12 +239,12 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     return {
       id: `${seed}-fact-building-${building.id}`,
       topic: currentTopic,
-      prompt: "Fact or fake?",
+      prompt: "True or false?",
       statement,
       image: building.image,
       imageAlt: building.name,
       imageCredit: building.imageCredit,
-      answer: truthful ? "Fact" : "Fake",
+      answer: truthful ? "True" : "False",
       explanation: `${building.name} is ${feet(building.heightFt)} tall and is in ${building.city}, ${building.country}.`,
     };
   }
@@ -270,12 +270,12 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   return {
     id: `${seed}-fact-shark-${shark.id}`,
     topic: currentTopic,
-    prompt: "Fact or fake?",
+    prompt: "True or false?",
     statement,
     image: shark.image,
     imageAlt: shark.name,
     imageCredit: shark.imageCredit,
-    answer: truthful ? "Fact" : "Fake",
+    answer: truthful ? "True" : "False",
     explanation: `${shark.name} is a ${shark.family}, can grow to about ${feet(shark.lengthFt)}, and eats ${shark.diet}.`,
   };
 };
