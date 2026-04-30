@@ -1,0 +1,16 @@
+{
+  "name": "Rabbit Hole",
+  "short_name": "Rabbit Hole",
+  "description": "Bite-size learning sessions for spicy peppers and tall buildings.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f1e6",
+  "theme_color": "#20383d",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}
