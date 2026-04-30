@@ -1,7 +1,7 @@
 {
-  "name": "Rabbit Hole",
-  "short_name": "Rabbit Hole",
-  "description": "Bite-size learning sessions for spicy peppers and tall buildings.",
+  "name": "Burrow",
+  "short_name": "Burrow",
+  "description": "Let your Kid go deep with bite-size learning sessions.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f7f1e6",

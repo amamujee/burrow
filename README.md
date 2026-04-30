@@ -1,6 +1,8 @@
-# Rabbit Hole
+# Burrow
 
-Rabbit Hole is a local-first learning game for short, visual quiz sessions.
+Let your Kid go deep.
+
+Burrow is a local-first learning game for short, visual quiz sessions.
 
 ## Development
 
@@ -15,7 +17,7 @@ npm run check:images
 
 Topic records live in `src/lib/game-data.ts`. Each card keeps structured stats plus image provenance:
 
-- `contentImage(topic, id, sourceFile)` points gameplay at `/public/rabbit-hole-assets/...`.
+- `contentImage(topic, id, sourceFile)` points gameplay at `/public/burrow-assets/...`.
 - `imageCredit` credits the curated source.
 - `imageSourceFile` and `imageSourceUrl` preserve where the local asset came from.
 

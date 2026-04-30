@@ -70,7 +70,8 @@ const initialProgress: Progress = {
   modeWins: { quiz: 0, versus: 0, sort: 0, fact: 0 },
 };
 
-const profilesKey = "rabbit-hole-profiles-v1";
+const profilesKey = "burrow-profiles-v1";
+const legacyProfilesKey = "rabbit-hole-profiles-v1";
 const legacyProgressKey = "rabbit-hole-progress-v1";
 const allKnowledgeTopics: KnowledgeTopic[] = ["peppers", "buildings", "sharks"];
 const difficultyOptions: { id: Difficulty; label: string }[] = [
@@ -120,7 +121,7 @@ const defaultProfiles = (legacyProgress?: Partial<Progress>): ProfilesState => (
 const loadProfiles = (): ProfilesState => {
   if (typeof window === "undefined") return defaultProfiles();
 
-  const savedProfiles = window.localStorage.getItem(profilesKey);
+  const savedProfiles = window.localStorage.getItem(profilesKey) ?? window.localStorage.getItem(legacyProfilesKey);
   if (savedProfiles) {
     try {
       const parsed = JSON.parse(savedProfiles) as Partial<ProfilesState>;
@@ -197,7 +198,7 @@ const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficu
 
 const difficultyLabel = (difficulty: Difficulty) => difficultyOptions.find((item) => item.id === difficulty)?.label ?? "Easy";
 
-export function RabbitHoleGame() {
+export function BurrowGame() {
   const [profilesState, setProfilesState] = useState<ProfilesState>(loadProfiles);
   const activeProfile = profilesState.profiles.find((profile) => profile.id === profilesState.activeProfileId) ?? profilesState.profiles[0];
   const activeInterests = normalizeInterests(activeProfile.interests);
@@ -508,8 +509,8 @@ export function RabbitHoleGame() {
           <div className="grid gap-1.5 lg:grid-cols-[minmax(210px,.72fr)_minmax(300px,1fr)_minmax(300px,.76fr)] lg:items-center">
             <div className="flex items-center justify-between gap-3 lg:block">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.24em] text-[#b5412b]">Rabbit Hole</p>
-                <h1 className="text-2xl font-black leading-none text-[#102f36] md:text-3xl">{activeProfile.name}&apos;s Lab</h1>
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#b5412b]">Let your Kid go deep</p>
+                <h1 className="text-2xl font-black leading-none text-[#102f36] md:text-3xl">Burrow</h1>
               </div>
               <p className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-3 py-1 text-sm font-black lg:hidden">
                 {difficultyLabel(progress.difficulty)}

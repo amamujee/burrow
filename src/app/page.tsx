@@ -1,5 +1,5 @@
-import { RabbitHoleGame } from "@/components/rabbit-hole-game";
+import { BurrowGame } from "@/components/burrow-game";
 
 export default function Home() {
-  return <RabbitHoleGame />;
+  return <BurrowGame />;
 }

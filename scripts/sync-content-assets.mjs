@@ -3,7 +3,7 @@ import https from "node:https";
 import path from "node:path";
 
 const dataFile = "src/lib/game-data.ts";
-const outputRoot = "public/rabbit-hole-assets";
+const outputRoot = "public/burrow-assets";
 const width = 900;
 const batchSize = 25;
 const force = process.argv.includes("--force");
@@ -28,7 +28,7 @@ if (!assets.length) {
 const fetchJson = (url) =>
   new Promise((resolve, reject) => {
     https
-      .get(url, { headers: { "User-Agent": "RabbitHoleContentSync/1.0" } }, (response) => {
+      .get(url, { headers: { "User-Agent": "BurrowContentSync/1.0" } }, (response) => {
         let body = "";
         response.on("data", (chunk) => {
           body += chunk;
@@ -80,7 +80,7 @@ const download = (asset, attempt = 1) =>
 
     const request = (url, redirectsLeft = 4) => {
       https
-        .get(url, { headers: { "User-Agent": "RabbitHoleContentSync/1.0" } }, (response) => {
+        .get(url, { headers: { "User-Agent": "BurrowContentSync/1.0" } }, (response) => {
           if (response.statusCode && response.statusCode >= 300 && response.statusCode < 400 && response.headers.location && redirectsLeft > 0) {
             response.resume();
             request(response.headers.location, redirectsLeft - 1);
@@ -136,4 +136,4 @@ if (failed.length) {
   process.exit(1);
 }
 
-console.log(`Synced ${assets.length} Rabbit Hole content images into ${outputRoot}.`);
+console.log(`Synced ${assets.length} Burrow content images into ${outputRoot}.`);

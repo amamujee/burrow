@@ -9,7 +9,7 @@ const assets = [...source.matchAll(/contentImage\("([^"]+)", "([^"]+)", "([^"]+)
   topic: match[1],
   id: match[2],
   sourceFile: match[3],
-  target: path.join("public", "rabbit-hole-assets", match[1], `${match[2]}.jpg`),
+  target: path.join("public", "burrow-assets", match[1], `${match[2]}.jpg`),
 }));
 
 const missing = assets.filter((asset) => !fs.existsSync(asset.target));
@@ -35,4 +35,4 @@ if (!assets.length || remoteImageReferences.length || missing.length || tiny.len
   process.exit(1);
 }
 
-console.log(`All ${assets.length} Rabbit Hole content images are local and present.`);
+console.log(`All ${assets.length} Burrow content images are local and present.`);

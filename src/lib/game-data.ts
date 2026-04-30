@@ -65,7 +65,7 @@ export type Shark = {
 };
 
 const contentImage = (topic: KnowledgeTopic, id: string, sourceFile: string) => ({
-  image: `/rabbit-hole-assets/${topic}/${id}.jpg`,
+  image: `/burrow-assets/${topic}/${id}.jpg`,
   imageSourceFile: sourceFile,
   imageSourceUrl: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(sourceFile).replaceAll("%20", "_")}`,
 });

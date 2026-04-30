@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Rabbit Hole",
-  description: "Bite-size learning games about peppers, tall buildings, sharks, reading, and math.",
+  title: "Burrow",
+  description: "Let your Kid go deep with bite-size learning games about peppers, tall buildings, sharks, reading, and math.",
   manifest: "/manifest.json",
 };
 
