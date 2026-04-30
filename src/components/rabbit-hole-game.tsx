@@ -1220,7 +1220,7 @@ function FeedbackPanel({
           </div>
         </div>
         <button onClick={onNext} className="mt-3 w-full rounded-lg border-2 border-[#082329] bg-[#102f36] px-4 py-3 text-lg font-black text-white shadow-[3px_3px_0_#082329] hover:bg-[#23515a]">
-          {isLast ? "Finish round" : "Next challenge"}
+          {isLast ? "Finish round" : "Next"}
         </button>
       </div>
     </div>
