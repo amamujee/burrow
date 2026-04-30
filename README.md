@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rabbit Hole
 
-## Getting Started
+Rabbit Hole is a local-first learning game for short, visual quiz sessions.
 
-First, run the development server:
+## Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run lint
+npm run build
+npm run check:images
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Content Packs
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Topic records live in `src/lib/game-data.ts`. Each card keeps structured stats plus image provenance:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `contentImage(topic, id, sourceFile)` points gameplay at `/public/rabbit-hole-assets/...`.
+- `imageCredit` credits the curated source.
+- `imageSourceFile` and `imageSourceUrl` preserve where the local asset came from.
 
-## Learn More
+The app should not load topic images from the internet during play. To add a topic or card:
 
-To learn more about Next.js, take a look at the following resources:
+1. Add the structured record and `contentImage(...)` source metadata.
+2. Run `npm run sync:assets` during development to cache images locally.
+3. Run `npm run check:images`; it fails on missing local assets or remote runtime image URLs.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Use `npm run sync:assets -- --only=sharks/great-white --force` to refresh one asset.

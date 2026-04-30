@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "check:images": "node scripts/check-images.mjs"
+    "check:images": "node scripts/check-images.mjs",
+    "sync:assets": "node scripts/sync-content-assets.mjs"
   },
   "dependencies": {
     "next": "16.2.4",
