@@ -486,9 +486,9 @@ export function RabbitHoleGame() {
 
   return (
     <main className="min-h-dvh bg-[#0f2e35] text-[#1d2528] lg:h-dvh lg:overflow-hidden">
-      <section className="flex min-h-dvh flex-col gap-2 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-2 md:p-3 lg:h-full lg:min-h-0">
-        <header className="shrink-0 rounded-lg border-2 border-[#082329] bg-[#fff4df] p-2 shadow-[4px_4px_0_#082329] md:p-3">
-          <div className="grid gap-2 lg:grid-cols-[minmax(210px,.72fr)_minmax(300px,1fr)_minmax(300px,.76fr)] lg:items-center">
+      <section className="flex min-h-dvh flex-col gap-1.5 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-1.5 md:p-2 lg:h-full lg:min-h-0">
+        <header className="shrink-0 rounded-lg border-2 border-[#082329] bg-[#fff4df] p-1.5 shadow-[3px_3px_0_#082329] md:p-2">
+          <div className="grid gap-1.5 lg:grid-cols-[minmax(210px,.72fr)_minmax(300px,1fr)_minmax(300px,.76fr)] lg:items-center">
             <div className="flex items-center justify-between gap-3 lg:block">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.24em] text-[#b5412b]">Rabbit Hole</p>
@@ -497,7 +497,7 @@ export function RabbitHoleGame() {
               <p className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-3 py-1 text-sm font-black lg:hidden">
                 Level {progress.level}
               </p>
-              <div className="mt-2 hidden flex-wrap gap-1.5 lg:flex">
+              <div className="mt-1.5 hidden flex-wrap gap-1.5 lg:flex">
                 {profilesState.profiles.map((profile) => (
                   <button
                     key={profile.id}
@@ -532,7 +532,7 @@ export function RabbitHoleGame() {
                   + Profile
                 </button>
               </div>
-              <div className="mt-2 grid grid-cols-3 gap-1.5 lg:mt-0">
+              <div className="mt-1.5 grid grid-cols-3 gap-1.5 lg:mt-0">
                 {allKnowledgeTopics.map((item) => {
                   const details = topicCatalog[item];
                   const enabled = activeInterests.includes(item);
@@ -540,7 +540,7 @@ export function RabbitHoleGame() {
                     <button
                       key={item}
                       onClick={() => toggleInterest(item)}
-                      className={`min-h-11 rounded-lg border-2 px-2 py-1.5 text-center transition active:translate-y-0.5 ${
+                      className={`min-h-9 rounded-lg border-2 px-2 py-1 text-center transition active:translate-y-0.5 ${
                         enabled
                           ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]"
                           : "border-[#cfbfae] bg-white opacity-70 hover:border-[#082329]"
@@ -563,13 +563,13 @@ export function RabbitHoleGame() {
             </div>
           </div>
 
-          <div className="mt-2 grid gap-2 lg:grid-cols-[minmax(180px,.55fr)_minmax(390px,1fr)_auto] lg:items-center">
+          <div className="mt-1.5 grid gap-1.5 lg:grid-cols-[minmax(180px,.55fr)_minmax(390px,1fr)_auto] lg:items-center">
             <div>
-              <div className="mb-1 flex items-center justify-between gap-3 text-[10px] font-black uppercase tracking-[0.14em] text-[#6f5a4b]">
+              <div className="mb-0.5 flex items-center justify-between gap-3 text-[10px] font-black uppercase tracking-[0.14em] text-[#6f5a4b]">
                 <span>{Math.max(0, nextLevelXp - progress.xp)} XP to next level</span>
                 <span>{unlockedCount}/{allCards.length} unlocked</span>
               </div>
-              <div className="h-3 overflow-hidden rounded-full border-2 border-[#082329] bg-white">
+              <div className="h-2.5 overflow-hidden rounded-full border-2 border-[#082329] bg-white">
                 <div className="h-full bg-[#4fb286]" style={{ width: `${levelProgress}%` }} />
               </div>
             </div>
@@ -579,7 +579,7 @@ export function RabbitHoleGame() {
                 <button
                   key={item.id}
                   onClick={() => startMode(item.id)}
-                  className={`min-h-11 rounded-lg border-2 px-1.5 py-1 text-center transition active:translate-y-0.5 ${
+                  className={`min-h-9 rounded-lg border-2 px-1.5 py-1 text-center transition active:translate-y-0.5 ${
                     mode === item.id
                       ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]"
                       : "border-[#cfbfae] bg-white hover:border-[#082329] hover:bg-[#eaf3f0]"
@@ -591,7 +591,7 @@ export function RabbitHoleGame() {
               ))}
             </div>
 
-            <button onClick={resetProgress} className="rounded-lg border-2 border-[#082329] bg-white px-3 py-2 text-sm font-black hover:bg-[#ffd7ce]">
+            <button onClick={resetProgress} className="rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-sm font-black hover:bg-[#ffd7ce]">
               Reset Profile
             </button>
           </div>
@@ -696,7 +696,7 @@ function QuestionRun({
     : `Image: ${question.imageCredit}`;
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.04fr)_minmax(330px,.96fr)]">
+    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.28fr)_minmax(360px,.72fr)]">
       <article className="relative min-h-[30dvh] overflow-hidden rounded-lg border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] md:min-h-0">
         {question.comparison ? <ComparisonStage cards={question.comparison} /> : <QuestionImage question={question} />}
         <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
@@ -712,7 +712,7 @@ function QuestionRun({
         </div>
       </article>
 
-      <article className="flex min-h-[48dvh] flex-col overflow-hidden rounded-lg border-2 border-[#082329] bg-white p-3 shadow-[4px_4px_0_#082329] md:min-h-0 md:p-4">
+      <article className="flex min-h-[42dvh] flex-col overflow-hidden rounded-lg border-2 border-[#082329] bg-white p-2.5 shadow-[3px_3px_0_#082329] md:min-h-0 md:p-3">
         <div className="shrink-0">
           <div className="flex items-center justify-between gap-2">
             <ProgressDots questions={questions} questionIndex={questionIndex} />
@@ -721,7 +721,7 @@ function QuestionRun({
             </p>
           </div>
 
-          <h2 className="mt-3 text-[clamp(1.35rem,3.5vw,2.9rem)] font-black leading-[1.05] text-[#102f36] lg:text-[clamp(1.45rem,2.8vw,3rem)]">
+          <h2 className="mt-2 text-[clamp(1.25rem,3vw,2.35rem)] font-black leading-[1.04] text-[#102f36] lg:text-[clamp(1.3rem,2.45vw,2.55rem)]">
             {question.prompt}
           </h2>
 
@@ -730,7 +730,7 @@ function QuestionRun({
           {question.comparison && showComparisonTable && <ComparisonTable cards={question.comparison} />}
         </div>
 
-        <div className="mt-3 grid shrink-0 gap-2 sm:grid-cols-2">
+        <div className="mt-2 grid shrink-0 gap-2 sm:grid-cols-2">
           {question.choices.map((choice) => {
             const chosen = selected === choice;
             const correctChoice = answered && choice === question.answer;
@@ -742,7 +742,7 @@ function QuestionRun({
               <button
                 key={`${question.id}-${choice}`}
                 onClick={() => onAnswer(choice)}
-                className={`min-h-14 rounded-lg border-2 px-3 py-2.5 text-left text-lg font-black leading-snug transition active:translate-y-0.5 md:min-h-16 md:text-xl ${
+                className={`min-h-12 rounded-lg border-2 px-3 py-2 text-left text-base font-black leading-snug transition active:translate-y-0.5 md:min-h-14 md:text-lg ${
                   correctChoice
                     ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
                     : chosen
@@ -808,7 +808,7 @@ function SortMode({
   const pickedSet = new Set(picked);
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.04fr)_minmax(330px,.96fr)]">
+    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.28fr)_minmax(360px,.72fr)]">
       <article className="overflow-hidden rounded-lg border-2 border-[#082329] bg-[#102f36] p-2 shadow-[4px_4px_0_#082329]">
         <div className="grid h-full min-h-[390px] grid-cols-2 gap-2 md:grid-cols-4 lg:min-h-0">
           {round.cards.map((card) => (
@@ -830,16 +830,16 @@ function SortMode({
         </div>
       </article>
 
-      <article className="flex min-h-[420px] flex-col rounded-lg border-2 border-[#082329] bg-white p-3 shadow-[4px_4px_0_#082329] md:p-4 lg:min-h-0">
+      <article className="flex min-h-[380px] flex-col rounded-lg border-2 border-[#082329] bg-white p-2.5 shadow-[3px_3px_0_#082329] md:p-3 lg:min-h-0">
         <div className="flex items-center justify-between gap-2">
           <p className="rounded-lg border-2 border-[#082329] bg-[#f3c647] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
             Sort board
           </p>
           <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
         </div>
-        <h2 className="mt-3 text-[clamp(1.55rem,3.4vw,3rem)] font-black leading-[1.05] text-[#102f36]">{round.prompt}</h2>
+        <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.45rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
 
-        <div className="mt-4 grid gap-2">
+        <div className="mt-3 grid gap-2">
           {round.answerIds.map((id, index) => {
             const pickedId = picked[index];
             const card = round.cards.find((item) => item.id === pickedId);
@@ -916,7 +916,7 @@ function FactMode({
   const answered = selected !== null;
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1fr)_minmax(330px,1fr)]">
+    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.28fr)_minmax(360px,.72fr)]">
       <article className="relative min-h-[320px] overflow-hidden rounded-lg border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] md:min-h-0">
         <MediaImage image={round.image} imageAlt={round.imageAlt} topic={round.topic} />
         <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
@@ -927,7 +927,7 @@ function FactMode({
         </div>
       </article>
 
-      <article className="flex min-h-[420px] flex-col rounded-lg border-2 border-[#082329] bg-white p-3 shadow-[4px_4px_0_#082329] md:min-h-0 md:p-4">
+      <article className="flex min-h-[380px] flex-col rounded-lg border-2 border-[#082329] bg-white p-2.5 shadow-[3px_3px_0_#082329] md:min-h-0 md:p-3">
         <div className="flex items-center justify-between gap-2">
           <p className="rounded-lg border-2 border-[#082329] bg-[#78d99a] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
             Read and decide
@@ -935,12 +935,12 @@ function FactMode({
           <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} caught</p>
         </div>
 
-        <h2 className="mt-3 text-[clamp(1.6rem,3.6vw,3.2rem)] font-black leading-[1.05] text-[#102f36]">{round.prompt}</h2>
-        <div className="mt-4 rounded-lg border-2 border-[#082329] bg-[#fff8ec] p-4 shadow-[3px_3px_0_#082329]">
-          <p className="text-[clamp(1.35rem,3vw,2.4rem)] font-black leading-tight text-[#102f36]">{round.statement}</p>
+        <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+        <div className="mt-3 rounded-lg border-2 border-[#082329] bg-[#fff8ec] p-3 shadow-[3px_3px_0_#082329]">
+          <p className="text-[clamp(1.15rem,2.45vw,2rem)] font-black leading-tight text-[#102f36]">{round.statement}</p>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-2">
+        <div className="mt-3 grid grid-cols-2 gap-2">
           {(["Fact", "Fake"] as const).map((choice) => {
             const correctChoice = answered && choice === round.answer;
             const chosenWrong = selected === choice && choice !== round.answer;
@@ -948,7 +948,7 @@ function FactMode({
               <button
                 key={choice}
                 onClick={() => onAnswer(choice)}
-                className={`min-h-24 rounded-lg border-2 px-3 py-4 text-center text-3xl font-black transition active:translate-y-0.5 ${
+                className={`min-h-18 rounded-lg border-2 px-3 py-3 text-center text-2xl font-black transition active:translate-y-0.5 ${
                   correctChoice
                     ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
                     : chosenWrong
@@ -1044,11 +1044,11 @@ function CollectionBook({
 
 function ProgressDots({ questions, questionIndex }: { questions: Question[]; questionIndex: number }) {
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="flex flex-wrap gap-0.5">
       {questions.map((item, index) => (
         <span
           key={item.id}
-          className={`h-3 w-3 rounded-sm border-2 border-[#082329] ${
+          className={`h-2.5 w-2.5 rounded-sm border-2 border-[#082329] ${
             index < questionIndex ? "bg-[#4fb286]" : index === questionIndex ? "bg-[#f3c647]" : "bg-[#eadfce]"
           }`}
         />
@@ -1080,14 +1080,14 @@ function CollectionStat({ label, value, wins }: { label: string; value: string; 
 
 function ComparisonStage({ cards }: { cards: ComparisonCard[] }) {
   return (
-    <div className="grid h-full min-h-[260px] grid-cols-2 gap-2 bg-[#102f36] p-2">
+    <div className="grid h-full min-h-[260px] grid-cols-2 gap-1.5 bg-[#102f36] p-1.5">
       {cards.map((card) => (
         <div key={`${card.label}-${card.title}`} className="relative overflow-hidden rounded-lg border-2 border-[#082329] bg-[#fff8ec]">
           <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#082329] bg-[#f3c647] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#082329]">
             {card.label}
           </div>
           <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.statLabel === "Scoville" ? "peppers" : card.statLabel === "Height" ? "buildings" : "sharks"} />
-          <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#082329] bg-white/95 p-2 shadow-[2px_2px_0_#082329]">
+          <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#082329] bg-white/95 p-1.5 shadow-[2px_2px_0_#082329]">
             <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
             <div className="mt-1 flex items-end justify-between gap-2">
               <div>
@@ -1108,7 +1108,7 @@ function ComparisonStage({ cards }: { cards: ComparisonCard[] }) {
 
 function ComparisonTable({ cards }: { cards: ComparisonCard[] }) {
   return (
-    <div className="mt-3 grid gap-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2 sm:grid-cols-2">
+    <div className="mt-2 grid gap-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2 sm:grid-cols-2">
       {cards.map((card) => (
         <div key={`${card.label}-table-${card.title}`} className="rounded-md bg-white px-2 py-1.5">
           <div className="flex items-center justify-between gap-2">
@@ -1124,7 +1124,7 @@ function ComparisonTable({ cards }: { cards: ComparisonCard[] }) {
 
 function PepperHeatMeter({ meter }: { meter: NonNullable<Question["heatMeter"]> }) {
   return (
-    <div className="mt-3 rounded-lg border-2 border-[#cfbfae] bg-[#fff0c2] p-2.5">
+    <div className="mt-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff0c2] p-2">
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">Pepper meter</p>
@@ -1155,7 +1155,7 @@ function HeatChoiceEmoji({ heat }: { heat: HeatBand }) {
 
 function NumberLine({ line }: { line: NonNullable<Question["numberLine"]> }) {
   return (
-    <div className="mt-3 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2.5">
+    <div className="mt-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
       <div className="flex justify-between gap-3 text-xs font-black md:text-sm">
         <span>{line.label}</span>
         <span>{line.value.toLocaleString("en-US")} {line.unit}</span>
