@@ -1,4 +1,6 @@
-export type TopicId = "peppers" | "buildings" | "sharks" | "mixed";
+import { contentLibraryStats } from "./content-library";
+
+export type TopicId = "peppers" | "buildings" | "sharks" | "space" | "mixed";
 export type KnowledgeTopic = Exclude<TopicId, "mixed">;
 export type Difficulty = 1 | 2 | 3;
 export type HeatBand = "not spicy" | "mild" | "warm" | "hot" | "very hot" | "insane";
@@ -66,10 +68,53 @@ export type Shark = {
   fact: string;
 };
 
+export type SpaceKind = "planet" | "star" | "concept" | "moon" | "region";
+
+export type SpaceCard = {
+  id: string;
+  name: string;
+  kind: SpaceKind;
+  group: string;
+  image: string;
+  imageSourceFile: string;
+  imageSourceUrl: string;
+  imageCredit: string;
+  imageFit?: VisualFit;
+  imagePosition?: string;
+  diameterMiles?: number;
+  distanceFromSunMillionMiles?: number;
+  meanSurfaceTempF?: number;
+  surfaceTempK?: number;
+  radiusSolar?: number;
+  distanceLightYears?: number;
+  moons?: number;
+  statNote?: string;
+  fact: string;
+  conceptQuestion?: string;
+  conceptAnswer?: string;
+};
+
+export type TopicPack = {
+  id: KnowledgeTopic;
+  label: string;
+  eyebrow: string;
+  roundLabel: string;
+  libraryCount: number;
+  featuredCount: number;
+  sources: { label: string; url: string }[];
+  samples: string[];
+};
+
 const contentImage = (topic: KnowledgeTopic, id: string, sourceFile: string) => ({
   image: `/burrow-assets/${topic}/${id}.jpg`,
   imageSourceFile: sourceFile,
   imageSourceUrl: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(sourceFile).replaceAll("%20", "_")}`,
+});
+
+const externalImage = (url: string, sourceFile: string, sourceUrl: string) => ({
+  image: url,
+  imageSourceFile: sourceFile,
+  imageSourceUrl: sourceUrl,
 });
 
 export const heatBands: HeatBand[] = ["not spicy", "mild", "warm", "hot", "very hot", "insane"];
@@ -781,19 +826,232 @@ export const sharks: Shark[] = [
   },
 ];
 
+export const spaceCards: SpaceCard[] = [
+  {
+    id: "venus",
+    name: "Venus",
+    kind: "planet",
+    group: "Solar System",
+    diameterMiles: 7521,
+    distanceFromSunMillionMiles: 67,
+    meanSurfaceTempF: 872,
+    moons: 0,
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/Venus%20globe.jpg?width=900", "Venus globe.jpg", "https://commons.wikimedia.org/wiki/File:Venus_globe.jpg"),
+    imageCredit: "NASA/JPL, Wikimedia Commons",
+    fact: "Venus is the hottest planet in the solar system because its thick atmosphere traps heat.",
+  },
+  {
+    id: "mars",
+    name: "Mars",
+    kind: "planet",
+    group: "Solar System",
+    diameterMiles: 4212,
+    distanceFromSunMillionMiles: 142,
+    meanSurfaceTempF: -85,
+    moons: 2,
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/OSIRIS%20Mars%20true%20color.jpg?width=900", "OSIRIS Mars true color.jpg", "https://commons.wikimedia.org/wiki/File:OSIRIS_Mars_true_color.jpg"),
+    imageCredit: "ESA/Rosetta/OSIRIS, Wikimedia Commons",
+    fact: "Mars is cold, dusty, and has two tiny moons named Phobos and Deimos.",
+  },
+  {
+    id: "mercury",
+    name: "Mercury",
+    kind: "planet",
+    group: "Solar System",
+    diameterMiles: 3032,
+    distanceFromSunMillionMiles: 36,
+    meanSurfaceTempF: 333,
+    moons: 0,
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/Mercury%20in%20true%20color.jpg?width=900", "Mercury in true color.jpg", "https://commons.wikimedia.org/wiki/File:Mercury_in_true_color.jpg"),
+    imageCredit: "NASA/Johns Hopkins University Applied Physics Laboratory/Carnegie Institution of Washington",
+    fact: "Mercury is closest to the Sun, but Venus is hotter because Mercury has almost no atmosphere.",
+  },
+  {
+    id: "jupiter",
+    name: "Jupiter",
+    kind: "planet",
+    group: "Solar System",
+    diameterMiles: 86881,
+    distanceFromSunMillionMiles: 484,
+    meanSurfaceTempF: -166,
+    moons: 95,
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/Jupiter%20and%20its%20shrunken%20Great%20Red%20Spot.jpg?width=900", "Jupiter and its shrunken Great Red Spot.jpg", "https://commons.wikimedia.org/wiki/File:Jupiter_and_its_shrunken_Great_Red_Spot.jpg"),
+    imageCredit: "NASA/ESA/A. Simon/M. H. Wong",
+    fact: "Jupiter is the biggest planet in our solar system and has a giant storm called the Great Red Spot.",
+  },
+  {
+    id: "neptune",
+    name: "Neptune",
+    kind: "planet",
+    group: "Solar System",
+    diameterMiles: 30599,
+    distanceFromSunMillionMiles: 2781,
+    meanSurfaceTempF: -330,
+    moons: 16,
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/Neptune%20Full.jpg?width=900", "Neptune Full.jpg", "https://commons.wikimedia.org/wiki/File:Neptune_Full.jpg"),
+    imageCredit: "NASA/JPL, Wikimedia Commons",
+    fact: "Neptune is an ice giant with supersonic winds and a deep blue color.",
+  },
+  {
+    id: "uy-scuti",
+    name: "UY Scuti",
+    kind: "star",
+    group: "Huge Stars",
+    surfaceTempK: 3400,
+    radiusSolar: 1700,
+    distanceLightYears: 9500,
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/Sun%20and%20VY%20Canis%20Majoris.svg?width=900", "Sun and VY Canis Majoris.svg", "https://commons.wikimedia.org/wiki/File:Sun_and_VY_Canis_Majoris.svg"),
+    imageCredit: "Wikimedia Commons scale illustration",
+    statNote: "Estimated radius; huge stars are difficult to measure exactly.",
+    fact: "UY Scuti is often listed among the largest known stars, but its exact size is uncertain.",
+  },
+  {
+    id: "stephenson-2-18",
+    name: "Stephenson 2-18",
+    kind: "star",
+    group: "Huge Stars",
+    surfaceTempK: 3200,
+    radiusSolar: 2150,
+    distanceLightYears: 19000,
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/Red%20supergiant%20star%20artist%27s%20impression.jpg?width=900", "Red supergiant star artist's impression.jpg", "https://commons.wikimedia.org/wiki/File:Red_supergiant_star_artist%27s_impression.jpg"),
+    imageCredit: "ESO/M. Kornmesser, Wikimedia Commons",
+    statNote: "Estimated radius; scientists revise giant-star measurements.",
+    fact: "Stephenson 2-18 is a red supergiant and one of the largest star candidates by estimated radius.",
+  },
+  {
+    id: "rigel",
+    name: "Rigel",
+    kind: "star",
+    group: "Hot Stars",
+    surfaceTempK: 12100,
+    radiusSolar: 79,
+    distanceLightYears: 860,
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/Rigel%20A%20and%20reflection%20nebula%20IC%202118.jpg?width=900", "Rigel A and reflection nebula IC 2118.jpg", "https://commons.wikimedia.org/wiki/File:Rigel_A_and_reflection_nebula_IC_2118.jpg"),
+    imageCredit: "Wikimedia Commons",
+    fact: "Rigel is a blue supergiant. Blue stars are much hotter at the surface than red stars.",
+  },
+  {
+    id: "betelgeuse",
+    name: "Betelgeuse",
+    kind: "star",
+    group: "Huge Stars",
+    surfaceTempK: 3500,
+    radiusSolar: 760,
+    distanceLightYears: 550,
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/Betelgeuse%20star%20%28Hubble%29.jpg?width=900", "Betelgeuse star (Hubble).jpg", "https://commons.wikimedia.org/wiki/File:Betelgeuse_star_(Hubble).jpg"),
+    imageCredit: "Andrea Dupree/NASA/ESA",
+    fact: "Betelgeuse is a red supergiant in Orion. It is huge, but its surface is cooler than blue stars.",
+  },
+  {
+    id: "sirius",
+    name: "Sirius",
+    kind: "star",
+    group: "Bright Stars",
+    surfaceTempK: 9940,
+    radiusSolar: 1.7,
+    distanceLightYears: 8.6,
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/Sirius%20A%20and%20B%20Hubble%20photo.jpg?width=900", "Sirius A and B Hubble photo.jpg", "https://commons.wikimedia.org/wiki/File:Sirius_A_and_B_Hubble_photo.jpg"),
+    imageCredit: "NASA/ESA/H. Bond/M. Barstow",
+    fact: "Sirius is the brightest star in Earth's night sky and is much closer than most stars we see.",
+  },
+  {
+    id: "black-hole",
+    name: "Black Hole",
+    kind: "concept",
+    group: "Cosmic Ideas",
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/Black%20hole%20-%20Messier%2087.jpg?width=900", "Black hole - Messier 87.jpg", "https://commons.wikimedia.org/wiki/File:Black_hole_-_Messier_87.jpg"),
+    imageCredit: "Event Horizon Telescope Collaboration",
+    fact: "A black hole is a place where gravity is so strong that light cannot escape once it gets too close.",
+    conceptQuestion: "What is a black hole?",
+    conceptAnswer: "A place in space where gravity is so strong that even light cannot escape.",
+  },
+  {
+    id: "supernova",
+    name: "Supernova",
+    kind: "concept",
+    group: "Cosmic Ideas",
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/Crab%20Nebula.jpg?width=900", "Crab Nebula.jpg", "https://commons.wikimedia.org/wiki/File:Crab_Nebula.jpg"),
+    imageCredit: "NASA/ESA/J. Hester/A. Loll",
+    fact: "A supernova is an extremely bright, powerful explosion of a star.",
+    conceptQuestion: "What is a supernova?",
+    conceptAnswer: "A super-powerful star explosion that blasts material into space.",
+  },
+  {
+    id: "nebula",
+    name: "Nebula",
+    kind: "concept",
+    group: "Cosmic Ideas",
+    ...externalImage("https://commons.wikimedia.org/wiki/Special:FilePath/Pillars%20of%20Creation%20%28NIRCam%20Image%29.jpg?width=900", "Pillars of Creation (NIRCam Image).jpg", "https://commons.wikimedia.org/wiki/File:Pillars_of_Creation_(NIRCam_Image).jpg"),
+    imageCredit: "NASA/ESA/CSA/STScI",
+    fact: "A nebula is a giant cloud of gas and dust. Some nebulae are places where stars are born.",
+    conceptQuestion: "Where can a star be born?",
+    conceptAnswer: "Inside a nebula, where gravity pulls gas and dust together.",
+  },
+];
+
+export const topicIds = ["peppers", "buildings", "sharks", "space"] as const satisfies readonly KnowledgeTopic[];
+
+export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
+  peppers: {
+    id: "peppers",
+    label: "Spicy Peppers",
+    eyebrow: `${contentLibraryStats.peppers}+ peppers`,
+    roundLabel: "Pepper round",
+    libraryCount: contentLibraryStats.peppers,
+    featuredCount: peppers.length,
+    sources: [{ label: "WikiPepper", url: "https://wikipepper.org/peppers" }],
+    samples: ["7 Pot Primo", "Aji Amarillo", "Carolina Reaper", "Scotch Bonnet"],
+  },
+  buildings: {
+    id: "buildings",
+    label: "Tall Buildings",
+    eyebrow: `${contentLibraryStats.buildings}+ towers`,
+    roundLabel: "Tower round",
+    libraryCount: contentLibraryStats.buildings,
+    featuredCount: buildings.length,
+    sources: [
+      { label: "Wikidata skyscraper records", url: "https://query.wikidata.org/" },
+      { label: "CTBUH criteria", url: "https://www.ctbuh.org/HighRiseInfo/TallestDatabase/Criteria/tabid/446/language/en-US/Default.aspx" },
+    ],
+    samples: ["Burj Khalifa", "Merdeka 118", "Shanghai Tower", "One World Trade Center"],
+  },
+  sharks: {
+    id: "sharks",
+    label: "Shark Lab",
+    eyebrow: `${contentLibraryStats.sharks}+ sharks`,
+    roundLabel: "Shark round",
+    libraryCount: contentLibraryStats.sharks,
+    featuredCount: sharks.length,
+    sources: [{ label: "Wikidata shark taxonomy", url: "https://query.wikidata.org/" }],
+    samples: ["Whale Shark", "Great White Shark", "Shortfin Mako", "Greenland Shark"],
+  },
+  space: {
+    id: "space",
+    label: "Space Lab",
+    eyebrow: `${spaceCards.length} space cards`,
+    roundLabel: "Space round",
+    libraryCount: spaceCards.length,
+    featuredCount: spaceCards.length,
+    sources: [
+      { label: "NASA Venus facts", url: "https://science.nasa.gov/venus/venus-facts" },
+      { label: "NASA solar-system temperatures", url: "https://science.nasa.gov/solar-system/temperatures-across-our-solar-system/" },
+      { label: "NASA Space Place", url: "https://spaceplace.nasa.gov/" },
+    ],
+    samples: ["Venus", "Mars", "Stephenson 2-18", "Black Hole"],
+  },
+};
+
 export const topicCatalog: Record<Exclude<TopicId, "mixed">, {
   label: string;
   eyebrow: string;
   roundLabel: string;
-}> = {
-  peppers: { label: "Spicy Peppers", eyebrow: `${peppers.length} peppers`, roundLabel: "Pepper round" },
-  buildings: { label: "Tall Buildings", eyebrow: `${buildings.length} towers`, roundLabel: "Tower round" },
-  sharks: { label: "Shark Lab", eyebrow: `${sharks.length} sharks`, roundLabel: "Shark round" },
-};
+}> = Object.fromEntries(topicIds.map((id) => [id, {
+  label: topicPacks[id].label,
+  eyebrow: topicPacks[id].eyebrow,
+  roundLabel: topicPacks[id].roundLabel,
+}])) as Record<KnowledgeTopic, { label: string; eyebrow: string; roundLabel: string }>;
 
 export const topicOptions: { id: TopicId; label: string; eyebrow: string }[] = [
   { id: "mixed", label: "Mix it up", eyebrow: "All labs" },
-  { id: "peppers", ...topicCatalog.peppers },
-  { id: "buildings", ...topicCatalog.buildings },
-  { id: "sharks", ...topicCatalog.sharks },
+  ...topicIds.map((id) => ({ id, label: topicCatalog[id].label, eyebrow: topicCatalog[id].eyebrow })),
 ];

@@ -4,15 +4,18 @@ import {
   heatProfiles,
   peppers,
   sharks,
+  spaceCards,
+  topicIds,
   type Building,
   type Difficulty,
   type KnowledgeTopic,
   type Pepper,
   type Shark,
+  type SpaceCard,
   type TopicId,
 } from "./game-data";
 
-export type GameMode = "quiz" | "versus" | "sort" | "fact" | "collection";
+export type GameMode = "mix" | "quiz" | "versus" | "sort" | "fact" | "peek";
 
 export const modeOptions: {
   id: GameMode;
@@ -20,11 +23,12 @@ export const modeOptions: {
   eyebrow: string;
   loop: string;
 }[] = [
+  { id: "mix", label: "Mix", eyebrow: "shuffle", loop: "all games" },
   { id: "quiz", label: "Quiz Run", eyebrow: "mixed skills", loop: "15-20 bites" },
   { id: "versus", label: "Versus", eyebrow: "pick winner", loop: "fast duels" },
   { id: "sort", label: "Sort", eyebrow: "order cards", loop: "tap order" },
   { id: "fact", label: "True/False", eyebrow: "read fast", loop: "true or not" },
-  { id: "collection", label: "Collection", eyebrow: "unlocks", loop: "progress book" },
+  { id: "peek", label: "Peek", eyebrow: "picture clue", loop: "reveal guess" },
 ];
 
 export type { KnowledgeTopic } from "./game-data";
@@ -66,6 +70,16 @@ export type FactRound = {
   explanation: string;
 };
 
+export type RevealRound = {
+  id: string;
+  topic: KnowledgeTopic;
+  prompt: string;
+  card: KnowledgeCard;
+  choices: string[];
+  answer: string;
+  explanation: string;
+};
+
 const formatNumber = (value: number) => value.toLocaleString("en-US");
 const feet = (value: number) => `${formatNumber(value)} ft`;
 
@@ -85,7 +99,7 @@ const shuffle = <T,>(items: T[], seed: number) => {
 
 const sample = <T,>(items: T[], seed: number) => items[Math.floor(seedRandom(seed) * items.length) % items.length];
 
-const allTopics: KnowledgeTopic[] = ["peppers", "buildings", "sharks"];
+const allTopics: KnowledgeTopic[] = [...topicIds];
 
 const topicsForScope = (topic: TopicScope): KnowledgeTopic[] => {
   if (typeof topic !== "string") return topic.length ? [...topic] : allTopics;
@@ -142,11 +156,60 @@ const sharkCard = (shark: Shark, metric: "length" | "speed" | "power" = "length"
   fact: shark.fact,
 });
 
+const spaceMetricValue = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons") => {
+  if (metric === "distance") return space.distanceFromSunMillionMiles ?? space.distanceLightYears ?? 0;
+  if (metric === "temperature") return space.surfaceTempK ?? space.meanSurfaceTempF ?? 0;
+  if (metric === "size") return space.radiusSolar ?? space.diameterMiles ?? 0;
+  return space.moons ?? 0;
+};
+
+const spaceMetricDisplay = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons") => {
+  const value = spaceMetricValue(space, metric);
+  if (metric === "distance") return space.kind === "star" ? `${formatNumber(value)} ly` : `${formatNumber(value)}M mi`;
+  if (metric === "temperature") return space.kind === "star" ? `${formatNumber(value)} K` : `${formatNumber(value)}°F`;
+  if (metric === "size") return space.kind === "star" ? `${formatNumber(value)}x Sun` : feet(value);
+  return `${formatNumber(value)} moons`;
+};
+
+const spaceCard = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons" = "distance"): KnowledgeCard => ({
+  id: space.id,
+  topic: "space",
+  title: space.name,
+  image: space.image,
+  imageAlt: space.name,
+  imageCredit: space.imageCredit,
+  statLabel: metric === "distance" ? "Distance" : metric === "temperature" ? "Temperature" : metric === "size" ? "Size" : "Moons",
+  statValue: spaceMetricValue(space, metric),
+  statDisplay: spaceMetricDisplay(space, metric),
+  subStat: `${space.group} · ${space.kind}`,
+  fact: space.fact,
+});
+
 export const collectionCards = (): KnowledgeCard[] => [
   ...peppers.map(pepperCard),
   ...buildings.map(buildingCard),
   ...sharks.map((shark) => sharkCard(shark)),
+  ...spaceCards.map((space) => spaceCard(space, space.kind === "star" ? "temperature" : space.kind === "planet" ? "distance" : "size")),
 ];
+
+export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed: number): RevealRound => {
+  const currentTopic = topicOrder(topic, seed);
+  const count = difficulty === 1 ? 3 : 4;
+  const allCards = collectionCards();
+  const topicCards = allCards.filter((card) => card.topic === currentTopic);
+  const card = sample(topicCards, seed + 1);
+  const distractors = shuffle(topicCards.filter((item) => item.id !== card.id).map((item) => item.title), seed + 2).slice(0, count - 1);
+
+  return {
+    id: `${seed}-peek-${currentTopic}-${card.id}`,
+    topic: currentTopic,
+    prompt: "What is hiding in the picture?",
+    card,
+    choices: shuffle([card.title, ...distractors], seed + 3),
+    answer: card.title,
+    explanation: `${card.title}: ${card.fact}`,
+  };
+};
 
 export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: number): SortRound => {
   const currentTopic = topicOrder(topic, seed);
@@ -177,6 +240,27 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       answerIds,
       explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
       statLabel: "Height",
+    };
+  }
+
+  if (currentTopic === "space") {
+    const metric = sample(["distance", "temperature", "size", "moons"] as const, seed + 5);
+    const pool = spaceCards.filter((item) => {
+      if (metric === "distance") return item.distanceFromSunMillionMiles !== undefined || item.distanceLightYears !== undefined;
+      if (metric === "temperature") return item.surfaceTempK !== undefined || item.meanSurfaceTempF !== undefined;
+      if (metric === "size") return item.radiusSolar !== undefined || item.diameterMiles !== undefined;
+      return item.moons !== undefined;
+    });
+    const cards = shuffle(pool, seed + 6).slice(0, count).map((space) => spaceCard(space, metric));
+    const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
+    return {
+      id: `${seed}-sort-space-${metric}`,
+      topic: currentTopic,
+      prompt: metric === "distance" ? "Tap the space cards from nearest to farthest." : metric === "temperature" ? "Tap from coolest to hottest." : metric === "size" ? "Tap from smallest to biggest." : "Tap from fewest moons to most moons.",
+      cards: shuffle(cards, seed + 7),
+      answerIds,
+      explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
+      statLabel: metric === "distance" ? "Distance" : metric === "temperature" ? "Temperature" : metric === "size" ? "Size" : "Moons",
     };
   }
 
@@ -247,6 +331,42 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       imageCredit: building.imageCredit,
       answer: truthful ? "True" : "False",
       explanation: `${building.name} is ${feet(building.heightFt)} tall and is in ${building.city}, ${building.country}.`,
+    };
+  }
+
+  if (currentTopic === "space") {
+    const space = sample(spaceCards, seed + 18);
+    const fake = sample(spaceCards.filter((item) => item.id !== space.id), seed + 19);
+    const factType = difficulty === 1 ? "group" : sample(["group", "fact", "temperature", "distance"] as const, seed + 20);
+    const realTemperature = space.surfaceTempK ?? space.meanSurfaceTempF;
+    const fakeTemperature = fake.surfaceTempK ?? fake.meanSurfaceTempF;
+    const realDistance = space.distanceFromSunMillionMiles ?? space.distanceLightYears;
+    const fakeDistance = fake.distanceFromSunMillionMiles ?? fake.distanceLightYears;
+    const statement = truthful
+      ? factType === "temperature" && realTemperature !== undefined
+        ? `${space.name} has a listed temperature of about ${spaceMetricDisplay(space, "temperature")}.`
+        : factType === "distance" && realDistance !== undefined
+          ? `${space.name} has a listed distance of about ${spaceMetricDisplay(space, "distance")}.`
+          : factType === "fact"
+            ? space.fact
+            : `${space.name} belongs in ${space.group}.`
+      : factType === "temperature" && fakeTemperature !== undefined
+        ? `${space.name} has a listed temperature of about ${spaceMetricDisplay(fake, "temperature")}.`
+        : factType === "distance" && fakeDistance !== undefined
+          ? `${space.name} has a listed distance of about ${spaceMetricDisplay(fake, "distance")}.`
+          : factType === "fact"
+            ? fake.fact
+            : `${space.name} belongs in ${fake.group}.`;
+    return {
+      id: `${seed}-fact-space-${space.id}`,
+      topic: currentTopic,
+      prompt: "True or false?",
+      statement,
+      image: space.image,
+      imageAlt: space.name,
+      imageCredit: space.imageCredit,
+      answer: truthful ? "True" : "False",
+      explanation: `${space.name}: ${space.fact}`,
     };
   }
 
