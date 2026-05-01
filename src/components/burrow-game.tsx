@@ -234,10 +234,15 @@ const comparisonLabelRank = (value: string) => (value.startsWith("A") ? 0 : valu
 const orderedComparisonCards = (cards: ComparisonCard[]) => [...cards].sort((a, b) => comparisonLabelRank(a.label) - comparisonLabelRank(b.label));
 const orderedComparisonChoices = (choices: string[]) => [...choices].sort((a, b) => comparisonLabelRank(a) - comparisonLabelRank(b));
 const sortCardById = (round: SortRound, id?: string) => round.cards.find((card) => card.id === id);
+const sortAnswerCardAt = (round: SortRound, index: number) => sortCardById(round, round.answerIds[index]);
+const sortAcceptableCardsAt = (round: SortRound, index: number) => {
+  const answerCard = sortAnswerCardAt(round, index);
+  if (!answerCard) return [];
+  return round.cards.filter((card) => card.statValue === answerCard.statValue || card.statDisplay === answerCard.statDisplay);
+};
 const isSortSlotCorrect = (round: SortRound, pickedId: string | undefined, index: number) => {
   const pickedCard = sortCardById(round, pickedId);
-  const answerCard = sortCardById(round, round.answerIds[index]);
-  return Boolean(pickedCard && answerCard && pickedCard.statValue === answerCard.statValue);
+  return Boolean(pickedCard && sortAcceptableCardsAt(round, index).some((card) => card.id === pickedCard.id));
 };
 const isSortAnswerCorrect = (round: SortRound, picked: string[]) => round.answerIds.every((_, index) => isSortSlotCorrect(round, picked[index], index));
 
@@ -998,7 +1003,7 @@ function GameHud({
   onReset: () => void;
 }) {
   return (
-    <header className="relative z-30 shrink-0 overflow-hidden rounded-lg border-2 border-[#092421] bg-[#f7f0df] px-2 pb-1.5 pt-5 shadow-[3px_3px_0_#092421]">
+    <header className="relative z-30 shrink-0 rounded-lg border-2 border-[#092421] bg-[#f7f0df] px-2 pb-1.5 pt-5 shadow-[3px_3px_0_#092421]">
       <div
         aria-hidden="true"
         className="absolute inset-x-0 top-0 h-4 border-b-2 border-[#092421] bg-[#123d38] bg-[linear-gradient(90deg,rgba(255,253,246,.12)_1px,transparent_1px)] bg-[size:32px_32px]"
@@ -1439,7 +1444,13 @@ function SortMode({
           {round.answerIds.map((id, index) => {
             const pickedId = picked[index];
             const card = sortCardById(round, pickedId);
-            const correctCard = sortCardById(round, id);
+            const acceptableCards = sortAcceptableCardsAt(round, index);
+            const correctCard = acceptableCards[0] ?? sortCardById(round, id);
+            const correctLabel = acceptableCards.length > 1
+              ? `${acceptableCards.map((item) => item.title).join(" / ")} (${correctCard?.statDisplay ?? round.statLabel})`
+              : correctCard
+                ? `${correctCard.title} (${correctCard.statDisplay})`
+                : round.statLabel;
             const good = checked && isSortSlotCorrect(round, pickedId, index);
             const bad = checked && pickedId && !good;
             return (
@@ -1456,7 +1467,7 @@ function SortMode({
                     {checked && correctCard
                       ? good && card
                         ? `Correct: ${card.statDisplay}`
-                        : `Correct: ${correctCard.title} (${correctCard.statDisplay})`
+                        : `Correct: ${correctLabel}`
                       : round.statLabel}
                   </p>
                 </div>

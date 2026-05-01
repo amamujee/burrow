@@ -6,7 +6,6 @@ const jiti = createJiti(`${process.cwd()}/`);
 const data = jiti("./src/lib/game-data.ts");
 const library = jiti("./src/lib/content-library.ts");
 const {
-  buildBuildFactRound,
   buildFactRound,
   buildNumberRound,
   buildOddRound,
@@ -89,6 +88,7 @@ const checkFeaturedMetadata = (item) => {
   if (item.topic === "peppers" && !(item.shuMin <= item.shuMax && item.shuMax >= 0)) critical.push(`${item.topic}/${item.id}: bad Scoville range`);
   if (item.topic === "buildings" && !(item.heightFt > 250 && item.city && item.country)) critical.push(`${item.topic}/${item.id}: bad building metadata`);
   if (item.topic === "sharks" && !(item.lengthFt > 0 && item.speedMph > 0 && item.power > 0 && item.family)) critical.push(`${item.topic}/${item.id}: bad shark metadata`);
+  if (item.topic === "jets" && !(item.maxSpeedMph > 0 && item.rangeMiles > 0 && item.firepower > 0 && item.country && item.category)) critical.push(`${item.topic}/${item.id}: bad jet metadata`);
   if (item.topic === "space") {
     if (item.kind === "planet" && !(item.diameterMiles && item.distanceFromSunMillionMiles !== undefined && item.meanSurfaceTempF !== undefined)) critical.push(`${item.topic}/${item.id}: bad planet metadata`);
     if (item.kind === "star" && !(item.surfaceTempK && item.radiusSolar && item.distanceLightYears)) warnings.push(`${item.topic}/${item.id}: star has thin numeric metadata`);
@@ -101,6 +101,7 @@ const featuredItems = [
   ...data.buildings.map((item) => ({ ...item, topic: "buildings" })),
   ...data.sharks.map((item) => ({ ...item, topic: "sharks" })),
   ...data.spaceCards.map((item) => ({ ...item, topic: "space" })),
+  ...data.jets.map((item) => ({ ...item, topic: "jets" })),
 ];
 
 for (const item of featuredItems) {
@@ -152,10 +153,6 @@ const checkRoundBuilders = async () => {
       if (!revealRound.choices.includes(revealRound.answer)) critical.push(`${topic}/peek/d${difficulty}: answer missing from choices`);
       await assertRoundCardImages(`${topic}/peek/d${difficulty}`, revealRound);
 
-      const buildRound = buildBuildFactRound(topic, difficulty, seed + 40);
-      if (buildRound.tokens.length !== buildRound.answerIds.length || !buildRound.answerText) critical.push(`${topic}/build/d${difficulty}: bad token set`);
-      await assertRoundCardImages(`${topic}/build/d${difficulty}`, buildRound);
-
       const numberRound = buildNumberRound(topic, difficulty, seed + 50);
       if (!numberRound.choices.includes(numberRound.answer) || numberRound.cards.length !== 2) critical.push(`${topic}/number/d${difficulty}: bad number choices`);
       await assertRoundCardImages(`${topic}/number/d${difficulty}`, numberRound);
@@ -183,6 +180,10 @@ for (const building of library.buildingLibrary) {
   if (!(building.heightMeters > 100 && building.heightFeet > 300)) critical.push(`buildingLibrary/${building.id}: bad height`);
 }
 
+for (const jet of library.jetLibrary) {
+  if (!jet.id || !jet.name || !jet.country || !jet.category || !jet.sourceUrl) critical.push(`jetLibrary/${jet.id ?? "missing"}: missing identity/source`);
+}
+
 const byTopic = Object.fromEntries(data.topicIds.map((topic) => [
   topic,
   cards.filter((card) => card.topic === topic),
@@ -200,6 +201,7 @@ const result = {
     peppers: library.pepperLibrary.length,
     sharks: library.sharkLibrary.length,
     buildings: library.buildingLibrary.length,
+    jets: library.jetLibrary.length,
   },
   warnings: warnings.slice(0, 30),
   warningCount: warnings.length,

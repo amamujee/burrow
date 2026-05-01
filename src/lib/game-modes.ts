@@ -3,6 +3,7 @@ import {
   heatBands,
   heatBandRangeLabel,
   heatProfiles,
+  jets,
   peppers,
   sharks,
   spaceCards,
@@ -10,6 +11,8 @@ import {
   type Building,
   type Difficulty,
   type HeatBand,
+  type Jet,
+  type JetCategory,
   type KnowledgeTopic,
   type Pepper,
   type Shark,
@@ -237,11 +240,39 @@ const spaceCard = (space: SpaceCard, metric: "distance" | "temperature" | "size"
   }).flags,
 });
 
+const jetCategoryLabels: Record<JetCategory, string> = {
+  stealth: "stealth",
+  dogfighter: "dogfighter",
+  multirole: "multirole",
+  bomber: "bomber",
+  recon: "recon",
+  attack: "attack",
+  interceptor: "interceptor",
+  trainer: "trainer",
+};
+
+const jetCard = (jet: Jet, metric: "speed" | "range" | "firepower" = "speed"): KnowledgeCard => ({
+  id: jet.id,
+  topic: "jets",
+  title: jet.name,
+  image: jet.image,
+  imageAlt: jet.name,
+  imageCredit: jet.imageCredit,
+  statLabel: metric === "speed" ? "Speed" : metric === "range" ? "Range" : "Firepower",
+  statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower,
+  statDisplay: metric === "speed" ? `${formatNumber(jet.maxSpeedMph)} mph` : metric === "range" ? `${formatNumber(jet.rangeMiles)} mi` : `${jet.firepower}/5`,
+  subStat: `${jet.country} · ${jetCategoryLabels[jet.category]}`,
+  fact: jet.fact,
+  qualityScore: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower }).score,
+  qualityFlags: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower }).flags,
+});
+
 export const collectionCards = (): KnowledgeCard[] => [
   ...peppers.map(pepperCard),
   ...buildings.map(buildingCard),
   ...sharks.map((shark) => sharkCard(shark)),
   ...spaceCards.map((space) => spaceCard(space, space.kind === "star" ? "temperature" : space.kind === "planet" ? "distance" : "size")),
+  ...jets.map((jet) => jetCard(jet)),
 ];
 
 export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed: number): RevealRound => {
@@ -343,6 +374,30 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     };
   }
 
+  if (currentTopic === "jets") {
+    const faster = sampleSafe(jets.filter((jet) => jet.maxSpeedMph >= 1200), jets, seed + 10);
+    const slower = sampleSafe(jets.filter((jet) => jet.id !== faster.id && jet.maxSpeedMph <= faster.maxSpeedMph - 250), jets.filter((jet) => jet.id !== faster.id), seed + 11);
+    const step = difficulty === 1 ? 100 : difficulty === 2 ? 50 : 10;
+    const biggerValue = roundTo(faster.maxSpeedMph, step);
+    const smallerValue = roundTo(slower.maxSpeedMph, step);
+    const answer = Math.abs(biggerValue - smallerValue);
+    return {
+      id: `${seed}-number-jets-${faster.id}-${slower.id}`,
+      topic: currentTopic,
+      prompt: `${faster.name} can reach about ${numberWithUnit(biggerValue, "mph")}. ${slower.name} can reach about ${numberWithUnit(smallerValue, "mph")}. How much faster is ${faster.name}?`,
+      cards: [jetCard(faster, "speed"), jetCard(slower, "speed")],
+      statLabel: "Speed",
+      unit: "mph",
+      biggerLabel: faster.name,
+      smallerLabel: slower.name,
+      biggerValue,
+      smallerValue,
+      answer,
+      choices: numberChoices(answer, difficulty === 1 ? 200 : 100, seed + 12),
+      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} mph.`,
+    };
+  }
+
   const bigger = sampleSafe(sharks.filter((shark) => shark.lengthFt >= 15), sharks, seed + 10);
   const smaller = sampleSafe(sharks.filter((shark) => shark.id !== bigger.id && shark.lengthFt <= bigger.lengthFt - 5), sharks.filter((shark) => shark.id !== bigger.id), seed + 11);
   const biggerValue = bigger.lengthFt;
@@ -424,6 +479,22 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
     };
   }
 
+  if (currentTopic === "jets") {
+    const category = sample(["stealth", "bomber", "trainer", "interceptor", "attack", "multirole", "dogfighter"] as JetCategory[], seed + 12);
+    const same = shuffle(jets.filter((jet) => jet.category === category), seed + 13).slice(0, 3);
+    const odd = sampleSafe(jets.filter((jet) => jet.category !== category), jets, seed + 14);
+    const cards = shuffle([...same.map((jet) => jetCard(jet)), jetCard(odd)], seed + 15);
+    return {
+      id: `${seed}-odd-jets-${category}-${odd.id}`,
+      topic: currentTopic,
+      prompt: "Which jet has the different mission category?",
+      cards,
+      answerId: odd.id,
+      reason: `${odd.name} is ${jetCategoryLabels[odd.category]}; the others are ${jetCategoryLabels[category]}.`,
+      explanation: `The rule is aircraft mission category. ${odd.name} is the odd one out because it is ${jetCategoryLabels[odd.category]}.`,
+    };
+  }
+
   const families = Array.from(new Set(sharks.map((shark) => shark.family)));
   const family = sampleSafe(families.filter((item) => sharks.filter((shark) => shark.family === item).length >= 3), families, seed + 12);
   const same = shuffle(sharks.filter((shark) => shark.family === family), seed + 13).slice(0, 3);
@@ -490,6 +561,21 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       answerIds,
       explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
       statLabel: metric === "distance" ? "Distance" : metric === "temperature" ? "Temperature" : metric === "size" ? "Size" : "Moons",
+    };
+  }
+
+  if (currentTopic === "jets") {
+    const metric = sample(["speed", "range", "firepower"] as const, seed + 5);
+    const cards = shuffle(jets, seed + 6).slice(0, count).map((jet) => jetCard(jet, metric));
+    const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
+    return {
+      id: `${seed}-sort-jets-${metric}`,
+      topic: currentTopic,
+      prompt: metric === "speed" ? "Tap the jets from slowest to fastest." : metric === "range" ? "Tap the jets from shortest range to longest range." : "Tap the jets from lowest firepower to highest firepower.",
+      cards: shuffle(cards, seed + 7),
+      answerIds,
+      explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
+      statLabel: metric === "speed" ? "Speed" : metric === "range" ? "Range" : "Firepower",
     };
   }
 
@@ -596,6 +682,38 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       imageCredit: space.imageCredit,
       answer: truthful ? "True" : "False",
       explanation: `${space.name}: ${space.fact}`,
+    };
+  }
+
+  if (currentTopic === "jets") {
+    const jet = sample(jets, seed + 18);
+    const fake = sample(jets.filter((item) => item.id !== jet.id), seed + 19);
+    const factType = difficulty === 1 ? "category" : sample(["category", "speed", "range", "country"] as const, seed + 20);
+    const statement = truthful
+      ? factType === "speed"
+        ? `${jet.name} can reach about ${formatNumber(jet.maxSpeedMph)} mph.`
+        : factType === "range"
+          ? `${jet.name} has a range of about ${formatNumber(jet.rangeMiles)} miles.`
+          : factType === "country"
+            ? `${jet.name} is from ${jet.country}.`
+            : `${jet.name} is a ${jetCategoryLabels[jet.category]} aircraft.`
+      : factType === "speed"
+        ? `${jet.name} can reach about ${formatNumber(fake.maxSpeedMph)} mph.`
+        : factType === "range"
+          ? `${jet.name} has a range of about ${formatNumber(fake.rangeMiles)} miles.`
+          : factType === "country"
+            ? `${jet.name} is from ${fake.country}.`
+            : `${jet.name} is a ${jetCategoryLabels[fake.category]} aircraft.`;
+    return {
+      id: `${seed}-fact-jet-${jet.id}`,
+      topic: currentTopic,
+      prompt: "True or false?",
+      statement,
+      image: jet.image,
+      imageAlt: jet.name,
+      imageCredit: jet.imageCredit,
+      answer: truthful ? "True" : "False",
+      explanation: `${jet.name} is from ${jet.country}, is a ${jetCategoryLabels[jet.category]} aircraft, reaches about ${formatNumber(jet.maxSpeedMph)} mph, and has about ${formatNumber(jet.rangeMiles)} miles of range.`,
     };
   }
 

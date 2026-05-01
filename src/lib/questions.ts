@@ -3,6 +3,7 @@ import {
   heatBands,
   heatBandRangeLabel,
   heatProfiles,
+  jets,
   peppers,
   sharks,
   spaceCards,
@@ -10,6 +11,8 @@ import {
   type Building,
   type Difficulty,
   type HeatBand,
+  type Jet,
+  type JetCategory,
   type KnowledgeTopic,
   type Pepper,
   type Shark,
@@ -42,7 +45,14 @@ export type QuestionKind =
   | "space-farther"
   | "space-moons"
   | "space-concept"
-  | "space-reading";
+  | "space-reading"
+  | "jet-name"
+  | "jet-category"
+  | "jet-faster"
+  | "jet-range"
+  | "jet-firepower"
+  | "jet-difference"
+  | "jet-reading";
 
 export type ComparisonCard = {
   label: "A" | "B";
@@ -91,6 +101,9 @@ const maxHeight = 3281;
 const maxSharkLength = 40;
 const maxSharkSpeed = 45;
 const maxSharkPower = 5;
+const maxJetSpeed = 2200;
+const maxJetRange = 8800;
+const maxJetFirepower = 5;
 const allTopics: KnowledgeTopic[] = [...topicIds];
 
 const choiceCountForDifficulty = (difficulty: Difficulty) => (difficulty === 1 ? 3 : 4);
@@ -217,6 +230,31 @@ const sharkCard = (shark: Shark, label: "A" | "B", stat: "length" | "speed" | "p
   meterMax: stat === "length" ? maxSharkLength : stat === "speed" ? maxSharkSpeed : maxSharkPower,
 });
 
+const jetCategoryLabels: Record<JetCategory, string> = {
+  stealth: "stealth",
+  dogfighter: "dogfighter",
+  multirole: "multirole",
+  bomber: "bomber",
+  recon: "recon",
+  attack: "attack",
+  interceptor: "interceptor",
+  trainer: "trainer",
+};
+
+const jetCard = (jet: Jet, label: "A" | "B", stat: "speed" | "range" | "firepower"): ComparisonCard => ({
+  label,
+  topic: "jets",
+  title: jet.name,
+  image: jet.image,
+  imageAlt: jet.name,
+  imageCredit: jet.imageCredit,
+  statLabel: stat === "speed" ? "Speed" : stat === "range" ? "Range" : "Firepower",
+  statValue: stat === "speed" ? `${formatNumber(jet.maxSpeedMph)} mph` : stat === "range" ? `${formatNumber(jet.rangeMiles)} mi` : `${jet.firepower}/5`,
+  subStat: `${jet.country} · ${jetCategoryLabels[jet.category]}`,
+  meterValue: stat === "speed" ? jet.maxSpeedMph : stat === "range" ? jet.rangeMiles : jet.firepower,
+  meterMax: stat === "speed" ? maxJetSpeed : stat === "range" ? maxJetRange : maxJetFirepower,
+});
+
 const spacePlanets = spaceCards.filter((item) => item.kind === "planet");
 const spaceStars = spaceCards.filter((item) => item.kind === "star");
 const spaceConcepts = spaceCards.filter((item) => item.kind === "concept");
@@ -333,6 +371,34 @@ const sharkComparisonQuestion = (seed: number, first: Shark, second: Shark, stat
   };
 };
 
+const jetComparisonQuestion = (seed: number, first: Jet, second: Jet, stat: "speed" | "range" | "firepower"): Question => {
+  const firstValue = stat === "speed" ? first.maxSpeedMph : stat === "range" ? first.rangeMiles : first.firepower;
+  const secondValue = stat === "speed" ? second.maxSpeedMph : stat === "range" ? second.rangeMiles : second.firepower;
+  const winner = firstValue >= secondValue ? first : second;
+  const winnerValue = stat === "speed" ? winner.maxSpeedMph : stat === "range" ? winner.rangeMiles : winner.firepower;
+  const cards = shuffle([jetCard(first, "A", stat), jetCard(second, "B", stat)], seed + 57);
+  const kind: QuestionKind = stat === "speed" ? "jet-faster" : stat === "range" ? "jet-range" : "jet-firepower";
+  const prompt = stat === "speed"
+    ? `Which jet is faster: ${first.name} or ${second.name}?`
+    : stat === "range"
+      ? `Which jet can fly farther: ${first.name} or ${second.name}?`
+      : `Which jet has more firepower: ${first.name} or ${second.name}?`;
+  return {
+    id: `${seed}-${kind}-${first.id}-${second.id}`,
+    topic: "jets",
+    kind,
+    prompt,
+    image: winner.image,
+    imageAlt: winner.name,
+    imageCredit: winner.imageCredit,
+    comparison: cards,
+    choices: cards.map((card) => `${card.label}: ${card.title}`),
+    answer: comparisonAnswer(cards, winner.name),
+    explanation: `${winner.name} wins with ${stat === "speed" ? `${formatNumber(winnerValue)} mph` : stat === "range" ? `${formatNumber(winnerValue)} miles of range` : `${winnerValue}/5 firepower`}.`,
+    numberLine: { label: stat === "speed" ? "Speed" : stat === "range" ? "Range" : "Firepower", value: winnerValue, max: stat === "speed" ? maxJetSpeed : stat === "range" ? maxJetRange : maxJetFirepower, unit: stat === "speed" ? "mph" : stat === "range" ? "mi" : "/5" },
+  };
+};
+
 const spaceComparisonQuestion = (seed: number, first: SpaceCard, second: SpaceCard, stat: "temp" | "radius" | "distance" | "moons"): Question => {
   const winner = spaceValue(first, stat) >= spaceValue(second, stat) ? first : second;
   const cards = shuffle([spaceCard(first, "A", stat), spaceCard(second, "B", stat)], seed + 67);
@@ -365,7 +431,8 @@ type HeadToHeadSpec =
   | { topic: "peppers"; stat: "heat"; firstId: string; secondId: string }
   | { topic: "buildings"; stat: "height"; firstId: string; secondId: string }
   | { topic: "sharks"; stat: "length" | "speed" | "power"; firstId: string; secondId: string }
-  | { topic: "space"; stat: "temp" | "radius" | "distance" | "moons"; firstId: string; secondId: string };
+  | { topic: "space"; stat: "temp" | "radius" | "distance" | "moons"; firstId: string; secondId: string }
+  | { topic: "jets"; stat: "speed" | "range" | "firepower"; firstId: string; secondId: string };
 
 const curatedHeadToHeads: HeadToHeadSpec[] = [
   { topic: "peppers", stat: "heat", firstId: "trinidad-scorpion", secondId: "pepper-x" },
@@ -389,6 +456,11 @@ const curatedHeadToHeads: HeadToHeadSpec[] = [
   { topic: "space", stat: "distance", firstId: "neptune", secondId: "mars" },
   { topic: "space", stat: "temp", firstId: "rigel", secondId: "betelgeuse" },
   { topic: "space", stat: "radius", firstId: "betelgeuse", secondId: "sirius" },
+  { topic: "jets", stat: "speed", firstId: "sr-71-blackbird", secondId: "f-22-raptor" },
+  { topic: "jets", stat: "range", firstId: "b-52-stratofortress", secondId: "f-35-lightning-ii" },
+  { topic: "jets", stat: "firepower", firstId: "f-15-eagle", secondId: "l-39-albatros" },
+  { topic: "jets", stat: "speed", firstId: "mig-31", secondId: "a-10-thunderbolt-ii" },
+  { topic: "jets", stat: "range", firstId: "u-2", secondId: "f-16-fighting-falcon" },
 ];
 
 const findById = <T extends { id: string }>(items: T[], id: string) => items.find((item) => item.id === id);
@@ -410,6 +482,12 @@ const headToHeadQuestionFromSpec = (spec: HeadToHeadSpec, seed: number): Questio
     const first = findById(sharks, spec.firstId);
     const second = findById(sharks, spec.secondId);
     return first && second ? sharkComparisonQuestion(seed, first, second, spec.stat) : null;
+  }
+
+  if (spec.topic === "jets") {
+    const first = findById(jets, spec.firstId);
+    const second = findById(jets, spec.secondId);
+    return first && second ? jetComparisonQuestion(seed, first, second, spec.stat) : null;
   }
 
   const first = findById(spaceCards, spec.firstId);
@@ -436,6 +514,14 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
     const first = sample(sharks, seed + 6);
     const second = sample(sharks.filter((item) => item.id !== first.id), seed + 7);
     return sharkComparisonQuestion(seed, first, second, stat);
+  }
+
+  if (topic === "jets") {
+    const stats: ("speed" | "range" | "firepower")[] = difficulty === 1 ? ["speed", "range"] : ["speed", "range", "firepower"];
+    const stat = sample(stats, seed + 5);
+    const first = sample(jets, seed + 6);
+    const second = sample(jets.filter((item) => item.id !== first.id), seed + 7);
+    return jetComparisonQuestion(seed, first, second, stat);
   }
 
   const stats: ("temp" | "radius" | "distance" | "moons")[] = difficulty === 1 ? ["radius", "distance", "temp"] : ["temp", "radius", "distance", "moons"];
@@ -709,6 +795,129 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
   };
 };
 
+const jetNameDistractors = (jet: Jet, difficulty: Difficulty, seed: number) => {
+  const count = choiceCountForDifficulty(difficulty) - 1;
+  const closePool = jets.filter((item) => item.id !== jet.id && (item.category === jet.category || item.country === jet.country));
+  const fallbackPool = jets.filter((item) => item.id !== jet.id);
+  return shuffle(closePool.length >= count ? closePool : fallbackPool, seed).slice(0, count).map((item) => item.name);
+};
+
+const jetReadingOptions = (jet: Jet, seed: number, count: number) => {
+  const category = jetCategoryLabels[jet.category];
+  const wrongCategory = sample(jets.filter((item) => item.category !== jet.category), seed + 1);
+  const wrongCountry = sample(jets.filter((item) => item.country !== jet.country), seed + 2);
+  const wrongSpeed = sample(jets.filter((item) => Math.abs(item.maxSpeedMph - jet.maxSpeedMph) >= 250), seed + 3);
+  const wrongRange = sample(jets.filter((item) => Math.abs(item.rangeMiles - jet.rangeMiles) >= 800), seed + 4);
+  const correctOptions = [
+    `${jet.name} is a ${category} aircraft`,
+    `${jet.name} is from ${jet.country}`,
+    `${jet.name} reaches about ${formatNumber(jet.maxSpeedMph)} mph`,
+    `${jet.name} has about ${formatNumber(jet.rangeMiles)} miles of range`,
+  ];
+  const correct = sample(correctOptions, seed + 5);
+  const distractors = [
+    `${jet.name} is a ${jetCategoryLabels[wrongCategory.category]} aircraft`,
+    `${jet.name} is from ${wrongCountry.country}`,
+    `${jet.name} reaches about ${formatNumber(wrongSpeed.maxSpeedMph)} mph`,
+    `${jet.name} has about ${formatNumber(wrongRange.rangeMiles)} miles of range`,
+  ].filter((option) => option !== correct);
+
+  return {
+    answer: correct,
+    choices: shuffle([correct, ...shuffle(Array.from(new Set(distractors)), seed + 6).slice(0, count - 1)], seed + 7),
+  };
+};
+
+const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
+  const jet = sample(jets, seed);
+  const kinds: QuestionKind[] = difficulty === 1
+    ? ["jet-name", "jet-category", "jet-faster", "jet-reading"]
+    : difficulty === 2
+      ? ["jet-name", "jet-category", "jet-faster", "jet-range", "jet-firepower", "jet-difference"]
+      : ["jet-faster", "jet-range", "jet-firepower", "jet-difference", "jet-category"];
+  const kind = sample(kinds, seed + 53);
+
+  if (kind === "jet-name") {
+    const options = jetNameDistractors(jet, difficulty, seed + 54);
+    return {
+      id: `${seed}-jet-name-${jet.id}`,
+      topic: "jets",
+      kind,
+      prompt: "Which jet is this?",
+      image: jet.image,
+      imageAlt: jet.name,
+      imageCredit: jet.imageCredit,
+      choices: shuffle([jet.name, ...options], seed + 55),
+      answer: jet.name,
+      explanation: `That is the ${jet.name}. ${jet.fact}`,
+      numberLine: { label: "Speed", value: jet.maxSpeedMph, max: maxJetSpeed, unit: "mph" },
+    };
+  }
+
+  if (kind === "jet-category") {
+    const categories = Array.from(new Set(jets.map((item) => jetCategoryLabels[item.category])));
+    const correct = jetCategoryLabels[jet.category];
+    const options = shuffle(categories.filter((category) => category !== correct), seed + 56).slice(0, choiceCountForDifficulty(difficulty) - 1);
+    return {
+      id: `${seed}-jet-category-${jet.id}`,
+      topic: "jets",
+      kind,
+      prompt: `What mission category fits ${jet.name}?`,
+      image: jet.image,
+      imageAlt: jet.name,
+      imageCredit: jet.imageCredit,
+      choices: shuffle([correct, ...options], seed + 57),
+      answer: correct,
+      explanation: `${jet.name} is a ${correct} aircraft from ${jet.country}. ${jet.fact}`,
+    };
+  }
+
+  if (kind === "jet-faster" || kind === "jet-range" || kind === "jet-firepower") {
+    const challenger = sample(jets.filter((item) => item.id !== jet.id), seed + 58);
+    const stat = kind === "jet-faster" ? "speed" : kind === "jet-range" ? "range" : "firepower";
+    return jetComparisonQuestion(seed, jet, challenger, stat);
+  }
+
+  if (kind === "jet-difference") {
+    const challenger = sample(jets.filter((item) => item.id !== jet.id && item.maxSpeedMph !== jet.maxSpeedMph), seed + 59);
+    const faster = jet.maxSpeedMph > challenger.maxSpeedMph ? jet : challenger;
+    const slower = jet.maxSpeedMph > challenger.maxSpeedMph ? challenger : jet;
+    const diff = faster.maxSpeedMph - slower.maxSpeedMph;
+    const correct = `${formatNumber(diff)} mph`;
+    const choices = shuffle([correct, `${formatNumber(diff + 100)} mph`, `${formatNumber(Math.max(50, diff - 100))} mph`, `${formatNumber(diff + 250)} mph`], seed + 60).slice(0, choiceCountForDifficulty(difficulty));
+    const cards = shuffle([jetCard(faster, "A", "speed"), jetCard(slower, "B", "speed")], seed + 61);
+    return {
+      id: `${seed}-jet-difference-${faster.id}-${slower.id}`,
+      topic: "jets",
+      kind,
+      prompt: `${faster.name} can reach ${formatNumber(faster.maxSpeedMph)} mph. ${slower.name} can reach ${formatNumber(slower.maxSpeedMph)} mph. How much faster is ${faster.name}?`,
+      image: faster.image,
+      imageAlt: faster.name,
+      imageCredit: faster.imageCredit,
+      comparison: cards,
+      choices: choices.includes(correct) ? choices : [correct, ...choices.slice(1)],
+      answer: correct,
+      explanation: `${formatNumber(faster.maxSpeedMph)} - ${formatNumber(slower.maxSpeedMph)} = ${formatNumber(diff)}. So ${faster.name} is ${formatNumber(diff)} mph faster.`,
+      numberLine: { label: "Difference", value: diff, max: maxJetSpeed, unit: "mph" },
+    };
+  }
+
+  const reading = jetReadingOptions(jet, seed + 62, choiceCountForDifficulty(difficulty));
+  return {
+    id: `${seed}-jet-reading-${jet.id}`,
+    topic: "jets",
+    kind: "jet-reading",
+    prompt: "What is true?",
+    readingClue: `${jet.name}: ${jetCategoryLabels[jet.category]} aircraft, ${jet.country}, ${formatNumber(jet.maxSpeedMph)} mph, ${formatNumber(jet.rangeMiles)} mi range.`,
+    image: jet.image,
+    imageAlt: jet.name,
+    imageCredit: jet.imageCredit,
+    choices: reading.choices,
+    answer: reading.answer,
+    explanation: `${jet.name}: ${jet.fact}`,
+  };
+};
+
 const spaceQuestion = (seed: number, difficulty: Difficulty): Question => {
   const item = sample(spaceCards, seed);
   const kinds: QuestionKind[] = difficulty === 1
@@ -839,7 +1048,7 @@ export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionS
   while (questions.length < sessionLength && attempt < 160) {
     const currentTopic = topicOrder[(questions.length + attempt) % topicOrder.length];
     const seed = sessionSeed + attempt * 17 + questions.length * 31;
-    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : spaceQuestion(seed, difficulty);
+    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty);
     if (!seenIds.includes(question.id) && !questions.some((item) => item.id === question.id)) {
       questions.push(question);
     }
@@ -849,7 +1058,7 @@ export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionS
   while (questions.length < sessionLength) {
     const seed = sessionSeed + questions.length * 101 + attempt;
     const currentTopic = topicOrder[questions.length % topicOrder.length];
-    questions.push(currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : spaceQuestion(seed, difficulty));
+    questions.push(currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty));
   }
 
   return questions;

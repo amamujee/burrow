@@ -1,6 +1,6 @@
 import { contentLibraryStats } from "./content-library";
 
-export type TopicId = "peppers" | "buildings" | "sharks" | "space" | "mixed";
+export type TopicId = "peppers" | "buildings" | "sharks" | "space" | "jets" | "mixed";
 export type KnowledgeTopic = Exclude<TopicId, "mixed">;
 export type Difficulty = 1 | 2 | 3;
 export type HeatBand = "not spicy" | "mild" | "warm" | "hot" | "very hot" | "insane";
@@ -92,6 +92,25 @@ export type SpaceCard = {
   fact: string;
   conceptQuestion?: string;
   conceptAnswer?: string;
+};
+
+export type JetCategory = "stealth" | "dogfighter" | "multirole" | "bomber" | "recon" | "attack" | "interceptor" | "trainer";
+
+export type Jet = {
+  id: string;
+  name: string;
+  country: string;
+  category: JetCategory;
+  maxSpeedMph: number;
+  rangeMiles: number;
+  firepower: number;
+  image: string;
+  imageSourceFile: string;
+  imageSourceUrl: string;
+  imageCredit: string;
+  imageFit?: VisualFit;
+  imagePosition?: string;
+  fact: string;
 };
 
 export type TopicPack = {
@@ -349,6 +368,86 @@ const pepperSeeds: PepperSeed[] = [
     imageCredit: "Eric in SF, Wikimedia Commons",
     fact: "Pepper X is known for an extremely high Scoville score.",
   },
+  {
+    id: "shishito",
+    name: "Shishito",
+    shuMin: 50,
+    shuMax: 200,
+    color: "green",
+    ...contentImage("peppers", "shishito", "Shishito Peppers.jpg"),
+    imageCredit: "orchidgalore, Wikimedia Commons",
+    fact: "Shishito peppers are usually very mild, but an occasional pepper can surprise you.",
+  },
+  {
+    id: "padron",
+    name: "Padron",
+    shuMin: 500,
+    shuMax: 2500,
+    color: "green",
+    ...contentImage("peppers", "padron", "Padrón peppers.jpg"),
+    imageCredit: "Flickr.Whisker, Wikimedia Commons",
+    fact: "Padron peppers are often mild, but some have a sudden spicy bite.",
+  },
+  {
+    id: "ancho",
+    name: "Ancho",
+    shuMin: 1000,
+    shuMax: 2000,
+    color: "dark red",
+    ...contentImage("peppers", "ancho", "Chile Ancho seco.JPG"),
+    imageCredit: "Diogenes el Filosofo, Wikimedia Commons",
+    fact: "Ancho chiles are dried poblanos with gentle heat and a deep, sweet flavor.",
+  },
+  {
+    id: "guajillo",
+    name: "Guajillo",
+    shuMin: 2500,
+    shuMax: 5000,
+    color: "red",
+    ...contentImage("peppers", "guajillo", "Chile Guajillo (5200438953).jpg"),
+    imageCredit: "Leslie Seaton, Wikimedia Commons",
+    fact: "Guajillo chiles are dried red peppers used in many Mexican sauces.",
+  },
+  {
+    id: "chile-de-arbol",
+    name: "Chile de Arbol",
+    shuMin: 15000,
+    shuMax: 30000,
+    color: "red",
+    ...contentImage("peppers", "chile-de-arbol", "Mature Chile de arbol peppers.jpg"),
+    imageCredit: "Yair Geva, Wikimedia Commons",
+    fact: "Chile de arbol peppers are thin, red, and often dried for spicy salsas.",
+  },
+  {
+    id: "aji-amarillo",
+    name: "Aji Amarillo",
+    shuMin: 30000,
+    shuMax: 50000,
+    color: "orange",
+    ...contentImage("peppers", "aji-amarillo", "Aji Amarillo pepper.jpg"),
+    imageCredit: "Luis Tamayo, Wikimedia Commons",
+    fact: "Aji amarillo is a bright orange pepper important in Peruvian cooking.",
+  },
+  {
+    id: "rocoto",
+    name: "Rocoto",
+    shuMin: 30000,
+    shuMax: 100000,
+    color: "red",
+    ...contentImage("peppers", "rocoto", "Rocoto.jpg"),
+    imageCredit: "Sebastian Aguilar, Wikimedia Commons",
+    fact: "Rocoto peppers can look round like small apples and have black seeds.",
+  },
+  {
+    id: "chiltepin",
+    name: "Chiltepin",
+    shuMin: 50000,
+    shuMax: 100000,
+    color: "red",
+    ...contentImage("peppers", "chiltepin", "Capsicum annuum Chiltepin 1zz.jpg"),
+    imageCredit: "David J. Stang, Wikimedia Commons",
+    fact: "Chiltepin is a tiny wild chile with a quick, sharp heat.",
+  },
 ];
 
 export const peppers = pepperSeeds.map((pepper) => ({
@@ -599,6 +698,90 @@ export const buildings: Building[] = [
     imageCredit: "Wikimedia Commons",
     fact: "Jeddah Tower is planned to be more than 3,000 feet tall when finished.",
   },
+  {
+    id: "wuhan-greenland-center",
+    name: "Wuhan Greenland Center",
+    city: "Wuhan",
+    country: "China",
+    heightFt: 1560,
+    floors: 101,
+    status: "finished",
+    ...contentImage("buildings", "wuhan-greenland-center", "Wuhan Greenland Center.jpg"),
+    imageCredit: "Aangkianghai, Wikimedia Commons",
+    fact: "Wuhan Greenland Center was redesigned shorter than first planned but still rises over 1,500 feet.",
+  },
+  {
+    id: "111-west-57th",
+    name: "111 West 57th Street",
+    city: "New York City",
+    country: "United States",
+    heightFt: 1428,
+    floors: 84,
+    status: "finished",
+    ...contentImage("buildings", "111-west-57th", "111 West 57th Street.jpg"),
+    imageCredit: "Kidfly182, Wikimedia Commons",
+    fact: "111 West 57th Street is a very slender residential tower beside historic Steinway Hall.",
+  },
+  {
+    id: "one-vanderbilt",
+    name: "One Vanderbilt",
+    city: "New York City",
+    country: "United States",
+    heightFt: 1401,
+    floors: 73,
+    status: "finished",
+    ...contentImage("buildings", "one-vanderbilt", "One Vanderbilt.jpg"),
+    imageCredit: "Kidfly182, Wikimedia Commons",
+    fact: "One Vanderbilt stands next to Grand Central Terminal in Midtown Manhattan.",
+  },
+  {
+    id: "jin-mao",
+    name: "Jin Mao Tower",
+    city: "Shanghai",
+    country: "China",
+    heightFt: 1380,
+    floors: 88,
+    status: "finished",
+    ...contentImage("buildings", "jin-mao", "Jin Mao Tower.JPG"),
+    imageCredit: "Christof Berger, Wikimedia Commons",
+    fact: "Jin Mao Tower uses tiered shapes inspired by traditional Chinese architecture.",
+  },
+  {
+    id: "princess-tower",
+    name: "Princess Tower",
+    city: "Dubai",
+    country: "United Arab Emirates",
+    heightFt: 1356,
+    floors: 101,
+    status: "finished",
+    ...contentImage("buildings", "princess-tower", "Dubai Marina (8973482466).jpg"),
+    imageCredit: "Fabio Achilli, Wikimedia Commons",
+    fact: "Princess Tower is a very tall residential skyscraper in Dubai Marina.",
+  },
+  {
+    id: "empire-state",
+    name: "Empire State Building",
+    city: "New York City",
+    country: "United States",
+    heightFt: 1250,
+    floors: 102,
+    status: "finished",
+    ...contentImage("buildings", "empire-state", "Empire State Building.png"),
+    imageCredit: "NegweS, Wikimedia Commons",
+    fact: "The Empire State Building was the world's tallest building for decades after opening in 1931.",
+  },
+  {
+    id: "bank-of-china",
+    name: "Bank of China Tower",
+    city: "Hong Kong",
+    country: "China",
+    heightFt: 1205,
+    floors: 72,
+    status: "finished",
+    ...contentImage("buildings", "bank-of-china", "Bank of China Tower (Hong Kong).jpg"),
+    imageCredit: "Mk2010, Wikimedia Commons",
+    fact: "Bank of China Tower was designed by I. M. Pei and has sharp triangular shapes.",
+  },
 ];
 
 export const sharks: Shark[] = [
@@ -818,6 +1001,90 @@ export const sharks: Shark[] = [
     imageCredit: "Wikimedia Commons",
     fact: "Cookiecutter sharks take round cookie-shaped bites.",
   },
+  {
+    id: "sand-tiger",
+    name: "Sand Tiger Shark",
+    family: "Sand tiger shark",
+    lengthFt: 10,
+    speedMph: 12,
+    power: 3,
+    diet: "fish, squid, small sharks",
+    ...contentImage("sharks", "sand-tiger", "Sand Tiger Shark.jpg"),
+    imageCredit: "Maniacduhockey, Wikimedia Commons",
+    fact: "Sand tiger sharks look toothy and fierce, but they are slow coastal hunters.",
+  },
+  {
+    id: "oceanic-whitetip",
+    name: "Oceanic Whitetip Shark",
+    family: "Requiem shark",
+    lengthFt: 13,
+    speedMph: 20,
+    power: 4,
+    diet: "fish, squid, seabirds",
+    ...contentImage("sharks", "oceanic-whitetip", "Oceanic Whitetip Shark (cropped).jpg"),
+    imageCredit: "Johanlantz, Wikimedia Commons",
+    fact: "Oceanic whitetips cruise warm open oceans and have rounded white-tipped fins.",
+  },
+  {
+    id: "scalloped-hammerhead",
+    name: "Scalloped Hammerhead",
+    family: "Hammerhead shark",
+    lengthFt: 14,
+    speedMph: 25,
+    power: 4,
+    diet: "fish, squid, rays",
+    ...contentImage("sharks", "scalloped-hammerhead", "Scalloped Hammerheads.jpg"),
+    imageCredit: "Stealthwater, Wikimedia Commons",
+    fact: "Scalloped hammerheads can gather in large schools around seamounts and islands.",
+  },
+  {
+    id: "frilled-shark",
+    name: "Frilled Shark",
+    family: "Frilled shark",
+    lengthFt: 7,
+    speedMph: 3,
+    power: 2,
+    diet: "squid, fish",
+    ...contentImage("sharks", "frilled-shark", "Frilled shark.jpg"),
+    imageCredit: "Edwin Ray Lankester, Wikimedia Commons",
+    fact: "Frilled sharks are deep-water sharks with an eel-like body and frilly gill slits.",
+  },
+  {
+    id: "megamouth",
+    name: "Megamouth Shark",
+    family: "Megamouth shark",
+    lengthFt: 18,
+    speedMph: 2,
+    power: 1,
+    diet: "plankton, krill",
+    ...contentImage("sharks", "megamouth", "Megamouthshark.jpg"),
+    imageCredit: "Maffeth Opiana, Wikimedia Commons",
+    fact: "Megamouth sharks are rare filter-feeders with huge mouths.",
+  },
+  {
+    id: "megalodon",
+    name: "Megalodon",
+    family: "Extinct megatooth shark",
+    lengthFt: 65,
+    speedMph: 20,
+    power: 5,
+    diet: "whales, large sea animals",
+    ...contentImage("sharks", "megalodon", "Megalodon reconstruction.jpg"),
+    imageCredit: "crudmucosa, Wikimedia Commons",
+    fact: "Megalodon was an extinct giant shark known mostly from fossil teeth.",
+  },
+  {
+    id: "dunkleosteus",
+    name: "Dunkleosteus",
+    family: "Armored placoderm",
+    lengthFt: 13,
+    speedMph: 10,
+    power: 5,
+    diet: "fish and other sea animals",
+    ...contentImage("sharks", "dunkleosteus", "Dunkleosteus skull QM email.jpg"),
+    imageCredit: "Wikimedia Commons",
+    fact: "Dunkleosteus was not a shark; it was an armored Devonian fish and early apex predator.",
+  },
 ];
 
 export const spaceCards: SpaceCard[] = [
@@ -983,7 +1250,60 @@ export const spaceCards: SpaceCard[] = [
   },
 ];
 
-export const topicIds = ["peppers", "buildings", "sharks", "space"] as const satisfies readonly KnowledgeTopic[];
+export const jets: Jet[] = [
+  { id: "f-35-lightning-ii", name: "F-35 Lightning II", country: "United States", category: "stealth", maxSpeedMph: 1200, rangeMiles: 1380, firepower: 5, ...contentImage("jets", "f-35-lightning-ii", "F-35A flight (cropped).jpg"), imageCredit: "U.S. Air Force/Wikimedia Commons", fact: "The F-35 is a stealth multirole fighter with sensors that help it spot threats before they spot it." },
+  { id: "f-22-raptor", name: "F-22 Raptor", country: "United States", category: "stealth", maxSpeedMph: 1500, rangeMiles: 1840, firepower: 5, ...contentImage("jets", "f-22-raptor", "F-22 Raptor edit1 (cropped).jpg"), imageCredit: "U.S. Air Force/Wikimedia Commons", fact: "The F-22 was built for air superiority: stealth, supercruise speed, and extreme agility." },
+  { id: "su-57", name: "Sukhoi Su-57", country: "Russia", category: "stealth", maxSpeedMph: 1320, rangeMiles: 2200, firepower: 5, ...contentImage("jets", "su-57", "Sukhoi Design Bureau, 054, Sukhoi T-50 (Su-57 prototype) (49581303977).jpg"), imageCredit: "Dmitry Terekhov/Wikimedia Commons", fact: "The Su-57 is Russia's stealth fighter design, mixing internal weapons bays with high maneuverability." },
+  { id: "j-20", name: "Chengdu J-20", country: "China", category: "stealth", maxSpeedMph: 1300, rangeMiles: 2100, firepower: 5, ...contentImage("jets", "j-20", "J-20 at CCAS2022 (20220827103424).jpg"), imageCredit: "N509FZ/Wikimedia Commons", fact: "The J-20 is a large stealth fighter designed for long-range missions and beyond-visual-range combat." },
+  { id: "b-2-spirit", name: "B-2 Spirit", country: "United States", category: "bomber", maxSpeedMph: 630, rangeMiles: 6900, firepower: 5, ...contentImage("jets", "b-2-spirit", "RAF F-35B integration flying training with USAF B-2 30092019 - 4.jpg"), imageCredit: "Royal Air Force/Wikimedia Commons", imagePosition: "center 40%", fact: "The B-2 is a stealth bomber with a flying-wing shape and intercontinental range." },
+  { id: "b-21-raider", name: "B-21 Raider", country: "United States", category: "bomber", maxSpeedMph: 620, rangeMiles: 6000, firepower: 5, ...contentImage("jets", "b-21-raider", "B-21-in-flight.jpg"), imageCredit: "U.S. Air Force/Wikimedia Commons", fact: "The B-21 Raider is a newer stealth bomber designed to fly deep into defended airspace." },
+  { id: "f-117-nighthawk", name: "F-117 Nighthawk", country: "United States", category: "stealth", maxSpeedMph: 684, rangeMiles: 1070, firepower: 3, ...contentImage("jets", "f-117-nighthawk", "F-117 Nighthawk Front.jpg"), imageCredit: "U.S. Air Force/Wikimedia Commons", fact: "The F-117 was an early operational stealth attack jet with sharp radar-deflecting angles." },
+  { id: "sr-71-blackbird", name: "SR-71 Blackbird", country: "United States", category: "recon", maxSpeedMph: 2200, rangeMiles: 3200, firepower: 1, ...contentImage("jets", "sr-71-blackbird", "Lockheed SR-71 Blackbird.jpg"), imageCredit: "NASA/Wikimedia Commons", fact: "The SR-71 was a spy plane so fast it could outrun many threats instead of fighting them." },
+  { id: "u-2", name: "Lockheed U-2", country: "United States", category: "recon", maxSpeedMph: 500, rangeMiles: 7000, firepower: 1, ...contentImage("jets", "u-2", "Usaf.u2.750pix.jpg"), imageCredit: "U.S. Air Force/Wikimedia Commons", fact: "The U-2 is a high-altitude reconnaissance jet that can fly above 70,000 feet." },
+  { id: "f-15-eagle", name: "F-15 Eagle", country: "United States", category: "dogfighter", maxSpeedMph: 1650, rangeMiles: 3000, firepower: 5, ...contentImage("jets", "f-15-eagle", "F-15C Eagle from the 44th Fighter Squadron flies during a routine training exercise April 15, 2019.jpg"), imageCredit: "U.S. Air Force/Wikimedia Commons", fact: "The F-15 Eagle is a powerful air-superiority fighter famous for speed, climb, and missile load." },
+  { id: "f-a-18-hornet", name: "F/A-18 Hornet", country: "United States", category: "multirole", maxSpeedMph: 1190, rangeMiles: 1250, firepower: 4, ...contentImage("jets", "f-a-18-hornet", "FA-18C desert refueling.jpg"), imageCredit: "U.S. Navy/Wikimedia Commons", fact: "The Hornet can fly from carriers and switch between fighter and attack missions." },
+  { id: "f-a-18-super-hornet", name: "F/A-18E/F Super Hornet", country: "United States", category: "multirole", maxSpeedMph: 1190, rangeMiles: 1460, firepower: 4, ...contentImage("jets", "f-a-18-super-hornet", "US Navy 071203-N-8923M-074 An F-A-18F Super Hornet, from the Red Rippers of Strike Fighter Squadron (VFA) 11, makes a sharp turn above the flight deck aboard the Nimitz-class nuclear-powered aircraft carrier USS Harry S. Truman.jpg"), imageCredit: "U.S. Navy/Wikimedia Commons", fact: "The Super Hornet is a bigger carrier fighter than the original Hornet and can carry a wide mix of weapons." },
+  { id: "f-16-fighting-falcon", name: "F-16 Fighting Falcon", country: "United States", category: "multirole", maxSpeedMph: 1320, rangeMiles: 2620, firepower: 4, ...contentImage("jets", "f-16-fighting-falcon", "F-16 June 2008.jpg"), imageCredit: "U.S. Air Force/Wikimedia Commons", fact: "The F-16 is a lightweight fighter with a bubble canopy and excellent turning performance." },
+  { id: "f-14-tomcat", name: "F-14 Tomcat", country: "United States", category: "interceptor", maxSpeedMph: 1544, rangeMiles: 1840, firepower: 5, ...contentImage("jets", "f-14-tomcat", "US Navy 051105-F-5480T-005 An F-14D Tomcat conducts a mission over the Persian Gulf-region.jpg"), imageCredit: "U.S. Navy/Wikimedia Commons", fact: "The F-14 used swing wings and long-range missiles to defend aircraft carriers." },
+  { id: "a-10-thunderbolt-ii", name: "A-10 Thunderbolt II", country: "United States", category: "attack", maxSpeedMph: 420, rangeMiles: 2580, firepower: 4, ...contentImage("jets", "a-10-thunderbolt-ii", "Fairchild Republic A-10 Thunderbolt II - 32156159151.jpg"), imageCredit: "Alan Wilson/Wikimedia Commons", fact: "The A-10 is built around a huge 30 mm cannon for close air support." },
+  { id: "rafale", name: "Dassault Rafale", country: "France", category: "multirole", maxSpeedMph: 1190, rangeMiles: 2300, firepower: 5, ...contentImage("jets", "rafale", "Rafale - RIAT 2009 (3751416421).jpg"), imageCredit: "Tim Felce/Wikimedia Commons", fact: "The Rafale is a French multirole fighter used for air combat, strike, and carrier missions." },
+  { id: "eurofighter-typhoon", name: "Eurofighter Typhoon", country: "United Kingdom/Germany/Italy/Spain", category: "dogfighter", maxSpeedMph: 1550, rangeMiles: 1800, firepower: 5, ...contentImage("jets", "eurofighter-typhoon", "RAF Eurofighter EF-2000 Typhoon F2 Lofting-1.jpg"), imageCredit: "Kogo/Wikimedia Commons", fact: "The Typhoon is a fast delta-canard fighter known for sharp air-to-air performance." },
+  { id: "jas-39-gripen", name: "Saab JAS 39 Gripen", country: "Sweden", category: "multirole", maxSpeedMph: 1530, rangeMiles: 2000, firepower: 4, ...contentImage("jets", "jas-39-gripen", "Saab JAS 39 Gripen at Kaivopuisto Air Show, June 2017 (altered) copy.jpg"), imageCredit: "Jakub Halun/Wikimedia Commons", fact: "The Gripen is designed to operate from short roads and be maintained quickly between missions." },
+  { id: "mig-29", name: "Mikoyan MiG-29", country: "Russia", category: "dogfighter", maxSpeedMph: 1520, rangeMiles: 890, firepower: 4, ...contentImage("jets", "mig-29", "VVS 100th IMG 0691 (7727464290) (cropped).jpg"), imageCredit: "Dmitry Terekhov/Wikimedia Commons", fact: "The MiG-29 is a nimble fighter built for short-range air combat and quick interception." },
+  { id: "su-27", name: "Sukhoi Su-27", country: "Russia", category: "dogfighter", maxSpeedMph: 1550, rangeMiles: 2200, firepower: 5, ...contentImage("jets", "su-27", "Sukhoi Su-27SKM at MAKS-2005 airshow.jpg"), imageCredit: "Alex Beltyukov/Wikimedia Commons", fact: "The Su-27 is a large, agile fighter that inspired many later Flanker-family jets." },
+  { id: "su-35", name: "Sukhoi Su-35", country: "Russia", category: "dogfighter", maxSpeedMph: 1490, rangeMiles: 2200, firepower: 5, ...contentImage("jets", "su-35", "Russian Air Force, RF-81719, Sukhoi Su-35S (49581740157).jpg"), imageCredit: "Dmitry Terekhov/Wikimedia Commons", fact: "The Su-35 adds thrust-vectoring engines and modern sensors to the Flanker family." },
+  { id: "su-34", name: "Sukhoi Su-34", country: "Russia", category: "attack", maxSpeedMph: 1180, rangeMiles: 2500, firepower: 5, ...contentImage("jets", "su-34", "MAKS2015part1-10 (cropped).jpg"), imageCredit: "Alex Beltyukov/Wikimedia Commons", fact: "The Su-34 is a strike aircraft with side-by-side seats and long-range attack capability." },
+  { id: "mig-31", name: "Mikoyan MiG-31", country: "Russia", category: "interceptor", maxSpeedMph: 1860, rangeMiles: 1900, firepower: 5, ...contentImage("jets", "mig-31", "Russian Air Force Mikoyan-Gurevich MiG-31P.jpg"), imageCredit: "Dmitry Pichugin/Wikimedia Commons", fact: "The MiG-31 is a very fast interceptor built to cover huge distances quickly." },
+  { id: "tu-160", name: "Tupolev Tu-160", country: "Russia", category: "bomber", maxSpeedMph: 1379, rangeMiles: 7600, firepower: 5, ...contentImage("jets", "tu-160", "Tupolev Tu-160 RF-94109.jpg"), imageCredit: "Dmitry Terekhov/Wikimedia Commons", fact: "The Tu-160 is a supersonic strategic bomber with swing wings and enormous range." },
+  { id: "tu-22m", name: "Tupolev Tu-22M", country: "Russia", category: "bomber", maxSpeedMph: 1240, rangeMiles: 3100, firepower: 5, ...contentImage("jets", "tu-22m", "Tupolev Tu-22M3M GEFEST (19230388334).jpg"), imageCredit: "Dmitry Terekhov/Wikimedia Commons", fact: "The Tu-22M is a fast bomber designed for long-range strike missions." },
+  { id: "b-1-lancer", name: "B-1 Lancer", country: "United States", category: "bomber", maxSpeedMph: 830, rangeMiles: 5900, firepower: 5, ...contentImage("jets", "b-1-lancer", "B-1B air refueling.jpg"), imageCredit: "U.S. Air Force/Wikimedia Commons", fact: "The B-1 Lancer is a swing-wing bomber that can carry a very large conventional payload." },
+  { id: "b-52-stratofortress", name: "B-52 Stratofortress", country: "United States", category: "bomber", maxSpeedMph: 650, rangeMiles: 8800, firepower: 5, ...contentImage("jets", "b-52-stratofortress", "B-52 Stratofortress assigned to the 307th Bomb Wing (cropped).jpg"), imageCredit: "U.S. Air Force/Wikimedia Commons", fact: "The B-52 has served for decades because it can fly far and carry a heavy weapons load." },
+  { id: "mirage-2000", name: "Dassault Mirage 2000", country: "France", category: "multirole", maxSpeedMph: 1450, rangeMiles: 960, firepower: 4, ...contentImage("jets", "mirage-2000", "Mirage 2000C in-flight 2 (cropped).jpg"), imageCredit: "French Air and Space Force/Wikimedia Commons", fact: "The Mirage 2000 is a delta-wing fighter known for speed and clean, sharp handling." },
+  { id: "mirage-f1", name: "Dassault Mirage F1", country: "France", category: "interceptor", maxSpeedMph: 1450, rangeMiles: 2050, firepower: 4, ...contentImage("jets", "mirage-f1", "Mirage F1C (26701300084).jpg"), imageCredit: "Rob Schleiffert/Wikimedia Commons", fact: "The Mirage F1 used a swept wing instead of the Mirage 2000's delta wing and served with many air forces." },
+  { id: "sepecat-jaguar", name: "SEPECAT Jaguar", country: "United Kingdom/France", category: "attack", maxSpeedMph: 1050, rangeMiles: 2190, firepower: 4, ...contentImage("jets", "sepecat-jaguar", "French Jaguar A of EC 1-7 Provence in flight over the Adriatic Sea, 8 April 2003 (DF-SD-05-05511).jpg"), imageCredit: "U.S. Navy/Wikimedia Commons", fact: "The Jaguar was a low-level attack jet built by Britain and France." },
+  { id: "panavia-tornado", name: "Panavia Tornado", country: "United Kingdom/Germany/Italy", category: "attack", maxSpeedMph: 1490, rangeMiles: 2400, firepower: 5, ...contentImage("jets", "panavia-tornado", "RAF Tornado GR4 MOD 45155233.jpg"), imageCredit: "UK Ministry of Defence/Wikimedia Commons", fact: "The Tornado used swing wings for fast low-level strike missions." },
+  { id: "av-8b-harrier-ii", name: "AV-8B Harrier II", country: "United States/United Kingdom", category: "attack", maxSpeedMph: 673, rangeMiles: 1400, firepower: 4, ...contentImage("jets", "av-8b-harrier-ii", "Boeing AV-8B Harrier II, Italy - Navy JP7306232.jpg"), imageCredit: "Alan Wilson/Wikimedia Commons", fact: "The AV-8B Harrier II can take off from short decks and land vertically like a jump jet." },
+  { id: "hawker-harrier", name: "Hawker Siddeley Harrier", country: "United Kingdom", category: "attack", maxSpeedMph: 730, rangeMiles: 1150, firepower: 3, ...contentImage("jets", "hawker-harrier", "Hawker Siddeley Harrier (35066585575).jpg"), imageCredit: "Timo Newton-Syms/Wikimedia Commons", fact: "The original Harrier made vertical and short takeoff combat jets famous." },
+  { id: "l-39-albatros", name: "Aero L-39 Albatros", country: "Czechoslovakia", category: "trainer", maxSpeedMph: 470, rangeMiles: 680, firepower: 2, ...contentImage("jets", "l-39-albatros", "L-39ZA Albatros (cropped).jpg"), imageCredit: "Alan Wilson/Wikimedia Commons", fact: "The L-39 is a popular jet trainer that also has light attack versions." },
+  { id: "t-50-golden-eagle", name: "T-50 Golden Eagle", country: "South Korea", category: "trainer", maxSpeedMph: 1060, rangeMiles: 1150, firepower: 3, ...contentImage("jets", "t-50-golden-eagle", "Phillipine Air Force FA-50PH.jpg"), imageCredit: "Dmitry A. Mottl/Wikimedia Commons", fact: "The T-50 is a supersonic trainer, and its FA-50 version can fight as a light combat jet." },
+  { id: "yak-130", name: "Yakovlev Yak-130", country: "Russia", category: "trainer", maxSpeedMph: 660, rangeMiles: 1300, firepower: 3, ...contentImage("jets", "yak-130", "Yakovlev Yak-130.jpg"), imageCredit: "Adrian Pingstone/Wikimedia Commons", fact: "The Yak-130 trains pilots for modern fighters and can carry light attack weapons." },
+  { id: "hongdu-l-15", name: "Hongdu L-15", country: "China", category: "trainer", maxSpeedMph: 1050, rangeMiles: 1900, firepower: 3, ...contentImage("jets", "hongdu-l-15", "L15 (17810345710).jpg"), imageCredit: "Peng Chen/Wikimedia Commons", fact: "The Hongdu L-15 is an advanced jet trainer with a light combat role." },
+  { id: "j-10", name: "Chengdu J-10", country: "China", category: "multirole", maxSpeedMph: 1450, rangeMiles: 2000, firepower: 4, ...contentImage("jets", "j-10", "J-10B with PL-10 and PL-12.jpg"), imageCredit: "Alert5/Wikimedia Commons", fact: "The J-10 is a single-engine Chinese multirole fighter with a delta-canard layout." },
+  { id: "j-11", name: "Shenyang J-11", country: "China", category: "dogfighter", maxSpeedMph: 1550, rangeMiles: 2200, firepower: 4, ...contentImage("jets", "j-11", "Chinese-j-11.jpg"), imageCredit: "U.S. Navy/Wikimedia Commons", fact: "The J-11 is a Chinese Flanker-family fighter based on the Su-27 design." },
+  { id: "j-16", name: "Shenyang J-16", country: "China", category: "multirole", maxSpeedMph: 1550, rangeMiles: 2400, firepower: 5, ...contentImage("jets", "j-16", "PLAAF J-16 - 2.jpg"), imageCredit: "N509FZ/Wikimedia Commons", fact: "The J-16 is a two-seat multirole fighter built for air-to-air and strike missions." },
+  { id: "fc-31", name: "Shenyang FC-31", country: "China", category: "stealth", maxSpeedMph: 1360, rangeMiles: 1200, firepower: 4, ...contentImage("jets", "fc-31", "Shenyang J-31 (F60) at 2014 Zhuhai Air Show.jpg"), imageCredit: "N509FZ/Wikimedia Commons", fact: "The FC-31 is a Chinese stealth fighter prototype with twin engines and internal weapons bays." },
+  { id: "hal-tejas", name: "HAL Tejas", country: "India", category: "multirole", maxSpeedMph: 1220, rangeMiles: 1150, firepower: 4, ...contentImage("jets", "hal-tejas", "HAL Tejas (LA-5018) of Squadron 18 Flying Bullets.jpg"), imageCredit: "Indian Air Force/Wikimedia Commons", fact: "The Tejas is India's lightweight multirole fighter with a compact delta-wing design." },
+  { id: "mitsubishi-f-2", name: "Mitsubishi F-2", country: "Japan", category: "multirole", maxSpeedMph: 1320, rangeMiles: 2100, firepower: 4, ...contentImage("jets", "mitsubishi-f-2", "Mitsubishi F-2.jpg"), imageCredit: "Japan Air Self-Defense Force/Wikimedia Commons", fact: "The Mitsubishi F-2 is a Japanese fighter related to the F-16 but with a larger wing." },
+  { id: "f-15j", name: "Mitsubishi F-15J", country: "Japan", category: "interceptor", maxSpeedMph: 1650, rangeMiles: 3000, firepower: 5, ...contentImage("jets", "f-15j", "JASDF equipment F-15J (7).jpg"), imageCredit: "Japan Air Self-Defense Force/Wikimedia Commons", fact: "The F-15J is Japan's version of the Eagle, used for fast air defense missions." },
+  { id: "f-ck-1", name: "AIDC F-CK-1 Ching-kuo", country: "Taiwan", category: "multirole", maxSpeedMph: 790, rangeMiles: 680, firepower: 3, ...contentImage("jets", "f-ck-1", "AIDC F-CK-1 Ching-kuo (36754649465).jpg"), imageCredit: "ltdccba/Wikimedia Commons", fact: "The F-CK-1 Ching-kuo is a Taiwanese multirole fighter designed for island air defense." },
+  { id: "iai-kfir", name: "IAI Kfir", country: "Israel", category: "multirole", maxSpeedMph: 1520, rangeMiles: 800, firepower: 4, ...contentImage("jets", "iai-kfir", "Colombian Air Force Kfir (cropped).jpg"), imageCredit: "Alex Beltyukov/Wikimedia Commons", fact: "The Kfir is an Israeli fighter derived from Mirage-style delta-wing designs." },
+  { id: "f-5", name: "Northrop F-5", country: "United States", category: "dogfighter", maxSpeedMph: 1060, rangeMiles: 1540, firepower: 3, ...contentImage("jets", "f-5", "J-3005.jpg"), imageCredit: "Adrian Pingstone/Wikimedia Commons", fact: "The F-5 is a small, simple fighter used by many countries and often used for training opponents." },
+  { id: "f-4-phantom-ii", name: "F-4 Phantom II", country: "United States", category: "multirole", maxSpeedMph: 1470, rangeMiles: 1700, firepower: 5, ...contentImage("jets", "f-4-phantom-ii", "QF-4 Holloman AFB.jpg"), imageCredit: "U.S. Air Force/Wikimedia Commons", fact: "The F-4 Phantom II was a big twin-engine fighter used for interception, attack, and reconnaissance." },
+  { id: "english-electric-lightning", name: "English Electric Lightning", country: "United Kingdom", category: "interceptor", maxSpeedMph: 1500, rangeMiles: 850, firepower: 4, ...contentImage("jets", "english-electric-lightning", "English Electric Lightning F6, UK - Air Force AN2260192.jpg"), imageCredit: "Alan Wilson/Wikimedia Commons", fact: "The Lightning was a British interceptor famous for its incredible climb rate." },
+  { id: "mig-21", name: "MiG-21", country: "Soviet Union", category: "interceptor", maxSpeedMph: 1350, rangeMiles: 750, firepower: 3, ...contentImage("jets", "mig-21", "Croatian MiG-21 (cropped).jpg"), imageCredit: "Christian Volpati/Wikimedia Commons", fact: "The MiG-21 is one of the most-produced supersonic jet fighters in history." },
+];
+
+export const topicIds = ["peppers", "buildings", "sharks", "space", "jets"] as const satisfies readonly KnowledgeTopic[];
 
 export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
   peppers: {
@@ -993,7 +1313,10 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
     roundLabel: "Pepper round",
     libraryCount: contentLibraryStats.peppers,
     featuredCount: peppers.length,
-    sources: [{ label: "WikiPepper", url: "https://wikipepper.org/peppers" }],
+    sources: [
+      { label: "WikiPepper", url: "https://wikipepper.org/peppers" },
+      { label: "PepperScale chile guides", url: "https://pepperscale.com/" },
+    ],
     samples: ["7 Pot Primo", "Aji Amarillo", "Carolina Reaper", "Scotch Bonnet"],
   },
   buildings: {
@@ -1005,7 +1328,7 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
     featuredCount: buildings.length,
     sources: [
       { label: "Wikidata skyscraper records", url: "https://query.wikidata.org/" },
-      { label: "CTBUH criteria", url: "https://www.ctbuh.org/HighRiseInfo/TallestDatabase/Criteria/tabid/446/language/en-US/Default.aspx" },
+      { label: "The Skyscraper Center", url: "https://www.skyscrapercenter.com/" },
     ],
     samples: ["Burj Khalifa", "Merdeka 118", "Shanghai Tower", "One World Trade Center"],
   },
@@ -1016,8 +1339,12 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
     roundLabel: "Shark round",
     libraryCount: contentLibraryStats.sharks,
     featuredCount: sharks.length,
-    sources: [{ label: "Wikidata shark taxonomy", url: "https://query.wikidata.org/" }],
-    samples: ["Whale Shark", "Great White Shark", "Shortfin Mako", "Greenland Shark"],
+    sources: [
+      { label: "Wikidata shark taxonomy", url: "https://query.wikidata.org/" },
+      { label: "Florida Museum shark profiles", url: "https://www.floridamuseum.ufl.edu/discover-fish/sharks/" },
+      { label: "Britannica placoderm notes", url: "https://www.britannica.com/animal/placoderm" },
+    ],
+    samples: ["Whale Shark", "Great White Shark", "Megalodon", "Dunkleosteus"],
   },
   space: {
     id: "space",
@@ -1032,6 +1359,19 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
       { label: "NASA Space Place", url: "https://spaceplace.nasa.gov/" },
     ],
     samples: ["Venus", "Mars", "Stephenson 2-18", "Black Hole"],
+  },
+  jets: {
+    id: "jets",
+    label: "Jet Hangar",
+    eyebrow: `${contentLibraryStats.jets}+ aircraft`,
+    roundLabel: "Jet round",
+    libraryCount: contentLibraryStats.jets,
+    featuredCount: jets.length,
+    sources: [
+      { label: "Wikimedia aircraft media", url: "https://commons.wikimedia.org/wiki/Category:Military_aircraft" },
+      { label: "Wikidata aircraft records", url: "https://query.wikidata.org/" },
+    ],
+    samples: ["F-22 Raptor", "SR-71 Blackbird", "Rafale", "MiG-31"],
   },
 };
 
