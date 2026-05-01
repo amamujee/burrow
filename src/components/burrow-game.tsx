@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand, type TopicId } from "@/lib/game-data";
 import {
@@ -241,11 +240,7 @@ const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficu
 };
 
 const difficultyLabel = (difficulty: Difficulty) => difficultyOptions.find((item) => item.id === difficulty)?.label ?? "Easy";
-const isQuestionAnswerCorrect = (question: Question, choice: string) => {
-  if (!question.estimate) return choice === question.answer;
-  const value = Number(choice);
-  return Number.isFinite(value) && value >= question.estimate.correctMin && value <= question.estimate.correctMax;
-};
+const isQuestionAnswerCorrect = (question: Question, choice: string) => choice === question.answer;
 const comparisonLabelRank = (value: string) => (value.startsWith("A") ? 0 : value.startsWith("B") ? 1 : 2);
 const orderedComparisonCards = (cards: ComparisonCard[]) => [...cards].sort((a, b) => comparisonLabelRank(a.label) - comparisonLabelRank(b.label));
 const orderedComparisonChoices = (choices: string[]) => [...choices].sort((a, b) => comparisonLabelRank(a) - comparisonLabelRank(b));
@@ -851,67 +846,36 @@ export function BurrowGame() {
   };
 
   return (
-    <main className="min-h-dvh overflow-x-hidden bg-[#0f2e35] text-[#1d2528] lg:h-dvh lg:overflow-hidden">
-      <section className="flex min-h-dvh flex-col gap-1.5 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-1.5 md:p-2 lg:h-full lg:min-h-0">
-        <header className="w-full max-w-full min-w-0 shrink-0 rounded-xl border-2 border-[#082329] bg-[#fff2d7] p-2 shadow-[3px_3px_0_#082329]">
-          <div className="grid w-full max-w-full min-w-0 gap-2 lg:grid-cols-[minmax(240px,.72fr)_minmax(360px,1.08fr)_minmax(260px,.8fr)] lg:items-center">
-            <div className="grid min-w-0 gap-2">
-              <div className="flex min-w-0 items-center gap-2.5">
-                <Image
-                  src="/icons/burrow-icon-64.png"
-                  alt=""
-                  aria-hidden="true"
-                  width={64}
-                  height={64}
-                  className="h-12 w-12 shrink-0 rounded-2xl border-2 border-[#082329] bg-[#f5d39c] shadow-[2px_2px_0_#082329]"
-                />
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#81533b]">Let your Kid go deep</p>
-                  <h1 className="text-2xl font-black leading-none text-[#321e16] md:text-3xl">Burrow</h1>
-                </div>
-              </div>
-              <ProfilePicker profiles={profilesState.profiles} activeProfileId={activeProfile.id} onChange={switchProfile} onCreate={createProfile} />
-            </div>
-
-            <div className="min-w-0 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-2">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#7a5d4b]">Level {progress.level}</p>
-                  <p className="text-sm font-black leading-tight text-[#102f36]">{Math.max(0, nextLevelXp - progress.xp)} XP to next level</p>
-                </div>
-                <p className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-2.5 py-1 text-sm font-black text-[#102f36]">
-                  {progress.xp} XP
-                </p>
-              </div>
-              <div className="mt-2 h-2.5 overflow-hidden rounded-full border-2 border-[#082329] bg-white">
-                <div className="h-full bg-[#4fb286] transition-[width] duration-500 ease-out" style={{ width: `${levelProgress}%` }} />
-              </div>
-              <div className="mt-2 grid min-w-0 grid-cols-2 gap-1.5 md:grid-cols-3">
-                <CollectionAction active={showCollection} value={`${unlockedCount}/${allCards.length}`} onClick={openCollection} />
-                <MiniStat label="Streak" value={progress.streak.toString()} />
-                <MiniStat label="Hit" value={`${accuracy}%`} />
-              </div>
-            </div>
-
-            <div className="grid min-w-0 gap-2 sm:grid-cols-[1fr_auto] lg:grid-cols-1">
-              <TopicMixMenu activeInterests={activeInterests} onToggle={toggleInterest} />
-              <DifficultySelector difficulty={progress.difficulty} onChange={setQuestionDifficulty} />
-            </div>
-          </div>
-
-          <div className="mt-2 grid w-full max-w-full min-w-0 gap-2 md:grid-cols-[minmax(180px,.7fr)_minmax(220px,.9fr)_auto] md:items-center">
-            <PlayModePicker mode={mode} onChange={startMode} />
-            <MixModeMenu activeModes={selectedMixModes} onToggle={toggleMixMode} />
-            <div className="grid gap-1.5 sm:grid-cols-2 md:grid-cols-1">
-              <button onClick={flagCurrentIssue} className="min-h-10 rounded-lg border-2 border-[#082329] bg-[#fff8ec] px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#fff0c2] active:translate-y-0.5">
-                {issueFlash ? "Flagged" : "Flag issue"}{issueCount ? ` (${issueCount})` : ""}
-              </button>
-              <button onClick={resetProgress} className="min-h-10 rounded-lg border-2 border-[#082329] bg-white px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#ffd7ce] active:translate-y-0.5">
-                Reset
-              </button>
-            </div>
-          </div>
-        </header>
+    <main className="h-dvh overflow-hidden bg-[#0f2e35] text-[#1d2528]">
+      <PortraitGate />
+      <section className="burrow-game-shell flex h-dvh min-h-0 flex-col gap-1.5 overflow-hidden bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-1.5 md:p-2">
+        <GameHud
+          profiles={profilesState.profiles}
+          activeProfileId={activeProfile.id}
+          onProfileChange={switchProfile}
+          onCreateProfile={createProfile}
+          level={progress.level}
+          xp={progress.xp}
+          xpToNext={Math.max(0, nextLevelXp - progress.xp)}
+          levelProgress={levelProgress}
+          streak={progress.streak}
+          accuracy={accuracy}
+          collectionValue={`${unlockedCount}/${allCards.length}`}
+          showCollection={showCollection}
+          onCollection={openCollection}
+          mode={mode}
+          onModeChange={startMode}
+          difficulty={progress.difficulty}
+          onDifficultyChange={setQuestionDifficulty}
+          activeInterests={activeInterests}
+          onToggleInterest={toggleInterest}
+          activeMixModes={selectedMixModes}
+          onToggleMixMode={toggleMixMode}
+          issueFlash={issueFlash}
+          issueCount={issueCount}
+          onFlagIssue={flagCurrentIssue}
+          onReset={resetProgress}
+        />
 
         {showCollection && (
           <CollectionBook cards={allCards} unlockedCards={progress.unlockedCards} topic={topic} topicWins={progress.topicWins} modeWins={progress.modeWins} />
@@ -1047,6 +1011,257 @@ export function BurrowGame() {
   );
 }
 
+function PortraitGate() {
+  return (
+    <section className="burrow-portrait-gate h-dvh items-center justify-center bg-[#fff2d7] p-6 text-center text-[#102f36]">
+      <div className="max-w-sm rounded-2xl border-2 border-[#082329] bg-white p-5 shadow-[4px_4px_0_#082329]">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/icons/burrow-icon-120.png"
+          alt=""
+          aria-hidden="true"
+          className="mx-auto h-20 w-20 rounded-2xl border-2 border-[#082329] bg-[#f5d39c] shadow-[2px_2px_0_#082329]"
+        />
+        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-[#81533b]">Landscape mode</p>
+        <h1 className="mt-1 text-4xl font-black leading-none text-[#321e16]">Turn sideways</h1>
+        <p className="mt-3 text-lg font-bold leading-snug text-[#405257]">
+          Burrow is tuned for iPad landscape so the picture, choices, and Next button always fit.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function GameHud({
+  profiles,
+  activeProfileId,
+  onProfileChange,
+  onCreateProfile,
+  level,
+  xp,
+  xpToNext,
+  levelProgress,
+  streak,
+  accuracy,
+  collectionValue,
+  showCollection,
+  onCollection,
+  mode,
+  onModeChange,
+  difficulty,
+  onDifficultyChange,
+  activeInterests,
+  onToggleInterest,
+  activeMixModes,
+  onToggleMixMode,
+  issueFlash,
+  issueCount,
+  onFlagIssue,
+  onReset,
+}: {
+  profiles: LearnerProfile[];
+  activeProfileId: string;
+  onProfileChange: (profileId: string) => void;
+  onCreateProfile: () => void;
+  level: number;
+  xp: number;
+  xpToNext: number;
+  levelProgress: number;
+  streak: number;
+  accuracy: number;
+  collectionValue: string;
+  showCollection: boolean;
+  onCollection: () => void;
+  mode: GameMode;
+  onModeChange: (mode: GameMode) => void;
+  difficulty: Difficulty;
+  onDifficultyChange: (difficulty: Difficulty) => void;
+  activeInterests: KnowledgeTopic[];
+  onToggleInterest: (topic: KnowledgeTopic) => void;
+  activeMixModes: ChallengeMode[];
+  onToggleMixMode: (mode: ChallengeMode) => void;
+  issueFlash: boolean;
+  issueCount: number;
+  onFlagIssue: () => void;
+  onReset: () => void;
+}) {
+  return (
+    <header className="relative z-30 shrink-0 rounded-xl border-2 border-[#082329] bg-[#fff2d7] px-2 py-1.5 shadow-[3px_3px_0_#082329]">
+      <div className="grid min-h-[68px] min-w-0 items-center gap-2 min-[900px]:grid-cols-[minmax(292px,.95fr)_minmax(200px,.85fr)_minmax(380px,1.3fr)_auto]">
+        <div className="flex min-w-0 items-center gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/icons/burrow-icon-64.png"
+            alt=""
+            aria-hidden="true"
+            className="h-11 w-11 shrink-0 rounded-xl border-2 border-[#082329] bg-[#f5d39c] shadow-[2px_2px_0_#082329]"
+          />
+          <div className="min-w-0 shrink">
+            <p className="hidden truncate text-[9px] font-black uppercase tracking-[0.18em] text-[#81533b] min-[1180px]:block">Let your Kid go deep</p>
+            <h1 className="truncate text-2xl font-black leading-none text-[#321e16]">Burrow</h1>
+          </div>
+          <ProfilePicker profiles={profiles} activeProfileId={activeProfileId} onChange={onProfileChange} onCreate={onCreateProfile} />
+        </div>
+
+        <HudProgress level={level} xp={xp} xpToNext={xpToNext} levelProgress={levelProgress} streak={streak} accuracy={accuracy} />
+
+        <div className="grid min-w-0 grid-cols-[minmax(112px,.6fr)_minmax(205px,1.05fr)_minmax(64px,.3fr)] gap-1.5">
+          <PlayModePicker mode={mode} onChange={onModeChange} />
+          <DifficultySelector difficulty={difficulty} onChange={onDifficultyChange} />
+          <CollectionAction active={showCollection} value={collectionValue} onClick={onCollection} />
+        </div>
+
+        <SetupMenu
+          activeInterests={activeInterests}
+          onToggleInterest={onToggleInterest}
+          activeMixModes={activeMixModes}
+          onToggleMixMode={onToggleMixMode}
+          issueFlash={issueFlash}
+          issueCount={issueCount}
+          onFlagIssue={onFlagIssue}
+          onReset={onReset}
+        />
+      </div>
+    </header>
+  );
+}
+
+function HudProgress({
+  level,
+  xp,
+  xpToNext,
+  levelProgress,
+  streak,
+  accuracy,
+}: {
+  level: number;
+  xp: number;
+  xpToNext: number;
+  levelProgress: number;
+  streak: number;
+  accuracy: number;
+}) {
+  return (
+    <div className="min-w-0 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] px-2 py-1.5">
+      <div className="flex items-center justify-between gap-2">
+        <div className="min-w-0">
+          <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#7a5d4b]">Level {level}</p>
+          <p className="truncate text-sm font-black leading-tight text-[#102f36]">{xpToNext} XP to next</p>
+        </div>
+        <p className="shrink-0 rounded-full border-2 border-[#082329] bg-[#f3c647] px-2.5 py-1 text-sm font-black leading-none text-[#102f36]">
+          {xp} XP
+        </p>
+      </div>
+      <div className="mt-1.5 h-2 overflow-hidden rounded-full border-2 border-[#082329] bg-white">
+        <div className="h-full bg-[#4fb286] transition-[width] duration-500 ease-out" style={{ width: `${levelProgress}%` }} />
+      </div>
+      <div className="mt-1 flex min-w-0 items-center gap-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">
+        <span className="truncate">Streak {streak}</span>
+        <span className="h-1 w-1 rounded-full bg-[#cfbfae]" />
+        <span className="truncate">Hit {accuracy}%</span>
+      </div>
+    </div>
+  );
+}
+
+function SetupMenu({
+  activeInterests,
+  onToggleInterest,
+  activeMixModes,
+  onToggleMixMode,
+  issueFlash,
+  issueCount,
+  onFlagIssue,
+  onReset,
+}: {
+  activeInterests: KnowledgeTopic[];
+  onToggleInterest: (topic: KnowledgeTopic) => void;
+  activeMixModes: ChallengeMode[];
+  onToggleMixMode: (mode: ChallengeMode) => void;
+  issueFlash: boolean;
+  issueCount: number;
+  onFlagIssue: () => void;
+  onReset: () => void;
+}) {
+  const activeModeSet = new Set(activeMixModes);
+
+  return (
+    <details className="group relative">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-center gap-2 rounded-lg border-2 border-[#082329] bg-white px-3 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#082329] transition hover:bg-[#fff0c2] group-open:bg-[#fff0c2] [&::-webkit-details-marker]:hidden">
+        Setup
+        <span className="text-lg leading-none">⌄</span>
+      </summary>
+      <div className="absolute right-0 z-40 mt-2 max-h-[calc(100dvh-112px)] w-[min(680px,calc(100vw-24px))] overflow-auto rounded-xl border-2 border-[#082329] bg-[#fffaf4] p-3 shadow-[4px_4px_0_#082329]">
+        <div className="grid gap-3 md:grid-cols-2">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7a5d4b]">Topics</p>
+            <div className="mt-2 grid gap-1.5">
+              {allKnowledgeTopics.map((item) => {
+                const enabled = activeInterests.includes(item);
+                return (
+                  <button
+                    key={item}
+                    type="button"
+                    aria-pressed={enabled}
+                    onClick={() => onToggleInterest(item)}
+                    className={`min-h-10 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
+                      enabled ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329] hover:bg-[#fff0c2]"
+                    }`}
+                  >
+                    <span className="block text-sm font-black leading-tight text-[#102f36]">{topicCatalog[item].label}</span>
+                    <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{enabled ? "in mix" : "tap to add"}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7a5d4b]">Mix includes</p>
+            <div className="mt-2 grid grid-cols-2 gap-1.5">
+              {allChallengeModes.map((challengeMode) => {
+                const item = modeOptions.find((option) => option.id === challengeMode) ?? modeOptions[0];
+                const enabled = activeModeSet.has(challengeMode);
+                return (
+                  <button
+                    key={challengeMode}
+                    type="button"
+                    aria-pressed={enabled}
+                    onClick={() => onToggleMixMode(challengeMode)}
+                    className={`min-h-10 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
+                      enabled ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329] hover:bg-[#fff0c2]"
+                    }`}
+                  >
+                    <span className="block truncate text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
+                    <span className="block truncate text-[10px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{enabled ? "in mix" : "tap to add"}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={onFlagIssue}
+            className="min-h-11 rounded-lg border-2 border-[#082329] bg-[#fff8ec] px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#fff0c2] active:translate-y-0.5"
+          >
+            {issueFlash ? "Flagged" : "Flag issue"}{issueCount ? ` (${issueCount})` : ""}
+          </button>
+          <button
+            type="button"
+            onClick={onReset}
+            className="min-h-11 rounded-lg border-2 border-[#082329] bg-white px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#ffd7ce] active:translate-y-0.5"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+    </details>
+  );
+}
+
 function QuestionRun({
   question,
   questions,
@@ -1091,7 +1306,7 @@ function QuestionRun({
     : `Image: ${question.imageCredit}`;
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] md:min-h-0">
         {question.comparison ? <ComparisonStage cards={question.comparison} /> : <QuestionImage question={question} />}
         <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
@@ -1107,7 +1322,7 @@ function QuestionRun({
         </div>
       </article>
 
-      <article className="flex min-h-[42dvh] flex-col overflow-hidden rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329] md:min-h-0">
+      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="shrink-0">
           <div className="flex items-center justify-between gap-2">
             <div className="flex min-w-0 items-center gap-2">
@@ -1130,42 +1345,38 @@ function QuestionRun({
           {question.comparison && showComparisonTable && <ComparisonTable cards={question.comparison} />}
         </div>
 
-        {question.estimate ? (
-          <EstimateSlider key={question.id} question={question} selected={selected} answered={answered} isCorrect={isCorrect} onAnswer={onAnswer} />
-        ) : (
-          <div className="mt-2 grid shrink-0 gap-2 xl:grid-cols-2">
-            {choices.map((choice) => {
-              const chosen = selected === choice;
-              const correctChoice = answered && choice === question.answer;
-              const heatChoice =
-                (question.kind === "pepper-heat" || question.kind === "pepper-reading") && heatBands.includes(choice as HeatBand)
-                  ? (choice as HeatBand)
-                  : null;
-              return (
-                <button
-                  key={`${question.id}-${choice}`}
-                  onClick={() => onAnswer(choice)}
-                  className={`min-h-12 rounded-lg border-2 px-3 py-2 text-left text-base font-black leading-snug transition duration-150 ease-out active:translate-y-0.5 md:min-h-14 md:text-lg ${
-                    correctChoice
-                      ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
-                      : chosen
-                        ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
-                        : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2] hover:shadow-[2px_2px_0_#082329]"
-                  }`}
-                >
-                  <span className="flex items-center justify-between gap-3">
-                    <span className="flex min-w-0 items-center gap-2">
-                      <span>{choice}</span>
-                      {heatChoice && <HeatChoiceEmoji heat={heatChoice} />}
-                    </span>
-                    {correctChoice && <span className="shrink-0 text-2xl leading-none">+</span>}
-                    {chosen && !correctChoice && <span className="shrink-0 text-2xl leading-none">x</span>}
+        <div className="mt-2 grid shrink-0 gap-2 xl:grid-cols-2">
+          {choices.map((choice) => {
+            const chosen = selected === choice;
+            const correctChoice = answered && choice === question.answer;
+            const heatChoice =
+              (question.kind === "pepper-heat" || question.kind === "pepper-reading") && heatBands.includes(choice as HeatBand)
+                ? (choice as HeatBand)
+                : null;
+            return (
+              <button
+                key={`${question.id}-${choice}`}
+                onClick={() => onAnswer(choice)}
+                className={`min-h-12 rounded-lg border-2 px-3 py-2 text-left text-base font-black leading-snug transition duration-150 ease-out active:translate-y-0.5 md:min-h-14 md:text-lg ${
+                  correctChoice
+                    ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
+                    : chosen
+                      ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
+                      : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2] hover:shadow-[2px_2px_0_#082329]"
+                }`}
+              >
+                <span className="flex items-center justify-between gap-3">
+                  <span className="flex min-w-0 items-center gap-2">
+                    <span>{choice}</span>
+                    {heatChoice && <HeatChoiceEmoji heat={heatChoice} />}
                   </span>
-                </button>
-              );
-            })}
-          </div>
-        )}
+                  {correctChoice && <span className="shrink-0 text-2xl leading-none">+</span>}
+                  {chosen && !correctChoice && <span className="shrink-0 text-2xl leading-none">x</span>}
+                </span>
+              </button>
+            );
+          })}
+        </div>
 
         {answered && lastResult && (
           <FeedbackPanel
@@ -1220,7 +1431,7 @@ function SortMode({
   const pickedSet = new Set(picked);
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <article className="overflow-hidden rounded-xl border-2 border-[#082329] bg-[#102f36] p-2 shadow-[4px_4px_0_#082329]">
         <div className="grid h-full min-h-[390px] grid-cols-2 gap-2 md:grid-cols-4 lg:min-h-0">
           {round.cards.map((card) => (
@@ -1242,7 +1453,7 @@ function SortMode({
         </div>
       </article>
 
-      <article className="flex min-h-[380px] flex-col rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329] lg:min-h-0">
+      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -1337,7 +1548,7 @@ function FactMode({
   const answered = selected !== null;
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <article className="relative min-h-[320px] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] md:min-h-0">
         <MediaImage image={round.image} imageAlt={round.imageAlt} topic={round.topic} />
         <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
@@ -1348,7 +1559,7 @@ function FactMode({
         </div>
       </article>
 
-      <article className="flex min-h-[380px] flex-col rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329] md:min-h-0">
+      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -1453,7 +1664,7 @@ function RevealMode({
   }, [answered, intervalMs, revealed, totalTiles]);
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#102f36] shadow-[4px_4px_0_#082329] md:min-h-0">
         <div className="h-full transition-[filter] duration-500 ease-out" style={{ filter: `blur(${blurPx}px)` }}>
           <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
@@ -1479,7 +1690,7 @@ function RevealMode({
         </div>
       </article>
 
-      <article className="flex min-h-[42dvh] flex-col overflow-hidden rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329] md:min-h-0">
+      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -1580,7 +1791,7 @@ function BuildFactMode({
   const pickedTokens = picked.map((id) => round.tokens.find((token) => token.id === id)).filter(Boolean) as BuildFactRound["tokens"];
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] md:min-h-0">
         <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
         <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
@@ -1592,7 +1803,7 @@ function BuildFactMode({
         </div>
       </article>
 
-      <article className="flex min-h-[42dvh] flex-col rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329] md:min-h-0">
+      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -1696,10 +1907,10 @@ function NumberMode({
   const answerLabel = `${round.answer.toLocaleString("en-US")} ${round.unit}`;
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <KnowledgeCardsStage cards={round.cards} badge="Number case" footer={`${round.biggerLabel} minus ${round.smallerLabel}`} />
 
-      <article className="flex min-h-[42dvh] flex-col rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329] md:min-h-0">
+      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -1788,10 +1999,10 @@ function OddOneMode({
   const answer = round.cards.find((card) => card.id === round.answerId);
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <KnowledgeCardsStage cards={round.cards} badge="Logic set" footer="Find the card that breaks the rule." />
 
-      <article className="flex min-h-[42dvh] flex-col rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329] md:min-h-0">
+      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -1936,145 +2147,6 @@ function CollectionBook({
   );
 }
 
-function EstimateSlider({
-  question,
-  selected,
-  answered,
-  isCorrect,
-  onAnswer,
-}: {
-  question: Question;
-  selected: string | null;
-  answered: boolean;
-  isCorrect: boolean;
-  onAnswer: (choice: string) => void;
-}) {
-  const estimate = question.estimate;
-  const [value, setValue] = useState(estimate?.start ?? 0);
-
-  if (!estimate) return null;
-
-  const displayValue = selected !== null ? Number(selected) : value;
-  const isScoville = estimate.unit === "SHU" && estimate.max >= 1000000;
-  const scalePercent = (item: number) => {
-    if (!isScoville) {
-      const span = estimate.max - estimate.min;
-      return Math.max(0, Math.min(100, ((item - estimate.min) / span) * 100));
-    }
-    const maxLog = Math.log10(estimate.max + 1);
-    return Math.max(0, Math.min(100, (Math.log10(item + 1) / maxLog) * 100));
-  };
-  const pct = (item: number) => `${scalePercent(item)}%`;
-  const sliderValue = isScoville ? Math.round(scalePercent(displayValue) * 10) : displayValue;
-  const sliderMin = isScoville ? 0 : estimate.min;
-  const sliderMax = isScoville ? 1000 : estimate.max;
-  const sliderStep = isScoville ? 1 : estimate.step;
-  const valueFromSlider = (nextValue: number) => {
-    if (!isScoville) return nextValue;
-    const rawValue = Math.pow(estimate.max + 1, nextValue / 1000) - 1;
-    return clampToStep(rawValue, estimate.min, estimate.max, estimate.step);
-  };
-  const valueLabel = `${displayValue.toLocaleString("en-US")} ${estimate.unit}`;
-  const rangeLabel =
-    estimate.correctMin === estimate.correctMax
-      ? `${estimate.correctMax.toLocaleString("en-US")} ${estimate.unit}`
-      : `${estimate.correctMin.toLocaleString("en-US")}-${estimate.correctMax.toLocaleString("en-US")} ${estimate.unit}`;
-
-  return (
-    <div className="mt-3 rounded-xl border-2 border-[#cfbfae] bg-[#fff8ec] p-3 shadow-[2px_2px_0_#cfbfae]">
-      <div className="flex flex-wrap items-end justify-between gap-2">
-        <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#7a5d4b]">{answered ? "Your guess" : estimate.label}</p>
-          <p className="text-[clamp(1.65rem,4vw,2.35rem)] font-black leading-none text-[#102f36]">{valueLabel}</p>
-        </div>
-        <button
-          onClick={() => onAnswer(String(value))}
-          disabled={answered}
-          className="min-h-11 rounded-full border-2 border-[#082329] bg-[#f3c647] px-4 py-2 text-sm font-black uppercase tracking-[0.08em] text-[#102f36] shadow-[2px_2px_0_#082329] transition hover:bg-[#ffd86b] active:translate-y-0.5 disabled:bg-[#d7ddd9] disabled:text-[#59686b] disabled:shadow-none"
-        >
-          Lock it in
-        </button>
-      </div>
-
-      {isScoville && <HeatZoneGuide />}
-
-      <div className="mt-3 rounded-xl border-2 border-[#cfbfae] bg-white p-3">
-        <div className="relative px-1 pb-8 pt-4">
-          <div className="absolute left-1 right-1 top-[27px] h-4 rounded-full bg-[#e9dfcf]" />
-          <div className="absolute left-1 right-1 top-[28px] h-2 rounded-full bg-gradient-to-r from-[#78d99a] via-[#f3c647] to-[#b5412b]" />
-          {answered && (
-            <div
-              className={`absolute top-[20px] h-7 rounded-full border-2 border-[#082329] ${isCorrect ? "bg-[#78d99a]" : "bg-[#ffe0d8]"}`}
-              style={{
-                left: pct(estimate.correctMin),
-                width: `max(28px, calc(${pct(estimate.correctMax)} - ${pct(estimate.correctMin)}))`,
-              }}
-              aria-hidden="true"
-            />
-          )}
-          <input
-            type="range"
-            min={sliderMin}
-            max={sliderMax}
-            step={sliderStep}
-            value={sliderValue}
-            disabled={answered}
-            onChange={(event) => setValue(valueFromSlider(Number(event.target.value)))}
-            className="relative z-10 h-10 w-full cursor-pointer appearance-none bg-transparent disabled:cursor-default [&::-webkit-slider-runnable-track]:h-4 [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-transparent [&::-webkit-slider-thumb]:-mt-2 [&::-webkit-slider-thumb]:h-9 [&::-webkit-slider-thumb]:w-9 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#082329] [&::-webkit-slider-thumb]:bg-[#f3c647] [&::-webkit-slider-thumb]:shadow-[2px_2px_0_#082329]"
-            aria-label={estimate.label}
-          />
-          <div className="absolute inset-x-1 bottom-0 flex justify-between gap-2 text-[11px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">
-            <span>{estimate.marks[0]?.label}</span>
-            <span>{estimate.marks[estimate.marks.length - 1]?.label}</span>
-          </div>
-          {!isScoville && (
-            <div className="absolute inset-x-1 bottom-4 flex justify-between gap-1 text-[10px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">
-              {estimate.marks.slice(1, -1).map((mark) => (
-                <span key={`${question.id}-${mark.label}`} className="text-center leading-tight">
-                  {mark.label}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="mt-2 rounded-lg border-2 border-[#cfbfae] bg-white px-3 py-2">
-        <p className="text-sm font-black leading-snug text-[#405257]">
-          {answered ? `Target zone: ${rangeLabel}` : estimate.helper}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function HeatZoneGuide() {
-  const colors: Record<HeatBand, string> = {
-    "not spicy": "bg-[#f4f1e8]",
-    mild: "bg-[#dff5d9]",
-    warm: "bg-[#fff0b8]",
-    hot: "bg-[#ffd09b]",
-    "very hot": "bg-[#ffb0a0]",
-    insane: "bg-[#ff8f7f]",
-  };
-
-  return (
-    <div className="mt-3 grid grid-cols-3 gap-1.5 sm:grid-cols-6">
-      {heatBands.map((heat) => (
-        <div key={heat} className={`rounded-lg border-2 border-[#cfbfae] px-2 py-1.5 text-center ${colors[heat]}`}>
-          <p className="truncate text-[11px] font-black leading-tight text-[#102f36]">{heatProfiles[heat].label}</p>
-          <p className="mt-0.5 min-h-5 text-sm leading-none">{heatProfiles[heat].icons ? heatProfiles[heat].emoji : "0"}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function clampToStep(value: number, min: number, max: number, step: number) {
-  const clamped = Math.max(min, Math.min(max, value));
-  return Math.round(clamped / step) * step;
-}
-
 function ProgressDots({ questions, questionIndex }: { questions: Question[]; questionIndex: number }) {
   return (
     <div className="flex flex-wrap gap-0.5">
@@ -2126,48 +2198,6 @@ function ProfilePicker({
   );
 }
 
-function TopicMixMenu({ activeInterests, onToggle }: { activeInterests: KnowledgeTopic[]; onToggle: (topic: KnowledgeTopic) => void }) {
-  const activeLabels = activeInterests.map((item) => topicCatalog[item].label);
-
-  return (
-    <details className="group relative min-w-0">
-      <summary className="flex min-h-10 cursor-pointer list-none items-center justify-between gap-3 rounded-lg border-2 border-[#082329] bg-white px-3 py-2 text-left shadow-[2px_2px_0_#082329] transition hover:bg-[#fff0c2] group-open:bg-[#fff0c2] [&::-webkit-details-marker]:hidden">
-        <span className="min-w-0">
-          <span className="block text-[9px] font-black uppercase tracking-[0.16em] text-[#7a5d4b]">Topics</span>
-          <span className="block truncate text-sm font-black leading-tight text-[#102f36]">
-            <span className="sm:hidden">{activeInterests.length} topics in mix</span>
-            <span className="hidden sm:inline">{activeLabels.join(", ")}</span>
-          </span>
-        </span>
-        <span className="shrink-0 text-lg font-black leading-none text-[#102f36]">⌄</span>
-      </summary>
-      <div className="absolute right-0 z-30 mt-2 w-full min-w-64 rounded-lg border-2 border-[#082329] bg-[#fffaf4] p-2 shadow-[4px_4px_0_#082329]">
-        <div className="grid gap-1.5">
-          {allKnowledgeTopics.map((item) => {
-            const details = topicCatalog[item];
-            const enabled = activeInterests.includes(item);
-            return (
-              <button
-                key={item}
-                onClick={() => onToggle(item)}
-                className={`flex min-h-11 items-center justify-between gap-3 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
-                  enabled ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329]"
-                }`}
-              >
-                <span>
-                  <span className="block text-sm font-black leading-tight text-[#102f36]">{details.label}</span>
-                  <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{enabled ? "in mix" : "tap to add"}</span>
-                </span>
-                <span className="text-xl font-black text-[#102f36]">{enabled ? "✓" : "+"}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </details>
-  );
-}
-
 function PlayModePicker({ mode, onChange }: { mode: GameMode; onChange: (mode: GameMode) => void }) {
   const active = modeOptions.find((item) => item.id === mode) ?? modeOptions[0];
 
@@ -2203,68 +2233,22 @@ function PlayModePicker({ mode, onChange }: { mode: GameMode; onChange: (mode: G
   );
 }
 
-function MixModeMenu({ activeModes, onToggle }: { activeModes: ChallengeMode[]; onToggle: (mode: ChallengeMode) => void }) {
-  const activeSet = new Set(activeModes);
-  const label = activeModes.length === allChallengeModes.length ? "All games" : `${activeModes.length} games`;
-
-  return (
-    <details className="group relative min-w-0">
-      <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 rounded-lg border-2 border-[#082329] bg-white px-3 py-2 text-left shadow-[2px_2px_0_#082329] transition hover:bg-[#fff0c2] group-open:bg-[#fff0c2] [&::-webkit-details-marker]:hidden">
-        <span className="min-w-0">
-          <span className="block text-[9px] font-black uppercase tracking-[0.16em] text-[#7a5d4b]">Mix includes</span>
-          <span className="block truncate text-base font-black leading-tight text-[#102f36]">{label}</span>
-        </span>
-        <span className="shrink-0 text-lg font-black leading-none text-[#102f36]">⌄</span>
-      </summary>
-      <div className="absolute left-0 z-30 mt-2 w-full min-w-72 rounded-lg border-2 border-[#082329] bg-[#fffaf4] p-2 shadow-[4px_4px_0_#082329]">
-        <div className="grid gap-1.5 sm:grid-cols-2">
-          {allChallengeModes.map((challengeMode) => {
-            const item = modeOptions.find((option) => option.id === challengeMode) ?? modeOptions[0];
-            return (
-            <button
-              key={challengeMode}
-              onClick={() => onToggle(challengeMode)}
-              className={`min-h-11 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
-                activeSet.has(challengeMode) ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329]"
-              }`}
-            >
-              <span className="block text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
-              <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{activeSet.has(challengeMode) ? "in mix" : "tap to add"}</span>
-            </button>
-            );
-          })}
-        </div>
-      </div>
-    </details>
-  );
-}
-
 function DifficultySelector({ difficulty, onChange }: { difficulty: Difficulty; onChange: (difficulty: Difficulty) => void }) {
   return (
-    <div className="grid min-w-0 grid-cols-1 gap-1 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-1 min-[520px]:grid-cols-3">
+    <div className="grid min-w-0 grid-cols-3 gap-1 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-1">
       {difficultyOptions.map((item) => (
         <button
           key={item.id}
           onClick={() => onChange(item.id)}
-          className={`min-h-10 min-w-0 rounded-md border-2 px-2 py-1 text-center transition active:translate-y-0.5 ${
+          className={`min-h-11 min-w-0 rounded-md border-2 px-1 py-1 text-center transition active:translate-y-0.5 ${
             difficulty === item.id
               ? "border-[#082329] bg-[#f3c647] shadow-[2px_2px_0_#082329]"
               : "border-transparent bg-transparent hover:border-[#cfbfae] hover:bg-white"
           }`}
         >
-          <span className="block truncate text-[8px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">Questions</span>
           <span className="block truncate text-base font-black leading-none text-[#102f36]">{item.label}</span>
         </button>
       ))}
-    </div>
-  );
-}
-
-function MiniStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="min-w-0 rounded-md bg-white px-2 py-1 text-center">
-      <p className="truncate text-[8px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">{label}</p>
-      <p className="truncate text-sm font-black leading-none text-[#102f36]">{value}</p>
     </div>
   );
 }
@@ -2277,7 +2261,7 @@ function CollectionAction({ active, value, onClick }: { active: boolean; value: 
         active ? "border-[#082329] bg-[#f3c647] shadow-[2px_2px_0_#082329]" : "border-transparent bg-white hover:border-[#cfbfae] hover:bg-[#fff0c2]"
       }`}
     >
-      <span className="block truncate text-[8px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">Collection</span>
+      <span className="block truncate text-[8px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">Cards</span>
       <span className="block truncate text-sm font-black leading-none text-[#102f36]">{value}</span>
     </button>
   );
@@ -2294,7 +2278,7 @@ function ReadingClue({ text }: { text: string }) {
 
 function SkipButton({ onClick }: { onClick: () => void }) {
   return (
-    <div className="mt-auto pt-3">
+    <div className="sticky bottom-0 z-20 mt-auto bg-white/95 pt-2 backdrop-blur">
       <button
         onClick={onClick}
         className="w-full rounded-lg border-2 border-[#cfbfae] bg-white px-4 py-2 text-sm font-black text-[#59686b] transition hover:border-[#082329] hover:bg-[#fff8ec] active:translate-y-0.5"
@@ -2476,15 +2460,15 @@ function FeedbackPanel({
   onNext: () => void;
 }) {
   return (
-    <div className="mt-auto pt-3">
-      <div className={`rounded-lg border-2 p-3 ${isCorrect ? "border-[#28764a] bg-[#e9ffe9]" : "border-[#b5412b] bg-[#fff0ea]"}`}>
-        <div className="grid gap-3 md:grid-cols-[auto_1fr] md:items-start">
-          <div className={`flex h-14 w-14 items-center justify-center rounded-lg border-2 border-[#082329] text-3xl font-black shadow-[2px_2px_0_#082329] ${isCorrect ? "bg-[#78d99a]" : "bg-[#ff9f8d]"}`}>
+    <div className="sticky bottom-0 z-20 mt-auto bg-white/95 pt-2 backdrop-blur">
+      <div className={`rounded-lg border-2 p-2.5 ${isCorrect ? "border-[#28764a] bg-[#e9ffe9]" : "border-[#b5412b] bg-[#fff0ea]"}`}>
+        <div className="grid gap-2 md:grid-cols-[auto_1fr] md:items-start">
+          <div className={`flex h-12 w-12 items-center justify-center rounded-lg border-2 border-[#082329] text-2xl font-black shadow-[2px_2px_0_#082329] ${isCorrect ? "bg-[#78d99a]" : "bg-[#ff9f8d]"}`}>
             {isCorrect ? "+" : "!"}
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <p className="text-xl font-black leading-tight text-[#102f36] md:text-2xl">
+              <p className="text-lg font-black leading-tight text-[#102f36] md:text-xl">
                 {isCorrect ? celebration : note}
               </p>
               <span className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-2 py-0.5 text-sm font-black text-[#102f36]">
@@ -2501,12 +2485,12 @@ function FeedbackPanel({
                 Answer: {correctAnswer}
               </p>
             )}
-            <p className="mt-1 text-sm font-semibold leading-5 text-[#24373b] md:text-base md:leading-6">
+            <p className="mt-1 text-sm font-semibold leading-5 text-[#24373b]">
               {explanation}
             </p>
           </div>
         </div>
-        <button onClick={onNext} className="mt-3 w-full rounded-lg border-2 border-[#082329] bg-[#102f36] px-4 py-3 text-lg font-black text-white shadow-[3px_3px_0_#082329] hover:bg-[#23515a]">
+        <button onClick={onNext} className="mt-2 w-full rounded-lg border-2 border-[#082329] bg-[#102f36] px-4 py-2.5 text-base font-black text-white shadow-[3px_3px_0_#082329] hover:bg-[#23515a]">
           {isLast ? "Finish round" : "Next"}
         </button>
       </div>

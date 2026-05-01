@@ -22,19 +22,16 @@ export type TopicScope = TopicId | readonly KnowledgeTopic[];
 export type QuestionKind =
   | "pepper-heat"
   | "pepper-shu"
-  | "pepper-estimate"
   | "pepper-hotter"
   | "pepper-reading"
   | "building-name"
   | "building-height"
-  | "building-estimate"
   | "building-taller"
   | "building-difference"
   | "building-reading"
   | "shark-name"
   | "shark-family"
   | "shark-bigger"
-  | "shark-size-estimate"
   | "shark-faster"
   | "shark-difference"
   | "shark-power"
@@ -86,24 +83,10 @@ export type Question = {
     max: number;
     unit: string;
   };
-  estimate?: {
-    label: string;
-    min: number;
-    max: number;
-    step: number;
-    unit: string;
-    start: number;
-    correctMin: number;
-    correctMax: number;
-    answerLabel: string;
-    helper: string;
-    marks: { label: string; value: number }[];
-  };
 };
 
 const sessionLength = 16;
 const maxShu = 2693000;
-const scovilleSliderMax = 5000000;
 const maxHeight = 3281;
 const maxSharkLength = 40;
 const maxSharkSpeed = 45;
@@ -144,90 +127,6 @@ const choiceSet = <T,>(correct: T, options: T[], seed: number, count: number) =>
   return shuffle([correct, ...distractors], seed + 1);
 };
 const roundTo = (value: number, step: number) => Math.max(step, Math.round(value / step) * step);
-const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
-
-const heatBandBounds: Record<HeatBand, { min: number; max: number }> = {
-  "not spicy": { min: 0, max: 500 },
-  mild: { min: 501, max: 2500 },
-  warm: { min: 2501, max: 25000 },
-  hot: { min: 25001, max: 50000 },
-  "very hot": { min: 50001, max: 500000 },
-  insane: { min: 500001, max: scovilleSliderMax },
-};
-
-const scovilleEstimate = (pepper: Pepper, difficulty: Difficulty) => {
-  const band = heatBandBounds[pepper.heat];
-  const tolerance = difficulty === 1 ? 100000 : difficulty === 2 ? 50000 : 25000;
-  const correctMin = clamp(Math.min(pepper.shuMin, band.min) - tolerance, 0, scovilleSliderMax);
-  const correctMax = clamp(Math.max(pepper.shuMax, band.max === scovilleSliderMax ? pepper.shuMax : band.max) + tolerance, correctMin, scovilleSliderMax);
-
-  return {
-    label: "Scoville score",
-    min: 0,
-    max: scovilleSliderMax,
-    step: 25000,
-    unit: "SHU",
-    start: pepper.heat === "insane" ? 1500000 : pepper.heat === "very hot" ? 250000 : 50000,
-    correctMin,
-    correctMax,
-    answerLabel: `${range(pepper)} SHU`,
-    helper: "Slide into the pepper's Scoville zone.",
-    marks: [
-      { label: "0", value: 0 },
-      { label: "warm", value: 25000 },
-      { label: "hot", value: 50000 },
-      { label: "very hot", value: 500000 },
-      { label: "insane", value: 1000000 },
-      { label: "5M", value: scovilleSliderMax },
-    ],
-  };
-};
-
-const heightEstimate = (building: Building, difficulty: Difficulty) => {
-  const tolerance = difficulty === 1 ? 250 : difficulty === 2 ? 150 : 75;
-  return {
-    label: "Height",
-    min: 0,
-    max: 3500,
-    step: 25,
-    unit: "ft",
-    start: 1800,
-    correctMin: clamp(building.heightFt - tolerance, 0, 3500),
-    correctMax: clamp(building.heightFt + tolerance, 0, 3500),
-    answerLabel: feet(building.heightFt),
-    helper: "Slide close to the real building height.",
-    marks: [
-      { label: "0", value: 0 },
-      { label: "1k", value: 1000 },
-      { label: "2k", value: 2000 },
-      { label: "3k", value: 3000 },
-      { label: "3.5k", value: 3500 },
-    ],
-  };
-};
-
-const sharkSizeEstimate = (shark: Shark, difficulty: Difficulty) => {
-  const tolerance = difficulty === 1 ? 5 : difficulty === 2 ? 3 : 2;
-  return {
-    label: "Length",
-    min: 0,
-    max: 50,
-    step: 1,
-    unit: "ft",
-    start: 20,
-    correctMin: clamp(shark.lengthFt - tolerance, 0, 50),
-    correctMax: clamp(shark.lengthFt + tolerance, 0, 50),
-    answerLabel: feet(shark.lengthFt),
-    helper: "Slide close to the shark's full-grown size.",
-    marks: [
-      { label: "tiny", value: 0 },
-      { label: "10 ft", value: 10 },
-      { label: "20 ft", value: 20 },
-      { label: "40 ft", value: 40 },
-      { label: "50 ft", value: 50 },
-    ],
-  };
-};
 
 const displayHeightChoice = (value: number, difficulty: Difficulty) => {
   if (difficulty === 3) return feet(value);
@@ -366,13 +265,12 @@ const spaceCard = (item: SpaceCard, label: "A" | "B", stat: "temp" | "radius" | 
 };
 
 const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
-  const estimateReadyPeppers = peppers.filter((item) => item.shuMax >= 100000);
   const pepper = sample(peppers, seed);
   const kinds: QuestionKind[] = difficulty === 1
-    ? ["pepper-heat", "pepper-shu", "pepper-estimate", "pepper-hotter", "pepper-reading"]
+    ? ["pepper-heat", "pepper-shu", "pepper-hotter", "pepper-reading"]
     : difficulty === 2
-      ? ["pepper-heat", "pepper-shu", "pepper-estimate", "pepper-hotter", "pepper-reading"]
-      : ["pepper-shu", "pepper-estimate", "pepper-hotter", "pepper-reading", "pepper-heat"];
+      ? ["pepper-heat", "pepper-shu", "pepper-hotter", "pepper-reading"]
+      : ["pepper-shu", "pepper-hotter", "pepper-reading", "pepper-heat"];
   const kind = sample(kinds, seed + 3);
 
   if (kind === "pepper-heat") {
@@ -439,26 +337,6 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
     };
   }
 
-  if (kind === "pepper-estimate") {
-    const estimatePepper = estimateReadyPeppers.length ? sample(estimateReadyPeppers, seed + 19) : pepper;
-    const estimate = scovilleEstimate(estimatePepper, difficulty);
-    return {
-      id: `${seed}-pepper-estimate-${estimatePepper.id}`,
-      topic: "peppers",
-      kind,
-      prompt: `Slide to the Scoville zone for ${estimatePepper.name}.`,
-      image: estimatePepper.image,
-      imageAlt: estimatePepper.name,
-      imageCredit: estimatePepper.imageCredit,
-      choices: [],
-      answer: estimate.answerLabel,
-      explanation: `${estimatePepper.name} is about ${estimate.answerLabel}. That puts it in the ${estimatePepper.heat} band (${heatBandRangeLabel(estimatePepper.heat)}).`,
-      heatMeter: heatMeter(estimatePepper.heat),
-      numberLine: { label: "Heat", value: estimatePepper.shuMax, max: scovilleSliderMax, unit: "SHU" },
-      estimate,
-    };
-  }
-
   const correct = `${range(pepper)} SHU`;
   const otherRanges = peppers.filter((item) => item.id !== pepper.id).map((item) => `${range(item)} SHU`);
   return {
@@ -480,10 +358,10 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
 const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
   const building = sample(buildings, seed);
   const kinds: QuestionKind[] = difficulty === 1
-    ? ["building-name", "building-height", "building-estimate", "building-taller", "building-reading"]
+    ? ["building-name", "building-height", "building-taller", "building-reading"]
     : difficulty === 2
-      ? ["building-name", "building-height", "building-estimate", "building-taller", "building-difference", "building-reading"]
-      : ["building-height", "building-estimate", "building-taller", "building-difference", "building-reading"];
+      ? ["building-name", "building-height", "building-taller", "building-difference", "building-reading"]
+      : ["building-height", "building-taller", "building-difference", "building-reading"];
   const kind = sample(kinds, seed + 23);
 
   if (kind === "building-name") {
@@ -571,24 +449,6 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
     };
   }
 
-  if (kind === "building-estimate") {
-    const estimate = heightEstimate(building, difficulty);
-    return {
-      id: `${seed}-building-estimate-${building.id}`,
-      topic: "buildings",
-      kind,
-      prompt: `Slide to the height of ${building.name}.`,
-      image: building.image,
-      imageAlt: building.name,
-      imageCredit: building.imageCredit,
-      choices: [],
-      answer: estimate.answerLabel,
-      explanation: `${building.name} is ${feet(building.heightFt)} tall. Close estimates count on this slider.`,
-      numberLine: { label: "Height", value: building.heightFt, max: estimate.max, unit: "ft" },
-      estimate,
-    };
-  }
-
   const correct = displayHeightChoice(building.heightFt, difficulty);
   return {
     id: `${seed}-building-height-${building.id}`,
@@ -608,10 +468,10 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
 const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
   const shark = sample(sharks, seed);
   const kinds: QuestionKind[] = difficulty === 1
-    ? ["shark-name", "shark-family", "shark-bigger", "shark-size-estimate", "shark-reading"]
+    ? ["shark-name", "shark-family", "shark-bigger", "shark-reading"]
     : difficulty === 2
-      ? ["shark-name", "shark-family", "shark-bigger", "shark-size-estimate", "shark-faster", "shark-difference", "shark-power"]
-      : ["shark-bigger", "shark-size-estimate", "shark-faster", "shark-difference", "shark-power", "shark-family"];
+      ? ["shark-name", "shark-family", "shark-bigger", "shark-faster", "shark-difference", "shark-power"]
+      : ["shark-bigger", "shark-faster", "shark-difference", "shark-power", "shark-family"];
   const kind = sample(kinds, seed + 41);
 
   if (kind === "shark-name") {
@@ -671,24 +531,6 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
       answer: `${cards.find((card) => card.title === winner.name)?.label}: ${winner.name}`,
       explanation: `${winner.name} wins this matchup with ${formatNumber(value)} ${unit}.`,
       numberLine: { label: stat === "length" ? "Size" : stat === "speed" ? "Speed" : "Power", value, max: stat === "length" ? maxSharkLength : stat === "speed" ? maxSharkSpeed : maxSharkPower, unit: stat === "length" ? "ft" : stat === "speed" ? "mph" : "/5" },
-    };
-  }
-
-  if (kind === "shark-size-estimate") {
-    const estimate = sharkSizeEstimate(shark, difficulty);
-    return {
-      id: `${seed}-shark-size-estimate-${shark.id}`,
-      topic: "sharks",
-      kind,
-      prompt: `Slide to the size of ${shark.name}.`,
-      image: shark.image,
-      imageAlt: shark.name,
-      imageCredit: shark.imageCredit,
-      choices: [],
-      answer: estimate.answerLabel,
-      explanation: `${shark.name} can be about ${feet(shark.lengthFt)} long. Close estimates count on this slider.`,
-      numberLine: { label: "Size", value: shark.lengthFt, max: estimate.max, unit: "ft" },
-      estimate,
     };
   }
 
