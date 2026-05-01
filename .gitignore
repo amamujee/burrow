@@ -31,6 +31,7 @@ burrow-polish-*.png
 rabbit-hole-*.png
 
 # debug
+.burrow/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

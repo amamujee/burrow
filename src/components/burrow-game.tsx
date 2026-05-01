@@ -65,6 +65,8 @@ type ContentIssueReport = {
   mode: string;
   topic: TopicId | KnowledgeTopic;
   itemId: string;
+  questionId?: string;
+  questionKind?: Question["kind"];
   title: string;
   prompt: string;
   image?: string;
@@ -357,13 +359,15 @@ export function BurrowGame() {
       mode: activeChallengeMode,
       topic: question?.topic ?? topic,
       itemId: question?.id ?? "unknown",
+      questionId: question?.id,
+      questionKind: question?.kind,
       title: question?.imageAlt ?? "Question",
       prompt: question?.prompt ?? "Question issue",
       image: question?.image,
     };
   };
 
-  const flagCurrentIssue = () => {
+  const flagCurrentIssue = async () => {
     const report: ContentIssueReport = {
       id: `issue-${Date.now()}`,
       createdAt: new Date().toISOString(),
@@ -375,7 +379,20 @@ export function BurrowGame() {
     setIssueCount(nextReports.length);
     setIssueFlash(true);
     window.setTimeout(() => setIssueFlash(false), 1800);
-    setCelebration("Flagged for content review.");
+    setCelebration("Flagged for content review. Saving the note locally...");
+
+    try {
+      const response = await fetch("/api/content-issues", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(report),
+      });
+      if (!response.ok) throw new Error(`Issue log failed with ${response.status}`);
+      setCelebration("Flagged for content review and logged locally.");
+    } catch (error) {
+      console.warn("Content issue was kept in browser storage but could not be written to the local log.", error);
+      setCelebration("Flagged here. Local file logging was not available.");
+    }
   };
 
   const setProgress = (update: Progress | ((current: Progress) => Progress)) => {
@@ -871,7 +888,6 @@ export function BurrowGame() {
           onToggleMixMode={toggleMixMode}
           issueFlash={issueFlash}
           issueCount={issueCount}
-          onFlagIssue={flagCurrentIssue}
           onReset={resetProgress}
         />
 
@@ -896,6 +912,8 @@ export function BurrowGame() {
             onAnswer={answer}
             onNext={advance}
             onSkip={advance}
+            issueFlash={issueFlash}
+            onFlagIssue={flagCurrentIssue}
           />
         )}
 
@@ -1032,7 +1050,6 @@ function GameHud({
   onToggleMixMode,
   issueFlash,
   issueCount,
-  onFlagIssue,
   onReset,
 }: {
   profiles: LearnerProfile[];
@@ -1057,7 +1074,6 @@ function GameHud({
   onToggleMixMode: (mode: ChallengeMode) => void;
   issueFlash: boolean;
   issueCount: number;
-  onFlagIssue: () => void;
   onReset: () => void;
 }) {
   return (
@@ -1094,7 +1110,6 @@ function GameHud({
           onToggleMixMode={onToggleMixMode}
           issueFlash={issueFlash}
           issueCount={issueCount}
-          onFlagIssue={onFlagIssue}
           onReset={onReset}
         />
       </div>
@@ -1163,7 +1178,6 @@ function SetupMenu({
   onToggleMixMode,
   issueFlash,
   issueCount,
-  onFlagIssue,
   onReset,
 }: {
   activeInterests: KnowledgeTopic[];
@@ -1174,7 +1188,6 @@ function SetupMenu({
   onToggleMixMode: (mode: ChallengeMode) => void;
   issueFlash: boolean;
   issueCount: number;
-  onFlagIssue: () => void;
   onReset: () => void;
 }) {
   const activeModeSet = new Set(activeMixModes);
@@ -1255,14 +1268,11 @@ function SetupMenu({
           </div>
         </div>
 
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={onFlagIssue}
-            className="min-h-11 rounded-lg border-2 border-[#082329] bg-[#fff8ec] px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#fff0c2] active:translate-y-0.5"
-          >
-            {issueFlash ? "Flagged" : "Flag issue"}{issueCount ? ` (${issueCount})` : ""}
-          </button>
+        <div className="mt-3 grid grid-cols-[1fr_auto] gap-2">
+          <div className="min-h-11 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] px-3 py-2">
+            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">Image reports</p>
+            <p className="text-sm font-black leading-tight text-[#102f36]">{issueFlash ? "Latest saved" : `${issueCount} logged`}</p>
+          </div>
           <button
             type="button"
             onClick={onReset}
@@ -1292,6 +1302,8 @@ function QuestionRun({
   onAnswer,
   onNext,
   onSkip,
+  issueFlash,
+  onFlagIssue,
 }: {
   question: Question;
   questions: Question[];
@@ -1308,6 +1320,8 @@ function QuestionRun({
   onAnswer: (choice: string) => void;
   onNext: () => void;
   onSkip: () => void;
+  issueFlash: boolean;
+  onFlagIssue: () => void;
 }) {
   const isDifferenceQuestion = question.kind === "building-difference" || question.kind === "shark-difference";
   const showNumberLine = Boolean(question.numberLine) && (answered || (Boolean(question.comparison) && !isDifferenceQuestion));
@@ -1326,6 +1340,14 @@ function QuestionRun({
         <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
           {topicCatalog[question.topic].roundLabel}
         </div>
+        <button
+          type="button"
+          onClick={onFlagIssue}
+          className="absolute right-2 top-2 rounded-lg border-2 border-[#082329] bg-white/95 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#082329] transition hover:bg-[#fff0c2] active:translate-y-0.5"
+          aria-label={`Flag an issue with this question image: ${question.imageAlt}`}
+        >
+          {issueFlash ? "Flagged" : "Flag image"}
+        </button>
         <div className="absolute bottom-2 left-2 right-2 grid gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
           <div className="rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">
             {stageHint}
