@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand, type TopicId } from "@/lib/game-data";
 import {
   buildBuildFactRound,
@@ -510,9 +510,9 @@ export function BurrowGame() {
   };
 
   const openCollection = () => {
-    setShowCollection(true);
+    setShowCollection((value) => !value);
     setLastResult(null);
-    setCelebration("Collection opened.");
+    setCelebration(showCollection ? "Back to the game." : "Collection opened.");
   };
 
   const switchProfile = (profileId: string) => {
@@ -846,16 +846,14 @@ export function BurrowGame() {
   };
 
   return (
-    <main className="h-dvh overflow-hidden bg-[#0f2e35] text-[#1d2528]">
-      <PortraitGate />
-      <section className="burrow-game-shell flex h-dvh min-h-0 flex-col gap-1.5 overflow-hidden bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-1.5 md:p-2">
+    <main className="min-h-dvh overflow-x-hidden bg-[#0f2e35] text-[#1d2528]">
+      <section className="burrow-game-shell flex min-h-dvh flex-col gap-1.5 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-1.5 md:p-2 min-[900px]:h-dvh min-[900px]:min-h-0 min-[900px]:overflow-hidden">
         <GameHud
           profiles={profilesState.profiles}
           activeProfileId={activeProfile.id}
           onProfileChange={switchProfile}
           onCreateProfile={createProfile}
           level={progress.level}
-          xp={progress.xp}
           xpToNext={Math.max(0, nextLevelXp - progress.xp)}
           levelProgress={levelProgress}
           streak={progress.streak}
@@ -1011,34 +1009,12 @@ export function BurrowGame() {
   );
 }
 
-function PortraitGate() {
-  return (
-    <section className="burrow-portrait-gate h-dvh items-center justify-center bg-[#fff2d7] p-6 text-center text-[#102f36]">
-      <div className="max-w-sm rounded-2xl border-2 border-[#082329] bg-white p-5 shadow-[4px_4px_0_#082329]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/icons/burrow-icon-120.png"
-          alt=""
-          aria-hidden="true"
-          className="mx-auto h-20 w-20 rounded-2xl border-2 border-[#082329] bg-[#f5d39c] shadow-[2px_2px_0_#082329]"
-        />
-        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-[#81533b]">Landscape mode</p>
-        <h1 className="mt-1 text-4xl font-black leading-none text-[#321e16]">Turn sideways</h1>
-        <p className="mt-3 text-lg font-bold leading-snug text-[#405257]">
-          Burrow is tuned for iPad landscape so the picture, choices, and Next button always fit.
-        </p>
-      </div>
-    </section>
-  );
-}
-
 function GameHud({
   profiles,
   activeProfileId,
   onProfileChange,
   onCreateProfile,
   level,
-  xp,
   xpToNext,
   levelProgress,
   streak,
@@ -1064,7 +1040,6 @@ function GameHud({
   onProfileChange: (profileId: string) => void;
   onCreateProfile: () => void;
   level: number;
-  xp: number;
   xpToNext: number;
   levelProgress: number;
   streak: number;
@@ -1097,16 +1072,15 @@ function GameHud({
             className="h-11 w-11 shrink-0 rounded-xl border-2 border-[#082329] bg-[#f5d39c] shadow-[2px_2px_0_#082329]"
           />
           <div className="min-w-0 shrink">
-            <p className="hidden truncate text-[9px] font-black uppercase tracking-[0.18em] text-[#81533b] min-[1180px]:block">Let your Kid go deep</p>
+            <p className="hidden truncate text-[9px] font-black uppercase tracking-[0.18em] text-[#81533b] min-[1240px]:block">Let your Kid go deep</p>
             <h1 className="truncate text-2xl font-black leading-none text-[#321e16]">Burrow</h1>
           </div>
           <ProfilePicker profiles={profiles} activeProfileId={activeProfileId} onChange={onProfileChange} onCreate={onCreateProfile} />
         </div>
 
-        <HudProgress level={level} xp={xp} xpToNext={xpToNext} levelProgress={levelProgress} streak={streak} accuracy={accuracy} />
+        <HudProgress level={level} xpToNext={xpToNext} levelProgress={levelProgress} streak={streak} accuracy={accuracy} />
 
-        <div className="grid min-w-0 grid-cols-[minmax(112px,.6fr)_minmax(205px,1.05fr)_minmax(64px,.3fr)] gap-1.5">
-          <PlayModePicker mode={mode} onChange={onModeChange} />
+        <div className="grid min-w-0 grid-cols-[minmax(220px,1fr)_minmax(72px,.32fr)] gap-1.5">
           <DifficultySelector difficulty={difficulty} onChange={onDifficultyChange} />
           <CollectionAction active={showCollection} value={collectionValue} onClick={onCollection} />
         </div>
@@ -1114,6 +1088,8 @@ function GameHud({
         <SetupMenu
           activeInterests={activeInterests}
           onToggleInterest={onToggleInterest}
+          mode={mode}
+          onModeChange={onModeChange}
           activeMixModes={activeMixModes}
           onToggleMixMode={onToggleMixMode}
           issueFlash={issueFlash}
@@ -1128,37 +1104,51 @@ function GameHud({
 
 function HudProgress({
   level,
-  xp,
   xpToNext,
   levelProgress,
   streak,
   accuracy,
 }: {
   level: number;
-  xp: number;
   xpToNext: number;
   levelProgress: number;
   streak: number;
   accuracy: number;
 }) {
+  const sparkSlots = 6;
+  const filledSparks = Math.min(sparkSlots, Math.max(0, Math.ceil((levelProgress / 100) * sparkSlots)));
+
   return (
     <div className="min-w-0 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] px-2 py-1.5">
-      <div className="flex items-center justify-between gap-2">
-        <div className="min-w-0">
-          <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#7a5d4b]">Level {level}</p>
-          <p className="truncate text-sm font-black leading-tight text-[#102f36]">{xpToNext} XP to next</p>
+      <div className="grid grid-cols-[auto_1fr] items-center gap-2">
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border-2 border-[#082329] bg-[#f3c647] text-center shadow-[2px_2px_0_#082329]">
+          <span className="block text-[8px] font-black uppercase leading-none tracking-[0.1em] text-[#81533b]">Level</span>
+          <span className="block text-2xl font-black leading-none text-[#102f36]">{level}</span>
         </div>
-        <p className="shrink-0 rounded-full border-2 border-[#082329] bg-[#f3c647] px-2.5 py-1 text-sm font-black leading-none text-[#102f36]">
-          {xp} XP
-        </p>
-      </div>
-      <div className="mt-1.5 h-2 overflow-hidden rounded-full border-2 border-[#082329] bg-white">
-        <div className="h-full bg-[#4fb286] transition-[width] duration-500 ease-out" style={{ width: `${levelProgress}%` }} />
+        <div className="min-w-0">
+          <div className="flex min-w-0 items-center justify-between gap-2">
+            <p className="truncate text-sm font-black leading-tight text-[#102f36]">Glow</p>
+            <p className="shrink-0 text-[10px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">{xpToNext} left</p>
+          </div>
+          <div className="mt-1 grid grid-cols-6 gap-1" aria-label={`${levelProgress}% of this level filled`}>
+            {Array.from({ length: sparkSlots }, (_, index) => {
+              const filled = index < filledSparks;
+              return (
+                <span
+                  key={`spark-${index}`}
+                  className={`h-3 rounded-sm border-2 border-[#082329] transition-colors duration-300 ${
+                    filled ? "bg-[#78d99a] shadow-[1px_1px_0_#082329]" : "bg-white"
+                  }`}
+                />
+              );
+            })}
+          </div>
+        </div>
       </div>
       <div className="mt-1 flex min-w-0 items-center gap-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">
-        <span className="truncate">Streak {streak}</span>
+        <span className="truncate">{streak ? `${streak} in a row` : "Warm up"}</span>
         <span className="h-1 w-1 rounded-full bg-[#cfbfae]" />
-        <span className="truncate">Hit {accuracy}%</span>
+        <span className="truncate">{accuracy}% right</span>
       </div>
     </div>
   );
@@ -1167,6 +1157,8 @@ function HudProgress({
 function SetupMenu({
   activeInterests,
   onToggleInterest,
+  mode,
+  onModeChange,
   activeMixModes,
   onToggleMixMode,
   issueFlash,
@@ -1176,6 +1168,8 @@ function SetupMenu({
 }: {
   activeInterests: KnowledgeTopic[];
   onToggleInterest: (topic: KnowledgeTopic) => void;
+  mode: GameMode;
+  onModeChange: (mode: GameMode) => void;
   activeMixModes: ChallengeMode[];
   onToggleMixMode: (mode: ChallengeMode) => void;
   issueFlash: boolean;
@@ -1192,7 +1186,27 @@ function SetupMenu({
         <span className="text-lg leading-none">⌄</span>
       </summary>
       <div className="absolute right-0 z-40 mt-2 max-h-[calc(100dvh-112px)] w-[min(680px,calc(100vw-24px))] overflow-auto rounded-xl border-2 border-[#082329] bg-[#fffaf4] p-3 shadow-[4px_4px_0_#082329]">
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-3">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7a5d4b]">Play mode</p>
+            <div className="mt-2 grid gap-1.5">
+              {modeOptions.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-pressed={mode === item.id}
+                  onClick={() => onModeChange(item.id)}
+                  className={`min-h-10 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
+                    mode === item.id ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329] hover:bg-[#fff0c2]"
+                  }`}
+                >
+                  <span className="block text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
+                  <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{item.eyebrow}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7a5d4b]">Topics</p>
             <div className="mt-2 grid gap-1.5">
@@ -1306,8 +1320,8 @@ function QuestionRun({
     : `Image: ${question.imageCredit}`;
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] md:min-h-0">
+    <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+      <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] min-[900px]:min-h-0">
         {question.comparison ? <ComparisonStage cards={question.comparison} /> : <QuestionImage question={question} />}
         <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
           {topicCatalog[question.topic].roundLabel}
@@ -1322,7 +1336,7 @@ function QuestionRun({
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="shrink-0">
           <div className="flex items-center justify-between gap-2">
             <div className="flex min-w-0 items-center gap-2">
@@ -1431,7 +1445,7 @@ function SortMode({
   const pickedSet = new Set(picked);
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <article className="overflow-hidden rounded-xl border-2 border-[#082329] bg-[#102f36] p-2 shadow-[4px_4px_0_#082329]">
         <div className="grid h-full min-h-[390px] grid-cols-2 gap-2 md:grid-cols-4 lg:min-h-0">
           {round.cards.map((card) => (
@@ -1453,7 +1467,7 @@ function SortMode({
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -1548,8 +1562,8 @@ function FactMode({
   const answered = selected !== null;
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="relative min-h-[320px] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] md:min-h-0">
+    <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+      <article className="relative min-h-[320px] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] min-[900px]:min-h-0">
         <MediaImage image={round.image} imageAlt={round.imageAlt} topic={round.topic} />
         <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
           Fact card
@@ -1559,7 +1573,7 @@ function FactMode({
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -1664,8 +1678,8 @@ function RevealMode({
   }, [answered, intervalMs, revealed, totalTiles]);
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#102f36] shadow-[4px_4px_0_#082329] md:min-h-0">
+    <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+      <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#102f36] shadow-[4px_4px_0_#082329] min-[900px]:min-h-0">
         <div className="h-full transition-[filter] duration-500 ease-out" style={{ filter: `blur(${blurPx}px)` }}>
           <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
         </div>
@@ -1690,7 +1704,7 @@ function RevealMode({
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -1791,8 +1805,8 @@ function BuildFactMode({
   const pickedTokens = picked.map((id) => round.tokens.find((token) => token.id === id)).filter(Boolean) as BuildFactRound["tokens"];
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] md:min-h-0">
+    <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+      <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] min-[900px]:min-h-0">
         <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
         <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
           Build round
@@ -1803,7 +1817,7 @@ function BuildFactMode({
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -1907,10 +1921,10 @@ function NumberMode({
   const answerLabel = `${round.answer.toLocaleString("en-US")} ${round.unit}`;
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <KnowledgeCardsStage cards={round.cards} badge="Number case" footer={`${round.biggerLabel} minus ${round.smallerLabel}`} />
 
-      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -1999,10 +2013,10 @@ function OddOneMode({
   const answer = round.cards.find((card) => card.id === round.answerId);
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 overflow-hidden md:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <KnowledgeCardsStage cards={round.cards} badge="Logic set" footer="Find the card that breaks the rule." />
 
-      <article className="flex min-h-0 flex-col overflow-y-auto rounded-xl border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -2079,7 +2093,7 @@ function CollectionBook({
   const totalResearchRecords = allKnowledgeTopics.reduce((total, item) => total + topicPacks[item].libraryCount, 0);
 
   return (
-    <section className="grid min-h-0 flex-1 gap-2 lg:grid-cols-[300px_1fr]">
+    <section className="grid flex-1 gap-2 min-[900px]:min-h-0 lg:grid-cols-[300px_1fr]">
       <aside className="rounded-lg border-2 border-[#082329] bg-white p-3 shadow-[4px_4px_0_#082329]">
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#b5412b]">Collection</p>
         <h2 className="mt-1 text-3xl font-black leading-none text-[#102f36]">{unlocked.length}/{filtered.length} cards</h2>
@@ -2198,41 +2212,6 @@ function ProfilePicker({
   );
 }
 
-function PlayModePicker({ mode, onChange }: { mode: GameMode; onChange: (mode: GameMode) => void }) {
-  const active = modeOptions.find((item) => item.id === mode) ?? modeOptions[0];
-
-  return (
-    <details className="group relative min-w-0">
-      <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 rounded-lg border-2 border-[#082329] bg-[#78d99a] px-3 py-2 text-left shadow-[2px_2px_0_#082329] transition hover:bg-[#91e0a9] group-open:bg-[#91e0a9] [&::-webkit-details-marker]:hidden">
-        <span className="min-w-0">
-          <span className="block text-[9px] font-black uppercase tracking-[0.16em] text-[#315a40]">Play mode</span>
-          <span className="block truncate text-base font-black leading-tight text-[#102f36]">{active.label}</span>
-        </span>
-        <span className="shrink-0 text-lg font-black leading-none text-[#102f36]">⌄</span>
-      </summary>
-      <div className="absolute left-0 z-30 mt-2 w-full min-w-64 rounded-lg border-2 border-[#082329] bg-[#fffaf4] p-2 shadow-[4px_4px_0_#082329]">
-        <div className="grid gap-1.5">
-          {modeOptions.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => onChange(item.id)}
-              className={`flex min-h-11 items-center justify-between gap-3 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
-                mode === item.id ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329] hover:bg-[#fff0c2]"
-              }`}
-            >
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
-                <span className="block truncate text-[10px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{item.eyebrow}</span>
-              </span>
-              <span className="shrink-0 text-xl font-black text-[#102f36]">{mode === item.id ? "✓" : "+"}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-    </details>
-  );
-}
-
 function DifficultySelector({ difficulty, onChange }: { difficulty: Difficulty; onChange: (difficulty: Difficulty) => void }) {
   return (
     <div className="grid min-w-0 grid-cols-3 gap-1 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-1">
@@ -2261,8 +2240,8 @@ function CollectionAction({ active, value, onClick }: { active: boolean; value: 
         active ? "border-[#082329] bg-[#f3c647] shadow-[2px_2px_0_#082329]" : "border-transparent bg-white hover:border-[#cfbfae] hover:bg-[#fff0c2]"
       }`}
     >
-      <span className="block truncate text-[8px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">Cards</span>
-      <span className="block truncate text-sm font-black leading-none text-[#102f36]">{value}</span>
+      <span className="block truncate text-[8px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">{active ? "Back" : "Cards"}</span>
+      <span className="block truncate text-sm font-black leading-none text-[#102f36]">{active ? "Game" : value}</span>
     </button>
   );
 }
@@ -2459,12 +2438,26 @@ function FeedbackPanel({
   isLast: boolean;
   onNext: () => void;
 }) {
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    panelRef.current?.scrollIntoView({ block: "end" });
+  }, [correctAnswer, explanation, isCorrect]);
+
   return (
-    <div className="sticky bottom-0 z-20 mt-auto bg-white/95 pt-2 backdrop-blur">
+    <div ref={panelRef} className="sticky bottom-0 z-20 mt-auto bg-white/95 pt-2 backdrop-blur">
       <div className={`rounded-lg border-2 p-2.5 ${isCorrect ? "border-[#28764a] bg-[#e9ffe9]" : "border-[#b5412b] bg-[#fff0ea]"}`}>
         <div className="grid gap-2 md:grid-cols-[auto_1fr] md:items-start">
-          <div className={`flex h-12 w-12 items-center justify-center rounded-lg border-2 border-[#082329] text-2xl font-black shadow-[2px_2px_0_#082329] ${isCorrect ? "bg-[#78d99a]" : "bg-[#ff9f8d]"}`}>
-            {isCorrect ? "+" : "!"}
+          <div className={`relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border-2 border-[#082329] text-2xl font-black shadow-[2px_2px_0_#082329] ${isCorrect ? "bg-[#78d99a]" : "bg-[#ff9f8d]"}`}>
+            {isCorrect ? (
+              <>
+                <span className="absolute left-1.5 top-1 h-2 w-2 rounded-sm bg-[#fff8ec]" />
+                <span className="absolute bottom-1.5 right-1.5 h-1.5 w-1.5 rounded-sm bg-[#f3c647]" />
+                <span>+</span>
+              </>
+            ) : (
+              "!"
+            )}
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
@@ -2472,11 +2465,11 @@ function FeedbackPanel({
                 {isCorrect ? celebration : note}
               </p>
               <span className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-2 py-0.5 text-sm font-black text-[#102f36]">
-                +{xpGain} XP
+                +{xpGain} glow
               </span>
               {leveledUp && (
                 <span className="rounded-full border-2 border-[#082329] bg-[#78d99a] px-2 py-0.5 text-sm font-black text-[#102f36]">
-                  Level up
+                  Glow up
                 </span>
               )}
             </div>

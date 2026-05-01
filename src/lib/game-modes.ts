@@ -1,5 +1,6 @@
 import {
   buildings,
+  heatBands,
   heatBandRangeLabel,
   heatProfiles,
   peppers,
@@ -8,6 +9,7 @@ import {
   topicIds,
   type Building,
   type Difficulty,
+  type HeatBand,
   type KnowledgeTopic,
   type Pepper,
   type Shark,
@@ -165,6 +167,12 @@ const topicOrder = (topic: TopicScope, seed: number): KnowledgeTopic => {
 
 const pepperRange = (pepper: Pepper) =>
   pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
+const heatRank = Object.fromEntries(heatBands.map((heat, index) => [heat, index])) as Record<HeatBand, number>;
+const spaceKindLabel = (space: SpaceCard) => {
+  if (space.kind === "concept") return "space idea";
+  if (space.kind === "region") return "space region";
+  return space.kind;
+};
 
 const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   id: pepper.id,
@@ -296,9 +304,9 @@ export const buildBuildFactRound = (topic: TopicScope, difficulty: Difficulty, s
     const card = pepperCard(pepper);
     const parts =
       difficulty === 1
-        ? [pepper.name, "is", pepper.heat, "heat."]
+        ? [pepper.name, "has", pepper.heat, "heat."]
         : difficulty === 2
-          ? [pepper.name, "can reach", formatShu(pepper.shuMax), "and is", pepper.heat, "."]
+          ? [pepper.name, "can reach", formatShu(pepper.shuMax), "and has", pepper.heat, "heat."]
           : [pepper.name, "fits", heatBandRangeLabel(pepper.heat), "because it can reach", formatShu(pepper.shuMax), "."];
     const tokens = factTokens(seed, parts);
     return {
@@ -338,12 +346,13 @@ export const buildBuildFactRound = (topic: TopicScope, difficulty: Difficulty, s
   if (currentTopic === "space") {
     const space = sample(spaceCards, seed + 3);
     const card = spaceCard(space, space.kind === "star" ? "temperature" : space.kind === "planet" ? "distance" : "size");
+    const kindLabel = spaceKindLabel(space);
     const parts =
       difficulty === 1
-        ? [space.name, "is a", space.kind, "."]
+        ? [space.name, "is a", kindLabel, "."]
         : difficulty === 2
-          ? [space.name, "belongs in", space.group, "and is a", space.kind, "."]
-          : [space.name, "is a", space.kind, "from", space.group, "with a big space clue."];
+          ? [space.name, "belongs in", space.group, "."]
+          : [space.name, "is part of", space.group, "and is a", kindLabel, "."];
     const tokens = factTokens(seed, parts);
     return {
       id: `${seed}-build-space-${space.id}`,
@@ -361,10 +370,10 @@ export const buildBuildFactRound = (topic: TopicScope, difficulty: Difficulty, s
   const card = sharkCard(shark);
   const parts =
     difficulty === 1
-      ? [shark.name, "is a", shark.family, "."]
+      ? [shark.name, "is in the", `${shark.family} group`, "."]
       : difficulty === 2
         ? [shark.name, "can grow to", feet(shark.lengthFt), "and eats", shark.diet, "."]
-        : [shark.name, "is a", shark.family, "that can swim", `${formatNumber(shark.speedMph)} mph`, "."];
+        : [shark.name, "can swim about", `${formatNumber(shark.speedMph)} mph`, "and eats", shark.diet, "."];
   const tokens = factTokens(seed, parts);
   return {
     id: `${seed}-build-shark-${shark.id}`,
@@ -484,14 +493,23 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
   const currentTopic = topicOrder(topic, seed);
 
   if (currentTopic === "peppers") {
-    const heat = sample(["not spicy", "warm", "very hot", "insane"] as const, seed + 1);
+    const eligibleHeats = heatBands.filter((heat) => {
+      const sameCount = peppers.filter((pepper) => pepper.heat === heat).length;
+      const hasClearOdd = peppers.some((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= 2);
+      return sameCount >= 3 && hasClearOdd;
+    });
+    const heat = sample(eligibleHeats, seed + 1);
     const same = shuffle(peppers.filter((pepper) => pepper.heat === heat), seed + 2).slice(0, 3);
-    const odd = sampleSafe(peppers.filter((pepper) => pepper.heat !== heat), peppers, seed + 3);
+    const odd = sampleSafe(
+      peppers.filter((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= 2),
+      peppers.filter((pepper) => pepper.heat !== heat),
+      seed + 3,
+    );
     const cards = shuffle([...same.map(pepperCard), pepperCard(odd)], seed + 4);
     return {
       id: `${seed}-odd-peppers-${heat}-${odd.id}`,
       topic: currentTopic,
-      prompt: "Which pepper does not fit the heat rule?",
+      prompt: "Which pepper has the different heat level?",
       cards,
       answerId: odd.id,
       reason: `${odd.name} is ${odd.heat}; the others are ${heat}.`,
