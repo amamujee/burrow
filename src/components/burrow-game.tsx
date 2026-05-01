@@ -1062,8 +1062,12 @@ function GameHud({
   onReset: () => void;
 }) {
   return (
-    <header className="relative z-30 shrink-0 rounded-lg border-2 border-[#092421] bg-[#f7f0df] px-2 py-1.5 shadow-[3px_3px_0_#092421]">
-      <div className="grid min-h-[68px] min-w-0 items-center gap-2 min-[900px]:grid-cols-[minmax(292px,.95fr)_minmax(200px,.85fr)_minmax(380px,1.3fr)_auto]">
+    <header className="relative z-30 shrink-0 overflow-hidden rounded-lg border-2 border-[#092421] bg-[#f7f0df] px-2 pb-1.5 pt-5 shadow-[3px_3px_0_#092421]">
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-4 border-b-2 border-[#092421] bg-[#123d38] bg-[linear-gradient(90deg,rgba(255,253,246,.12)_1px,transparent_1px)] bg-[size:32px_32px]"
+      />
+      <div className="relative z-10 grid min-h-[68px] min-w-0 items-center gap-2 min-[900px]:grid-cols-[minmax(292px,.95fr)_minmax(200px,.85fr)_minmax(380px,1.3fr)_auto]">
         <div className="flex min-w-0 items-center gap-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
