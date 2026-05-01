@@ -18,7 +18,7 @@ import {
 } from "./game-data";
 import { scoreFeaturedContent } from "./content-quality";
 
-export type GameMode = "mix" | "quiz" | "versus" | "sort" | "fact" | "peek" | "build" | "number" | "odd";
+export type GameMode = "mix" | "quiz" | "versus" | "sort" | "fact" | "peek" | "number" | "odd";
 
 export const modeOptions: {
   id: GameMode;
@@ -32,7 +32,6 @@ export const modeOptions: {
   { id: "sort", label: "Sort", eyebrow: "order cards", loop: "tap order" },
   { id: "fact", label: "True/False", eyebrow: "read fast", loop: "true or not" },
   { id: "peek", label: "Peek", eyebrow: "picture clue", loop: "reveal guess" },
-  { id: "build", label: "Build", eyebrow: "make a fact", loop: "tap words" },
   { id: "number", label: "Numbers", eyebrow: "math clue", loop: "solve gap" },
   { id: "odd", label: "Odd One", eyebrow: "spot rule", loop: "logic pick" },
 ];
@@ -88,22 +87,6 @@ export type RevealRound = {
   explanation: string;
 };
 
-export type FactToken = {
-  id: string;
-  text: string;
-};
-
-export type BuildFactRound = {
-  id: string;
-  topic: KnowledgeTopic;
-  prompt: string;
-  card: KnowledgeCard;
-  tokens: FactToken[];
-  answerIds: string[];
-  answerText: string;
-  explanation: string;
-};
-
 export type NumberRound = {
   id: string;
   topic: KnowledgeTopic;
@@ -131,7 +114,6 @@ export type OddRound = {
 };
 
 const formatNumber = (value: number) => value.toLocaleString("en-US");
-const formatShu = (value: number) => `${formatNumber(value)} SHU`;
 const feet = (value: number) => `${formatNumber(value)} ft`;
 const numberWithUnit = (value: number, unit: string) => `${formatNumber(value)} ${unit}`;
 
@@ -168,12 +150,6 @@ const topicOrder = (topic: TopicScope, seed: number): KnowledgeTopic => {
 const pepperRange = (pepper: Pepper) =>
   pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
 const heatRank = Object.fromEntries(heatBands.map((heat, index) => [heat, index])) as Record<HeatBand, number>;
-const spaceKindLabel = (space: SpaceCard) => {
-  if (space.kind === "concept") return "space idea";
-  if (space.kind === "region") return "space region";
-  return space.kind;
-};
-
 const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   id: pepper.id,
   topic: "peppers",
@@ -284,106 +260,6 @@ export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed
     choices: shuffle([card.title, ...distractors], seed + 3),
     answer: card.title,
     explanation: `${card.title}: ${card.fact}`,
-  };
-};
-
-const factTokens = (seed: number, parts: string[]) => {
-  const answer = parts.map((text, index) => ({ id: `${seed}-token-${index}`, text }));
-  return {
-    answer,
-    shuffled: shuffle(answer, seed + 19),
-    sentence: parts.join(" ").replace(/\s+([.,])/g, "$1"),
-  };
-};
-
-export const buildBuildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: number): BuildFactRound => {
-  const currentTopic = topicOrder(topic, seed);
-
-  if (currentTopic === "peppers") {
-    const pepper = sample(peppers, seed + 1);
-    const card = pepperCard(pepper);
-    const parts =
-      difficulty === 1
-        ? [pepper.name, "has", pepper.heat, "heat."]
-        : difficulty === 2
-          ? [pepper.name, "can reach", formatShu(pepper.shuMax), "and has", pepper.heat, "heat."]
-          : [pepper.name, "fits", heatBandRangeLabel(pepper.heat), "because it can reach", formatShu(pepper.shuMax), "."];
-    const tokens = factTokens(seed, parts);
-    return {
-      id: `${seed}-build-pepper-${pepper.id}`,
-      topic: currentTopic,
-      prompt: "Build the pepper fact.",
-      card,
-      tokens: tokens.shuffled,
-      answerIds: tokens.answer.map((token) => token.id),
-      answerText: tokens.sentence,
-      explanation: `${pepper.name}: ${pepper.fact}`,
-    };
-  }
-
-  if (currentTopic === "buildings") {
-    const building = sample(buildings, seed + 2);
-    const card = buildingCard(building);
-    const parts =
-      difficulty === 1
-        ? [building.name, "is in", building.city, "."]
-        : difficulty === 2
-          ? [building.name, "is", feet(building.heightFt), "tall", "in", building.city, "."]
-          : [building.name, "is", building.status, "and rises", feet(building.heightFt), "in", building.city, "."];
-    const tokens = factTokens(seed, parts);
-    return {
-      id: `${seed}-build-building-${building.id}`,
-      topic: currentTopic,
-      prompt: "Build the building fact.",
-      card,
-      tokens: tokens.shuffled,
-      answerIds: tokens.answer.map((token) => token.id),
-      answerText: tokens.sentence,
-      explanation: `${building.name}: ${building.fact}`,
-    };
-  }
-
-  if (currentTopic === "space") {
-    const space = sample(spaceCards, seed + 3);
-    const card = spaceCard(space, space.kind === "star" ? "temperature" : space.kind === "planet" ? "distance" : "size");
-    const kindLabel = spaceKindLabel(space);
-    const parts =
-      difficulty === 1
-        ? [space.name, "is a", kindLabel, "."]
-        : difficulty === 2
-          ? [space.name, "belongs in", space.group, "."]
-          : [space.name, "is part of", space.group, "and is a", kindLabel, "."];
-    const tokens = factTokens(seed, parts);
-    return {
-      id: `${seed}-build-space-${space.id}`,
-      topic: currentTopic,
-      prompt: "Build the space fact.",
-      card,
-      tokens: tokens.shuffled,
-      answerIds: tokens.answer.map((token) => token.id),
-      answerText: tokens.sentence,
-      explanation: `${space.name}: ${space.fact}`,
-    };
-  }
-
-  const shark = sample(sharks, seed + 4);
-  const card = sharkCard(shark);
-  const parts =
-    difficulty === 1
-      ? [shark.name, "is in the", `${shark.family} group`, "."]
-      : difficulty === 2
-        ? [shark.name, "can grow to", feet(shark.lengthFt), "and eats", shark.diet, "."]
-        : [shark.name, "can swim about", `${formatNumber(shark.speedMph)} mph`, "and eats", shark.diet, "."];
-  const tokens = factTokens(seed, parts);
-  return {
-    id: `${seed}-build-shark-${shark.id}`,
-    topic: currentTopic,
-    prompt: "Build the shark fact.",
-    card,
-    tokens: tokens.shuffled,
-    answerIds: tokens.answer.map((token) => token.id),
-    answerText: tokens.sentence,
-    explanation: `${shark.name}: ${shark.fact}`,
   };
 };
 

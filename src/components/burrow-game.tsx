@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand, type TopicId } from "@/lib/game-data";
 import {
-  buildBuildFactRound,
   buildFactRound,
   buildNumberRound,
   buildOddRound,
@@ -11,7 +10,6 @@ import {
   buildSortRound,
   collectionCards,
   modeOptions,
-  type BuildFactRound,
   type FactRound,
   type GameMode,
   type KnowledgeCard,
@@ -89,7 +87,7 @@ const initialProgress: Progress = {
   unlockedCards: [],
   topicWins: emptyTopicCounts(),
   topicStats: emptyTopicStats(),
-  modeWins: { mix: 0, quiz: 0, versus: 0, sort: 0, fact: 0, peek: 0, build: 0, number: 0, odd: 0 },
+  modeWins: { mix: 0, quiz: 0, versus: 0, sort: 0, fact: 0, peek: 0, number: 0, odd: 0 },
 };
 
 const profilesKey = "burrow-profiles-v1";
@@ -105,8 +103,8 @@ const levelFromXp = (xp: number) => Math.max(1, Math.floor(xp / 120) + 1);
 const praise = ["Nice reading!", "Big brain move!", "You measured it!", "Hot answer!", "Sky-high thinking!", "Sharp thinking!"];
 const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
 type ChallengeMode = Exclude<GameMode, "mix">;
-const allChallengeModes: ChallengeMode[] = ["quiz", "versus", "sort", "fact", "peek", "build", "number", "odd"];
-const defaultMixPattern: ChallengeMode[] = ["quiz", "peek", "versus", "number", "build", "odd", "sort", "fact"];
+const allChallengeModes: ChallengeMode[] = ["quiz", "versus", "sort", "fact", "peek", "number", "odd"];
+const defaultMixPattern: ChallengeMode[] = ["quiz", "peek", "versus", "number", "odd", "sort", "fact"];
 
 const freshProgress = (): Progress => ({
   ...initialProgress,
@@ -235,6 +233,13 @@ const isQuestionAnswerCorrect = (question: Question, choice: string) => choice =
 const comparisonLabelRank = (value: string) => (value.startsWith("A") ? 0 : value.startsWith("B") ? 1 : 2);
 const orderedComparisonCards = (cards: ComparisonCard[]) => [...cards].sort((a, b) => comparisonLabelRank(a.label) - comparisonLabelRank(b.label));
 const orderedComparisonChoices = (choices: string[]) => [...choices].sort((a, b) => comparisonLabelRank(a) - comparisonLabelRank(b));
+const sortCardById = (round: SortRound, id?: string) => round.cards.find((card) => card.id === id);
+const isSortSlotCorrect = (round: SortRound, pickedId: string | undefined, index: number) => {
+  const pickedCard = sortCardById(round, pickedId);
+  const answerCard = sortCardById(round, round.answerIds[index]);
+  return Boolean(pickedCard && answerCard && pickedCard.statValue === answerCard.statValue);
+};
+const isSortAnswerCorrect = (round: SortRound, picked: string[]) => round.answerIds.every((_, index) => isSortSlotCorrect(round, picked[index], index));
 
 export function BurrowGame() {
   const [profilesState, setProfilesState] = useState<ProfilesState>(() => defaultProfiles());
@@ -257,9 +262,6 @@ export function BurrowGame() {
   const [factSelected, setFactSelected] = useState<"True" | "False" | null>(null);
   const [revealRound, setRevealRound] = useState<RevealRound>(() => buildRevealRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
   const [revealSelected, setRevealSelected] = useState<string | null>(null);
-  const [buildRound, setBuildRound] = useState<BuildFactRound>(() => buildBuildFactRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
-  const [buildPicked, setBuildPicked] = useState<string[]>([]);
-  const [buildChecked, setBuildChecked] = useState(false);
   const [numberRound, setNumberRound] = useState<NumberRound>(() => buildNumberRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
   const [numberSelected, setNumberSelected] = useState<number | null>(null);
   const [oddRound, setOddRound] = useState<OddRound>(() => buildOddRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
@@ -287,9 +289,7 @@ export function BurrowGame() {
         ? factSelected !== null
         : activeChallengeMode === "peek"
           ? revealSelected !== null
-          : activeChallengeMode === "build"
-            ? buildChecked
-            : activeChallengeMode === "number"
+          : activeChallengeMode === "number"
               ? numberSelected !== null
               : activeChallengeMode === "odd"
                 ? oddSelected !== null
@@ -310,7 +310,6 @@ export function BurrowGame() {
       setSortRound(buildSortRound(loadedScope, loadedProfile.progress.difficulty, 20260461));
       setFactRound(buildFactRound(loadedScope, loadedProfile.progress.difficulty, 20260477));
       setRevealRound(buildRevealRound(loadedScope, loadedProfile.progress.difficulty, 20260493));
-      setBuildRound(buildBuildFactRound(loadedScope, loadedProfile.progress.difficulty, 20260503));
       setNumberRound(buildNumberRound(loadedScope, loadedProfile.progress.difficulty, 20260513));
       setOddRound(buildOddRound(loadedScope, loadedProfile.progress.difficulty, 20260523));
       setIssueCount(loadContentIssues().length);
@@ -339,7 +338,6 @@ export function BurrowGame() {
     if (activeChallengeMode === "sort") return { mode: activeChallengeMode, topic: sortRound.topic, itemId: sortRound.id, title: "Sort round", prompt: sortRound.prompt, image: sortRound.cards[0]?.image };
     if (activeChallengeMode === "fact") return { mode: activeChallengeMode, topic: factRound.topic, itemId: factRound.id, title: factRound.imageAlt, prompt: factRound.statement, image: factRound.image };
     if (activeChallengeMode === "peek") return { mode: activeChallengeMode, topic: revealRound.topic, itemId: revealRound.id, title: revealRound.card.title, prompt: revealRound.prompt, image: revealRound.card.image };
-    if (activeChallengeMode === "build") return { mode: activeChallengeMode, topic: buildRound.topic, itemId: buildRound.id, title: buildRound.card.title, prompt: buildRound.prompt, image: buildRound.card.image };
     if (activeChallengeMode === "number") return { mode: activeChallengeMode, topic: numberRound.topic, itemId: numberRound.id, title: numberRound.biggerLabel, prompt: numberRound.prompt, image: numberRound.cards[0]?.image };
     if (activeChallengeMode === "odd") return { mode: activeChallengeMode, topic: oddRound.topic, itemId: oddRound.id, title: "Odd one round", prompt: oddRound.prompt, image: oddRound.cards[0]?.image };
 
@@ -453,8 +451,6 @@ export function BurrowGame() {
     setSortChecked(false);
     setFactSelected(null);
     setRevealSelected(null);
-    setBuildPicked([]);
-    setBuildChecked(false);
     setNumberSelected(null);
     setOddSelected(null);
     setLastResult(null);
@@ -480,7 +476,6 @@ export function BurrowGame() {
     setSortRound(buildSortRound(scope, nextProfile.progress.difficulty, seed + 31));
     setFactRound(buildFactRound(scope, nextProfile.progress.difficulty, seed + 47));
     setRevealRound(buildRevealRound(scope, nextProfile.progress.difficulty, seed + 61));
-    setBuildRound(buildBuildFactRound(scope, nextProfile.progress.difficulty, seed + 73));
     setNumberRound(buildNumberRound(scope, nextProfile.progress.difficulty, seed + 89));
     setOddRound(buildOddRound(scope, nextProfile.progress.difficulty, seed + 97));
   };
@@ -494,7 +489,6 @@ export function BurrowGame() {
     setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 59));
     setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 71));
     setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 83));
-    setBuildRound(buildBuildFactRound(currentTopicScope, progress.difficulty, seed + 91));
     setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 103));
     setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 109));
   };
@@ -508,7 +502,6 @@ export function BurrowGame() {
     setSortRound(buildSortRound(currentTopicScope, nextDifficulty, seed + 41));
     setFactRound(buildFactRound(currentTopicScope, nextDifficulty, seed + 47));
     setRevealRound(buildRevealRound(currentTopicScope, nextDifficulty, seed + 53));
-    setBuildRound(buildBuildFactRound(currentTopicScope, nextDifficulty, seed + 59));
     setNumberRound(buildNumberRound(currentTopicScope, nextDifficulty, seed + 67));
     setOddRound(buildOddRound(currentTopicScope, nextDifficulty, seed + 71));
     setCelebration(`${difficultyLabel(nextDifficulty)} questions.`);
@@ -582,7 +575,6 @@ export function BurrowGame() {
       setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 29));
       setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 37));
       setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 43));
-      setBuildRound(buildBuildFactRound(currentTopicScope, progress.difficulty, seed + 49));
       setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 53));
       setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 59));
     }
@@ -626,14 +618,11 @@ export function BurrowGame() {
     setSortChecked(false);
     setFactSelected(null);
     setRevealSelected(null);
-    setBuildPicked([]);
-    setBuildChecked(false);
     setNumberSelected(null);
     setOddSelected(null);
     setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 29));
     setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 37));
     setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 43));
-    setBuildRound(buildBuildFactRound(currentTopicScope, progress.difficulty, seed + 49));
     setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 53));
     setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 59));
   };
@@ -663,7 +652,7 @@ export function BurrowGame() {
 
   const checkSort = () => {
     if (sortChecked || sortPicked.length !== sortRound.answerIds.length) return;
-    const correct = sortPicked.every((id, index) => id === sortRound.answerIds[index]);
+    const correct = isSortAnswerCorrect(sortRound, sortPicked);
     const xpGain = correct ? 30 + progress.difficulty * 6 : 8;
     const unlocked = sortRound.cards.filter((card) => sortRound.answerIds.includes(card.id)).map((card) => card.title);
     const result = reward({
@@ -749,35 +738,6 @@ export function BurrowGame() {
     setCelebration("New picture peek.");
   };
 
-  const checkBuild = () => {
-    if (buildChecked || buildPicked.length !== buildRound.answerIds.length) return;
-    const correct = buildPicked.every((id, index) => id === buildRound.answerIds[index]);
-    const xpGain = correct ? 24 + progress.difficulty * 6 : 7;
-    const result = reward({
-      correct,
-      xpGain,
-      topicName: buildRound.topic,
-      modeName: mode === "mix" ? "mix" : "build",
-      seenId: buildRound.id,
-      unlockTitles: [buildRound.card.title],
-    });
-    setBuildChecked(true);
-    setMiniRunAnswered((value) => value + 1);
-    setMiniRunCorrect((value) => value + (correct ? 1 : 0));
-    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
-    setCelebration(correct ? "Sentence builder!" : "Good try. Read it in order.");
-    setLastResult(result);
-  };
-
-  const nextBuildRound = () => {
-    const seed = freshSeed(miniRunAnswered * 29);
-    setBuildRound(buildBuildFactRound(currentTopicScope, progress.difficulty, seed));
-    setBuildPicked([]);
-    setBuildChecked(false);
-    setLastResult(null);
-    setCelebration("New fact build.");
-  };
-
   const answerNumber = (choice: number) => {
     if (numberSelected !== null) return;
     const correct = choice === numberRound.answer;
@@ -843,7 +803,6 @@ export function BurrowGame() {
     setSortRound(buildSortRound(currentTopicScope, reset.difficulty, seed + 29));
     setFactRound(buildFactRound(currentTopicScope, reset.difficulty, seed + 37));
     setRevealRound(buildRevealRound(currentTopicScope, reset.difficulty, seed + 43));
-    setBuildRound(buildBuildFactRound(currentTopicScope, reset.difficulty, seed + 49));
     setNumberRound(buildNumberRound(currentTopicScope, reset.difficulty, seed + 53));
     setOddRound(buildOddRound(currentTopicScope, reset.difficulty, seed + 59));
     resetRunState();
@@ -954,29 +913,6 @@ export function BurrowGame() {
             onAnswer={answerReveal}
             onNext={mode === "mix" ? advanceMix : nextRevealRound}
             onSkip={mode === "mix" ? advanceMix : nextRevealRound}
-          />
-        )}
-
-        {!showCollection && activeChallengeMode === "build" && (
-          <BuildFactMode
-            round={buildRound}
-            picked={buildPicked}
-            checked={buildChecked}
-            result={lastResult}
-            miniRunAnswered={miniRunAnswered}
-            miniRunCorrect={miniRunCorrect}
-            celebration={celebration}
-            difficulty={progress.difficulty}
-            onPick={(id) => {
-              if (buildChecked || buildPicked.includes(id)) return;
-              setBuildPicked((value) => [...value, id]);
-            }}
-            onUndo={() => {
-              if (!buildChecked) setBuildPicked((value) => value.slice(0, -1));
-            }}
-            onCheck={checkBuild}
-            onNext={mode === "mix" ? advanceMix : nextBuildRound}
-            onSkip={mode === "mix" ? advanceMix : nextBuildRound}
           />
         )}
 
@@ -1449,7 +1385,19 @@ function SortMode({
   onNext: () => void;
   onSkip: () => void;
 }) {
-  const answerTitles = round.answerIds.map((id) => round.cards.find((card) => card.id === id)?.title).filter(Boolean).join(" -> ");
+  const answerTitles = round.answerIds
+    .reduce<{ statValue: number; titles: string[] }[]>((groups, id) => {
+      const card = sortCardById(round, id);
+      if (!card) return groups;
+      const lastGroup = groups.at(-1);
+      if (lastGroup?.statValue === card.statValue) {
+        lastGroup.titles.push(card.title);
+        return groups;
+      }
+      return [...groups, { statValue: card.statValue, titles: [card.title] }];
+    }, [])
+    .map((group) => group.titles.join(" / "))
+    .join(" -> ");
   const pickedSet = new Set(picked);
 
   return (
@@ -1490,10 +1438,10 @@ function SortMode({
         <div className="mt-3 grid gap-2">
           {round.answerIds.map((id, index) => {
             const pickedId = picked[index];
-            const card = round.cards.find((item) => item.id === pickedId);
-            const correctCard = round.cards.find((item) => item.id === id);
-            const good = checked && pickedId === id;
-            const bad = checked && pickedId && pickedId !== id;
+            const card = sortCardById(round, pickedId);
+            const correctCard = sortCardById(round, id);
+            const good = checked && isSortSlotCorrect(round, pickedId, index);
+            const bad = checked && pickedId && !good;
             return (
               <div
                 key={`${round.id}-slot-${id}`}
@@ -1504,7 +1452,13 @@ function SortMode({
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-[#092421] bg-white text-xl font-black">{index + 1}</div>
                 <div>
                   <p className="text-base font-black leading-tight text-[#102f36]">{card ? card.title : "Tap a card"}</p>
-                  <p className="text-xs font-bold text-[#5f6b5d]">{checked && correctCard ? `Correct: ${correctCard.title} (${correctCard.statDisplay})` : round.statLabel}</p>
+                  <p className="text-xs font-bold text-[#5f6b5d]">
+                    {checked && correctCard
+                      ? good && card
+                        ? `Correct: ${card.statDisplay}`
+                        : `Correct: ${correctCard.title} (${correctCard.statDisplay})`
+                      : round.statLabel}
+                  </p>
                 </div>
               </div>
             );
@@ -1780,128 +1734,6 @@ function RevealMode({
   );
 }
 
-function BuildFactMode({
-  round,
-  picked,
-  checked,
-  result,
-  miniRunAnswered,
-  miniRunCorrect,
-  celebration,
-  difficulty,
-  onPick,
-  onUndo,
-  onCheck,
-  onNext,
-  onSkip,
-}: {
-  round: BuildFactRound;
-  picked: string[];
-  checked: boolean;
-  result: ResultState | null;
-  miniRunAnswered: number;
-  miniRunCorrect: number;
-  celebration: string;
-  difficulty: Difficulty;
-  onPick: (id: string) => void;
-  onUndo: () => void;
-  onCheck: () => void;
-  onNext: () => void;
-  onSkip: () => void;
-}) {
-  const pickedSet = new Set(picked);
-  const pickedTokens = picked.map((id) => round.tokens.find((token) => token.id === id)).filter(Boolean) as BuildFactRound["tokens"];
-
-  return (
-    <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="relative min-h-[34dvh] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
-        <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
-        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#092421]">
-          Build round
-        </div>
-        <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-2 shadow-[2px_2px_0_#092421]">
-          <p className="text-lg font-black leading-tight text-[#102f36]">{round.card.title}</p>
-          <p className="text-sm font-bold text-[#5f6b5d]">{round.card.subStat}</p>
-        </div>
-      </article>
-
-      <article className="flex min-h-0 flex-col rounded-lg min-[900px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex min-w-0 items-center gap-2">
-            <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#092421] bg-[#70d392] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
-              Make a fact
-            </p>
-          </div>
-          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} built</p>
-        </div>
-
-        <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
-
-        <div className="mt-3 grid gap-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
-          {round.answerIds.map((id, index) => {
-            const token = pickedTokens[index];
-            const good = checked && token?.id === id;
-            const bad = checked && token && token.id !== id;
-            return (
-              <div
-                key={`${round.id}-slot-${id}`}
-                className={`min-h-11 rounded-lg border-2 px-3 py-2 text-lg font-black ${
-                  good ? "border-[#2f7d4f] bg-[#e9ffe9]" : bad ? "border-[#9f3f2b] bg-[#fff0ea]" : "border-[#d9c7a7] bg-white"
-                }`}
-              >
-                {token?.text ?? "Tap a word chunk"}
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="mt-3 flex flex-wrap gap-2">
-          {round.tokens.map((token) => (
-            <button
-              key={token.id}
-              onClick={() => onPick(token.id)}
-              disabled={pickedSet.has(token.id) || checked}
-              className="min-h-11 rounded-lg border-2 border-[#092421] bg-[#fffdf6] px-3 py-2 text-base font-black transition hover:bg-[#fff1bf] active:translate-y-0.5 disabled:opacity-35"
-            >
-              {token.text}
-            </button>
-          ))}
-        </div>
-
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <button onClick={onUndo} className="rounded-lg border-2 border-[#092421] bg-white px-3 py-3 text-base font-black hover:bg-[#fff1bf]">
-            Undo
-          </button>
-          <button
-            onClick={onCheck}
-            disabled={picked.length !== round.answerIds.length || checked}
-            className="rounded-lg border-2 border-[#092421] bg-[#102f36] px-3 py-3 text-base font-black text-white shadow-[3px_3px_0_#092421] disabled:opacity-45"
-          >
-            Check fact
-          </button>
-        </div>
-
-        {checked && result && (
-          <FeedbackPanel
-            isCorrect={result.correct}
-            xpGain={result.xpGain}
-            leveledUp={result.leveledUp}
-            celebration={celebration}
-            correctAnswer={round.answerText}
-            explanation={round.explanation}
-            note="Good try."
-            isLast={false}
-            onNext={onNext}
-          />
-        )}
-
-        {!checked && <SkipButton onClick={onSkip} />}
-      </article>
-    </section>
-  );
-}
-
 function NumberMode({
   round,
   selected,
@@ -2124,7 +1956,6 @@ function CollectionBook({
           <HudStat label="Sort" value={modeWins.sort.toString()} />
           <HudStat label="Fact" value={modeWins.fact.toString()} />
           <HudStat label="Peek" value={modeWins.peek.toString()} />
-          <HudStat label="Build" value={modeWins.build.toString()} />
           <HudStat label="Numbers" value={modeWins.number.toString()} />
           <HudStat label="Odd" value={modeWins.odd.toString()} />
         </div>
