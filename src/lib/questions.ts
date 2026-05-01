@@ -264,6 +264,192 @@ const spaceCard = (item: SpaceCard, label: "A" | "B", stat: "temp" | "radius" | 
   };
 };
 
+const comparisonAnswer = (cards: ComparisonCard[], winnerName: string) => `${cards.find((card) => card.title === winnerName)?.label}: ${winnerName}`;
+
+const pepperHotterQuestion = (seed: number, first: Pepper, second: Pepper): Question => {
+  const hotter = first.shuMax >= second.shuMax ? first : second;
+  const cards = shuffle([pepperCard(first, "A"), pepperCard(second, "B")], seed + 12);
+  return {
+    id: `${seed}-pepper-hotter-${first.id}-${second.id}`,
+    topic: "peppers",
+    kind: "pepper-hotter",
+    prompt: `Which pepper is spicier: ${first.name} or ${second.name}?`,
+    image: hotter.image,
+    imageAlt: hotter.name,
+    imageCredit: hotter.imageCredit,
+    comparison: cards,
+    choices: cards.map((card) => `${card.label}: ${card.title}`),
+    answer: comparisonAnswer(cards, hotter.name),
+    explanation: `${hotter.name} can reach ${formatShu(hotter.shuMax)}. Bigger Scoville numbers mean more heat.`,
+    heatMeter: heatMeter(hotter.heat),
+  };
+};
+
+const buildingTallerQuestion = (seed: number, first: Building, second: Building): Question => {
+  const taller = first.heightFt >= second.heightFt ? first : second;
+  const cards = shuffle([buildingCard(first, "A"), buildingCard(second, "B")], seed + 27);
+  return {
+    id: `${seed}-building-taller-${first.id}-${second.id}`,
+    topic: "buildings",
+    kind: "building-taller",
+    prompt: `Which building is taller: ${first.name} or ${second.name}?`,
+    image: taller.image,
+    imageAlt: taller.name,
+    imageCredit: taller.imageCredit,
+    comparison: cards,
+    choices: cards.map((card) => `${card.label}: ${card.title}`),
+    answer: comparisonAnswer(cards, taller.name),
+    explanation: `${taller.name} is ${feet(taller.heightFt)} tall. Taller means the bigger number wins.`,
+    numberLine: { label: taller.name, value: taller.heightFt, max: maxHeight, unit: "ft" },
+  };
+};
+
+const sharkComparisonQuestion = (seed: number, first: Shark, second: Shark, stat: "length" | "speed" | "power"): Question => {
+  const firstValue = stat === "length" ? first.lengthFt : stat === "speed" ? first.speedMph : first.power;
+  const secondValue = stat === "length" ? second.lengthFt : stat === "speed" ? second.speedMph : second.power;
+  const winner = firstValue >= secondValue ? first : second;
+  const winnerValue = stat === "length" ? winner.lengthFt : stat === "speed" ? winner.speedMph : winner.power;
+  const cards = shuffle([sharkCard(first, "A", stat), sharkCard(second, "B", stat)], seed + 47);
+  const kind: QuestionKind = stat === "length" ? "shark-bigger" : stat === "speed" ? "shark-faster" : "shark-power";
+  const prompt = stat === "length"
+    ? `Which shark is bigger: ${first.name} or ${second.name}?`
+    : stat === "speed"
+      ? `Which shark is faster: ${first.name} or ${second.name}?`
+      : `Which shark has more predator power: ${first.name} or ${second.name}?`;
+  const unit = stat === "length" ? "feet long" : stat === "speed" ? "mph" : "power points";
+  return {
+    id: `${seed}-${kind}-${first.id}-${second.id}`,
+    topic: "sharks",
+    kind,
+    prompt,
+    image: winner.image,
+    imageAlt: winner.name,
+    imageCredit: winner.imageCredit,
+    comparison: cards,
+    choices: cards.map((card) => `${card.label}: ${card.title}`),
+    answer: comparisonAnswer(cards, winner.name),
+    explanation: `${winner.name} wins this matchup with ${formatNumber(winnerValue)} ${unit}.`,
+    numberLine: { label: stat === "length" ? "Size" : stat === "speed" ? "Speed" : "Power", value: winnerValue, max: stat === "length" ? maxSharkLength : stat === "speed" ? maxSharkSpeed : maxSharkPower, unit: stat === "length" ? "ft" : stat === "speed" ? "mph" : "/5" },
+  };
+};
+
+const spaceComparisonQuestion = (seed: number, first: SpaceCard, second: SpaceCard, stat: "temp" | "radius" | "distance" | "moons"): Question => {
+  const winner = spaceValue(first, stat) >= spaceValue(second, stat) ? first : second;
+  const cards = shuffle([spaceCard(first, "A", stat), spaceCard(second, "B", stat)], seed + 67);
+  const kind: QuestionKind = stat === "temp" ? "space-hotter" : stat === "radius" ? "space-bigger" : stat === "distance" ? "space-farther" : "space-moons";
+  const noun = first.kind === "star" ? "star" : "planet";
+  const prompt = stat === "temp"
+    ? `Which ${noun} is hotter: ${first.name} or ${second.name}?`
+    : stat === "radius"
+      ? `Which ${noun} is bigger: ${first.name} or ${second.name}?`
+      : stat === "distance"
+        ? `Which ${noun} is farther away: ${first.name} or ${second.name}?`
+        : `Which planet has more moons: ${first.name} or ${second.name}?`;
+  return {
+    id: `${seed}-${kind}-${first.id}-${second.id}`,
+    topic: "space",
+    kind,
+    prompt,
+    image: winner.image,
+    imageAlt: winner.name,
+    imageCredit: winner.imageCredit,
+    comparison: cards,
+    choices: cards.map((card) => `${card.label}: ${card.title}`),
+    answer: comparisonAnswer(cards, winner.name),
+    explanation: `${winner.name} wins with ${spaceStatDisplay(spaceValue(winner, stat), stat, winner)}. ${winner.statNote ?? winner.fact}`,
+    numberLine: { label: stat === "temp" ? "Temperature" : stat === "radius" ? "Size" : stat === "distance" ? "Distance" : "Moons", value: spaceValue(winner, stat), max: spaceMeterMax(stat, winner), unit: winner.kind === "star" && stat === "radius" ? "x Sun" : stat === "temp" ? (winner.kind === "star" ? "K" : "°F") : stat === "distance" ? (winner.kind === "star" ? "ly" : "million mi") : stat === "moons" ? "moons" : "mi" },
+  };
+};
+
+type HeadToHeadSpec =
+  | { topic: "peppers"; stat: "heat"; firstId: string; secondId: string }
+  | { topic: "buildings"; stat: "height"; firstId: string; secondId: string }
+  | { topic: "sharks"; stat: "length" | "speed" | "power"; firstId: string; secondId: string }
+  | { topic: "space"; stat: "temp" | "radius" | "distance" | "moons"; firstId: string; secondId: string };
+
+const curatedHeadToHeads: HeadToHeadSpec[] = [
+  { topic: "peppers", stat: "heat", firstId: "trinidad-scorpion", secondId: "pepper-x" },
+  { topic: "peppers", stat: "heat", firstId: "trinidad-scorpion", secondId: "carolina-reaper" },
+  { topic: "peppers", stat: "heat", firstId: "dragons-breath", secondId: "carolina-reaper" },
+  { topic: "peppers", stat: "heat", firstId: "ghost-pepper", secondId: "habanero" },
+  { topic: "peppers", stat: "heat", firstId: "jalapeno", secondId: "serrano" },
+  { topic: "peppers", stat: "heat", firstId: "scotch-bonnet", secondId: "cayenne" },
+  { topic: "buildings", stat: "height", firstId: "burj-khalifa", secondId: "merdeka-118" },
+  { topic: "buildings", stat: "height", firstId: "shanghai-tower", secondId: "makkah-clock" },
+  { topic: "buildings", stat: "height", firstId: "one-wtc", secondId: "taipei-101" },
+  { topic: "buildings", stat: "height", firstId: "jeddah-tower", secondId: "burj-khalifa" },
+  { topic: "sharks", stat: "speed", firstId: "tiger-shark", secondId: "blue-shark" },
+  { topic: "sharks", stat: "speed", firstId: "shortfin-mako", secondId: "great-white" },
+  { topic: "sharks", stat: "speed", firstId: "common-thresher", secondId: "blue-shark" },
+  { topic: "sharks", stat: "length", firstId: "whale-shark", secondId: "basking-shark" },
+  { topic: "sharks", stat: "length", firstId: "great-hammerhead", secondId: "tiger-shark" },
+  { topic: "sharks", stat: "power", firstId: "bull-shark", secondId: "nurse-shark" },
+  { topic: "space", stat: "temp", firstId: "venus", secondId: "mercury" },
+  { topic: "space", stat: "radius", firstId: "jupiter", secondId: "neptune" },
+  { topic: "space", stat: "distance", firstId: "neptune", secondId: "mars" },
+  { topic: "space", stat: "temp", firstId: "rigel", secondId: "betelgeuse" },
+  { topic: "space", stat: "radius", firstId: "betelgeuse", secondId: "sirius" },
+];
+
+const findById = <T extends { id: string }>(items: T[], id: string) => items.find((item) => item.id === id);
+
+const headToHeadQuestionFromSpec = (spec: HeadToHeadSpec, seed: number): Question | null => {
+  if (spec.topic === "peppers") {
+    const first = findById(peppers, spec.firstId);
+    const second = findById(peppers, spec.secondId);
+    return first && second ? pepperHotterQuestion(seed, first, second) : null;
+  }
+
+  if (spec.topic === "buildings") {
+    const first = findById(buildings, spec.firstId);
+    const second = findById(buildings, spec.secondId);
+    return first && second ? buildingTallerQuestion(seed, first, second) : null;
+  }
+
+  if (spec.topic === "sharks") {
+    const first = findById(sharks, spec.firstId);
+    const second = findById(sharks, spec.secondId);
+    return first && second ? sharkComparisonQuestion(seed, first, second, spec.stat) : null;
+  }
+
+  const first = findById(spaceCards, spec.firstId);
+  const second = findById(spaceCards, spec.secondId);
+  return first && second ? spaceComparisonQuestion(seed, first, second, spec.stat) : null;
+};
+
+const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty, seed: number): Question => {
+  if (topic === "peppers") {
+    const first = sample(peppers, seed + 1);
+    const second = sample(peppers.filter((item) => item.id !== first.id), seed + 2);
+    return pepperHotterQuestion(seed, first, second);
+  }
+
+  if (topic === "buildings") {
+    const first = sample(buildings, seed + 3);
+    const second = sample(buildings.filter((item) => item.id !== first.id), seed + 4);
+    return buildingTallerQuestion(seed, first, second);
+  }
+
+  if (topic === "sharks") {
+    const stats: ("length" | "speed" | "power")[] = difficulty === 1 ? ["length", "speed"] : ["length", "speed", "power"];
+    const stat = sample(stats, seed + 5);
+    const first = sample(sharks, seed + 6);
+    const second = sample(sharks.filter((item) => item.id !== first.id), seed + 7);
+    return sharkComparisonQuestion(seed, first, second, stat);
+  }
+
+  const stats: ("temp" | "radius" | "distance" | "moons")[] = difficulty === 1 ? ["radius", "distance", "temp"] : ["temp", "radius", "distance", "moons"];
+  const stat = sample(stats, seed + 8);
+  const pool = stat === "distance" || stat === "moons"
+    ? spacePlanets
+    : seedRandom(seed + 9) > 0.5
+      ? spaceStars
+      : spacePlanets.filter((card) => stat !== "temp" || card.meanSurfaceTempF !== undefined);
+  const first = sample(pool, seed + 10);
+  const second = sample(pool.filter((item) => item.id !== first.id), seed + 11);
+  return spaceComparisonQuestion(seed, first, second, stat);
+};
+
 const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
   const pepper = sample(peppers, seed);
   const kinds: QuestionKind[] = difficulty === 1
@@ -293,22 +479,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
 
   if (kind === "pepper-hotter") {
     const challenger = sample(peppers.filter((item) => item.id !== pepper.id), seed + 11);
-    const hotter = pepper.shuMax >= challenger.shuMax ? pepper : challenger;
-    const cards = shuffle([pepperCard(pepper, "A"), pepperCard(challenger, "B")], seed + 12);
-    return {
-      id: `${seed}-pepper-hotter-${pepper.id}-${challenger.id}`,
-      topic: "peppers",
-      kind,
-      prompt: `Which pepper is spicier?`,
-      image: hotter.image,
-      imageAlt: hotter.name,
-      imageCredit: hotter.imageCredit,
-      comparison: cards,
-      choices: cards.map((card) => `${card.label}: ${card.title}`),
-      answer: `${cards.find((card) => card.title === hotter.name)?.label}: ${hotter.name}`,
-      explanation: `${hotter.name} can reach ${formatShu(hotter.shuMax)}. Bigger Scoville numbers mean more heat.`,
-      heatMeter: heatMeter(hotter.heat),
-    };
+    return pepperHotterQuestion(seed, pepper, challenger);
   }
 
   if (kind === "pepper-reading") {
@@ -383,22 +554,7 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
 
   if (kind === "building-taller") {
     const challenger = sample(buildings.filter((item) => item.id !== building.id), seed + 26);
-    const taller = building.heightFt >= challenger.heightFt ? building : challenger;
-    const cards = shuffle([buildingCard(building, "A"), buildingCard(challenger, "B")], seed + 27);
-    return {
-      id: `${seed}-building-taller-${building.id}-${challenger.id}`,
-      topic: "buildings",
-      kind,
-      prompt: `Which building is taller?`,
-      image: taller.image,
-      imageAlt: taller.name,
-      imageCredit: taller.imageCredit,
-      comparison: cards,
-      choices: cards.map((card) => `${card.label}: ${card.title}`),
-      answer: `${cards.find((card) => card.title === taller.name)?.label}: ${taller.name}`,
-      explanation: `${taller.name} is ${feet(taller.heightFt)} tall. Taller means the bigger number wins.`,
-      numberLine: { label: taller.name, value: taller.heightFt, max: maxHeight, unit: "ft" },
-    };
+    return buildingTallerQuestion(seed, building, challenger);
   }
 
   if (kind === "building-difference") {
@@ -511,27 +667,7 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
   if (kind === "shark-bigger" || kind === "shark-faster" || kind === "shark-power") {
     const challenger = sample(sharks.filter((item) => item.id !== shark.id), seed + 46);
     const stat = kind === "shark-bigger" ? "length" : kind === "shark-faster" ? "speed" : "power";
-    const a = stat === "length" ? shark.lengthFt : stat === "speed" ? shark.speedMph : shark.power;
-    const b = stat === "length" ? challenger.lengthFt : stat === "speed" ? challenger.speedMph : challenger.power;
-    const winner = a >= b ? shark : challenger;
-    const cards = shuffle([sharkCard(shark, "A", stat), sharkCard(challenger, "B", stat)], seed + 47);
-    const prompt = stat === "length" ? "Which shark is bigger?" : stat === "speed" ? "Which shark is faster?" : "Which shark has more predator power?";
-    const unit = stat === "length" ? "feet long" : stat === "speed" ? "mph" : "power points";
-    const value = stat === "length" ? winner.lengthFt : stat === "speed" ? winner.speedMph : winner.power;
-    return {
-      id: `${seed}-${kind}-${shark.id}-${challenger.id}`,
-      topic: "sharks",
-      kind,
-      prompt,
-      image: winner.image,
-      imageAlt: winner.name,
-      imageCredit: winner.imageCredit,
-      comparison: cards,
-      choices: cards.map((card) => `${card.label}: ${card.title}`),
-      answer: `${cards.find((card) => card.title === winner.name)?.label}: ${winner.name}`,
-      explanation: `${winner.name} wins this matchup with ${formatNumber(value)} ${unit}.`,
-      numberLine: { label: stat === "length" ? "Size" : stat === "speed" ? "Speed" : "Power", value, max: stat === "length" ? maxSharkLength : stat === "speed" ? maxSharkSpeed : maxSharkPower, unit: stat === "length" ? "ft" : stat === "speed" ? "mph" : "/5" },
-    };
+    return sharkComparisonQuestion(seed, shark, challenger, stat);
   }
 
   if (kind === "shark-difference") {
@@ -603,86 +739,26 @@ const spaceQuestion = (seed: number, difficulty: Difficulty): Question => {
     const pool = seedRandom(seed + 64) > 0.45 ? spaceStars : spacePlanets.filter((card) => card.meanSurfaceTempF !== undefined);
     const first = sample(pool, seed + 65);
     const second = sample(pool.filter((card) => card.id !== first.id), seed + 66);
-    const hotter = spaceValue(first, "temp") >= spaceValue(second, "temp") ? first : second;
-    const cards = shuffle([spaceCard(first, "A", "temp"), spaceCard(second, "B", "temp")], seed + 67);
-    return {
-      id: `${seed}-space-hotter-${first.id}-${second.id}`,
-      topic: "space",
-      kind,
-      prompt: first.kind === "star" ? "Which star is hotter on the surface?" : "Which planet is hotter at the surface?",
-      image: hotter.image,
-      imageAlt: hotter.name,
-      imageCredit: hotter.imageCredit,
-      comparison: cards,
-      choices: cards.map((card) => `${card.label}: ${card.title}`),
-      answer: `${cards.find((card) => card.title === hotter.name)?.label}: ${hotter.name}`,
-      explanation: `${hotter.name} wins with ${spaceStatDisplay(spaceValue(hotter, "temp"), "temp", hotter)}. ${hotter.fact}`,
-      numberLine: { label: "Temperature", value: spaceValue(hotter, "temp"), max: spaceMeterMax("temp", hotter), unit: hotter.kind === "star" ? "K" : "°F" },
-    };
+    return spaceComparisonQuestion(seed, first, second, "temp");
   }
 
   if (kind === "space-bigger") {
     const pool = seedRandom(seed + 68) > 0.5 ? spaceStars : spacePlanets;
     const first = sample(pool, seed + 69);
     const second = sample(pool.filter((card) => card.id !== first.id), seed + 70);
-    const bigger = spaceValue(first, "radius") >= spaceValue(second, "radius") ? first : second;
-    const cards = shuffle([spaceCard(first, "A", "radius"), spaceCard(second, "B", "radius")], seed + 71);
-    return {
-      id: `${seed}-space-bigger-${first.id}-${second.id}`,
-      topic: "space",
-      kind,
-      prompt: first.kind === "star" ? "Which star is bigger?" : "Which planet is bigger?",
-      image: bigger.image,
-      imageAlt: bigger.name,
-      imageCredit: bigger.imageCredit,
-      comparison: cards,
-      choices: cards.map((card) => `${card.label}: ${card.title}`),
-      answer: `${cards.find((card) => card.title === bigger.name)?.label}: ${bigger.name}`,
-      explanation: `${bigger.name} is larger by this stat. ${bigger.statNote ?? bigger.fact}`,
-      numberLine: { label: "Size", value: spaceValue(bigger, "radius"), max: spaceMeterMax("radius", bigger), unit: bigger.kind === "star" ? "x Sun" : "mi" },
-    };
+    return spaceComparisonQuestion(seed, first, second, "radius");
   }
 
   if (kind === "space-farther") {
     const first = sample(spacePlanets, seed + 72);
     const second = sample(spacePlanets.filter((card) => card.id !== first.id), seed + 73);
-    const farther = spaceValue(first, "distance") >= spaceValue(second, "distance") ? first : second;
-    const cards = shuffle([spaceCard(first, "A", "distance"), spaceCard(second, "B", "distance")], seed + 74);
-    return {
-      id: `${seed}-space-farther-${first.id}-${second.id}`,
-      topic: "space",
-      kind,
-      prompt: "Which planet is farther from the Sun?",
-      image: farther.image,
-      imageAlt: farther.name,
-      imageCredit: farther.imageCredit,
-      comparison: cards,
-      choices: cards.map((card) => `${card.label}: ${card.title}`),
-      answer: `${cards.find((card) => card.title === farther.name)?.label}: ${farther.name}`,
-      explanation: `${farther.name} is about ${spaceStatDisplay(spaceValue(farther, "distance"), "distance", farther)} from the Sun.`,
-      numberLine: { label: "Distance from Sun", value: spaceValue(farther, "distance"), max: maxPlanetDistance, unit: "million mi" },
-    };
+    return spaceComparisonQuestion(seed, first, second, "distance");
   }
 
   if (kind === "space-moons") {
     const first = sample(spacePlanets, seed + 75);
     const second = sample(spacePlanets.filter((card) => card.id !== first.id), seed + 76);
-    const winner = spaceValue(first, "moons") >= spaceValue(second, "moons") ? first : second;
-    const cards = shuffle([spaceCard(first, "A", "moons"), spaceCard(second, "B", "moons")], seed + 77);
-    return {
-      id: `${seed}-space-moons-${first.id}-${second.id}`,
-      topic: "space",
-      kind,
-      prompt: "Which planet has more known moons?",
-      image: winner.image,
-      imageAlt: winner.name,
-      imageCredit: winner.imageCredit,
-      comparison: cards,
-      choices: cards.map((card) => `${card.label}: ${card.title}`),
-      answer: `${cards.find((card) => card.title === winner.name)?.label}: ${winner.name}`,
-      explanation: `${winner.name} has ${spaceStatDisplay(spaceValue(winner, "moons"), "moons", winner)} in this dataset.`,
-      numberLine: { label: "Moons", value: spaceValue(winner, "moons"), max: maxPlanetMoons, unit: "moons" },
-    };
+    return spaceComparisonQuestion(seed, first, second, "moons");
   }
 
   if (kind === "space-concept") {
@@ -725,6 +801,34 @@ const spaceQuestion = (seed: number, difficulty: Difficulty): Question => {
     answer: item.kind === "star" ? "Giant star sizes can be estimates" : item.kind === "planet" ? `${item.name} is in the solar system` : item.conceptAnswer ?? item.fact,
     explanation: readable,
   };
+};
+
+export const buildHeadToHeadSession = (topic: TopicScope, difficulty: Difficulty, sessionSeed: number, seenIds: string[]) => {
+  const questions: Question[] = [];
+  const topicOrder = topicsForScope(topic);
+  const curatedOrder = shuffle(curatedHeadToHeads.filter((spec) => topicOrder.includes(spec.topic)), sessionSeed + 313);
+  let attempt = 0;
+
+  while (questions.length < sessionLength && attempt < 180) {
+    const seed = sessionSeed + attempt * 43 + questions.length * 29;
+    const curated = curatedOrder[attempt];
+    const question = curated
+      ? headToHeadQuestionFromSpec(curated, seed)
+      : randomHeadToHeadQuestion(topicOrder[(questions.length + attempt) % topicOrder.length], difficulty, seed);
+
+    if (question?.comparison && !seenIds.includes(question.id) && !questions.some((item) => item.id === question.id)) {
+      questions.push(question);
+    }
+    attempt += 1;
+  }
+
+  while (questions.length < sessionLength) {
+    const seed = sessionSeed + questions.length * 101 + attempt;
+    const currentTopic = topicOrder[questions.length % topicOrder.length];
+    questions.push(randomHeadToHeadQuestion(currentTopic, difficulty, seed));
+  }
+
+  return questions;
 };
 
 export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionSeed: number, seenIds: string[]) => {

@@ -22,7 +22,7 @@ import {
   type SortRound,
   type TopicScope,
 } from "@/lib/game-modes";
-import { buildSession, type ComparisonCard, type Question } from "@/lib/questions";
+import { buildHeadToHeadSession, buildSession, type ComparisonCard, type Question } from "@/lib/questions";
 
 type Progress = {
   xp: number;
@@ -223,22 +223,11 @@ const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficu
     });
   }
 
-  if (mode !== "versus") {
-    return buildSession(topic, difficulty, sessionSeed, seenIds);
+  if (mode === "versus") {
+    return buildHeadToHeadSession(topic, difficulty, sessionSeed, seenIds);
   }
 
-  const picked: Question[] = [];
-  let pass = 0;
-  while (picked.length < 16 && pass < 8) {
-    const candidates = buildSession(topic, difficulty, sessionSeed + pass * 997, seenIds).filter((question) => question.comparison);
-    candidates.forEach((question) => {
-      if (picked.length < 16 && !picked.some((item) => item.id === question.id)) {
-        picked.push(question);
-      }
-    });
-    pass += 1;
-  }
-  return picked.length ? picked : buildSession(topic, difficulty, sessionSeed, seenIds);
+  return buildSession(topic, difficulty, sessionSeed, seenIds);
 };
 
 const difficultyLabel = (difficulty: Difficulty) => difficultyOptions.find((item) => item.id === difficulty)?.label ?? "Easy";

@@ -28,7 +28,7 @@ export const modeOptions: {
 }[] = [
   { id: "mix", label: "Mix", eyebrow: "shuffle", loop: "all games" },
   { id: "quiz", label: "Quiz Run", eyebrow: "mixed skills", loop: "15-20 bites" },
-  { id: "versus", label: "Versus", eyebrow: "pick winner", loop: "fast duels" },
+  { id: "versus", label: "Head to Head", eyebrow: "pick winner", loop: "fast duels" },
   { id: "sort", label: "Sort", eyebrow: "order cards", loop: "tap order" },
   { id: "fact", label: "True/False", eyebrow: "read fast", loop: "true or not" },
   { id: "peek", label: "Peek", eyebrow: "picture clue", loop: "reveal guess" },
