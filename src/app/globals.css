@@ -39,6 +39,43 @@ select {
 }
 
 button:focus-visible {
-  outline: 4px solid #f3c647;
+  outline: 4px solid #f0c84b;
   outline-offset: 3px;
+}
+
+.field-guide-skin {
+  --field-ink: #092421;
+  --field-green: #0d332f;
+  --field-paper: #fffdf6;
+  --field-paper-deep: #f7f0df;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(112, 211, 146, 0.16), transparent 28rem),
+    radial-gradient(circle at 82% 18%, rgba(240, 200, 75, 0.12), transparent 24rem),
+    linear-gradient(135deg, #092421 0%, #0d332f 48%, #123d38 100%);
+}
+
+.field-guide-shell {
+  background-color: var(--field-green);
+  background-image:
+    linear-gradient(90deg, rgba(255, 253, 246, 0.055) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255, 253, 246, 0.055) 1px, transparent 1px),
+    radial-gradient(circle at center, rgba(240, 200, 75, 0.08), transparent 24rem);
+  background-size: 34px 34px, 34px 34px, 100% 100%;
+}
+
+.field-guide-skin header,
+.field-guide-skin aside,
+.field-guide-skin details > div,
+.field-guide-skin article.bg-white,
+.field-guide-skin .bg-\[\#fffdf6\],
+.field-guide-skin .bg-\[\#fff9ec\],
+.field-guide-skin .bg-\[\#f7f0df\] {
+  background-image:
+    linear-gradient(rgba(9, 36, 33, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(9, 36, 33, 0.018) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.field-guide-media {
+  filter: saturate(1.08) contrast(1.03);
 }

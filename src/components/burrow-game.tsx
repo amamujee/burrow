@@ -290,7 +290,6 @@ export function BurrowGame() {
   const isQuestionMode = !showCollection && (activeChallengeMode === "quiz" || activeChallengeMode === "versus");
   const answered = isQuestionMode && selected !== null;
   const isCorrect = isQuestionMode && question ? selected !== null && isQuestionAnswerCorrect(question, selected) : false;
-  const nextLevelXp = progress.level * 120;
   const levelProgress = Math.min(100, Math.round(((progress.xp % 120) / 120) * 100));
   const activeChallengeAnswered =
     activeChallengeMode === "sort"
@@ -863,15 +862,14 @@ export function BurrowGame() {
   };
 
   return (
-    <main className="min-h-dvh overflow-x-hidden bg-[#0f2e35] text-[#1d2528]">
-      <section className="burrow-game-shell flex min-h-dvh flex-col gap-1.5 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-1.5 md:p-2 min-[900px]:h-dvh min-[900px]:min-h-0 min-[900px]:overflow-hidden">
+    <main className="field-guide-skin min-h-dvh overflow-x-hidden bg-[#0d332f] text-[#1d2528]">
+      <section className="burrow-game-shell field-guide-shell flex min-h-dvh flex-col gap-1.5 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-1.5 md:p-2 min-[900px]:h-dvh min-[900px]:min-h-0 min-[900px]:overflow-hidden">
         <GameHud
           profiles={profilesState.profiles}
           activeProfileId={activeProfile.id}
           onProfileChange={switchProfile}
           onCreateProfile={createProfile}
           level={progress.level}
-          xpToNext={Math.max(0, nextLevelXp - progress.xp)}
           levelProgress={levelProgress}
           streak={progress.streak}
           accuracy={accuracy}
@@ -1033,7 +1031,6 @@ function GameHud({
   onProfileChange,
   onCreateProfile,
   level,
-  xpToNext,
   levelProgress,
   streak,
   accuracy,
@@ -1057,7 +1054,6 @@ function GameHud({
   onProfileChange: (profileId: string) => void;
   onCreateProfile: () => void;
   level: number;
-  xpToNext: number;
   levelProgress: number;
   streak: number;
   accuracy: number;
@@ -1077,7 +1073,7 @@ function GameHud({
   onReset: () => void;
 }) {
   return (
-    <header className="relative z-30 shrink-0 rounded-xl border-2 border-[#082329] bg-[#fff2d7] px-2 py-1.5 shadow-[3px_3px_0_#082329]">
+    <header className="relative z-30 shrink-0 rounded-lg border-2 border-[#092421] bg-[#f7f0df] px-2 py-1.5 shadow-[3px_3px_0_#092421]">
       <div className="grid min-h-[68px] min-w-0 items-center gap-2 min-[900px]:grid-cols-[minmax(292px,.95fr)_minmax(200px,.85fr)_minmax(380px,1.3fr)_auto]">
         <div className="flex min-w-0 items-center gap-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1085,16 +1081,16 @@ function GameHud({
             src="/icons/burrow-icon-64.png"
             alt=""
             aria-hidden="true"
-            className="h-11 w-11 shrink-0 rounded-xl border-2 border-[#082329] bg-[#f5d39c] shadow-[2px_2px_0_#082329]"
+            className="h-11 w-11 shrink-0 rounded-lg border-2 border-[#092421] bg-[#eac57c] shadow-[2px_2px_0_#092421]"
           />
           <div className="min-w-0 shrink">
-            <p className="hidden truncate text-[9px] font-black uppercase tracking-[0.18em] text-[#81533b] min-[1240px]:block">Let your Kid go deep</p>
+            <p className="hidden truncate text-[9px] font-black uppercase tracking-[0.18em] text-[#7d5a3f] min-[1240px]:block">Field notes for curious kids</p>
             <h1 className="truncate text-2xl font-black leading-none text-[#321e16]">Burrow</h1>
           </div>
           <ProfilePicker profiles={profiles} activeProfileId={activeProfileId} onChange={onProfileChange} onCreate={onCreateProfile} />
         </div>
 
-        <HudProgress level={level} xpToNext={xpToNext} levelProgress={levelProgress} streak={streak} accuracy={accuracy} />
+        <HudProgress level={level} levelProgress={levelProgress} streak={streak} accuracy={accuracy} />
 
         <div className="grid min-w-0 grid-cols-[minmax(220px,1fr)_minmax(72px,.32fr)] gap-1.5">
           <DifficultySelector difficulty={difficulty} onChange={onDifficultyChange} />
@@ -1119,13 +1115,11 @@ function GameHud({
 
 function HudProgress({
   level,
-  xpToNext,
   levelProgress,
   streak,
   accuracy,
 }: {
   level: number;
-  xpToNext: number;
   levelProgress: number;
   streak: number;
   accuracy: number;
@@ -1134,16 +1128,15 @@ function HudProgress({
   const filledSparks = Math.min(sparkSlots, Math.max(0, Math.ceil((levelProgress / 100) * sparkSlots)));
 
   return (
-    <div className="min-w-0 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] px-2 py-1.5">
+    <div className="min-w-0 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] px-2 py-1.5">
       <div className="grid grid-cols-[auto_1fr] items-center gap-2">
-        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border-2 border-[#082329] bg-[#f3c647] text-center shadow-[2px_2px_0_#082329]">
-          <span className="block text-[8px] font-black uppercase leading-none tracking-[0.1em] text-[#81533b]">Level</span>
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border-2 border-[#092421] bg-[#f0c84b] text-center shadow-[2px_2px_0_#092421]">
+          <span className="block text-[8px] font-black uppercase leading-none tracking-[0.1em] text-[#7d5a3f]">Level</span>
           <span className="block text-2xl font-black leading-none text-[#102f36]">{level}</span>
         </div>
         <div className="min-w-0">
           <div className="flex min-w-0 items-center justify-between gap-2">
             <p className="truncate text-sm font-black leading-tight text-[#102f36]">Glow</p>
-            <p className="shrink-0 text-[10px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">{xpToNext} left</p>
           </div>
           <div className="mt-1 grid grid-cols-6 gap-1" aria-label={`${levelProgress}% of this level filled`}>
             {Array.from({ length: sparkSlots }, (_, index) => {
@@ -1151,8 +1144,8 @@ function HudProgress({
               return (
                 <span
                   key={`spark-${index}`}
-                  className={`h-3 rounded-sm border-2 border-[#082329] transition-colors duration-300 ${
-                    filled ? "bg-[#78d99a] shadow-[1px_1px_0_#082329]" : "bg-white"
+                  className={`h-3 rounded-sm border-2 border-[#092421] transition-colors duration-300 ${
+                    filled ? "bg-[#70d392] shadow-[1px_1px_0_#092421]" : "bg-white"
                   }`}
                 />
               );
@@ -1160,9 +1153,9 @@ function HudProgress({
           </div>
         </div>
       </div>
-      <div className="mt-1 flex min-w-0 items-center gap-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">
+      <div className="mt-1 flex min-w-0 items-center gap-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#72543e]">
         <span className="truncate">{streak ? `${streak} in a row` : "Warm up"}</span>
-        <span className="h-1 w-1 rounded-full bg-[#cfbfae]" />
+        <span className="h-1 w-1 rounded-full bg-[#d9c7a7]" />
         <span className="truncate">{accuracy}% right</span>
       </div>
     </div>
@@ -1194,14 +1187,14 @@ function SetupMenu({
 
   return (
     <details className="group relative">
-      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-center gap-2 rounded-lg border-2 border-[#082329] bg-white px-3 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#082329] transition hover:bg-[#fff0c2] group-open:bg-[#fff0c2] [&::-webkit-details-marker]:hidden">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-center gap-2 rounded-lg border-2 border-[#092421] bg-white px-3 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition hover:bg-[#fff1bf] group-open:bg-[#fff1bf] [&::-webkit-details-marker]:hidden">
         Setup
         <span className="text-lg leading-none">⌄</span>
       </summary>
-      <div className="absolute right-0 z-40 mt-2 max-h-[calc(100dvh-112px)] w-[min(680px,calc(100vw-24px))] overflow-auto rounded-xl border-2 border-[#082329] bg-[#fffaf4] p-3 shadow-[4px_4px_0_#082329]">
+      <div className="absolute right-0 z-40 mt-2 max-h-[calc(100dvh-112px)] w-[min(680px,calc(100vw-24px))] overflow-auto rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-3 shadow-[4px_4px_0_#092421]">
         <div className="grid gap-3 md:grid-cols-3">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7a5d4b]">Play mode</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#72543e]">Play mode</p>
             <div className="mt-2 grid gap-1.5">
               {modeOptions.map((item) => (
                 <button
@@ -1210,18 +1203,18 @@ function SetupMenu({
                   aria-pressed={mode === item.id}
                   onClick={() => onModeChange(item.id)}
                   className={`min-h-10 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
-                    mode === item.id ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329] hover:bg-[#fff0c2]"
+                    mode === item.id ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : "border-[#d9c7a7] bg-white hover:border-[#092421] hover:bg-[#fff1bf]"
                   }`}
                 >
                   <span className="block text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
-                  <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{item.eyebrow}</span>
+                  <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{item.eyebrow}</span>
                 </button>
               ))}
             </div>
           </div>
 
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7a5d4b]">Topics</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#72543e]">Topics</p>
             <div className="mt-2 grid gap-1.5">
               {allKnowledgeTopics.map((item) => {
                 const enabled = activeInterests.includes(item);
@@ -1232,11 +1225,11 @@ function SetupMenu({
                     aria-pressed={enabled}
                     onClick={() => onToggleInterest(item)}
                     className={`min-h-10 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
-                      enabled ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329] hover:bg-[#fff0c2]"
+                      enabled ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : "border-[#d9c7a7] bg-white hover:border-[#092421] hover:bg-[#fff1bf]"
                     }`}
                   >
                     <span className="block text-sm font-black leading-tight text-[#102f36]">{topicCatalog[item].label}</span>
-                    <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{enabled ? "in mix" : "tap to add"}</span>
+                    <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{enabled ? "in mix" : "tap to add"}</span>
                   </button>
                 );
               })}
@@ -1244,7 +1237,7 @@ function SetupMenu({
           </div>
 
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7a5d4b]">Mix includes</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#72543e]">Mix includes</p>
             <div className="mt-2 grid grid-cols-2 gap-1.5">
               {allChallengeModes.map((challengeMode) => {
                 const item = modeOptions.find((option) => option.id === challengeMode) ?? modeOptions[0];
@@ -1256,11 +1249,11 @@ function SetupMenu({
                     aria-pressed={enabled}
                     onClick={() => onToggleMixMode(challengeMode)}
                     className={`min-h-10 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
-                      enabled ? "border-[#082329] bg-[#78d99a] shadow-[2px_2px_0_#082329]" : "border-[#cfbfae] bg-white hover:border-[#082329] hover:bg-[#fff0c2]"
+                      enabled ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : "border-[#d9c7a7] bg-white hover:border-[#092421] hover:bg-[#fff1bf]"
                     }`}
                   >
                     <span className="block truncate text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
-                    <span className="block truncate text-[10px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{enabled ? "in mix" : "tap to add"}</span>
+                    <span className="block truncate text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{enabled ? "in mix" : "tap to add"}</span>
                   </button>
                 );
               })}
@@ -1269,14 +1262,14 @@ function SetupMenu({
         </div>
 
         <div className="mt-3 grid grid-cols-[1fr_auto] gap-2">
-          <div className="min-h-11 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] px-3 py-2">
-            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">Image reports</p>
+          <div className="min-h-11 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] px-3 py-2">
+            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#72543e]">Image reports</p>
             <p className="text-sm font-black leading-tight text-[#102f36]">{issueFlash ? "Latest saved" : `${issueCount} logged`}</p>
           </div>
           <button
             type="button"
             onClick={onReset}
-            className="min-h-11 rounded-lg border-2 border-[#082329] bg-white px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#ffd7ce] active:translate-y-0.5"
+            className="min-h-11 rounded-lg border-2 border-[#092421] bg-white px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#ffd7ce] active:translate-y-0.5"
           >
             Reset
           </button>
@@ -1335,15 +1328,15 @@ function QuestionRun({
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] min-[900px]:min-h-0">
+      <article className="relative min-h-[34dvh] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
         {question.comparison ? <ComparisonStage cards={question.comparison} /> : <QuestionImage question={question} />}
-        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
+        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#092421]">
           {topicCatalog[question.topic].roundLabel}
         </div>
         <button
           type="button"
           onClick={onFlagIssue}
-          className="absolute right-2 top-2 rounded-lg border-2 border-[#082329] bg-white/95 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#082329] transition hover:bg-[#fff0c2] active:translate-y-0.5"
+          className="absolute right-2 top-2 rounded-lg border-2 border-[#092421] bg-white/95 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5"
           aria-label={`Flag an issue with this question image: ${question.imageAlt}`}
         >
           {issueFlash ? "Flagged" : "Flag image"}
@@ -1352,20 +1345,20 @@ function QuestionRun({
           <div className="rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">
             {stageHint}
           </div>
-          <div className="rounded-lg border-2 border-[#082329] bg-[#f3c647] px-3 py-1.5 text-center text-sm font-black text-[#102f36] shadow-[2px_2px_0_#082329]">
+          <div className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1.5 text-center text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421]">
             {sessionCorrect}/{sessionAnswered} this run
           </div>
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-lg min-[900px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
         <div className="shrink-0">
           <div className="flex items-center justify-between gap-2">
             <div className="flex min-w-0 items-center gap-2">
               <DifficultyPill difficulty={difficulty} />
               <ProgressDots questions={questions} questionIndex={questionIndex} />
             </div>
-            <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">
+            <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">
               {questionIndex + 1}/{questions.length}
             </p>
           </div>
@@ -1395,10 +1388,10 @@ function QuestionRun({
                 onClick={() => onAnswer(choice)}
                 className={`min-h-12 rounded-lg border-2 px-3 py-2 text-left text-base font-black leading-snug transition duration-150 ease-out active:translate-y-0.5 md:min-h-14 md:text-lg ${
                   correctChoice
-                    ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
+                    ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosen
-                      ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
-                      : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2] hover:shadow-[2px_2px_0_#082329]"
+                      ? "border-[#092421] bg-[#f59a7d] shadow-[3px_3px_0_#092421]"
+                      : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf] hover:shadow-[2px_2px_0_#092421]"
                 }`}
               >
                 <span className="flex items-center justify-between gap-3">
@@ -1468,36 +1461,36 @@ function SortMode({
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="overflow-hidden rounded-xl border-2 border-[#082329] bg-[#102f36] p-2 shadow-[4px_4px_0_#082329]">
+      <article className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
         <div className="grid h-full min-h-[390px] grid-cols-2 gap-2 md:grid-cols-4 lg:min-h-0">
           {round.cards.map((card) => (
             <button
               key={card.id}
               onClick={() => onPick(card.id)}
               className={`relative min-h-[185px] overflow-hidden rounded-lg border-2 text-left transition active:translate-y-0.5 ${
-                pickedSet.has(card.id) ? "border-[#f3c647] bg-[#f3c647] opacity-55" : "border-[#082329] bg-white hover:border-[#f3c647]"
+                pickedSet.has(card.id) ? "border-[#f0c84b] bg-[#f0c84b] opacity-55" : "border-[#092421] bg-white hover:border-[#f0c84b]"
               }`}
             >
               <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} />
-              <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#082329] bg-white/95 p-2 shadow-[2px_2px_0_#082329]">
+              <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-2 shadow-[2px_2px_0_#092421]">
                 <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
-                <p className="mt-1 text-lg font-black leading-none text-[#b5412b]">{card.statDisplay}</p>
-                <p className="mt-1 text-[11px] font-bold leading-tight text-[#405257]">{card.subStat}</p>
+                <p className="mt-1 text-lg font-black leading-none text-[#9f3f2b]">{card.statDisplay}</p>
+                <p className="mt-1 text-[11px] font-bold leading-tight text-[#5f6b5d]">{card.subStat}</p>
               </div>
             </button>
           ))}
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-lg min-[900px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#082329] bg-[#f3c647] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+            <p className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
               Sort board
             </p>
           </div>
-          <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
+          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
         </div>
         <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.45rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
 
@@ -1512,13 +1505,13 @@ function SortMode({
               <div
                 key={`${round.id}-slot-${id}`}
                 className={`grid min-h-14 grid-cols-[44px_1fr] items-center gap-2 rounded-lg border-2 p-2 ${
-                  good ? "border-[#28764a] bg-[#e9ffe9]" : bad ? "border-[#b5412b] bg-[#fff0ea]" : "border-[#cfbfae] bg-[#fff8ec]"
+                  good ? "border-[#2f7d4f] bg-[#e9ffe9]" : bad ? "border-[#9f3f2b] bg-[#fff0ea]" : "border-[#d9c7a7] bg-[#fff9ec]"
                 }`}
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-[#082329] bg-white text-xl font-black">{index + 1}</div>
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-[#092421] bg-white text-xl font-black">{index + 1}</div>
                 <div>
                   <p className="text-base font-black leading-tight text-[#102f36]">{card ? card.title : "Tap a card"}</p>
-                  <p className="text-xs font-bold text-[#59686b]">{checked && correctCard ? `Correct: ${correctCard.title} (${correctCard.statDisplay})` : round.statLabel}</p>
+                  <p className="text-xs font-bold text-[#5f6b5d]">{checked && correctCard ? `Correct: ${correctCard.title} (${correctCard.statDisplay})` : round.statLabel}</p>
                 </div>
               </div>
             );
@@ -1526,13 +1519,13 @@ function SortMode({
         </div>
 
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <button onClick={onUndo} className="rounded-lg border-2 border-[#082329] bg-white px-3 py-3 text-base font-black hover:bg-[#fff0c2]">
+          <button onClick={onUndo} className="rounded-lg border-2 border-[#092421] bg-white px-3 py-3 text-base font-black hover:bg-[#fff1bf]">
             Undo
           </button>
           <button
             onClick={onCheck}
             disabled={picked.length !== round.answerIds.length || checked}
-            className="rounded-lg border-2 border-[#082329] bg-[#102f36] px-3 py-3 text-base font-black text-white shadow-[3px_3px_0_#082329] disabled:opacity-45"
+            className="rounded-lg border-2 border-[#092421] bg-[#102f36] px-3 py-3 text-base font-black text-white shadow-[3px_3px_0_#092421] disabled:opacity-45"
           >
             Check order
           </button>
@@ -1585,9 +1578,9 @@ function FactMode({
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="relative min-h-[320px] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] min-[900px]:min-h-0">
+      <article className="relative min-h-[320px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
         <MediaImage image={round.image} imageAlt={round.imageAlt} topic={round.topic} />
-        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
+        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#092421]">
           Fact card
         </div>
         <div className="absolute bottom-2 left-2 right-2 rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">
@@ -1595,19 +1588,19 @@ function FactMode({
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-lg min-[900px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#082329] bg-[#78d99a] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+            <p className="rounded-lg border-2 border-[#092421] bg-[#70d392] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
               Read and decide
             </p>
           </div>
-          <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} caught</p>
+          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} caught</p>
         </div>
 
         <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
-        <div className="mt-3 rounded-lg border-2 border-[#082329] bg-[#fff8ec] p-3 shadow-[3px_3px_0_#082329]">
+        <div className="mt-3 rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-3 shadow-[3px_3px_0_#092421]">
           <p className="text-[clamp(1.15rem,2.45vw,2rem)] font-black leading-tight text-[#102f36]">{round.statement}</p>
         </div>
 
@@ -1621,10 +1614,10 @@ function FactMode({
                 onClick={() => onAnswer(choice)}
                 className={`min-h-18 rounded-lg border-2 px-3 py-3 text-center text-2xl font-black transition active:translate-y-0.5 ${
                   correctChoice
-                    ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
+                    ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
-                      ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
-                      : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2]"
+                      ? "border-[#092421] bg-[#f59a7d] shadow-[3px_3px_0_#092421]"
+                      : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf]"
                 }`}
               >
                 {choice}
@@ -1701,7 +1694,7 @@ function RevealMode({
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#102f36] shadow-[4px_4px_0_#082329] min-[900px]:min-h-0">
+      <article className="relative min-h-[34dvh] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
         <div className="h-full transition-[filter] duration-500 ease-out" style={{ filter: `blur(${blurPx}px)` }}>
           <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
         </div>
@@ -1709,42 +1702,42 @@ function RevealMode({
           {Array.from({ length: totalTiles }, (_, index) => (
             <div
               key={`${round.id}-tile-${index}`}
-              className={`border border-[#f3c647]/20 bg-[#102f36] transition duration-500 ${revealedTiles.has(index) ? "opacity-0" : "opacity-95"}`}
+              className={`border border-[#f0c84b]/20 bg-[#102f36] transition duration-500 ${revealedTiles.has(index) ? "opacity-0" : "opacity-95"}`}
             />
           ))}
         </div>
-        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
+        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#092421]">
           Peek round
         </div>
         <div className="absolute bottom-2 left-2 right-2 grid gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
           <div className="rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">
             {answered ? `Image: ${round.card.imageCredit}` : "The picture reveals itself. Guess early for style points."}
           </div>
-          <div className="rounded-lg border-2 border-[#082329] bg-[#f3c647] px-3 py-1.5 text-center text-sm font-black text-[#102f36] shadow-[2px_2px_0_#082329]">
+          <div className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1.5 text-center text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421]">
             {visibleCount}/{totalTiles} open
           </div>
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-lg min-[900px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#082329] bg-[#78d99a] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+            <p className="rounded-lg border-2 border-[#092421] bg-[#70d392] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
               Picture clue
             </p>
           </div>
-          <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
+          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
         </div>
 
         <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
-        <div className="mt-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
+        <div className="mt-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
           <div className="flex items-center justify-between gap-3 text-xs font-black md:text-sm">
             <span>Picture reveal</span>
             <span>{Math.round((visibleCount / totalTiles) * 100)}%</span>
           </div>
-          <div className="mt-2 h-3 overflow-hidden rounded-full bg-[#eadfce]">
-            <div className="h-full bg-[#b5412b] transition-[width] duration-500 ease-out" style={{ width: `${Math.round((visibleCount / totalTiles) * 100)}%` }} />
+          <div className="mt-2 h-3 overflow-hidden rounded-full bg-[#e6d7bc]">
+            <div className="h-full bg-[#9f3f2b] transition-[width] duration-500 ease-out" style={{ width: `${Math.round((visibleCount / totalTiles) * 100)}%` }} />
           </div>
         </div>
 
@@ -1758,10 +1751,10 @@ function RevealMode({
                 onClick={() => onAnswer(choice, visibleCount)}
                 className={`min-h-12 rounded-lg border-2 px-3 py-2 text-left text-base font-black leading-snug transition active:translate-y-0.5 md:min-h-14 md:text-lg ${
                   correctChoice
-                    ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
+                    ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
-                      ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
-                      : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2] hover:shadow-[2px_2px_0_#082329]"
+                      ? "border-[#092421] bg-[#f59a7d] shadow-[3px_3px_0_#092421]"
+                      : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf] hover:shadow-[2px_2px_0_#092421]"
                 }`}
               >
                 <span className="flex items-center justify-between gap-3">
@@ -1828,31 +1821,31 @@ function BuildFactMode({
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="relative min-h-[34dvh] overflow-hidden rounded-xl border-2 border-[#082329] bg-[#d8e8e5] shadow-[4px_4px_0_#082329] min-[900px]:min-h-0">
+      <article className="relative min-h-[34dvh] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
         <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
-        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#082329]">
+        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#092421]">
           Build round
         </div>
-        <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#082329] bg-white/95 p-2 shadow-[2px_2px_0_#082329]">
+        <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-2 shadow-[2px_2px_0_#092421]">
           <p className="text-lg font-black leading-tight text-[#102f36]">{round.card.title}</p>
-          <p className="text-sm font-bold text-[#59686b]">{round.card.subStat}</p>
+          <p className="text-sm font-bold text-[#5f6b5d]">{round.card.subStat}</p>
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-lg min-[900px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#082329] bg-[#78d99a] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+            <p className="rounded-lg border-2 border-[#092421] bg-[#70d392] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
               Make a fact
             </p>
           </div>
-          <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} built</p>
+          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} built</p>
         </div>
 
         <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
 
-        <div className="mt-3 grid gap-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
+        <div className="mt-3 grid gap-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
           {round.answerIds.map((id, index) => {
             const token = pickedTokens[index];
             const good = checked && token?.id === id;
@@ -1861,7 +1854,7 @@ function BuildFactMode({
               <div
                 key={`${round.id}-slot-${id}`}
                 className={`min-h-11 rounded-lg border-2 px-3 py-2 text-lg font-black ${
-                  good ? "border-[#28764a] bg-[#e9ffe9]" : bad ? "border-[#b5412b] bg-[#fff0ea]" : "border-[#cfbfae] bg-white"
+                  good ? "border-[#2f7d4f] bg-[#e9ffe9]" : bad ? "border-[#9f3f2b] bg-[#fff0ea]" : "border-[#d9c7a7] bg-white"
                 }`}
               >
                 {token?.text ?? "Tap a word chunk"}
@@ -1876,7 +1869,7 @@ function BuildFactMode({
               key={token.id}
               onClick={() => onPick(token.id)}
               disabled={pickedSet.has(token.id) || checked}
-              className="min-h-11 rounded-lg border-2 border-[#082329] bg-[#fffaf4] px-3 py-2 text-base font-black transition hover:bg-[#fff0c2] active:translate-y-0.5 disabled:opacity-35"
+              className="min-h-11 rounded-lg border-2 border-[#092421] bg-[#fffdf6] px-3 py-2 text-base font-black transition hover:bg-[#fff1bf] active:translate-y-0.5 disabled:opacity-35"
             >
               {token.text}
             </button>
@@ -1884,13 +1877,13 @@ function BuildFactMode({
         </div>
 
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <button onClick={onUndo} className="rounded-lg border-2 border-[#082329] bg-white px-3 py-3 text-base font-black hover:bg-[#fff0c2]">
+          <button onClick={onUndo} className="rounded-lg border-2 border-[#092421] bg-white px-3 py-3 text-base font-black hover:bg-[#fff1bf]">
             Undo
           </button>
           <button
             onClick={onCheck}
             disabled={picked.length !== round.answerIds.length || checked}
-            className="rounded-lg border-2 border-[#082329] bg-[#102f36] px-3 py-3 text-base font-black text-white shadow-[3px_3px_0_#082329] disabled:opacity-45"
+            className="rounded-lg border-2 border-[#092421] bg-[#102f36] px-3 py-3 text-base font-black text-white shadow-[3px_3px_0_#092421] disabled:opacity-45"
           >
             Check fact
           </button>
@@ -1946,21 +1939,21 @@ function NumberMode({
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <KnowledgeCardsStage cards={round.cards} badge="Number case" footer={`${round.biggerLabel} minus ${round.smallerLabel}`} />
 
-      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-lg min-[900px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#082329] bg-[#f3c647] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+            <p className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
               Math clue
             </p>
           </div>
-          <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
+          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
         </div>
 
         <h2 className="mt-2 text-[clamp(1.2rem,2.6vw,2.25rem)] font-black leading-[1.06] text-[#102f36]">{round.prompt}</h2>
 
-        <div className="mt-3 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-3">
-          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">{round.statLabel}</p>
+        <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-3">
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">{round.statLabel}</p>
           <p className="mt-1 text-3xl font-black leading-none text-[#102f36]">
             {round.biggerValue.toLocaleString("en-US")} - {round.smallerValue.toLocaleString("en-US")} = ?
           </p>
@@ -1976,10 +1969,10 @@ function NumberMode({
                 onClick={() => onAnswer(choice)}
                 className={`min-h-14 rounded-lg border-2 px-3 py-2 text-left text-xl font-black leading-snug transition active:translate-y-0.5 ${
                   correctChoice
-                    ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
+                    ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
-                      ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
-                      : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2]"
+                      ? "border-[#092421] bg-[#f59a7d] shadow-[3px_3px_0_#092421]"
+                      : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf]"
                 }`}
               >
                 {choice.toLocaleString("en-US")} {round.unit}
@@ -2038,15 +2031,15 @@ function OddOneMode({
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <KnowledgeCardsStage cards={round.cards} badge="Logic set" footer="Find the card that breaks the rule." />
 
-      <article className="flex min-h-0 flex-col rounded-xl min-[900px]:overflow-y-auto border-2 border-[#082329] bg-white p-3 shadow-[3px_3px_0_#082329]">
+      <article className="flex min-h-0 flex-col rounded-lg min-[900px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#082329] bg-[#78d99a] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+            <p className="rounded-lg border-2 border-[#092421] bg-[#70d392] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
               Spot the rule
             </p>
           </div>
-          <p className="rounded-lg bg-[#eaf3f0] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} found</p>
+          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} found</p>
         </div>
 
         <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
@@ -2061,10 +2054,10 @@ function OddOneMode({
                 onClick={() => onAnswer(card.id)}
                 className={`min-h-14 rounded-lg border-2 px-3 py-2 text-left text-lg font-black leading-snug transition active:translate-y-0.5 ${
                   correctChoice
-                    ? "border-[#082329] bg-[#78d99a] shadow-[3px_3px_0_#082329]"
+                    ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
-                      ? "border-[#082329] bg-[#ff9f8d] shadow-[3px_3px_0_#082329]"
-                      : "border-[#cfbfae] bg-[#fffaf4] hover:border-[#082329] hover:bg-[#fff0c2]"
+                      ? "border-[#092421] bg-[#f59a7d] shadow-[3px_3px_0_#092421]"
+                      : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf]"
                 }`}
               >
                 {String.fromCharCode(65 + index)}: {card.title}
@@ -2116,8 +2109,8 @@ function CollectionBook({
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 lg:grid-cols-[300px_1fr]">
-      <aside className="rounded-lg border-2 border-[#082329] bg-white p-3 shadow-[4px_4px_0_#082329]">
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#b5412b]">Collection</p>
+      <aside className="rounded-lg border-2 border-[#092421] bg-white p-3 shadow-[4px_4px_0_#092421]">
+        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#9f3f2b]">Collection</p>
         <h2 className="mt-1 text-3xl font-black leading-none text-[#102f36]">{unlocked.length}/{filtered.length} cards</h2>
         <div className="mt-4 grid gap-2">
           {allKnowledgeTopics.map((item) => (
@@ -2142,12 +2135,12 @@ function CollectionBook({
           <HudStat label="Numbers" value={modeWins.number.toString()} />
           <HudStat label="Odd" value={modeWins.odd.toString()} />
         </div>
-        <div className="mt-4 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
-          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">Research library</p>
+        <div className="mt-4 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
+          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#72543e]">Research library</p>
           <p className="mt-1 text-xl font-black leading-none text-[#102f36]">{totalResearchRecords.toLocaleString("en-US")} records</p>
           <div className="mt-2 grid gap-1.5">
             {allKnowledgeTopics.flatMap((item) => topicPacks[item].sources.map((source) => ({ ...source, key: `${item}-${source.label}` }))).map((source) => (
-              <a key={source.key} href={source.url} target="_blank" rel="noreferrer" className="rounded-md bg-white px-2 py-1.5 text-xs font-bold leading-tight text-[#405257] underline-offset-2 hover:underline">
+              <a key={source.key} href={source.url} target="_blank" rel="noreferrer" className="rounded-md bg-white px-2 py-1.5 text-xs font-bold leading-tight text-[#5f6b5d] underline-offset-2 hover:underline">
                 {source.label}
               </a>
             ))}
@@ -2155,24 +2148,24 @@ function CollectionBook({
         </div>
       </aside>
 
-      <article className="min-h-0 overflow-auto rounded-lg border-2 border-[#082329] bg-[#102f36] p-2 shadow-[4px_4px_0_#082329]">
+      <article className="min-h-0 overflow-auto rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
         <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
           {filtered.map((card) => {
             const isUnlocked = unlockedCards.includes(card.title);
             return (
-              <div key={`${card.topic}-${card.id}`} className="overflow-hidden rounded-lg border-2 border-[#082329] bg-white">
-                <div className={`relative h-36 overflow-hidden bg-[#d8e8e5] ${isUnlocked ? "" : "grayscale"}`}>
+              <div key={`${card.topic}-${card.id}`} className="overflow-hidden rounded-lg border-2 border-[#092421] bg-white">
+                <div className={`relative h-36 overflow-hidden bg-[#e3efe4] ${isUnlocked ? "" : "grayscale"}`}>
                   {isUnlocked ? <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} /> : <LockedCard topic={card.topic} />}
                 </div>
                 <div className="p-2">
                   <p className="text-base font-black leading-tight text-[#102f36]">{isUnlocked ? card.title : "Locked card"}</p>
-                  <p className="mt-1 text-sm font-black text-[#b5412b]">{isUnlocked ? card.statDisplay : "Win a round"}</p>
+                  <p className="mt-1 text-sm font-black text-[#9f3f2b]">{isUnlocked ? card.statDisplay : "Win a round"}</p>
                   {isUnlocked && (
-                    <p className={`mt-1 text-[10px] font-black uppercase tracking-[0.1em] ${card.qualityScore >= 85 ? "text-[#28764a]" : card.qualityScore >= 70 ? "text-[#a36b00]" : "text-[#b5412b]"}`}>
+                    <p className={`mt-1 text-[10px] font-black uppercase tracking-[0.1em] ${card.qualityScore >= 85 ? "text-[#2f7d4f]" : card.qualityScore >= 70 ? "text-[#a36b00]" : "text-[#9f3f2b]"}`}>
                       Quality {card.qualityScore}
                     </p>
                   )}
-                  <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#59686b]">{isUnlocked ? card.fact : "Answer correctly to add it here."}</p>
+                  <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#5f6b5d]">{isUnlocked ? card.fact : "Answer correctly to add it here."}</p>
                 </div>
               </div>
             );
@@ -2189,8 +2182,8 @@ function ProgressDots({ questions, questionIndex }: { questions: Question[]; que
       {questions.map((item, index) => (
         <span
           key={item.id}
-          className={`h-2.5 w-2.5 rounded-sm border-2 border-[#082329] ${
-            index < questionIndex ? "bg-[#4fb286]" : index === questionIndex ? "bg-[#f3c647]" : "bg-[#eadfce]"
+          className={`h-2.5 w-2.5 rounded-sm border-2 border-[#092421] ${
+            index < questionIndex ? "bg-[#4fa775]" : index === questionIndex ? "bg-[#f0c84b]" : "bg-[#e6d7bc]"
           }`}
         />
       ))}
@@ -2216,7 +2209,7 @@ function ProfilePicker({
         id="profile-picker"
         value={activeProfileId}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 max-w-32 rounded-lg border-2 border-[#082329] bg-white px-2 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#082329] transition focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#f3c647]"
+        className="h-10 max-w-32 rounded-lg border-2 border-[#092421] bg-white px-2 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#f0c84b]"
       >
         {profiles.map((profile) => (
           <option key={profile.id} value={profile.id}>
@@ -2226,7 +2219,7 @@ function ProfilePicker({
       </select>
       <button
         onClick={onCreate}
-        className="h-10 rounded-lg border-2 border-[#082329] bg-white px-3 text-sm font-black text-[#102f36] transition hover:bg-[#fff0c2] active:translate-y-0.5"
+        className="h-10 rounded-lg border-2 border-[#092421] bg-white px-3 text-sm font-black text-[#102f36] transition hover:bg-[#fff1bf] active:translate-y-0.5"
       >
         +
       </button>
@@ -2236,15 +2229,15 @@ function ProfilePicker({
 
 function DifficultySelector({ difficulty, onChange }: { difficulty: Difficulty; onChange: (difficulty: Difficulty) => void }) {
   return (
-    <div className="grid min-w-0 grid-cols-3 gap-1 rounded-lg border-2 border-[#cfbfae] bg-[#fffaf4] p-1">
+    <div className="grid min-w-0 grid-cols-3 gap-1 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-1">
       {difficultyOptions.map((item) => (
         <button
           key={item.id}
           onClick={() => onChange(item.id)}
           className={`min-h-11 min-w-0 rounded-md border-2 px-1 py-1 text-center transition active:translate-y-0.5 ${
             difficulty === item.id
-              ? "border-[#082329] bg-[#f3c647] shadow-[2px_2px_0_#082329]"
-              : "border-transparent bg-transparent hover:border-[#cfbfae] hover:bg-white"
+              ? "border-[#092421] bg-[#f0c84b] shadow-[2px_2px_0_#092421]"
+              : "border-transparent bg-transparent hover:border-[#d9c7a7] hover:bg-white"
           }`}
         >
           <span className="block truncate text-base font-black leading-none text-[#102f36]">{item.label}</span>
@@ -2259,10 +2252,10 @@ function CollectionAction({ active, value, onClick }: { active: boolean; value: 
     <button
       onClick={onClick}
       className={`min-w-0 rounded-md border-2 px-2 py-1 text-center transition active:translate-y-0.5 ${
-        active ? "border-[#082329] bg-[#f3c647] shadow-[2px_2px_0_#082329]" : "border-transparent bg-white hover:border-[#cfbfae] hover:bg-[#fff0c2]"
+        active ? "border-[#092421] bg-[#f0c84b] shadow-[2px_2px_0_#092421]" : "border-transparent bg-white hover:border-[#d9c7a7] hover:bg-[#fff1bf]"
       }`}
     >
-      <span className="block truncate text-[8px] font-black uppercase tracking-[0.08em] text-[#7a5d4b]">{active ? "Back" : "Cards"}</span>
+      <span className="block truncate text-[8px] font-black uppercase tracking-[0.08em] text-[#72543e]">{active ? "Back" : "Cards"}</span>
       <span className="block truncate text-sm font-black leading-none text-[#102f36]">{active ? "Game" : value}</span>
     </button>
   );
@@ -2270,8 +2263,8 @@ function CollectionAction({ active, value, onClick }: { active: boolean; value: 
 
 function ReadingClue({ text }: { text: string }) {
   return (
-    <div className="mt-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
-      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">Read this</p>
+    <div className="mt-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
+      <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#72543e]">Read this</p>
       <p className="mt-1 text-base font-black leading-snug text-[#102f36] md:text-lg">“{text}”</p>
     </div>
   );
@@ -2279,10 +2272,10 @@ function ReadingClue({ text }: { text: string }) {
 
 function SkipButton({ onClick }: { onClick: () => void }) {
   return (
-    <div className="sticky bottom-0 z-20 mt-auto bg-white/95 pt-2 backdrop-blur">
+    <div className="sticky bottom-0 z-20 mt-auto bg-[#fffdf6]/95 pt-2 backdrop-blur">
       <button
         onClick={onClick}
-        className="w-full rounded-lg border-2 border-[#cfbfae] bg-white px-4 py-2 text-sm font-black text-[#59686b] transition hover:border-[#082329] hover:bg-[#fff8ec] active:translate-y-0.5"
+        className="w-full rounded-lg border-2 border-[#d9c7a7] bg-white px-4 py-2 text-sm font-black text-[#5f6b5d] transition hover:border-[#092421] hover:bg-[#fff9ec] active:translate-y-0.5"
       >
         Skip question
       </button>
@@ -2293,7 +2286,7 @@ function SkipButton({ onClick }: { onClick: () => void }) {
 function DifficultyPill({ difficulty }: { difficulty: Difficulty }) {
   const label = difficultyLabel(difficulty);
   return (
-    <span className="shrink-0 rounded-lg border-2 border-[#082329] bg-[#f3c647] px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#082329]">
+    <span className="shrink-0 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#092421]">
       {label}
     </span>
   );
@@ -2301,8 +2294,8 @@ function DifficultyPill({ difficulty }: { difficulty: Difficulty }) {
 
 function HudStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border-2 border-[#cfbfae] bg-white px-1.5 py-1 text-center">
-      <p className="text-[8px] font-black uppercase tracking-[0.1em] text-[#7a5d4b]">{label}</p>
+    <div className="rounded-lg border-2 border-[#d9c7a7] bg-white px-1.5 py-1 text-center">
+      <p className="text-[8px] font-black uppercase tracking-[0.1em] text-[#72543e]">{label}</p>
       <p className="text-lg font-black leading-none text-[#102f36] md:text-xl">{value}</p>
     </div>
   );
@@ -2310,39 +2303,39 @@ function HudStat({ label, value }: { label: string; value: string }) {
 
 function CollectionStat({ label, value, libraryValue, wins, samples }: { label: string; value: string; libraryValue: string; wins: number; samples: readonly string[] }) {
   return (
-    <div className="rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
+    <div className="rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-black text-[#102f36]">{label}</p>
-        <p className="text-sm font-black text-[#b5412b]">{value}</p>
+        <p className="text-sm font-black text-[#9f3f2b]">{value}</p>
       </div>
-      <p className="mt-1 text-xs font-bold text-[#59686b]">{wins} correct answers · {libraryValue} research records</p>
-      <p className="mt-1 line-clamp-2 text-[11px] font-semibold leading-tight text-[#59686b]">{samples.join(" | ")}</p>
+      <p className="mt-1 text-xs font-bold text-[#5f6b5d]">{wins} correct answers · {libraryValue} research records</p>
+      <p className="mt-1 line-clamp-2 text-[11px] font-semibold leading-tight text-[#5f6b5d]">{samples.join(" | ")}</p>
     </div>
   );
 }
 
 function KnowledgeCardsStage({ cards, badge, footer }: { cards: KnowledgeCard[]; badge: string; footer: string }) {
   return (
-    <article className="overflow-hidden rounded-xl border-2 border-[#082329] bg-[#102f36] p-2 shadow-[4px_4px_0_#082329]">
+    <article className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
       <div className="grid h-full min-h-[390px] grid-cols-2 gap-2 lg:min-h-0">
         {cards.map((card, index) => (
-          <div key={`${badge}-${card.topic}-${card.id}`} className="relative overflow-hidden rounded-lg border-2 border-[#082329] bg-[#fff8ec]">
-            <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#082329] bg-[#f3c647] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#082329]">
+          <div key={`${badge}-${card.topic}-${card.id}`} className="relative overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
+            <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#092421]">
               {String.fromCharCode(65 + index)}
             </div>
             <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} />
-            <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#082329] bg-white/95 p-1.5 shadow-[2px_2px_0_#082329]">
+            <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-1.5 shadow-[2px_2px_0_#092421]">
               <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
               <div className="mt-1 flex items-end justify-between gap-2">
-                <p className="text-lg font-black leading-none text-[#b5412b]">{card.statDisplay}</p>
-                <p className="text-right text-[11px] font-bold leading-tight text-[#405257]">{card.subStat}</p>
+                <p className="text-lg font-black leading-none text-[#9f3f2b]">{card.statDisplay}</p>
+                <p className="text-right text-[11px] font-bold leading-tight text-[#5f6b5d]">{card.subStat}</p>
               </div>
             </div>
           </div>
         ))}
       </div>
       <div className="mt-2 grid gap-2 sm:grid-cols-[auto_1fr] sm:items-center">
-        <div className="rounded-lg border-2 border-[#082329] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+        <div className="rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
           {badge}
         </div>
         <p className="rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">{footer}</p>
@@ -2356,22 +2349,22 @@ function ComparisonStage({ cards }: { cards: ComparisonCard[] }) {
   return (
     <div className="grid h-full min-h-[260px] grid-cols-2 gap-1.5 bg-[#102f36] p-1.5">
       {displayCards.map((card) => (
-        <div key={`${card.label}-${card.title}`} className="relative overflow-hidden rounded-lg border-2 border-[#082329] bg-[#fff8ec]">
-          <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#082329] bg-[#f3c647] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#082329]">
+        <div key={`${card.label}-${card.title}`} className="relative overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
+          <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#092421]">
             {card.label}
           </div>
           <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} />
-          <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#082329] bg-white/95 p-1.5 shadow-[2px_2px_0_#082329]">
+          <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-1.5 shadow-[2px_2px_0_#092421]">
             <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
             <div className="mt-1 flex items-end justify-between gap-2">
               <div>
-                <p className="text-[9px] font-black uppercase tracking-[0.12em] text-[#7a5d4b]">{card.statLabel}</p>
-                <p className="text-lg font-black leading-none text-[#b5412b]">{card.statValue}</p>
+                <p className="text-[9px] font-black uppercase tracking-[0.12em] text-[#72543e]">{card.statLabel}</p>
+                <p className="text-lg font-black leading-none text-[#9f3f2b]">{card.statValue}</p>
               </div>
-              <p className="text-right text-[11px] font-bold leading-tight text-[#405257]">{card.subStat}</p>
+              <p className="text-right text-[11px] font-bold leading-tight text-[#5f6b5d]">{card.subStat}</p>
             </div>
-            <div className="mt-1 h-2 overflow-hidden rounded-full bg-[#eadfce]">
-              <div className="h-full bg-[#b5412b]" style={{ width: `${Math.max(2, Math.min(100, (card.meterValue / card.meterMax) * 100))}%` }} />
+            <div className="mt-1 h-2 overflow-hidden rounded-full bg-[#e6d7bc]">
+              <div className="h-full bg-[#9f3f2b]" style={{ width: `${Math.max(2, Math.min(100, (card.meterValue / card.meterMax) * 100))}%` }} />
             </div>
           </div>
         </div>
@@ -2383,14 +2376,14 @@ function ComparisonStage({ cards }: { cards: ComparisonCard[] }) {
 function ComparisonTable({ cards }: { cards: ComparisonCard[] }) {
   const displayCards = orderedComparisonCards(cards);
   return (
-    <div className="mt-2 grid gap-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2 sm:grid-cols-2">
+    <div className="mt-2 grid gap-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2 sm:grid-cols-2">
       {displayCards.map((card) => (
         <div key={`${card.label}-table-${card.title}`} className="rounded-md bg-white px-2 py-1.5">
           <div className="flex items-center justify-between gap-2">
             <p className="text-sm font-black text-[#102f36]">{card.label}: {card.title}</p>
-            <p className="text-sm font-black text-[#b5412b]">{card.statValue}</p>
+            <p className="text-sm font-black text-[#9f3f2b]">{card.statValue}</p>
           </div>
-          <p className="text-xs font-semibold text-[#59686b]">{card.subStat}</p>
+          <p className="text-xs font-semibold text-[#5f6b5d]">{card.subStat}</p>
         </div>
       ))}
     </div>
@@ -2399,17 +2392,17 @@ function ComparisonTable({ cards }: { cards: ComparisonCard[] }) {
 
 function PepperHeatMeter({ meter }: { meter: NonNullable<Question["heatMeter"]> }) {
   return (
-    <div className="mt-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff0c2] p-2">
+    <div className="mt-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff1bf] p-2">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#7a5d4b]">Pepper meter</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Pepper meter</p>
           <p className="text-lg font-black leading-none text-[#102f36]">{meter.label}</p>
         </div>
         <div className="text-2xl leading-none" aria-label={`${meter.icons} pepper heat`}>
           {meter.emoji}
         </div>
       </div>
-      <p className="mt-1 text-xs font-bold text-[#405257]">{meter.line}</p>
+      <p className="mt-1 text-xs font-bold text-[#5f6b5d]">{meter.line}</p>
     </div>
   );
 }
@@ -2427,13 +2420,13 @@ function HeatChoiceEmoji({ heat }: { heat: HeatBand }) {
 
 function NumberLine({ line }: { line: NonNullable<Question["numberLine"]> }) {
   return (
-    <div className="mt-2 rounded-lg border-2 border-[#cfbfae] bg-[#fff8ec] p-2">
+    <div className="mt-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
       <div className="flex justify-between gap-3 text-xs font-black md:text-sm">
         <span>{line.label}</span>
         <span>{line.value.toLocaleString("en-US")} {line.unit}</span>
       </div>
-      <div className="mt-2 h-3 overflow-hidden rounded-full bg-[#eadfce]">
-        <div className="h-full bg-[#b5412b]" style={{ width: `${Math.max(2, Math.min(100, (line.value / line.max) * 100))}%` }} />
+      <div className="mt-2 h-3 overflow-hidden rounded-full bg-[#e6d7bc]">
+        <div className="h-full bg-[#9f3f2b]" style={{ width: `${Math.max(2, Math.min(100, (line.value / line.max) * 100))}%` }} />
       </div>
     </div>
   );
@@ -2467,14 +2460,14 @@ function FeedbackPanel({
   }, [correctAnswer, explanation, isCorrect]);
 
   return (
-    <div ref={panelRef} className="sticky bottom-0 z-20 mt-auto bg-white/95 pt-2 backdrop-blur">
-      <div className={`rounded-lg border-2 p-2.5 ${isCorrect ? "border-[#28764a] bg-[#e9ffe9]" : "border-[#b5412b] bg-[#fff0ea]"}`}>
+    <div ref={panelRef} className="sticky bottom-0 z-20 mt-auto bg-[#fffdf6]/95 pt-2 backdrop-blur">
+      <div className={`rounded-lg border-2 p-2.5 ${isCorrect ? "border-[#2f7d4f] bg-[#e9ffe9]" : "border-[#9f3f2b] bg-[#fff0ea]"}`}>
         <div className="grid gap-2 md:grid-cols-[auto_1fr] md:items-start">
-          <div className={`relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border-2 border-[#082329] text-2xl font-black shadow-[2px_2px_0_#082329] ${isCorrect ? "bg-[#78d99a]" : "bg-[#ff9f8d]"}`}>
+          <div className={`relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border-2 border-[#092421] text-2xl font-black shadow-[2px_2px_0_#092421] ${isCorrect ? "bg-[#70d392]" : "bg-[#f59a7d]"}`}>
             {isCorrect ? (
               <>
-                <span className="absolute left-1.5 top-1 h-2 w-2 rounded-sm bg-[#fff8ec]" />
-                <span className="absolute bottom-1.5 right-1.5 h-1.5 w-1.5 rounded-sm bg-[#f3c647]" />
+                <span className="absolute left-1.5 top-1 h-2 w-2 rounded-sm bg-[#fff9ec]" />
+                <span className="absolute bottom-1.5 right-1.5 h-1.5 w-1.5 rounded-sm bg-[#f0c84b]" />
                 <span>+</span>
               </>
             ) : (
@@ -2486,17 +2479,17 @@ function FeedbackPanel({
               <p className="text-lg font-black leading-tight text-[#102f36] md:text-xl">
                 {isCorrect ? celebration : note}
               </p>
-              <span className="rounded-full border-2 border-[#082329] bg-[#f3c647] px-2 py-0.5 text-sm font-black text-[#102f36]">
+              <span className="rounded-full border-2 border-[#092421] bg-[#f0c84b] px-2 py-0.5 text-sm font-black text-[#102f36]">
                 +{xpGain} glow
               </span>
               {leveledUp && (
-                <span className="rounded-full border-2 border-[#082329] bg-[#78d99a] px-2 py-0.5 text-sm font-black text-[#102f36]">
+                <span className="rounded-full border-2 border-[#092421] bg-[#70d392] px-2 py-0.5 text-sm font-black text-[#102f36]">
                   Glow up
                 </span>
               )}
             </div>
             {!isCorrect && (
-              <p className="mt-1 text-base font-black text-[#b5412b]">
+              <p className="mt-1 text-base font-black text-[#9f3f2b]">
                 Answer: {correctAnswer}
               </p>
             )}
@@ -2505,7 +2498,7 @@ function FeedbackPanel({
             </p>
           </div>
         </div>
-        <button onClick={onNext} className="mt-2 w-full rounded-lg border-2 border-[#082329] bg-[#102f36] px-4 py-2.5 text-base font-black text-white shadow-[3px_3px_0_#082329] hover:bg-[#23515a]">
+        <button onClick={onNext} className="mt-2 w-full rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2.5 text-base font-black text-white shadow-[3px_3px_0_#092421] hover:bg-[#23564f]">
           {isLast ? "Finish round" : "Next"}
         </button>
       </div>
@@ -2523,12 +2516,12 @@ function MediaImage({ image, imageAlt, topic }: { image: string; imageAlt: strin
 
   if (failed) {
     return (
-      <div className={`flex h-full min-h-[260px] w-full items-center justify-center p-6 ${topic === "peppers" ? "bg-[#f7d8d0]" : topic === "sharks" ? "bg-[#cfe9ee]" : topic === "space" ? "bg-[#d9ddff]" : "bg-[#d8e8e5]"}`}>
+      <div className={`flex h-full min-h-[260px] w-full items-center justify-center p-6 ${topic === "peppers" ? "bg-[#f3d7c8]" : topic === "sharks" ? "bg-[#d6ece8]" : topic === "space" ? "bg-[#dfe4ef]" : "bg-[#e3efe4]"}`}>
         <div className="w-full max-w-sm rounded-lg border-2 border-[#20383d] bg-white p-5 text-center shadow-[4px_4px_0_#20383d]">
-          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#20383d] bg-[#f3c647] text-5xl">
+          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#20383d] bg-[#f0c84b] text-5xl">
             {topic === "peppers" ? "!" : topic === "sharks" ? "~" : topic === "space" ? "*" : "^"}
           </div>
-          <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-[#b5412b]">Picture clue</p>
+          <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-[#9f3f2b]">Picture clue</p>
           <p className="mt-1 text-3xl font-black leading-tight text-[#192f35]">{imageAlt}</p>
         </div>
       </div>
@@ -2537,14 +2530,14 @@ function MediaImage({ image, imageAlt, topic }: { image: string; imageAlt: strin
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={image} alt={imageAlt} onError={() => setFailedImage(image)} className="h-full min-h-[260px] w-full object-cover" />
+    <img src={image} alt={imageAlt} onError={() => setFailedImage(image)} className="field-guide-media h-full min-h-[260px] w-full object-cover" />
   );
 }
 
 function LockedCard({ topic }: { topic: KnowledgeTopic }) {
   return (
-    <div className={`flex h-full min-h-36 items-center justify-center ${topic === "peppers" ? "bg-[#f7d8d0]" : topic === "sharks" ? "bg-[#cfe9ee]" : topic === "space" ? "bg-[#d9ddff]" : "bg-[#d8e8e5]"}`}>
-      <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#082329] bg-[#f3c647] text-4xl font-black">?</div>
+    <div className={`flex h-full min-h-36 items-center justify-center ${topic === "peppers" ? "bg-[#f3d7c8]" : topic === "sharks" ? "bg-[#d6ece8]" : topic === "space" ? "bg-[#dfe4ef]" : "bg-[#e3efe4]"}`}>
+      <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#092421] bg-[#f0c84b] text-4xl font-black">?</div>
     </div>
   );
 }
