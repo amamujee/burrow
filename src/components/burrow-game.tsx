@@ -305,6 +305,13 @@ export function BurrowGame() {
   const accuracy = progress.answered ? Math.round((progress.correct / progress.answered) * 100) : 0;
 
   useEffect(() => {
+    document.documentElement.dataset.burrowHydrated = "true";
+    return () => {
+      delete document.documentElement.dataset.burrowHydrated;
+    };
+  }, []);
+
+  useEffect(() => {
     const loadSavedProfiles = window.setTimeout(() => {
       const loadedProfiles = loadProfiles();
       const loadedProfile = loadedProfiles.profiles.find((profile) => profile.id === loadedProfiles.activeProfileId) ?? loadedProfiles.profiles[0];
@@ -908,6 +915,7 @@ export function BurrowGame() {
 
         {!showCollection && activeChallengeMode === "peek" && (
           <RevealMode
+            key={revealRound.id}
             round={revealRound}
             selected={revealSelected}
             result={lastResult}

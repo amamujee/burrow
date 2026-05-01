@@ -50,8 +50,13 @@ export async function POST(request: Request) {
     return Response.json({ error: "Missing required issue fields" }, { status: 422 });
   }
 
-  await mkdir(issueLogDir, { recursive: true });
-  await appendFile(issueLogPath, `${JSON.stringify(issue)}\n`, "utf8");
+  try {
+    await mkdir(issueLogDir, { recursive: true });
+    await appendFile(issueLogPath, `${JSON.stringify(issue)}\n`, "utf8");
+  } catch (error) {
+    console.warn("Content issue could not be written to the local log.", error);
+    return Response.json({ ok: false, error: "Issue could not be written" }, { status: 503 });
+  }
 
-  return Response.json({ ok: true, path: issueLogPath });
+  return Response.json({ ok: true });
 }

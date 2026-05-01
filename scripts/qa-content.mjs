@@ -13,7 +13,7 @@ const {
   buildSortRound,
   collectionCards,
 } = jiti("./src/lib/game-modes.ts");
-const { buildSession } = jiti("./src/lib/questions.ts");
+const { buildHeadToHeadSession, buildSession } = jiti("./src/lib/questions.ts");
 
 const userAgent = "BurrowContentQA/1.0";
 const critical = [];
@@ -126,6 +126,15 @@ const assertRoundCardImages = async (roundName, round) => {
   if (!cardsToCheck.length && !round.image) critical.push(`${roundName}/${round.id}: no image-bearing content`);
 };
 
+const assertQuestion = async (roundName, question) => {
+  if (!question.id || !question.prompt || !question.answer) critical.push(`${roundName}/${question.id ?? "missing"}: incomplete question`);
+  if (!question.choices?.includes(question.answer)) critical.push(`${roundName}/${question.id}: answer missing from choices`);
+  await checkImage({ id: question.id, topic: question.topic, image: question.image });
+  for (const comparison of question.comparison ?? []) {
+    await checkImage({ id: comparison.title, topic: comparison.topic, image: comparison.image });
+  }
+};
+
 const checkRoundBuilders = async () => {
   const difficulties = [1, 2, 3];
   for (const topic of data.topicIds) {
@@ -134,11 +143,14 @@ const checkRoundBuilders = async () => {
       const session = buildSession(topic, difficulty, seed, []);
       if (session.length < 12) critical.push(`${topic}/quiz/d${difficulty}: short session`);
       for (const question of session) {
-        if (!question.id || !question.prompt || !question.answer) critical.push(`${topic}/question/${question.id ?? "missing"}: incomplete question`);
-        await checkImage({ id: question.id, topic: question.topic, image: question.image });
-        for (const comparison of question.comparison ?? []) {
-          await checkImage({ id: comparison.title, topic: comparison.topic, image: comparison.image });
-        }
+        await assertQuestion(`${topic}/quiz/d${difficulty}`, question);
+      }
+
+      const headToHeadSession = buildHeadToHeadSession(topic, difficulty, seed + 5, []);
+      if (headToHeadSession.length < 12) critical.push(`${topic}/versus/d${difficulty}: short session`);
+      for (const question of headToHeadSession) {
+        await assertQuestion(`${topic}/versus/d${difficulty}`, question);
+        if (!question.comparison || question.comparison.length !== 2) critical.push(`${topic}/versus/d${difficulty}/${question.id}: missing comparison cards`);
       }
 
       const sortRound = buildSortRound(topic, difficulty, seed + 10);

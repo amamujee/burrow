@@ -5,11 +5,11 @@ export default function Home() {
   const gameModes = [
     { label: "Quiz", detail: "reading clues" },
     { label: "Head-to-head", detail: "compare numbers" },
-    { label: "Reorder", detail: "sequence facts" },
-    { label: "Coloring", detail: "label and shade" },
-    { label: "Image reveal", detail: "guess in pieces" },
-    { label: "Number line", detail: "place values" },
+    { label: "Sort", detail: "sequence facts" },
     { label: "True or false", detail: "read closely" },
+    { label: "Peek", detail: "guess in pieces" },
+    { label: "Numbers", detail: "solve differences" },
+    { label: "Odd one", detail: "spot the rule" },
     { label: "Collection", detail: "unlock cards" },
   ];
 

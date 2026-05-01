@@ -139,6 +139,10 @@ const choiceSet = <T,>(correct: T, options: T[], seed: number, count: number) =>
   const distractors = shuffle(options.filter((option) => option !== correct), seed).slice(0, count - 1);
   return shuffle([correct, ...distractors], seed + 1);
 };
+const answerChoices = <T,>(correct: T, distractors: T[], seed: number, count: number) => {
+  const uniqueDistractors = Array.from(new Set(distractors.filter((option) => option !== correct)));
+  return shuffle([correct, ...shuffle(uniqueDistractors, seed).slice(0, count - 1)], seed + 1);
+};
 const roundTo = (value: number, step: number) => Math.max(step, Math.round(value / step) * step);
 
 const displayHeightChoice = (value: number, difficulty: Difficulty) => {
@@ -680,12 +684,12 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
       image: building.image,
       imageAlt: building.name,
       imageCredit: building.imageCredit,
-      choices: shuffle([
+      choices: answerChoices(
         building.status === "finished" ? "It is finished" : "It is still being built",
-        "It is a pepper",
-        "It is under the ocean",
-        "It is only 10 feet tall",
-      ], seed + 31).slice(0, choiceCountForDifficulty(difficulty)),
+        ["It is a pepper", "It is under the ocean", "It is only 10 feet tall"],
+        seed + 31,
+        choiceCountForDifficulty(difficulty),
+      ),
       answer: building.status === "finished" ? "It is finished" : "It is still being built",
       explanation: sentence,
     };
@@ -762,7 +766,7 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
     const smaller = shark.lengthFt > challenger.lengthFt ? challenger : shark;
     const diff = bigger.lengthFt - smaller.lengthFt;
     const correct = `${formatNumber(diff)} ft`;
-    const choices = shuffle([correct, `${formatNumber(diff + 3)} ft`, `${formatNumber(Math.max(1, diff - 3))} ft`, `${formatNumber(diff + 7)} ft`], seed + 49).slice(0, choiceCountForDifficulty(difficulty));
+    const choices = answerChoices(correct, [`${formatNumber(diff + 3)} ft`, `${formatNumber(Math.max(1, diff - 3))} ft`, `${formatNumber(diff + 7)} ft`], seed + 49, choiceCountForDifficulty(difficulty));
     const cards = shuffle([sharkCard(bigger, "A", "length"), sharkCard(smaller, "B", "length")], seed + 50);
     return {
       id: `${seed}-shark-difference-${bigger.id}-${smaller.id}`,
@@ -789,7 +793,7 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
     image: shark.image,
     imageAlt: shark.name,
     imageCredit: shark.imageCredit,
-    choices: shuffle([`It eats ${shark.diet}`, "It is a pepper", "It is a skyscraper", "It has wheels"], seed + 51).slice(0, choiceCountForDifficulty(difficulty)),
+    choices: answerChoices(`It eats ${shark.diet}`, ["It is a pepper", "It is a skyscraper", "It has wheels"], seed + 51, choiceCountForDifficulty(difficulty)),
     answer: `It eats ${shark.diet}`,
     explanation: `${shark.name} eats ${shark.diet}. ${shark.fact}`,
   };
@@ -884,7 +888,7 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
     const slower = jet.maxSpeedMph > challenger.maxSpeedMph ? challenger : jet;
     const diff = faster.maxSpeedMph - slower.maxSpeedMph;
     const correct = `${formatNumber(diff)} mph`;
-    const choices = shuffle([correct, `${formatNumber(diff + 100)} mph`, `${formatNumber(Math.max(50, diff - 100))} mph`, `${formatNumber(diff + 250)} mph`], seed + 60).slice(0, choiceCountForDifficulty(difficulty));
+    const choices = answerChoices(correct, [`${formatNumber(diff + 100)} mph`, `${formatNumber(Math.max(50, diff - 100))} mph`, `${formatNumber(diff + 250)} mph`], seed + 60, choiceCountForDifficulty(difficulty));
     const cards = shuffle([jetCard(faster, "A", "speed"), jetCard(slower, "B", "speed")], seed + 61);
     return {
       id: `${seed}-jet-difference-${faster.id}-${slower.id}`,
@@ -1001,12 +1005,12 @@ const spaceQuestion = (seed: number, difficulty: Difficulty): Question => {
     image: item.image,
     imageAlt: item.name,
     imageCredit: item.imageCredit,
-    choices: shuffle([
+    choices: answerChoices(
       item.kind === "star" ? "Giant star sizes can be estimates" : item.kind === "planet" ? `${item.name} is in the solar system` : item.conceptAnswer ?? item.fact,
-      "It is a pepper",
-      "It is a shark family",
-      "It is a skyscraper",
-    ], seed + 81).slice(0, choiceCountForDifficulty(difficulty)),
+      ["It is a pepper", "It is a shark family", "It is a skyscraper"],
+      seed + 81,
+      choiceCountForDifficulty(difficulty),
+    ),
     answer: item.kind === "star" ? "Giant star sizes can be estimates" : item.kind === "planet" ? `${item.name} is in the solar system` : item.conceptAnswer ?? item.fact,
     explanation: readable,
   };
