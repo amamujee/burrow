@@ -1,7 +1,19 @@
 {
   "name": "burrow",
   "version": "0.1.0",
+  "description": "A local-first learning game for short, visual quiz sessions.",
   "private": true,
+  "homepage": "https://github.com/amamujee/rabbit-hole-app#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amamujee/rabbit-hole-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amamujee/rabbit-hole-app/issues"
+  },
+  "engines": {
+    "node": ">=20.9"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -10,7 +22,8 @@
     "check:images": "node scripts/check-images.mjs",
     "test:e2e": "playwright test",
     "qa:content": "node scripts/qa-content.mjs",
-    "sync:assets": "node scripts/sync-content-assets.mjs"
+    "sync:assets": "node scripts/sync-content-assets.mjs",
+    "verify": "npm run lint && npm run check:images && npm run qa:content && npm run build && npm run test:e2e"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
