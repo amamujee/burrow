@@ -108,6 +108,9 @@ const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
 type ChallengeMode = Exclude<GameMode, "mix">;
 const defaultMixPattern: ChallengeMode[] = ["quiz", "peek", "versus", "trumps", "number", "odd", "sort", "fact"];
 const selectableModeOptions = modeOptions.filter((item): item is (typeof modeOptions)[number] & { id: ChallengeMode } => item.id !== "mix");
+const defaultStarterTopics: KnowledgeTopic[] = ["peppers", "sharks"];
+const starterMixModes: ChallengeMode[] = ["quiz"];
+const gameTypeLabel = (modeId: ChallengeMode) => modeOptions.find((item) => item.id === modeId)?.label ?? "Game";
 
 const freshProgress = (): Progress => ({
   ...initialProgress,
@@ -129,15 +132,15 @@ const normalizeProgress = (progress?: Partial<Progress>): Progress => ({
 });
 
 const normalizeInterests = (interests?: KnowledgeTopic[]) => {
-  const cleaned = (interests ?? allKnowledgeTopics).filter((topic): topic is KnowledgeTopic => allKnowledgeTopics.includes(topic as KnowledgeTopic));
-  return cleaned.length ? Array.from(new Set(cleaned)) : [...allKnowledgeTopics];
+  const cleaned = (interests ?? defaultStarterTopics).filter((topic): topic is KnowledgeTopic => allKnowledgeTopics.includes(topic as KnowledgeTopic));
+  return cleaned.length ? Array.from(new Set(cleaned)) : [...defaultStarterTopics];
 };
 
 const defaultProfiles = (legacyProgress?: Partial<Progress>): ProfilesState => ({
   activeProfileId: "player-1",
   profiles: [
-    { id: "player-1", name: "Player 1", interests: [...allKnowledgeTopics], progress: normalizeProgress(legacyProgress) },
-    { id: "player-2", name: "Player 2", interests: [...allKnowledgeTopics], progress: freshProgress() },
+    { id: "player-1", name: "Player 1", interests: [...defaultStarterTopics], progress: normalizeProgress(legacyProgress) },
+    { id: "player-2", name: "Player 2", interests: [...defaultStarterTopics], progress: freshProgress() },
   ],
 });
 
@@ -309,6 +312,8 @@ export function BurrowGame() {
   const sessionAnswered = questionIndex + (activeChallengeAnswered ? 1 : 0);
   const unlockedCount = allCards.filter((card) => progress.unlockedCards.includes(card.title)).length;
   const currentTopicScope = adaptiveTopicScopeFor(topic, activeInterests, progress);
+  const currentTopicLabel = isQuestionMode && question ? topicCatalog[question.topic].label : typeof currentTopicScope === "string" && isKnowledgeTopic(currentTopicScope) ? topicCatalog[currentTopicScope].label : "Mixed topics";
+  const currentRoundContext = `${currentTopicLabel} · ${gameTypeLabel(activeChallengeMode)}`;
   const accuracy = progress.answered ? Math.round((progress.correct / progress.answered) * 100) : 0;
 
   useEffect(() => {
@@ -540,7 +545,7 @@ export function BurrowGame() {
     const newProfile: LearnerProfile = {
       id: `profile-${Date.now()}`,
       name: cleanName.slice(0, 18),
-      interests: [...allKnowledgeTopics],
+      interests: [...defaultStarterTopics],
       progress: freshProgress(),
     };
     const seed = freshSeed(cleanName.length + 29);
@@ -552,22 +557,52 @@ export function BurrowGame() {
     setCelebration(`${newProfile.name} is ready.`);
   };
 
-  const toggleInterest = (interest: KnowledgeTopic) => {
-    const nextInterests = activeInterests.includes(interest)
-      ? activeInterests.length === 1
-        ? activeInterests
-        : activeInterests.filter((item) => item !== interest)
-      : [...activeInterests, interest];
-    const nextProfile = { ...activeProfile, interests: nextInterests };
-    const nextTopic = playableTopic(topic, nextInterests);
-    const seed = freshSeed(interest.length + nextInterests.length * 41);
+  const applyInterests = (nextInterests: KnowledgeTopic[], seedBasis: string, message: string) => {
+    const safeInterests = normalizeInterests(nextInterests);
+    const nextProfile = { ...activeProfile, interests: safeInterests };
+    const nextTopic = playableTopic(topic, safeInterests);
+    const seed = freshSeed(seedBasis.length + safeInterests.length * 41);
 
     setProfilesState((current) => ({
       ...current,
       profiles: current.profiles.map((profile) => (profile.id === activeProfile.id ? nextProfile : profile)),
     }));
     restartPlay(nextTopic, mode, nextProfile, seed);
-    setCelebration(`${activeProfile.name}'s mix updated.`);
+    setCelebration(message);
+  };
+
+  const toggleInterest = (interest: KnowledgeTopic) => {
+    const nextInterests = activeInterests.includes(interest)
+      ? activeInterests.length === 1
+        ? activeInterests
+        : activeInterests.filter((item) => item !== interest)
+      : [...activeInterests, interest];
+    applyInterests(nextInterests, interest, `${activeProfile.name}'s topics updated.`);
+  };
+
+  const selectAllInterests = () => {
+    applyInterests([...allKnowledgeTopics], "all-topics", "All topics selected.");
+  };
+
+  const clearInterests = () => {
+    applyInterests([...defaultStarterTopics], "starter-topics", "Starter topics selected.");
+  };
+
+  const applyMixModes = (nextModes: ChallengeMode[], seedBasis: string, message: string) => {
+    const safeModes = nextModes.length ? nextModes : starterMixModes;
+    const seed = freshSeed(seedBasis.length + safeModes.length * 31);
+    setMode("mix");
+    setShowCollection(false);
+    setMixModes(safeModes);
+    resetRunState();
+    setQuestions(buildQuestionRun(currentTopicScope, "mix", progress.difficulty, seed, progress.seenIds, safeModes));
+    setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 29));
+    setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 37));
+    setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 43));
+    setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 53));
+    setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 59));
+    setTopTrumpRound(buildTopTrumpRound(currentTopicScope, progress.difficulty, seed + 67));
+    setCelebration(message);
   };
 
   const toggleMixMode = (challengeMode: ChallengeMode) => {
@@ -577,20 +612,15 @@ export function BurrowGame() {
         ? currentModes
         : currentModes.filter((item) => item !== challengeMode)
       : defaultMixPattern.filter((item) => currentModes.includes(item) || item === challengeMode);
-    const seed = freshSeed(challengeMode.length + nextModes.length * 31);
+    applyMixModes(nextModes, challengeMode, `${nextModes.length} game types selected.`);
+  };
 
-    setMode("mix");
-    setShowCollection(false);
-    setMixModes(nextModes);
-    resetRunState();
-    setQuestions(buildQuestionRun(currentTopicScope, "mix", progress.difficulty, seed, progress.seenIds, nextModes));
-    setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 29));
-    setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 37));
-    setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 43));
-    setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 53));
-    setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 59));
-    setTopTrumpRound(buildTopTrumpRound(currentTopicScope, progress.difficulty, seed + 67));
-    setCelebration(`${nextModes.length} games selected.`);
+  const selectAllMixModes = () => {
+    applyMixModes([...defaultMixPattern], "all-game-types", "All game types selected.");
+  };
+
+  const clearMixModes = () => {
+    applyMixModes([...starterMixModes], "starter-game-types", "Starter game type selected.");
   };
 
   const answer = (choice: string) => {
@@ -850,6 +880,7 @@ export function BurrowGame() {
   };
 
   const resetProgress = () => {
+    if (typeof window !== "undefined" && !window.confirm("Reset this player's progress?")) return;
     const seed = freshSeed(211);
     const reset = freshProgress();
     setProgress(reset);
@@ -884,8 +915,12 @@ export function BurrowGame() {
           onDifficultyChange={setQuestionDifficulty}
           activeInterests={activeInterests}
           onToggleInterest={toggleInterest}
+          onSelectAllInterests={selectAllInterests}
+          onClearInterests={clearInterests}
           activeMixModes={selectedMixModes}
           onToggleMixMode={toggleMixMode}
+          onSelectAllMixModes={selectAllMixModes}
+          onClearMixModes={clearMixModes}
           issueFlash={issueFlash}
           issueCount={issueCount}
           onReset={resetProgress}
@@ -909,6 +944,7 @@ export function BurrowGame() {
             celebration={celebration}
             note={tryAgainNotes[(questionIndex + progress.answered) % tryAgainNotes.length]}
             difficulty={progress.difficulty}
+            roundContext={currentRoundContext}
             onAnswer={answer}
             onNext={advance}
             onSkip={advance}
@@ -927,6 +963,7 @@ export function BurrowGame() {
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
             difficulty={progress.difficulty}
+            roundContext={`${topicCatalog[sortRound.topic].label} · ${gameTypeLabel("sort")}`}
             onPick={(id) => {
               if (sortChecked || sortPicked.includes(id)) return;
               setSortPicked((value) => [...value, id]);
@@ -949,6 +986,7 @@ export function BurrowGame() {
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
             difficulty={progress.difficulty}
+            roundContext={`${topicCatalog[factRound.topic].label} · ${gameTypeLabel("fact")}`}
             onAnswer={answerFact}
             onNext={mode === "mix" ? advanceMix : nextFactRound}
             onSkip={mode === "mix" ? advanceMix : nextFactRound}
@@ -965,6 +1003,7 @@ export function BurrowGame() {
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
             difficulty={progress.difficulty}
+            roundContext={`${topicCatalog[revealRound.topic].label} · ${gameTypeLabel("peek")}`}
             onAnswer={answerReveal}
             onNext={mode === "mix" ? advanceMix : nextRevealRound}
             onSkip={mode === "mix" ? advanceMix : nextRevealRound}
@@ -980,6 +1019,7 @@ export function BurrowGame() {
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
             difficulty={progress.difficulty}
+            roundContext={`${topicCatalog[numberRound.topic].label} · ${gameTypeLabel("number")}`}
             onAnswer={answerNumber}
             onNext={mode === "mix" ? advanceMix : nextNumberRound}
             onSkip={mode === "mix" ? advanceMix : nextNumberRound}
@@ -995,6 +1035,7 @@ export function BurrowGame() {
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
             difficulty={progress.difficulty}
+            roundContext={`${topicCatalog[topTrumpRound.topic].label} · ${gameTypeLabel("trumps")}`}
             onAnswer={answerTopTrump}
             onNext={mode === "mix" ? advanceMix : nextTopTrumpRound}
             onSkip={mode === "mix" ? advanceMix : nextTopTrumpRound}
@@ -1010,6 +1051,7 @@ export function BurrowGame() {
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
             difficulty={progress.difficulty}
+            roundContext={`${topicCatalog[oddRound.topic].label} · ${gameTypeLabel("odd")}`}
             onAnswer={answerOdd}
             onNext={mode === "mix" ? advanceMix : nextOddRound}
             onSkip={mode === "mix" ? advanceMix : nextOddRound}
@@ -1036,8 +1078,12 @@ function GameHud({
   onDifficultyChange,
   activeInterests,
   onToggleInterest,
+  onSelectAllInterests,
+  onClearInterests,
   activeMixModes,
   onToggleMixMode,
+  onSelectAllMixModes,
+  onClearMixModes,
   issueFlash,
   issueCount,
   onReset,
@@ -1057,12 +1103,18 @@ function GameHud({
   onDifficultyChange: (difficulty: Difficulty) => void;
   activeInterests: KnowledgeTopic[];
   onToggleInterest: (topic: KnowledgeTopic) => void;
+  onSelectAllInterests: () => void;
+  onClearInterests: () => void;
   activeMixModes: ChallengeMode[];
   onToggleMixMode: (mode: ChallengeMode) => void;
+  onSelectAllMixModes: () => void;
+  onClearMixModes: () => void;
   issueFlash: boolean;
   issueCount: number;
   onReset: () => void;
 }) {
+  const setupSummary = `${activeMixModes.length} games · ${activeInterests.length} topics`;
+
   return (
     <header className="relative z-30 shrink-0 rounded-lg border-2 border-[#092421] bg-[#f7f0df] px-2 pb-1.5 pt-5 shadow-[3px_3px_0_#092421]">
       <div
@@ -1095,8 +1147,13 @@ function GameHud({
         <SetupMenu
           activeInterests={activeInterests}
           onToggleInterest={onToggleInterest}
+          onSelectAllInterests={onSelectAllInterests}
+          onClearInterests={onClearInterests}
           activeMixModes={activeMixModes}
           onToggleMixMode={onToggleMixMode}
+          onSelectAllMixModes={onSelectAllMixModes}
+          onClearMixModes={onClearMixModes}
+          setupSummary={setupSummary}
           issueFlash={issueFlash}
           issueCount={issueCount}
           onReset={onReset}
@@ -1158,16 +1215,26 @@ function HudProgress({
 function SetupMenu({
   activeInterests,
   onToggleInterest,
+  onSelectAllInterests,
+  onClearInterests,
   activeMixModes,
   onToggleMixMode,
+  onSelectAllMixModes,
+  onClearMixModes,
+  setupSummary,
   issueFlash,
   issueCount,
   onReset,
 }: {
   activeInterests: KnowledgeTopic[];
   onToggleInterest: (topic: KnowledgeTopic) => void;
+  onSelectAllInterests: () => void;
+  onClearInterests: () => void;
   activeMixModes: ChallengeMode[];
   onToggleMixMode: (mode: ChallengeMode) => void;
+  onSelectAllMixModes: () => void;
+  onClearMixModes: () => void;
+  setupSummary: string;
   issueFlash: boolean;
   issueCount: number;
   onReset: () => void;
@@ -1176,14 +1243,17 @@ function SetupMenu({
 
   return (
     <details className="group relative">
-      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-center gap-2 rounded-lg border-2 border-[#092421] bg-white px-3 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition hover:bg-[#fff1bf] group-open:bg-[#fff1bf] [&::-webkit-details-marker]:hidden">
-        Setup
-        <span className="text-lg leading-none">⌄</span>
+      <summary className="flex min-h-11 cursor-pointer list-none flex-col items-center justify-center rounded-lg border-2 border-[#092421] bg-white px-3 py-1 text-center text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition hover:bg-[#fff1bf] group-open:bg-[#fff1bf] [&::-webkit-details-marker]:hidden">
+        <span className="flex items-center gap-2 leading-tight">
+          Setup
+          <span className="text-lg leading-none">⌄</span>
+        </span>
+        <span className="mt-0.5 whitespace-nowrap text-[9px] font-black uppercase tracking-[0.1em] text-[#72543e]">{setupSummary}</span>
       </summary>
       <div className="absolute right-0 z-40 mt-2 max-h-[calc(100dvh-112px)] w-[min(720px,calc(100vw-24px))] overflow-auto rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-3 shadow-[4px_4px_0_#092421]">
         <div className="grid gap-3 md:grid-cols-[1fr_1.05fr]">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#72543e]">Play mode</p>
+            <SectionHeader title="Game Types" onAll={onSelectAllMixModes} onClear={onClearMixModes} />
             <div className="mt-2 grid gap-1.5 sm:grid-cols-2">
               {selectableModeOptions.map((item) => {
                 const selected = activeModeSet.has(item.id);
@@ -1206,7 +1276,7 @@ function SetupMenu({
           </div>
 
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#72543e]">Topics</p>
+            <SectionHeader title="Topics" onAll={onSelectAllInterests} onClear={onClearInterests} />
             <div className="mt-2 grid gap-1.5">
               {allKnowledgeTopics.map((item) => {
                 const enabled = activeInterests.includes(item);
@@ -1221,7 +1291,7 @@ function SetupMenu({
                     }`}
                   >
                     <span className="block text-sm font-black leading-tight text-[#102f36]">{topicCatalog[item].label}</span>
-                    <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{enabled ? "in mix" : "tap to add"}</span>
+                    <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{enabled ? "selected" : "tap to add"}</span>
                   </button>
                 );
               })}
@@ -1229,21 +1299,60 @@ function SetupMenu({
           </div>
         </div>
 
-        <div className="mt-3 grid grid-cols-[1fr_auto] gap-2">
+        <div className="mt-3 grid gap-2">
           <div className="min-h-11 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] px-3 py-2">
             <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#72543e]">Image reports</p>
             <p className="text-sm font-black leading-tight text-[#102f36]">{issueFlash ? "Latest saved" : `${issueCount} logged`}</p>
           </div>
-          <button
-            type="button"
-            onClick={onReset}
-            className="min-h-11 rounded-lg border-2 border-[#092421] bg-white px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#ffd7ce] active:translate-y-0.5"
-          >
-            Reset
-          </button>
+          <details>
+            <summary className="cursor-pointer list-none rounded-lg border-2 border-[#d9c7a7] bg-white px-3 py-2 text-sm font-black text-[#102f36] transition hover:border-[#092421] hover:bg-[#fff1bf] [&::-webkit-details-marker]:hidden">
+              Advanced
+            </summary>
+            <div className="mt-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
+              <button
+                type="button"
+                onClick={onReset}
+                className="min-h-10 rounded-lg border-2 border-[#092421] bg-white px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#ffd7ce] active:translate-y-0.5"
+              >
+                Reset progress
+              </button>
+            </div>
+          </details>
         </div>
       </div>
     </details>
+  );
+}
+
+function SectionHeader({ title, onAll, onClear }: { title: string; onAll: () => void; onClear: () => void }) {
+  return (
+    <div className="flex items-center justify-between gap-2">
+      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#72543e]">{title}</p>
+      <div className="flex gap-1">
+        <button
+          type="button"
+          onClick={onAll}
+          className="rounded-md border-2 border-[#d9c7a7] bg-white px-2 py-1 text-[9px] font-black uppercase tracking-[0.08em] text-[#102f36] transition hover:border-[#092421] hover:bg-[#fff1bf]"
+        >
+          All
+        </button>
+        <button
+          type="button"
+          onClick={onClear}
+          className="rounded-md border-2 border-[#d9c7a7] bg-white px-2 py-1 text-[9px] font-black uppercase tracking-[0.08em] text-[#102f36] transition hover:border-[#092421] hover:bg-[#fff1bf]"
+        >
+          Clear
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function RoundContextPill({ label }: { label: string }) {
+  return (
+    <p className="max-w-[180px] truncate rounded-lg border-2 border-[#092421] bg-[#fff1bf] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#102f36]">
+      {label}
+    </p>
   );
 }
 
@@ -1260,6 +1369,7 @@ function QuestionRun({
   celebration,
   note,
   difficulty,
+  roundContext,
   onAnswer,
   onNext,
   onSkip,
@@ -1278,6 +1388,7 @@ function QuestionRun({
   celebration: string;
   note: string;
   difficulty: Difficulty;
+  roundContext: string;
   onAnswer: (choice: string) => void;
   onNext: () => void;
   onSkip: () => void;
@@ -1324,6 +1435,7 @@ function QuestionRun({
           <div className="flex items-center justify-between gap-2">
             <div className="flex min-w-0 items-center gap-2">
               <DifficultyPill difficulty={difficulty} />
+              <RoundContextPill label={roundContext} />
               <ProgressDots questions={questions} questionIndex={questionIndex} />
             </div>
             <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">
@@ -1404,6 +1516,7 @@ function SortMode({
   miniRunCorrect,
   celebration,
   difficulty,
+  roundContext,
   onPick,
   onUndo,
   onCheck,
@@ -1418,6 +1531,7 @@ function SortMode({
   miniRunCorrect: number;
   celebration: string;
   difficulty: Difficulty;
+  roundContext: string;
   onPick: (id: string) => void;
   onUndo: () => void;
   onCheck: () => void;
@@ -1466,9 +1580,7 @@ function SortMode({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
-              Sort board
-            </p>
+            <RoundContextPill label={roundContext} />
           </div>
           <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
         </div>
@@ -1551,6 +1663,7 @@ function FactMode({
   miniRunCorrect,
   celebration,
   difficulty,
+  roundContext,
   onAnswer,
   onNext,
   onSkip,
@@ -1562,6 +1675,7 @@ function FactMode({
   miniRunCorrect: number;
   celebration: string;
   difficulty: Difficulty;
+  roundContext: string;
   onAnswer: (choice: "True" | "False") => void;
   onNext: () => void;
   onSkip: () => void;
@@ -1584,9 +1698,7 @@ function FactMode({
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#092421] bg-[#70d392] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
-              Read and decide
-            </p>
+            <RoundContextPill label={roundContext} />
           </div>
           <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} caught</p>
         </div>
@@ -1646,6 +1758,7 @@ function RevealMode({
   miniRunCorrect,
   celebration,
   difficulty,
+  roundContext,
   onAnswer,
   onNext,
   onSkip,
@@ -1657,6 +1770,7 @@ function RevealMode({
   miniRunCorrect: number;
   celebration: string;
   difficulty: Difficulty;
+  roundContext: string;
   onAnswer: (choice: string, revealedCount: number) => void;
   onNext: () => void;
   onSkip: () => void;
@@ -1715,9 +1829,7 @@ function RevealMode({
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#092421] bg-[#70d392] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
-              Picture clue
-            </p>
+            <RoundContextPill label={roundContext} />
           </div>
           <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
         </div>
@@ -1787,6 +1899,7 @@ function NumberMode({
   miniRunCorrect,
   celebration,
   difficulty,
+  roundContext,
   onAnswer,
   onNext,
   onSkip,
@@ -1798,6 +1911,7 @@ function NumberMode({
   miniRunCorrect: number;
   celebration: string;
   difficulty: Difficulty;
+  roundContext: string;
   onAnswer: (choice: number) => void;
   onNext: () => void;
   onSkip: () => void;
@@ -1813,9 +1927,7 @@ function NumberMode({
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
-              Math clue
-            </p>
+            <RoundContextPill label={roundContext} />
           </div>
           <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
         </div>
@@ -1879,6 +1991,7 @@ function TopTrumpsMode({
   miniRunCorrect,
   celebration,
   difficulty,
+  roundContext,
   onAnswer,
   onNext,
   onSkip,
@@ -1890,6 +2003,7 @@ function TopTrumpsMode({
   miniRunCorrect: number;
   celebration: string;
   difficulty: Difficulty;
+  roundContext: string;
   onAnswer: (statId: string) => void;
   onNext: () => void;
   onSkip: () => void;
@@ -1920,9 +2034,7 @@ function TopTrumpsMode({
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
-              Top Trumps
-            </p>
+            <RoundContextPill label={roundContext} />
           </div>
           <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} won</p>
         </div>
@@ -1992,6 +2104,7 @@ function OddOneMode({
   miniRunCorrect,
   celebration,
   difficulty,
+  roundContext,
   onAnswer,
   onNext,
   onSkip,
@@ -2003,6 +2116,7 @@ function OddOneMode({
   miniRunCorrect: number;
   celebration: string;
   difficulty: Difficulty;
+  roundContext: string;
   onAnswer: (cardId: string) => void;
   onNext: () => void;
   onSkip: () => void;
@@ -2018,9 +2132,7 @@ function OddOneMode({
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
-            <p className="rounded-lg border-2 border-[#092421] bg-[#70d392] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
-              Spot the rule
-            </p>
+            <RoundContextPill label={roundContext} />
           </div>
           <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} found</p>
         </div>
