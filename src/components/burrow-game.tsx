@@ -103,8 +103,8 @@ const levelFromXp = (xp: number) => Math.max(1, Math.floor(xp / 120) + 1);
 const praise = ["Nice reading!", "Big brain move!", "You measured it!", "Hot answer!", "Sky-high thinking!", "Sharp thinking!"];
 const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
 type ChallengeMode = Exclude<GameMode, "mix">;
-const allChallengeModes: ChallengeMode[] = ["quiz", "versus", "sort", "fact", "peek", "number", "odd"];
 const defaultMixPattern: ChallengeMode[] = ["quiz", "peek", "versus", "number", "odd", "sort", "fact"];
+const selectableModeOptions = modeOptions.filter((item): item is (typeof modeOptions)[number] & { id: ChallengeMode } => item.id !== "mix");
 
 const freshProgress = (): Progress => ({
   ...initialProgress,
@@ -492,19 +492,6 @@ export function BurrowGame() {
     setOddRound(buildOddRound(scope, nextProfile.progress.difficulty, seed + 97));
   };
 
-  const startMode = (nextMode: GameMode) => {
-    const seed = freshSeed(nextMode.length);
-    setShowCollection(false);
-    setMode(nextMode);
-    resetRunState();
-    setQuestions(buildQuestionRun(currentTopicScope, nextMode, progress.difficulty, seed, progress.seenIds, selectedMixModes));
-    setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 59));
-    setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 71));
-    setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 83));
-    setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 103));
-    setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 109));
-  };
-
   const setQuestionDifficulty = (nextDifficulty: Difficulty) => {
     if (nextDifficulty === progress.difficulty) return;
     const seed = freshSeed(nextDifficulty * 53);
@@ -580,17 +567,17 @@ export function BurrowGame() {
       : defaultMixPattern.filter((item) => currentModes.includes(item) || item === challengeMode);
     const seed = freshSeed(challengeMode.length + nextModes.length * 31);
 
+    setMode("mix");
+    setShowCollection(false);
     setMixModes(nextModes);
-    if (mode === "mix") {
-      resetRunState();
-      setQuestions(buildQuestionRun(currentTopicScope, "mix", progress.difficulty, seed, progress.seenIds, nextModes));
-      setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 29));
-      setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 37));
-      setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 43));
-      setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 53));
-      setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 59));
-    }
-    setCelebration(`${nextModes.length} games in Mix.`);
+    resetRunState();
+    setQuestions(buildQuestionRun(currentTopicScope, "mix", progress.difficulty, seed, progress.seenIds, nextModes));
+    setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 29));
+    setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 37));
+    setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 43));
+    setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 53));
+    setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 59));
+    setCelebration(`${nextModes.length} games selected.`);
   };
 
   const answer = (choice: string) => {
@@ -836,8 +823,6 @@ export function BurrowGame() {
           collectionValue={`${unlockedCount}/${allCards.length}`}
           showCollection={showCollection}
           onCollection={openCollection}
-          mode={mode}
-          onModeChange={startMode}
           difficulty={progress.difficulty}
           onDifficultyChange={setQuestionDifficulty}
           activeInterests={activeInterests}
@@ -975,8 +960,6 @@ function GameHud({
   collectionValue,
   showCollection,
   onCollection,
-  mode,
-  onModeChange,
   difficulty,
   onDifficultyChange,
   activeInterests,
@@ -998,8 +981,6 @@ function GameHud({
   collectionValue: string;
   showCollection: boolean;
   onCollection: () => void;
-  mode: GameMode;
-  onModeChange: (mode: GameMode) => void;
   difficulty: Difficulty;
   onDifficultyChange: (difficulty: Difficulty) => void;
   activeInterests: KnowledgeTopic[];
@@ -1042,8 +1023,6 @@ function GameHud({
         <SetupMenu
           activeInterests={activeInterests}
           onToggleInterest={onToggleInterest}
-          mode={mode}
-          onModeChange={onModeChange}
           activeMixModes={activeMixModes}
           onToggleMixMode={onToggleMixMode}
           issueFlash={issueFlash}
@@ -1107,8 +1086,6 @@ function HudProgress({
 function SetupMenu({
   activeInterests,
   onToggleInterest,
-  mode,
-  onModeChange,
   activeMixModes,
   onToggleMixMode,
   issueFlash,
@@ -1117,8 +1094,6 @@ function SetupMenu({
 }: {
   activeInterests: KnowledgeTopic[];
   onToggleInterest: (topic: KnowledgeTopic) => void;
-  mode: GameMode;
-  onModeChange: (mode: GameMode) => void;
   activeMixModes: ChallengeMode[];
   onToggleMixMode: (mode: ChallengeMode) => void;
   issueFlash: boolean;
@@ -1133,25 +1108,28 @@ function SetupMenu({
         Setup
         <span className="text-lg leading-none">⌄</span>
       </summary>
-      <div className="absolute right-0 z-40 mt-2 max-h-[calc(100dvh-112px)] w-[min(680px,calc(100vw-24px))] overflow-auto rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-3 shadow-[4px_4px_0_#092421]">
-        <div className="grid gap-3 md:grid-cols-3">
+      <div className="absolute right-0 z-40 mt-2 max-h-[calc(100dvh-112px)] w-[min(720px,calc(100vw-24px))] overflow-auto rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-3 shadow-[4px_4px_0_#092421]">
+        <div className="grid gap-3 md:grid-cols-[1fr_1.05fr]">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#72543e]">Play mode</p>
-            <div className="mt-2 grid gap-1.5">
-              {modeOptions.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  aria-pressed={mode === item.id}
-                  onClick={() => onModeChange(item.id)}
-                  className={`min-h-10 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
-                    mode === item.id ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : "border-[#d9c7a7] bg-white hover:border-[#092421] hover:bg-[#fff1bf]"
-                  }`}
-                >
-                  <span className="block text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
-                  <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{item.eyebrow}</span>
-                </button>
-              ))}
+            <div className="mt-2 grid gap-1.5 sm:grid-cols-2">
+              {selectableModeOptions.map((item) => {
+                const selected = activeModeSet.has(item.id);
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => onToggleMixMode(item.id)}
+                    className={`min-h-10 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
+                      selected ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : "border-[#d9c7a7] bg-white hover:border-[#092421] hover:bg-[#fff1bf]"
+                    }`}
+                  >
+                    <span className="block truncate text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
+                    <span className="block truncate text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{selected ? "selected" : "tap to add"}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -1172,30 +1150,6 @@ function SetupMenu({
                   >
                     <span className="block text-sm font-black leading-tight text-[#102f36]">{topicCatalog[item].label}</span>
                     <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{enabled ? "in mix" : "tap to add"}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#72543e]">Mix includes</p>
-            <div className="mt-2 grid grid-cols-2 gap-1.5">
-              {allChallengeModes.map((challengeMode) => {
-                const item = modeOptions.find((option) => option.id === challengeMode) ?? modeOptions[0];
-                const enabled = activeModeSet.has(challengeMode);
-                return (
-                  <button
-                    key={challengeMode}
-                    type="button"
-                    aria-pressed={enabled}
-                    onClick={() => onToggleMixMode(challengeMode)}
-                    className={`min-h-10 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
-                      enabled ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : "border-[#d9c7a7] bg-white hover:border-[#092421] hover:bg-[#fff1bf]"
-                    }`}
-                  >
-                    <span className="block truncate text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
-                    <span className="block truncate text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{enabled ? "in mix" : "tap to add"}</span>
                   </button>
                 );
               })}
