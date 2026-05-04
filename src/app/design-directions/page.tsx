@@ -156,7 +156,7 @@ function MockHud({ direction }: { direction: Direction }) {
         />
         <div>
           <p className={`text-xl font-black leading-none ${direction.text}`}>Burrow</p>
-          <p className={`text-[10px] font-black uppercase tracking-[0.12em] ${direction.muted}`}>Kal</p>
+          <p className={`text-[10px] font-black uppercase tracking-[0.12em] ${direction.muted}`}>Player 1</p>
         </div>
       </div>
 

@@ -131,10 +131,10 @@ const normalizeInterests = (interests?: KnowledgeTopic[]) => {
 };
 
 const defaultProfiles = (legacyProgress?: Partial<Progress>): ProfilesState => ({
-  activeProfileId: "kal",
+  activeProfileId: "player-1",
   profiles: [
-    { id: "kal", name: "Kal", interests: [...allKnowledgeTopics], progress: normalizeProgress(legacyProgress) },
-    { id: "remy", name: "Remy", interests: [...allKnowledgeTopics], progress: freshProgress() },
+    { id: "player-1", name: "Player 1", interests: [...allKnowledgeTopics], progress: normalizeProgress(legacyProgress) },
+    { id: "player-2", name: "Player 2", interests: [...allKnowledgeTopics], progress: freshProgress() },
   ],
 });
 
