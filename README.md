@@ -2,7 +2,7 @@
 
 Burrow is a local-first learning game for short, visual quiz sessions. Pick a kid's current obsession, then Burrow turns it into fast reading and math rounds with real images, structured facts, and lightweight progress tracking.
 
-[![CI](https://github.com/amamujee/rabbit-hole-app/actions/workflows/ci.yml/badge.svg)](https://github.com/amamujee/rabbit-hole-app/actions/workflows/ci.yml)
+[![CI](https://github.com/amamujee/burrow/actions/workflows/ci.yml/badge.svg)](https://github.com/amamujee/burrow/actions/workflows/ci.yml)
 
 ![Burrow home screen](docs/screenshots/home.png)
 
@@ -18,8 +18,8 @@ Burrow is a local-first learning game for short, visual quiz sessions. Pick a ki
 
 ## Links
 
-- Repository: [github.com/amamujee/rabbit-hole-app](https://github.com/amamujee/rabbit-hole-app)
-- Issues: [github.com/amamujee/rabbit-hole-app/issues](https://github.com/amamujee/rabbit-hole-app/issues)
+- Repository: [github.com/amamujee/burrow](https://github.com/amamujee/burrow)
+- Issues: [github.com/amamujee/burrow/issues](https://github.com/amamujee/burrow/issues)
 - Next.js app docs: [nextjs.org/docs/app](https://nextjs.org/docs/app)
 - Vercel deploy docs: [vercel.com/docs](https://vercel.com/docs)
 

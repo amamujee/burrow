@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "description": "A local-first learning game for short, visual quiz sessions.",
   "private": true,
-  "homepage": "https://github.com/amamujee/rabbit-hole-app#readme",
+  "homepage": "https://github.com/amamujee/burrow#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amamujee/rabbit-hole-app.git"
+    "url": "git+https://github.com/amamujee/burrow.git"
   },
   "bugs": {
-    "url": "https://github.com/amamujee/rabbit-hole-app/issues"
+    "url": "https://github.com/amamujee/burrow/issues"
   },
   "engines": {
     "node": ">=20.9"
