@@ -1321,7 +1321,7 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
   },
   buildings: {
     id: "buildings",
-    label: "Tall Buildings",
+    label: "Sky Scrapers",
     eyebrow: `${contentLibraryStats.buildings}+ towers`,
     roundLabel: "Tower round",
     libraryCount: contentLibraryStats.buildings,
@@ -1334,7 +1334,7 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
   },
   sharks: {
     id: "sharks",
-    label: "Shark Lab",
+    label: "Shark Tank",
     eyebrow: `${contentLibraryStats.sharks}+ sharks`,
     roundLabel: "Shark round",
     libraryCount: contentLibraryStats.sharks,
@@ -1348,7 +1348,7 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
   },
   space: {
     id: "space",
-    label: "Space Lab",
+    label: "Space Universe",
     eyebrow: `${spaceCards.length} space cards`,
     roundLabel: "Space round",
     libraryCount: spaceCards.length,
