@@ -1,4 +1,14 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One"];
+
+const chooseOnlyMode = async (page: Page, target: string) => {
+  await page.locator("summary").click();
+  for (const label of modeLabels) {
+    if (label !== target) await page.getByRole("button", { name: new RegExp(label.replace("/", "\\/")) }).click();
+  }
+  await page.locator("details").evaluate((details) => details.removeAttribute("open"));
+};
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/content-issues", async (route) => {
@@ -17,14 +27,16 @@ test("setup menu opens and core game controls keep working", async ({ page }) =>
 
   await page.locator("summary").click();
   await expect(page.getByText("Play mode")).toBeVisible();
-  await expect(page.getByText("Mix includes")).toBeVisible();
+  await expect(page.getByText("Topics")).toBeVisible();
 
-  await page.getByRole("button", { name: "True/False read fast" }).click();
+  for (const label of modeLabels.filter((label) => label !== "True/False")) {
+    await page.getByRole("button", { name: new RegExp(label.replace("/", "\\/")) }).click();
+  }
+  await page.locator("details").evaluate((details) => details.removeAttribute("open"));
   await expect(page.getByText("Read and decide")).toBeVisible();
 
-  await page.locator("details").evaluate((details) => details.removeAttribute("open"));
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
-  await expect(page.getByText(/glow|Good try|Answer:/)).toBeVisible();
+  await expect(page.getByText(/Answer:/)).toBeVisible();
 
   await page.getByRole("button", { name: /Next|Finish round/ }).click();
   await expect(page.getByText("Read and decide")).toBeVisible();
@@ -43,8 +55,7 @@ test("flag image gives local feedback without leaking server details", async ({ 
 });
 
 test("peek rounds reset their reveal count after skip", async ({ page }) => {
-  await page.locator("summary").click();
-  await page.getByRole("button", { name: "Peek picture clue" }).click();
+  await chooseOnlyMode(page, "Peek");
 
   await expect(page.locator("article").getByText("Picture clue", { exact: true })).toBeVisible();
   await expect(page.getByText("4/12 open")).toBeVisible();
@@ -52,6 +63,18 @@ test("peek rounds reset their reveal count after skip", async ({ page }) => {
 
   await page.getByRole("button", { name: "Skip question" }).click();
   await expect(page.getByText("4/12 open")).toBeVisible();
+});
+
+test("top trumps lets player choose a category against the computer", async ({ page }) => {
+  await chooseOnlyMode(page, "Top Trumps");
+
+  await expect(page.getByRole("paragraph").filter({ hasText: "Top Trumps" })).toBeVisible();
+  await expect(page.locator("div").filter({ hasText: /^Player$/ })).toBeVisible();
+  await expect(page.getByText("Computer card", { exact: true })).toBeVisible();
+
+  await page.locator("button").filter({ hasText: /higher wins|lower wins/ }).first().click();
+  await expect(page.getByText(/Player wins the matchup|Computer wins the matchup/)).toBeVisible();
+  await expect(page.getByText("Computer card", { exact: true })).not.toBeVisible();
 });
 
 test("setup menu opens and fits on mobile", async ({ page, isMobile }) => {

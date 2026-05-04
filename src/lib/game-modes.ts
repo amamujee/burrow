@@ -21,7 +21,7 @@ import {
 } from "./game-data";
 import { scoreFeaturedContent } from "./content-quality";
 
-export type GameMode = "mix" | "quiz" | "versus" | "sort" | "fact" | "peek" | "number" | "odd";
+export type GameMode = "mix" | "quiz" | "versus" | "trumps" | "sort" | "fact" | "peek" | "number" | "odd";
 
 export const modeOptions: {
   id: GameMode;
@@ -32,6 +32,7 @@ export const modeOptions: {
   { id: "mix", label: "Mix", eyebrow: "shuffle", loop: "all games" },
   { id: "quiz", label: "Quiz Run", eyebrow: "mixed skills", loop: "15-20 bites" },
   { id: "versus", label: "Head to Head", eyebrow: "pick winner", loop: "fast duels" },
+  { id: "trumps", label: "Top Trumps", eyebrow: "player vs CPU", loop: "choose stat" },
   { id: "sort", label: "Sort", eyebrow: "order cards", loop: "tap order" },
   { id: "fact", label: "True/False", eyebrow: "read fast", loop: "true or not" },
   { id: "peek", label: "Peek", eyebrow: "picture clue", loop: "reveal guess" },
@@ -116,9 +117,41 @@ export type OddRound = {
   explanation: string;
 };
 
+export type TopTrumpDirection = "higher" | "lower";
+
+export type TopTrumpStat = {
+  id: string;
+  label: string;
+  value: number;
+  display: string;
+  direction: TopTrumpDirection;
+};
+
+export type TopTrumpCard = {
+  id: string;
+  topic: KnowledgeTopic;
+  title: string;
+  image: string;
+  imageAlt: string;
+  imageCredit: string;
+  subStat: string;
+  fact: string;
+  stats: TopTrumpStat[];
+};
+
+export type TopTrumpRound = {
+  id: string;
+  topic: KnowledgeTopic;
+  prompt: string;
+  player: TopTrumpCard;
+  computer: TopTrumpCard;
+};
+
 const formatNumber = (value: number) => value.toLocaleString("en-US");
 const feet = (value: number) => `${formatNumber(value)} ft`;
 const numberWithUnit = (value: number, unit: string) => `${formatNumber(value)} ${unit}`;
+const pounds = (value: number) => `${formatNumber(value)} lb`;
+const inches = (value: number) => `${value.toFixed(value >= 10 ? 0 : 1)} in`;
 
 const seedRandom = (seed: number) => {
   const x = Math.sin(seed * 999) * 10000;
@@ -274,6 +307,457 @@ export const collectionCards = (): KnowledgeCard[] => [
   ...spaceCards.map((space) => spaceCard(space, space.kind === "star" ? "temperature" : space.kind === "planet" ? "distance" : "size")),
   ...jets.map((jet) => jetCard(jet)),
 ];
+
+const pepperSizeInches: Record<string, number> = {
+  "bell-pepper": 4,
+  "banana-pepper": 6,
+  pepperoncini: 3,
+  poblano: 5,
+  anaheim: 7,
+  jalapeno: 3,
+  fresno: 3,
+  serrano: 2.5,
+  cayenne: 5,
+  tabasco: 1.5,
+  "thai-chili": 2,
+  "scotch-bonnet": 1.5,
+  habanero: 2,
+  fatalii: 3,
+  "ghost-pepper": 3,
+  "seven-pot-primo": 2,
+  "trinidad-scorpion": 2,
+  "carolina-reaper": 2,
+  "dragons-breath": 1.5,
+  "pepper-x": 2,
+  shishito: 4,
+  padron: 2,
+  ancho: 5,
+  guajillo: 5,
+  "chile-de-arbol": 3,
+  "aji-amarillo": 5,
+  rocoto: 2.5,
+  chiltepin: 0.4,
+  cubanelle: 6,
+  "cherry-pepper": 1.5,
+  pasilla: 8,
+  mulato: 5,
+  cascabel: 1.5,
+  "hatch-chile": 6,
+  "new-mexico-chile": 6,
+  datil: 3,
+  manzano: 2.5,
+  "aji-limo": 3,
+  "aji-charapita": 0.4,
+  "lemon-drop": 3,
+  "bishop-crown": 2,
+  "fish-pepper": 3,
+  "goat-pepper": 2,
+  pequin: 0.8,
+  "naga-viper": 2,
+  "komodo-dragon": 2,
+  "trinidad-perfume": 1.5,
+  "peter-pepper": 4,
+  "purple-beauty": 4,
+  "madame-jeanette": 3,
+};
+
+const pepperWildness = (pepper: Pepper) => {
+  if (["chiltepin", "pequin", "aji-charapita"].includes(pepper.id)) return 10;
+  if (["padron", "shishito", "rocoto", "manzano", "aji-amarillo", "aji-limo", "lemon-drop", "bishop-crown", "tabasco", "cayenne", "poblano", "jalapeno", "serrano", "fish-pepper"].includes(pepper.id)) return 7;
+  if (["bell-pepper", "banana-pepper", "pepperoncini", "anaheim", "fresno", "thai-chili", "habanero", "scotch-bonnet", "cubanelle", "cherry-pepper", "pasilla", "mulato", "cascabel", "hatch-chile", "new-mexico-chile", "datil", "goat-pepper", "trinidad-perfume", "peter-pepper", "purple-beauty", "madame-jeanette"].includes(pepper.id)) return 5;
+  return 2;
+};
+
+const sharkWeightLb = (shark: Shark) => Math.round(Math.max(10, shark.lengthFt ** 2.85 * (shark.power >= 4 ? 0.85 : 0.55)));
+const sharkRarity = (shark: Shark) => {
+  const rarity: Record<string, number> = {
+    dunkleosteus: 10,
+    megalodon: 10,
+    "goblin-shark": 9,
+    megamouth: 9,
+    "frilled-shark": 9,
+    "greenland-shark": 8,
+    cookiecutter: 8,
+    sawshark: 7,
+    "great-hammerhead": 7,
+    "scalloped-hammerhead": 7,
+    "oceanic-whitetip": 7,
+    "basking-shark": 6,
+    "common-thresher": 6,
+    "shortfin-mako": 6,
+    "bull-shark": 5,
+    "tiger-shark": 5,
+    "great-white": 5,
+    "blue-shark": 4,
+    "lemon-shark": 4,
+    "zebra-shark": 4,
+    "nurse-shark": 3,
+    "blacktip-reef": 3,
+    "sand-tiger": 3,
+    "whale-shark": 6,
+    "epaulette-shark": 5,
+    "longfin-mako": 8,
+    "bigeye-thresher": 7,
+    "pelagic-thresher": 7,
+    "silky-shark": 5,
+    "spinner-shark": 5,
+    "dusky-shark": 6,
+    "sandbar-shark": 4,
+    "galapagos-shark": 6,
+    "whitetip-reef": 4,
+    "grey-reef-shark": 4,
+    porbeagle: 6,
+    "salmon-shark": 6,
+    bonnethead: 3,
+    "smooth-hammerhead": 6,
+    "horn-shark": 4,
+    "port-jackson-shark": 4,
+    "spotted-wobbegong": 5,
+    angelshark: 8,
+    "pyjama-shark": 5,
+    "bamboo-shark": 3,
+    "caribbean-reef": 4,
+    "silvertip-shark": 6,
+    "swell-shark": 4,
+    "zambezi-shark": 5,
+  };
+  return rarity[shark.id] ?? 5;
+};
+const buildingCompletedYear = (building: Building) => {
+  const years: Record<string, number> = {
+    "willis-tower": 1974,
+    "empire-state": 1931,
+    "bank-of-china": 1990,
+    "petronas-towers": 1998,
+    "jin-mao": 1999,
+    "taipei-101": 2004,
+    "burj-khalifa": 2010,
+    "icc": 2010,
+    "makkah-clock": 2012,
+    "princess-tower": 2012,
+    "432-park": 2015,
+    "one-wtc": 2014,
+    "shanghai-tower": 2015,
+    "shanghai-wfc": 2008,
+    "ping-an": 2017,
+    "lotte-world-tower": 2017,
+    "guangzhou-ctf": 2016,
+    "tianjin-ctf": 2019,
+    "lakhta-center": 2019,
+    "china-zun": 2018,
+    "landmark-81": 2018,
+    "wuhan-greenland-center": 2023,
+    "111-west-57th": 2021,
+    "one-vanderbilt": 2020,
+    "central-park-tower": 2020,
+    "merdeka-118": 2023,
+    "jeddah-tower": 2030,
+  };
+  return years[building.id] ?? (building.status === "under construction" ? 2030 : 2018);
+};
+
+const jetFirstFlightYear = (jet: Jet) => {
+  const years: Record<string, number> = {
+    "f-35-lightning-ii": 2006,
+    "f-22-raptor": 1997,
+    "su-57": 2010,
+    "j-20": 2011,
+    "b-2-spirit": 1989,
+    "b-21-raider": 2023,
+    "f-117-nighthawk": 1981,
+    "sr-71-blackbird": 1964,
+    "u-2": 1955,
+    "f-15-eagle": 1972,
+    "f-a-18-hornet": 1978,
+    "f-a-18-super-hornet": 1995,
+    "f-16-fighting-falcon": 1974,
+    "f-14-tomcat": 1970,
+    "a-10-thunderbolt-ii": 1972,
+    rafale: 1986,
+    "eurofighter-typhoon": 1994,
+    "jas-39-gripen": 1988,
+    "mig-29": 1977,
+    "su-27": 1977,
+    "su-35": 2008,
+    "su-34": 1990,
+    "mig-31": 1975,
+    "tu-160": 1981,
+    "tu-22m": 1969,
+    "b-1-lancer": 1974,
+    "b-52-stratofortress": 1952,
+    "mirage-2000": 1978,
+    "mirage-f1": 1966,
+    "sepecat-jaguar": 1968,
+    "panavia-tornado": 1974,
+    "av-8b-harrier-ii": 1981,
+    "hawker-harrier": 1967,
+    "l-39-albatros": 1968,
+    "t-50-golden-eagle": 2002,
+    "yak-130": 1996,
+    "hongdu-l-15": 2006,
+    "j-10": 1998,
+    "j-11": 1998,
+    "j-16": 2011,
+    "fc-31": 2012,
+    "hal-tejas": 2001,
+    "mitsubishi-f-2": 1995,
+    "f-15j": 1980,
+    "f-ck-1": 1989,
+    "iai-kfir": 1973,
+    "f-5": 1959,
+    "f-4-phantom-ii": 1958,
+    "english-electric-lightning": 1954,
+    "mig-21": 1955,
+  };
+  return years[jet.id] ?? 1985;
+};
+
+const jetWeightLb = (jet: Jet) => {
+  const weights: Record<string, number> = {
+    "f-35-lightning-ii": 70000,
+    "f-22-raptor": 83500,
+    "su-57": 77000,
+    "j-20": 81600,
+    "b-2-spirit": 336500,
+    "b-21-raider": 160000,
+    "f-117-nighthawk": 52500,
+    "sr-71-blackbird": 172000,
+    "u-2": 40000,
+    "f-15-eagle": 68000,
+    "f-a-18-hornet": 51900,
+    "f-a-18-super-hornet": 66000,
+    "f-16-fighting-falcon": 42300,
+    "f-14-tomcat": 74350,
+    "a-10-thunderbolt-ii": 51000,
+    rafale: 54000,
+    "eurofighter-typhoon": 51800,
+    "jas-39-gripen": 36400,
+    "mig-29": 40800,
+    "su-27": 67100,
+    "su-35": 76100,
+    "su-34": 99200,
+    "mig-31": 101000,
+    "tu-160": 606000,
+    "tu-22m": 275600,
+    "b-1-lancer": 477000,
+    "b-52-stratofortress": 488000,
+    "mirage-2000": 37500,
+    "mirage-f1": 35700,
+    "sepecat-jaguar": 34400,
+    "panavia-tornado": 61700,
+    "av-8b-harrier-ii": 31000,
+    "hawker-harrier": 25200,
+    "l-39-albatros": 10360,
+    "t-50-golden-eagle": 27300,
+    "yak-130": 22700,
+    "hongdu-l-15": 21600,
+    "j-10": 42500,
+    "j-11": 72750,
+    "j-16": 77000,
+    "fc-31": 61700,
+    "hal-tejas": 29100,
+    "mitsubishi-f-2": 48700,
+    "f-15j": 68000,
+    "f-ck-1": 26900,
+    "iai-kfir": 36400,
+    "f-5": 24700,
+    "f-4-phantom-ii": 61795,
+    "english-electric-lightning": 45750,
+    "mig-21": 22900,
+  };
+  return weights[jet.id] ?? 30000;
+};
+
+const jetAltitudeFt = (jet: Jet) => {
+  const altitudes: Record<string, number> = {
+    "f-35-lightning-ii": 50000,
+    "f-22-raptor": 65000,
+    "su-57": 66000,
+    "j-20": 66000,
+    "b-2-spirit": 50000,
+    "b-21-raider": 50000,
+    "f-117-nighthawk": 45000,
+    "sr-71-blackbird": 85000,
+    "u-2": 70000,
+    "f-15-eagle": 65000,
+    "f-a-18-hornet": 50000,
+    "f-a-18-super-hornet": 50000,
+    "f-16-fighting-falcon": 50000,
+    "f-14-tomcat": 53000,
+    "a-10-thunderbolt-ii": 45000,
+    rafale: 50000,
+    "eurofighter-typhoon": 65000,
+    "jas-39-gripen": 50000,
+    "mig-29": 59000,
+    "su-27": 62000,
+    "su-35": 59000,
+    "su-34": 56000,
+    "mig-31": 67000,
+    "tu-160": 52000,
+    "tu-22m": 44000,
+    "b-1-lancer": 60000,
+    "b-52-stratofortress": 50000,
+    "mirage-2000": 59000,
+    "mirage-f1": 66000,
+    "sepecat-jaguar": 46000,
+    "panavia-tornado": 50000,
+    "av-8b-harrier-ii": 50000,
+    "hawker-harrier": 51000,
+    "l-39-albatros": 36000,
+    "t-50-golden-eagle": 48000,
+    "yak-130": 41000,
+    "hongdu-l-15": 52000,
+    "j-10": 59000,
+    "j-11": 62000,
+    "j-16": 59000,
+    "fc-31": 52000,
+    "hal-tejas": 50000,
+    "mitsubishi-f-2": 59000,
+    "f-15j": 65000,
+    "f-ck-1": 55000,
+    "iai-kfir": 58000,
+    "f-5": 51800,
+    "f-4-phantom-ii": 60000,
+    "english-electric-lightning": 60000,
+    "mig-21": 57400,
+  };
+  return altitudes[jet.id] ?? 50000;
+};
+
+const spaceTrumpPool = () => spaceCards.filter((card) => card.distanceFromSunMillionMiles !== undefined);
+
+const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null => {
+  if (topic === "peppers") {
+    const pepper = peppers.find((item) => item.id === id);
+    if (!pepper) return null;
+    return {
+      id: pepper.id,
+      topic,
+      title: pepper.name,
+      image: pepper.image,
+      imageAlt: pepper.name,
+      imageCredit: pepper.imageCredit,
+      subStat: `${heatProfiles[pepper.heat].label} · ${pepper.color}`,
+      fact: pepper.fact,
+      stats: [
+        { id: "scoville", label: "Scoville", value: pepper.shuMax, display: `${formatNumber(pepper.shuMax)} SHU`, direction: "higher" },
+        { id: "size", label: "Fruit size", value: pepperSizeInches[pepper.id] ?? 2, display: inches(pepperSizeInches[pepper.id] ?? 2), direction: "higher" },
+        { id: "wildness", label: "Natural roots", value: pepperWildness(pepper), display: `${pepperWildness(pepper)}/10`, direction: "higher" },
+      ],
+    };
+  }
+
+  if (topic === "buildings") {
+    const building = buildings.find((item) => item.id === id);
+    if (!building) return null;
+    return {
+      id: building.id,
+      topic,
+      title: building.name,
+      image: building.image,
+      imageAlt: building.name,
+      imageCredit: building.imageCredit,
+      subStat: `${building.city}, ${building.country}`,
+      fact: building.fact,
+      stats: [
+        { id: "height", label: "Height", value: building.heightFt, display: feet(building.heightFt), direction: "higher" },
+        { id: "floors", label: "Floors", value: building.floors ?? 0, display: `${building.floors ?? "?"}`, direction: "higher" },
+        { id: "year", label: "Year built", value: buildingCompletedYear(building), display: `${buildingCompletedYear(building)} (older wins)`, direction: "lower" },
+        { id: "fame", label: "Skyline fame", value: Math.min(10, Math.max(5, Math.round(building.heightFt / 350) + (building.status === "finished" ? 2 : 0))), display: `${Math.min(10, Math.max(5, Math.round(building.heightFt / 350) + (building.status === "finished" ? 2 : 0)))}/10`, direction: "higher" },
+      ],
+    };
+  }
+
+  if (topic === "sharks") {
+    const shark = sharks.find((item) => item.id === id);
+    if (!shark) return null;
+    return {
+      id: shark.id,
+      topic,
+      title: shark.name,
+      image: shark.image,
+      imageAlt: shark.name,
+      imageCredit: shark.imageCredit,
+      subStat: `${shark.family} · eats ${shark.diet}`,
+      fact: shark.fact,
+      stats: [
+        { id: "speed", label: "Speed", value: shark.speedMph, display: `${formatNumber(shark.speedMph)} mph`, direction: "higher" },
+        { id: "weight", label: "Weight", value: sharkWeightLb(shark), display: pounds(sharkWeightLb(shark)), direction: "higher" },
+        { id: "length", label: "Length", value: shark.lengthFt, display: feet(shark.lengthFt), direction: "higher" },
+        { id: "power", label: "Predator power", value: shark.power * 2, display: `${shark.power * 2}/10`, direction: "higher" },
+        { id: "rarity", label: "Rarity", value: sharkRarity(shark), display: `${sharkRarity(shark)}/10`, direction: "higher" },
+      ],
+    };
+  }
+
+  if (topic === "space") {
+    const space = spaceCards.find((item) => item.id === id);
+    if (!space) return null;
+    const sizeValue = space.radiusSolar ?? space.diameterMiles ?? 0;
+    const tempValue = space.surfaceTempK ?? space.meanSurfaceTempF ?? 0;
+    return {
+      id: space.id,
+      topic,
+      title: space.name,
+      image: space.image,
+      imageAlt: space.name,
+      imageCredit: space.imageCredit,
+      subStat: `${space.group} · ${space.kind}`,
+      fact: space.fact,
+      stats: ([
+        { id: "size", label: "Size", value: sizeValue, display: space.radiusSolar ? `${formatNumber(sizeValue)}x Sun` : `${formatNumber(sizeValue)} mi`, direction: "higher" },
+        { id: "temperature", label: "Temperature", value: tempValue, display: space.surfaceTempK ? `${formatNumber(tempValue)} K` : `${formatNumber(tempValue)}°F`, direction: "higher" },
+        { id: "distance", label: "Distance from Sun", value: space.distanceFromSunMillionMiles ?? 0, display: `${formatNumber(space.distanceFromSunMillionMiles ?? 0)}M mi`, direction: "higher" },
+        { id: "moons", label: "Moons", value: space.moons ?? 0, display: `${formatNumber(space.moons ?? 0)}`, direction: "higher" },
+      ] satisfies TopTrumpStat[]).filter((stat) => stat.value > 0 || stat.id === "moons"),
+    };
+  }
+
+  const jet = jets.find((item) => item.id === id);
+  if (!jet) return null;
+  return {
+    id: jet.id,
+    topic,
+    title: jet.name,
+    image: jet.image,
+    imageAlt: jet.name,
+    imageCredit: jet.imageCredit,
+    subStat: `${jet.country} · ${jetCategoryLabels[jet.category]}`,
+    fact: jet.fact,
+    stats: [
+      { id: "speed", label: "Speed", value: jet.maxSpeedMph, display: `${formatNumber(jet.maxSpeedMph)} mph`, direction: "higher" },
+      { id: "range", label: "Range", value: jet.rangeMiles, display: `${formatNumber(jet.rangeMiles)} mi`, direction: "higher" },
+      { id: "weight", label: "Weight", value: jetWeightLb(jet), display: pounds(jetWeightLb(jet)), direction: "higher" },
+      { id: "deadliness", label: "Deadliness", value: jet.firepower * 2, display: `${jet.firepower * 2}/10`, direction: "higher" },
+      { id: "year", label: "Year created", value: jetFirstFlightYear(jet), display: `${jetFirstFlightYear(jet)} (older wins)`, direction: "lower" },
+      { id: "altitude", label: "Max altitude", value: jetAltitudeFt(jet), display: feet(jetAltitudeFt(jet)), direction: "higher" },
+    ],
+  };
+};
+
+export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, seed: number): TopTrumpRound => {
+  const currentTopic = topicOrder(topic, seed);
+  const pool =
+    currentTopic === "peppers" ? peppers :
+    currentTopic === "buildings" ? buildings :
+    currentTopic === "sharks" ? sharks :
+    currentTopic === "space" ? spaceTrumpPool() :
+    jets;
+  const shuffled = shuffle(pool.map((item) => item.id), seed + difficulty);
+  const first = shuffled[0];
+  const second = shuffled.find((id) => id !== first) ?? shuffled[1];
+  const player = topTrumpCard(currentTopic, first);
+  const computer = topTrumpCard(currentTopic, second);
+  if (!player || !computer) throw new Error(`Could not build Top Trumps round for ${currentTopic}`);
+
+  return {
+    id: `${seed}-trumps-${currentTopic}-${player.id}-${computer.id}`,
+    topic: currentTopic,
+    prompt: "Choose your strongest category.",
+    player,
+    computer,
+  };
+};
 
 export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed: number): RevealRound => {
   const currentTopic = topicOrder(topic, seed);

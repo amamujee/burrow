@@ -11,6 +11,7 @@ const {
   buildOddRound,
   buildRevealRound,
   buildSortRound,
+  buildTopTrumpRound,
   collectionCards,
 } = jiti("./src/lib/game-modes.ts");
 const { buildHeadToHeadSession, buildSession } = jiti("./src/lib/questions.ts");
@@ -172,6 +173,18 @@ const checkRoundBuilders = async () => {
       const oddRound = buildOddRound(topic, difficulty, seed + 60);
       if (oddRound.cards.length !== 4 || !oddRound.cards.some((card) => card.id === oddRound.answerId)) critical.push(`${topic}/odd/d${difficulty}: bad odd-one-out set`);
       await assertRoundCardImages(`${topic}/odd/d${difficulty}`, oddRound);
+
+      const topTrumpRound = buildTopTrumpRound(topic, difficulty, seed + 70);
+      if (!topTrumpRound.player?.stats?.length || !topTrumpRound.computer?.stats?.length) critical.push(`${topic}/trumps/d${difficulty}: missing trumps stats`);
+      const playerStatIds = new Set(topTrumpRound.player.stats.map((stat) => stat.id));
+      for (const stat of topTrumpRound.computer.stats) {
+        if (!playerStatIds.has(stat.id)) critical.push(`${topic}/trumps/d${difficulty}: mismatched stat ${stat.id}`);
+      }
+      await assertRoundCardImages(`${topic}/trumps/d${difficulty}`, {
+        id: topTrumpRound.id,
+        topic: topTrumpRound.topic,
+        cards: [topTrumpRound.player, topTrumpRound.computer],
+      });
     }
   }
 };

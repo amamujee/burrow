@@ -8,6 +8,7 @@ import {
   buildOddRound,
   buildRevealRound,
   buildSortRound,
+  buildTopTrumpRound,
   collectionCards,
   modeOptions,
   type FactRound,
@@ -18,6 +19,8 @@ import {
   type OddRound,
   type RevealRound,
   type SortRound,
+  type TopTrumpRound,
+  type TopTrumpStat,
   type TopicScope,
 } from "@/lib/game-modes";
 import { buildHeadToHeadSession, buildSession, type ComparisonCard, type Question } from "@/lib/questions";
@@ -87,7 +90,7 @@ const initialProgress: Progress = {
   unlockedCards: [],
   topicWins: emptyTopicCounts(),
   topicStats: emptyTopicStats(),
-  modeWins: { mix: 0, quiz: 0, versus: 0, sort: 0, fact: 0, peek: 0, number: 0, odd: 0 },
+  modeWins: { mix: 0, quiz: 0, versus: 0, trumps: 0, sort: 0, fact: 0, peek: 0, number: 0, odd: 0 },
 };
 
 const profilesKey = "burrow-profiles-v1";
@@ -103,7 +106,7 @@ const levelFromXp = (xp: number) => Math.max(1, Math.floor(xp / 120) + 1);
 const praise = ["Nice reading!", "Big brain move!", "You measured it!", "Hot answer!", "Sky-high thinking!", "Sharp thinking!"];
 const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
 type ChallengeMode = Exclude<GameMode, "mix">;
-const defaultMixPattern: ChallengeMode[] = ["quiz", "peek", "versus", "number", "odd", "sort", "fact"];
+const defaultMixPattern: ChallengeMode[] = ["quiz", "peek", "versus", "trumps", "number", "odd", "sort", "fact"];
 const selectableModeOptions = modeOptions.filter((item): item is (typeof modeOptions)[number] & { id: ChallengeMode } => item.id !== "mix");
 
 const freshProgress = (): Progress => ({
@@ -271,6 +274,8 @@ export function BurrowGame() {
   const [numberSelected, setNumberSelected] = useState<number | null>(null);
   const [oddRound, setOddRound] = useState<OddRound>(() => buildOddRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
   const [oddSelected, setOddSelected] = useState<string | null>(null);
+  const [topTrumpRound, setTopTrumpRound] = useState<TopTrumpRound>(() => buildTopTrumpRound(adaptiveTopicScopeFor("mixed", activeInterests, progress), progress.difficulty, 20260430));
+  const [topTrumpSelected, setTopTrumpSelected] = useState<string | null>(null);
   const [sessionCorrect, setSessionCorrect] = useState(0);
   const [miniRunAnswered, setMiniRunAnswered] = useState(0);
   const [miniRunCorrect, setMiniRunCorrect] = useState(0);
@@ -296,10 +301,12 @@ export function BurrowGame() {
           ? revealSelected !== null
           : activeChallengeMode === "number"
               ? numberSelected !== null
+              : activeChallengeMode === "trumps"
+                ? topTrumpSelected !== null
               : activeChallengeMode === "odd"
                 ? oddSelected !== null
                 : answered;
-  const sessionAnswered = mode === "mix" ? questionIndex + (activeChallengeAnswered ? 1 : 0) : questionIndex + (answered ? 1 : 0);
+  const sessionAnswered = questionIndex + (activeChallengeAnswered ? 1 : 0);
   const unlockedCount = allCards.filter((card) => progress.unlockedCards.includes(card.title)).length;
   const currentTopicScope = adaptiveTopicScopeFor(topic, activeInterests, progress);
   const accuracy = progress.answered ? Math.round((progress.correct / progress.answered) * 100) : 0;
@@ -324,6 +331,7 @@ export function BurrowGame() {
       setRevealRound(buildRevealRound(loadedScope, loadedProfile.progress.difficulty, 20260493));
       setNumberRound(buildNumberRound(loadedScope, loadedProfile.progress.difficulty, 20260513));
       setOddRound(buildOddRound(loadedScope, loadedProfile.progress.difficulty, 20260523));
+      setTopTrumpRound(buildTopTrumpRound(loadedScope, loadedProfile.progress.difficulty, 20260531));
       setIssueCount(loadContentIssues().length);
       setProfilesReady(true);
     }, 0);
@@ -352,6 +360,7 @@ export function BurrowGame() {
     if (activeChallengeMode === "peek") return { mode: activeChallengeMode, topic: revealRound.topic, itemId: revealRound.id, title: revealRound.card.title, prompt: revealRound.prompt, image: revealRound.card.image };
     if (activeChallengeMode === "number") return { mode: activeChallengeMode, topic: numberRound.topic, itemId: numberRound.id, title: numberRound.biggerLabel, prompt: numberRound.prompt, image: numberRound.cards[0]?.image };
     if (activeChallengeMode === "odd") return { mode: activeChallengeMode, topic: oddRound.topic, itemId: oddRound.id, title: "Odd one round", prompt: oddRound.prompt, image: oddRound.cards[0]?.image };
+    if (activeChallengeMode === "trumps") return { mode: activeChallengeMode, topic: topTrumpRound.topic, itemId: topTrumpRound.id, title: topTrumpRound.player.title, prompt: topTrumpRound.prompt, image: topTrumpRound.player.image };
 
     return {
       mode: activeChallengeMode,
@@ -465,6 +474,7 @@ export function BurrowGame() {
     setRevealSelected(null);
     setNumberSelected(null);
     setOddSelected(null);
+    setTopTrumpSelected(null);
     setLastResult(null);
     setSessionCorrect(0);
     setMiniRunAnswered(0);
@@ -490,6 +500,7 @@ export function BurrowGame() {
     setRevealRound(buildRevealRound(scope, nextProfile.progress.difficulty, seed + 61));
     setNumberRound(buildNumberRound(scope, nextProfile.progress.difficulty, seed + 89));
     setOddRound(buildOddRound(scope, nextProfile.progress.difficulty, seed + 97));
+    setTopTrumpRound(buildTopTrumpRound(scope, nextProfile.progress.difficulty, seed + 113));
   };
 
   const setQuestionDifficulty = (nextDifficulty: Difficulty) => {
@@ -503,6 +514,7 @@ export function BurrowGame() {
     setRevealRound(buildRevealRound(currentTopicScope, nextDifficulty, seed + 53));
     setNumberRound(buildNumberRound(currentTopicScope, nextDifficulty, seed + 67));
     setOddRound(buildOddRound(currentTopicScope, nextDifficulty, seed + 71));
+    setTopTrumpRound(buildTopTrumpRound(currentTopicScope, nextDifficulty, seed + 79));
     setCelebration(`${difficultyLabel(nextDifficulty)} questions.`);
   };
 
@@ -577,6 +589,7 @@ export function BurrowGame() {
     setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 43));
     setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 53));
     setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 59));
+    setTopTrumpRound(buildTopTrumpRound(currentTopicScope, progress.difficulty, seed + 67));
     setCelebration(`${nextModes.length} games selected.`);
   };
 
@@ -619,11 +632,13 @@ export function BurrowGame() {
     setRevealSelected(null);
     setNumberSelected(null);
     setOddSelected(null);
+    setTopTrumpSelected(null);
     setSortRound(buildSortRound(currentTopicScope, progress.difficulty, seed + 29));
     setFactRound(buildFactRound(currentTopicScope, progress.difficulty, seed + 37));
     setRevealRound(buildRevealRound(currentTopicScope, progress.difficulty, seed + 43));
     setNumberRound(buildNumberRound(currentTopicScope, progress.difficulty, seed + 53));
     setOddRound(buildOddRound(currentTopicScope, progress.difficulty, seed + 59));
+    setTopTrumpRound(buildTopTrumpRound(currentTopicScope, progress.difficulty, seed + 67));
   };
 
   const advance = () => {
@@ -793,6 +808,47 @@ export function BurrowGame() {
     setCelebration("New logic set.");
   };
 
+  const topTrumpStat = (round: TopTrumpRound, statId: string) => {
+    const playerStat = round.player.stats.find((stat) => stat.id === statId);
+    const computerStat = round.computer.stats.find((stat) => stat.id === statId);
+    return playerStat && computerStat ? { playerStat, computerStat } : null;
+  };
+
+  const playerWinsTopTrump = (playerStat: TopTrumpStat, computerStat: TopTrumpStat) => {
+    if (playerStat.value === computerStat.value) return true;
+    return playerStat.direction === "lower" ? playerStat.value < computerStat.value : playerStat.value > computerStat.value;
+  };
+
+  const answerTopTrump = (statId: string) => {
+    if (topTrumpSelected !== null) return;
+    const stats = topTrumpStat(topTrumpRound, statId);
+    if (!stats) return;
+    const correct = playerWinsTopTrump(stats.playerStat, stats.computerStat);
+    const xpGain = correct ? 30 + progress.difficulty * 6 : 8;
+    const result = reward({
+      correct,
+      xpGain,
+      topicName: topTrumpRound.topic,
+      modeName: mode === "mix" ? "mix" : "trumps",
+      seenId: topTrumpRound.id,
+      unlockTitles: [topTrumpRound.player.title, topTrumpRound.computer.title],
+    });
+    setTopTrumpSelected(statId);
+    setMiniRunAnswered((value) => value + 1);
+    setMiniRunCorrect((value) => value + (correct ? 1 : 0));
+    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
+    setCelebration(correct ? "Your card takes it!" : "Computer steals this one.");
+    setLastResult(result);
+  };
+
+  const nextTopTrumpRound = () => {
+    const seed = freshSeed(miniRunAnswered * 41);
+    setTopTrumpRound(buildTopTrumpRound(currentTopicScope, progress.difficulty, seed));
+    setTopTrumpSelected(null);
+    setLastResult(null);
+    setCelebration("New Top Trumps deal.");
+  };
+
   const resetProgress = () => {
     const seed = freshSeed(211);
     const reset = freshProgress();
@@ -804,6 +860,7 @@ export function BurrowGame() {
     setRevealRound(buildRevealRound(currentTopicScope, reset.difficulty, seed + 43));
     setNumberRound(buildNumberRound(currentTopicScope, reset.difficulty, seed + 53));
     setOddRound(buildOddRound(currentTopicScope, reset.difficulty, seed + 59));
+    setTopTrumpRound(buildTopTrumpRound(currentTopicScope, reset.difficulty, seed + 67));
     resetRunState();
     setCelebration("Progress reset. Fresh start.");
   };
@@ -926,6 +983,21 @@ export function BurrowGame() {
             onAnswer={answerNumber}
             onNext={mode === "mix" ? advanceMix : nextNumberRound}
             onSkip={mode === "mix" ? advanceMix : nextNumberRound}
+          />
+        )}
+
+        {!showCollection && activeChallengeMode === "trumps" && (
+          <TopTrumpsMode
+            round={topTrumpRound}
+            selected={topTrumpSelected}
+            result={lastResult}
+            miniRunAnswered={miniRunAnswered}
+            miniRunCorrect={miniRunCorrect}
+            celebration={celebration}
+            difficulty={progress.difficulty}
+            onAnswer={answerTopTrump}
+            onNext={mode === "mix" ? advanceMix : nextTopTrumpRound}
+            onSkip={mode === "mix" ? advanceMix : nextTopTrumpRound}
           />
         )}
 
@@ -1799,6 +1871,119 @@ function NumberMode({
   );
 }
 
+function TopTrumpsMode({
+  round,
+  selected,
+  result,
+  miniRunAnswered,
+  miniRunCorrect,
+  celebration,
+  difficulty,
+  onAnswer,
+  onNext,
+  onSkip,
+}: {
+  round: TopTrumpRound;
+  selected: string | null;
+  result: ResultState | null;
+  miniRunAnswered: number;
+  miniRunCorrect: number;
+  celebration: string;
+  difficulty: Difficulty;
+  onAnswer: (statId: string) => void;
+  onNext: () => void;
+  onSkip: () => void;
+}) {
+  const answered = selected !== null;
+  const selectedPlayerStat = selected ? round.player.stats.find((stat) => stat.id === selected) : null;
+  const selectedComputerStat = selected ? round.computer.stats.find((stat) => stat.id === selected) : null;
+  const playerWins = selectedPlayerStat && selectedComputerStat
+    ? selectedPlayerStat.value === selectedComputerStat.value || (selectedPlayerStat.direction === "lower" ? selectedPlayerStat.value < selectedComputerStat.value : selectedPlayerStat.value > selectedComputerStat.value)
+    : false;
+  const answerLabel = selectedPlayerStat
+    ? `${selectedPlayerStat.label}: ${round.player.title} ${selectedPlayerStat.display} vs ${round.computer.title} ${selectedComputerStat?.display ?? "?"}`
+    : "Pick a category";
+  const explanation = selectedPlayerStat && selectedComputerStat
+    ? `${selectedPlayerStat.direction === "lower" ? "Lower wins here." : "Higher wins here."} ${answerLabel}. ${playerWins ? "Player wins the matchup." : "Computer wins the matchup."}`
+    : round.player.fact;
+
+  return (
+    <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+      <article className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
+        <div className="grid h-full min-h-[420px] grid-cols-2 gap-2 lg:min-h-0">
+          <TrumpCardView card={round.player} badge="Player" revealStats />
+          <TrumpCardView card={round.computer} badge="Computer" revealStats={answered} />
+        </div>
+      </article>
+
+      <article className="flex min-h-0 flex-col rounded-lg border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421] min-[900px]:overflow-y-auto">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex min-w-0 items-center gap-2">
+            <DifficultyPill difficulty={difficulty} />
+            <p className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
+              Top Trumps
+            </p>
+          </div>
+          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} won</p>
+        </div>
+
+        <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+        <p className="mt-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] px-3 py-2 text-sm font-bold leading-snug text-[#5f6b5d]">
+          Your card is face up. Pick the category you think beats the computer card.
+        </p>
+
+        <div className="mt-3 grid shrink-0 gap-2 xl:grid-cols-2">
+          {round.player.stats.map((stat) => {
+            const computerStat = round.computer.stats.find((item) => item.id === stat.id);
+            const correctChoice = answered && selected === stat.id && playerWins;
+            const chosenWrong = answered && selected === stat.id && !playerWins;
+            return (
+              <button
+                key={`${round.id}-${stat.id}`}
+                onClick={() => onAnswer(stat.id)}
+                className={`min-h-16 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
+                  correctChoice
+                    ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
+                    : chosenWrong
+                      ? "border-[#092421] bg-[#f59a7d] shadow-[3px_3px_0_#092421]"
+                      : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf]"
+                }`}
+              >
+                <span className="flex items-start justify-between gap-3">
+                  <span>
+                    <span className="block text-lg font-black leading-tight text-[#102f36]">{stat.label}</span>
+                    <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{stat.direction === "lower" ? "lower wins" : "higher wins"}</span>
+                  </span>
+                  <span className="text-right text-xl font-black leading-none text-[#9f3f2b]">
+                    {stat.display}
+                    {answered && computerStat && selected === stat.id && <span className="block text-xs text-[#5f6b5d]">CPU {computerStat.display}</span>}
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {answered && result && (
+          <FeedbackPanel
+            isCorrect={result.correct}
+            xpGain={result.xpGain}
+            leveledUp={result.leveledUp}
+            celebration={celebration}
+            correctAnswer={answerLabel}
+            explanation={explanation}
+            note="Computer takes it."
+            isLast={false}
+            onNext={onNext}
+          />
+        )}
+
+        {!answered && <SkipButton onClick={onSkip} />}
+      </article>
+    </section>
+  );
+}
+
 function OddOneMode({
   round,
   selected,
@@ -1926,6 +2111,7 @@ function CollectionBook({
           <HudStat label="Mix" value={modeWins.mix.toString()} />
           <HudStat label="Quiz" value={modeWins.quiz.toString()} />
           <HudStat label="Versus" value={modeWins.versus.toString()} />
+          <HudStat label="Trumps" value={modeWins.trumps.toString()} />
           <HudStat label="Sort" value={modeWins.sort.toString()} />
           <HudStat label="Fact" value={modeWins.fact.toString()} />
           <HudStat label="Peek" value={modeWins.peek.toString()} />
@@ -2138,6 +2324,41 @@ function KnowledgeCardsStage({ cards, badge, footer }: { cards: KnowledgeCard[];
         <p className="rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">{footer}</p>
       </div>
     </article>
+  );
+}
+
+function TrumpCardView({ card, badge, revealStats }: { card: TopTrumpRound["player"]; badge: string; revealStats: boolean }) {
+  return (
+    <div className="relative overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
+      <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#092421]">
+        {badge}
+      </div>
+      <div className={revealStats ? "" : "brightness-[.55] saturate-[.7]"}>
+        <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} />
+      </div>
+      {!revealStats && (
+        <div className="absolute inset-0 grid place-items-center bg-[#102f36]/45 p-4">
+          <div className="rounded-lg border-2 border-[#092421] bg-white px-4 py-3 text-center shadow-[3px_3px_0_#092421]">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#72543e]">Face down</p>
+            <p className="text-3xl font-black leading-none text-[#102f36]">?</p>
+          </div>
+        </div>
+      )}
+      <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-2 shadow-[2px_2px_0_#092421]">
+        <p className="text-lg font-black leading-tight text-[#102f36]">{revealStats ? card.title : "Computer card"}</p>
+        <p className="mt-0.5 text-[11px] font-bold leading-tight text-[#5f6b5d]">{revealStats ? card.subStat : "Stats reveal after your pick."}</p>
+        {revealStats && (
+          <div className="mt-2 grid gap-1">
+            {card.stats.map((stat) => (
+              <div key={`${card.id}-${stat.id}`} className="grid grid-cols-[1fr_auto] gap-2 rounded-md bg-[#fff9ec] px-2 py-1">
+                <span className="truncate text-[11px] font-black uppercase tracking-[0.08em] text-[#72543e]">{stat.label}</span>
+                <span className="text-sm font-black text-[#9f3f2b]">{stat.display}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
