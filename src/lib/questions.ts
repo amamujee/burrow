@@ -144,6 +144,16 @@ const answerChoices = <T,>(correct: T, distractors: T[], seed: number, count: nu
   return shuffle([correct, ...shuffle(uniqueDistractors, seed).slice(0, count - 1)], seed + 1);
 };
 const roundTo = (value: number, step: number) => Math.max(step, Math.round(value / step) * step);
+const roundedSubtractionPair = (bigger: number, smaller: number, step: number) => {
+  const biggerValue = roundTo(bigger, step);
+  const smallerValue = Math.max(0, Math.min(biggerValue - step, roundTo(smaller, step)));
+  return { biggerValue, smallerValue, diff: biggerValue - smallerValue };
+};
+const roundedComparisonCard = (card: ComparisonCard, value: number, unit: string): ComparisonCard => ({
+  ...card,
+  statValue: `${formatNumber(value)} ${unit}`,
+  meterValue: value,
+});
 
 const displayHeightChoice = (value: number, difficulty: Difficulty) => {
   if (difficulty === 3) return feet(value);
@@ -178,16 +188,34 @@ const buildingHeightChoices = (building: Building, difficulty: Difficulty, seed:
 };
 
 const buildingDifferenceChoices = (diff: number, difficulty: Difficulty, seed: number) => {
-  const gap = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
+  const gap = difficulty === 1 ? 400 : difficulty === 2 ? 200 : 100;
   const values = [
     diff,
-    diff + gap,
     diff + gap * 2,
-    Math.max(gap, diff - gap),
+    diff + gap * 3,
     Math.max(gap, diff - gap * 2),
+    Math.max(gap, diff - gap * 3),
+    diff + gap * 4,
+    diff + gap * 5,
   ];
   const labels = Array.from(new Set(values.map((value) => `${formatNumber(value)} ft`)));
   const correct = `${formatNumber(diff)} ft`;
+  const distractors = shuffle(labels.filter((label) => label !== correct), seed + 1).slice(0, choiceCountForDifficulty(difficulty) - 1);
+  return shuffle([correct, ...distractors], seed + 2);
+};
+
+const differenceChoices = (diff: number, unit: string, gap: number, difficulty: Difficulty, seed: number) => {
+  const values = [
+    diff,
+    diff + gap * 2,
+    diff + gap * 3,
+    Math.max(gap, diff - gap * 2),
+    Math.max(gap, diff - gap * 3),
+    diff + gap * 4,
+    diff + gap * 5,
+  ];
+  const labels = Array.from(new Set(values.map((value) => `${formatNumber(value)} ${unit}`)));
+  const correct = `${formatNumber(diff)} ${unit}`;
   const distractors = shuffle(labels.filter((label) => label !== correct), seed + 1).slice(0, choiceCountForDifficulty(difficulty) - 1);
   return shuffle([correct, ...distractors], seed + 2);
 };
@@ -651,22 +679,22 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
     const challenger = sample(buildings.filter((item) => item.id !== building.id && item.heightFt !== building.heightFt), seed + 28);
     const taller = building.heightFt > challenger.heightFt ? building : challenger;
     const shorter = building.heightFt > challenger.heightFt ? challenger : building;
-    const diff = taller.heightFt - shorter.heightFt;
+    const { biggerValue, smallerValue, diff } = roundedSubtractionPair(taller.heightFt, shorter.heightFt, difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50);
     const correct = `${formatNumber(diff)} ft`;
     const choices = buildingDifferenceChoices(diff, difficulty, seed + 29);
-    const cards = shuffle([buildingCard(taller, "A"), buildingCard(shorter, "B")], seed + 30);
+    const cards = shuffle([roundedComparisonCard(buildingCard(taller, "A"), biggerValue, "ft"), roundedComparisonCard(buildingCard(shorter, "B"), smallerValue, "ft")], seed + 30);
     return {
       id: `${seed}-building-difference-${taller.id}-${shorter.id}`,
       topic: "buildings",
       kind,
-      prompt: `${taller.name} is ${feet(taller.heightFt)}. ${shorter.name} is ${feet(shorter.heightFt)}. How much taller is ${taller.name}?`,
+      prompt: `${taller.name} is about ${feet(biggerValue)}. ${shorter.name} is about ${feet(smallerValue)}. How much taller is ${taller.name}?`,
       image: taller.image,
       imageAlt: taller.name,
       imageCredit: taller.imageCredit,
       comparison: cards,
       choices,
       answer: correct,
-      explanation: `${formatNumber(taller.heightFt)} - ${formatNumber(shorter.heightFt)} = ${formatNumber(diff)}. So ${taller.name} is ${formatNumber(diff)} feet taller.`,
+      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(diff)}. So ${taller.name} is about ${formatNumber(diff)} feet taller.`,
       numberLine: { label: "Difference", value: diff, max: 1000, unit: "ft" },
     };
   }
@@ -764,22 +792,22 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
     const challenger = sample(sharks.filter((item) => item.id !== shark.id && item.lengthFt !== shark.lengthFt), seed + 48);
     const bigger = shark.lengthFt > challenger.lengthFt ? shark : challenger;
     const smaller = shark.lengthFt > challenger.lengthFt ? challenger : shark;
-    const diff = bigger.lengthFt - smaller.lengthFt;
+    const { biggerValue, smallerValue, diff } = roundedSubtractionPair(bigger.lengthFt, smaller.lengthFt, 5);
     const correct = `${formatNumber(diff)} ft`;
-    const choices = answerChoices(correct, [`${formatNumber(diff + 3)} ft`, `${formatNumber(Math.max(1, diff - 3))} ft`, `${formatNumber(diff + 7)} ft`], seed + 49, choiceCountForDifficulty(difficulty));
-    const cards = shuffle([sharkCard(bigger, "A", "length"), sharkCard(smaller, "B", "length")], seed + 50);
+    const choices = differenceChoices(diff, "ft", 5, difficulty, seed + 49);
+    const cards = shuffle([roundedComparisonCard(sharkCard(bigger, "A", "length"), biggerValue, "ft"), roundedComparisonCard(sharkCard(smaller, "B", "length"), smallerValue, "ft")], seed + 50);
     return {
       id: `${seed}-shark-difference-${bigger.id}-${smaller.id}`,
       topic: "sharks",
       kind,
-      prompt: `${bigger.name} can be ${feet(bigger.lengthFt)}. ${smaller.name} can be ${feet(smaller.lengthFt)}. How much longer is ${bigger.name}?`,
+      prompt: `${bigger.name} can be about ${feet(biggerValue)}. ${smaller.name} can be about ${feet(smallerValue)}. How much longer is ${bigger.name}?`,
       image: bigger.image,
       imageAlt: bigger.name,
       imageCredit: bigger.imageCredit,
       comparison: cards,
       choices: choices.includes(correct) ? choices : [correct, ...choices.slice(1)],
       answer: correct,
-      explanation: `${bigger.lengthFt} - ${smaller.lengthFt} = ${diff}. So ${bigger.name} is ${diff} feet longer.`,
+      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(diff)}. So ${bigger.name} is about ${formatNumber(diff)} feet longer.`,
       numberLine: { label: "Difference", value: diff, max: maxSharkLength, unit: "ft" },
     };
   }
@@ -886,22 +914,22 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
     const challenger = sample(jets.filter((item) => item.id !== jet.id && item.maxSpeedMph !== jet.maxSpeedMph), seed + 59);
     const faster = jet.maxSpeedMph > challenger.maxSpeedMph ? jet : challenger;
     const slower = jet.maxSpeedMph > challenger.maxSpeedMph ? challenger : jet;
-    const diff = faster.maxSpeedMph - slower.maxSpeedMph;
+    const { biggerValue, smallerValue, diff } = roundedSubtractionPair(faster.maxSpeedMph, slower.maxSpeedMph, difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50);
     const correct = `${formatNumber(diff)} mph`;
-    const choices = answerChoices(correct, [`${formatNumber(diff + 100)} mph`, `${formatNumber(Math.max(50, diff - 100))} mph`, `${formatNumber(diff + 250)} mph`], seed + 60, choiceCountForDifficulty(difficulty));
-    const cards = shuffle([jetCard(faster, "A", "speed"), jetCard(slower, "B", "speed")], seed + 61);
+    const choices = differenceChoices(diff, "mph", difficulty === 1 ? 200 : 100, difficulty, seed + 60);
+    const cards = shuffle([roundedComparisonCard(jetCard(faster, "A", "speed"), biggerValue, "mph"), roundedComparisonCard(jetCard(slower, "B", "speed"), smallerValue, "mph")], seed + 61);
     return {
       id: `${seed}-jet-difference-${faster.id}-${slower.id}`,
       topic: "jets",
       kind,
-      prompt: `${faster.name} can reach ${formatNumber(faster.maxSpeedMph)} mph. ${slower.name} can reach ${formatNumber(slower.maxSpeedMph)} mph. How much faster is ${faster.name}?`,
+      prompt: `${faster.name} can reach about ${formatNumber(biggerValue)} mph. ${slower.name} can reach about ${formatNumber(smallerValue)} mph. How much faster is ${faster.name}?`,
       image: faster.image,
       imageAlt: faster.name,
       imageCredit: faster.imageCredit,
       comparison: cards,
       choices: choices.includes(correct) ? choices : [correct, ...choices.slice(1)],
       answer: correct,
-      explanation: `${formatNumber(faster.maxSpeedMph)} - ${formatNumber(slower.maxSpeedMph)} = ${formatNumber(diff)}. So ${faster.name} is ${formatNumber(diff)} mph faster.`,
+      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(diff)}. So ${faster.name} is about ${formatNumber(diff)} mph faster.`,
       numberLine: { label: "Difference", value: diff, max: maxJetSpeed, unit: "mph" },
     };
   }

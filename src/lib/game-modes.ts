@@ -170,6 +170,16 @@ const shuffle = <T,>(items: T[], seed: number) => {
 const sample = <T,>(items: T[], seed: number) => items[Math.floor(seedRandom(seed) * items.length) % items.length];
 const sampleSafe = <T,>(items: T[], fallback: T[], seed: number) => sample(items.length ? items : fallback, seed);
 const roundTo = (value: number, step: number) => Math.round(value / step) * step;
+const roundedSubtractionPair = (bigger: number, smaller: number, step: number) => {
+  const biggerValue = Math.max(step, roundTo(bigger, step));
+  const smallerValue = Math.max(0, Math.min(biggerValue - step, roundTo(smaller, step)));
+  return { biggerValue, smallerValue, answer: biggerValue - smallerValue };
+};
+const roundedStatCard = (card: KnowledgeCard, value: number, unit: string): KnowledgeCard => ({
+  ...card,
+  statValue: value,
+  statDisplay: `${formatNumber(value)} ${unit}`,
+});
 
 const allTopics: KnowledgeTopic[] = [...topicIds];
 
@@ -778,8 +788,8 @@ export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed
   };
 };
 
-const numberChoices = (answer: number, step: number, seed: number) => {
-  const candidates = [answer, Math.max(step, answer - step), answer + step, answer + step * 2, Math.max(step, answer - step * 2)];
+const numberChoices = (answer: number, gap: number, seed: number) => {
+  const candidates = [answer, Math.max(gap, answer - gap * 2), answer + gap * 2, answer + gap * 3, Math.max(gap, answer - gap * 3), answer + gap * 4, answer + gap * 5];
   const uniqueDistractors = Array.from(new Set(candidates.filter((item) => item >= 0 && item !== answer)));
   return shuffle([answer, ...shuffle(uniqueDistractors, seed + 1).slice(0, 3)], seed);
 };
@@ -790,15 +800,13 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   if (currentTopic === "peppers") {
     const hotter = sampleSafe(peppers.filter((pepper) => pepper.shuMax >= 50000), peppers, seed + 1);
     const milder = sampleSafe(peppers.filter((pepper) => pepper.id !== hotter.id && pepper.shuMax <= hotter.shuMax * 0.35), peppers.filter((pepper) => pepper.id !== hotter.id), seed + 2);
-    const step = difficulty === 1 ? 10000 : difficulty === 2 ? 5000 : 1000;
-    const biggerValue = roundTo(hotter.shuMax, step);
-    const smallerValue = roundTo(milder.shuMax, step);
-    const answer = Math.abs(biggerValue - smallerValue);
+    const step = difficulty === 1 ? 50000 : difficulty === 2 ? 25000 : 10000;
+    const { biggerValue, smallerValue, answer } = roundedSubtractionPair(hotter.shuMax, milder.shuMax, step);
     return {
       id: `${seed}-number-peppers-${hotter.id}-${milder.id}`,
       topic: currentTopic,
       prompt: `${hotter.name} can reach ${numberWithUnit(biggerValue, "SHU")}. ${milder.name} can reach ${numberWithUnit(smallerValue, "SHU")}. How much spicier is ${hotter.name}?`,
-      cards: [pepperCard(hotter), pepperCard(milder)],
+      cards: [roundedStatCard(pepperCard(hotter), biggerValue, "SHU"), roundedStatCard(pepperCard(milder), smallerValue, "SHU")],
       statLabel: "Scoville",
       unit: "SHU",
       biggerLabel: hotter.name,
@@ -806,7 +814,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       biggerValue,
       smallerValue,
       answer,
-      choices: numberChoices(answer, Math.max(step, answer > 100000 ? 50000 : step * 2), seed + 3),
+      choices: numberChoices(answer, Math.max(step, answer > 100000 ? 100000 : step * 2), seed + 3),
       explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} SHU.`,
     };
   }
@@ -814,15 +822,13 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   if (currentTopic === "buildings") {
     const taller = sampleSafe(buildings.filter((building) => building.heightFt >= 1800), buildings, seed + 4);
     const shorter = sampleSafe(buildings.filter((building) => building.id !== taller.id && building.heightFt <= taller.heightFt - 150), buildings.filter((building) => building.id !== taller.id), seed + 5);
-    const step = difficulty === 1 ? 50 : difficulty === 2 ? 25 : 1;
-    const biggerValue = roundTo(taller.heightFt, step);
-    const smallerValue = roundTo(shorter.heightFt, step);
-    const answer = Math.abs(biggerValue - smallerValue);
+    const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
+    const { biggerValue, smallerValue, answer } = roundedSubtractionPair(taller.heightFt, shorter.heightFt, step);
     return {
       id: `${seed}-number-buildings-${taller.id}-${shorter.id}`,
       topic: currentTopic,
       prompt: `${taller.name} is ${feet(biggerValue)}. ${shorter.name} is ${feet(smallerValue)}. How much taller is ${taller.name}?`,
-      cards: [buildingCard(taller), buildingCard(shorter)],
+      cards: [roundedStatCard(buildingCard(taller), biggerValue, "ft"), roundedStatCard(buildingCard(shorter), smallerValue, "ft")],
       statLabel: "Height",
       unit: "ft",
       biggerLabel: taller.name,
@@ -830,7 +836,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       biggerValue,
       smallerValue,
       answer,
-      choices: numberChoices(answer, difficulty === 1 ? 100 : 50, seed + 6),
+      choices: numberChoices(answer, difficulty === 1 ? 200 : 100, seed + 6),
       explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} feet.`,
     };
   }
@@ -838,14 +844,13 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   if (currentTopic === "space") {
     const moreMoons = sampleSafe(spaceCards.filter((space) => (space.moons ?? 0) >= 10), spaceCards.filter((space) => space.moons !== undefined), seed + 7);
     const fewerMoons = sampleSafe(spaceCards.filter((space) => space.id !== moreMoons.id && (space.moons ?? 0) < (moreMoons.moons ?? 0)), spaceCards.filter((space) => space.id !== moreMoons.id && space.moons !== undefined), seed + 8);
-    const biggerValue = moreMoons.moons ?? 0;
-    const smallerValue = fewerMoons.moons ?? 0;
-    const answer = Math.abs(biggerValue - smallerValue);
+    const step = difficulty === 1 ? 10 : 5;
+    const { biggerValue, smallerValue, answer } = roundedSubtractionPair(moreMoons.moons ?? 0, fewerMoons.moons ?? 0, step);
     return {
       id: `${seed}-number-space-${moreMoons.id}-${fewerMoons.id}`,
       topic: currentTopic,
       prompt: `${moreMoons.name} has ${formatNumber(biggerValue)} moons. ${fewerMoons.name} has ${formatNumber(smallerValue)} moons. How many more moons does ${moreMoons.name} have?`,
-      cards: [spaceCard(moreMoons, "moons"), spaceCard(fewerMoons, "moons")],
+      cards: [roundedStatCard(spaceCard(moreMoons, "moons"), biggerValue, "moons"), roundedStatCard(spaceCard(fewerMoons, "moons"), smallerValue, "moons")],
       statLabel: "Moons",
       unit: "moons",
       biggerLabel: moreMoons.name,
@@ -853,7 +858,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       biggerValue,
       smallerValue,
       answer,
-      choices: numberChoices(answer, difficulty === 1 ? 5 : 3, seed + 9),
+      choices: numberChoices(answer, difficulty === 1 ? 10 : 5, seed + 9),
       explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} moons.`,
     };
   }
@@ -861,15 +866,13 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   if (currentTopic === "jets") {
     const faster = sampleSafe(jets.filter((jet) => jet.maxSpeedMph >= 1200), jets, seed + 10);
     const slower = sampleSafe(jets.filter((jet) => jet.id !== faster.id && jet.maxSpeedMph <= faster.maxSpeedMph - 250), jets.filter((jet) => jet.id !== faster.id), seed + 11);
-    const step = difficulty === 1 ? 100 : difficulty === 2 ? 50 : 10;
-    const biggerValue = roundTo(faster.maxSpeedMph, step);
-    const smallerValue = roundTo(slower.maxSpeedMph, step);
-    const answer = Math.abs(biggerValue - smallerValue);
+    const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
+    const { biggerValue, smallerValue, answer } = roundedSubtractionPair(faster.maxSpeedMph, slower.maxSpeedMph, step);
     return {
       id: `${seed}-number-jets-${faster.id}-${slower.id}`,
       topic: currentTopic,
       prompt: `${faster.name} can reach about ${numberWithUnit(biggerValue, "mph")}. ${slower.name} can reach about ${numberWithUnit(smallerValue, "mph")}. How much faster is ${faster.name}?`,
-      cards: [jetCard(faster, "speed"), jetCard(slower, "speed")],
+      cards: [roundedStatCard(jetCard(faster, "speed"), biggerValue, "mph"), roundedStatCard(jetCard(slower, "speed"), smallerValue, "mph")],
       statLabel: "Speed",
       unit: "mph",
       biggerLabel: faster.name,
@@ -877,21 +880,20 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       biggerValue,
       smallerValue,
       answer,
-      choices: numberChoices(answer, difficulty === 1 ? 200 : 100, seed + 12),
+      choices: numberChoices(answer, difficulty === 1 ? 400 : 200, seed + 12),
       explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} mph.`,
     };
   }
 
   const bigger = sampleSafe(sharks.filter((shark) => shark.lengthFt >= 15), sharks, seed + 10);
   const smaller = sampleSafe(sharks.filter((shark) => shark.id !== bigger.id && shark.lengthFt <= bigger.lengthFt - 5), sharks.filter((shark) => shark.id !== bigger.id), seed + 11);
-  const biggerValue = bigger.lengthFt;
-  const smallerValue = smaller.lengthFt;
-  const answer = Math.abs(biggerValue - smallerValue);
+  const step = difficulty === 1 ? 5 : 2;
+  const { biggerValue, smallerValue, answer } = roundedSubtractionPair(bigger.lengthFt, smaller.lengthFt, step);
   return {
     id: `${seed}-number-sharks-${bigger.id}-${smaller.id}`,
     topic: currentTopic,
     prompt: `${bigger.name} can be ${feet(biggerValue)}. ${smaller.name} can be ${feet(smallerValue)}. How much longer is ${bigger.name}?`,
-    cards: [sharkCard(bigger), sharkCard(smaller)],
+    cards: [roundedStatCard(sharkCard(bigger), biggerValue, "ft"), roundedStatCard(sharkCard(smaller), smallerValue, "ft")],
     statLabel: "Length",
     unit: "ft",
     biggerLabel: bigger.name,
@@ -899,7 +901,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     biggerValue,
     smallerValue,
     answer,
-    choices: numberChoices(answer, difficulty === 1 ? 5 : 3, seed + 12),
+    choices: numberChoices(answer, difficulty === 1 ? 5 : 4, seed + 12),
     explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} feet.`,
   };
 };

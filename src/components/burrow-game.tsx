@@ -1395,7 +1395,7 @@ function QuestionRun({
   issueFlash: boolean;
   onFlagIssue: () => void;
 }) {
-  const isDifferenceQuestion = question.kind === "building-difference" || question.kind === "shark-difference";
+  const isDifferenceQuestion = question.kind === "building-difference" || question.kind === "shark-difference" || question.kind === "jet-difference";
   const showNumberLine = Boolean(question.numberLine) && (answered || (Boolean(question.comparison) && !isDifferenceQuestion));
   const showComparisonTable = Boolean(question.comparison) && (answered || !isDifferenceQuestion);
   const choices = question.comparison ? orderedComparisonChoices(question.choices) : question.choices;
