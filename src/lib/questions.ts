@@ -204,6 +204,113 @@ const buildingDifferenceChoices = (diff: number, difficulty: Difficulty, seed: n
   return shuffle([correct, ...distractors], seed + 2);
 };
 
+const buildingStatusLabel = (building: Building) => building.status === "finished" ? "a completed skyscraper" : "still being built";
+const brooklynBuildingIds = new Set(["brooklyn-tower", "brooklyn-point", "ava-dobro", "11-hoyt", "the-everly"]);
+const falseHeightComparisons = (building: Building, thresholds: number[]) =>
+  thresholds.flatMap((threshold) => {
+    const taller = building.heightFt > threshold;
+    const shorter = building.heightFt < threshold;
+    return [
+      shorter ? `It is taller than ${feet(threshold)}.` : "",
+      taller ? `It is shorter than ${feet(threshold)}.` : "",
+    ].filter(Boolean);
+  });
+
+const buildingReadingQuestion = (seed: number, building: Building, difficulty: Difficulty): Question => {
+  const count = choiceCountForDifficulty(difficulty);
+  const otherCities = Array.from(new Set(buildings.filter((item) => item.city !== building.city).map((item) => item.city)));
+  const otherFloors = Array.from(new Set(buildings.map((item) => item.floors).filter((floors): floors is number => Boolean(floors && floors !== building.floors))));
+  const thresholds = difficulty === 1 ? [500, 1000, 1500] : difficulty === 2 ? [720, 1000, 1200, 1500] : [984, 1200, 1400, 1776];
+  const selectedThreshold = sample(thresholds.filter((threshold) => threshold !== building.heightFt), seed + 33);
+  const heightAnswer = building.heightFt > selectedThreshold
+    ? `It is taller than ${feet(selectedThreshold)}.`
+    : `It is shorter than ${feet(selectedThreshold)}.`;
+
+  const templates = [
+    {
+      id: "city",
+      prompt: "Which detail matches the clue?",
+      clue: `${building.name} rises in ${building.city}, ${building.country}.`,
+      answer: `It is in ${building.city}.`,
+      distractors: shuffle(otherCities, seed + 34).map((city) => `It is in ${city}.`),
+      explanation: `${building.name} is in ${building.city}, ${building.country}.`,
+    },
+    {
+      id: "height-compare",
+      prompt: "Which height sentence is true?",
+      clue: `${building.name} is ${feet(building.heightFt)} tall.`,
+      answer: heightAnswer,
+      distractors: falseHeightComparisons(building, thresholds),
+      explanation: `${building.name} is ${feet(building.heightFt)} tall, so ${heightAnswer.toLowerCase()}`,
+    },
+    {
+      id: "floors",
+      prompt: "Which floor count matches?",
+      clue: `${building.name} has ${building.floors ?? "many"} floors and is ${feet(building.heightFt)} tall.`,
+      answer: building.floors ? `It has ${building.floors} floors.` : `It is ${feet(building.heightFt)} tall.`,
+      distractors: building.floors
+        ? shuffle(otherFloors, seed + 35).map((floors) => `It has ${floors} floors.`)
+        : falseHeightComparisons(building, thresholds),
+      explanation: building.floors ? `${building.name} has ${building.floors} floors.` : `${building.name} is ${feet(building.heightFt)} tall.`,
+    },
+    ...(building.status === "finished"
+      ? []
+      : [
+          {
+            id: "status",
+            prompt: "Which sentence fits the clue?",
+            clue: `${building.name} is ${buildingStatusLabel(building)} in ${building.city}.`,
+            answer: `It is ${buildingStatusLabel(building)}.`,
+            distractors: [
+              "It is a completed skyscraper.",
+              "It is a pepper variety.",
+              "It is a shark species.",
+              "It is a planet.",
+            ],
+            explanation: `${building.name} is ${buildingStatusLabel(building)}.`,
+          },
+        ]),
+    ...(brooklynBuildingIds.has(building.id)
+      ? [
+          {
+            id: "borough",
+            prompt: "Which detail matches the clue?",
+            clue: `${building.name} rises in Brooklyn, New York City.`,
+            answer: "It is in Brooklyn.",
+            distractors: ["It is in Chicago.", "It is in Dubai.", "It is in Hong Kong.", "It is in Shanghai."],
+            explanation: `${building.name} is one of Brooklyn's tallest buildings.`,
+          },
+        ]
+      : []),
+    {
+      id: "fact",
+      prompt: "Which building does the clue describe?",
+      clue: building.fact,
+      answer: building.name,
+      distractors: shuffle(buildings.filter((item) => item.id !== building.id), seed + 36).map((item) => item.name),
+      explanation: `${building.name}: ${building.fact}`,
+    },
+  ].filter((template) => template.distractors.length >= count - 1);
+
+  const template = sample(templates, seed + 37);
+  const choices = answerChoices(template.answer, template.distractors, seed + 38, count);
+
+  return {
+    id: `${seed}-building-reading-${template.id}-${building.id}`,
+    topic: "buildings",
+    kind: "building-reading",
+    prompt: template.prompt,
+    readingClue: template.clue,
+    image: building.image,
+    imageAlt: building.name,
+    imageCredit: building.imageCredit,
+    choices,
+    answer: template.answer,
+    explanation: template.explanation,
+    numberLine: template.id === "height-compare" || template.id === "floors" ? { label: "Height", value: building.heightFt, max: maxHeight, unit: "ft" } : undefined,
+  };
+};
+
 const differenceChoices = (diff: number, unit: string, gap: number, difficulty: Difficulty, seed: number) => {
   const values = [
     diff,
@@ -700,27 +807,7 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
   }
 
   if (kind === "building-reading") {
-    const sentence = building.status === "finished"
-      ? `${building.name} is finished. People can go inside.`
-      : `${building.name} is still being built. It is not finished yet.`;
-    return {
-      id: `${seed}-building-reading-${building.id}`,
-      topic: "buildings",
-      kind,
-      prompt: "What is true?",
-      readingClue: sentence,
-      image: building.image,
-      imageAlt: building.name,
-      imageCredit: building.imageCredit,
-      choices: answerChoices(
-        building.status === "finished" ? "It is finished" : "It is still being built",
-        ["It is a pepper", "It is under the ocean", "It is only 10 feet tall"],
-        seed + 31,
-        choiceCountForDifficulty(difficulty),
-      ),
-      answer: building.status === "finished" ? "It is finished" : "It is still being built",
-      explanation: sentence,
-    };
+    return buildingReadingQuestion(seed, building, difficulty);
   }
 
   const correct = displayHeightChoice(building.heightFt, difficulty);

@@ -466,6 +466,12 @@ const buildingCompletedYear = (building: Building) => {
   return years[building.id] ?? (building.status === "under construction" ? 2030 : 2018);
 };
 
+const buildingIsInAsia = (building: Building) =>
+  ["China", "Hong Kong", "Malaysia", "Saudi Arabia", "South Korea", "Taiwan", "United Arab Emirates", "Vietnam"].includes(building.country);
+const buildingIsInBrooklyn = (building: Building) => ["brooklyn-tower", "brooklyn-point", "ava-dobro", "11-hoyt", "the-everly"].includes(building.id);
+const buildingIsSupertall = (building: Building) => building.heightFt >= 984;
+const buildingIsMegaTall = (building: Building) => building.heightFt >= 1968;
+
 const jetFirstFlightYear = (jet: Jet) => {
   const years: Record<string, number> = {
     "f-35-lightning-ii": 2006,
@@ -940,17 +946,92 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
   }
 
   if (currentTopic === "buildings") {
-    const same = shuffle(buildings.filter((building) => building.status === "finished"), seed + 5).slice(0, 3);
-    const odd = sampleSafe(buildings.filter((building) => building.status !== "finished"), buildings, seed + 6);
-    const cards = shuffle([...same.map(buildingCard), buildingCard(odd)], seed + 7);
+    const rules: {
+      id: string;
+      prompt: string;
+      same: (building: Building) => boolean;
+      odd: (building: Building) => boolean;
+      reason: (odd: Building) => string;
+      explanation: (odd: Building) => string;
+    }[] = [
+      {
+        id: "new-york-city",
+        prompt: "Which building is not in New York City?",
+        same: (building) => building.city === "New York City",
+        odd: (building) => building.city !== "New York City",
+        reason: (odd) => `${odd.name} is in ${odd.city}; the others are in New York City.`,
+        explanation: (odd) => `The rule is location. ${odd.name} is the odd one out because it is in ${odd.city}, not New York City.`,
+      },
+      {
+        id: "brooklyn",
+        prompt: "Which building is not in Brooklyn?",
+        same: buildingIsInBrooklyn,
+        odd: (building) => !buildingIsInBrooklyn(building),
+        reason: (odd) => `${odd.name} is not in Brooklyn; the others are Brooklyn towers.`,
+        explanation: (odd) => `The rule is borough. ${odd.name} is the odd one out because it is not one of the Brooklyn towers.`,
+      },
+      {
+        id: "asia",
+        prompt: "Which building is not in Asia?",
+        same: buildingIsInAsia,
+        odd: (building) => !buildingIsInAsia(building),
+        reason: (odd) => `${odd.name} is in ${odd.country}; the others are in Asia.`,
+        explanation: (odd) => `The rule is region. ${odd.name} is the odd one out because it is not in Asia.`,
+      },
+      {
+        id: "united-states",
+        prompt: "Which building is not in the United States?",
+        same: (building) => building.country === "United States",
+        odd: (building) => building.country !== "United States",
+        reason: (odd) => `${odd.name} is in ${odd.country}; the others are in the United States.`,
+        explanation: (odd) => `The rule is country. ${odd.name} is the odd one out because it is in ${odd.country}.`,
+      },
+      {
+        id: "china",
+        prompt: "Which building is not in China?",
+        same: (building) => building.country === "China",
+        odd: (building) => building.country !== "China",
+        reason: (odd) => `${odd.name} is in ${odd.country}; the others are in China.`,
+        explanation: (odd) => `The rule is country. ${odd.name} is the odd one out because it is not in China.`,
+      },
+      {
+        id: "supertall",
+        prompt: "Which building is not supertall?",
+        same: buildingIsSupertall,
+        odd: (building) => !buildingIsSupertall(building),
+        reason: (odd) => `${odd.name} is ${feet(odd.heightFt)}; the others are at least ${feet(984)}.`,
+        explanation: (odd) => `The rule is height. ${odd.name} is below the 984-foot supertall mark.`,
+      },
+      {
+        id: "megatall",
+        prompt: "Which building is not megatall?",
+        same: buildingIsMegaTall,
+        odd: (building) => !buildingIsMegaTall(building),
+        reason: (odd) => `${odd.name} is ${feet(odd.heightFt)}; the others are at least ${feet(1968)}.`,
+        explanation: (odd) => `The rule is height. ${odd.name} is below the 1,968-foot megatall mark.`,
+      },
+      {
+        id: "status",
+        prompt: "Which building is still being built?",
+        same: (building) => building.status === "finished",
+        odd: (building) => building.status !== "finished",
+        reason: (odd) => `${odd.name} is ${odd.status}; the others are finished.`,
+        explanation: (odd) => `The rule is building status. ${odd.name} is the odd one out because it is ${odd.status}.`,
+      },
+    ];
+    const eligibleRules = rules.filter((rule) => buildings.filter(rule.same).length >= 3 && buildings.some(rule.odd));
+    const rule = sampleSafe(eligibleRules, rules, seed + 5);
+    const same = shuffle(buildings.filter(rule.same), seed + 6).slice(0, 3);
+    const odd = sampleSafe(buildings.filter(rule.odd), buildings.filter((building) => !same.some((card) => card.id === building.id)), seed + 7);
+    const cards = shuffle([...same.map(buildingCard), buildingCard(odd)], seed + 8);
     return {
-      id: `${seed}-odd-buildings-${odd.id}`,
+      id: `${seed}-odd-buildings-${rule.id}-${odd.id}`,
       topic: currentTopic,
-      prompt: "Which building does not fit?",
+      prompt: rule.prompt,
       cards,
       answerId: odd.id,
-      reason: `${odd.name} is ${odd.status}; the others are finished.`,
-      explanation: `The rule is building status. ${odd.name} is the odd one out because it is ${odd.status}.`,
+      reason: rule.reason(odd),
+      explanation: rule.explanation(odd),
     };
   }
 
@@ -1090,15 +1171,16 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "peppers") {
     const pepper = sample(peppers, seed + 12);
-    const fake = sample(peppers.filter((item) => item.id !== pepper.id && item.heat !== pepper.heat), seed + 13);
+    const fakeHeat = sample(peppers.filter((item) => item.id !== pepper.id && item.heat !== pepper.heat), seed + 13);
+    const fakeShu = sampleSafe(peppers.filter((item) => item.id !== pepper.id && item.shuMax !== pepper.shuMax), peppers.filter((item) => item.id !== pepper.id), seed + 14);
     const useMath = difficulty > 1 && seedRandom(seed + 14) > 0.5;
     const statement = truthful
       ? useMath
         ? `${pepper.name} can reach about ${formatNumber(pepper.shuMax)} Scoville heat units.`
         : `${pepper.name} belongs in the ${pepper.heat} heat zone.`
       : useMath
-        ? `${pepper.name} can reach about ${formatNumber(fake.shuMax)} Scoville heat units.`
-        : `${pepper.name} belongs in the ${fake.heat} heat zone.`;
+        ? `${pepper.name} can reach about ${formatNumber(fakeShu.shuMax)} Scoville heat units.`
+        : `${pepper.name} belongs in the ${fakeHeat.heat} heat zone.`;
     return {
       id: `${seed}-fact-pepper-${pepper.id}`,
       topic: currentTopic,
@@ -1114,8 +1196,9 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "buildings") {
     const building = sample(buildings, seed + 15);
-    const fake = sample(buildings.filter((item) => item.id !== building.id), seed + 16);
     const factType = difficulty === 1 ? "city" : sample(["city", "height", "status"] as const, seed + 17);
+    const fakeCity = sampleSafe(buildings.filter((item) => item.id !== building.id && item.city !== building.city), buildings.filter((item) => item.id !== building.id), seed + 16);
+    const fakeHeight = sampleSafe(buildings.filter((item) => item.id !== building.id && item.heightFt !== building.heightFt), buildings.filter((item) => item.id !== building.id), seed + 18);
     const statement = truthful
       ? factType === "height"
         ? `${building.name} is ${feet(building.heightFt)} tall.`
@@ -1123,10 +1206,10 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
           ? `${building.name} is ${building.status}.`
           : `${building.name} is in ${building.city}.`
       : factType === "height"
-        ? `${building.name} is ${feet(fake.heightFt)} tall.`
+        ? `${building.name} is ${feet(fakeHeight.heightFt)} tall.`
         : factType === "status"
           ? `${building.name} is ${building.status === "finished" ? "under construction" : "finished"}.`
-          : `${building.name} is in ${fake.city}.`;
+          : `${building.name} is in ${fakeCity.city}.`;
     return {
       id: `${seed}-fact-building-${building.id}`,
       topic: currentTopic,
@@ -1142,12 +1225,29 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "space") {
     const space = sample(spaceCards, seed + 18);
-    const fake = sample(spaceCards.filter((item) => item.id !== space.id), seed + 19);
     const factType = difficulty === 1 ? "group" : sample(["group", "fact", "temperature", "distance"] as const, seed + 20);
     const realTemperature = space.surfaceTempK ?? space.meanSurfaceTempF;
-    const fakeTemperature = fake.surfaceTempK ?? fake.meanSurfaceTempF;
     const realDistance = space.distanceFromSunMillionMiles ?? space.distanceLightYears;
-    const fakeDistance = fake.distanceFromSunMillionMiles ?? fake.distanceLightYears;
+    const fakeGroup = sampleSafe(spaceCards.filter((item) => item.id !== space.id && item.group !== space.group), spaceCards.filter((item) => item.id !== space.id), seed + 19);
+    const fakeFact = sample(spaceCards.filter((item) => item.id !== space.id), seed + 21);
+    const fakeTemperatureCard = sampleSafe(
+      spaceCards.filter((item) => {
+        const value = item.surfaceTempK ?? item.meanSurfaceTempF;
+        return item.id !== space.id && value !== undefined && value !== realTemperature;
+      }),
+      spaceCards.filter((item) => item.id !== space.id),
+      seed + 22,
+    );
+    const fakeDistanceCard = sampleSafe(
+      spaceCards.filter((item) => {
+        const value = item.distanceFromSunMillionMiles ?? item.distanceLightYears;
+        return item.id !== space.id && value !== undefined && value !== realDistance;
+      }),
+      spaceCards.filter((item) => item.id !== space.id),
+      seed + 23,
+    );
+    const fakeTemperature = fakeTemperatureCard.surfaceTempK ?? fakeTemperatureCard.meanSurfaceTempF;
+    const fakeDistance = fakeDistanceCard.distanceFromSunMillionMiles ?? fakeDistanceCard.distanceLightYears;
     const statement = truthful
       ? factType === "temperature" && realTemperature !== undefined
         ? `${space.name} has a listed temperature of about ${spaceMetricDisplay(space, "temperature")}.`
@@ -1157,12 +1257,12 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
             ? space.fact
             : `${space.name} belongs in ${space.group}.`
       : factType === "temperature" && fakeTemperature !== undefined
-        ? `${space.name} has a listed temperature of about ${spaceMetricDisplay(fake, "temperature")}.`
+        ? `${space.name} has a listed temperature of about ${spaceMetricDisplay(fakeTemperatureCard, "temperature")}.`
         : factType === "distance" && fakeDistance !== undefined
-          ? `${space.name} has a listed distance of about ${spaceMetricDisplay(fake, "distance")}.`
+          ? `${space.name} has a listed distance of about ${spaceMetricDisplay(fakeDistanceCard, "distance")}.`
           : factType === "fact"
-            ? fake.fact
-            : `${space.name} belongs in ${fake.group}.`;
+            ? fakeFact.fact
+            : `${space.name} belongs in ${fakeGroup.group}.`;
     return {
       id: `${seed}-fact-space-${space.id}`,
       topic: currentTopic,
@@ -1178,8 +1278,11 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "jets") {
     const jet = sample(jets, seed + 18);
-    const fake = sample(jets.filter((item) => item.id !== jet.id), seed + 19);
     const factType = difficulty === 1 ? "category" : sample(["category", "speed", "range", "country"] as const, seed + 20);
+    const fakeCategory = sampleSafe(jets.filter((item) => item.id !== jet.id && item.category !== jet.category), jets.filter((item) => item.id !== jet.id), seed + 19);
+    const fakeSpeed = sampleSafe(jets.filter((item) => item.id !== jet.id && item.maxSpeedMph !== jet.maxSpeedMph), jets.filter((item) => item.id !== jet.id), seed + 21);
+    const fakeRange = sampleSafe(jets.filter((item) => item.id !== jet.id && item.rangeMiles !== jet.rangeMiles), jets.filter((item) => item.id !== jet.id), seed + 22);
+    const fakeCountry = sampleSafe(jets.filter((item) => item.id !== jet.id && item.country !== jet.country), jets.filter((item) => item.id !== jet.id), seed + 23);
     const statement = truthful
       ? factType === "speed"
         ? `${jet.name} can reach about ${formatNumber(jet.maxSpeedMph)} mph.`
@@ -1189,12 +1292,12 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
             ? `${jet.name} is from ${jet.country}.`
             : `${jet.name} is a ${jetCategoryLabels[jet.category]} aircraft.`
       : factType === "speed"
-        ? `${jet.name} can reach about ${formatNumber(fake.maxSpeedMph)} mph.`
+        ? `${jet.name} can reach about ${formatNumber(fakeSpeed.maxSpeedMph)} mph.`
         : factType === "range"
-          ? `${jet.name} has a range of about ${formatNumber(fake.rangeMiles)} miles.`
+          ? `${jet.name} has a range of about ${formatNumber(fakeRange.rangeMiles)} miles.`
           : factType === "country"
-            ? `${jet.name} is from ${fake.country}.`
-            : `${jet.name} is a ${jetCategoryLabels[fake.category]} aircraft.`;
+            ? `${jet.name} is from ${fakeCountry.country}.`
+            : `${jet.name} is a ${jetCategoryLabels[fakeCategory.category]} aircraft.`;
     return {
       id: `${seed}-fact-jet-${jet.id}`,
       topic: currentTopic,
@@ -1209,8 +1312,11 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   }
 
   const shark = sample(sharks, seed + 18);
-  const fake = sample(sharks.filter((item) => item.id !== shark.id), seed + 19);
   const factType = difficulty === 1 ? "family" : sample(["family", "speed", "size", "diet"] as const, seed + 20);
+  const fakeFamily = sampleSafe(sharks.filter((item) => item.id !== shark.id && item.family !== shark.family), sharks.filter((item) => item.id !== shark.id), seed + 19);
+  const fakeSpeed = sampleSafe(sharks.filter((item) => item.id !== shark.id && item.speedMph !== shark.speedMph), sharks.filter((item) => item.id !== shark.id), seed + 21);
+  const fakeSize = sampleSafe(sharks.filter((item) => item.id !== shark.id && item.lengthFt !== shark.lengthFt), sharks.filter((item) => item.id !== shark.id), seed + 22);
+  const fakeDiet = sampleSafe(sharks.filter((item) => item.id !== shark.id && item.diet !== shark.diet), sharks.filter((item) => item.id !== shark.id), seed + 23);
   const statement = truthful
     ? factType === "speed"
       ? `${shark.name} can swim about ${formatNumber(shark.speedMph)} mph.`
@@ -1220,12 +1326,12 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
           ? `${shark.name} eats ${shark.diet}.`
           : `${shark.name} is a ${shark.family}.`
     : factType === "speed"
-      ? `${shark.name} can swim about ${formatNumber(fake.speedMph)} mph.`
+      ? `${shark.name} can swim about ${formatNumber(fakeSpeed.speedMph)} mph.`
       : factType === "size"
-        ? `${shark.name} can grow to about ${feet(fake.lengthFt)}.`
+        ? `${shark.name} can grow to about ${feet(fakeSize.lengthFt)}.`
         : factType === "diet"
-          ? `${shark.name} eats ${fake.diet}.`
-          : `${shark.name} is a ${fake.family}.`;
+          ? `${shark.name} eats ${fakeDiet.diet}.`
+          : `${shark.name} is a ${fakeFamily.family}.`;
   return {
     id: `${seed}-fact-shark-${shark.id}`,
     topic: currentTopic,
