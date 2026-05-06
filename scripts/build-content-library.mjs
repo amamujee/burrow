@@ -170,6 +170,59 @@ LIMIT 1200`;
   ).slice(0, 350);
 };
 
+const jets = [
+  { id: "f-35-lightning-ii", name: "F-35 Lightning II", country: "United States", category: "stealth", sourceUrl: "https://www.wikidata.org/wiki/Q167811" },
+  { id: "f-22-raptor", name: "F-22 Raptor", country: "United States", category: "stealth", sourceUrl: "https://www.wikidata.org/wiki/Q182048" },
+  { id: "su-57", name: "Sukhoi Su-57", country: "Russia", category: "stealth", sourceUrl: "https://www.wikidata.org/wiki/Q753410" },
+  { id: "j-20", name: "Chengdu J-20", country: "China", category: "stealth", sourceUrl: "https://www.wikidata.org/wiki/Q1072516" },
+  { id: "b-2-spirit", name: "B-2 Spirit", country: "United States", category: "bomber", sourceUrl: "https://www.wikidata.org/wiki/Q179388" },
+  { id: "b-21-raider", name: "B-21 Raider", country: "United States", category: "bomber", sourceUrl: "https://www.wikidata.org/wiki/Q1649200" },
+  { id: "f-117-nighthawk", name: "F-117 Nighthawk", country: "United States", category: "stealth", sourceUrl: "https://www.wikidata.org/wiki/Q216713" },
+  { id: "sr-71-blackbird", name: "SR-71 Blackbird", country: "United States", category: "recon", sourceUrl: "https://www.wikidata.org/wiki/Q214581" },
+  { id: "u-2", name: "Lockheed U-2", country: "United States", category: "recon", sourceUrl: "https://www.wikidata.org/wiki/Q218416" },
+  { id: "f-15-eagle", name: "F-15 Eagle", country: "United States", category: "dogfighter", sourceUrl: "https://www.wikidata.org/wiki/Q207556" },
+  { id: "f-a-18-hornet", name: "F/A-18 Hornet", country: "United States", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q188155" },
+  { id: "f-a-18-super-hornet", name: "F/A-18E/F Super Hornet", country: "United States", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q182878" },
+  { id: "f-16-fighting-falcon", name: "F-16 Fighting Falcon", country: "United States", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q188153" },
+  { id: "f-14-tomcat", name: "F-14 Tomcat", country: "United States", category: "interceptor", sourceUrl: "https://www.wikidata.org/wiki/Q182979" },
+  { id: "a-10-thunderbolt-ii", name: "A-10 Thunderbolt II", country: "United States", category: "attack", sourceUrl: "https://www.wikidata.org/wiki/Q183550" },
+  { id: "rafale", name: "Dassault Rafale", country: "France", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q188163" },
+  { id: "eurofighter-typhoon", name: "Eurofighter Typhoon", country: "United Kingdom/Germany/Italy/Spain", category: "dogfighter", sourceUrl: "https://www.wikidata.org/wiki/Q187961" },
+  { id: "jas-39-gripen", name: "Saab JAS 39 Gripen", country: "Sweden", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q188158" },
+  { id: "mig-29", name: "Mikoyan MiG-29", country: "Russia", category: "dogfighter", sourceUrl: "https://www.wikidata.org/wiki/Q184905" },
+  { id: "su-27", name: "Sukhoi Su-27", country: "Russia", category: "dogfighter", sourceUrl: "https://www.wikidata.org/wiki/Q184907" },
+  { id: "su-35", name: "Sukhoi Su-35", country: "Russia", category: "dogfighter", sourceUrl: "https://www.wikidata.org/wiki/Q752099" },
+  { id: "su-34", name: "Sukhoi Su-34", country: "Russia", category: "attack", sourceUrl: "https://www.wikidata.org/wiki/Q753392" },
+  { id: "mig-31", name: "Mikoyan MiG-31", country: "Russia", category: "interceptor", sourceUrl: "https://www.wikidata.org/wiki/Q184910" },
+  { id: "tu-160", name: "Tupolev Tu-160", country: "Russia", category: "bomber", sourceUrl: "https://www.wikidata.org/wiki/Q183754" },
+  { id: "tu-22m", name: "Tupolev Tu-22M", country: "Russia", category: "bomber", sourceUrl: "https://www.wikidata.org/wiki/Q218247" },
+  { id: "b-1-lancer", name: "B-1 Lancer", country: "United States", category: "bomber", sourceUrl: "https://www.wikidata.org/wiki/Q193598" },
+  { id: "b-52-stratofortress", name: "B-52 Stratofortress", country: "United States", category: "bomber", sourceUrl: "https://www.wikidata.org/wiki/Q179391" },
+  { id: "mirage-2000", name: "Dassault Mirage 2000", country: "France", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q188167" },
+  { id: "mirage-f1", name: "Dassault Mirage F1", country: "France", category: "interceptor", sourceUrl: "https://www.wikidata.org/wiki/Q465786" },
+  { id: "sepecat-jaguar", name: "SEPECAT Jaguar", country: "United Kingdom/France", category: "attack", sourceUrl: "https://www.wikidata.org/wiki/Q213778" },
+  { id: "panavia-tornado", name: "Panavia Tornado", country: "United Kingdom/Germany/Italy", category: "attack", sourceUrl: "https://www.wikidata.org/wiki/Q161062" },
+  { id: "av-8b-harrier-ii", name: "AV-8B Harrier II", country: "United States/United Kingdom", category: "attack", sourceUrl: "https://www.wikidata.org/wiki/Q747709" },
+  { id: "hawker-harrier", name: "Hawker Siddeley Harrier", country: "United Kingdom", category: "attack", sourceUrl: "https://www.wikidata.org/wiki/Q383342" },
+  { id: "l-39-albatros", name: "Aero L-39 Albatros", country: "Czechoslovakia", category: "trainer", sourceUrl: "https://www.wikidata.org/wiki/Q217457" },
+  { id: "t-50-golden-eagle", name: "T-50 Golden Eagle", country: "South Korea", category: "trainer", sourceUrl: "https://www.wikidata.org/wiki/Q489410" },
+  { id: "yak-130", name: "Yakovlev Yak-130", country: "Russia", category: "trainer", sourceUrl: "https://www.wikidata.org/wiki/Q4514" },
+  { id: "hongdu-l-15", name: "Hongdu L-15", country: "China", category: "trainer", sourceUrl: "https://www.wikidata.org/wiki/Q740536" },
+  { id: "j-10", name: "Chengdu J-10", country: "China", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q620300" },
+  { id: "j-11", name: "Shenyang J-11", country: "China", category: "dogfighter", sourceUrl: "https://www.wikidata.org/wiki/Q625850" },
+  { id: "j-16", name: "Shenyang J-16", country: "China", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q3897132" },
+  { id: "fc-31", name: "Shenyang FC-31", country: "China", category: "stealth", sourceUrl: "https://www.wikidata.org/wiki/Q131176348" },
+  { id: "hal-tejas", name: "HAL Tejas", country: "India", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q319131" },
+  { id: "mitsubishi-f-2", name: "Mitsubishi F-2", country: "Japan", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q592814" },
+  { id: "f-15j", name: "Mitsubishi F-15J", country: "Japan", category: "interceptor", sourceUrl: "https://www.wikidata.org/wiki/Q1140645" },
+  { id: "f-ck-1", name: "AIDC F-CK-1 Ching-kuo", country: "Taiwan", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q465819" },
+  { id: "iai-kfir", name: "IAI Kfir", country: "Israel", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q610877" },
+  { id: "f-5", name: "Northrop F-5", country: "United States", category: "dogfighter", sourceUrl: "https://www.wikidata.org/wiki/Q192440" },
+  { id: "f-4-phantom-ii", name: "F-4 Phantom II", country: "United States", category: "multirole", sourceUrl: "https://www.wikidata.org/wiki/Q206734" },
+  { id: "english-electric-lightning", name: "English Electric Lightning", country: "United Kingdom", category: "interceptor", sourceUrl: "https://www.wikidata.org/wiki/Q844935" },
+  { id: "mig-21", name: "MiG-21", country: "Soviet Union", category: "interceptor", sourceUrl: "https://www.wikidata.org/wiki/Q182478" },
+];
+
 const toTs = (name, value) => `export const ${name} = ${JSON.stringify(value, null, 2)} as const;\n`;
 
 const peppers = await buildPeppers();
@@ -211,6 +264,14 @@ export type BuildingLibraryEntry = {
   sourceUrl: string;
 };
 
+export type JetLibraryEntry = {
+  id: string;
+  name: string;
+  country: string;
+  category: string;
+  sourceUrl: string;
+};
+
 export const contentLibrarySources: LibrarySource[] = [
   {
     id: "wikipepper",
@@ -236,18 +297,32 @@ export const contentLibrarySources: LibrarySource[] = [
     url: "https://www.ctbuh.org/HighRiseInfo/TallestDatabase/Criteria/tabid/446/language/en-US/Default.aspx",
     note: "The Council on Tall Buildings and Urban Habitat defines tall, supertall, and megatall building measurement standards.",
   },
+  {
+    id: "wikidata-aircraft",
+    label: "Wikidata military aircraft records",
+    url: "https://query.wikidata.org/",
+    note: "Structured aircraft records with country, manufacturer, aircraft role, and source pages.",
+  },
+  {
+    id: "wikimedia-aircraft",
+    label: "Wikimedia Commons aircraft media",
+    url: "https://commons.wikimedia.org/wiki/Category:Military_aircraft",
+    note: "Open aircraft photography used for the playable jet cards.",
+  },
 ];
 
 ${toTs("pepperLibrary", peppers)}
 ${toTs("sharkLibrary", sharks)}
 ${toTs("buildingLibrary", buildings)}
+${toTs("jetLibrary", jets)}
 export const contentLibraryStats = {
   peppers: pepperLibrary.length,
   sharks: sharkLibrary.length,
   buildings: buildingLibrary.length,
-  total: pepperLibrary.length + sharkLibrary.length + buildingLibrary.length,
+  jets: jetLibrary.length,
+  total: pepperLibrary.length + sharkLibrary.length + buildingLibrary.length + jetLibrary.length,
 } as const;
 `;
 
 fs.writeFileSync(outputFile, source);
-console.log(`Wrote ${outputFile}: ${peppers.length} peppers, ${sharks.length} sharks, ${buildings.length} buildings.`);
+console.log(`Wrote ${outputFile}: ${peppers.length} peppers, ${sharks.length} sharks, ${buildings.length} buildings, ${jets.length} jets.`);
