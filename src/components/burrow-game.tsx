@@ -108,7 +108,7 @@ const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
 type ChallengeMode = Exclude<GameMode, "mix">;
 const defaultMixPattern: ChallengeMode[] = ["quiz", "peek", "versus", "trumps", "number", "odd", "sort", "fact"];
 const selectableModeOptions = modeOptions.filter((item): item is (typeof modeOptions)[number] & { id: ChallengeMode } => item.id !== "mix");
-const defaultStarterTopics: KnowledgeTopic[] = ["peppers", "sharks"];
+const defaultStarterTopics: KnowledgeTopic[] = ["sharks", "jets"];
 const starterMixModes: ChallengeMode[] = ["quiz"];
 const gameTypeLabel = (modeId: ChallengeMode) => modeOptions.find((item) => item.id === modeId)?.label ?? "Game";
 
@@ -136,18 +136,12 @@ const normalizeInterests = (interests?: KnowledgeTopic[]) => {
   return cleaned.length ? Array.from(new Set(cleaned)) : [...defaultStarterTopics];
 };
 
-const starterProfileId = "starter-profile";
-const starterProfile = (legacyProgress?: Partial<Progress>): LearnerProfile => ({
-  id: starterProfileId,
-  name: "",
-  interests: [...defaultStarterTopics],
-  progress: normalizeProgress(legacyProgress),
-});
-const isLegacyDefaultProfileName = (name: string, index: number) => name === `Player ${index + 1}`;
-
 const defaultProfiles = (legacyProgress?: Partial<Progress>): ProfilesState => ({
-  activeProfileId: starterProfileId,
-  profiles: [starterProfile(legacyProgress)],
+  activeProfileId: "player-1",
+  profiles: [
+    { id: "player-1", name: "Player 1", interests: [...defaultStarterTopics], progress: normalizeProgress(legacyProgress) },
+    { id: "player-2", name: "Player 2", interests: [...defaultStarterTopics], progress: freshProgress() },
+  ],
 });
 
 const loadProfiles = (): ProfilesState => {
@@ -159,15 +153,11 @@ const loadProfiles = (): ProfilesState => {
       const parsed = JSON.parse(savedProfiles) as Partial<ProfilesState>;
       const profiles = (parsed.profiles ?? []).map((profile, index) => ({
         id: profile.id ?? `profile-${index}`,
-        name: profile.name?.trim().slice(0, 18) ?? "",
+        name: profile.name?.trim().slice(0, 18) || `Player ${index + 1}`,
         interests: normalizeInterests(profile.interests),
         progress: normalizeProgress(profile.progress),
       }));
       if (profiles.length) {
-        if (profiles.every((profile, index) => isLegacyDefaultProfileName(profile.name, index))) {
-          const activeLegacyProfile = profiles.find((profile) => profile.id === parsed.activeProfileId) ?? profiles[0];
-          return defaultProfiles(activeLegacyProfile.progress);
-        }
         return {
           activeProfileId: profiles.some((profile) => profile.id === parsed.activeProfileId) ? parsed.activeProfileId ?? profiles[0].id : profiles[0].id,
           profiles,
@@ -567,23 +557,15 @@ export function BurrowGame() {
     setCelebration(`${newProfile.name} is ready.`);
   };
 
-  const completeNameSetup = (name: string) => {
-    const cleanName = name.trim().slice(0, 18);
+  const renameActiveProfile = () => {
+    const name = window.prompt("Player name", activeProfile.name);
+    const cleanName = name?.trim().slice(0, 18);
     if (!cleanName) return;
-    const namedProfile: LearnerProfile = {
-      ...activeProfile,
-      id: activeProfile.id || `profile-${Date.now()}`,
-      name: cleanName,
-      interests: normalizeInterests(activeProfile.interests),
-      progress: normalizeProgress(activeProfile.progress),
-    };
-    const seed = freshSeed(cleanName.length + 29);
-    setProfilesState({
-      activeProfileId: namedProfile.id,
-      profiles: [namedProfile],
-    });
-    restartPlay("mixed", mode, namedProfile, seed);
-    setCelebration(`${namedProfile.name} is ready.`);
+    setProfilesState((current) => ({
+      ...current,
+      profiles: current.profiles.map((profile) => (profile.id === activeProfile.id ? { ...profile, name: cleanName } : profile)),
+    }));
+    setCelebration(`${cleanName}'s notes are ready.`);
   };
 
   const applyInterests = (nextInterests: KnowledgeTopic[], seedBasis: string, message: string) => {
@@ -925,10 +907,6 @@ export function BurrowGame() {
     setCelebration("Progress reset. Fresh start.");
   };
 
-  if (!profilesReady || !activeProfile.name.trim()) {
-    return <NameGate ready={profilesReady} onSubmit={completeNameSetup} />;
-  }
-
   return (
     <main className="field-guide-skin min-h-dvh overflow-x-hidden bg-[#0d332f] text-[#1d2528]">
       <section className="burrow-game-shell field-guide-shell flex min-h-dvh flex-col gap-1.5 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-1.5 md:p-2 min-[900px]:h-dvh min-[900px]:min-h-0 min-[900px]:overflow-hidden">
@@ -937,6 +915,7 @@ export function BurrowGame() {
           activeProfileId={activeProfile.id}
           onProfileChange={switchProfile}
           onCreateProfile={createProfile}
+          onRenameProfile={renameActiveProfile}
           level={progress.level}
           levelProgress={levelProgress}
           streak={progress.streak}
@@ -1095,62 +1074,12 @@ export function BurrowGame() {
   );
 }
 
-function NameGate({ ready, onSubmit }: { ready: boolean; onSubmit: (name: string) => void }) {
-  const [name, setName] = useState("");
-  const cleanName = name.trim();
-
-  return (
-    <main className="field-guide-skin grid min-h-dvh place-items-center bg-[#0d332f] p-4 text-[#1d2528]">
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (cleanName) onSubmit(cleanName);
-        }}
-        className="w-full max-w-md rounded-lg border-2 border-[#092421] bg-[#f7f0df] p-4 shadow-[4px_4px_0_#092421]"
-      >
-        <div className="flex items-center gap-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/icons/burrow-icon-64.png"
-            alt=""
-            aria-hidden="true"
-            className="h-12 w-12 shrink-0 rounded-lg border-2 border-[#092421] bg-[#eac57c] shadow-[2px_2px_0_#092421]"
-          />
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7d5a3f]">Burrow</p>
-            <h1 className="text-2xl font-black leading-tight text-[#321e16]">What is your name?</h1>
-          </div>
-        </div>
-        <label className="mt-4 block text-[10px] font-black uppercase tracking-[0.16em] text-[#72543e]" htmlFor="starter-name">
-          Name
-        </label>
-        <input
-          id="starter-name"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          maxLength={18}
-          autoComplete="given-name"
-          autoFocus={ready}
-          disabled={!ready}
-          className="mt-1 h-12 w-full rounded-lg border-2 border-[#092421] bg-white px-3 text-lg font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#f0c84b] disabled:opacity-60"
-        />
-        <button
-          type="submit"
-          disabled={!ready || !cleanName}
-          className="mt-4 min-h-12 w-full rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-4 text-base font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 disabled:cursor-not-allowed disabled:bg-[#e6d7bc]"
-        >
-          Start
-        </button>
-      </form>
-    </main>
-  );
-}
-
 function GameHud({
   profiles,
   activeProfileId,
   onProfileChange,
   onCreateProfile,
+  onRenameProfile,
   level,
   levelProgress,
   streak,
@@ -1176,6 +1105,7 @@ function GameHud({
   activeProfileId: string;
   onProfileChange: (profileId: string) => void;
   onCreateProfile: () => void;
+  onRenameProfile: () => void;
   level: number;
   levelProgress: number;
   streak: number;
@@ -1218,7 +1148,7 @@ function GameHud({
             <p className="hidden truncate text-[9px] font-black uppercase tracking-[0.18em] text-[#7d5a3f] min-[1240px]:block">Field notes for curious kids</p>
             <h1 className="truncate text-2xl font-black leading-none text-[#321e16]">Burrow</h1>
           </div>
-          <ProfilePicker profiles={profiles} activeProfileId={activeProfileId} onChange={onProfileChange} onCreate={onCreateProfile} />
+          <ProfilePicker profiles={profiles} activeProfileId={activeProfileId} onChange={onProfileChange} onCreate={onCreateProfile} onRename={onRenameProfile} />
         </div>
 
         <HudProgress level={level} levelProgress={levelProgress} streak={streak} accuracy={accuracy} />
@@ -2375,11 +2305,13 @@ function ProfilePicker({
   activeProfileId,
   onChange,
   onCreate,
+  onRename,
 }: {
   profiles: LearnerProfile[];
   activeProfileId: string;
   onChange: (profileId: string) => void;
   onCreate: () => void;
+  onRename: () => void;
 }) {
   return (
     <div className="flex min-w-0 shrink-0 items-center gap-1.5">
@@ -2397,7 +2329,17 @@ function ProfilePicker({
         ))}
       </select>
       <button
+        type="button"
+        onClick={onRename}
+        aria-label="Edit player name"
+        className="h-10 rounded-lg border-2 border-[#092421] bg-white px-2 text-xs font-black uppercase tracking-[0.06em] text-[#102f36] transition hover:bg-[#fff1bf] active:translate-y-0.5"
+      >
+        Edit
+      </button>
+      <button
+        type="button"
         onClick={onCreate}
+        aria-label="Add player"
         className="h-10 rounded-lg border-2 border-[#092421] bg-white px-3 text-sm font-black text-[#102f36] transition hover:bg-[#fff1bf] active:translate-y-0.5"
       >
         +
