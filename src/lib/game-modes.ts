@@ -798,9 +798,14 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   const currentTopic = topicOrder(topic, seed);
 
   if (currentTopic === "peppers") {
+    const step = difficulty === 1 ? 1000 : difficulty === 2 ? 5000 : 10000;
     const hotter = sampleSafe(peppers.filter((pepper) => pepper.shuMax >= 50000), peppers, seed + 1);
-    const milder = sampleSafe(peppers.filter((pepper) => pepper.id !== hotter.id && pepper.shuMax <= hotter.shuMax * 0.35), peppers.filter((pepper) => pepper.id !== hotter.id), seed + 2);
-    const step = difficulty === 1 ? 50000 : difficulty === 2 ? 25000 : 10000;
+    const nonzeroPeppers = peppers.filter((pepper) => pepper.id !== hotter.id && pepper.shuMax >= step);
+    const milder = sampleSafe(
+      nonzeroPeppers.filter((pepper) => pepper.shuMax <= hotter.shuMax * 0.35),
+      nonzeroPeppers,
+      seed + 2,
+    );
     const { biggerValue, smallerValue, answer } = roundedSubtractionPair(hotter.shuMax, milder.shuMax, step);
     return {
       id: `${seed}-number-peppers-${hotter.id}-${milder.id}`,
@@ -1007,7 +1012,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     return {
       id: `${seed}-sort-peppers`,
       topic: currentTopic,
-      prompt: "Tap the peppers from not spicy to insane.",
+      prompt: "Tap the peppers from least to most spicy.",
       cards: shuffle(cards, seed + 2),
       answerIds,
       explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
