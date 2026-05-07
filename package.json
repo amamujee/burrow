@@ -20,10 +20,11 @@
     "start": "next start",
     "lint": "eslint",
     "check:images": "node scripts/check-images.mjs",
+    "validate:packs": "node scripts/validate-packs.mjs",
     "test:e2e": "playwright test",
     "qa:content": "node scripts/qa-content.mjs",
     "sync:assets": "node scripts/sync-content-assets.mjs",
-    "verify": "npm run lint && npm run check:images && npm run qa:content && npm run build && npm run test:e2e"
+    "verify": "npm run lint && npm run validate:packs && npm run check:images && npm run qa:content && npm run build && npm run test:e2e"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

@@ -1,0 +1,51 @@
+{
+  "$schema": "../pack.schema.json",
+  "id": "new-pack-id",
+  "title": "New Pack Title",
+  "summary": "One sentence about the kid obsession this pack turns into reading and math games.",
+  "status": "draft",
+  "audience": {
+    "minAge": 5,
+    "maxAge": 9,
+    "readingLevel": "short facts, parent-approved vocabulary"
+  },
+  "recommendedModes": ["quiz", "versus", "trumps", "sort", "fact", "peek", "number", "odd"],
+  "sources": [
+    {
+      "label": "Source name",
+      "url": "https://example.com/source",
+      "note": "Use sources with clear rights and facts a parent can audit."
+    }
+  ],
+  "cards": [
+    {
+      "id": "example-card",
+      "name": "Example Card",
+      "image": "/burrow-assets/new-pack-id/example-card.jpg",
+      "imageAlt": "Example Card",
+      "imageCredit": "Photographer or source name",
+      "imageSourceUrl": "https://example.com/source-image",
+      "fact": "Write one short, concrete fact that a kid can read and a parent can verify.",
+      "stats": [
+        {
+          "id": "size",
+          "label": "Size",
+          "value": 10,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "speed",
+          "label": "Speed",
+          "value": 25,
+          "unit": "mph",
+          "direction": "higher"
+        }
+      ],
+      "categories": ["example category"],
+      "readingPrompts": [
+        "What is one detail you noticed in the fact?"
+      ]
+    }
+  ]
+}

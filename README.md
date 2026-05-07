@@ -53,16 +53,46 @@ Open [http://localhost:3000](http://localhost:3000), or go straight to the game 
 npm run dev          # Start the Next.js dev server
 npm run build        # Create a production build
 npm run start        # Run the production build
-npm run lint         # Run ESLint
-npm run check:images # Verify gameplay images are local and present
-npm run qa:content   # Run content quality checks
-npm run test:e2e     # Run Playwright tests
-npm run verify       # Run the full pre-publish check
+npm run lint           # Run ESLint
+npm run validate:packs # Validate repo-authored pack JSON files
+npm run check:images   # Verify gameplay images are local and present
+npm run qa:content     # Run content quality checks
+npm run test:e2e       # Run Playwright tests
+npm run verify         # Run the full pre-publish check
 ```
 
-## Content Packs
+## Make Your Own Pack
 
-Topic records live in `src/lib/game-data.ts`. Each card keeps structured stats plus image provenance:
+Burrow has a repo-level pack authoring format for parents and contributors who want to turn a kid's current obsession into a future playable pack. This is the v1 path: make a JSON pack in the repo, validate it, and keep it in your fork or open a pull request.
+
+Start by copying the template:
+
+```bash
+cp -R content/packs/_template content/packs/construction-trucks
+```
+
+Then edit `content/packs/construction-trucks/pack.json`:
+
+- Change `id` to match the folder name, such as `construction-trucks`.
+- Add a kid-friendly `title` and `summary`.
+- Add at least 16 cards for good replay variety.
+- Give each card a local image path like `/burrow-assets/construction-trucks/excavator.jpg`.
+- Put the matching image file in `public/burrow-assets/construction-trucks/`.
+- Reuse at least 2 stat IDs across most cards, such as `weight`, `speed`, `height`, or `length`.
+- Add categories so Burrow can later build odd-one-out and sorting rounds.
+- Include `imageCredit` and `imageSourceUrl` for every card.
+
+Validate the pack:
+
+```bash
+npm run validate:packs -- --pack construction-trucks
+```
+
+For a deeper walkthrough, see [docs/pack-authoring.md](docs/pack-authoring.md). The live game still uses the curated TypeScript topic data below. New JSON packs are the contributor-friendly staging format for future generic pack support.
+
+## Built-In Content Packs
+
+Topic records currently live in `src/lib/game-data.ts`. Each playable card keeps structured stats plus image provenance:
 
 - `contentImage(topic, id, sourceFile)` points gameplay at `/public/burrow-assets/...`.
 - `imageCredit` credits the curated source.
