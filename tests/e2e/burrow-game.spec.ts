@@ -57,6 +57,14 @@ test("flag image gives local feedback without leaking server details", async ({ 
   await expect(page.getByText("1 logged")).toBeVisible();
 });
 
+test("head to head comparison images can submit an answer", async ({ page }) => {
+  await chooseOnlyMode(page, "Head to Head");
+
+  await expect(page.getByText(/Look at both cards|Use the numbers/)).toBeVisible();
+  await page.getByRole("button", { name: /^Choose [AB]:/ }).first().click();
+  await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
+});
+
 test("peek rounds reset their reveal count after skip", async ({ page }) => {
   await chooseOnlyMode(page, "Peek");
 

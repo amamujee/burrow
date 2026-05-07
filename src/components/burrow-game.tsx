@@ -239,6 +239,7 @@ const isQuestionAnswerCorrect = (question: Question, choice: string) => choice =
 const comparisonLabelRank = (value: string) => (value.startsWith("A") ? 0 : value.startsWith("B") ? 1 : 2);
 const orderedComparisonCards = (cards: ComparisonCard[]) => [...cards].sort((a, b) => comparisonLabelRank(a.label) - comparisonLabelRank(b.label));
 const orderedComparisonChoices = (choices: string[]) => [...choices].sort((a, b) => comparisonLabelRank(a) - comparisonLabelRank(b));
+const comparisonChoiceForCard = (card: ComparisonCard) => `${card.label}: ${card.title}`;
 const sortCardById = (round: SortRound, id?: string) => round.cards.find((card) => card.id === id);
 const sortAnswerCardAt = (round: SortRound, index: number) => sortCardById(round, round.answerIds[index]);
 const sortAcceptableCardsAt = (round: SortRound, index: number) => {
@@ -1422,7 +1423,16 @@ function QuestionRun({
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <article className="relative min-h-[34dvh] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
-        {question.comparison ? <ComparisonStage cards={question.comparison} /> : <QuestionImage question={question} />}
+        {question.comparison ? (
+          <ComparisonStage
+            cards={question.comparison}
+            selected={selected}
+            answer={question.answer}
+            onSelect={onAnswer}
+          />
+        ) : (
+          <QuestionImage question={question} />
+        )}
         <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#092421]">
           {topicCatalog[question.topic].roundLabel}
         </div>
@@ -2500,31 +2510,58 @@ function TrumpCardView({ card, badge, revealStats }: { card: TopTrumpRound["play
   );
 }
 
-function ComparisonStage({ cards }: { cards: ComparisonCard[] }) {
+function ComparisonStage({
+  cards,
+  selected,
+  answer,
+  onSelect,
+}: {
+  cards: ComparisonCard[];
+  selected?: string | null;
+  answer?: string;
+  onSelect?: (choice: string) => void;
+}) {
   const displayCards = orderedComparisonCards(cards);
   return (
     <div className="grid h-full min-h-[260px] grid-cols-2 gap-1.5 bg-[#102f36] p-1.5">
-      {displayCards.map((card) => (
-        <div key={`${card.label}-${card.title}`} className="relative overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
-          <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#092421]">
-            {card.label}
-          </div>
-          <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} />
-          <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-1.5 shadow-[2px_2px_0_#092421]">
-            <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
-            <div className="mt-1 flex items-end justify-between gap-2">
-              <div>
-                <p className="text-[9px] font-black uppercase tracking-[0.12em] text-[#72543e]">{card.statLabel}</p>
-                <p className="text-lg font-black leading-none text-[#9f3f2b]">{card.statValue}</p>
+      {displayCards.map((card) => {
+        const choice = comparisonChoiceForCard(card);
+        const chosen = selected === choice;
+        const correctChoice = Boolean(selected && answer && choice === answer);
+        const cardState = correctChoice
+          ? "border-[#70d392] bg-[#70d392] shadow-[3px_3px_0_#70d392]"
+          : chosen
+            ? "border-[#f59a7d] bg-[#f59a7d] shadow-[3px_3px_0_#f59a7d]"
+            : "border-[#092421] bg-[#fff9ec] hover:border-[#f0c84b]";
+
+        return (
+          <button
+            key={`${card.label}-${card.title}`}
+            type="button"
+            onClick={() => onSelect?.(choice)}
+            aria-label={`Choose ${choice}`}
+            className={`relative overflow-hidden rounded-lg border-2 text-left transition active:translate-y-0.5 ${onSelect ? "cursor-pointer" : "cursor-default"} ${cardState}`}
+          >
+            <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#092421]">
+              {card.label}
+            </div>
+            <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} />
+            <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-1.5 shadow-[2px_2px_0_#092421]">
+              <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
+              <div className="mt-1 flex items-end justify-between gap-2">
+                <div>
+                  <p className="text-[9px] font-black uppercase tracking-[0.12em] text-[#72543e]">{card.statLabel}</p>
+                  <p className="text-lg font-black leading-none text-[#9f3f2b]">{card.statValue}</p>
+                </div>
+                <p className="text-right text-[11px] font-bold leading-tight text-[#5f6b5d]">{card.subStat}</p>
               </div>
-              <p className="text-right text-[11px] font-bold leading-tight text-[#5f6b5d]">{card.subStat}</p>
+              <div className="mt-1 h-2 overflow-hidden rounded-full bg-[#e6d7bc]">
+                <div className="h-full bg-[#9f3f2b]" style={{ width: `${Math.max(2, Math.min(100, (card.meterValue / card.meterMax) * 100))}%` }} />
+              </div>
             </div>
-            <div className="mt-1 h-2 overflow-hidden rounded-full bg-[#e6d7bc]">
-              <div className="h-full bg-[#9f3f2b]" style={{ width: `${Math.max(2, Math.min(100, (card.meterValue / card.meterMax) * 100))}%` }} />
-            </div>
-          </div>
-        </div>
-      ))}
+          </button>
+        );
+      })}
     </div>
   );
 }
