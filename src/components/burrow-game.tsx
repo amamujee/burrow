@@ -1942,10 +1942,16 @@ function NumberMode({
 }) {
   const answered = selected !== null;
   const answerLabel = `${round.answer.toLocaleString("en-US")} ${round.unit}`;
+  const expressionLabel = round.termValues.map((value) => value.toLocaleString("en-US")).join(` ${round.operator} `);
+  const stageBadge = round.operation === "addition" ? "Stack case" : "Number case";
+  const stageFooter =
+    round.operation === "addition"
+      ? `${round.cards.map((card) => card.title).join(" + ")} stacked together`
+      : `${round.biggerLabel} minus ${round.smallerLabel}`;
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <KnowledgeCardsStage cards={round.cards} badge="Number case" footer={`${round.biggerLabel} minus ${round.smallerLabel}`} />
+      <KnowledgeCardsStage cards={round.cards} badge={stageBadge} footer={stageFooter} />
 
       <article className="flex min-h-0 flex-col rounded-lg min-[900px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
         <div className="flex items-center justify-between gap-2">
@@ -1961,9 +1967,12 @@ function NumberMode({
         <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-3">
           <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">{round.statLabel}</p>
           <p className="mt-1 text-3xl font-black leading-none text-[#102f36]">
-            {round.biggerValue.toLocaleString("en-US")} - {round.smallerValue.toLocaleString("en-US")} = ?
+            {expressionLabel} = ?
           </p>
+          <p className="mt-1 text-xs font-black uppercase tracking-[0.1em] text-[#5f6b5d]">{round.resultLabel}</p>
         </div>
+
+        <NumberEquationBoard round={round} />
 
         <div className="mt-3 grid shrink-0 gap-2 xl:grid-cols-2">
           {round.choices.map((choice) => {
@@ -2004,6 +2013,57 @@ function NumberMode({
         {!answered && <SkipButton onClick={onSkip} />}
       </article>
     </section>
+  );
+}
+
+function NumberEquationBoard({ round }: { round: NumberRound }) {
+  const maxValue = Math.max(...round.termValues, round.answer, 1);
+  const terms = round.cards.map((card, index) => ({
+    card,
+    value: round.termValues[index] ?? card.statValue,
+    label: String.fromCharCode(65 + index),
+  }));
+
+  if (round.operation === "addition") {
+    return (
+      <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2">
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Stack</p>
+          <p className="text-xs font-black text-[#102f36]">{round.cards.length} parts</p>
+        </div>
+        <div className="mt-2 flex min-h-28 flex-col-reverse justify-end gap-1 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2">
+          {terms.map((term) => (
+            <div
+              key={`${round.id}-stack-${term.card.id}`}
+              className="grid min-h-9 grid-cols-[2rem_1fr_auto] items-center gap-2 rounded-md border-2 border-[#092421] bg-[#fff9ec] px-2 py-1 shadow-[2px_2px_0_#092421]"
+              style={{ width: `${Math.max(54, Math.min(100, (term.value / maxValue) * 100))}%` }}
+            >
+              <span className="grid h-6 w-6 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs font-black">{term.label}</span>
+              <span className="truncate text-sm font-black text-[#102f36]">{term.card.title}</span>
+              <span className="text-sm font-black text-[#9f3f2b]">{term.value.toLocaleString("en-US")}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2">
+      <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Subtract</p>
+      <div className="mt-2 grid gap-1.5">
+        {terms.map((term, index) => (
+          <div key={`${round.id}-compare-${term.card.id}`} className="grid grid-cols-[2rem_1fr_auto] items-center gap-2">
+            <span className="grid h-6 w-6 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs font-black">{index === 0 ? "+" : "-"}</span>
+            <span className="truncate text-sm font-black text-[#102f36]">{term.card.title}</span>
+            <span className="text-sm font-black text-[#9f3f2b]">{term.value.toLocaleString("en-US")}</span>
+            <span className="col-span-3 h-2 overflow-hidden rounded-full bg-[#e6d7bc]">
+              <span className="block h-full bg-[#9f3f2b]" style={{ width: `${Math.max(2, Math.min(100, (term.value / maxValue) * 100))}%` }} />
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -2448,7 +2508,10 @@ function CollectionStat({ label, value, libraryValue, wins, samples }: { label: 
 function KnowledgeCardsStage({ cards, badge, footer }: { cards: KnowledgeCard[]; badge: string; footer: string }) {
   return (
     <article className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
-      <div className="grid h-full min-h-[390px] grid-cols-2 gap-2 lg:min-h-0">
+      <div
+        className="grid h-full min-h-[390px] gap-2 lg:min-h-0"
+        style={{ gridTemplateColumns: cards.length > 2 ? "repeat(auto-fit, minmax(150px, 1fr))" : "repeat(2, minmax(0, 1fr))" }}
+      >
         {cards.map((card, index) => (
           <div key={`${badge}-${card.topic}-${card.id}`} className="relative overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
             <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#092421]">

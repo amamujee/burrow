@@ -94,10 +94,14 @@ export type RevealRound = {
 export type NumberRound = {
   id: string;
   topic: KnowledgeTopic;
+  operation: "addition" | "subtraction";
   prompt: string;
   cards: KnowledgeCard[];
   statLabel: string;
   unit: string;
+  operator: "+" | "-";
+  termValues: number[];
+  resultLabel: string;
   biggerLabel: string;
   smallerLabel: string;
   biggerValue: number;
@@ -800,11 +804,43 @@ const numberChoices = (answer: number, gap: number, seed: number) => {
   return shuffle([answer, ...shuffle(uniqueDistractors, seed + 1).slice(0, 3)], seed);
 };
 
+const shouldBuildAdditionRound = (difficulty: Difficulty, seed: number) => seedRandom(seed + difficulty * 23) > (difficulty === 1 ? 0.45 : 0.35);
+const additionTermCount = (difficulty: Difficulty, seed: number) => difficulty === 1 ? 2 : seedRandom(seed + difficulty * 17) > 0.45 ? 3 : 2;
+const additionPromptStart = (count: number) => count === 2 ? "Add these together" : "Add all three together";
+const stackedTotalLabel = (count: number) => count === 2 ? "stacked total" : "three-part total";
+const sumValues = (values: number[]) => values.reduce((total, value) => total + value, 0);
+
 export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed: number): NumberRound => {
   const currentTopic = topicOrder(topic, seed);
 
   if (currentTopic === "peppers") {
     const step = difficulty === 1 ? 1000 : difficulty === 2 ? 5000 : 10000;
+    if (shouldBuildAdditionRound(difficulty, seed)) {
+      const count = additionTermCount(difficulty, seed);
+      const selected = shuffle(peppers.filter((pepper) => pepper.shuMax >= step), seed + 1).slice(0, count);
+      const values = selected.map((pepper) => Math.max(step, roundTo(pepper.shuMax, step)));
+      const answer = sumValues(values);
+      return {
+        id: `${seed}-number-peppers-add-${selected.map((pepper) => pepper.id).join("-")}`,
+        topic: currentTopic,
+        operation: "addition",
+        prompt: `${additionPromptStart(count)}. What is their total Scoville score?`,
+        cards: selected.map((pepper, index) => roundedStatCard(pepperCard(pepper), values[index], "SHU")),
+        statLabel: "Scoville",
+        unit: "SHU",
+        operator: "+",
+        termValues: values,
+        resultLabel: stackedTotalLabel(count),
+        biggerLabel: selected[0]?.name ?? "Pepper",
+        smallerLabel: selected[1]?.name ?? "Pepper",
+        biggerValue: values[0] ?? 0,
+        smallerValue: values[1] ?? 0,
+        answer,
+        choices: numberChoices(answer, Math.max(step * 2, answer > 100000 ? 100000 : step), seed + 3),
+        explanation: `${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} SHU.`,
+      };
+    }
+
     const hotter = sampleSafe(peppers.filter((pepper) => pepper.shuMax >= 50000), peppers, seed + 1);
     const nonzeroPeppers = peppers.filter((pepper) => pepper.id !== hotter.id && pepper.shuMax >= step);
     const milder = sampleSafe(
@@ -816,10 +852,14 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     return {
       id: `${seed}-number-peppers-${hotter.id}-${milder.id}`,
       topic: currentTopic,
+      operation: "subtraction",
       prompt: `${hotter.name} can reach ${numberWithUnit(biggerValue, "SHU")}. ${milder.name} can reach ${numberWithUnit(smallerValue, "SHU")}. How much spicier is ${hotter.name}?`,
       cards: [roundedStatCard(pepperCard(hotter), biggerValue, "SHU"), roundedStatCard(pepperCard(milder), smallerValue, "SHU")],
       statLabel: "Scoville",
       unit: "SHU",
+      operator: "-",
+      termValues: [biggerValue, smallerValue],
+      resultLabel: "difference",
       biggerLabel: hotter.name,
       smallerLabel: milder.name,
       biggerValue,
@@ -831,17 +871,47 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   }
 
   if (currentTopic === "buildings") {
+    const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
+    if (shouldBuildAdditionRound(difficulty, seed)) {
+      const count = additionTermCount(difficulty, seed);
+      const selected = shuffle(buildings, seed + 4).slice(0, count);
+      const values = selected.map((building) => Math.max(step, roundTo(building.heightFt, step)));
+      const answer = sumValues(values);
+      return {
+        id: `${seed}-number-buildings-add-${selected.map((building) => building.id).join("-")}`,
+        topic: currentTopic,
+        operation: "addition",
+        prompt: `${additionPromptStart(count)}. If you stacked ${selected.map((building) => building.name).join(" + ")}, how tall would the stack be?`,
+        cards: selected.map((building, index) => roundedStatCard(buildingCard(building), values[index], "ft")),
+        statLabel: "Height",
+        unit: "ft",
+        operator: "+",
+        termValues: values,
+        resultLabel: stackedTotalLabel(count),
+        biggerLabel: selected[0]?.name ?? "Building",
+        smallerLabel: selected[1]?.name ?? "Building",
+        biggerValue: values[0] ?? 0,
+        smallerValue: values[1] ?? 0,
+        answer,
+        choices: numberChoices(answer, difficulty === 1 ? 400 : 200, seed + 6),
+        explanation: `${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} feet.`,
+      };
+    }
+
     const taller = sampleSafe(buildings.filter((building) => building.heightFt >= 1800), buildings, seed + 4);
     const shorter = sampleSafe(buildings.filter((building) => building.id !== taller.id && building.heightFt <= taller.heightFt - 150), buildings.filter((building) => building.id !== taller.id), seed + 5);
-    const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
     const { biggerValue, smallerValue, answer } = roundedSubtractionPair(taller.heightFt, shorter.heightFt, step);
     return {
       id: `${seed}-number-buildings-${taller.id}-${shorter.id}`,
       topic: currentTopic,
+      operation: "subtraction",
       prompt: `${taller.name} is ${feet(biggerValue)}. ${shorter.name} is ${feet(smallerValue)}. How much taller is ${taller.name}?`,
       cards: [roundedStatCard(buildingCard(taller), biggerValue, "ft"), roundedStatCard(buildingCard(shorter), smallerValue, "ft")],
       statLabel: "Height",
       unit: "ft",
+      operator: "-",
+      termValues: [biggerValue, smallerValue],
+      resultLabel: "difference",
       biggerLabel: taller.name,
       smallerLabel: shorter.name,
       biggerValue,
@@ -853,6 +923,33 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   }
 
   if (currentTopic === "space") {
+    if (shouldBuildAdditionRound(difficulty, seed)) {
+      const count = additionTermCount(difficulty, seed);
+      const step = difficulty === 1 ? 500 : difficulty === 2 ? 100 : 50;
+      const selected = shuffle(spaceCards.filter((space) => space.diameterMiles !== undefined), seed + 7).slice(0, count);
+      const values = selected.map((space) => Math.max(step, roundTo(space.diameterMiles ?? 0, step)));
+      const answer = sumValues(values);
+      return {
+        id: `${seed}-number-space-add-${selected.map((space) => space.id).join("-")}`,
+        topic: currentTopic,
+        operation: "addition",
+        prompt: `${additionPromptStart(count)}. If these space bodies lined up edge to edge, how wide would they be?`,
+        cards: selected.map((space, index) => roundedStatCard(spaceCard(space, "size"), values[index], "mi")),
+        statLabel: "Diameter",
+        unit: "mi",
+        operator: "+",
+        termValues: values,
+        resultLabel: stackedTotalLabel(count),
+        biggerLabel: selected[0]?.name ?? "Space body",
+        smallerLabel: selected[1]?.name ?? "Space body",
+        biggerValue: values[0] ?? 0,
+        smallerValue: values[1] ?? 0,
+        answer,
+        choices: numberChoices(answer, difficulty === 1 ? 1000 : 500, seed + 9),
+        explanation: `${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} miles.`,
+      };
+    }
+
     const moreMoons = sampleSafe(spaceCards.filter((space) => (space.moons ?? 0) >= 10), spaceCards.filter((space) => space.moons !== undefined), seed + 7);
     const fewerMoons = sampleSafe(spaceCards.filter((space) => space.id !== moreMoons.id && (space.moons ?? 0) < (moreMoons.moons ?? 0)), spaceCards.filter((space) => space.id !== moreMoons.id && space.moons !== undefined), seed + 8);
     const step = difficulty === 1 ? 10 : 5;
@@ -860,10 +957,14 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     return {
       id: `${seed}-number-space-${moreMoons.id}-${fewerMoons.id}`,
       topic: currentTopic,
+      operation: "subtraction",
       prompt: `${moreMoons.name} has ${formatNumber(biggerValue)} moons. ${fewerMoons.name} has ${formatNumber(smallerValue)} moons. How many more moons does ${moreMoons.name} have?`,
       cards: [roundedStatCard(spaceCard(moreMoons, "moons"), biggerValue, "moons"), roundedStatCard(spaceCard(fewerMoons, "moons"), smallerValue, "moons")],
       statLabel: "Moons",
       unit: "moons",
+      operator: "-",
+      termValues: [biggerValue, smallerValue],
+      resultLabel: "difference",
       biggerLabel: moreMoons.name,
       smallerLabel: fewerMoons.name,
       biggerValue,
@@ -875,17 +976,47 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   }
 
   if (currentTopic === "jets") {
+    const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
+    if (shouldBuildAdditionRound(difficulty, seed)) {
+      const count = additionTermCount(difficulty, seed);
+      const selected = shuffle(jets, seed + 10).slice(0, count);
+      const values = selected.map((jet) => Math.max(step, roundTo(jet.maxSpeedMph, step)));
+      const answer = sumValues(values);
+      return {
+        id: `${seed}-number-jets-add-${selected.map((jet) => jet.id).join("-")}`,
+        topic: currentTopic,
+        operation: "addition",
+        prompt: `${additionPromptStart(count)}. What is the total if you add their top speeds?`,
+        cards: selected.map((jet, index) => roundedStatCard(jetCard(jet, "speed"), values[index], "mph")),
+        statLabel: "Speed",
+        unit: "mph",
+        operator: "+",
+        termValues: values,
+        resultLabel: stackedTotalLabel(count),
+        biggerLabel: selected[0]?.name ?? "Jet",
+        smallerLabel: selected[1]?.name ?? "Jet",
+        biggerValue: values[0] ?? 0,
+        smallerValue: values[1] ?? 0,
+        answer,
+        choices: numberChoices(answer, difficulty === 1 ? 400 : 200, seed + 12),
+        explanation: `${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} mph.`,
+      };
+    }
+
     const faster = sampleSafe(jets.filter((jet) => jet.maxSpeedMph >= 1200), jets, seed + 10);
     const slower = sampleSafe(jets.filter((jet) => jet.id !== faster.id && jet.maxSpeedMph <= faster.maxSpeedMph - 250), jets.filter((jet) => jet.id !== faster.id), seed + 11);
-    const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
     const { biggerValue, smallerValue, answer } = roundedSubtractionPair(faster.maxSpeedMph, slower.maxSpeedMph, step);
     return {
       id: `${seed}-number-jets-${faster.id}-${slower.id}`,
       topic: currentTopic,
+      operation: "subtraction",
       prompt: `${faster.name} can reach about ${numberWithUnit(biggerValue, "mph")}. ${slower.name} can reach about ${numberWithUnit(smallerValue, "mph")}. How much faster is ${faster.name}?`,
       cards: [roundedStatCard(jetCard(faster, "speed"), biggerValue, "mph"), roundedStatCard(jetCard(slower, "speed"), smallerValue, "mph")],
       statLabel: "Speed",
       unit: "mph",
+      operator: "-",
+      termValues: [biggerValue, smallerValue],
+      resultLabel: "difference",
       biggerLabel: faster.name,
       smallerLabel: slower.name,
       biggerValue,
@@ -896,17 +1027,47 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     };
   }
 
+  const step = difficulty === 1 ? 5 : 2;
+  if (shouldBuildAdditionRound(difficulty, seed)) {
+    const count = additionTermCount(difficulty, seed);
+    const selected = shuffle(sharks, seed + 10).slice(0, count);
+    const values = selected.map((shark) => Math.max(step, roundTo(shark.lengthFt, step)));
+    const answer = sumValues(values);
+    return {
+      id: `${seed}-number-sharks-add-${selected.map((shark) => shark.id).join("-")}`,
+      topic: currentTopic,
+      operation: "addition",
+      prompt: `${additionPromptStart(count)}. If these sharks lined up nose to tail, how long would the line be?`,
+      cards: selected.map((shark, index) => roundedStatCard(sharkCard(shark), values[index], "ft")),
+      statLabel: "Length",
+      unit: "ft",
+      operator: "+",
+      termValues: values,
+      resultLabel: stackedTotalLabel(count),
+      biggerLabel: selected[0]?.name ?? "Shark",
+      smallerLabel: selected[1]?.name ?? "Shark",
+      biggerValue: values[0] ?? 0,
+      smallerValue: values[1] ?? 0,
+      answer,
+      choices: numberChoices(answer, difficulty === 1 ? 10 : 4, seed + 12),
+      explanation: `${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} feet.`,
+    };
+  }
+
   const bigger = sampleSafe(sharks.filter((shark) => shark.lengthFt >= 15), sharks, seed + 10);
   const smaller = sampleSafe(sharks.filter((shark) => shark.id !== bigger.id && shark.lengthFt <= bigger.lengthFt - 5), sharks.filter((shark) => shark.id !== bigger.id), seed + 11);
-  const step = difficulty === 1 ? 5 : 2;
   const { biggerValue, smallerValue, answer } = roundedSubtractionPair(bigger.lengthFt, smaller.lengthFt, step);
   return {
     id: `${seed}-number-sharks-${bigger.id}-${smaller.id}`,
     topic: currentTopic,
+    operation: "subtraction",
     prompt: `${bigger.name} can be ${feet(biggerValue)}. ${smaller.name} can be ${feet(smallerValue)}. How much longer is ${bigger.name}?`,
     cards: [roundedStatCard(sharkCard(bigger), biggerValue, "ft"), roundedStatCard(sharkCard(smaller), smallerValue, "ft")],
     statLabel: "Length",
     unit: "ft",
+    operator: "-",
+    termValues: [biggerValue, smallerValue],
+    resultLabel: "difference",
     biggerLabel: bigger.name,
     smallerLabel: smaller.name,
     biggerValue,

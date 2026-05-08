@@ -65,6 +65,16 @@ test("head to head comparison images can submit an answer", async ({ page }) => 
   await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
 });
 
+test("number rounds show an arithmetic equation and accept an answer", async ({ page }) => {
+  await chooseOnlyMode(page, "Numbers");
+
+  await expect(page.getByText(/Stack case|Number case/)).toBeVisible();
+  await expect(page.getByText(/\d[\d,]*\s[+-]\s\d[\d,]*(\s\+\s\d[\d,]*)?\s=\s\?/)).toBeVisible();
+
+  await page.locator("button").filter({ hasText: /\d[\d,]*\s(?:ft|mph|SHU|mi|moons)/ }).first().click();
+  await expect(page.getByText(/Answer:/)).toBeVisible();
+});
+
 test("peek rounds reset their reveal count after skip", async ({ page }) => {
   await chooseOnlyMode(page, "Peek");
 
