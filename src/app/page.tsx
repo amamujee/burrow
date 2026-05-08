@@ -24,7 +24,7 @@ export default function Home() {
         <div className="absolute inset-x-0 bottom-0 h-16 rounded-t-[50%] bg-[#4a271b]" />
 
         <div className="relative z-10 flex w-full flex-col px-5 py-5 sm:px-8 lg:px-12">
-          <header className="flex items-center justify-between gap-4">
+          <header className="flex items-center">
             <Link href="/" className="flex items-center gap-3" aria-label="Burrow home">
               <Image
                 src="/icons/burrow-icon-64.png"
@@ -35,14 +35,6 @@ export default function Home() {
               />
               <span className="text-xl font-black tracking-normal">Burrow</span>
             </Link>
-            <a
-              href="https://github.com/amamujee/burrow"
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-lg border-2 border-[#082329] bg-[#fffaf4]/85 px-3 py-2 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#082329] transition hover:-translate-y-0.5 hover:bg-white"
-            >
-              GitHub
-            </a>
           </header>
 
           <div className="grid flex-1 items-center gap-10 py-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(460px,0.9fr)] lg:py-8">
@@ -53,6 +45,27 @@ export default function Home() {
               </h1>
               <p className="mt-5 max-w-full text-xl font-bold leading-snug text-[#253f45] sm:max-w-xl sm:text-2xl">
                 Pick your kid&apos;s current obsession. Burrow turns it into quick games that practice reading and math in context.
+              </p>
+              <p className="mt-5 max-w-full text-base font-bold leading-relaxed text-[#4d4038] sm:max-w-xl sm:text-lg">
+                Built by{" "}
+                <a
+                  href="https://github.com/amamujee"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline decoration-[#102f36]/45 decoration-2 underline-offset-4 transition hover:text-[#102f36] hover:decoration-[#102f36]"
+                >
+                  @amamujee
+                </a>
+                . Source on{" "}
+                <a
+                  href="https://github.com/amamujee/burrow"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline decoration-[#102f36]/45 decoration-2 underline-offset-4 transition hover:text-[#102f36] hover:decoration-[#102f36]"
+                >
+                  GitHub
+                </a>
+                .
               </p>
               <div className="mt-8">
                 <Link
