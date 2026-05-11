@@ -159,6 +159,11 @@ const assertDistinctSortValues = (roundName, round) => {
   if (new Set(values).size !== values.length) critical.push(`${roundName}: duplicate ${round.statLabel} values in sort round`);
 };
 
+const assertPackPrimarySortStat = (deck) => {
+  const labels = new Set(deck.cards.map((card) => card.statLabel));
+  if (labels.size > 1) critical.push(`${deck.id}: mixed primary sort labels (${Array.from(labels).join(", ")})`);
+};
+
 const assertQuestion = async (roundName, question) => {
   if (!question.id || !question.prompt || !question.answer) critical.push(`${roundName}/${question.id ?? "missing"}: incomplete question`);
   if (!question.choices?.includes(question.answer)) critical.push(`${roundName}/${question.id}: answer missing from choices`);
@@ -231,6 +236,7 @@ const checkPlayablePackRoundBuilders = async () => {
   for (const pack of playablePacks) {
     const deck = packToPlayableDeck(pack);
     if (deck.cards.length < 4) critical.push(`${deck.id}: needs at least 4 playable cards`);
+    assertPackPrimarySortStat(deck);
 
     for (const difficulty of difficulties) {
       const seed = 20260511 + difficulty * 100 + deck.id.length;

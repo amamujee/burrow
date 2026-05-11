@@ -1148,7 +1148,7 @@
       "stats": [
         {
           "id": "length",
-          "label": "Wingspan",
+          "label": "Length",
           "value": 5,
           "unit": "ft",
           "direction": "higher"
