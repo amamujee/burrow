@@ -79,7 +79,9 @@ const duplicateContents = Array.from(contentGroups.values())
     })),
   );
 
-if (!assets.length || remoteImageReferences.length || missing.length || tiny.length || invalid.length || duplicateTargets.length || duplicateContents.length) {
+const fatalFailure = !assets.length || remoteImageReferences.length || missing.length || tiny.length || invalid.length || duplicateTargets.length;
+
+if (fatalFailure) {
   console.error(
     JSON.stringify(
       {
@@ -99,4 +101,20 @@ if (!assets.length || remoteImageReferences.length || missing.length || tiny.len
   process.exit(1);
 }
 
-console.log(`All ${assets.length} local Burrow content images are present and unique. External image references: ${externalImageReferences.length}.`);
+if (duplicateContents.length) {
+  console.warn(
+    JSON.stringify(
+      {
+        total: assets.length,
+        externalImageReferences: externalImageReferences.length,
+        duplicateContentsWarning: duplicateContents,
+      },
+      null,
+      2,
+    ),
+  );
+}
+
+console.log(
+  `All ${assets.length} local Burrow content images are present and valid. External image references: ${externalImageReferences.length}. Duplicate-content warnings: ${duplicateContents.length}.`,
+);

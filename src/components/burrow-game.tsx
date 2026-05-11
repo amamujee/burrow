@@ -2886,10 +2886,11 @@ function QuestionImage({ question }: { question: Pick<Question, "image" | "image
 function MediaImage({ image, imageAlt, topic }: { image: string; imageAlt: string; topic: RoundTopic }) {
   const [failedImage, setFailedImage] = useState<string | null>(null);
   const failed = failedImage === image;
+  const imageSurface = topic === "peppers" ? "bg-[#f3d7c8]" : topic === "sharks" ? "bg-[#d6ece8]" : topic === "space" ? "bg-[#dfe4ef]" : "bg-[#f7f0df]";
 
   if (failed) {
     return (
-      <div className={`flex h-full min-h-[260px] w-full items-center justify-center p-6 ${topic === "peppers" ? "bg-[#f3d7c8]" : topic === "sharks" ? "bg-[#d6ece8]" : topic === "space" ? "bg-[#dfe4ef]" : "bg-[#e3efe4]"}`}>
+      <div className={`flex h-full min-h-[260px] w-full items-center justify-center p-6 ${imageSurface}`}>
         <div className="w-full max-w-sm rounded-lg border-2 border-[#20383d] bg-white p-5 text-center shadow-[4px_4px_0_#20383d]">
           <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#20383d] bg-[#f0c84b] text-5xl">
             {topic === "peppers" ? "!" : topic === "sharks" ? "~" : topic === "space" ? "*" : "^"}
@@ -2902,8 +2903,10 @@ function MediaImage({ image, imageAlt, topic }: { image: string; imageAlt: strin
   }
 
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={image} alt={imageAlt} onError={() => setFailedImage(image)} className="field-guide-media h-full min-h-[260px] w-full object-cover" />
+    <div className={`field-guide-media flex h-full min-h-[260px] w-full items-center justify-center overflow-hidden ${imageSurface}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={image} alt={imageAlt} onError={() => setFailedImage(image)} className="h-full w-full object-contain p-3" />
+    </div>
   );
 }
 

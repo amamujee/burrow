@@ -797,6 +797,18 @@ const numberChoices = (answer: number, gap: number, seed: number) => {
 
 const cardsWithStats = (cards: readonly GenericKnowledgeCard[]) => cards.filter((card) => card.stats.length && Number.isFinite(card.statValue));
 
+const distinctStatCards = <T extends { statValue: number }>(cards: readonly T[], seed: number, requestedCount: number) => {
+  const selected: T[] = [];
+  const seenValues = new Set<number>();
+  for (const card of shuffle(cards.filter((item) => Number.isFinite(item.statValue)), seed)) {
+    if (seenValues.has(card.statValue)) continue;
+    seenValues.add(card.statValue);
+    selected.push(card);
+    if (selected.length === requestedCount) break;
+  }
+  return selected;
+};
+
 const statValueGap = (values: readonly number[]) => {
   const sorted = [...new Set(values.map((value) => Math.abs(value)).filter((value) => Number.isFinite(value)))].sort((a, b) => a - b);
   const max = sorted.at(-1) ?? 10;
@@ -821,7 +833,8 @@ export const buildSortRoundFromCards = (
   const pool = cardsWithStats(cards);
   if (pool.length < 3) throw new Error(`Need at least 3 stat cards to build a sort round for ${topic}`);
   const count = Math.min(pool.length, difficulty === 1 ? 3 : 4);
-  const selected = shuffle(pool, seed + 1).slice(0, count);
+  const selected = distinctStatCards(pool, seed + 1, count);
+  if (selected.length < 3) throw new Error(`Need at least 3 distinct stat values to build a sort round for ${topic}`);
   const sorted = [...selected].sort((a, b) => a.statValue - b.statValue);
 
   return {
@@ -1464,13 +1477,13 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   const count = difficulty === 1 ? 3 : 4;
 
   if (currentTopic === "peppers") {
-    const cards = shuffle(peppers, seed + 1).slice(0, count).map(pepperCard);
+    const cards = distinctStatCards(shuffle(peppers, seed + 1).map(pepperCard), seed + 2, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-peppers`,
       topic: currentTopic,
       prompt: "Tap the peppers from least to most spicy.",
-      cards: shuffle(cards, seed + 2),
+      cards: shuffle(cards, seed + 3),
       answerIds,
       explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
       statLabel: "Scoville heat",
@@ -1478,13 +1491,13 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   }
 
   if (currentTopic === "buildings") {
-    const cards = shuffle(buildings, seed + 3).slice(0, count).map(buildingCard);
+    const cards = distinctStatCards(shuffle(buildings, seed + 3).map(buildingCard), seed + 4, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-buildings`,
       topic: currentTopic,
       prompt: "Tap the buildings from shortest to tallest.",
-      cards: shuffle(cards, seed + 4),
+      cards: shuffle(cards, seed + 5),
       answerIds,
       explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
       statLabel: "Height",
@@ -1499,13 +1512,13 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       if (metric === "size") return item.radiusSolar !== undefined || item.diameterMiles !== undefined;
       return item.moons !== undefined;
     });
-    const cards = shuffle(pool, seed + 6).slice(0, count).map((space) => spaceCard(space, metric));
+    const cards = distinctStatCards(shuffle(pool, seed + 6).map((space) => spaceCard(space, metric)), seed + 7, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-space-${metric}`,
       topic: currentTopic,
       prompt: metric === "distance" ? "Tap the space cards from nearest to farthest." : metric === "temperature" ? "Tap from coolest to hottest." : metric === "size" ? "Tap from smallest to biggest." : "Tap from fewest moons to most moons.",
-      cards: shuffle(cards, seed + 7),
+      cards: shuffle(cards, seed + 8),
       answerIds,
       explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
       statLabel: metric === "distance" ? "Distance" : metric === "temperature" ? "Temperature" : metric === "size" ? "Size" : "Moons",
@@ -1514,13 +1527,13 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "jets") {
     const metric = sample(["speed", "range", "firepower"] as const, seed + 5);
-    const cards = shuffle(jets, seed + 6).slice(0, count).map((jet) => jetCard(jet, metric));
+    const cards = distinctStatCards(shuffle(jets, seed + 6).map((jet) => jetCard(jet, metric)), seed + 7, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-jets-${metric}`,
       topic: currentTopic,
       prompt: metric === "speed" ? "Tap the jets from slowest to fastest." : metric === "range" ? "Tap the jets from shortest range to longest range." : "Tap the jets from lowest firepower to highest firepower.",
-      cards: shuffle(cards, seed + 7),
+      cards: shuffle(cards, seed + 8),
       answerIds,
       explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
       statLabel: metric === "speed" ? "Speed" : metric === "range" ? "Range" : "Firepower",
@@ -1528,13 +1541,13 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   }
 
   const metric = sample(["length", "speed", "power"] as const, seed + 5);
-  const cards = shuffle(sharks, seed + 6).slice(0, count).map((shark) => sharkCard(shark, metric));
+  const cards = distinctStatCards(shuffle(sharks, seed + 6).map((shark) => sharkCard(shark, metric)), seed + 7, count);
   const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
   return {
     id: `${seed}-sort-sharks-${metric}`,
     topic: currentTopic,
     prompt: metric === "length" ? "Tap the sharks from smallest to biggest." : metric === "speed" ? "Tap the sharks from slowest to fastest." : "Tap the sharks from lowest power to highest power.",
-    cards: shuffle(cards, seed + 7),
+    cards: shuffle(cards, seed + 8),
     answerIds,
     explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
     statLabel: metric === "length" ? "Size" : metric === "speed" ? "Speed" : "Power",

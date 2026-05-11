@@ -154,6 +154,11 @@ const assertRoundCardImages = async (roundName, round) => {
   if (!cardsToCheck.length && !round.image) critical.push(`${roundName}/${round.id}: no image-bearing content`);
 };
 
+const assertDistinctSortValues = (roundName, round) => {
+  const values = round.cards.map((card) => card.statValue);
+  if (new Set(values).size !== values.length) critical.push(`${roundName}: duplicate ${round.statLabel} values in sort round`);
+};
+
 const assertQuestion = async (roundName, question) => {
   if (!question.id || !question.prompt || !question.answer) critical.push(`${roundName}/${question.id ?? "missing"}: incomplete question`);
   if (!question.choices?.includes(question.answer)) critical.push(`${roundName}/${question.id}: answer missing from choices`);
@@ -183,6 +188,7 @@ const checkRoundBuilders = async () => {
 
       const sortRound = buildSortRound(topic, difficulty, seed + 10);
       if (sortRound.cards.length < 3 || sortRound.cards.length !== sortRound.answerIds.length) critical.push(`${topic}/sort/d${difficulty}: bad card count`);
+      assertDistinctSortValues(`${topic}/sort/d${difficulty}`, sortRound);
       await assertRoundCardImages(`${topic}/sort/d${difficulty}`, sortRound);
 
       const factRound = buildFactRound(topic, difficulty, seed + 20);
@@ -231,6 +237,7 @@ const checkPlayablePackRoundBuilders = async () => {
 
       const sortRound = buildSortRoundFromCards(deck.cards, deck.id, difficulty, seed + 10);
       if (sortRound.cards.length < 3 || sortRound.cards.length !== sortRound.answerIds.length) critical.push(`${deck.id}/sort/d${difficulty}: bad card count`);
+      assertDistinctSortValues(`${deck.id}/sort/d${difficulty}`, sortRound);
       await assertRoundCardImages(`${deck.id}/sort/d${difficulty}`, sortRound);
 
       const factRound = buildFactRoundFromCards(deck.cards, deck.id, difficulty, seed + 20);
