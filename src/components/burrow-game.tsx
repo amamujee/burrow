@@ -1695,12 +1695,12 @@ function SortMode({
             <button
               key={card.id}
               onClick={() => onPick(card.id)}
-              className={`relative min-h-[185px] overflow-hidden rounded-lg border-2 text-left transition active:translate-y-0.5 ${
+              className={`relative flex min-h-[185px] flex-col overflow-hidden rounded-lg border-2 text-left transition active:translate-y-0.5 ${
                 pickedSet.has(card.id) ? "border-[#f0c84b] bg-[#f0c84b] opacity-55" : "border-[#092421] bg-white hover:border-[#f0c84b]"
               }`}
             >
-              <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} />
-              <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-2 shadow-[2px_2px_0_#092421]">
+              <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} compact />
+              <div className="m-2 mt-0 rounded-lg border-2 border-[#092421] bg-white/95 p-2 shadow-[2px_2px_0_#092421]">
                 <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
                 <p className="mt-1 text-lg font-black leading-none text-[#9f3f2b]">{card.statDisplay}</p>
                 <p className="mt-1 text-[11px] font-bold leading-tight text-[#5f6b5d]">{card.subStat}</p>
@@ -2883,14 +2883,15 @@ function QuestionImage({ question }: { question: Pick<Question, "image" | "image
   return <MediaImage image={question.image} imageAlt={question.imageAlt} topic={question.topic} />;
 }
 
-function MediaImage({ image, imageAlt, topic }: { image: string; imageAlt: string; topic: RoundTopic }) {
+function MediaImage({ image, imageAlt, topic, compact = false }: { image: string; imageAlt: string; topic: RoundTopic; compact?: boolean }) {
   const [failedImage, setFailedImage] = useState<string | null>(null);
   const failed = failedImage === image;
   const imageSurface = topic === "peppers" ? "bg-[#f3d7c8]" : topic === "sharks" ? "bg-[#d6ece8]" : topic === "space" ? "bg-[#dfe4ef]" : "bg-[#f7f0df]";
+  const frameSize = compact ? "min-h-0 flex-1" : "h-full min-h-[260px]";
 
   if (failed) {
     return (
-      <div className={`flex h-full min-h-[260px] w-full items-center justify-center p-6 ${imageSurface}`}>
+      <div className={`flex ${frameSize} w-full items-center justify-center p-6 ${imageSurface}`}>
         <div className="w-full max-w-sm rounded-lg border-2 border-[#20383d] bg-white p-5 text-center shadow-[4px_4px_0_#20383d]">
           <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#20383d] bg-[#f0c84b] text-5xl">
             {topic === "peppers" ? "!" : topic === "sharks" ? "~" : topic === "space" ? "*" : "^"}
@@ -2903,9 +2904,9 @@ function MediaImage({ image, imageAlt, topic }: { image: string; imageAlt: strin
   }
 
   return (
-    <div className={`field-guide-media flex h-full min-h-[260px] w-full items-center justify-center overflow-hidden ${imageSurface}`}>
+    <div className={`field-guide-media flex ${frameSize} w-full items-center justify-center overflow-hidden ${imageSurface}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={image} alt={imageAlt} onError={() => setFailedImage(image)} className="h-full w-full object-contain p-3" />
+      <img src={image} alt={imageAlt} onError={() => setFailedImage(image)} className="max-h-full max-w-full object-contain p-3" />
     </div>
   );
 }
