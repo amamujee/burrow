@@ -1328,6 +1328,711 @@
       "imageAlt": "Life restoration of Saber-toothed Cat",
       "imageCredit": "John Cummings / Wikimedia Commons",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Saber-toothed_cat_(Smilodon_fatalis)_reconstruction%2C_Natural_History_Museum%2C_London%2C_Mammals_Gallery.JPG"
+    },
+    {
+      "id": "apatosaurus",
+      "name": "Apatosaurus",
+      "fact": "Apatosaurus was a massive long-necked sauropod from Jurassic North America, with a whip-like tail and pillar-shaped legs.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 75,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 15,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 25,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 7,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "sauropod",
+        "late jurassic"
+      ],
+      "readingPrompts": [
+        "What body shape helped Apatosaurus reach high plants?"
+      ],
+      "image": "/burrow-assets/dinosaurs/apatosaurus.jpg",
+      "imageAlt": "Life restoration of Apatosaurus",
+      "imageCredit": "Wikimedia Commons paleoart contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Apatosaurus_louisae_by_durbed.jpg"
+    },
+    {
+      "id": "argentinosaurus",
+      "name": "Argentinosaurus",
+      "fact": "Argentinosaurus was one of the largest land animals ever discovered, a huge plant-eating titanosaur from South America.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 100,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 23,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 75,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 9,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "titanosaur",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "Why is Argentinosaurus famous among giant dinosaurs?"
+      ],
+      "image": "/burrow-assets/dinosaurs/argentinosaurus.jpg",
+      "imageAlt": "Life restoration of Argentinosaurus",
+      "imageCredit": "Wikimedia Commons paleoart contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Argentinosaurus_BW.jpg"
+    },
+    {
+      "id": "oviraptor",
+      "name": "Oviraptor",
+      "fact": "Oviraptor was a beaked, feathered dinosaur once blamed for stealing eggs, but later finds showed it may have guarded nests.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 6,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 3,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.08,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 4,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "omnivore",
+        "oviraptorosaur",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "What changed scientists' ideas about Oviraptor and eggs?"
+      ],
+      "image": "/burrow-assets/dinosaurs/oviraptor.jpg",
+      "imageAlt": "Life restoration of Oviraptor",
+      "imageCredit": "DinosaurPictures.org image contributors",
+      "imageSourceUrl": "https://dinosaurpictures.org/Oviraptor-pictures"
+    },
+    {
+      "id": "protoceratops",
+      "name": "Protoceratops",
+      "fact": "Protoceratops was a sheep-sized horned dinosaur with a neck frill, famous from fossils found in Mongolia.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 6,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 2,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.2,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 5,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "ceratopsian",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "Which famous horned dinosaur group was Protoceratops related to?"
+      ],
+      "image": "/burrow-assets/dinosaurs/protoceratops.png",
+      "imageAlt": "Life restoration of Protoceratops",
+      "imageCredit": "Wikimedia Commons paleoart contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Protoceratops_andrewsi_Restoration.png"
+    },
+    {
+      "id": "baryonyx",
+      "name": "Baryonyx",
+      "fact": "Baryonyx had a crocodile-like snout and a huge thumb claw, and fossil evidence suggests it ate fish as well as meat.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 30,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 9,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 2,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 8,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "spinosaurid",
+        "early cretaceous"
+      ],
+      "readingPrompts": [
+        "What kind of food did Baryonyx probably catch near water?"
+      ],
+      "image": "/burrow-assets/dinosaurs/baryonyx.jpg",
+      "imageAlt": "Life restoration of Baryonyx",
+      "imageCredit": "DinosaurPictures.org image contributors",
+      "imageSourceUrl": "https://dinosaurpictures.org/Baryonyx-pictures"
+    },
+    {
+      "id": "suchomimus",
+      "name": "Suchomimus",
+      "fact": "Suchomimus means crocodile mimic, a name inspired by its long narrow jaws and fish-catching spinosaurid body plan.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 36,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 10,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 4,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 8,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "spinosaurid",
+        "early cretaceous"
+      ],
+      "readingPrompts": [
+        "Why does the name Suchomimus mean crocodile mimic?"
+      ],
+      "image": "/burrow-assets/dinosaurs/suchomimus.png",
+      "imageAlt": "Life restoration of Suchomimus",
+      "imageCredit": "Wikimedia Commons paleoart contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Suchomimus_life_restoration_(2024).png"
+    },
+    {
+      "id": "ceratosaurus",
+      "name": "Ceratosaurus",
+      "fact": "Ceratosaurus was a Jurassic predator with a blade-like horn on its nose and bony armor bumps along its back.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 20,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 6,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 1,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 7,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "theropod",
+        "late jurassic"
+      ],
+      "readingPrompts": [
+        "What feature on Ceratosaurus made it easy to recognize?"
+      ],
+      "image": "/burrow-assets/dinosaurs/ceratosaurus.jpg",
+      "imageAlt": "Life restoration of Ceratosaurus",
+      "imageCredit": "Wikimedia Commons paleoart contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ceratosaurus_NT.jpg"
+    },
+    {
+      "id": "compsognathus",
+      "name": "Compsognathus",
+      "fact": "Compsognathus was a tiny, fast Jurassic meat-eater, once famous as one of the smallest known dinosaurs.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 3,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 1,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.01,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 2,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "theropod",
+        "late jurassic"
+      ],
+      "readingPrompts": [
+        "Why was Compsognathus famous for its size?"
+      ],
+      "image": "/burrow-assets/dinosaurs/compsognathus.png",
+      "imageAlt": "Life restoration of Compsognathus",
+      "imageCredit": "Wikimedia Commons paleoart contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Compsognathus_Conty.png"
+    },
+    {
+      "id": "corythosaurus",
+      "name": "Corythosaurus",
+      "fact": "Corythosaurus was a duck-billed dinosaur with a tall helmet-shaped crest that may have helped it make sounds.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 30,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 8,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 4,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 6,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "hadrosaur",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "What was special about Corythosaurus's head crest?"
+      ],
+      "image": "/burrow-assets/dinosaurs/corythosaurus.png",
+      "imageAlt": "Life restoration of Corythosaurus",
+      "imageCredit": "Wikimedia Commons paleoart contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Life_reconstruction_of_Corythosaurus_casuarius.png"
+    },
+    {
+      "id": "hadrosaurus",
+      "name": "Hadrosaurus",
+      "fact": "Hadrosaurus was an important duck-billed dinosaur because its discovery helped show that some dinosaurs stood on two legs.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 25,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 7,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 3,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 5,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "hadrosaur",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "Why was Hadrosaurus important to dinosaur science?"
+      ],
+      "image": "/burrow-assets/dinosaurs/hadrosaurus.png",
+      "imageAlt": "Life restoration of Hadrosaurus",
+      "imageCredit": "Wikimedia Commons paleoart contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Hadrosaurus_foulkii_restoration.png"
+    },
+    {
+      "id": "kentrosaurus",
+      "name": "Kentrosaurus",
+      "fact": "Kentrosaurus was a smaller stegosaur with plates near its shoulders and long spikes along its hips and tail.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 17,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 5,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 2,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 7,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "stegosaur",
+        "late jurassic"
+      ],
+      "readingPrompts": [
+        "How was Kentrosaurus protected?"
+      ],
+      "image": "/burrow-assets/dinosaurs/kentrosaurus.png",
+      "imageAlt": "Life restoration of Kentrosaurus",
+      "imageCredit": "Wikimedia Commons paleoart contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kentrosaurus_aethiopicus.png"
+    },
+    {
+      "id": "lambeosaurus",
+      "name": "Lambeosaurus",
+      "fact": "Lambeosaurus was a duck-billed dinosaur with a dramatic hatchet-shaped crest rising from the top of its head.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 30,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 8,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 5,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 6,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "hadrosaur",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "What head feature makes Lambeosaurus stand out?"
+      ],
+      "image": "/burrow-assets/dinosaurs/lambeosaurus.jpg",
+      "imageAlt": "Life restoration of Lambeosaurus",
+      "imageCredit": "DinosaurPictures.org image contributors",
+      "imageSourceUrl": "https://dinosaurpictures.org/Lambeosaurus-pictures"
+    },
+    {
+      "id": "acrocanthosaurus",
+      "name": "Acrocanthosaurus",
+      "fact": "Acrocanthosaurus was a large North American predator with tall spines along its back that formed a raised ridge.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 38,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 12,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 6,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 9,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "theropod",
+        "early cretaceous"
+      ],
+      "readingPrompts": [
+        "What did the tall spines on Acrocanthosaurus form?"
+      ],
+      "image": "/burrow-assets/dinosaurs/acrocanthosaurus.jpg",
+      "imageAlt": "Life restoration of Acrocanthosaurus",
+      "imageCredit": "DinosaurPictures.org image contributors",
+      "imageSourceUrl": "https://dinosaurpictures.org/Acrocanthosaurus-pictures"
+    },
+    {
+      "id": "albertosaurus",
+      "name": "Albertosaurus",
+      "fact": "Albertosaurus was a tyrannosaur from Canada, smaller than T. rex but still a fast and dangerous late Cretaceous hunter.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 30,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 9,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 2.5,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 8,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "tyrannosaur",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "Which giant predator was Albertosaurus related to?"
+      ],
+      "image": "/burrow-assets/dinosaurs/albertosaurus.jpg",
+      "imageAlt": "Life restoration of Albertosaurus",
+      "imageCredit": "DinosaurPictures.org image contributors",
+      "imageSourceUrl": "https://dinosaurpictures.org/Albertosaurus-pictures"
+    },
+    {
+      "id": "amargasaurus",
+      "name": "Amargasaurus",
+      "fact": "Amargasaurus was a sauropod with two rows of tall neck spines, giving it one of the strangest silhouettes in the pack.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 33,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 9,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 3,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 7,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "sauropod",
+        "early cretaceous"
+      ],
+      "readingPrompts": [
+        "What made Amargasaurus's neck look unusual?"
+      ],
+      "image": "/burrow-assets/dinosaurs/amargasaurus.jpg",
+      "imageAlt": "Life restoration of Amargasaurus",
+      "imageCredit": "DinosaurPictures.org image contributors",
+      "imageSourceUrl": "https://dinosaurpictures.org/Amargasaurus-pictures"
     }
   ]
 }
