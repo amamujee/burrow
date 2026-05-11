@@ -2,7 +2,7 @@
   "$schema": "../pack.schema.json",
   "id": "dinosaurs",
   "title": "Dinosaur Lab",
-  "summary": "Dinosaur icons and prehistoric favorites become reading, sorting, number, and Top Trumps challenges.",
+  "summary": "Dinosaur icons, Ice Age mammals, and prehistoric favorites become reading, sorting, number, and Top Trumps challenges.",
   "status": "playable",
   "audience": {
     "minAge": 5,
@@ -47,6 +47,16 @@
       "label": "Dino Wiki dinosaur articles",
       "url": "https://dino.fandom.com/wiki/Main_Page",
       "note": "General dinosaur facts and cross-checking context."
+    },
+    {
+      "label": "Britannica woolly mammoth facts",
+      "url": "https://www.britannica.com/animal/woolly-mammoth",
+      "note": "Woolly mammoth size, diet, adaptations, and extinction context."
+    },
+    {
+      "label": "Britannica saber-toothed cat facts",
+      "url": "https://www.britannica.com/animal/saber-toothed-cat",
+      "note": "Smilodon and saber-toothed cat background."
     }
   ],
   "cards": [
@@ -1224,6 +1234,100 @@
       "imageAlt": "Life restoration of Mosasaurus",
       "imageCredit": "Jonagold2000 / Wikimedia Commons",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mosasaurus_hoffmanni_life.jpg"
+    },
+    {
+      "id": "woolly-mammoth",
+      "name": "Woolly Mammoth",
+      "fact": "Woolly mammoths were shaggy Ice Age relatives of elephants, with huge curved tusks and thick coats for cold steppe tundra.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 16,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Shoulder height",
+          "value": 11,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 7,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 8,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "ice age mammal",
+        "herbivore",
+        "pleistocene"
+      ],
+      "readingPrompts": [
+        "What helped woolly mammoths stay warm in Ice Age habitats?"
+      ],
+      "image": "/burrow-assets/dinosaurs/woolly-mammoth.jpg",
+      "imageAlt": "Life restoration of Woolly Mammoth",
+      "imageCredit": "WolfmanSF / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Woolly_Mammoth-RBC.jpg"
+    },
+    {
+      "id": "smilodon",
+      "name": "Saber-toothed Cat",
+      "fact": "Smilodon is the famous saber-toothed cat often nicknamed a saber-toothed tiger, with long upper canine teeth for tackling prey.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 6,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Shoulder height",
+          "value": 3.5,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.3,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 9,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "ice age mammal",
+        "carnivore",
+        "pleistocene"
+      ],
+      "readingPrompts": [
+        "Why do people call Smilodon a saber-toothed cat?"
+      ],
+      "image": "/burrow-assets/dinosaurs/smilodon.jpg",
+      "imageAlt": "Life restoration of Saber-toothed Cat",
+      "imageCredit": "John Cummings / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Saber-toothed_cat_(Smilodon_fatalis)_reconstruction%2C_Natural_History_Museum%2C_London%2C_Mammals_Gallery.JPG"
     }
   ]
 }
