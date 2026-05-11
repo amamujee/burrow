@@ -1,0 +1,1229 @@
+{
+  "$schema": "../pack.schema.json",
+  "id": "dinosaurs",
+  "title": "Dinosaur Lab",
+  "summary": "Dinosaur icons and prehistoric favorites become reading, sorting, number, and Top Trumps challenges.",
+  "status": "playable",
+  "audience": {
+    "minAge": 5,
+    "maxAge": 10,
+    "readingLevel": "short fossil facts with parent-auditable numbers"
+  },
+  "recommendedModes": [
+    "trumps",
+    "sort",
+    "fact",
+    "peek",
+    "number",
+    "odd"
+  ],
+  "sources": [
+    {
+      "label": "Natural History Museum dinosaur guides",
+      "url": "https://www.nhm.ac.uk/discover/dino-directory.html",
+      "note": "General dinosaur size, diet, and discovery notes."
+    },
+    {
+      "label": "Encyclopaedia Britannica dinosaurs",
+      "url": "https://www.britannica.com/animal/dinosaur",
+      "note": "General dinosaur background and fossil context."
+    },
+    {
+      "label": "Wikimedia Commons life-restoration paleoart",
+      "url": "https://commons.wikimedia.org/wiki/Category:Dinosauria",
+      "note": "Local gameplay images use dinosaur life-restoration media from Commons file pages."
+    },
+    {
+      "label": "DinosaurPictures.org dinosaur profiles",
+      "url": "https://dinosaurpictures.org/",
+      "note": "Visual and kid-friendly dinosaur profile reference."
+    },
+    {
+      "label": "Dinopedia dinosaur articles",
+      "url": "https://dinopedia.fandom.com/",
+      "note": "General dinosaur background and species context."
+    },
+    {
+      "label": "Dino Wiki dinosaur articles",
+      "url": "https://dino.fandom.com/wiki/Main_Page",
+      "note": "General dinosaur facts and cross-checking context."
+    }
+  ],
+  "cards": [
+    {
+      "id": "tyrannosaurus-rex",
+      "name": "Tyrannosaurus rex",
+      "image": "/burrow-assets/dinosaurs/tyrannosaurus-rex.jpg",
+      "imageAlt": "Life restoration of Tyrannosaurus rex",
+      "imageCredit": "RJPalmerArt / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Rjpalmer_tyrannosaurusrex_(white_background).jpg",
+      "fact": "T. rex was a giant meat-eating theropod with banana-sized teeth and one of the strongest bites in dinosaur history.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 40,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 12,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 8,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 10,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "theropod",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "What body part made T. rex such a powerful predator?"
+      ]
+    },
+    {
+      "id": "triceratops",
+      "name": "Triceratops",
+      "image": "/burrow-assets/dinosaurs/triceratops.png",
+      "imageAlt": "Life restoration of Triceratops",
+      "imageCredit": "Tomopteryx / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Triceratops_by_Tom_Patker.png",
+      "fact": "Triceratops had three horns and a huge bony frill, useful for defense, display, and pushing through tough plants.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 30,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 10,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 12,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 8,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "horned dinosaur",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "How many horns did Triceratops have?"
+      ]
+    },
+    {
+      "id": "stegosaurus",
+      "name": "Stegosaurus",
+      "image": "/burrow-assets/dinosaurs/stegosaurus.png",
+      "imageAlt": "Life restoration of Stegosaurus",
+      "imageCredit": "Fred Wierum / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Stegosaurus_stenops_Life_Reconstruction.png",
+      "fact": "Stegosaurus carried tall plates along its back and sharp tail spikes that could make predators think twice.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 30,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 9,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 5.5,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 7,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "plated dinosaur",
+        "jurassic"
+      ],
+      "readingPrompts": [
+        "What weapon did Stegosaurus carry on its tail?"
+      ]
+    },
+    {
+      "id": "velociraptor",
+      "name": "Velociraptor",
+      "image": "/burrow-assets/dinosaurs/velociraptor.png",
+      "imageAlt": "Life restoration of Velociraptor",
+      "imageCredit": "Fred Wierum / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Velociraptor_Restoration.png",
+      "fact": "Velociraptor was a small feathered hunter, much closer to turkey-sized than the movie monster version.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 6.8,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 1.6,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.035,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 4,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "theropod",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "Was Velociraptor giant or small?"
+      ]
+    },
+    {
+      "id": "spinosaurus",
+      "name": "Spinosaurus",
+      "image": "/burrow-assets/dinosaurs/spinosaurus.png",
+      "imageAlt": "Life restoration of Spinosaurus",
+      "imageCredit": "Artwork by Joschua Knüppe. Article by Jamale Ijouiher. / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Spinosaurus_by_Joschua_Kn%C3%BCppe.png",
+      "fact": "Spinosaurus had a tall sail on its back and a crocodile-like snout that points to a fish-heavy diet.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 50,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 16,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 7.5,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 9,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "fish eater",
+        "theropod"
+      ],
+      "readingPrompts": [
+        "What clue tells us Spinosaurus may have eaten fish?"
+      ]
+    },
+    {
+      "id": "brachiosaurus",
+      "name": "Brachiosaurus",
+      "image": "/burrow-assets/dinosaurs/brachiosaurus.jpg",
+      "imageAlt": "Life restoration of Brachiosaurus",
+      "imageCredit": "Dmitry Bogdanov / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Brachiosaurus_DB.jpg",
+      "fact": "Brachiosaurus had long front legs and a high neck, helping it browse leaves far above many other plant eaters.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 85,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 40,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 35,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 7,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "sauropod",
+        "jurassic"
+      ],
+      "readingPrompts": [
+        "Why was Brachiosaurus good at reaching high leaves?"
+      ]
+    },
+    {
+      "id": "diplodocus",
+      "name": "Diplodocus",
+      "image": "/burrow-assets/dinosaurs/diplodocus.jpg",
+      "imageAlt": "Life restoration of Diplodocus",
+      "imageCredit": "Fred Wierum / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Diplodocus_carnegii.jpg",
+      "fact": "Diplodocus was one of the longest dinosaurs, with a whip-like tail and a long neck for sweeping through plants.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 85,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 15,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 12,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 6,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "sauropod",
+        "jurassic"
+      ],
+      "readingPrompts": [
+        "Which body parts made Diplodocus look so long?"
+      ]
+    },
+    {
+      "id": "ankylosaurus",
+      "name": "Ankylosaurus",
+      "image": "/burrow-assets/dinosaurs/ankylosaurus.png",
+      "imageAlt": "Life restoration of Ankylosaurus",
+      "imageCredit": "Emily Willoughby (e.deinonychus@gmail.com, http://emilywilloughby.com ) / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ankylosaurus_magniventris_reconstruction.png",
+      "fact": "Ankylosaurus wore bony armor and carried a heavy tail club, making it a walking tank of the Cretaceous.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 26,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 5.5,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 8,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 8,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "armored dinosaur",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "What made Ankylosaurus so hard to attack?"
+      ]
+    },
+    {
+      "id": "allosaurus",
+      "name": "Allosaurus",
+      "image": "/burrow-assets/dinosaurs/allosaurus.jpg",
+      "imageAlt": "Life restoration of Allosaurus",
+      "imageCredit": "Fred Wierum / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Allosaurus_Life_Restoration.jpg",
+      "fact": "Allosaurus was a large Jurassic predator with strong arms, sharp claws, and slicing teeth.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 28,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 10,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 2.3,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 8,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "theropod",
+        "jurassic"
+      ],
+      "readingPrompts": [
+        "Which tools helped Allosaurus hunt?"
+      ]
+    },
+    {
+      "id": "parasaurolophus",
+      "name": "Parasaurolophus",
+      "image": "/burrow-assets/dinosaurs/parasaurolophus.png",
+      "imageAlt": "Life restoration of Parasaurolophus",
+      "imageCredit": "Connor Ashbridge / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Life_reconstruction_of_Parasaurolophus_walkeri.png",
+      "fact": "Parasaurolophus had a long hollow crest that may have helped it make deep calls across the herd.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 31,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 8,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 3,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 5,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "duck-billed dinosaur",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "What may the crest have helped Parasaurolophus do?"
+      ]
+    },
+    {
+      "id": "iguanodon",
+      "name": "Iguanodon",
+      "image": "/burrow-assets/dinosaurs/iguanodon.png",
+      "imageAlt": "Life restoration of Iguanodon",
+      "imageCredit": "Sauroarchive / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Iguanodon_paleoart_2025.png",
+      "fact": "Iguanodon had thumb spikes and could move on two legs or four, depending on what it was doing.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 33,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 9,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 4.5,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 5,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "ornithopod",
+        "early cretaceous"
+      ],
+      "readingPrompts": [
+        "What special weapon did Iguanodon have on its hand?"
+      ]
+    },
+    {
+      "id": "carnotaurus",
+      "name": "Carnotaurus",
+      "image": "/burrow-assets/dinosaurs/carnotaurus.jpg",
+      "imageAlt": "Life restoration of Carnotaurus",
+      "imageCredit": "Andrey Atuchin / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Carnotaurus_sastrei_Andrey_Atuchin.jpg",
+      "fact": "Carnotaurus had short horns above its eyes and tiny arms, but it was still a fast meat-eating hunter.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 25,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 9,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 1.5,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 7,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "theropod",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "What feature made Carnotaurus look different from many predators?"
+      ]
+    },
+    {
+      "id": "deinonychus",
+      "name": "Deinonychus",
+      "image": "/burrow-assets/dinosaurs/deinonychus.png",
+      "imageAlt": "Life restoration of Deinonychus",
+      "imageCredit": "Fred Wierum / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Deinonychus_Restoration.png",
+      "fact": "Deinonychus had a large sickle-shaped claw on each foot, a clue that changed how scientists imagined active dinosaurs.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 11,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 3,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.16,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 5,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "theropod",
+        "early cretaceous"
+      ],
+      "readingPrompts": [
+        "What kind of claw made Deinonychus famous?"
+      ]
+    },
+    {
+      "id": "edmontosaurus",
+      "name": "Edmontosaurus",
+      "image": "/burrow-assets/dinosaurs/edmontosaurus.png",
+      "imageAlt": "Life restoration of Edmontosaurus",
+      "imageCredit": "Connor Ashbridge / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Life_reconstruction_of_Edmontosaurus_regalis.png",
+      "fact": "Edmontosaurus was a duck-billed herbivore that chewed tough plants with batteries of tightly packed teeth.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 39,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 10,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 4,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 5,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "duck-billed dinosaur",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "What helped Edmontosaurus chew tough plants?"
+      ]
+    },
+    {
+      "id": "pachycephalosaurus",
+      "name": "Pachycephalosaurus",
+      "image": "/burrow-assets/dinosaurs/pachycephalosaurus.jpg",
+      "imageAlt": "Life restoration of Pachycephalosaurus",
+      "imageCredit": "Fred Wierum / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pachycephalosaurus_Reconstruction.jpg",
+      "fact": "Pachycephalosaurus had a thick domed skull, one of the strangest head shapes in the dinosaur world.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 15,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 5,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.45,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 6,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "dome-headed dinosaur",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "Which skull feature made Pachycephalosaurus stand out?"
+      ]
+    },
+    {
+      "id": "therizinosaurus",
+      "name": "Therizinosaurus",
+      "image": "/burrow-assets/dinosaurs/therizinosaurus.jpg",
+      "imageAlt": "Life restoration of Therizinosaurus",
+      "imageCredit": "Danny Cicchetti / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Therizinosaurus_life_restoration.jpg",
+      "fact": "Therizinosaurus had enormous scythe-like claws, even though it was probably more of a plant eater than a hunter.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 33,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 16,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 5,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 6,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "theropod",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "Why is Therizinosaurus surprising?"
+      ]
+    },
+    {
+      "id": "archaeopteryx",
+      "name": "Archaeopteryx",
+      "image": "/burrow-assets/dinosaurs/archaeopteryx.jpg",
+      "imageAlt": "Life restoration of Archaeopteryx",
+      "imageCredit": "Durbed / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Archaeopteryx_lithographica_by_durbed.jpg",
+      "fact": "Archaeopteryx had feathers, wings, teeth, and a long bony tail, making it a famous early bird-like dinosaur.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 1.7,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 0.8,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.002,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 2,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "bird-like dinosaur",
+        "jurassic"
+      ],
+      "readingPrompts": [
+        "What features made Archaeopteryx bird-like?"
+      ]
+    },
+    {
+      "id": "utahraptor",
+      "name": "Utahraptor",
+      "image": "/burrow-assets/dinosaurs/utahraptor.png",
+      "imageAlt": "Life restoration of Utahraptor",
+      "imageCredit": "Fred Wierum / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Utahraptor_Restoration.png",
+      "fact": "Utahraptor was a much larger raptor than Velociraptor, with powerful legs and a huge curved claw.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 23,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 5.5,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.7,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 7,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "theropod",
+        "early cretaceous"
+      ],
+      "readingPrompts": [
+        "How was Utahraptor different from Velociraptor?"
+      ]
+    },
+    {
+      "id": "maiasaura",
+      "name": "Maiasaura",
+      "image": "/burrow-assets/dinosaurs/maiasaura.jpg",
+      "imageAlt": "Life restoration of Maiasaura",
+      "imageCredit": "User:Debivort / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Maiasaura_herd_pano.jpg",
+      "fact": "Maiasaura means good mother lizard, a name inspired by nesting sites with eggs and young dinosaurs.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 30,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 8,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 3,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 4,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "duck-billed dinosaur",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "What discovery helped inspire the name Maiasaura?"
+      ]
+    },
+    {
+      "id": "dilophosaurus",
+      "name": "Dilophosaurus",
+      "image": "/burrow-assets/dinosaurs/dilophosaurus.jpg",
+      "imageAlt": "Life restoration of Dilophosaurus",
+      "imageCredit": "Petr Menshikov ( https://twitter.com/Petr75113553 ; https://vk.com/prehistoricproduction ) / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Dilophosaurus_2020.jpg",
+      "fact": "Dilophosaurus had two thin crests on its head; real fossils do not show the movie-style neck frill.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 20,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 5,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.4,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 6,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "theropod",
+        "jurassic"
+      ],
+      "readingPrompts": [
+        "What did Dilophosaurus really have on its head?"
+      ]
+    },
+    {
+      "id": "brontosaurus",
+      "name": "Brontosaurus",
+      "fact": "Brontosaurus was the classic 'thunder lizard,' a long-necked plant eater that became one of the most famous sauropods ever.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 72,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 15,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 17,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 7,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "herbivore",
+        "sauropod",
+        "late jurassic"
+      ],
+      "readingPrompts": [
+        "Why do people call Brontosaurus the thunder lizard?"
+      ],
+      "image": "/burrow-assets/dinosaurs/brontosaurus.png",
+      "imageAlt": "Life restoration of Brontosaurus",
+      "imageCredit": "Tom Parker / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Brontosaurus_by_Tom_Parker.png"
+    },
+    {
+      "id": "giganotosaurus",
+      "name": "Giganotosaurus",
+      "fact": "Giganotosaurus was a huge meat-eating dinosaur from South America, close to T. rex size but from a different dinosaur family.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 43,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 13,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 8,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 10,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "carnivore",
+        "theropod",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "Which continent did Giganotosaurus live on?"
+      ],
+      "image": "/burrow-assets/dinosaurs/giganotosaurus.jpg",
+      "imageAlt": "Life restoration of Giganotosaurus",
+      "imageCredit": "Durbed / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Giganotosaurus_carolinii_by_durbed.jpg"
+    },
+    {
+      "id": "gallimimus",
+      "name": "Gallimimus",
+      "fact": "Gallimimus looked like a giant ostrich with a long tail, long legs, and a toothless beak built for speed.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 20,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 6,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.5,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 5,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "omnivore",
+        "ornithomimid",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "What modern bird does Gallimimus remind people of?"
+      ],
+      "image": "/burrow-assets/dinosaurs/gallimimus.png",
+      "imageAlt": "Life restoration of Gallimimus",
+      "imageCredit": "PaleoNeolitic / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Gallimimus_Restoration.png"
+    },
+    {
+      "id": "pterodactylus",
+      "name": "Pterodactylus",
+      "fact": "Pterodactylus is the famous animal many people call a pterodactyl. It was a flying pterosaur, not a dinosaur.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Wingspan",
+          "value": 5,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Body length",
+          "value": 3,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.02,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 4,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "pterosaur",
+        "carnivore",
+        "late jurassic"
+      ],
+      "readingPrompts": [
+        "Was Pterodactylus a dinosaur or a flying pterosaur?"
+      ],
+      "image": "/burrow-assets/dinosaurs/pterodactylus.png",
+      "imageAlt": "Life restoration of Pterodactylus",
+      "imageCredit": "Matthew Martyniuk / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pterodactylus_BMMS7_life.png"
+    },
+    {
+      "id": "mosasaurus",
+      "name": "Mosasaurus",
+      "fact": "Mosasaurus was a giant sea reptile and a fan-favorite mosasaur. It lived with dinosaurs, but it was not a dinosaur.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 50,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Body depth",
+          "value": 7,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 15,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 10,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "marine reptile",
+        "carnivore",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "Was Mosasaurus a dinosaur or a sea reptile?"
+      ],
+      "image": "/burrow-assets/dinosaurs/mosasaurus.jpg",
+      "imageAlt": "Life restoration of Mosasaurus",
+      "imageCredit": "Jonagold2000 / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mosasaurus_hoffmanni_life.jpg"
+    }
+  ]
+}

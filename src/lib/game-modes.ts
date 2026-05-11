@@ -20,6 +20,7 @@ import {
   type TopicId,
 } from "./game-data";
 import { scoreFeaturedContent } from "./content-quality";
+import { sample, sampleSafe, seedRandom, shuffle } from "./random";
 
 export type GameMode = "mix" | "quiz" | "versus" | "trumps" | "sort" | "fact" | "peek" | "number" | "odd";
 
@@ -42,10 +43,11 @@ export const modeOptions: {
 
 export type { KnowledgeTopic } from "./game-data";
 export type TopicScope = TopicId | readonly KnowledgeTopic[];
+export type RoundTopic = string;
 
 export type KnowledgeCard = {
   id: string;
-  topic: KnowledgeTopic;
+  topic: RoundTopic;
   title: string;
   image: string;
   imageAlt: string;
@@ -61,7 +63,7 @@ export type KnowledgeCard = {
 
 export type SortRound = {
   id: string;
-  topic: KnowledgeTopic;
+  topic: RoundTopic;
   prompt: string;
   cards: KnowledgeCard[];
   answerIds: string[];
@@ -71,7 +73,7 @@ export type SortRound = {
 
 export type FactRound = {
   id: string;
-  topic: KnowledgeTopic;
+  topic: RoundTopic;
   prompt: string;
   statement: string;
   image: string;
@@ -83,7 +85,7 @@ export type FactRound = {
 
 export type RevealRound = {
   id: string;
-  topic: KnowledgeTopic;
+  topic: RoundTopic;
   prompt: string;
   card: KnowledgeCard;
   choices: string[];
@@ -93,7 +95,7 @@ export type RevealRound = {
 
 export type NumberRound = {
   id: string;
-  topic: KnowledgeTopic;
+  topic: RoundTopic;
   operation: "addition" | "subtraction";
   prompt: string;
   cards: KnowledgeCard[];
@@ -113,7 +115,7 @@ export type NumberRound = {
 
 export type OddRound = {
   id: string;
-  topic: KnowledgeTopic;
+  topic: RoundTopic;
   prompt: string;
   cards: KnowledgeCard[];
   answerId: string;
@@ -133,7 +135,7 @@ export type TopTrumpStat = {
 
 export type TopTrumpCard = {
   id: string;
-  topic: KnowledgeTopic;
+  topic: RoundTopic;
   title: string;
   image: string;
   imageAlt: string;
@@ -145,10 +147,15 @@ export type TopTrumpCard = {
 
 export type TopTrumpRound = {
   id: string;
-  topic: KnowledgeTopic;
+  topic: RoundTopic;
   prompt: string;
   player: TopTrumpCard;
   computer: TopTrumpCard;
+};
+
+export type GenericKnowledgeCard = KnowledgeCard & {
+  categories: string[];
+  stats: TopTrumpStat[];
 };
 
 const formatNumber = (value: number) => value.toLocaleString("en-US");
@@ -157,22 +164,6 @@ const numberWithUnit = (value: number, unit: string) => `${formatNumber(value)} 
 const pounds = (value: number) => `${formatNumber(value)} lb`;
 const inches = (value: number) => `${value.toFixed(value >= 10 ? 0 : 1)} in`;
 
-const seedRandom = (seed: number) => {
-  const x = Math.sin(seed * 999) * 10000;
-  return x - Math.floor(x);
-};
-
-const shuffle = <T,>(items: T[], seed: number) => {
-  const copy = [...items];
-  for (let i = copy.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(seedRandom(seed + i) * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-};
-
-const sample = <T,>(items: T[], seed: number) => items[Math.floor(seedRandom(seed) * items.length) % items.length];
-const sampleSafe = <T,>(items: T[], fallback: T[], seed: number) => sample(items.length ? items : fallback, seed);
 const roundTo = (value: number, step: number) => Math.round(value / step) * step;
 const roundedSubtractionPair = (bigger: number, smaller: number, step: number) => {
   const biggerValue = Math.max(step, roundTo(bigger, step));
@@ -802,6 +793,230 @@ const numberChoices = (answer: number, gap: number, seed: number) => {
   const candidates = [answer, Math.max(gap, answer - gap * 2), answer + gap * 2, answer + gap * 3, Math.max(gap, answer - gap * 3), answer + gap * 4, answer + gap * 5];
   const uniqueDistractors = Array.from(new Set(candidates.filter((item) => item >= 0 && item !== answer)));
   return shuffle([answer, ...shuffle(uniqueDistractors, seed + 1).slice(0, 3)], seed);
+};
+
+const cardsWithStats = (cards: readonly GenericKnowledgeCard[]) => cards.filter((card) => card.stats.length && Number.isFinite(card.statValue));
+
+const statValueGap = (values: readonly number[]) => {
+  const sorted = [...new Set(values.map((value) => Math.abs(value)).filter((value) => Number.isFinite(value)))].sort((a, b) => a - b);
+  const max = sorted.at(-1) ?? 10;
+  if (max >= 1000) return 100;
+  if (max >= 100) return 10;
+  if (max >= 10) return 2;
+  return 1;
+};
+
+const sameStatCard = (card: GenericKnowledgeCard, value: number): KnowledgeCard => ({
+  ...card,
+  statValue: value,
+  statDisplay: numberWithUnit(value, card.stats[0]?.display.replace(formatNumber(card.stats[0].value), "").trim() || ""),
+});
+
+export const buildSortRoundFromCards = (
+  cards: readonly GenericKnowledgeCard[],
+  topic: RoundTopic,
+  difficulty: Difficulty,
+  seed: number,
+): SortRound => {
+  const pool = cardsWithStats(cards);
+  if (pool.length < 3) throw new Error(`Need at least 3 stat cards to build a sort round for ${topic}`);
+  const count = Math.min(pool.length, difficulty === 1 ? 3 : 4);
+  const selected = shuffle(pool, seed + 1).slice(0, count);
+  const sorted = [...selected].sort((a, b) => a.statValue - b.statValue);
+
+  return {
+    id: `${seed}-sort-${topic}-${selected.map((card) => card.id).join("-")}`,
+    topic,
+    prompt: `Tap from lowest to highest ${selected[0].statLabel}.`,
+    cards: shuffle(selected, seed + 2),
+    answerIds: sorted.map((card) => card.id),
+    explanation: sorted.map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
+    statLabel: selected[0].statLabel,
+  };
+};
+
+export const buildRevealRoundFromCards = (
+  cards: readonly GenericKnowledgeCard[],
+  topic: RoundTopic,
+  difficulty: Difficulty,
+  seed: number,
+): RevealRound => {
+  if (cards.length < 3) throw new Error(`Need at least 3 cards to build a peek round for ${topic}`);
+  const count = Math.min(cards.length, difficulty === 1 ? 3 : 4);
+  const card = sample(cards, seed + 1);
+  const distractors = shuffle(cards.filter((item) => item.id !== card.id).map((item) => item.title), seed + 2).slice(0, count - 1);
+
+  return {
+    id: `${seed}-peek-${topic}-${card.id}`,
+    topic,
+    prompt: "What is hiding in the picture?",
+    card,
+    choices: shuffle([card.title, ...distractors], seed + 3),
+    answer: card.title,
+    explanation: `${card.title}: ${card.fact}`,
+  };
+};
+
+export const buildFactRoundFromCards = (
+  cards: readonly GenericKnowledgeCard[],
+  topic: RoundTopic,
+  difficulty: Difficulty,
+  seed: number,
+): FactRound => {
+  const pool = cardsWithStats(cards);
+  if (pool.length < 2) throw new Error(`Need at least 2 stat cards to build a fact round for ${topic}`);
+  const truthful = seedRandom(seed + 11) > 0.46;
+  const card = sample(pool, seed + 12);
+  const fakeCard = sampleSafe(pool.filter((item) => item.id !== card.id && item.statValue !== card.statValue), pool.filter((item) => item.id !== card.id), seed + 13);
+  const useStat = difficulty > 1 || seedRandom(seed + 14) > 0.45;
+  const statement = truthful
+    ? useStat
+      ? `${card.title} has ${card.statDisplay}.`
+      : card.fact
+    : `${card.title} has ${fakeCard.statDisplay}.`;
+
+  return {
+    id: `${seed}-fact-${topic}-${card.id}`,
+    topic,
+    prompt: "True or false?",
+    statement,
+    image: card.image,
+    imageAlt: card.imageAlt,
+    imageCredit: card.imageCredit,
+    answer: truthful ? "True" : "False",
+    explanation: `${card.title} has ${card.statDisplay}. ${card.fact}`,
+  };
+};
+
+export const buildNumberRoundFromCards = (
+  cards: readonly GenericKnowledgeCard[],
+  topic: RoundTopic,
+  difficulty: Difficulty,
+  seed: number,
+): NumberRound => {
+  const pool = cardsWithStats(cards).filter((card) => card.statValue >= 0);
+  if (pool.length < 2) throw new Error(`Need at least 2 non-negative stat cards to build a number round for ${topic}`);
+  const values = pool.map((card) => card.statValue);
+  const gap = statValueGap(values);
+  const shouldAdd = pool.length >= 3 && shouldBuildAdditionRound(difficulty, seed);
+  const unit = pool[0].stats[0]?.display.replace(formatNumber(pool[0].stats[0].value), "").trim() || "";
+
+  if (shouldAdd) {
+    const count = Math.min(pool.length, additionTermCount(difficulty, seed));
+    const selected = shuffle(pool, seed + 1).slice(0, count);
+    const termValues = selected.map((card) => Math.max(0, roundTo(card.statValue, gap)));
+    const answer = sumValues(termValues);
+
+    return {
+      id: `${seed}-number-${topic}-add-${selected.map((card) => card.id).join("-")}`,
+      topic,
+      operation: "addition",
+      prompt: `${additionPromptStart(count)}. What is their total ${selected[0].statLabel}?`,
+      cards: selected.map((card, index) => sameStatCard(card, termValues[index])),
+      statLabel: selected[0].statLabel,
+      unit,
+      operator: "+",
+      termValues,
+      resultLabel: stackedTotalLabel(count),
+      biggerLabel: selected[0]?.title ?? "Card",
+      smallerLabel: selected[1]?.title ?? "Card",
+      biggerValue: termValues[0] ?? 0,
+      smallerValue: termValues[1] ?? 0,
+      answer,
+      choices: numberChoices(answer, Math.max(gap, answer > 1000 ? 100 : gap), seed + 3),
+      explanation: `${termValues.map(formatNumber).join(" + ")} = ${formatNumber(answer)}${unit ? ` ${unit}` : ""}.`,
+    };
+  }
+
+  const sorted = shuffle(pool, seed + 1).sort((a, b) => b.statValue - a.statValue);
+  const bigger = sorted[0];
+  const smaller = sorted.find((card) => card.id !== bigger.id && card.statValue <= bigger.statValue) ?? sorted[1];
+  const { biggerValue, smallerValue, answer } = roundedSubtractionPair(bigger.statValue, smaller.statValue, gap);
+
+  return {
+    id: `${seed}-number-${topic}-${bigger.id}-${smaller.id}`,
+    topic,
+    operation: "subtraction",
+    prompt: `${bigger.title} has ${numberWithUnit(biggerValue, unit)}. ${smaller.title} has ${numberWithUnit(smallerValue, unit)}. What is the difference?`,
+    cards: [sameStatCard(bigger, biggerValue), sameStatCard(smaller, smallerValue)],
+    statLabel: bigger.statLabel,
+    unit,
+    operator: "-",
+    termValues: [biggerValue, smallerValue],
+    resultLabel: "difference",
+    biggerLabel: bigger.title,
+    smallerLabel: smaller.title,
+    biggerValue,
+    smallerValue,
+    answer,
+    choices: numberChoices(answer, gap, seed + 12),
+    explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)}${unit ? ` ${unit}` : ""}.`,
+  };
+};
+
+export const buildOddRoundFromCards = (
+  cards: readonly GenericKnowledgeCard[],
+  topic: RoundTopic,
+  _difficulty: Difficulty,
+  seed: number,
+): OddRound => {
+  if (cards.length < 4) throw new Error(`Need at least 4 cards to build an odd-one round for ${topic}`);
+  const categories = Array.from(new Set(cards.flatMap((card) => card.categories)));
+  const eligibleCategories = categories.filter((category) => cards.filter((card) => card.categories.includes(category)).length >= 3);
+  const category = sampleSafe(eligibleCategories, categories, seed + 1);
+
+  if (category) {
+    const same = shuffle(cards.filter((card) => card.categories.includes(category)), seed + 2).slice(0, 3);
+    const odd = sampleSafe(cards.filter((card) => !card.categories.includes(category)), cards.filter((card) => !same.some((sameCard) => sameCard.id === card.id)), seed + 3);
+    const displayCategory = category.toLowerCase();
+    const cardsInRound = shuffle([...same, odd], seed + 4);
+    return {
+      id: `${seed}-odd-${topic}-${category}-${odd.id}`,
+      topic,
+      prompt: "Which card does not fit the category rule?",
+      cards: cardsInRound,
+      answerId: odd.id,
+      reason: `${odd.title} is not ${displayCategory}; the others are.`,
+      explanation: `The rule is category. Three cards share ${displayCategory}.`,
+    };
+  }
+
+  const selected = shuffle(cardsWithStats(cards), seed + 5).slice(0, 4);
+  const sorted = [...selected].sort((a, b) => a.statValue - b.statValue);
+  const odd = sorted.at(-1) ?? selected[0];
+  return {
+    id: `${seed}-odd-${topic}-stat-${odd.id}`,
+    topic,
+    prompt: `Which card has the highest ${odd.statLabel}?`,
+    cards: shuffle(selected, seed + 6),
+    answerId: odd.id,
+    reason: `${odd.title} has ${odd.statDisplay}.`,
+    explanation: `The rule is highest ${odd.statLabel}.`,
+  };
+};
+
+export const buildTopTrumpRoundFromCards = (
+  cards: readonly GenericKnowledgeCard[],
+  topic: RoundTopic,
+  difficulty: Difficulty,
+  seed: number,
+): TopTrumpRound => {
+  const pool = cards.filter((card) => card.stats.length >= 2);
+  if (pool.length < 2) throw new Error(`Need at least 2 multi-stat cards to build a Top Trumps round for ${topic}`);
+  const shuffled = shuffle(pool, seed + difficulty);
+  const player = shuffled[0];
+  const computer = shuffled.find((card) => card.id !== player.id && card.stats.some((stat) => player.stats.some((playerStat) => playerStat.id === stat.id))) ?? shuffled[1];
+  const sharedStatIds = new Set(computer.stats.map((stat) => stat.id));
+  const playerStats = player.stats.filter((stat) => sharedStatIds.has(stat.id));
+  const computerStats = computer.stats.filter((stat) => playerStats.some((playerStat) => playerStat.id === stat.id));
+
+  return {
+    id: `${seed}-trumps-${topic}-${player.id}-${computer.id}`,
+    topic,
+    prompt: "Choose your strongest category.",
+    player: { ...player, stats: playerStats },
+    computer: { ...computer, stats: computerStats },
+  };
 };
 
 const shouldBuildAdditionRound = (difficulty: Difficulty, seed: number) => seedRandom(seed + difficulty * 23) > (difficulty === 1 ? 0.45 : 0.35);

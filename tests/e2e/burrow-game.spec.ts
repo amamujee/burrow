@@ -23,6 +23,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto("/play");
   await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
   await page.waitForFunction(() => document.documentElement.dataset.burrowHydrated === "true");
+  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
 });
 
 test("setup menu opens and core game controls keep working", async ({ page }) => {
@@ -84,6 +85,20 @@ test("peek rounds reset their reveal count after skip", async ({ page }) => {
 
   await page.getByRole("button", { name: "Skip question" }).click();
   await expect(page.getByText("4/12 open")).toBeVisible();
+});
+
+test("playable dinosaur pack appears in setup topics", async ({ page }) => {
+  await setupSummary(page).click();
+  const dinosaurTopic = page.getByRole("button", { name: /Dinosaur Lab/ });
+  await expect(dinosaurTopic).toBeVisible();
+
+  await dinosaurTopic.click();
+  await expect(dinosaurTopic).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("button", { name: /Shark Tank selected/ }).click();
+  await expect(page.getByRole("button", { name: /Shark Tank selected/ })).toHaveCount(0);
+  await page.getByRole("button", { name: /Jet Hangar selected/ }).click();
+  await expect(page.getByRole("button", { name: /Jet Hangar selected/ })).toHaveCount(0);
+  await expect(page.getByText("Dinosaur Lab · Peek")).toBeVisible();
 });
 
 test("top trumps lets player choose a category against the computer", async ({ page }) => {

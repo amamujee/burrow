@@ -19,6 +19,7 @@ import {
   type SpaceCard,
   type TopicId,
 } from "./game-data";
+import { sample, seedRandom, shuffle } from "./random";
 
 export type TopicScope = TopicId | readonly KnowledgeTopic[];
 
@@ -108,26 +109,10 @@ const allTopics: KnowledgeTopic[] = [...topicIds];
 
 const choiceCountForDifficulty = (difficulty: Difficulty) => (difficulty === 1 ? 3 : 4);
 
-const shuffle = <T,>(items: T[], seed: number) => {
-  const copy = [...items];
-  for (let i = copy.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(seedRandom(seed + i) * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-};
-
 const topicsForScope = (topic: TopicScope): KnowledgeTopic[] => {
   if (typeof topic !== "string") return topic.length ? [...topic] : allTopics;
   return topic === "mixed" ? allTopics : [topic];
 };
-
-const seedRandom = (seed: number) => {
-  const x = Math.sin(seed * 999) * 10000;
-  return x - Math.floor(x);
-};
-
-const sample = <T,>(items: T[], seed: number) => items[Math.floor(seedRandom(seed) * items.length) % items.length];
 
 const formatNumber = (value: number) => value.toLocaleString("en-US");
 const formatShu = (value: number) => `${formatNumber(value)} SHU`;

@@ -7,13 +7,20 @@ const data = jiti("./src/lib/game-data.ts");
 const library = jiti("./src/lib/content-library.ts");
 const {
   buildFactRound,
+  buildFactRoundFromCards,
   buildNumberRound,
+  buildNumberRoundFromCards,
   buildOddRound,
+  buildOddRoundFromCards,
   buildRevealRound,
+  buildRevealRoundFromCards,
   buildSortRound,
+  buildSortRoundFromCards,
   buildTopTrumpRound,
+  buildTopTrumpRoundFromCards,
   collectionCards,
 } = jiti("./src/lib/game-modes.ts");
+const { packToPlayableDeck } = jiti("./src/lib/pack-adapter.ts");
 const { buildHeadToHeadSession, buildSession } = jiti("./src/lib/questions.ts");
 
 const userAgent = "BurrowContentQA/1.0";
@@ -73,6 +80,26 @@ const checkImage = async (item) => {
   if (!isImageFile(target)) {
     critical.push(`${item.topic}/${item.id}: image file does not look like an image`);
   }
+};
+
+const loadPlayablePacks = () => {
+  const packsRoot = "content/packs";
+  if (!fs.existsSync(packsRoot)) return [];
+
+  return fs.readdirSync(packsRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .filter((entry) => !entry.name.startsWith("_"))
+    .map((entry) => path.join(packsRoot, entry.name, "pack.json"))
+    .filter((packFile) => fs.existsSync(packFile))
+    .flatMap((packFile) => {
+      try {
+        const pack = JSON.parse(fs.readFileSync(packFile, "utf8"));
+        return pack.status === "playable" ? [pack] : [];
+      } catch (error) {
+        critical.push(`${packFile}: invalid pack JSON (${error.message})`);
+        return [];
+      }
+    });
 };
 
 const requireText = (item, field, min = 2) => {
@@ -167,7 +194,7 @@ const checkRoundBuilders = async () => {
       await assertRoundCardImages(`${topic}/peek/d${difficulty}`, revealRound);
 
       const numberRound = buildNumberRound(topic, difficulty, seed + 50);
-      if (!numberRound.choices.includes(numberRound.answer) || numberRound.cards.length !== 2) critical.push(`${topic}/number/d${difficulty}: bad number choices`);
+      if (!numberRound.choices.includes(numberRound.answer) || numberRound.cards.length < 2 || numberRound.cards.length !== numberRound.termValues.length) critical.push(`${topic}/number/d${difficulty}: bad number choices`);
       await assertRoundCardImages(`${topic}/number/d${difficulty}`, numberRound);
 
       const oddRound = buildOddRound(topic, difficulty, seed + 60);
@@ -190,6 +217,54 @@ const checkRoundBuilders = async () => {
 };
 
 await checkRoundBuilders();
+
+const playablePacks = loadPlayablePacks();
+
+const checkPlayablePackRoundBuilders = async () => {
+  const difficulties = [1, 2, 3];
+  for (const pack of playablePacks) {
+    const deck = packToPlayableDeck(pack);
+    if (deck.cards.length < 4) critical.push(`${deck.id}: needs at least 4 playable cards`);
+
+    for (const difficulty of difficulties) {
+      const seed = 20260511 + difficulty * 100 + deck.id.length;
+
+      const sortRound = buildSortRoundFromCards(deck.cards, deck.id, difficulty, seed + 10);
+      if (sortRound.cards.length < 3 || sortRound.cards.length !== sortRound.answerIds.length) critical.push(`${deck.id}/sort/d${difficulty}: bad card count`);
+      await assertRoundCardImages(`${deck.id}/sort/d${difficulty}`, sortRound);
+
+      const factRound = buildFactRoundFromCards(deck.cards, deck.id, difficulty, seed + 20);
+      if (!["True", "False"].includes(factRound.answer)) critical.push(`${deck.id}/fact/d${difficulty}: bad answer`);
+      await assertRoundCardImages(`${deck.id}/fact/d${difficulty}`, factRound);
+
+      const revealRound = buildRevealRoundFromCards(deck.cards, deck.id, difficulty, seed + 30);
+      if (!revealRound.choices.includes(revealRound.answer)) critical.push(`${deck.id}/peek/d${difficulty}: answer missing from choices`);
+      await assertRoundCardImages(`${deck.id}/peek/d${difficulty}`, revealRound);
+
+      const numberRound = buildNumberRoundFromCards(deck.cards, deck.id, difficulty, seed + 50);
+      if (!numberRound.choices.includes(numberRound.answer) || numberRound.cards.length < 2 || numberRound.cards.length !== numberRound.termValues.length) critical.push(`${deck.id}/number/d${difficulty}: bad number choices`);
+      await assertRoundCardImages(`${deck.id}/number/d${difficulty}`, numberRound);
+
+      const oddRound = buildOddRoundFromCards(deck.cards, deck.id, difficulty, seed + 60);
+      if (oddRound.cards.length !== 4 || !oddRound.cards.some((card) => card.id === oddRound.answerId)) critical.push(`${deck.id}/odd/d${difficulty}: bad odd-one-out set`);
+      await assertRoundCardImages(`${deck.id}/odd/d${difficulty}`, oddRound);
+
+      const topTrumpRound = buildTopTrumpRoundFromCards(deck.cards, deck.id, difficulty, seed + 70);
+      if (!topTrumpRound.player?.stats?.length || !topTrumpRound.computer?.stats?.length) critical.push(`${deck.id}/trumps/d${difficulty}: missing trumps stats`);
+      const playerStatIds = new Set(topTrumpRound.player.stats.map((stat) => stat.id));
+      for (const stat of topTrumpRound.computer.stats) {
+        if (!playerStatIds.has(stat.id)) critical.push(`${deck.id}/trumps/d${difficulty}: mismatched stat ${stat.id}`);
+      }
+      await assertRoundCardImages(`${deck.id}/trumps/d${difficulty}`, {
+        id: topTrumpRound.id,
+        topic: topTrumpRound.topic,
+        cards: [topTrumpRound.player, topTrumpRound.computer],
+      });
+    }
+  }
+};
+
+await checkPlayablePackRoundBuilders();
 
 for (const pepper of library.pepperLibrary) {
   if (!pepper.id || !pepper.name || !pepper.sourceUrl) critical.push(`pepperLibrary/${pepper.id ?? "missing"}: missing identity/source`);
@@ -221,6 +296,7 @@ const confidence = Object.fromEntries(Object.entries(byTopic).map(([topic, topic
 const result = {
   featuredItems: featuredItems.length,
   collectionCards: cards.length,
+  playablePacks: playablePacks.length,
   confidence,
   researchLibrary: {
     peppers: library.pepperLibrary.length,

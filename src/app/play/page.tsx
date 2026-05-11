@@ -1,5 +1,7 @@
 import { BurrowGame } from "@/components/burrow-game";
+import { loadPlayablePacks } from "@/lib/pack-loader";
 
 export default function PlayPage() {
-  return <BurrowGame />;
+  const packs = loadPlayablePacks();
+  return <BurrowGame packs={packs} />;
 }
