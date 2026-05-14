@@ -105,7 +105,18 @@
       ],
       "readingPrompts": [
         "What body part made T. rex such a powerful predator?"
-      ]
+      ],
+      "tags": [
+        "carnivore",
+        "theropod",
+        "late-cretaceous",
+        "popular"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "triceratops",
@@ -152,7 +163,18 @@
       ],
       "readingPrompts": [
         "How many horns did Triceratops have?"
-      ]
+      ],
+      "tags": [
+        "herbivore",
+        "horned-dinosaur",
+        "late-cretaceous",
+        "popular"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "horned dinosaur"
+      }
     },
     {
       "id": "stegosaurus",
@@ -199,7 +221,18 @@
       ],
       "readingPrompts": [
         "What weapon did Stegosaurus carry on its tail?"
-      ]
+      ],
+      "tags": [
+        "herbivore",
+        "plated-dinosaur",
+        "jurassic",
+        "popular"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "plated dinosaur"
+      }
     },
     {
       "id": "velociraptor",
@@ -246,7 +279,18 @@
       ],
       "readingPrompts": [
         "Was Velociraptor giant or small?"
-      ]
+      ],
+      "tags": [
+        "carnivore",
+        "theropod",
+        "late-cretaceous",
+        "popular"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "spinosaurus",
@@ -293,7 +337,18 @@
       ],
       "readingPrompts": [
         "What clue tells us Spinosaurus may have eaten fish?"
-      ]
+      ],
+      "tags": [
+        "carnivore",
+        "fish-eater",
+        "theropod",
+        "popular"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "brachiosaurus",
@@ -340,7 +395,18 @@
       ],
       "readingPrompts": [
         "Why was Brachiosaurus good at reaching high leaves?"
-      ]
+      ],
+      "tags": [
+        "herbivore",
+        "sauropod",
+        "jurassic",
+        "popular"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "sauropod"
+      }
     },
     {
       "id": "diplodocus",
@@ -387,7 +453,17 @@
       ],
       "readingPrompts": [
         "Which body parts made Diplodocus look so long?"
-      ]
+      ],
+      "tags": [
+        "herbivore",
+        "sauropod",
+        "jurassic"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "sauropod"
+      }
     },
     {
       "id": "ankylosaurus",
@@ -434,7 +510,18 @@
       ],
       "readingPrompts": [
         "What made Ankylosaurus so hard to attack?"
-      ]
+      ],
+      "tags": [
+        "herbivore",
+        "armored-dinosaur",
+        "late-cretaceous",
+        "popular"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "armored dinosaur"
+      }
     },
     {
       "id": "allosaurus",
@@ -481,7 +568,17 @@
       ],
       "readingPrompts": [
         "Which tools helped Allosaurus hunt?"
-      ]
+      ],
+      "tags": [
+        "carnivore",
+        "theropod",
+        "jurassic"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "parasaurolophus",
@@ -528,7 +625,17 @@
       ],
       "readingPrompts": [
         "What may the crest have helped Parasaurolophus do?"
-      ]
+      ],
+      "tags": [
+        "herbivore",
+        "duck-billed-dinosaur",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "duck-billed dinosaur"
+      }
     },
     {
       "id": "iguanodon",
@@ -575,7 +682,17 @@
       ],
       "readingPrompts": [
         "What special weapon did Iguanodon have on its hand?"
-      ]
+      ],
+      "tags": [
+        "herbivore",
+        "ornithopod",
+        "early-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "herbivore"
+      }
     },
     {
       "id": "carnotaurus",
@@ -622,7 +739,17 @@
       ],
       "readingPrompts": [
         "What feature made Carnotaurus look different from many predators?"
-      ]
+      ],
+      "tags": [
+        "carnivore",
+        "theropod",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "deinonychus",
@@ -669,7 +796,17 @@
       ],
       "readingPrompts": [
         "What kind of claw made Deinonychus famous?"
-      ]
+      ],
+      "tags": [
+        "carnivore",
+        "theropod",
+        "early-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "edmontosaurus",
@@ -716,7 +853,17 @@
       ],
       "readingPrompts": [
         "What helped Edmontosaurus chew tough plants?"
-      ]
+      ],
+      "tags": [
+        "herbivore",
+        "duck-billed-dinosaur",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "duck-billed dinosaur"
+      }
     },
     {
       "id": "pachycephalosaurus",
@@ -763,7 +910,17 @@
       ],
       "readingPrompts": [
         "Which skull feature made Pachycephalosaurus stand out?"
-      ]
+      ],
+      "tags": [
+        "herbivore",
+        "dome-headed-dinosaur",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "dome-headed dinosaur"
+      }
     },
     {
       "id": "therizinosaurus",
@@ -810,7 +967,17 @@
       ],
       "readingPrompts": [
         "Why is Therizinosaurus surprising?"
-      ]
+      ],
+      "tags": [
+        "herbivore",
+        "theropod",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "archaeopteryx",
@@ -857,7 +1024,17 @@
       ],
       "readingPrompts": [
         "What features made Archaeopteryx bird-like?"
-      ]
+      ],
+      "tags": [
+        "carnivore",
+        "bird-like-dinosaur",
+        "jurassic"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "bird-like dinosaur"
+      }
     },
     {
       "id": "utahraptor",
@@ -904,7 +1081,17 @@
       ],
       "readingPrompts": [
         "How was Utahraptor different from Velociraptor?"
-      ]
+      ],
+      "tags": [
+        "carnivore",
+        "theropod",
+        "early-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "maiasaura",
@@ -951,7 +1138,17 @@
       ],
       "readingPrompts": [
         "What discovery helped inspire the name Maiasaura?"
-      ]
+      ],
+      "tags": [
+        "herbivore",
+        "duck-billed-dinosaur",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "duck-billed dinosaur"
+      }
     },
     {
       "id": "dilophosaurus",
@@ -998,7 +1195,17 @@
       ],
       "readingPrompts": [
         "What did Dilophosaurus really have on its head?"
-      ]
+      ],
+      "tags": [
+        "carnivore",
+        "theropod",
+        "jurassic"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "brontosaurus",
@@ -1045,7 +1252,18 @@
       "image": "/burrow-assets/dinosaurs/brontosaurus.png",
       "imageAlt": "Life restoration of Brontosaurus",
       "imageCredit": "Tom Parker / Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Brontosaurus_by_Tom_Parker.png"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Brontosaurus_by_Tom_Parker.png",
+      "tags": [
+        "herbivore",
+        "sauropod",
+        "late-jurassic",
+        "popular"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "sauropod"
+      }
     },
     {
       "id": "giganotosaurus",
@@ -1092,7 +1310,17 @@
       "image": "/burrow-assets/dinosaurs/giganotosaurus.jpg",
       "imageAlt": "Life restoration of Giganotosaurus",
       "imageCredit": "Durbed / Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Giganotosaurus_carolinii_by_durbed.jpg"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Giganotosaurus_carolinii_by_durbed.jpg",
+      "tags": [
+        "carnivore",
+        "theropod",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "gallimimus",
@@ -1139,7 +1367,17 @@
       "image": "/burrow-assets/dinosaurs/gallimimus.png",
       "imageAlt": "Life restoration of Gallimimus",
       "imageCredit": "PaleoNeolitic / Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Gallimimus_Restoration.png"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Gallimimus_Restoration.png",
+      "tags": [
+        "omnivore",
+        "ornithomimid",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "omnivore"
+      }
     },
     {
       "id": "pterodactylus",
@@ -1186,7 +1424,20 @@
       "image": "/burrow-assets/dinosaurs/pterodactylus.png",
       "imageAlt": "Life restoration of Pterodactylus",
       "imageCredit": "Matthew Martyniuk / Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pterodactylus_BMMS7_life.png"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pterodactylus_BMMS7_life.png",
+      "tags": [
+        "pterosaur",
+        "carnivore",
+        "late-jurassic",
+        "popular",
+        "not-dinosaur"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "pterosaur",
+        "accuracyNote": "Pterodactylus is included as a popular prehistoric animal, but it was not a dinosaur."
+      }
     },
     {
       "id": "mosasaurus",
@@ -1233,7 +1484,260 @@
       "image": "/burrow-assets/dinosaurs/mosasaurus.jpg",
       "imageAlt": "Life restoration of Mosasaurus",
       "imageCredit": "Jonagold2000 / Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mosasaurus_hoffmanni_life.jpg"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mosasaurus_hoffmanni_life.jpg",
+      "tags": [
+        "marine-reptile",
+        "carnivore",
+        "late-cretaceous",
+        "popular",
+        "not-dinosaur"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "marine reptile",
+        "accuracyNote": "Mosasaurus is included as a popular prehistoric animal, but it was not a dinosaur."
+      }
+    },
+    {
+      "id": "pteranodon",
+      "name": "Pteranodon",
+      "fact": "Pteranodon was a big flying pterosaur with a long head crest. It lived with dinosaurs, but it was not a dinosaur.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 23,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Body length",
+          "value": 6,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.02,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 5,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "pterosaur",
+        "carnivore",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "Was Pteranodon a dinosaur or a flying pterosaur?"
+      ],
+      "image": "/burrow-assets/dinosaurs/pteranodon.png",
+      "imageAlt": "Life restoration of Pteranodon",
+      "imageCredit": "DataBase Center for Life Science (DBCLS) / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:202009_Pteranodon_longiceps.png",
+      "tags": [
+        "pterosaur",
+        "carnivore",
+        "late-cretaceous",
+        "popular",
+        "not-dinosaur"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "pterosaur",
+        "accuracyNote": "Pteranodon is included as a popular prehistoric animal, but it was not a dinosaur."
+      }
+    },
+    {
+      "id": "quetzalcoatlus",
+      "name": "Quetzalcoatlus",
+      "fact": "Quetzalcoatlus was one of the largest flying animals ever, a giant pterosaur tall enough to look a person in the eye.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 36,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Standing height",
+          "value": 16,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.25,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 8,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "pterosaur",
+        "carnivore",
+        "late cretaceous"
+      ],
+      "readingPrompts": [
+        "What made Quetzalcoatlus famous?"
+      ],
+      "image": "/burrow-assets/dinosaurs/quetzalcoatlus.png",
+      "imageAlt": "Life restoration of Quetzalcoatlus",
+      "imageCredit": "Connor Ashbridge / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Quetzalcoatlus_northropi.png",
+      "tags": [
+        "pterosaur",
+        "carnivore",
+        "late-cretaceous",
+        "popular",
+        "not-dinosaur"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "pterosaur",
+        "accuracyNote": "Quetzalcoatlus is included as a popular prehistoric animal, but it was not a dinosaur."
+      }
+    },
+    {
+      "id": "plesiosaurus",
+      "name": "Plesiosaurus",
+      "fact": "Plesiosaurus was a long-necked sea reptile with four flippers. It swam in Jurassic seas, but it was not a dinosaur.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 11,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Body depth",
+          "value": 3,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.5,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 5,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "marine reptile",
+        "carnivore",
+        "early jurassic"
+      ],
+      "readingPrompts": [
+        "What helped Plesiosaurus swim?"
+      ],
+      "image": "/burrow-assets/dinosaurs/plesiosaurus.jpg",
+      "imageAlt": "Life restoration of Plesiosaurus",
+      "imageCredit": "Dmitry Bogdanov / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Plesiosaurus_3DB.jpg",
+      "tags": [
+        "marine-reptile",
+        "carnivore",
+        "early-jurassic",
+        "popular",
+        "not-dinosaur"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "marine reptile",
+        "accuracyNote": "Plesiosaurus is included as a popular prehistoric animal, but it was not a dinosaur."
+      }
+    },
+    {
+      "id": "megalodon",
+      "name": "Megalodon",
+      "fact": "Megalodon was a giant prehistoric shark known from huge fossil teeth, and it was one of the ocean's biggest predators.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 65,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Body depth",
+          "value": 10,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 50,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 10,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "prehistoric shark",
+        "carnivore",
+        "cenozoic"
+      ],
+      "readingPrompts": [
+        "What fossil part is Megalodon famous for?"
+      ],
+      "image": "/burrow-assets/dinosaurs/megalodon.jpg",
+      "imageAlt": "Historical reconstruction of Megalodon jaws",
+      "imageCredit": "Bashford Dean / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Carcharodon_megalodon.jpg",
+      "tags": [
+        "prehistoric-shark",
+        "carnivore",
+        "cenozoic",
+        "popular",
+        "not-dinosaur"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "prehistoric shark",
+        "accuracyNote": "Megalodon is included as a popular prehistoric animal, but it was not a dinosaur."
+      }
     },
     {
       "id": "woolly-mammoth",
@@ -1280,7 +1784,20 @@
       "image": "/burrow-assets/dinosaurs/woolly-mammoth.jpg",
       "imageAlt": "Life restoration of Woolly Mammoth",
       "imageCredit": "WolfmanSF / Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Woolly_Mammoth-RBC.jpg"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Woolly_Mammoth-RBC.jpg",
+      "tags": [
+        "ice-age-mammal",
+        "herbivore",
+        "pleistocene",
+        "popular",
+        "not-dinosaur"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "ice age mammal",
+        "accuracyNote": "Woolly Mammoth is included as a popular prehistoric animal, but it was not a dinosaur."
+      }
     },
     {
       "id": "smilodon",
@@ -1327,7 +1844,20 @@
       "image": "/burrow-assets/dinosaurs/smilodon.jpg",
       "imageAlt": "Life restoration of Saber-toothed Cat",
       "imageCredit": "John Cummings / Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Saber-toothed_cat_(Smilodon_fatalis)_reconstruction%2C_Natural_History_Museum%2C_London%2C_Mammals_Gallery.JPG"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Saber-toothed_cat_(Smilodon_fatalis)_reconstruction%2C_Natural_History_Museum%2C_London%2C_Mammals_Gallery.JPG",
+      "tags": [
+        "ice-age-mammal",
+        "carnivore",
+        "pleistocene",
+        "popular",
+        "not-dinosaur"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "ice age mammal",
+        "accuracyNote": "Saber-toothed Cat is included as a popular prehistoric animal, but it was not a dinosaur."
+      }
     },
     {
       "id": "apatosaurus",
@@ -1374,7 +1904,78 @@
       "image": "/burrow-assets/dinosaurs/apatosaurus.jpg",
       "imageAlt": "Life restoration of Apatosaurus",
       "imageCredit": "Wikimedia Commons paleoart contributors",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Apatosaurus_louisae_by_durbed.jpg"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Apatosaurus_louisae_by_durbed.jpg",
+      "tags": [
+        "herbivore",
+        "sauropod",
+        "late-jurassic",
+        "popular"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "sauropod"
+      }
+    },
+    {
+      "id": "dimetrodon",
+      "name": "Dimetrodon",
+      "fact": "Dimetrodon had a huge sail on its back and lived long before dinosaurs. It was a synapsid, closer to mammals than reptiles.",
+      "stats": [
+        {
+          "id": "length",
+          "label": "Length",
+          "value": 15,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "height",
+          "label": "Hip height",
+          "value": 4,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "weight",
+          "label": "Weight",
+          "value": 0.4,
+          "unit": "tons",
+          "direction": "higher"
+        },
+        {
+          "id": "power",
+          "label": "Power",
+          "value": 7,
+          "unit": "pts",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "synapsid",
+        "carnivore",
+        "permian"
+      ],
+      "readingPrompts": [
+        "What made Dimetrodon easy to recognize?"
+      ],
+      "image": "/burrow-assets/dinosaurs/dimetrodon.jpg",
+      "imageAlt": "Life restoration of Dimetrodon",
+      "imageCredit": "Mojcaj / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Dimetrodon_limbatus.jpg",
+      "tags": [
+        "synapsid",
+        "carnivore",
+        "permian",
+        "popular",
+        "not-dinosaur"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "synapsid",
+        "accuracyNote": "Dimetrodon is included as a popular prehistoric animal, but it was not a dinosaur."
+      }
     },
     {
       "id": "argentinosaurus",
@@ -1421,7 +2022,17 @@
       "image": "/burrow-assets/dinosaurs/argentinosaurus.jpg",
       "imageAlt": "Life restoration of Argentinosaurus",
       "imageCredit": "Wikimedia Commons paleoart contributors",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Argentinosaurus_BW.jpg"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Argentinosaurus_BW.jpg",
+      "tags": [
+        "herbivore",
+        "titanosaur",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "herbivore"
+      }
     },
     {
       "id": "oviraptor",
@@ -1468,7 +2079,17 @@
       "image": "/burrow-assets/dinosaurs/oviraptor.jpg",
       "imageAlt": "Life restoration of Oviraptor",
       "imageCredit": "DinosaurPictures.org image contributors",
-      "imageSourceUrl": "https://dinosaurpictures.org/Oviraptor-pictures"
+      "imageSourceUrl": "https://dinosaurpictures.org/Oviraptor-pictures",
+      "tags": [
+        "omnivore",
+        "oviraptorosaur",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "omnivore"
+      }
     },
     {
       "id": "protoceratops",
@@ -1515,7 +2136,17 @@
       "image": "/burrow-assets/dinosaurs/protoceratops.png",
       "imageAlt": "Life restoration of Protoceratops",
       "imageCredit": "Wikimedia Commons paleoart contributors",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Protoceratops_andrewsi_Restoration.png"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Protoceratops_andrewsi_Restoration.png",
+      "tags": [
+        "herbivore",
+        "ceratopsian",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "herbivore"
+      }
     },
     {
       "id": "baryonyx",
@@ -1562,7 +2193,17 @@
       "image": "/burrow-assets/dinosaurs/baryonyx.jpg",
       "imageAlt": "Life restoration of Baryonyx",
       "imageCredit": "DinosaurPictures.org image contributors",
-      "imageSourceUrl": "https://dinosaurpictures.org/Baryonyx-pictures"
+      "imageSourceUrl": "https://dinosaurpictures.org/Baryonyx-pictures",
+      "tags": [
+        "carnivore",
+        "spinosaurid",
+        "early-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 4,
+        "taxonomyGroup": "carnivore"
+      }
     },
     {
       "id": "suchomimus",
@@ -1609,7 +2250,17 @@
       "image": "/burrow-assets/dinosaurs/suchomimus.png",
       "imageAlt": "Life restoration of Suchomimus",
       "imageCredit": "Wikimedia Commons paleoart contributors",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Suchomimus_life_restoration_(2024).png"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Suchomimus_life_restoration_(2024).png",
+      "tags": [
+        "carnivore",
+        "spinosaurid",
+        "early-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "carnivore"
+      }
     },
     {
       "id": "ceratosaurus",
@@ -1656,7 +2307,17 @@
       "image": "/burrow-assets/dinosaurs/ceratosaurus.jpg",
       "imageAlt": "Life restoration of Ceratosaurus",
       "imageCredit": "Wikimedia Commons paleoart contributors",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ceratosaurus_NT.jpg"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ceratosaurus_NT.jpg",
+      "tags": [
+        "carnivore",
+        "theropod",
+        "late-jurassic"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "compsognathus",
@@ -1703,7 +2364,17 @@
       "image": "/burrow-assets/dinosaurs/compsognathus.png",
       "imageAlt": "Life restoration of Compsognathus",
       "imageCredit": "Wikimedia Commons paleoart contributors",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Compsognathus_Conty.png"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Compsognathus_Conty.png",
+      "tags": [
+        "carnivore",
+        "theropod",
+        "late-jurassic"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "corythosaurus",
@@ -1750,7 +2421,17 @@
       "image": "/burrow-assets/dinosaurs/corythosaurus.png",
       "imageAlt": "Life restoration of Corythosaurus",
       "imageCredit": "Wikimedia Commons paleoart contributors",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Life_reconstruction_of_Corythosaurus_casuarius.png"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Life_reconstruction_of_Corythosaurus_casuarius.png",
+      "tags": [
+        "herbivore",
+        "hadrosaur",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "herbivore"
+      }
     },
     {
       "id": "hadrosaurus",
@@ -1797,7 +2478,17 @@
       "image": "/burrow-assets/dinosaurs/hadrosaurus.png",
       "imageAlt": "Life restoration of Hadrosaurus",
       "imageCredit": "Wikimedia Commons paleoart contributors",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Hadrosaurus_foulkii_restoration.png"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Hadrosaurus_foulkii_restoration.png",
+      "tags": [
+        "herbivore",
+        "hadrosaur",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "herbivore"
+      }
     },
     {
       "id": "kentrosaurus",
@@ -1844,7 +2535,17 @@
       "image": "/burrow-assets/dinosaurs/kentrosaurus.png",
       "imageAlt": "Life restoration of Kentrosaurus",
       "imageCredit": "Wikimedia Commons paleoart contributors",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kentrosaurus_aethiopicus.png"
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kentrosaurus_aethiopicus.png",
+      "tags": [
+        "herbivore",
+        "stegosaur",
+        "late-jurassic"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "herbivore"
+      }
     },
     {
       "id": "lambeosaurus",
@@ -1891,7 +2592,17 @@
       "image": "/burrow-assets/dinosaurs/lambeosaurus.jpg",
       "imageAlt": "Life restoration of Lambeosaurus",
       "imageCredit": "DinosaurPictures.org image contributors",
-      "imageSourceUrl": "https://dinosaurpictures.org/Lambeosaurus-pictures"
+      "imageSourceUrl": "https://dinosaurpictures.org/Lambeosaurus-pictures",
+      "tags": [
+        "herbivore",
+        "hadrosaur",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "herbivore"
+      }
     },
     {
       "id": "acrocanthosaurus",
@@ -1938,7 +2649,17 @@
       "image": "/burrow-assets/dinosaurs/acrocanthosaurus.jpg",
       "imageAlt": "Life restoration of Acrocanthosaurus",
       "imageCredit": "DinosaurPictures.org image contributors",
-      "imageSourceUrl": "https://dinosaurpictures.org/Acrocanthosaurus-pictures"
+      "imageSourceUrl": "https://dinosaurpictures.org/Acrocanthosaurus-pictures",
+      "tags": [
+        "carnivore",
+        "theropod",
+        "early-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "theropod"
+      }
     },
     {
       "id": "albertosaurus",
@@ -1985,7 +2706,17 @@
       "image": "/burrow-assets/dinosaurs/albertosaurus.jpg",
       "imageAlt": "Life restoration of Albertosaurus",
       "imageCredit": "DinosaurPictures.org image contributors",
-      "imageSourceUrl": "https://dinosaurpictures.org/Albertosaurus-pictures"
+      "imageSourceUrl": "https://dinosaurpictures.org/Albertosaurus-pictures",
+      "tags": [
+        "carnivore",
+        "tyrannosaur",
+        "late-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "carnivore"
+      }
     },
     {
       "id": "amargasaurus",
@@ -2032,7 +2763,17 @@
       "image": "/burrow-assets/dinosaurs/amargasaurus.jpg",
       "imageAlt": "Life restoration of Amargasaurus",
       "imageCredit": "DinosaurPictures.org image contributors",
-      "imageSourceUrl": "https://dinosaurpictures.org/Amargasaurus-pictures"
+      "imageSourceUrl": "https://dinosaurpictures.org/Amargasaurus-pictures",
+      "tags": [
+        "herbivore",
+        "sauropod",
+        "early-cretaceous"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "sauropod"
+      }
     }
   ]
 }

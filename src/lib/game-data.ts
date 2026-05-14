@@ -1,4 +1,5 @@
 import { contentLibraryStats } from "./content-library";
+import type { CardMetadata } from "./card-metadata";
 
 export type TopicId = "peppers" | "buildings" | "sharks" | "space" | "jets" | "mixed";
 export type KnowledgeTopic = Exclude<TopicId, "mixed">;
@@ -66,6 +67,8 @@ export type Shark = {
   imageFit?: VisualFit;
   imagePosition?: string;
   fact: string;
+  tags?: string[];
+  metadata?: CardMetadata;
 };
 
 export type SpaceKind = "planet" | "dwarf planet" | "star" | "concept" | "moon" | "region";
@@ -1241,14 +1244,16 @@ export const sharks: Shark[] = [
     speedMph: 43,
     power: 4,
     diet: "fast fish, squid",
-    ...contentImage("sharks", "shortfin-mako", "Atlantic Shortfin mako.jpg"),
-    imageCredit: "NOAA, Wikimedia Commons",
+    ...contentImage("sharks", "shortfin-mako", "Kurzflossen-Mako.jpg"),
+    imageCredit: "Patrick Doll, Wikimedia Commons",
     fact: "Shortfin makos are among the fastest sharks in the ocean.",
+    tags: ["popular", "mackerel-shark", "fast-shark"],
+    metadata: { difficultyBand: "easy", recognition: 4, taxonomyGroup: "Lamnidae", imageDistinctGroup: "mako-porbeagle" },
   },
   {
     id: "basking-shark",
     name: "Basking Shark",
-    family: "Basking shark",
+    family: "Cetorhinid shark",
     lengthFt: 40,
     speedMph: 4,
     power: 1,
@@ -1260,7 +1265,7 @@ export const sharks: Shark[] = [
   {
     id: "nurse-shark",
     name: "Nurse Shark",
-    family: "Nurse shark",
+    family: "Ginglymostomatid shark",
     lengthFt: 10,
     speedMph: 5,
     power: 2,
@@ -1284,7 +1289,7 @@ export const sharks: Shark[] = [
   {
     id: "goblin-shark",
     name: "Goblin Shark",
-    family: "Goblin shark",
+    family: "Mitsukurinid shark",
     lengthFt: 13,
     speedMph: 10,
     power: 3,
@@ -1368,7 +1373,7 @@ export const sharks: Shark[] = [
   {
     id: "sawshark",
     name: "Sawshark",
-    family: "Sawshark",
+    family: "Pristiophorid shark",
     lengthFt: 5,
     speedMph: 10,
     power: 2,
@@ -1404,7 +1409,7 @@ export const sharks: Shark[] = [
   {
     id: "sand-tiger",
     name: "Sand Tiger Shark",
-    family: "Sand tiger shark",
+    family: "Odontaspidid shark",
     lengthFt: 10,
     speedMph: 12,
     power: 3,
@@ -1440,7 +1445,7 @@ export const sharks: Shark[] = [
   {
     id: "frilled-shark",
     name: "Frilled Shark",
-    family: "Frilled shark",
+    family: "Chlamydoselachid shark",
     lengthFt: 7,
     speedMph: 3,
     power: 2,
@@ -1452,7 +1457,7 @@ export const sharks: Shark[] = [
   {
     id: "megamouth",
     name: "Megamouth Shark",
-    family: "Megamouth shark",
+    family: "Megachasmid shark",
     lengthFt: 18,
     speedMph: 2,
     power: 1,
@@ -1553,9 +1558,11 @@ export const sharks: Shark[] = [
     speedMph: 20,
     power: 4,
     diet: "fish, squid",
-    ...contentImage("sharks", "porbeagle", "Porbeagle shark.jpg"),
-    imageCredit: "Wikimedia Commons",
+    ...contentImage("sharks", "porbeagle", "Lamna nasus noaa.jpg"),
+    imageCredit: "NOAA, Wikimedia Commons",
     fact: "Porbeagles are cold-water relatives of makos and great whites.",
+    tags: ["cold-water", "mackerel-shark"],
+    metadata: { difficultyBand: "hard", recognition: 2, taxonomyGroup: "Lamnidae", imageDistinctGroup: "mako-porbeagle" },
   },
   {
     id: "salmon-shark",
@@ -1577,9 +1584,11 @@ export const sharks: Shark[] = [
     speedMph: 35,
     power: 4,
     diet: "fish, squid",
-    ...contentImage("sharks", "longfin-mako", "Longfin mako shark.jpg"),
-    imageCredit: "Wikimedia Commons",
+    ...contentImage("sharks", "longfin-mako", "Longfin mako.jpg"),
+    imageCredit: "NOAA Fisheries, Wikimedia Commons",
     fact: "Longfin makos are rarer, longer-finned cousins of the shortfin mako.",
+    tags: ["mackerel-shark", "fast-shark"],
+    metadata: { difficultyBand: "hard", recognition: 2, taxonomyGroup: "Lamnidae", imageDistinctGroup: "mako-porbeagle" },
   },
   {
     id: "bigeye-thresher",
@@ -1668,7 +1677,7 @@ export const sharks: Shark[] = [
   {
     id: "angelshark",
     name: "Angelshark",
-    family: "Angel shark",
+    family: "Squatinid shark",
     lengthFt: 8,
     speedMph: 8,
     power: 3,

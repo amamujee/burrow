@@ -150,6 +150,41 @@
             },
             "uniqueItems": true
           },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+            },
+            "uniqueItems": true
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "difficultyBand": {
+                "type": "string",
+                "enum": ["easy", "medium", "hard"]
+              },
+              "recognition": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              },
+              "taxonomyGroup": {
+                "type": "string",
+                "minLength": 2
+              },
+              "accuracyNote": {
+                "type": "string",
+                "minLength": 8
+              },
+              "imageDistinctGroup": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+              }
+            }
+          },
           "readingPrompts": {
             "type": "array",
             "items": {

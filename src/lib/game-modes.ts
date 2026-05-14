@@ -20,6 +20,8 @@ import {
   type TopicId,
 } from "./game-data";
 import { scoreFeaturedContent } from "./content-quality";
+import type { CardMetadata } from "./card-metadata";
+import { poolForDifficulty } from "./difficulty-pool";
 import { sample, sampleSafe, seedRandom, shuffle } from "./random";
 
 export type GameMode = "mix" | "quiz" | "versus" | "trumps" | "sort" | "fact" | "peek" | "number" | "odd";
@@ -59,6 +61,8 @@ export type KnowledgeCard = {
   fact: string;
   qualityScore: number;
   qualityFlags: string[];
+  tags?: string[];
+  metadata?: CardMetadata;
 };
 
 export type SortRound = {
@@ -142,6 +146,8 @@ export type TopTrumpCard = {
   imageCredit: string;
   subStat: string;
   fact: string;
+  tags?: string[];
+  metadata?: CardMetadata;
   stats: TopTrumpStat[];
 };
 
@@ -177,6 +183,7 @@ const roundedStatCard = (card: KnowledgeCard, value: number, unit: string): Know
 });
 
 const allTopics: KnowledgeTopic[] = [...topicIds];
+const preferredPool = <T extends { id: string }>(items: readonly T[], difficulty: Difficulty) => poolForDifficulty(items, difficulty);
 
 const topicsForScope = (topic: TopicScope): KnowledgeTopic[] => {
   if (typeof topic !== "string") return topic.length ? [...topic] : allTopics;
@@ -237,6 +244,8 @@ const sharkCard = (shark: Shark, metric: "length" | "speed" | "power" = "length"
   fact: shark.fact,
   qualityScore: scoreFeaturedContent({ ...shark, statValue: metric === "length" ? shark.lengthFt : metric === "speed" ? shark.speedMph : shark.power }).score,
   qualityFlags: scoreFeaturedContent({ ...shark, statValue: metric === "length" ? shark.lengthFt : metric === "speed" ? shark.speedMph : shark.power }).flags,
+  tags: shark.tags,
+  metadata: shark.metadata,
 });
 
 const spaceMetricValue = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons") => {
@@ -749,11 +758,11 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
 export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, seed: number): TopTrumpRound => {
   const currentTopic = topicOrder(topic, seed);
   const pool =
-    currentTopic === "peppers" ? peppers :
-    currentTopic === "buildings" ? buildings :
-    currentTopic === "sharks" ? sharks :
-    currentTopic === "space" ? spaceTrumpPool() :
-    jets;
+    currentTopic === "peppers" ? preferredPool(peppers, difficulty) :
+    currentTopic === "buildings" ? preferredPool(buildings, difficulty) :
+    currentTopic === "sharks" ? preferredPool(sharks, difficulty) :
+    currentTopic === "space" ? preferredPool(spaceTrumpPool(), difficulty) :
+    preferredPool(jets, difficulty);
   const shuffled = shuffle(pool.map((item) => item.id), seed + difficulty);
   const first = shuffled[0];
   const second = shuffled.find((id) => id !== first) ?? shuffled[1];
@@ -774,7 +783,7 @@ export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed
   const currentTopic = topicOrder(topic, seed);
   const count = difficulty === 1 ? 3 : 4;
   const allCards = collectionCards();
-  const topicCards = allCards.filter((card) => card.topic === currentTopic);
+  const topicCards = preferredPool(allCards.filter((card) => card.topic === currentTopic), difficulty);
   const card = sample(topicCards, seed + 1);
   const distractors = shuffle(topicCards.filter((item) => item.id !== card.id).map((item) => item.title), seed + 2).slice(0, count - 1);
 
@@ -831,9 +840,10 @@ export const buildSortRoundFromCards = (
   seed: number,
 ): SortRound => {
   const pool = cardsWithStats(cards);
-  if (pool.length < 3) throw new Error(`Need at least 3 stat cards to build a sort round for ${topic}`);
-  const count = Math.min(pool.length, difficulty === 1 ? 3 : 4);
-  const selected = distinctStatCards(pool, seed + 1, count);
+  const preferred = preferredPool(pool, difficulty);
+  if (preferred.length < 3) throw new Error(`Need at least 3 stat cards to build a sort round for ${topic}`);
+  const count = Math.min(preferred.length, difficulty === 1 ? 3 : 4);
+  const selected = distinctStatCards(preferred, seed + 1, count);
   if (selected.length < 3) throw new Error(`Need at least 3 distinct stat values to build a sort round for ${topic}`);
   const sorted = [...selected].sort((a, b) => a.statValue - b.statValue);
 
@@ -855,9 +865,10 @@ export const buildRevealRoundFromCards = (
   seed: number,
 ): RevealRound => {
   if (cards.length < 3) throw new Error(`Need at least 3 cards to build a peek round for ${topic}`);
-  const count = Math.min(cards.length, difficulty === 1 ? 3 : 4);
-  const card = sample(cards, seed + 1);
-  const distractors = shuffle(cards.filter((item) => item.id !== card.id).map((item) => item.title), seed + 2).slice(0, count - 1);
+  const pool = preferredPool(cards, difficulty);
+  const count = Math.min(pool.length, difficulty === 1 ? 3 : 4);
+  const card = sample(pool, seed + 1);
+  const distractors = shuffle(pool.filter((item) => item.id !== card.id).map((item) => item.title), seed + 2).slice(0, count - 1);
 
   return {
     id: `${seed}-peek-${topic}-${card.id}`,
@@ -876,7 +887,7 @@ export const buildFactRoundFromCards = (
   difficulty: Difficulty,
   seed: number,
 ): FactRound => {
-  const pool = cardsWithStats(cards);
+  const pool = preferredPool(cardsWithStats(cards), difficulty);
   if (pool.length < 2) throw new Error(`Need at least 2 stat cards to build a fact round for ${topic}`);
   const truthful = seedRandom(seed + 11) > 0.46;
   const card = sample(pool, seed + 12);
@@ -907,7 +918,7 @@ export const buildNumberRoundFromCards = (
   difficulty: Difficulty,
   seed: number,
 ): NumberRound => {
-  const pool = cardsWithStats(cards).filter((card) => card.statValue >= 0);
+  const pool = preferredPool(cardsWithStats(cards).filter((card) => card.statValue >= 0), difficulty);
   if (pool.length < 2) throw new Error(`Need at least 2 non-negative stat cards to build a number round for ${topic}`);
   const values = pool.map((card) => card.statValue);
   const gap = statValueGap(values);
@@ -970,17 +981,21 @@ export const buildNumberRoundFromCards = (
 export const buildOddRoundFromCards = (
   cards: readonly GenericKnowledgeCard[],
   topic: RoundTopic,
-  _difficulty: Difficulty,
+  difficulty: Difficulty,
   seed: number,
 ): OddRound => {
-  if (cards.length < 4) throw new Error(`Need at least 4 cards to build an odd-one round for ${topic}`);
-  const categories = Array.from(new Set(cards.flatMap((card) => card.categories)));
-  const eligibleCategories = categories.filter((category) => cards.filter((card) => card.categories.includes(category)).length >= 3);
+  const preferred = preferredPool(cards, difficulty);
+  const preferredCategories = Array.from(new Set(preferred.flatMap((card) => card.categories)));
+  const preferredEligibleCategories = preferredCategories.filter((category) => preferred.filter((card) => card.categories.includes(category)).length >= 3);
+  const pool = preferredEligibleCategories.length ? preferred : [...cards];
+  if (pool.length < 4) throw new Error(`Need at least 4 cards to build an odd-one round for ${topic}`);
+  const categories = Array.from(new Set(pool.flatMap((card) => card.categories)));
+  const eligibleCategories = categories.filter((category) => pool.filter((card) => card.categories.includes(category)).length >= 3);
   const category = sampleSafe(eligibleCategories, categories, seed + 1);
 
   if (category) {
-    const same = shuffle(cards.filter((card) => card.categories.includes(category)), seed + 2).slice(0, 3);
-    const odd = sampleSafe(cards.filter((card) => !card.categories.includes(category)), cards.filter((card) => !same.some((sameCard) => sameCard.id === card.id)), seed + 3);
+    const same = shuffle(pool.filter((card) => card.categories.includes(category)), seed + 2).slice(0, 3);
+    const odd = sampleSafe(pool.filter((card) => !card.categories.includes(category)), pool.filter((card) => !same.some((sameCard) => sameCard.id === card.id)), seed + 3);
     const displayCategory = category.toLowerCase();
     const cardsInRound = shuffle([...same, odd], seed + 4);
     return {
@@ -994,7 +1009,7 @@ export const buildOddRoundFromCards = (
     };
   }
 
-  const selected = shuffle(cardsWithStats(cards), seed + 5).slice(0, 4);
+  const selected = shuffle(cardsWithStats(pool), seed + 5).slice(0, 4);
   const sorted = [...selected].sort((a, b) => a.statValue - b.statValue);
   const odd = sorted.at(-1) ?? selected[0];
   return {
@@ -1014,7 +1029,7 @@ export const buildTopTrumpRoundFromCards = (
   difficulty: Difficulty,
   seed: number,
 ): TopTrumpRound => {
-  const pool = cards.filter((card) => card.stats.length >= 2);
+  const pool = preferredPool(cards.filter((card) => card.stats.length >= 2), difficulty);
   if (pool.length < 2) throw new Error(`Need at least 2 multi-stat cards to build a Top Trumps round for ${topic}`);
   const shuffled = shuffle(pool, seed + difficulty);
   const player = shuffled[0];
@@ -1042,10 +1057,11 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   const currentTopic = topicOrder(topic, seed);
 
   if (currentTopic === "peppers") {
+    const pool = preferredPool(peppers, difficulty);
     const step = difficulty === 1 ? 1000 : difficulty === 2 ? 5000 : 10000;
     if (shouldBuildAdditionRound(difficulty, seed)) {
       const count = additionTermCount(difficulty, seed);
-      const selected = shuffle(peppers.filter((pepper) => pepper.shuMax >= step), seed + 1).slice(0, count);
+      const selected = shuffle(pool.filter((pepper) => pepper.shuMax >= step), seed + 1).slice(0, count);
       const values = selected.map((pepper) => Math.max(step, roundTo(pepper.shuMax, step)));
       const answer = sumValues(values);
       return {
@@ -1069,8 +1085,8 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       };
     }
 
-    const hotter = sampleSafe(peppers.filter((pepper) => pepper.shuMax >= 50000), peppers, seed + 1);
-    const nonzeroPeppers = peppers.filter((pepper) => pepper.id !== hotter.id && pepper.shuMax >= step);
+    const hotter = sampleSafe(pool.filter((pepper) => pepper.shuMax >= 50000), pool, seed + 1);
+    const nonzeroPeppers = pool.filter((pepper) => pepper.id !== hotter.id && pepper.shuMax >= step);
     const milder = sampleSafe(
       nonzeroPeppers.filter((pepper) => pepper.shuMax <= hotter.shuMax * 0.35),
       nonzeroPeppers,
@@ -1099,10 +1115,11 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   }
 
   if (currentTopic === "buildings") {
+    const pool = preferredPool(buildings, difficulty);
     const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
     if (shouldBuildAdditionRound(difficulty, seed)) {
       const count = additionTermCount(difficulty, seed);
-      const selected = shuffle(buildings, seed + 4).slice(0, count);
+      const selected = shuffle(pool, seed + 4).slice(0, count);
       const values = selected.map((building) => Math.max(step, roundTo(building.heightFt, step)));
       const answer = sumValues(values);
       return {
@@ -1126,8 +1143,8 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       };
     }
 
-    const taller = sampleSafe(buildings.filter((building) => building.heightFt >= 1800), buildings, seed + 4);
-    const shorter = sampleSafe(buildings.filter((building) => building.id !== taller.id && building.heightFt <= taller.heightFt - 150), buildings.filter((building) => building.id !== taller.id), seed + 5);
+    const taller = sampleSafe(pool.filter((building) => building.heightFt >= 1800), pool, seed + 4);
+    const shorter = sampleSafe(pool.filter((building) => building.id !== taller.id && building.heightFt <= taller.heightFt - 150), pool.filter((building) => building.id !== taller.id), seed + 5);
     const { biggerValue, smallerValue, answer } = roundedSubtractionPair(taller.heightFt, shorter.heightFt, step);
     return {
       id: `${seed}-number-buildings-${taller.id}-${shorter.id}`,
@@ -1151,10 +1168,11 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   }
 
   if (currentTopic === "space") {
+    const pool = preferredPool(spaceCards, difficulty);
     if (shouldBuildAdditionRound(difficulty, seed)) {
       const count = additionTermCount(difficulty, seed);
       const step = difficulty === 1 ? 500 : difficulty === 2 ? 100 : 50;
-      const selected = shuffle(spaceCards.filter((space) => space.diameterMiles !== undefined), seed + 7).slice(0, count);
+      const selected = shuffle(pool.filter((space) => space.diameterMiles !== undefined), seed + 7).slice(0, count);
       const values = selected.map((space) => Math.max(step, roundTo(space.diameterMiles ?? 0, step)));
       const answer = sumValues(values);
       return {
@@ -1178,8 +1196,8 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       };
     }
 
-    const moreMoons = sampleSafe(spaceCards.filter((space) => (space.moons ?? 0) >= 10), spaceCards.filter((space) => space.moons !== undefined), seed + 7);
-    const fewerMoons = sampleSafe(spaceCards.filter((space) => space.id !== moreMoons.id && (space.moons ?? 0) < (moreMoons.moons ?? 0)), spaceCards.filter((space) => space.id !== moreMoons.id && space.moons !== undefined), seed + 8);
+    const moreMoons = sampleSafe(pool.filter((space) => (space.moons ?? 0) >= 10), pool.filter((space) => space.moons !== undefined), seed + 7);
+    const fewerMoons = sampleSafe(pool.filter((space) => space.id !== moreMoons.id && (space.moons ?? 0) < (moreMoons.moons ?? 0)), pool.filter((space) => space.id !== moreMoons.id && space.moons !== undefined), seed + 8);
     const step = difficulty === 1 ? 10 : 5;
     const { biggerValue, smallerValue, answer } = roundedSubtractionPair(moreMoons.moons ?? 0, fewerMoons.moons ?? 0, step);
     return {
@@ -1204,10 +1222,11 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   }
 
   if (currentTopic === "jets") {
+    const pool = preferredPool(jets, difficulty);
     const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
     if (shouldBuildAdditionRound(difficulty, seed)) {
       const count = additionTermCount(difficulty, seed);
-      const selected = shuffle(jets, seed + 10).slice(0, count);
+      const selected = shuffle(pool, seed + 10).slice(0, count);
       const values = selected.map((jet) => Math.max(step, roundTo(jet.maxSpeedMph, step)));
       const answer = sumValues(values);
       return {
@@ -1231,8 +1250,8 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       };
     }
 
-    const faster = sampleSafe(jets.filter((jet) => jet.maxSpeedMph >= 1200), jets, seed + 10);
-    const slower = sampleSafe(jets.filter((jet) => jet.id !== faster.id && jet.maxSpeedMph <= faster.maxSpeedMph - 250), jets.filter((jet) => jet.id !== faster.id), seed + 11);
+    const faster = sampleSafe(pool.filter((jet) => jet.maxSpeedMph >= 1200), pool, seed + 10);
+    const slower = sampleSafe(pool.filter((jet) => jet.id !== faster.id && jet.maxSpeedMph <= faster.maxSpeedMph - 250), pool.filter((jet) => jet.id !== faster.id), seed + 11);
     const { biggerValue, smallerValue, answer } = roundedSubtractionPair(faster.maxSpeedMph, slower.maxSpeedMph, step);
     return {
       id: `${seed}-number-jets-${faster.id}-${slower.id}`,
@@ -1256,9 +1275,10 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   }
 
   const step = difficulty === 1 ? 5 : 2;
+  const sharkPool = preferredPool(sharks, difficulty);
   if (shouldBuildAdditionRound(difficulty, seed)) {
     const count = additionTermCount(difficulty, seed);
-    const selected = shuffle(sharks, seed + 10).slice(0, count);
+    const selected = shuffle(sharkPool, seed + 10).slice(0, count);
     const values = selected.map((shark) => Math.max(step, roundTo(shark.lengthFt, step)));
     const answer = sumValues(values);
     return {
@@ -1282,8 +1302,8 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     };
   }
 
-  const bigger = sampleSafe(sharks.filter((shark) => shark.lengthFt >= 15), sharks, seed + 10);
-  const smaller = sampleSafe(sharks.filter((shark) => shark.id !== bigger.id && shark.lengthFt <= bigger.lengthFt - 5), sharks.filter((shark) => shark.id !== bigger.id), seed + 11);
+  const bigger = sampleSafe(sharkPool.filter((shark) => shark.lengthFt >= 15), sharkPool, seed + 10);
+  const smaller = sampleSafe(sharkPool.filter((shark) => shark.id !== bigger.id && shark.lengthFt <= bigger.lengthFt - 5), sharkPool.filter((shark) => shark.id !== bigger.id), seed + 11);
   const { biggerValue, smallerValue, answer } = roundedSubtractionPair(bigger.lengthFt, smaller.lengthFt, step);
   return {
     id: `${seed}-number-sharks-${bigger.id}-${smaller.id}`,
@@ -1310,16 +1330,23 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
   const currentTopic = topicOrder(topic, seed);
 
   if (currentTopic === "peppers") {
-    const eligibleHeats = heatBands.filter((heat) => {
-      const sameCount = peppers.filter((pepper) => pepper.heat === heat).length;
-      const hasClearOdd = peppers.some((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= 2);
+    const preferred = preferredPool(peppers, difficulty);
+    const preferredEligibleHeats = heatBands.filter((heat) => {
+      const sameCount = preferred.filter((pepper) => pepper.heat === heat).length;
+      const hasClearOdd = preferred.some((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= 2);
+      return sameCount >= 3 && hasClearOdd;
+    });
+    const pool = preferredEligibleHeats.length ? preferred : peppers;
+    const eligibleHeats = (preferredEligibleHeats.length ? preferredEligibleHeats : heatBands).filter((heat) => {
+      const sameCount = pool.filter((pepper) => pepper.heat === heat).length;
+      const hasClearOdd = pool.some((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= 2);
       return sameCount >= 3 && hasClearOdd;
     });
     const heat = sample(eligibleHeats, seed + 1);
-    const same = shuffle(peppers.filter((pepper) => pepper.heat === heat), seed + 2).slice(0, 3);
+    const same = shuffle(pool.filter((pepper) => pepper.heat === heat), seed + 2).slice(0, 3);
     const odd = sampleSafe(
-      peppers.filter((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= 2),
-      peppers.filter((pepper) => pepper.heat !== heat),
+      pool.filter((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= 2),
+      pool.filter((pepper) => pepper.heat !== heat),
       seed + 3,
     );
     const cards = shuffle([...same.map(pepperCard), pepperCard(odd)], seed + 4);
@@ -1335,6 +1362,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
   }
 
   if (currentTopic === "buildings") {
+    const preferred = preferredPool(buildings, difficulty);
     const rules: {
       id: string;
       prompt: string;
@@ -1408,10 +1436,12 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
         explanation: (odd) => `The rule is building status. ${odd.name} is the odd one out because it is ${odd.status}.`,
       },
     ];
-    const eligibleRules = rules.filter((rule) => buildings.filter(rule.same).length >= 3 && buildings.some(rule.odd));
+    const preferredEligibleRules = rules.filter((rule) => preferred.filter(rule.same).length >= 3 && preferred.some(rule.odd));
+    const pool = preferredEligibleRules.length ? preferred : buildings;
+    const eligibleRules = rules.filter((rule) => pool.filter(rule.same).length >= 3 && pool.some(rule.odd));
     const rule = sampleSafe(eligibleRules, rules, seed + 5);
-    const same = shuffle(buildings.filter(rule.same), seed + 6).slice(0, 3);
-    const odd = sampleSafe(buildings.filter(rule.odd), buildings.filter((building) => !same.some((card) => card.id === building.id)), seed + 7);
+    const same = shuffle(pool.filter(rule.same), seed + 6).slice(0, 3);
+    const odd = sampleSafe(pool.filter(rule.odd), pool.filter((building) => !same.some((card) => card.id === building.id)), seed + 7);
     const cards = shuffle([...same.map(buildingCard), buildingCard(odd)], seed + 8);
     return {
       id: `${seed}-odd-buildings-${rule.id}-${odd.id}`,
@@ -1425,9 +1455,14 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
   }
 
   if (currentTopic === "space") {
-    const kind = sample(["planet", "star", "concept"] as const, seed + 8);
-    const same = shuffle(spaceCards.filter((space) => space.kind === kind), seed + 9).slice(0, 3);
-    const odd = sampleSafe(spaceCards.filter((space) => space.kind !== kind), spaceCards, seed + 10);
+    const preferred = preferredPool(spaceCards, difficulty);
+    const allKinds = ["planet", "star", "concept"] as const;
+    const preferredEligibleKinds = allKinds.filter((kind) => preferred.filter((space) => space.kind === kind).length >= 3 && preferred.some((space) => space.kind !== kind));
+    const pool = preferredEligibleKinds.length ? preferred : spaceCards;
+    const eligibleKinds = allKinds.filter((kind) => pool.filter((space) => space.kind === kind).length >= 3 && pool.some((space) => space.kind !== kind));
+    const kind = sampleSafe(preferredEligibleKinds, eligibleKinds, seed + 8);
+    const same = shuffle(pool.filter((space) => space.kind === kind), seed + 9).slice(0, 3);
+    const odd = sampleSafe(pool.filter((space) => space.kind !== kind), pool, seed + 10);
     const cards = shuffle([...same.map((space) => spaceCard(space)), spaceCard(odd)], seed + 11);
     return {
       id: `${seed}-odd-space-${kind}-${odd.id}`,
@@ -1441,9 +1476,14 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
   }
 
   if (currentTopic === "jets") {
-    const category = sample(["stealth", "bomber", "trainer", "interceptor", "attack", "multirole", "dogfighter"] as JetCategory[], seed + 12);
-    const same = shuffle(jets.filter((jet) => jet.category === category), seed + 13).slice(0, 3);
-    const odd = sampleSafe(jets.filter((jet) => jet.category !== category), jets, seed + 14);
+    const preferred = preferredPool(jets, difficulty);
+    const allCategories = ["stealth", "bomber", "trainer", "interceptor", "attack", "multirole", "dogfighter"] as JetCategory[];
+    const preferredEligibleCategories = allCategories.filter((category) => preferred.filter((jet) => jet.category === category).length >= 3 && preferred.some((jet) => jet.category !== category));
+    const pool = preferredEligibleCategories.length ? preferred : jets;
+    const eligibleCategories = allCategories.filter((category) => pool.filter((jet) => jet.category === category).length >= 3 && pool.some((jet) => jet.category !== category));
+    const category = sampleSafe(preferredEligibleCategories, eligibleCategories, seed + 12);
+    const same = shuffle(pool.filter((jet) => jet.category === category), seed + 13).slice(0, 3);
+    const odd = sampleSafe(pool.filter((jet) => jet.category !== category), pool, seed + 14);
     const cards = shuffle([...same.map((jet) => jetCard(jet)), jetCard(odd)], seed + 15);
     return {
       id: `${seed}-odd-jets-${category}-${odd.id}`,
@@ -1456,10 +1496,14 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
     };
   }
 
-  const families = Array.from(new Set(sharks.map((shark) => shark.family)));
-  const family = sampleSafe(families.filter((item) => sharks.filter((shark) => shark.family === item).length >= 3), families, seed + 12);
-  const same = shuffle(sharks.filter((shark) => shark.family === family), seed + 13).slice(0, 3);
-  const odd = sampleSafe(sharks.filter((shark) => shark.family !== family), sharks, seed + 14);
+  const preferred = preferredPool(sharks, difficulty);
+  const preferredFamilies = Array.from(new Set(preferred.map((shark) => shark.family)));
+  const preferredEligibleFamilies = preferredFamilies.filter((item) => preferred.filter((shark) => shark.family === item).length >= 3);
+  const pool = preferredEligibleFamilies.length ? preferred : sharks;
+  const families = Array.from(new Set(pool.map((shark) => shark.family)));
+  const family = sampleSafe(preferredEligibleFamilies, families.filter((item) => pool.filter((shark) => shark.family === item).length >= 3), seed + 12);
+  const same = shuffle(pool.filter((shark) => shark.family === family), seed + 13).slice(0, 3);
+  const odd = sampleSafe(pool.filter((shark) => shark.family !== family), pool, seed + 14);
   const cards = shuffle([...same.map((shark) => sharkCard(shark)), sharkCard(odd)], seed + 15);
   return {
     id: `${seed}-odd-sharks-${family}-${odd.id}`,
@@ -1477,7 +1521,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   const count = difficulty === 1 ? 3 : 4;
 
   if (currentTopic === "peppers") {
-    const cards = distinctStatCards(shuffle(peppers, seed + 1).map(pepperCard), seed + 2, count);
+    const cards = distinctStatCards(shuffle(preferredPool(peppers, difficulty), seed + 1).map(pepperCard), seed + 2, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-peppers`,
@@ -1491,7 +1535,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   }
 
   if (currentTopic === "buildings") {
-    const cards = distinctStatCards(shuffle(buildings, seed + 3).map(buildingCard), seed + 4, count);
+    const cards = distinctStatCards(shuffle(preferredPool(buildings, difficulty), seed + 3).map(buildingCard), seed + 4, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-buildings`,
@@ -1512,7 +1556,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       if (metric === "size") return item.radiusSolar !== undefined || item.diameterMiles !== undefined;
       return item.moons !== undefined;
     });
-    const cards = distinctStatCards(shuffle(pool, seed + 6).map((space) => spaceCard(space, metric)), seed + 7, count);
+    const cards = distinctStatCards(shuffle(preferredPool(pool, difficulty), seed + 6).map((space) => spaceCard(space, metric)), seed + 7, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-space-${metric}`,
@@ -1527,7 +1571,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "jets") {
     const metric = sample(["speed", "range", "firepower"] as const, seed + 5);
-    const cards = distinctStatCards(shuffle(jets, seed + 6).map((jet) => jetCard(jet, metric)), seed + 7, count);
+    const cards = distinctStatCards(shuffle(preferredPool(jets, difficulty), seed + 6).map((jet) => jetCard(jet, metric)), seed + 7, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-jets-${metric}`,
@@ -1541,7 +1585,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   }
 
   const metric = sample(["length", "speed", "power"] as const, seed + 5);
-  const cards = distinctStatCards(shuffle(sharks, seed + 6).map((shark) => sharkCard(shark, metric)), seed + 7, count);
+  const cards = distinctStatCards(shuffle(preferredPool(sharks, difficulty), seed + 6).map((shark) => sharkCard(shark, metric)), seed + 7, count);
   const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
   return {
     id: `${seed}-sort-sharks-${metric}`,
@@ -1559,9 +1603,10 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   const truthful = seedRandom(seed + 11) > 0.46;
 
   if (currentTopic === "peppers") {
-    const pepper = sample(peppers, seed + 12);
-    const fakeHeat = sample(peppers.filter((item) => item.id !== pepper.id && item.heat !== pepper.heat), seed + 13);
-    const fakeShu = sampleSafe(peppers.filter((item) => item.id !== pepper.id && item.shuMax !== pepper.shuMax), peppers.filter((item) => item.id !== pepper.id), seed + 14);
+    const pool = preferredPool(peppers, difficulty);
+    const pepper = sample(pool, seed + 12);
+    const fakeHeat = sample(pool.filter((item) => item.id !== pepper.id && item.heat !== pepper.heat), seed + 13);
+    const fakeShu = sampleSafe(pool.filter((item) => item.id !== pepper.id && item.shuMax !== pepper.shuMax), pool.filter((item) => item.id !== pepper.id), seed + 14);
     const useMath = difficulty > 1 && seedRandom(seed + 14) > 0.5;
     const statement = truthful
       ? useMath
@@ -1584,10 +1629,11 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   }
 
   if (currentTopic === "buildings") {
-    const building = sample(buildings, seed + 15);
+    const pool = preferredPool(buildings, difficulty);
+    const building = sample(pool, seed + 15);
     const factType = difficulty === 1 ? "city" : sample(["city", "height", "status"] as const, seed + 17);
-    const fakeCity = sampleSafe(buildings.filter((item) => item.id !== building.id && item.city !== building.city), buildings.filter((item) => item.id !== building.id), seed + 16);
-    const fakeHeight = sampleSafe(buildings.filter((item) => item.id !== building.id && item.heightFt !== building.heightFt), buildings.filter((item) => item.id !== building.id), seed + 18);
+    const fakeCity = sampleSafe(pool.filter((item) => item.id !== building.id && item.city !== building.city), pool.filter((item) => item.id !== building.id), seed + 16);
+    const fakeHeight = sampleSafe(pool.filter((item) => item.id !== building.id && item.heightFt !== building.heightFt), pool.filter((item) => item.id !== building.id), seed + 18);
     const statement = truthful
       ? factType === "height"
         ? `${building.name} is ${feet(building.heightFt)} tall.`
@@ -1613,26 +1659,27 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   }
 
   if (currentTopic === "space") {
-    const space = sample(spaceCards, seed + 18);
+    const pool = preferredPool(spaceCards, difficulty);
+    const space = sample(pool, seed + 18);
     const factType = difficulty === 1 ? "group" : sample(["group", "fact", "temperature", "distance"] as const, seed + 20);
     const realTemperature = space.surfaceTempK ?? space.meanSurfaceTempF;
     const realDistance = space.distanceFromSunMillionMiles ?? space.distanceLightYears;
-    const fakeGroup = sampleSafe(spaceCards.filter((item) => item.id !== space.id && item.group !== space.group), spaceCards.filter((item) => item.id !== space.id), seed + 19);
-    const fakeFact = sample(spaceCards.filter((item) => item.id !== space.id), seed + 21);
+    const fakeGroup = sampleSafe(pool.filter((item) => item.id !== space.id && item.group !== space.group), pool.filter((item) => item.id !== space.id), seed + 19);
+    const fakeFact = sample(pool.filter((item) => item.id !== space.id), seed + 21);
     const fakeTemperatureCard = sampleSafe(
-      spaceCards.filter((item) => {
+      pool.filter((item) => {
         const value = item.surfaceTempK ?? item.meanSurfaceTempF;
         return item.id !== space.id && value !== undefined && value !== realTemperature;
       }),
-      spaceCards.filter((item) => item.id !== space.id),
+      pool.filter((item) => item.id !== space.id),
       seed + 22,
     );
     const fakeDistanceCard = sampleSafe(
-      spaceCards.filter((item) => {
+      pool.filter((item) => {
         const value = item.distanceFromSunMillionMiles ?? item.distanceLightYears;
         return item.id !== space.id && value !== undefined && value !== realDistance;
       }),
-      spaceCards.filter((item) => item.id !== space.id),
+      pool.filter((item) => item.id !== space.id),
       seed + 23,
     );
     const fakeTemperature = fakeTemperatureCard.surfaceTempK ?? fakeTemperatureCard.meanSurfaceTempF;
@@ -1666,12 +1713,13 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   }
 
   if (currentTopic === "jets") {
-    const jet = sample(jets, seed + 18);
+    const pool = preferredPool(jets, difficulty);
+    const jet = sample(pool, seed + 18);
     const factType = difficulty === 1 ? "category" : sample(["category", "speed", "range", "country"] as const, seed + 20);
-    const fakeCategory = sampleSafe(jets.filter((item) => item.id !== jet.id && item.category !== jet.category), jets.filter((item) => item.id !== jet.id), seed + 19);
-    const fakeSpeed = sampleSafe(jets.filter((item) => item.id !== jet.id && item.maxSpeedMph !== jet.maxSpeedMph), jets.filter((item) => item.id !== jet.id), seed + 21);
-    const fakeRange = sampleSafe(jets.filter((item) => item.id !== jet.id && item.rangeMiles !== jet.rangeMiles), jets.filter((item) => item.id !== jet.id), seed + 22);
-    const fakeCountry = sampleSafe(jets.filter((item) => item.id !== jet.id && item.country !== jet.country), jets.filter((item) => item.id !== jet.id), seed + 23);
+    const fakeCategory = sampleSafe(pool.filter((item) => item.id !== jet.id && item.category !== jet.category), pool.filter((item) => item.id !== jet.id), seed + 19);
+    const fakeSpeed = sampleSafe(pool.filter((item) => item.id !== jet.id && item.maxSpeedMph !== jet.maxSpeedMph), pool.filter((item) => item.id !== jet.id), seed + 21);
+    const fakeRange = sampleSafe(pool.filter((item) => item.id !== jet.id && item.rangeMiles !== jet.rangeMiles), pool.filter((item) => item.id !== jet.id), seed + 22);
+    const fakeCountry = sampleSafe(pool.filter((item) => item.id !== jet.id && item.country !== jet.country), pool.filter((item) => item.id !== jet.id), seed + 23);
     const statement = truthful
       ? factType === "speed"
         ? `${jet.name} can reach about ${formatNumber(jet.maxSpeedMph)} mph.`
@@ -1700,12 +1748,13 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     };
   }
 
-  const shark = sample(sharks, seed + 18);
+  const pool = preferredPool(sharks, difficulty);
+  const shark = sample(pool, seed + 18);
   const factType = difficulty === 1 ? "family" : sample(["family", "speed", "size", "diet"] as const, seed + 20);
-  const fakeFamily = sampleSafe(sharks.filter((item) => item.id !== shark.id && item.family !== shark.family), sharks.filter((item) => item.id !== shark.id), seed + 19);
-  const fakeSpeed = sampleSafe(sharks.filter((item) => item.id !== shark.id && item.speedMph !== shark.speedMph), sharks.filter((item) => item.id !== shark.id), seed + 21);
-  const fakeSize = sampleSafe(sharks.filter((item) => item.id !== shark.id && item.lengthFt !== shark.lengthFt), sharks.filter((item) => item.id !== shark.id), seed + 22);
-  const fakeDiet = sampleSafe(sharks.filter((item) => item.id !== shark.id && item.diet !== shark.diet), sharks.filter((item) => item.id !== shark.id), seed + 23);
+  const fakeFamily = sampleSafe(pool.filter((item) => item.id !== shark.id && item.family !== shark.family), pool.filter((item) => item.id !== shark.id), seed + 19);
+  const fakeSpeed = sampleSafe(pool.filter((item) => item.id !== shark.id && item.speedMph !== shark.speedMph), pool.filter((item) => item.id !== shark.id), seed + 21);
+  const fakeSize = sampleSafe(pool.filter((item) => item.id !== shark.id && item.lengthFt !== shark.lengthFt), pool.filter((item) => item.id !== shark.id), seed + 22);
+  const fakeDiet = sampleSafe(pool.filter((item) => item.id !== shark.id && item.diet !== shark.diet), pool.filter((item) => item.id !== shark.id), seed + 23);
   const statement = truthful
     ? factType === "speed"
       ? `${shark.name} can swim about ${formatNumber(shark.speedMph)} mph.`

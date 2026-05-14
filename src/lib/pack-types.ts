@@ -1,4 +1,5 @@
 import type { GameMode } from "./game-modes";
+import type { CardMetadata } from "./card-metadata";
 
 export type PackStat = {
   id: string;
@@ -19,6 +20,8 @@ export type PackCard = {
   fact: string;
   stats: PackStat[];
   categories: string[];
+  tags?: string[];
+  metadata?: CardMetadata;
   readingPrompts?: string[];
 };
 

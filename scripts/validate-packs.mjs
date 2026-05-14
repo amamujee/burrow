@@ -77,6 +77,35 @@ const validateStats = (packId, card, cardLabel) => {
   });
 };
 
+const validateCardMetadata = (packId, card, cardLabel) => {
+  if (card.tags !== undefined) {
+    if (!Array.isArray(card.tags)) {
+      addError(packId, `${cardLabel}: tags must be an array`);
+    } else {
+      uniqueCheck(packId, card.tags.filter(Boolean), `${cardLabel} tag`);
+      for (const tag of card.tags) {
+        if (!hasText(tag) || !slugPattern.test(tag)) addError(packId, `${cardLabel}: tag "${tag}" must be a lowercase slug`);
+      }
+    }
+  }
+
+  if (card.metadata !== undefined) {
+    if (!isObject(card.metadata)) {
+      addError(packId, `${cardLabel}: metadata must be an object`);
+      return;
+    }
+    const allowedKeys = new Set(["difficultyBand", "recognition", "taxonomyGroup", "accuracyNote", "imageDistinctGroup"]);
+    for (const key of Object.keys(card.metadata)) {
+      if (!allowedKeys.has(key)) addError(packId, `${cardLabel}: metadata.${key} is not supported`);
+    }
+    if (card.metadata.difficultyBand !== undefined && !["easy", "medium", "hard"].includes(card.metadata.difficultyBand)) addError(packId, `${cardLabel}: metadata.difficultyBand must be easy, medium, or hard`);
+    if (card.metadata.recognition !== undefined && (!Number.isInteger(card.metadata.recognition) || card.metadata.recognition < 1 || card.metadata.recognition > 5)) addError(packId, `${cardLabel}: metadata.recognition must be an integer from 1 to 5`);
+    if (card.metadata.taxonomyGroup !== undefined && !hasText(card.metadata.taxonomyGroup, 2)) addError(packId, `${cardLabel}: metadata.taxonomyGroup needs text`);
+    if (card.metadata.accuracyNote !== undefined && !hasText(card.metadata.accuracyNote, 8)) addError(packId, `${cardLabel}: metadata.accuracyNote needs text`);
+    if (card.metadata.imageDistinctGroup !== undefined && (!hasText(card.metadata.imageDistinctGroup) || !slugPattern.test(card.metadata.imageDistinctGroup))) addError(packId, `${cardLabel}: metadata.imageDistinctGroup must be a lowercase slug`);
+  }
+};
+
 const validateImage = (packId, card) => {
   if (!hasText(card.image)) {
     addError(packId, `${card.id}: missing image`);
@@ -162,6 +191,7 @@ const validatePack = (packFile) => {
     validateImage(packId, card);
 
     const stats = validateStats(packId, card, cardLabel);
+    validateCardMetadata(packId, card, cardLabel);
     for (const stat of stats) {
       if (stat.value > 0) commonStatIds.set(stat.id, (commonStatIds.get(stat.id) ?? 0) + 1);
     }

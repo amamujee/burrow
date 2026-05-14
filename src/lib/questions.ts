@@ -19,6 +19,7 @@ import {
   type SpaceCard,
   type TopicId,
 } from "./game-data";
+import { poolForDifficulty } from "./difficulty-pool";
 import { sample, seedRandom, shuffle } from "./random";
 
 export type TopicScope = TopicId | readonly KnowledgeTopic[];
@@ -106,6 +107,7 @@ const maxJetSpeed = 2200;
 const maxJetRange = 8800;
 const maxJetFirepower = 5;
 const allTopics: KnowledgeTopic[] = [...topicIds];
+const preferredPool = <T extends { id: string }>(items: readonly T[], difficulty: Difficulty) => poolForDifficulty(items, difficulty);
 
 const choiceCountForDifficulty = (difficulty: Difficulty) => (difficulty === 1 ? 3 : 4);
 
@@ -621,47 +623,52 @@ const headToHeadQuestionFromSpec = (spec: HeadToHeadSpec, seed: number): Questio
 
 const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty, seed: number): Question => {
   if (topic === "peppers") {
-    const first = sample(peppers, seed + 1);
-    const second = sample(peppers.filter((item) => item.id !== first.id), seed + 2);
+    const pool = preferredPool(peppers, difficulty);
+    const first = sample(pool, seed + 1);
+    const second = sample(pool.filter((item) => item.id !== first.id), seed + 2);
     return pepperHotterQuestion(seed, first, second);
   }
 
   if (topic === "buildings") {
-    const first = sample(buildings, seed + 3);
-    const second = sample(buildings.filter((item) => item.id !== first.id), seed + 4);
+    const pool = preferredPool(buildings, difficulty);
+    const first = sample(pool, seed + 3);
+    const second = sample(pool.filter((item) => item.id !== first.id), seed + 4);
     return buildingTallerQuestion(seed, first, second);
   }
 
   if (topic === "sharks") {
     const stats: ("length" | "speed" | "power")[] = difficulty === 1 ? ["length", "speed"] : ["length", "speed", "power"];
     const stat = sample(stats, seed + 5);
-    const first = sample(sharks, seed + 6);
-    const second = sample(sharks.filter((item) => item.id !== first.id), seed + 7);
+    const pool = preferredPool(sharks, difficulty);
+    const first = sample(pool, seed + 6);
+    const second = sample(pool.filter((item) => item.id !== first.id), seed + 7);
     return sharkComparisonQuestion(seed, first, second, stat);
   }
 
   if (topic === "jets") {
     const stats: ("speed" | "range" | "firepower")[] = difficulty === 1 ? ["speed", "range"] : ["speed", "range", "firepower"];
     const stat = sample(stats, seed + 5);
-    const first = sample(jets, seed + 6);
-    const second = sample(jets.filter((item) => item.id !== first.id), seed + 7);
+    const pool = preferredPool(jets, difficulty);
+    const first = sample(pool, seed + 6);
+    const second = sample(pool.filter((item) => item.id !== first.id), seed + 7);
     return jetComparisonQuestion(seed, first, second, stat);
   }
 
   const stats: ("temp" | "radius" | "distance" | "moons")[] = difficulty === 1 ? ["radius", "distance", "temp"] : ["temp", "radius", "distance", "moons"];
   const stat = sample(stats, seed + 8);
-  const pool = stat === "distance" || stat === "moons"
+  const pool = preferredPool(stat === "distance" || stat === "moons"
     ? spacePlanets
     : seedRandom(seed + 9) > 0.5
       ? spaceStars
-      : spacePlanets.filter((card) => stat !== "temp" || card.meanSurfaceTempF !== undefined);
+      : spacePlanets.filter((card) => stat !== "temp" || card.meanSurfaceTempF !== undefined), difficulty);
   const first = sample(pool, seed + 10);
   const second = sample(pool.filter((item) => item.id !== first.id), seed + 11);
   return spaceComparisonQuestion(seed, first, second, stat);
 };
 
 const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
-  const pepper = sample(peppers, seed);
+  const pool = preferredPool(peppers, difficulty);
+  const pepper = sample(pool, seed);
   const kinds: QuestionKind[] = difficulty === 1
     ? ["pepper-heat", "pepper-shu", "pepper-hotter", "pepper-reading"]
     : difficulty === 2
@@ -688,7 +695,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
   }
 
   if (kind === "pepper-hotter") {
-    const challenger = sample(peppers.filter((item) => item.id !== pepper.id), seed + 11);
+    const challenger = sample(pool.filter((item) => item.id !== pepper.id), seed + 11);
     return pepperHotterQuestion(seed, pepper, challenger);
   }
 
@@ -719,7 +726,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
   }
 
   const correct = `${range(pepper)} SHU`;
-  const otherRanges = peppers.filter((item) => item.id !== pepper.id).map((item) => `${range(item)} SHU`);
+  const otherRanges = pool.filter((item) => item.id !== pepper.id).map((item) => `${range(item)} SHU`);
   return {
     id: `${seed}-pepper-shu-${pepper.id}`,
     topic: "peppers",
@@ -737,7 +744,8 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
 };
 
 const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
-  const building = sample(buildings, seed);
+  const pool = preferredPool(buildings, difficulty);
+  const building = sample(pool, seed);
   const kinds: QuestionKind[] = difficulty === 1
     ? ["building-name", "building-height", "building-taller", "building-reading"]
     : difficulty === 2
@@ -746,7 +754,7 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
   const kind = sample(kinds, seed + 23);
 
   if (kind === "building-name") {
-    const options = shuffle(buildings.filter((item) => item.id !== building.id).map((item) => item.name), seed + 24).slice(0, choiceCountForDifficulty(difficulty) - 1);
+    const options = shuffle(pool.filter((item) => item.id !== building.id).map((item) => item.name), seed + 24).slice(0, choiceCountForDifficulty(difficulty) - 1);
     return {
       id: `${seed}-building-name-${building.id}`,
       topic: "buildings",
@@ -763,12 +771,12 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
   }
 
   if (kind === "building-taller") {
-    const challenger = sample(buildings.filter((item) => item.id !== building.id), seed + 26);
+    const challenger = sample(pool.filter((item) => item.id !== building.id), seed + 26);
     return buildingTallerQuestion(seed, building, challenger);
   }
 
   if (kind === "building-difference") {
-    const challenger = sample(buildings.filter((item) => item.id !== building.id && item.heightFt !== building.heightFt), seed + 28);
+    const challenger = sample(pool.filter((item) => item.id !== building.id && item.heightFt !== building.heightFt), seed + 28);
     const taller = building.heightFt > challenger.heightFt ? building : challenger;
     const shorter = building.heightFt > challenger.heightFt ? challenger : building;
     const { biggerValue, smallerValue, diff } = roundedSubtractionPair(taller.heightFt, shorter.heightFt, difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50);
@@ -812,7 +820,8 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
 };
 
 const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
-  const shark = sample(sharks, seed);
+  const pool = preferredPool(sharks, difficulty);
+  const shark = sample(pool, seed);
   const kinds: QuestionKind[] = difficulty === 1
     ? ["shark-name", "shark-family", "shark-bigger", "shark-reading"]
     : difficulty === 2
@@ -821,7 +830,7 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
   const kind = sample(kinds, seed + 41);
 
   if (kind === "shark-name") {
-    const options = shuffle(sharks.filter((item) => item.id !== shark.id).map((item) => item.name), seed + 42).slice(0, choiceCountForDifficulty(difficulty) - 1);
+    const options = shuffle(pool.filter((item) => item.id !== shark.id).map((item) => item.name), seed + 42).slice(0, choiceCountForDifficulty(difficulty) - 1);
     return {
       id: `${seed}-shark-name-${shark.id}`,
       topic: "sharks",
@@ -838,7 +847,7 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
   }
 
   if (kind === "shark-family") {
-    const families = Array.from(new Set(sharks.map((item) => item.family)));
+    const families = Array.from(new Set(pool.map((item) => item.family)));
     const options = shuffle(families.filter((family) => family !== shark.family), seed + 44).slice(0, choiceCountForDifficulty(difficulty) - 1);
     return {
       id: `${seed}-shark-family-${shark.id}`,
@@ -855,13 +864,13 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
   }
 
   if (kind === "shark-bigger" || kind === "shark-faster" || kind === "shark-power") {
-    const challenger = sample(sharks.filter((item) => item.id !== shark.id), seed + 46);
+    const challenger = sample(pool.filter((item) => item.id !== shark.id), seed + 46);
     const stat = kind === "shark-bigger" ? "length" : kind === "shark-faster" ? "speed" : "power";
     return sharkComparisonQuestion(seed, shark, challenger, stat);
   }
 
   if (kind === "shark-difference") {
-    const challenger = sample(sharks.filter((item) => item.id !== shark.id && item.lengthFt !== shark.lengthFt), seed + 48);
+    const challenger = sample(pool.filter((item) => item.id !== shark.id && item.lengthFt !== shark.lengthFt), seed + 48);
     const bigger = shark.lengthFt > challenger.lengthFt ? shark : challenger;
     const smaller = shark.lengthFt > challenger.lengthFt ? challenger : shark;
     const { biggerValue, smallerValue, diff } = roundedSubtractionPair(bigger.lengthFt, smaller.lengthFt, 5);
@@ -901,8 +910,9 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
 
 const jetNameDistractors = (jet: Jet, difficulty: Difficulty, seed: number) => {
   const count = choiceCountForDifficulty(difficulty) - 1;
-  const closePool = jets.filter((item) => item.id !== jet.id && (item.category === jet.category || item.country === jet.country));
-  const fallbackPool = jets.filter((item) => item.id !== jet.id);
+  const pool = preferredPool(jets, difficulty);
+  const closePool = pool.filter((item) => item.id !== jet.id && (item.category === jet.category || item.country === jet.country));
+  const fallbackPool = pool.filter((item) => item.id !== jet.id);
   return shuffle(closePool.length >= count ? closePool : fallbackPool, seed).slice(0, count).map((item) => item.name);
 };
 
@@ -933,7 +943,8 @@ const jetReadingOptions = (jet: Jet, seed: number, count: number) => {
 };
 
 const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
-  const jet = sample(jets, seed);
+  const pool = preferredPool(jets, difficulty);
+  const jet = sample(pool, seed);
   const kinds: QuestionKind[] = difficulty === 1
     ? ["jet-name", "jet-category", "jet-faster", "jet-reading"]
     : difficulty === 2
@@ -959,7 +970,7 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
   }
 
   if (kind === "jet-category") {
-    const categories = Array.from(new Set(jets.map((item) => jetCategoryLabels[item.category])));
+    const categories = Array.from(new Set(pool.map((item) => jetCategoryLabels[item.category])));
     const correct = jetCategoryLabels[jet.category];
     const options = shuffle(categories.filter((category) => category !== correct), seed + 56).slice(0, choiceCountForDifficulty(difficulty) - 1);
     return {
@@ -977,13 +988,13 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
   }
 
   if (kind === "jet-faster" || kind === "jet-range" || kind === "jet-firepower") {
-    const challenger = sample(jets.filter((item) => item.id !== jet.id), seed + 58);
+    const challenger = sample(pool.filter((item) => item.id !== jet.id), seed + 58);
     const stat = kind === "jet-faster" ? "speed" : kind === "jet-range" ? "range" : "firepower";
     return jetComparisonQuestion(seed, jet, challenger, stat);
   }
 
   if (kind === "jet-difference") {
-    const challenger = sample(jets.filter((item) => item.id !== jet.id && item.maxSpeedMph !== jet.maxSpeedMph), seed + 59);
+    const challenger = sample(pool.filter((item) => item.id !== jet.id && item.maxSpeedMph !== jet.maxSpeedMph), seed + 59);
     const faster = jet.maxSpeedMph > challenger.maxSpeedMph ? jet : challenger;
     const slower = jet.maxSpeedMph > challenger.maxSpeedMph ? challenger : jet;
     const { biggerValue, smallerValue, diff } = roundedSubtractionPair(faster.maxSpeedMph, slower.maxSpeedMph, difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50);
@@ -1023,7 +1034,8 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
 };
 
 const spaceQuestion = (seed: number, difficulty: Difficulty): Question => {
-  const item = sample(spaceCards, seed);
+  const pool = preferredPool(spaceCards, difficulty);
+  const item = sample(pool, seed);
   const kinds: QuestionKind[] = difficulty === 1
     ? ["space-name", "space-farther", "space-concept", "space-reading"]
     : difficulty === 2
@@ -1032,7 +1044,7 @@ const spaceQuestion = (seed: number, difficulty: Difficulty): Question => {
   const kind = sample(kinds, seed + 61);
 
   if (kind === "space-name") {
-    const options = shuffle(spaceCards.filter((card) => card.id !== item.id).map((card) => card.name), seed + 62).slice(0, choiceCountForDifficulty(difficulty) - 1);
+    const options = shuffle(pool.filter((card) => card.id !== item.id).map((card) => card.name), seed + 62).slice(0, choiceCountForDifficulty(difficulty) - 1);
     return {
       id: `${seed}-space-name-${item.id}`,
       topic: "space",
@@ -1049,34 +1061,37 @@ const spaceQuestion = (seed: number, difficulty: Difficulty): Question => {
   }
 
   if (kind === "space-hotter") {
-    const pool = seedRandom(seed + 64) > 0.45 ? spaceStars : spacePlanets.filter((card) => card.meanSurfaceTempF !== undefined);
-    const first = sample(pool, seed + 65);
-    const second = sample(pool.filter((card) => card.id !== first.id), seed + 66);
+    const comparisonPool = preferredPool(seedRandom(seed + 64) > 0.45 ? spaceStars : spacePlanets.filter((card) => card.meanSurfaceTempF !== undefined), difficulty);
+    const first = sample(comparisonPool, seed + 65);
+    const second = sample(comparisonPool.filter((card) => card.id !== first.id), seed + 66);
     return spaceComparisonQuestion(seed, first, second, "temp");
   }
 
   if (kind === "space-bigger") {
-    const pool = seedRandom(seed + 68) > 0.5 ? spaceStars : spacePlanets;
-    const first = sample(pool, seed + 69);
-    const second = sample(pool.filter((card) => card.id !== first.id), seed + 70);
+    const comparisonPool = preferredPool(seedRandom(seed + 68) > 0.5 ? spaceStars : spacePlanets, difficulty);
+    const first = sample(comparisonPool, seed + 69);
+    const second = sample(comparisonPool.filter((card) => card.id !== first.id), seed + 70);
     return spaceComparisonQuestion(seed, first, second, "radius");
   }
 
   if (kind === "space-farther") {
-    const first = sample(spacePlanets, seed + 72);
-    const second = sample(spacePlanets.filter((card) => card.id !== first.id), seed + 73);
+    const comparisonPool = preferredPool(spacePlanets, difficulty);
+    const first = sample(comparisonPool, seed + 72);
+    const second = sample(comparisonPool.filter((card) => card.id !== first.id), seed + 73);
     return spaceComparisonQuestion(seed, first, second, "distance");
   }
 
   if (kind === "space-moons") {
-    const first = sample(spacePlanets, seed + 75);
-    const second = sample(spacePlanets.filter((card) => card.id !== first.id), seed + 76);
+    const comparisonPool = preferredPool(spacePlanets, difficulty);
+    const first = sample(comparisonPool, seed + 75);
+    const second = sample(comparisonPool.filter((card) => card.id !== first.id), seed + 76);
     return spaceComparisonQuestion(seed, first, second, "moons");
   }
 
   if (kind === "space-concept") {
-    const concept = sample(spaceConcepts, seed + 78);
-    const options = shuffle(spaceConcepts.filter((card) => card.id !== concept.id).map((card) => card.conceptAnswer ?? card.fact), seed + 79).slice(0, choiceCountForDifficulty(difficulty) - 1);
+    const conceptPool = preferredPool(spaceConcepts, difficulty);
+    const concept = sample(conceptPool, seed + 78);
+    const options = shuffle(conceptPool.filter((card) => card.id !== concept.id).map((card) => card.conceptAnswer ?? card.fact), seed + 79).slice(0, choiceCountForDifficulty(difficulty) - 1);
     return {
       id: `${seed}-space-concept-${concept.id}`,
       topic: "space",

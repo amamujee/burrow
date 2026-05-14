@@ -46,6 +46,8 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
         qualityScore,
         qualityFlags: [],
         categories: card.categories,
+        tags: card.tags,
+        metadata: card.metadata,
         stats: card.stats.map(toTopTrumpStat),
       } satisfies GenericKnowledgeCard;
     });
