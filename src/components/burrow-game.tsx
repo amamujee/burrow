@@ -2052,11 +2052,16 @@ function NumberMode({
 }) {
   const answered = selected !== null;
   const answerLabel = `${round.answer.toLocaleString("en-US")} ${round.unit}`;
-  const expressionLabel = round.termValues.map((value) => value.toLocaleString("en-US")).join(` ${round.operator} `);
-  const stageBadge = round.operation === "addition" ? "Stack case" : "Number case";
+  const expressionLabel =
+    round.operation === "fit"
+      ? `${round.smallerValue.toLocaleString("en-US")} x ? = ${round.biggerValue.toLocaleString("en-US")}`
+      : round.termValues.map((value) => value.toLocaleString("en-US")).join(` ${round.operator} `);
+  const stageBadge = round.operation === "addition" ? "Stack case" : round.operation === "fit" ? "Fit case" : "Number case";
   const stageFooter =
     round.operation === "addition"
       ? `${round.cards.map((card) => card.title).join(" + ")} stacked together`
+      : round.operation === "fit"
+        ? `${round.smallerLabel} repeated to reach ${round.biggerLabel}`
       : `${round.biggerLabel} minus ${round.smallerLabel}`;
 
   return (
@@ -2151,6 +2156,29 @@ function NumberEquationBoard({ round }: { round: NumberRound }) {
               <span className="grid h-6 w-6 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs font-black">{term.label}</span>
               <span className="truncate text-sm font-black text-[#102f36]">{term.card.title}</span>
               <span className="text-sm font-black text-[#9f3f2b]">{term.value.toLocaleString("en-US")}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (round.operation === "fit") {
+    return (
+      <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2">
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Fit</p>
+          <p className="text-xs font-black text-[#102f36]">count the small height</p>
+        </div>
+        <div className="mt-2 grid gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2">
+          {terms.map((term, index) => (
+            <div key={`${round.id}-fit-${term.card.id}`} className="grid grid-cols-[2rem_1fr_auto] items-center gap-2 rounded-md border-2 border-[#092421] bg-[#fff9ec] px-2 py-1 shadow-[2px_2px_0_#092421]">
+              <span className="grid h-6 w-6 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs font-black">{index === 0 ? "1" : "?"}</span>
+              <span className="truncate text-sm font-black text-[#102f36]">{term.card.title}</span>
+              <span className="text-sm font-black text-[#9f3f2b]">{term.value.toLocaleString("en-US")}</span>
+              <span className="col-span-3 h-2 overflow-hidden rounded-full bg-[#e6d7bc]">
+                <span className="block h-full bg-[#9f3f2b]" style={{ width: `${Math.max(2, Math.min(100, (term.value / maxValue) * 100))}%` }} />
+              </span>
             </div>
           ))}
         </div>

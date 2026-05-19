@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 900" role="img" aria-labelledby="title desc">
+  <title id="title">Standing human height reference</title>
+  <desc id="desc">A simple standing human silhouette beside a height ruler.</desc>
+  <rect width="720" height="900" fill="#e9f2ee"/>
+  <rect x="84" y="70" width="6" height="720" fill="#23433f"/>
+  <g fill="#23433f" font-family="Arial, sans-serif" font-weight="700" font-size="26">
+    <text x="112" y="106">6 ft</text>
+    <text x="112" y="302">4 ft</text>
+    <text x="112" y="500">2 ft</text>
+  </g>
+  <g stroke="#23433f" stroke-width="5">
+    <line x1="78" y1="90" x2="104" y2="90"/>
+    <line x1="78" y1="286" x2="104" y2="286"/>
+    <line x1="78" y1="484" x2="104" y2="484"/>
+    <line x1="78" y1="690" x2="104" y2="690"/>
+  </g>
+  <circle cx="374" cy="170" r="58" fill="#102f36"/>
+  <path d="M330 245h88c34 0 61 27 61 61v172c0 24-19 43-43 43h-9v206c0 28-23 51-51 51s-51-23-51-51V521h-9c-24 0-43-19-43-43V306c0-34 27-61 57-61Z" fill="#102f36"/>
+  <path d="M305 315 216 455c-13 20-7 47 13 60 20 12 47 6 60-14l69-108" fill="#102f36"/>
+  <path d="M443 315 532 455c13 20 7 47-13 60-20 12-47 6-60-14l-69-108" fill="#102f36"/>
+  <path d="M128 804h464" stroke="#23433f" stroke-width="10" stroke-linecap="round"/>
+</svg>

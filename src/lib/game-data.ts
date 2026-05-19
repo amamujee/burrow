@@ -1306,8 +1306,11 @@ export const sharks: Shark[] = [
     speedMph: 30,
     power: 4,
     diet: "schooling fish",
-    ...contentImage("sharks", "common-thresher", "Thresher shark - 3.jpg"),
-    imageCredit: "Oleg Yunakov, Wikimedia Commons",
+    image: "/burrow-assets/sharks/common-thresher.png",
+    imageSourceFile: "640x427-Shark-Common-Thresher-NOAAFisheries.png",
+    imageSourceUrl: "https://www.fisheries.noaa.gov/species/pacific-common-thresher-shark",
+    imageCredit: "NOAA Fisheries / Jack Hornady",
+    imageFit: "contain",
     fact: "Thresher sharks use their long tails like a whip to stun fish.",
   },
   {

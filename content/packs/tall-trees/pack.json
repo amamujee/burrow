@@ -1,0 +1,410 @@
+{
+  "$schema": "../pack.schema.json",
+  "id": "tall-trees",
+  "title": "Tall Trees",
+  "summary": "Record-setting trees, giant tree species, and familiar height references become photo-rich sorting, comparison, and number challenges.",
+  "status": "playable",
+  "audience": {
+    "minAge": 5,
+    "maxAge": 10,
+    "readingLevel": "short tree facts with rounded height math"
+  },
+  "recommendedModes": [
+    "trumps",
+    "sort",
+    "fact",
+    "peek",
+    "number",
+    "odd"
+  ],
+  "sources": [
+    {
+      "label": "Wikipedia list of tallest trees",
+      "url": "https://en.wikipedia.org/wiki/List_of_tallest_trees",
+      "note": "Verified tallest-tree species list and current height references."
+    },
+    {
+      "label": "Treehugger tallest trees guide",
+      "url": "https://www.treehugger.com/tallest-trees-world-4858795",
+      "note": "Kid-friendly tallest-tree overview and Candide height-chart credit."
+    },
+    {
+      "label": "Big Ben article",
+      "url": "https://en.wikipedia.org/wiki/Big_Ben",
+      "note": "Elizabeth Tower height used as a familiar 316-foot reference."
+    },
+    {
+      "label": "Wikimedia Commons tree media",
+      "url": "https://commons.wikimedia.org/wiki/Category:Trees",
+      "note": "Local gameplay images use openly licensed Commons media where possible."
+    }
+  ],
+  "cards": [
+    {
+      "id": "dave-human",
+      "name": "Dave the Human",
+      "image": "/burrow-assets/tall-trees/dave-human.svg",
+      "imageAlt": "Standing human height reference beside a ruler",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://github.com/amamujee/burrow",
+      "fact": "Dave is a tallish 6-foot person, which makes him a handy ruler for giant tree height problems.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 6, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 1.8, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 1, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 0.3, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["reference", "human-scale"],
+      "tags": ["reference", "human", "height-math"],
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "reference" },
+      "readingPrompts": ["How many Daves tall is a 60-foot tree?"]
+    },
+    {
+      "id": "geoffrey-giraffe",
+      "name": "Geoffrey the Giraffe",
+      "image": "/burrow-assets/tall-trees/giraffe.jpg",
+      "imageAlt": "Tall giraffe standing in a park",
+      "imageCredit": "Wikimedia Commons contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Giraffe_Mikumi_National_Park.jpg",
+      "fact": "A giraffe is the tallest living land animal, but Hyperion is still about twenty-one giraffes tall.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 18, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 5.5, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 3, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 1, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["reference", "animal-scale"],
+      "tags": ["reference", "giraffe", "height-math"],
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "reference" },
+      "readingPrompts": ["What tree cards are more than ten giraffes tall?"]
+    },
+    {
+      "id": "english-oak",
+      "name": "English Oak",
+      "image": "/burrow-assets/tall-trees/english-oak.jpg",
+      "imageAlt": "Large English oak tree with a spreading crown",
+      "imageCredit": "Wikimedia Commons contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Quercus_robur.jpg",
+      "fact": "English oaks can become broad old trees; the guide uses a 35-meter oak as the first tree comparison.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 115, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 35, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 19, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 6, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["tree type", "broadleaf", "europe"],
+      "tags": ["oak", "broadleaf", "reference-tree"],
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "broadleaf" },
+      "readingPrompts": ["About how many Daves tall is this oak?"]
+    },
+    {
+      "id": "atlantis-shuttle-stack",
+      "name": "Atlantis Shuttle Stack",
+      "image": "/burrow-assets/tall-trees/atlantis.jpg",
+      "imageAlt": "Space Shuttle Atlantis launching on its external tank and boosters",
+      "imageCredit": "NASA / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Space_Shuttle_Atlantis_launches_from_KSC_on_STS-132_side_view.jpg",
+      "fact": "The Space Shuttle launch stack stood about 184 feet tall, so several giant trees would tower above it.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 184, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 56, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 31, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 10, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["reference", "space-scale"],
+      "tags": ["reference", "space-shuttle", "height-math"],
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "reference" },
+      "readingPrompts": ["Which tree is about twice as tall as the shuttle stack?"]
+    },
+    {
+      "id": "betws-y-coed-douglas-fir",
+      "name": "Betws-y-Coed Douglas Fir",
+      "image": "/burrow-assets/tall-trees/douglas-fir.jpg",
+      "imageAlt": "Tall Douglas fir tree viewed from the ground",
+      "imageCredit": "Neptuul / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Douglasie_(Pseudotsuga_menziesii).jpg",
+      "fact": "A famous Douglas fir in Wales is shown in the guide at about 67 meters, taller than the shuttle stack.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 220, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 67, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 37, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 12, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["specific tree", "conifer", "europe"],
+      "tags": ["douglas-fir", "conifer", "wales"],
+      "metadata": { "difficultyBand": "easy", "recognition": 4, "taxonomyGroup": "conifer" },
+      "readingPrompts": ["How much taller is this Douglas fir than Atlantis?"]
+    },
+    {
+      "id": "karri-valle-de-canas",
+      "name": "Karri Tree",
+      "image": "/burrow-assets/tall-trees/karri.jpg",
+      "imageAlt": "Karri trees growing along a road in Western Australia",
+      "imageCredit": "Calistemon / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Karri_(Eucalyptus_diversicolor)_at_Karri_Gully,_January_2023_03.jpg",
+      "fact": "Karri trees are towering eucalyptus relatives; the guide shows a 73-meter karri as Europe's tallest tree example.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 240, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 73, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 40, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 13, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["tree type", "eucalyptus relative", "australia"],
+      "tags": ["karri", "eucalyptus", "tall-tree"],
+      "metadata": { "difficultyBand": "easy", "recognition": 4, "taxonomyGroup": "eucalyptus" },
+      "readingPrompts": ["How many 6-foot people would stack to this karri's height?"]
+    },
+    {
+      "id": "general-sherman",
+      "name": "General Sherman",
+      "image": "/burrow-assets/tall-trees/general-sherman.jpg",
+      "imageAlt": "The General Sherman giant sequoia tree",
+      "imageCredit": "Tuxyso / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:General_Sherman_Tree_2013.jpg",
+      "fact": "General Sherman is famous as the largest known living single-stem tree by volume, even though Hyperion is taller.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 275, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 84, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 46, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 15, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["specific tree", "conifer", "california"],
+      "tags": ["general-sherman", "giant-sequoia", "famous-tree"],
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "conifer" },
+      "readingPrompts": ["Why can General Sherman be biggest but not tallest?"]
+    },
+    {
+      "id": "big-ben",
+      "name": "Big Ben",
+      "image": "/burrow-assets/tall-trees/big-ben.jpg",
+      "imageAlt": "Elizabeth Tower, often called Big Ben, in London",
+      "imageCredit": "Wikimedia Commons contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Elizabeth_Tower,_June_2022.jpg",
+      "fact": "Elizabeth Tower, often called Big Ben, is about 316 feet tall, making it a useful city landmark for tree math.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 316, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 96, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 53, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 18, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["reference", "building-scale"],
+      "tags": ["reference", "big-ben", "london"],
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "reference" },
+      "readingPrompts": ["Which trees are taller than Big Ben?"]
+    },
+    {
+      "id": "centurion",
+      "name": "Centurion",
+      "image": "/burrow-assets/tall-trees/centurion.jpg",
+      "imageAlt": "Centurion, a very tall Eucalyptus regnans tree in Tasmania",
+      "imageCredit": "Eucalyptus 99 / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Centurion_tree_99.82.jpg",
+      "fact": "Centurion is a mountain ash in Tasmania that became famous for reaching about 100 meters before losing height in a 2019 fire.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 315, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 96, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 53, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 18, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["specific tree", "eucalyptus", "australia"],
+      "tags": ["centurion", "mountain-ash", "tasmania"],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "eucalyptus",
+        "accuracyNote": "The famous 100 m measurement predates later fire damage; current rounded height is lower."
+      },
+      "readingPrompts": ["How close is Centurion to Big Ben's height?"]
+    },
+    {
+      "id": "hyperion",
+      "name": "Hyperion",
+      "image": "/burrow-assets/tall-trees/hyperion-height-chart.webp",
+      "imageAlt": "Illustrated height chart comparing Hyperion, Centurion, Big Ben, General Sherman, Karri, Douglas fir, oak, a shuttle, a giraffe, and a human",
+      "imageCredit": "Candide / CC BY-SA 4.0 via Treehugger",
+      "imageSourceUrl": "https://www.treehugger.com/tallest-trees-world-4858795",
+      "fact": "Hyperion is a coast redwood in Redwood National Park and is widely listed as the tallest reliably measured living tree.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 381, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 116, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 64, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 21, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["specific tree", "conifer", "california"],
+      "tags": ["hyperion", "coast-redwood", "record-holder"],
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "conifer" },
+      "readingPrompts": ["About how many giraffes tall is Hyperion?"]
+    },
+    {
+      "id": "south-tibetan-cypress",
+      "name": "South Tibetan Cypress",
+      "image": "/burrow-assets/tall-trees/south-tibetan-cypress.jpg",
+      "imageAlt": "South Tibetan cypress growing in a steep valley",
+      "imageCredit": "Wikimedia Commons contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cupressus_austrotibetica,_Parlung_Tsangpo_2014.09.20_09-37-03_crop_2.jpg",
+      "fact": "A South Tibetan cypress measured at 102.3 meters made this species one of the tallest known trees in Asia.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 336, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 102.3, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 56, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 19, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["tree type", "conifer", "asia"],
+      "tags": ["cypress", "asia", "record-tree"],
+      "metadata": { "difficultyBand": "hard", "recognition": 2, "taxonomyGroup": "conifer" },
+      "readingPrompts": ["Is this cypress taller or shorter than Hyperion?"]
+    },
+    {
+      "id": "ravens-tower-sitka-spruce",
+      "name": "Raven's Tower Sitka Spruce",
+      "image": "/burrow-assets/tall-trees/sitka-spruce.jpg",
+      "imageAlt": "Looking up at the trunk and canopy of a giant Sitka spruce",
+      "imageCredit": "Vankathryn / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Sitka_Spruce_at_Harris_Creek_BC.jpg",
+      "fact": "Raven's Tower is a Sitka spruce in California, and Sitka spruce is the largest spruce species.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 329, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 100.2, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 55, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 18, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["specific tree", "conifer", "california"],
+      "tags": ["sitka-spruce", "ravens-tower", "conifer"],
+      "metadata": { "difficultyBand": "medium", "recognition": 3, "taxonomyGroup": "conifer" },
+      "readingPrompts": ["How many feet separate Raven's Tower and Hyperion?"]
+    },
+    {
+      "id": "doerner-fir",
+      "name": "Doerner Fir",
+      "image": "/burrow-assets/tall-trees/doerner-fir.jpg",
+      "imageAlt": "Old-growth Douglas-fir towering above a forest floor",
+      "imageCredit": "Patte David / U.S. Fish and Wildlife Service",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:An_old_growth_douglas_fir_towers_in_an_old_growth_forest.jpg",
+      "fact": "The Doerner Fir is a coast Douglas-fir in Oregon and is one of the tallest non-redwood trees known.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 326, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 99.5, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 54, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 18, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["specific tree", "conifer", "oregon"],
+      "tags": ["douglas-fir", "oregon", "record-tree"],
+      "metadata": { "difficultyBand": "medium", "recognition": 3, "taxonomyGroup": "conifer" },
+      "readingPrompts": ["How many 6-foot people fit into the Doerner Fir's height?"]
+    },
+    {
+      "id": "menara-yellow-meranti",
+      "name": "Menara Yellow Meranti",
+      "image": "/burrow-assets/tall-trees/yellow-meranti.jpg",
+      "imageAlt": "Tall yellow meranti tree in a tropical forest",
+      "imageCredit": "Annette Teng / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:World%27s_Tallest_Tropical_Tree_-_panoramio.jpg",
+      "fact": "Menara is a yellow meranti in Borneo and was celebrated as the tallest known tropical tree when measured.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 320, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 97.6, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 53, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 18, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["specific tree", "tropical", "borneo"],
+      "tags": ["yellow-meranti", "borneo", "tropical-tree"],
+      "metadata": { "difficultyBand": "hard", "recognition": 3, "taxonomyGroup": "flowering tree" },
+      "readingPrompts": ["Is Menara closer in height to Big Ben or Hyperion?"]
+    },
+    {
+      "id": "giant-sequoia-type",
+      "name": "Giant Sequoia",
+      "image": "/burrow-assets/tall-trees/giant-sequoia.jpg",
+      "imageAlt": "Looking up the trunk of a giant sequoia",
+      "imageCredit": "Jim Bahn / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:General_Sherman_tree_looking_up.jpg",
+      "fact": "Giant sequoias are not usually the tallest trees, but their enormous trunks make them the largest by volume.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 316.2, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 96.4, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 53, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 18, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["tree type", "conifer", "california"],
+      "tags": ["giant-sequoia", "conifer", "large-tree"],
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "conifer" },
+      "readingPrompts": ["Why is giant sequoia a large-tree champion?"]
+    },
+    {
+      "id": "mountain-ash-type",
+      "name": "Mountain Ash",
+      "image": "/burrow-assets/tall-trees/mountain-ash.jpg",
+      "imageAlt": "Mountain ash tree towering above parked cars",
+      "imageCredit": "Wikimedia Commons contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:MountainAshWithCars.jpg",
+      "fact": "Mountain ash trees, also called Eucalyptus regnans, are the tallest flowering plants known from modern measurements.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 330, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 100.5, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 55, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 18, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["tree type", "eucalyptus", "australia"],
+      "tags": ["mountain-ash", "eucalyptus", "flowering-tree"],
+      "metadata": { "difficultyBand": "medium", "recognition": 4, "taxonomyGroup": "eucalyptus" },
+      "readingPrompts": ["How much taller is mountain ash than General Sherman?"]
+    },
+    {
+      "id": "southern-blue-gum",
+      "name": "Southern Blue Gum",
+      "image": "/burrow-assets/tall-trees/southern-blue-gum.jpg",
+      "imageAlt": "Tall southern blue gum with a person standing near the trunk",
+      "imageCredit": "Forest and Kim Starr / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Starr-090317-5067-Eucalyptus_globulus-tall_tree_with_Kim-Haleakala_Ranch_Olinda-Maui_(24855255531).jpg",
+      "fact": "Southern blue gum is another tall Tasmanian eucalyptus, with top trees measured around 92 meters.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 302, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 92, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 50, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 17, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["tree type", "eucalyptus", "australia"],
+      "tags": ["blue-gum", "eucalyptus", "tasmania"],
+      "metadata": { "difficultyBand": "hard", "recognition": 3, "taxonomyGroup": "eucalyptus" },
+      "readingPrompts": ["How much shorter is southern blue gum than Hyperion?"]
+    },
+    {
+      "id": "manna-gum",
+      "name": "Manna Gum",
+      "image": "/burrow-assets/tall-trees/manna-gum.jpg",
+      "imageAlt": "Manna gum with smooth pale bark growing in Australia",
+      "imageCredit": "Geekstreet / Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Eucalyptus_viminalis_01.jpg",
+      "fact": "The White Knight manna gums in Tasmania are famous for being about 300 feet tall and centuries old.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 300, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 91.3, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 50, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 17, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["tree type", "eucalyptus", "australia"],
+      "tags": ["manna-gum", "eucalyptus", "tasmania"],
+      "metadata": { "difficultyBand": "hard", "recognition": 3, "taxonomyGroup": "eucalyptus" },
+      "readingPrompts": ["How many giraffes tall is a 300-foot tree?"]
+    },
+    {
+      "id": "noble-fir",
+      "name": "Noble Fir",
+      "image": "/burrow-assets/tall-trees/noble-fir.jpg",
+      "imageAlt": "Noble fir tree in a conifer forest",
+      "imageCredit": "Wikimedia Commons contributors",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Abies_procera_3159.JPG",
+      "fact": "The Goat Marsh Giant noble fir reached nearly 90 meters, showing that Pacific Northwest firs can be immense.",
+      "stats": [
+        { "id": "height-ft", "label": "Height", "value": 295, "unit": "ft", "direction": "higher" },
+        { "id": "height-m", "label": "Height", "value": 89.9, "unit": "m", "direction": "higher" },
+        { "id": "dave-stacks", "label": "Dave stacks", "value": 49, "unit": "Daves", "direction": "higher" },
+        { "id": "giraffe-stacks", "label": "Giraffe stacks", "value": 16, "unit": "giraffes", "direction": "higher" }
+      ],
+      "categories": ["tree type", "conifer", "pacific northwest"],
+      "tags": ["noble-fir", "conifer", "washington"],
+      "metadata": { "difficultyBand": "hard", "recognition": 3, "taxonomyGroup": "conifer" },
+      "readingPrompts": ["Which is taller, noble fir or General Sherman?"]
+    }
+  ]
+}

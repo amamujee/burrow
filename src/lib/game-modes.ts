@@ -100,12 +100,12 @@ export type RevealRound = {
 export type NumberRound = {
   id: string;
   topic: RoundTopic;
-  operation: "addition" | "subtraction";
+  operation: "addition" | "subtraction" | "fit";
   prompt: string;
   cards: KnowledgeCard[];
   statLabel: string;
   unit: string;
-  operator: "+" | "-";
+  operator: "+" | "-" | "x";
   termValues: number[];
   resultLabel: string;
   biggerLabel: string;
@@ -833,6 +833,14 @@ const sameStatCard = (card: GenericKnowledgeCard, value: number): KnowledgeCard 
   statDisplay: numberWithUnit(value, card.stats[0]?.display.replace(formatNumber(card.stats[0].value), "").trim() || ""),
 });
 
+const shouldBuildFitRound = (difficulty: Difficulty, seed: number) => difficulty > 1 && seedRandom(seed + 21) > 0.48;
+
+const pluralTitle = (title: string) => {
+  if (title.endsWith("s")) return title;
+  if (title.endsWith("y")) return `${title.slice(0, -1)}ies`;
+  return `${title}s`;
+};
+
 export const buildSortRoundFromCards = (
   cards: readonly GenericKnowledgeCard[],
   topic: RoundTopic,
@@ -924,6 +932,37 @@ export const buildNumberRoundFromCards = (
   const gap = statValueGap(values);
   const shouldAdd = pool.length >= 3 && shouldBuildAdditionRound(difficulty, seed);
   const unit = pool[0].stats[0]?.display.replace(formatNumber(pool[0].stats[0].value), "").trim() || "";
+
+  if (shouldBuildFitRound(difficulty, seed)) {
+    const sorted = shuffle(pool, seed + 1).sort((a, b) => b.statValue - a.statValue);
+    const bigger = sorted[0];
+    const smaller = sorted.find((card) => card.id !== bigger.id && card.statValue > 0 && card.statValue <= bigger.statValue / 2);
+    if (smaller) {
+      const biggerValue = Math.max(gap, roundTo(bigger.statValue, gap));
+      const smallerValue = Math.max(gap, roundTo(smaller.statValue, gap));
+      const answer = Math.max(2, Math.round(biggerValue / smallerValue));
+
+      return {
+        id: `${seed}-number-${topic}-fit-${bigger.id}-${smaller.id}`,
+        topic,
+        operation: "fit",
+        prompt: `${bigger.title} has about ${numberWithUnit(biggerValue, unit)}. ${smaller.title} has about ${numberWithUnit(smallerValue, unit)}. About how many ${pluralTitle(smaller.title)} fit into ${bigger.title}?`,
+        cards: [sameStatCard(smaller, smallerValue), sameStatCard(bigger, biggerValue)],
+        statLabel: bigger.statLabel,
+        unit: "stacks",
+        operator: "x",
+        termValues: [smallerValue, biggerValue],
+        resultLabel: "number that fit",
+        biggerLabel: bigger.title,
+        smallerLabel: smaller.title,
+        biggerValue,
+        smallerValue,
+        answer,
+        choices: numberChoices(answer, 1, seed + 12),
+        explanation: `${formatNumber(smallerValue)} x ${formatNumber(answer)} = ${formatNumber(smallerValue * answer)}${unit ? ` ${unit}` : ""}, close to ${formatNumber(biggerValue)}${unit ? ` ${unit}` : ""}.`,
+      };
+    }
+  }
 
   if (shouldAdd) {
     const count = Math.min(pool.length, additionTermCount(difficulty, seed));
