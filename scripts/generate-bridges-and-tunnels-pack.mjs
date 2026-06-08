@@ -81,9 +81,46 @@ const svgFor = ([, name, kind, structure, location]) => {
   const isTunnel = kind === "tunnel";
   const title = name.replaceAll("&", "&amp;");
   const label = structure.replace("-", " ");
-  return isTunnel
-    ? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="${title}"><rect width="640" height="420" fill="#e8edf0"/><path d="M70 300c34-124 130-188 250-188s216 64 250 188" fill="#8a8176"/><path d="M132 300c30-78 92-118 188-118s158 40 188 118" fill="#263238"/><path d="M190 302c24-34 62-52 130-52s106 18 130 52" fill="none" stroke="#f4d35e" stroke-width="12" stroke-linecap="round"/><path d="M0 300h640v120H0z" fill="#5f6b6d"/><path d="M122 354h396" stroke="#f4d35e" stroke-width="10" stroke-dasharray="36 28"/><text x="320" y="58" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#2f3437">${title}</text><text x="320" y="92" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#4f5b60">${location} - ${label}</text></svg>`
-    : `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="${title}"><rect width="640" height="420" fill="#edf4f7"/><rect y="292" width="640" height="128" fill="#8ec6d6"/><path d="M64 278c78-84 162-126 256-126s178 42 256 126" fill="none" stroke="#5b6470" stroke-width="30" stroke-linecap="round"/><path d="M94 282h452" stroke="#34414a" stroke-width="22" stroke-linecap="round"/><path d="M132 278v58M214 238v92M320 206v120M426 238v92M508 278v58" stroke="#34414a" stroke-width="16" stroke-linecap="round"/><path d="M112 282h496" stroke="#f4d35e" stroke-width="6" stroke-dasharray="22 18"/><text x="320" y="58" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#263238">${title}</text><text x="320" y="92" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#52636b">${location} - ${label}</text></svg>`;
+  const header = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="${title}"><rect width="640" height="420" fill="#edf4f7"/><text x="320" y="58" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#263238">${title}</text><text x="320" y="92" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#52636b">${location} - ${label}</text>`;
+  const water = `<rect y="292" width="640" height="128" fill="#8ec6d6"/>`;
+  const road = `<path d="M88 280h464" stroke="#34414a" stroke-width="22" stroke-linecap="round"/><path d="M112 280h416" stroke="#f4d35e" stroke-width="6" stroke-dasharray="22 18"/>`;
+  const footer = `</svg>`;
+
+  if (isTunnel) {
+    const undersea = structure === "bridge-tunnel" || location.includes("Bay") || location.includes("Strait");
+    const ground = undersea ? "#77b9c9" : "#8a8176";
+    return `${header}<rect y="300" width="640" height="120" fill="${ground}"/><path d="M70 308c34-124 130-188 250-188s216 64 250 188" fill="#8a8176"/><path d="M132 308c30-78 92-118 188-118s158 40 188 118" fill="#263238"/><path d="M190 310c24-34 62-52 130-52s106 18 130 52" fill="none" stroke="#f4d35e" stroke-width="12" stroke-linecap="round"/><path d="M0 320h640v100H0z" fill="#5f6b6d"/><path d="M122 362h396" stroke="#f4d35e" stroke-width="10" stroke-dasharray="36 28"/>${footer}`;
+  }
+
+  if (structure === "cable-stayed") {
+    return `${header}${water}<path d="M190 122v204M450 122v204" stroke="#34414a" stroke-width="24" stroke-linecap="round"/><path d="M190 138 86 280M190 156 156 280M190 174 232 280M190 194 308 280M450 138 554 280M450 156 484 280M450 174 408 280M450 194 332 280" stroke="#5b6470" stroke-width="8" stroke-linecap="round"/>${road}<path d="M120 292v54M244 292v54M396 292v54M520 292v54" stroke="#34414a" stroke-width="14" stroke-linecap="round"/>${footer}`;
+  }
+
+  if (structure === "arch") {
+    return `${header}${water}<path d="M82 280c68-118 158-176 238-176s170 58 238 176" fill="none" stroke="#5b6470" stroke-width="34" stroke-linecap="round"/><path d="M122 280c54-76 118-116 198-116s144 40 198 116" fill="none" stroke="#edf4f7" stroke-width="34" stroke-linecap="round"/>${road}<path d="M150 280v58M246 248v88M394 248v88M490 280v58" stroke="#34414a" stroke-width="14" stroke-linecap="round"/>${footer}`;
+  }
+
+  if (structure === "cantilever") {
+    return `${header}${water}<path d="M84 270h472M116 226h408M116 226l68 44 68-44 68 44 68-44 68 44 68-44M116 270l68-44 68 44 68-44 68 44 68-44 68 44" fill="none" stroke="#34414a" stroke-width="14" stroke-linejoin="round" stroke-linecap="round"/><path d="M128 270v68M320 238v100M512 270v68" stroke="#34414a" stroke-width="16" stroke-linecap="round"/><path d="M102 284h436" stroke="#f4d35e" stroke-width="6" stroke-dasharray="22 18"/>${footer}`;
+  }
+
+  if (structure === "bascule") {
+    return `${header}${water}<rect x="120" y="150" width="70" height="144" fill="#7d6a56" stroke="#34414a" stroke-width="10"/><rect x="450" y="150" width="70" height="144" fill="#7d6a56" stroke="#34414a" stroke-width="10"/><path d="M190 272 304 210M450 272 336 210" stroke="#34414a" stroke-width="20" stroke-linecap="round"/><path d="M92 282h98M450 282h98" stroke="#34414a" stroke-width="20" stroke-linecap="round"/><circle cx="320" cy="232" r="18" fill="#f4d35e" stroke="#34414a" stroke-width="8"/>${footer}`;
+  }
+
+  if (structure === "viaduct") {
+    return `${header}<rect y="304" width="640" height="116" fill="#b7c98c"/><path d="M64 244h512" stroke="#34414a" stroke-width="24" stroke-linecap="round"/><path d="M104 256v96M184 256v96M264 256v96M344 256v96M424 256v96M504 256v96" stroke="#5b6470" stroke-width="18" stroke-linecap="round"/><path d="M80 244h480" stroke="#f4d35e" stroke-width="6" stroke-dasharray="22 18"/><path d="M104 352h400" stroke="#34414a" stroke-width="12" stroke-linecap="round"/>${footer}`;
+  }
+
+  if (structure === "bridge-tunnel") {
+    return `${header}${water}<path d="M60 270h222" stroke="#34414a" stroke-width="22" stroke-linecap="round"/><path d="M94 270v58M180 270v58" stroke="#34414a" stroke-width="14" stroke-linecap="round"/><ellipse cx="342" cy="296" rx="52" ry="24" fill="#d8cba4"/><path d="M392 302c22-64 70-98 128-98s106 34 128 98" fill="#8a8176"/><path d="M428 302c20-38 50-58 92-58s72 20 92 58" fill="#263238"/><path d="M80 270h188M438 326h168" stroke="#f4d35e" stroke-width="6" stroke-dasharray="22 18"/>${footer}`;
+  }
+
+  if (structure === "complex") {
+    return `${header}${water}<path d="M60 280c48-70 100-104 156-104s108 34 156 104M288 280c48-70 100-104 156-104s108 34 156 104" fill="none" stroke="#5b6470" stroke-width="24" stroke-linecap="round"/><path d="M82 280h476" stroke="#34414a" stroke-width="22" stroke-linecap="round"/><path d="M140 280v58M248 260v78M360 260v78M496 280v58" stroke="#34414a" stroke-width="14" stroke-linecap="round"/><path d="M106 280h428" stroke="#f4d35e" stroke-width="6" stroke-dasharray="22 18"/>${footer}`;
+  }
+
+  return `${header}${water}<path d="M92 278c72-98 148-146 228-146s156 48 228 146" fill="none" stroke="#5b6470" stroke-width="28" stroke-linecap="round"/><path d="M150 146v190M490 146v190" stroke="#34414a" stroke-width="24" stroke-linecap="round"/><path d="M150 154c50 46 100 66 170 66s120-20 170-66" fill="none" stroke="#34414a" stroke-width="10" stroke-linecap="round"/>${road}<path d="M132 280v58M214 250v88M320 226v112M426 250v88M508 280v58" stroke="#34414a" stroke-width="14" stroke-linecap="round"/>${footer}`;
 };
 
 fs.mkdirSync(packDir, { recursive: true });

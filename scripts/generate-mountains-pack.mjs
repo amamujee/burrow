@@ -88,11 +88,39 @@ const cardObject = ([id, name, range, location, elevationM, prominenceM, firstAs
   readingPrompts: [`What makes ${name} special?`, `How does ${name}'s elevation compare with another mountain?`],
 });
 
-const svgFor = ([, name, range, location, elevationM]) => {
+const hashValue = (value) => [...value].reduce((total, char) => total + char.charCodeAt(0), 0);
+
+const svgFor = ([, name, range, location, elevationM, , , , , , categories]) => {
   const title = name.replaceAll("&", "&amp;");
-  const snowLine = elevationM >= 7500 ? 145 : elevationM >= 5000 ? 170 : 205;
-  const peakColor = elevationM >= 7500 ? "#6c7480" : elevationM >= 5000 ? "#7b7f6f" : "#8f795f";
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="${title}"><rect width="640" height="420" fill="#e7f0f4"/><circle cx="514" cy="84" r="46" fill="#f3c65d"/><rect y="314" width="640" height="106" fill="#b7c98c"/><path d="M56 326 214 120l78 112 82-146 206 240z" fill="${peakColor}"/><path d="M214 120 166 183l54-14 36 46 36-47zM374 86l-62 110 70-28 44 54 44-55z" fill="#f6f1e8"/><path d="M56 326h524" stroke="#4a433a" stroke-width="10" stroke-linecap="round"/><path d="M146 ${snowLine}c44 28 88 31 132 0M322 ${snowLine - 24}c50 32 98 32 148 0" fill="none" stroke="#f6f1e8" stroke-width="8" stroke-linecap="round"/><text x="320" y="54" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#263238">${title}</text><text x="320" y="88" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#52636b">${range} - ${location} - ${elevationM.toLocaleString("en-US")} m</text></svg>`;
+  const seed = hashValue(name);
+  const isVolcano = categories.includes("volcano");
+  const isSharp = categories.includes("famous-shape") || ["K2", "Nanga Parbat", "Gasherbrum IV", "Rakaposhi", "Matterhorn"].includes(name);
+  const isPolar = categories.includes("antarctica") || categories.includes("polar");
+  const high = elevationM >= 7500;
+  const peakColor = isPolar ? "#9aa2a8" : high ? (range === "Karakoram" ? "#58616d" : "#6c7480") : isVolcano ? "#8d755e" : "#7b7f6f";
+  const landColor = isPolar ? "#dfe8ea" : isVolcano ? "#c7b189" : "#b7c98c";
+  const snow = "#f6f1e8";
+  const header = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 420" role="img" aria-label="${title}"><rect width="640" height="420" fill="#e7f0f4"/><circle cx="${500 + (seed % 34)}" cy="${70 + (seed % 24)}" r="42" fill="#f3c65d"/><rect y="314" width="640" height="106" fill="${landColor}"/><text x="320" y="54" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#263238">${title}</text><text x="320" y="88" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" fill="#52636b">${range} - ${location} - ${elevationM.toLocaleString("en-US")} m</text>`;
+  const footer = `<path d="M48 326h544" stroke="#4a433a" stroke-width="10" stroke-linecap="round"/></svg>`;
+
+  if (isVolcano) {
+    const craterShift = (seed % 34) - 17;
+    const smoke = name === "Mount Fuji" || name === "Mount Kilimanjaro" ? "" : `<path d="M${320 + craterShift} 126c-24-28 24-32 0-60M${340 + craterShift} 132c-10-24 28-28 14-54" fill="none" stroke="#dfe8ea" stroke-width="8" stroke-linecap="round"/>`;
+    return `${header}${smoke}<path d="M72 326 320 112 568 326z" fill="${peakColor}"/><path d="M252 170c38 26 86 26 136 0l-38 42-32-20-34 22z" fill="${snow}"/><path d="M284 126c26 16 52 16 78 0" fill="none" stroke="#4a433a" stroke-width="12" stroke-linecap="round"/><path d="M120 326c52-48 94-70 126-66M402 326c38-46 82-70 132-72" fill="none" stroke="#6b5a47" stroke-width="10" stroke-linecap="round" opacity=".55"/>${footer}`;
+  }
+
+  if (isSharp) {
+    const peakX = 314 + (seed % 34) - 17;
+    return `${header}<path d="M74 326 ${peakX} 92 566 326z" fill="${peakColor}"/><path d="M${peakX} 92 ${peakX - 62} 194 ${peakX + 4} 166 ${peakX + 48} 214z" fill="${snow}"/><path d="M${peakX} 94 ${peakX - 14} 326" stroke="#3e454c" stroke-width="8" opacity=".55"/><path d="M118 326 226 226l70 100M416 326l54-74 74 74" fill="none" stroke="#4a433a" stroke-width="9" stroke-linecap="round" opacity=".55"/>${footer}`;
+  }
+
+  const p1 = 178 + (seed % 42);
+  const p2 = 324 + ((seed * 3) % 44) - 22;
+  const p3 = 456 + ((seed * 5) % 42) - 21;
+  const y1 = high ? 110 + (seed % 28) : 168 + (seed % 28);
+  const y2 = high ? 78 + ((seed * 2) % 32) : 150 + ((seed * 2) % 34);
+  const y3 = high ? 118 + ((seed * 4) % 30) : 178 + ((seed * 4) % 32);
+  return `${header}<path d="M48 326 ${p1} ${y1} ${p1 + 84} 236 ${p2} ${y2} ${p2 + 92} 232 ${p3} ${y3} 592 326z" fill="${peakColor}"/><path d="M${p1} ${y1} ${p1 - 42} ${y1 + 64} ${p1 + 18} ${y1 + 42} ${p1 + 66} ${y1 + 84} ${p1 + 94} ${y1 + 46}zM${p2} ${y2} ${p2 - 58} ${y2 + 94} ${p2 + 20} ${y2 + 56} ${p2 + 72} ${y2 + 108} ${p2 + 116} ${y2 + 58}zM${p3} ${y3} ${p3 - 50} ${y3 + 74} ${p3 + 12} ${y3 + 46} ${p3 + 72} ${y3 + 94} ${p3 + 106} ${y3 + 54}z" fill="${snow}"/><path d="M96 326c54-36 104-52 150-48M286 326c52-44 104-64 156-60M436 326c32-30 70-44 114-42" fill="none" stroke="#4a433a" stroke-width="8" stroke-linecap="round" opacity=".45"/>${footer}`;
 };
 
 fs.mkdirSync(packDir, { recursive: true });
