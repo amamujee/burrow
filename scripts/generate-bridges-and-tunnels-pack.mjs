@@ -56,9 +56,9 @@ const difficultyFor = (recognition, scale) => recognition >= 7 ? "easy" : scale 
 const cardObject = ([id, name, kind, structure, location, lengthMi, opened, recognition, scale, fact, sourceUrl, categories]) => ({
   id,
   name,
-  image: `/burrow-assets/${packId}/${id}.svg`,
-  imageAlt: `${name} stylized ${kind} card`,
-  imageCredit: "Burrow original SVG",
+  image: `/burrow-assets/${packId}/${id}.jpg`,
+  imageAlt: `${name} photo`,
+  imageCredit: "Wikimedia Commons",
   imageSourceUrl: sourceUrl,
   fact,
   stats: [

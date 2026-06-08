@@ -38,10 +38,10 @@
     {
       "id": "mount-everest",
       "name": "Mount Everest",
-      "image": "/burrow-assets/tallest-mountains/mount-everest.svg",
-      "imageAlt": "Mount Everest stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Everest",
+      "image": "/burrow-assets/tallest-mountains/mount-everest.jpg",
+      "imageAlt": "Mount Everest photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mt._Everest_from_Gokyo_Ri_November_5,_2012.jpg",
       "fact": "Mount Everest is the highest mountain above sea level and is known in Nepal as Sagarmatha and in Tibet as Chomolungma.",
       "stats": [
         {
@@ -106,10 +106,10 @@
     {
       "id": "k2",
       "name": "K2",
-      "image": "/burrow-assets/tallest-mountains/k2.svg",
-      "imageAlt": "K2 stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/K2",
+      "image": "/burrow-assets/tallest-mountains/k2.jpg",
+      "imageAlt": "K2 photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Chogori.jpg",
       "fact": "K2 is the second-highest mountain on Earth and is famous for steep routes and severe Karakoram weather.",
       "stats": [
         {
@@ -174,10 +174,10 @@
     {
       "id": "kangchenjunga",
       "name": "Kangchenjunga",
-      "image": "/burrow-assets/tallest-mountains/kangchenjunga.svg",
-      "imageAlt": "Kangchenjunga stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Kangchenjunga",
+      "image": "/burrow-assets/tallest-mountains/kangchenjunga.jpg",
+      "imageAlt": "Kangchenjunga photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kangchenjunga_PangPema.JPG",
       "fact": "Kangchenjunga is the world's third-highest mountain and rises on the border of Nepal and India.",
       "stats": [
         {
@@ -242,10 +242,10 @@
     {
       "id": "lhotse",
       "name": "Lhotse",
-      "image": "/burrow-assets/tallest-mountains/lhotse.svg",
-      "imageAlt": "Lhotse stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Lhotse",
+      "image": "/burrow-assets/tallest-mountains/lhotse.jpg",
+      "imageAlt": "Lhotse photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Lhotse-fromChukhungRi.jpg",
       "fact": "Lhotse sits next to Everest and has one of the most dramatic south faces in the Himalaya.",
       "stats": [
         {
@@ -310,10 +310,10 @@
     {
       "id": "makalu",
       "name": "Makalu",
-      "image": "/burrow-assets/tallest-mountains/makalu.svg",
-      "imageAlt": "Makalu stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Makalu",
+      "image": "/burrow-assets/tallest-mountains/makalu.jpg",
+      "imageAlt": "Makalu photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Makalu.jpg",
       "fact": "Makalu is a sharply pyramid-shaped Himalayan giant east of Everest.",
       "stats": [
         {
@@ -378,10 +378,10 @@
     {
       "id": "cho-oyu",
       "name": "Cho Oyu",
-      "image": "/burrow-assets/tallest-mountains/cho-oyu.svg",
-      "imageAlt": "Cho Oyu stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Cho_Oyu",
+      "image": "/burrow-assets/tallest-mountains/cho-oyu.jpg",
+      "imageAlt": "Cho Oyu photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Chooyu.jpg",
       "fact": "Cho Oyu is often called one of the more approachable eight-thousanders, though it is still extremely high.",
       "stats": [
         {
@@ -446,10 +446,10 @@
     {
       "id": "dhaulagiri-i",
       "name": "Dhaulagiri I",
-      "image": "/burrow-assets/tallest-mountains/dhaulagiri-i.svg",
-      "imageAlt": "Dhaulagiri I stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Dhaulagiri",
+      "image": "/burrow-assets/tallest-mountains/dhaulagiri-i.jpg",
+      "imageAlt": "Dhaulagiri I photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Dhaulagiri_-_view_from_aircraft.jpg",
       "fact": "Dhaulagiri I towers over central Nepal and was once thought to be the world's highest mountain.",
       "stats": [
         {
@@ -514,10 +514,10 @@
     {
       "id": "manaslu",
       "name": "Manaslu",
-      "image": "/burrow-assets/tallest-mountains/manaslu.svg",
-      "imageAlt": "Manaslu stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Manaslu",
+      "image": "/burrow-assets/tallest-mountains/manaslu.jpg",
+      "imageAlt": "Manaslu photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Sunrise,_Manaslu.jpg",
       "fact": "Manaslu means Mountain of the Spirit and is the eighth-highest mountain in the world.",
       "stats": [
         {
@@ -582,10 +582,10 @@
     {
       "id": "nanga-parbat",
       "name": "Nanga Parbat",
-      "image": "/burrow-assets/tallest-mountains/nanga-parbat.svg",
-      "imageAlt": "Nanga Parbat stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Nanga_Parbat",
+      "image": "/burrow-assets/tallest-mountains/nanga-parbat.jpg",
+      "imageAlt": "Nanga Parbat photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Fairy_Meadows_and_the_view_of_Nanga_Parbat.jpg",
       "fact": "Nanga Parbat has enormous relief from nearby valleys and is sometimes called a contender for tallest land rise.",
       "stats": [
         {
@@ -650,10 +650,10 @@
     {
       "id": "annapurna-i",
       "name": "Annapurna I",
-      "image": "/burrow-assets/tallest-mountains/annapurna-i.svg",
-      "imageAlt": "Annapurna I stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Annapurna",
+      "image": "/burrow-assets/tallest-mountains/annapurna-i.jpg",
+      "imageAlt": "Annapurna I photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:South_Face_of_Annapurna_I_(Main).jpg",
       "fact": "Annapurna I was the first eight-thousander climbed, reached by a French expedition in 1950.",
       "stats": [
         {
@@ -718,10 +718,10 @@
     {
       "id": "gasherbrum-i",
       "name": "Gasherbrum I",
-      "image": "/burrow-assets/tallest-mountains/gasherbrum-i.svg",
-      "imageAlt": "Gasherbrum I stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Gasherbrum_I",
+      "image": "/burrow-assets/tallest-mountains/gasherbrum-i.jpg",
+      "imageAlt": "Gasherbrum I photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:HiddenPeak.jpg",
       "fact": "Gasherbrum I is also called Hidden Peak because it sits deep inside the Karakoram.",
       "stats": [
         {
@@ -786,10 +786,10 @@
     {
       "id": "broad-peak",
       "name": "Broad Peak",
-      "image": "/burrow-assets/tallest-mountains/broad-peak.svg",
-      "imageAlt": "Broad Peak stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Broad_Peak",
+      "image": "/burrow-assets/tallest-mountains/broad-peak.jpg",
+      "imageAlt": "Broad Peak photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:7_15_BroadPeak.jpg",
       "fact": "Broad Peak gets its name from its wide summit ridge near K2.",
       "stats": [
         {
@@ -854,10 +854,10 @@
     {
       "id": "gasherbrum-ii",
       "name": "Gasherbrum II",
-      "image": "/burrow-assets/tallest-mountains/gasherbrum-ii.svg",
-      "imageAlt": "Gasherbrum II stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Gasherbrum_II",
+      "image": "/burrow-assets/tallest-mountains/gasherbrum-ii.jpg",
+      "imageAlt": "Gasherbrum II photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Gasherbrum2.jpg",
       "fact": "Gasherbrum II is another Karakoram eight-thousander in the Baltoro region.",
       "stats": [
         {
@@ -922,10 +922,10 @@
     {
       "id": "shishapangma",
       "name": "Shishapangma",
-      "image": "/burrow-assets/tallest-mountains/shishapangma.svg",
-      "imageAlt": "Shishapangma stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Shishapangma",
+      "image": "/burrow-assets/tallest-mountains/shishapangma.jpg",
+      "imageAlt": "Shishapangma photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:8,013m_Shishapangma_Tibet_China_西藏_希夏邦马峰_-_panoramio.jpg",
       "fact": "Shishapangma is the only eight-thousander located entirely in Tibet.",
       "stats": [
         {
@@ -990,10 +990,10 @@
     {
       "id": "gyachung-kang",
       "name": "Gyachung Kang",
-      "image": "/burrow-assets/tallest-mountains/gyachung-kang.svg",
-      "imageAlt": "Gyachung Kang stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Gyachung_Kang",
+      "image": "/burrow-assets/tallest-mountains/gyachung-kang.jpg",
+      "imageAlt": "Gyachung Kang photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Gyachung_Kang.jpg",
       "fact": "Gyachung Kang is the highest peak below 8,000 meters and sits between Everest and Cho Oyu.",
       "stats": [
         {
@@ -1058,10 +1058,10 @@
     {
       "id": "annapurna-ii",
       "name": "Annapurna II",
-      "image": "/burrow-assets/tallest-mountains/annapurna-ii.svg",
-      "imageAlt": "Annapurna II stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Annapurna_II",
+      "image": "/burrow-assets/tallest-mountains/annapurna-ii.jpg",
+      "imageAlt": "Annapurna II photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Annapurna_II_north.jpg",
       "fact": "Annapurna II is a major peak on the eastern side of Nepal's Annapurna massif.",
       "stats": [
         {
@@ -1126,10 +1126,10 @@
     {
       "id": "gasherbrum-iv",
       "name": "Gasherbrum IV",
-      "image": "/burrow-assets/tallest-mountains/gasherbrum-iv.svg",
-      "imageAlt": "Gasherbrum IV stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Gasherbrum_IV",
+      "image": "/burrow-assets/tallest-mountains/gasherbrum-iv.jpg",
+      "imageAlt": "Gasherbrum IV photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Gasherbrum_IV.JPG",
       "fact": "Gasherbrum IV is famous among climbers for its beautiful shape and difficult ridges.",
       "stats": [
         {
@@ -1194,10 +1194,10 @@
     {
       "id": "himalchuli",
       "name": "Himalchuli",
-      "image": "/burrow-assets/tallest-mountains/himalchuli.svg",
-      "imageAlt": "Himalchuli stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Himalchuli",
+      "image": "/burrow-assets/tallest-mountains/himalchuli.jpg",
+      "imageAlt": "Himalchuli photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Himalchuli_from_south.jpg",
       "fact": "Himalchuli is a high peak in the Manaslu Himal of Nepal.",
       "stats": [
         {
@@ -1262,10 +1262,10 @@
     {
       "id": "distaghil-sar",
       "name": "Distaghil Sar",
-      "image": "/burrow-assets/tallest-mountains/distaghil-sar.svg",
-      "imageAlt": "Distaghil Sar stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Distaghil_Sar",
+      "image": "/burrow-assets/tallest-mountains/distaghil-sar.jpg",
+      "imageAlt": "Distaghil Sar photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Distaghil_ISS.JPG",
       "fact": "Distaghil Sar is the highest mountain in the Hispar Muztagh of the Karakoram.",
       "stats": [
         {
@@ -1330,10 +1330,10 @@
     {
       "id": "ngadi-chuli",
       "name": "Ngadi Chuli",
-      "image": "/burrow-assets/tallest-mountains/ngadi-chuli.svg",
-      "imageAlt": "Ngadi Chuli stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Ngadi_Chuli",
+      "image": "/burrow-assets/tallest-mountains/ngadi-chuli.jpg",
+      "imageAlt": "Ngadi Chuli photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ngadi_Chuli.jpg",
       "fact": "Ngadi Chuli is a high Manaslu-area peak with a remote, complex climbing history.",
       "stats": [
         {
@@ -1398,10 +1398,10 @@
     {
       "id": "khunyang-chhish",
       "name": "Khunyang Chhish",
-      "image": "/burrow-assets/tallest-mountains/khunyang-chhish.svg",
-      "imageAlt": "Khunyang Chhish stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Khunyang_Chhish",
+      "image": "/burrow-assets/tallest-mountains/khunyang-chhish.jpg",
+      "imageAlt": "Khunyang Chhish photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Khunyang_Chhish_and_Pumari_Chhish.jpg",
       "fact": "Khunyang Chhish rises in Pakistan's Hispar region and is one of the highest Karakoram peaks.",
       "stats": [
         {
@@ -1466,10 +1466,10 @@
     {
       "id": "masherbrum",
       "name": "Masherbrum",
-      "image": "/burrow-assets/tallest-mountains/masherbrum.svg",
-      "imageAlt": "Masherbrum stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Masherbrum",
+      "image": "/burrow-assets/tallest-mountains/masherbrum.jpg",
+      "imageAlt": "Masherbrum photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Masherbrum.jpg",
       "fact": "Masherbrum is also known as K1 and stands above the Baltoro Glacier region.",
       "stats": [
         {
@@ -1534,10 +1534,10 @@
     {
       "id": "nanda-devi",
       "name": "Nanda Devi",
-      "image": "/burrow-assets/tallest-mountains/nanda-devi.svg",
-      "imageAlt": "Nanda Devi stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Nanda_Devi",
+      "image": "/burrow-assets/tallest-mountains/nanda-devi.jpg",
+      "imageAlt": "Nanda Devi photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mt._Nanda_Devi.jpg",
       "fact": "Nanda Devi is one of India's most sacred and famous Himalayan mountains.",
       "stats": [
         {
@@ -1602,10 +1602,10 @@
     {
       "id": "chomo-lonzo",
       "name": "Chomo Lonzo",
-      "image": "/burrow-assets/tallest-mountains/chomo-lonzo.svg",
-      "imageAlt": "Chomo Lonzo stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Chomo_Lonzo",
+      "image": "/burrow-assets/tallest-mountains/chomo-lonzo.jpg",
+      "imageAlt": "Chomo Lonzo photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Everest_Region_in_Tibet.jpg",
       "fact": "Chomo Lonzo is a high Tibetan peak close to Makalu.",
       "stats": [
         {
@@ -1670,10 +1670,10 @@
     {
       "id": "batura-sar",
       "name": "Batura Sar",
-      "image": "/burrow-assets/tallest-mountains/batura-sar.svg",
-      "imageAlt": "Batura Sar stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Batura_Sar",
+      "image": "/burrow-assets/tallest-mountains/batura-sar.jpg",
+      "imageAlt": "Batura Sar photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Batura_Sar_(7795m)_(25570898320).jpg",
       "fact": "Batura Sar is the highest peak of the Batura Muztagh in the western Karakoram.",
       "stats": [
         {
@@ -1738,10 +1738,10 @@
     {
       "id": "rakaposhi",
       "name": "Rakaposhi",
-      "image": "/burrow-assets/tallest-mountains/rakaposhi.svg",
-      "imageAlt": "Rakaposhi stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Rakaposhi",
+      "image": "/burrow-assets/tallest-mountains/rakaposhi.jpg",
+      "imageAlt": "Rakaposhi photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Rakaposhi_&_Autumn.jpg",
       "fact": "Rakaposhi is famous for rising dramatically above the Hunza Valley.",
       "stats": [
         {
@@ -1806,10 +1806,10 @@
     {
       "id": "namcha-barwa",
       "name": "Namcha Barwa",
-      "image": "/burrow-assets/tallest-mountains/namcha-barwa.svg",
-      "imageAlt": "Namcha Barwa stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Namcha_Barwa",
+      "image": "/burrow-assets/tallest-mountains/namcha-barwa.jpg",
+      "imageAlt": "Namcha Barwa photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Namcha_Barwa_from_the_west.jpg",
       "fact": "Namcha Barwa stands near the great bend of the Yarlung Tsangpo River in eastern Tibet.",
       "stats": [
         {
@@ -1874,10 +1874,10 @@
     {
       "id": "kanjut-sar",
       "name": "Kanjut Sar",
-      "image": "/burrow-assets/tallest-mountains/kanjut-sar.svg",
-      "imageAlt": "Kanjut Sar stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Kanjut_Sar",
+      "image": "/burrow-assets/tallest-mountains/kanjut-sar.jpg",
+      "imageAlt": "Kanjut Sar photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kanjut_Sar.jpg",
       "fact": "Kanjut Sar is a high peak in the Hispar Muztagh of the Karakoram.",
       "stats": [
         {
@@ -1942,10 +1942,10 @@
     {
       "id": "kamet",
       "name": "Kamet",
-      "image": "/burrow-assets/tallest-mountains/kamet.svg",
-      "imageAlt": "Kamet stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Kamet",
+      "image": "/burrow-assets/tallest-mountains/kamet.jpg",
+      "imageAlt": "Kamet photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kamet_Closeup.jpg",
       "fact": "Kamet was one of the earliest very high Himalayan peaks to be climbed.",
       "stats": [
         {
@@ -2010,10 +2010,10 @@
     {
       "id": "dhaulagiri-ii",
       "name": "Dhaulagiri II",
-      "image": "/burrow-assets/tallest-mountains/dhaulagiri-ii.svg",
-      "imageAlt": "Dhaulagiri II stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Dhaulagiri_II",
+      "image": "/burrow-assets/tallest-mountains/dhaulagiri-ii.jpg",
+      "imageAlt": "Dhaulagiri II photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Dhaulagiri_II_(3to4-1).jpg",
       "fact": "Dhaulagiri II is part of the Dhaulagiri massif in Nepal.",
       "stats": [
         {
@@ -2078,10 +2078,10 @@
     {
       "id": "aconcagua",
       "name": "Aconcagua",
-      "image": "/burrow-assets/tallest-mountains/aconcagua.svg",
-      "imageAlt": "Aconcagua stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Aconcagua",
+      "image": "/burrow-assets/tallest-mountains/aconcagua.jpg",
+      "imageAlt": "Aconcagua photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Aconcagua2016.jpg",
       "fact": "Aconcagua is the highest mountain outside Asia and the tallest peak in the Americas.",
       "stats": [
         {
@@ -2146,10 +2146,10 @@
     {
       "id": "denali",
       "name": "Denali",
-      "image": "/burrow-assets/tallest-mountains/denali.svg",
-      "imageAlt": "Denali stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Denali",
+      "image": "/burrow-assets/tallest-mountains/denali.jpg",
+      "imageAlt": "Denali photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Wonder_Lake_and_Denali.jpg",
       "fact": "Denali is North America's highest mountain and rises powerfully from the Alaska Range.",
       "stats": [
         {
@@ -2214,10 +2214,10 @@
     {
       "id": "mount-kilimanjaro",
       "name": "Mount Kilimanjaro",
-      "image": "/burrow-assets/tallest-mountains/mount-kilimanjaro.svg",
-      "imageAlt": "Mount Kilimanjaro stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Kilimanjaro",
+      "image": "/burrow-assets/tallest-mountains/mount-kilimanjaro.jpg",
+      "imageAlt": "Mount Kilimanjaro photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kilimanjaro_from_Amboseli.jpg",
       "fact": "Mount Kilimanjaro is Africa's highest mountain and a huge freestanding volcano.",
       "stats": [
         {
@@ -2282,10 +2282,10 @@
     {
       "id": "mount-elbrus",
       "name": "Mount Elbrus",
-      "image": "/burrow-assets/tallest-mountains/mount-elbrus.svg",
-      "imageAlt": "Mount Elbrus stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Elbrus",
+      "image": "/burrow-assets/tallest-mountains/mount-elbrus.jpg",
+      "imageAlt": "Mount Elbrus photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mount_Elbrus_(cropped).jpg",
       "fact": "Mount Elbrus is a dormant volcano and is often counted as Europe's highest mountain.",
       "stats": [
         {
@@ -2350,10 +2350,10 @@
     {
       "id": "mount-vinson",
       "name": "Mount Vinson",
-      "image": "/burrow-assets/tallest-mountains/mount-vinson.svg",
-      "imageAlt": "Mount Vinson stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Vinson_Massif",
+      "image": "/burrow-assets/tallest-mountains/mount-vinson.jpg",
+      "imageAlt": "Mount Vinson photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mount_Vinson_from_NW_at_Vinson_Plateau_by_Christian_Stangl_(flickr).jpg",
       "fact": "Mount Vinson is Antarctica's highest mountain and one of the Seven Summits.",
       "stats": [
         {
@@ -2418,10 +2418,10 @@
     {
       "id": "puncak-jaya",
       "name": "Puncak Jaya",
-      "image": "/burrow-assets/tallest-mountains/puncak-jaya.svg",
-      "imageAlt": "Puncak Jaya stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Puncak_Jaya",
+      "image": "/burrow-assets/tallest-mountains/puncak-jaya.jpg",
+      "imageAlt": "Puncak Jaya photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Carstenzs_Piramida_Mountain.jpg",
       "fact": "Puncak Jaya is the highest island peak in the world and one version of Oceania's Seven Summit.",
       "stats": [
         {
@@ -2486,10 +2486,10 @@
     {
       "id": "mont-blanc",
       "name": "Mont Blanc",
-      "image": "/burrow-assets/tallest-mountains/mont-blanc.svg",
-      "imageAlt": "Mont Blanc stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mont_Blanc",
+      "image": "/burrow-assets/tallest-mountains/mont-blanc.jpg",
+      "imageAlt": "Mont Blanc photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mont_Blanc_Aiguille.jpg",
       "fact": "Mont Blanc is the highest mountain in the Alps and a classic symbol of European mountaineering.",
       "stats": [
         {
@@ -2553,10 +2553,10 @@
     {
       "id": "matterhorn",
       "name": "Matterhorn",
-      "image": "/burrow-assets/tallest-mountains/matterhorn.svg",
-      "imageAlt": "Matterhorn stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Matterhorn",
+      "image": "/burrow-assets/tallest-mountains/matterhorn.jpg",
+      "imageAlt": "Matterhorn photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Matterhorn_from_Domhütte_-_2.jpg",
       "fact": "The Matterhorn's sharp pyramid shape makes it one of the most recognizable mountains in the world.",
       "stats": [
         {
@@ -2620,10 +2620,10 @@
     {
       "id": "mount-whitney",
       "name": "Mount Whitney",
-      "image": "/burrow-assets/tallest-mountains/mount-whitney.svg",
-      "imageAlt": "Mount Whitney stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Whitney",
+      "image": "/burrow-assets/tallest-mountains/mount-whitney.jpg",
+      "imageAlt": "Mount Whitney photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mount_Whitney_2003-03-25.jpg",
       "fact": "Mount Whitney is the highest summit in the contiguous United States.",
       "stats": [
         {
@@ -2688,10 +2688,10 @@
     {
       "id": "mauna-kea",
       "name": "Mauna Kea",
-      "image": "/burrow-assets/tallest-mountains/mauna-kea.svg",
-      "imageAlt": "Mauna Kea stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mauna_Kea",
+      "image": "/burrow-assets/tallest-mountains/mauna-kea.jpg",
+      "imageAlt": "Mauna Kea photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mauna_Kea_from_the_ocean.jpg",
       "fact": "Mauna Kea is modest above sea level, but from the Pacific seafloor it rises higher than Everest.",
       "stats": [
         {
@@ -2756,10 +2756,10 @@
     {
       "id": "mount-fuji",
       "name": "Mount Fuji",
-      "image": "/burrow-assets/tallest-mountains/mount-fuji.svg",
-      "imageAlt": "Mount Fuji stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Fuji",
+      "image": "/burrow-assets/tallest-mountains/mount-fuji.jpg",
+      "imageAlt": "Mount Fuji photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:View_of_Mount_Fuji_from_Ōwakudani_20211202.jpg",
       "fact": "Mount Fuji is Japan's highest mountain and one of the world's most famous volcano silhouettes.",
       "stats": [
         {
@@ -2824,10 +2824,10 @@
     {
       "id": "aoraki-mount-cook",
       "name": "Aoraki / Mount Cook",
-      "image": "/burrow-assets/tallest-mountains/aoraki-mount-cook.svg",
-      "imageAlt": "Aoraki / Mount Cook stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Aoraki_/_Mount_Cook",
+      "image": "/burrow-assets/tallest-mountains/aoraki-mount-cook.jpg",
+      "imageAlt": "Aoraki / Mount Cook photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mt_Cook_LC0247.jpg",
       "fact": "Aoraki / Mount Cook is New Zealand's highest mountain and a centerpiece of the Southern Alps.",
       "stats": [
         {
@@ -2892,10 +2892,10 @@
     {
       "id": "mount-rainier",
       "name": "Mount Rainier",
-      "image": "/burrow-assets/tallest-mountains/mount-rainier.svg",
-      "imageAlt": "Mount Rainier stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Rainier",
+      "image": "/burrow-assets/tallest-mountains/mount-rainier.jpg",
+      "imageAlt": "Mount Rainier photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Rainier20200906.jpg",
       "fact": "Mount Rainier is a heavily glaciated volcano that dominates the skyline near Seattle and Tacoma.",
       "stats": [
         {
@@ -2960,10 +2960,10 @@
     {
       "id": "chimborazo",
       "name": "Chimborazo",
-      "image": "/burrow-assets/tallest-mountains/chimborazo.svg",
-      "imageAlt": "Chimborazo stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Chimborazo",
+      "image": "/burrow-assets/tallest-mountains/chimborazo.jpg",
+      "imageAlt": "Chimborazo photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Chimborazo,_aspecto_norte,_Ecuador._(26354503702).jpg",
       "fact": "Chimborazo's summit is often described as the farthest point from Earth's center because of the equatorial bulge.",
       "stats": [
         {
@@ -3027,10 +3027,10 @@
     {
       "id": "mount-kenya",
       "name": "Mount Kenya",
-      "image": "/burrow-assets/tallest-mountains/mount-kenya.svg",
-      "imageAlt": "Mount Kenya stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Kenya",
+      "image": "/burrow-assets/tallest-mountains/mount-kenya.jpg",
+      "imageAlt": "Mount Kenya photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:MtKenya.jpg",
       "fact": "Mount Kenya is Africa's second-highest mountain and an eroded volcanic massif.",
       "stats": [
         {
@@ -3095,10 +3095,10 @@
     {
       "id": "mount-kosciuszko",
       "name": "Mount Kosciuszko",
-      "image": "/burrow-assets/tallest-mountains/mount-kosciuszko.svg",
-      "imageAlt": "Mount Kosciuszko stylized mountain card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Kosciuszko",
+      "image": "/burrow-assets/tallest-mountains/mount-kosciuszko.jpg",
+      "imageAlt": "Mount Kosciuszko photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kosciusko_Mountain_view_from_the_track.jpg",
       "fact": "Mount Kosciuszko is Australia's highest mainland mountain and one version of the Seven Summits.",
       "stats": [
         {

@@ -62,9 +62,9 @@ const difficultyFor = (recognition, elevationM) => recognition >= 7 ? "easy" : e
 const cardObject = ([id, name, range, location, elevationM, prominenceM, firstAscent, recognition, fact, sourceUrl, categories]) => ({
   id,
   name,
-  image: `/burrow-assets/${packId}/${id}.svg`,
-  imageAlt: `${name} stylized mountain card`,
-  imageCredit: "Burrow original SVG",
+  image: `/burrow-assets/${packId}/${id}.jpg`,
+  imageAlt: `${name} photo`,
+  imageCredit: "Wikimedia Commons",
   imageSourceUrl: sourceUrl,
   fact,
   stats: [

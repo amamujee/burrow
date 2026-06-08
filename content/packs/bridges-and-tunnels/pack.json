@@ -43,10 +43,10 @@
     {
       "id": "brooklyn-bridge",
       "name": "Brooklyn Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/brooklyn-bridge.svg",
-      "imageAlt": "Brooklyn Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Brooklyn_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/brooklyn-bridge.jpg",
+      "imageAlt": "Brooklyn Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Bridge_and_the_Lower_Manhattan_skyline_from_Pebble_Beach,_New_York.jpg",
       "fact": "A New York icon, the Brooklyn Bridge joined Manhattan and Brooklyn with Gothic stone towers and a daring suspended span.",
       "stats": [
         {
@@ -104,10 +104,10 @@
     {
       "id": "manhattan-bridge",
       "name": "Manhattan Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/manhattan-bridge.svg",
-      "imageAlt": "Manhattan Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Manhattan_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/manhattan-bridge.jpg",
+      "imageAlt": "Manhattan Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Manhattan_Bridge_January_2023_003.jpg",
       "fact": "The Manhattan Bridge carries road, subway, bike, and foot traffic between Lower Manhattan and Brooklyn.",
       "stats": [
         {
@@ -165,10 +165,10 @@
     {
       "id": "williamsburg-bridge",
       "name": "Williamsburg Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/williamsburg-bridge.svg",
-      "imageAlt": "Williamsburg Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Williamsburg_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/williamsburg-bridge.jpg",
+      "imageAlt": "Williamsburg Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Williamsburg_Bridge_full.jpg",
       "fact": "The Williamsburg Bridge links Manhattan's Lower East Side with Brooklyn and was once the world's longest suspension span.",
       "stats": [
         {
@@ -226,10 +226,10 @@
     {
       "id": "queensboro-bridge",
       "name": "Queensboro Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/queensboro-bridge.svg",
-      "imageAlt": "Queensboro Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Queensboro_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/queensboro-bridge.jpg",
+      "imageAlt": "Queensboro Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Queensboro_Bridge_from_Manhattan_side.jpg",
       "fact": "The Queensboro Bridge crosses the East River by Roosevelt Island and is also known as the Ed Koch Queensboro Bridge.",
       "stats": [
         {
@@ -287,10 +287,10 @@
     {
       "id": "verrazzano-narrows-bridge",
       "name": "Verrazzano-Narrows Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/verrazzano-narrows-bridge.svg",
-      "imageAlt": "Verrazzano-Narrows Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Verrazzano-Narrows_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/verrazzano-narrows-bridge.jpg",
+      "imageAlt": "Verrazzano-Narrows Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Verrazano_Bridge2.jpg",
       "fact": "The Verrazzano-Narrows Bridge connects Brooklyn and Staten Island with a giant suspension span over the Narrows.",
       "stats": [
         {
@@ -348,10 +348,10 @@
     {
       "id": "george-washington-bridge",
       "name": "George Washington Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/george-washington-bridge.svg",
-      "imageAlt": "George Washington Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/George_Washington_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/george-washington-bridge.jpg",
+      "imageAlt": "George Washington Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:George_Washington_Bridge_from_New_Jersey-edit.jpg",
       "fact": "The George Washington Bridge crosses the Hudson River and is one of the world's busiest motor-vehicle bridges.",
       "stats": [
         {
@@ -409,10 +409,10 @@
     {
       "id": "rfk-triborough-bridge",
       "name": "Robert F. Kennedy Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/rfk-triborough-bridge.svg",
-      "imageAlt": "Robert F. Kennedy Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Triborough_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/rfk-triborough-bridge.jpg",
+      "imageAlt": "Robert F. Kennedy Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Randalls_and_Wards_Islands.JPG",
       "fact": "The Robert F. Kennedy Bridge, often called the Triborough, ties Manhattan, Queens, and the Bronx together.",
       "stats": [
         {
@@ -470,10 +470,10 @@
     {
       "id": "bronx-whitestone-bridge",
       "name": "Bronx-Whitestone Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/bronx-whitestone-bridge.svg",
-      "imageAlt": "Bronx-Whitestone Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Bronx-Whitestone_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/bronx-whitestone-bridge.jpg",
+      "imageAlt": "Bronx-Whitestone Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Whitestone_Bridge_from_Clason_Point_Park.jpg",
       "fact": "The Bronx-Whitestone Bridge gives drivers a direct East River route between the Bronx and Queens.",
       "stats": [
         {
@@ -531,10 +531,10 @@
     {
       "id": "throgs-neck-bridge",
       "name": "Throgs Neck Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/throgs-neck-bridge.svg",
-      "imageAlt": "Throgs Neck Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Throgs_Neck_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/throgs-neck-bridge.jpg",
+      "imageAlt": "Throgs Neck Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:ThrogsNeckBridge.jpg",
       "fact": "The Throgs Neck Bridge is a major suspension bridge connecting the Bronx and Queens near Long Island Sound.",
       "stats": [
         {
@@ -592,10 +592,10 @@
     {
       "id": "henry-hudson-bridge",
       "name": "Henry Hudson Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/henry-hudson-bridge.svg",
-      "imageAlt": "Henry Hudson Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Henry_Hudson_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/henry-hudson-bridge.jpg",
+      "imageAlt": "Henry Hudson Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Henry_Hudson_Bridge_20171010-jag9889.jpg",
       "fact": "The Henry Hudson Bridge is a tall steel arch crossing the Harlem River Ship Canal in northern Manhattan.",
       "stats": [
         {
@@ -653,10 +653,10 @@
     {
       "id": "bayonne-bridge",
       "name": "Bayonne Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/bayonne-bridge.svg",
-      "imageAlt": "Bayonne Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Bayonne_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/bayonne-bridge.jpg",
+      "imageAlt": "Bayonne Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:High_BB_from_Bayonne_jeh.jpg",
       "fact": "The Bayonne Bridge's roadway was raised so larger ships could pass beneath its graceful steel arch.",
       "stats": [
         {
@@ -714,10 +714,10 @@
     {
       "id": "goethals-bridge",
       "name": "Goethals Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/goethals-bridge.svg",
-      "imageAlt": "Goethals Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Goethals_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/goethals-bridge.jpg",
+      "imageAlt": "Goethals Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:New_Goethals_Bridge_from_airplane_cropped.jpg",
       "fact": "The modern Goethals Bridge uses cable-stayed towers to connect Staten Island with Elizabeth, New Jersey.",
       "stats": [
         {
@@ -775,10 +775,10 @@
     {
       "id": "governor-mario-cuomo-bridge",
       "name": "Governor Mario M. Cuomo Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/governor-mario-cuomo-bridge.svg",
-      "imageAlt": "Governor Mario M. Cuomo Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Governor_Mario_M._Cuomo_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/governor-mario-cuomo-bridge.jpg",
+      "imageAlt": "Governor Mario M. Cuomo Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mario_Cuomo_Bridge_Overhead.jpg",
       "fact": "The Governor Mario M. Cuomo Bridge replaced the old Tappan Zee Bridge across one of the Hudson River's widest points.",
       "stats": [
         {
@@ -836,10 +836,10 @@
     {
       "id": "golden-gate-bridge",
       "name": "Golden Gate Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/golden-gate-bridge.svg",
-      "imageAlt": "Golden Gate Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Golden_Gate_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/golden-gate-bridge.jpg",
+      "imageAlt": "Golden Gate Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Golden_Gate_Bridge_as_seen_from_Battery_East.jpg",
       "fact": "The Golden Gate Bridge's orange towers and foggy bay setting make it one of the most recognizable bridges on Earth.",
       "stats": [
         {
@@ -897,10 +897,10 @@
     {
       "id": "tower-bridge",
       "name": "Tower Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/tower-bridge.svg",
-      "imageAlt": "Tower Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Tower_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/tower-bridge.jpg",
+      "imageAlt": "Tower Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tower_Bridge_at_Dawn.jpg",
       "fact": "Tower Bridge combines two castle-like towers with a roadway that can lift for tall ships on the Thames.",
       "stats": [
         {
@@ -958,10 +958,10 @@
     {
       "id": "london-bridge",
       "name": "London Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/london-bridge.svg",
-      "imageAlt": "London Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/London_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/london-bridge.jpg",
+      "imageAlt": "London Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:London_Bridge_from_St_Olaf_Stairs.jpg",
       "fact": "London Bridge is famous because bridges at this crossing have linked the City of London and Southwark for centuries.",
       "stats": [
         {
@@ -1019,10 +1019,10 @@
     {
       "id": "sydney-harbour-bridge",
       "name": "Sydney Harbour Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/sydney-harbour-bridge.svg",
-      "imageAlt": "Sydney Harbour Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Sydney_Harbour_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/sydney-harbour-bridge.jpg",
+      "imageAlt": "Sydney Harbour Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Sydney_Harbour_Bridge-16_October_2025.jpg",
       "fact": "Sydney Harbour Bridge is nicknamed the Coathanger because of its huge steel arch over the harbor.",
       "stats": [
         {
@@ -1080,10 +1080,10 @@
     {
       "id": "akashi-kaikyo-bridge",
       "name": "Akashi Kaikyo Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.svg",
-      "imageAlt": "Akashi Kaikyo Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Akashi_Kaikyo_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.jpg",
+      "imageAlt": "Akashi Kaikyo Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:明石海峡大橋_-_panoramio_(1)_(cropped).jpg",
       "fact": "The Akashi Kaikyo Bridge has one of the longest central spans ever built for a suspension bridge.",
       "stats": [
         {
@@ -1141,9 +1141,9 @@
     {
       "id": "millau-viaduct",
       "name": "Millau Viaduct",
-      "image": "/burrow-assets/bridges-and-tunnels/millau-viaduct.svg",
-      "imageAlt": "Millau Viaduct stylized bridge card",
-      "imageCredit": "Burrow original SVG",
+      "image": "/burrow-assets/bridges-and-tunnels/millau-viaduct.jpg",
+      "imageAlt": "Millau Viaduct photo",
+      "imageCredit": "Wikimedia Commons",
       "imageSourceUrl": "https://en.wikipedia.org/wiki/Millau_Viaduct",
       "fact": "The Millau Viaduct soars above France's Tarn valley and is famous for its very tall, elegant piers.",
       "stats": [
@@ -1202,10 +1202,10 @@
     {
       "id": "ponte-vecchio",
       "name": "Ponte Vecchio",
-      "image": "/burrow-assets/bridges-and-tunnels/ponte-vecchio.svg",
-      "imageAlt": "Ponte Vecchio stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Ponte_Vecchio",
+      "image": "/burrow-assets/bridges-and-tunnels/ponte-vecchio.jpg",
+      "imageAlt": "Ponte Vecchio photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ponte_Vecchio_from_Ponte_alle_Grazie.jpg",
       "fact": "Ponte Vecchio is a medieval Florence bridge lined with shops, making it feel like a tiny street over water.",
       "stats": [
         {
@@ -1263,10 +1263,10 @@
     {
       "id": "rialto-bridge",
       "name": "Rialto Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/rialto-bridge.svg",
-      "imageAlt": "Rialto Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Rialto_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/rialto-bridge.jpg",
+      "imageAlt": "Rialto Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Rialto_2025_4.jpg",
       "fact": "The Rialto Bridge is Venice's famous stone crossing over the Grand Canal.",
       "stats": [
         {
@@ -1324,10 +1324,10 @@
     {
       "id": "charles-bridge",
       "name": "Charles Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/charles-bridge.svg",
-      "imageAlt": "Charles Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Charles_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/charles-bridge.jpg",
+      "imageAlt": "Charles Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Prague_07-2016_view_from_Lesser_Town_Tower_of_Charles_Bridge_img3.jpg",
       "fact": "Charles Bridge is a stone bridge lined with statues and is one of Prague's best-known landmarks.",
       "stats": [
         {
@@ -1385,10 +1385,10 @@
     {
       "id": "forth-bridge",
       "name": "Forth Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/forth-bridge.svg",
-      "imageAlt": "Forth Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Forth_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/forth-bridge.jpg",
+      "imageAlt": "Forth Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Forth_Bridge_2022.jpg",
       "fact": "The Forth Bridge is a bold red railway cantilever bridge and a UNESCO-listed engineering landmark.",
       "stats": [
         {
@@ -1446,10 +1446,10 @@
     {
       "id": "oresund-bridge",
       "name": "Oresund Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/oresund-bridge.svg",
-      "imageAlt": "Oresund Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/%C3%98resund_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/oresund-bridge.jpg",
+      "imageAlt": "Oresund Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Øresund_Bridge_from_the_air_in_September_2015.jpg",
       "fact": "The Oresund Bridge links Denmark and Sweden, then continues through a tunnel on the same crossing.",
       "stats": [
         {
@@ -1507,10 +1507,10 @@
     {
       "id": "bosphorus-bridge",
       "name": "15 July Martyrs Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/bosphorus-bridge.svg",
-      "imageAlt": "15 July Martyrs Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/15_July_Martyrs_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/bosphorus-bridge.jpg",
+      "imageAlt": "15 July Martyrs Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Bosphorus_Bridge_(235499411).jpeg",
       "fact": "The 15 July Martyrs Bridge, often called the Bosphorus Bridge, links Europe and Asia across Istanbul's strait.",
       "stats": [
         {
@@ -1568,10 +1568,10 @@
     {
       "id": "danyang-kunshan-grand-bridge",
       "name": "Danyang-Kunshan Grand Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/danyang-kunshan-grand-bridge.svg",
-      "imageAlt": "Danyang-Kunshan Grand Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Danyang%E2%80%93Kunshan_Grand_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/danyang-kunshan-grand-bridge.jpg",
+      "imageAlt": "Danyang-Kunshan Grand Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:201603_Danyang-Kunshan_grand_bridge_(wuxi)_(cropped).JPG",
       "fact": "The Danyang-Kunshan Grand Bridge carries high-speed rail and is widely listed as the longest bridge in the world.",
       "stats": [
         {
@@ -1629,10 +1629,10 @@
     {
       "id": "hong-kong-zhuhai-macau-bridge",
       "name": "Hong Kong-Zhuhai-Macau Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/hong-kong-zhuhai-macau-bridge.svg",
-      "imageAlt": "Hong Kong-Zhuhai-Macau Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Hong_Kong%E2%80%93Zhuhai%E2%80%93Macau_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/hong-kong-zhuhai-macau-bridge.jpg",
+      "imageAlt": "Hong Kong-Zhuhai-Macau Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:West_section_of_Hong_Kong-Zhuhai-Macau_Bridge_(20180902174105).jpg",
       "fact": "The Hong Kong-Zhuhai-Macau crossing mixes long sea bridges, artificial islands, and an undersea tunnel.",
       "stats": [
         {
@@ -1690,10 +1690,10 @@
     {
       "id": "mackinac-bridge",
       "name": "Mackinac Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/mackinac-bridge.svg",
-      "imageAlt": "Mackinac Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mackinac_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/mackinac-bridge.jpg",
+      "imageAlt": "Mackinac Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mackinac_Bridge_2022.jpg",
       "fact": "The Mackinac Bridge stretches between Michigan's peninsulas and is one of North America's great suspension bridges.",
       "stats": [
         {
@@ -1751,10 +1751,10 @@
     {
       "id": "sunshine-skyway-bridge",
       "name": "Sunshine Skyway Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/sunshine-skyway-bridge.svg",
-      "imageAlt": "Sunshine Skyway Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Sunshine_Skyway_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/sunshine-skyway-bridge.jpg",
+      "imageAlt": "Sunshine Skyway Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:SunshineSkywayBridge-4SC_6643-15.jpg",
       "fact": "The Sunshine Skyway Bridge is known for bright yellow cables rising over Tampa Bay.",
       "stats": [
         {
@@ -1812,10 +1812,10 @@
     {
       "id": "bixby-creek-bridge",
       "name": "Bixby Creek Bridge",
-      "image": "/burrow-assets/bridges-and-tunnels/bixby-creek-bridge.svg",
-      "imageAlt": "Bixby Creek Bridge stylized bridge card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Bixby_Creek_Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/bixby-creek-bridge.jpg",
+      "imageAlt": "Bixby Creek Bridge photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Bixby_Creek_Bridge,_California,_USA_-_May_2013.jpg",
       "fact": "Bixby Creek Bridge is a beloved concrete arch on California's Pacific Coast Highway.",
       "stats": [
         {
@@ -1873,10 +1873,10 @@
     {
       "id": "gotthard-base-tunnel",
       "name": "Gotthard Base Tunnel",
-      "image": "/burrow-assets/bridges-and-tunnels/gotthard-base-tunnel.svg",
-      "imageAlt": "Gotthard Base Tunnel stylized tunnel card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Gotthard_Base_Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/gotthard-base-tunnel.jpg",
+      "imageAlt": "Gotthard Base Tunnel photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:20141120_gotthard-basistunnel02-wikipedia-hannes-ortlieb.jpg",
       "fact": "The Gotthard Base Tunnel runs under the Alps and is one of the longest railway tunnels in the world.",
       "stats": [
         {
@@ -1934,10 +1934,10 @@
     {
       "id": "seikan-tunnel",
       "name": "Seikan Tunnel",
-      "image": "/burrow-assets/bridges-and-tunnels/seikan-tunnel.svg",
-      "imageAlt": "Seikan Tunnel stylized tunnel card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Seikan_Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/seikan-tunnel.jpg",
+      "imageAlt": "Seikan Tunnel photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Inside_seikan_tunnel.JPG",
       "fact": "The Seikan Tunnel carries trains between Honshu and Hokkaido with a long section under the seabed.",
       "stats": [
         {
@@ -1995,10 +1995,10 @@
     {
       "id": "channel-tunnel",
       "name": "Channel Tunnel",
-      "image": "/burrow-assets/bridges-and-tunnels/channel-tunnel.svg",
-      "imageAlt": "Channel Tunnel stylized tunnel card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Channel_Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/channel-tunnel.jpg",
+      "imageAlt": "Channel Tunnel photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:TGV_TMST_3011-2_-_Sortie_Tunnel_sous_la_Manche_à_Coquelles.jpg",
       "fact": "The Channel Tunnel, or Chunnel, lets trains travel beneath the English Channel between Britain and France.",
       "stats": [
         {
@@ -2056,10 +2056,10 @@
     {
       "id": "loetschberg-base-tunnel",
       "name": "Loetschberg Base Tunnel",
-      "image": "/burrow-assets/bridges-and-tunnels/loetschberg-base-tunnel.svg",
-      "imageAlt": "Loetschberg Base Tunnel stylized tunnel card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/L%C3%B6tschberg_Base_Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/loetschberg-base-tunnel.jpg",
+      "imageAlt": "Loetschberg Base Tunnel photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Lötschberg_Basistunnel_Nordportal.jpg",
       "fact": "The Loetschberg Base Tunnel is a long Swiss railway tunnel that slices through the Alps.",
       "stats": [
         {
@@ -2117,10 +2117,10 @@
     {
       "id": "guadarrama-tunnel",
       "name": "Guadarrama Tunnel",
-      "image": "/burrow-assets/bridges-and-tunnels/guadarrama-tunnel.svg",
-      "imageAlt": "Guadarrama Tunnel stylized tunnel card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Guadarrama_Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/guadarrama-tunnel.jpg",
+      "imageAlt": "Guadarrama Tunnel photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Túnel_ferroviario_de_Guadarrama.jpg",
       "fact": "The Guadarrama Tunnel carries high-speed trains through the mountains north of Madrid.",
       "stats": [
         {
@@ -2178,10 +2178,10 @@
     {
       "id": "chesapeake-bay-bridge-tunnel",
       "name": "Chesapeake Bay Bridge-Tunnel",
-      "image": "/burrow-assets/bridges-and-tunnels/chesapeake-bay-bridge-tunnel.svg",
-      "imageAlt": "Chesapeake Bay Bridge-Tunnel stylized tunnel card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Chesapeake_Bay_Bridge%E2%80%93Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/chesapeake-bay-bridge-tunnel.jpg",
+      "imageAlt": "Chesapeake Bay Bridge-Tunnel photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:2017-07-12_11_23_10_View_south_along_U.S._Route_13_(Chesapeake_Bay_Bridge-Tunnel)_crossing_the_North_Channel_of_the_Chesapeake_Bay_in_Northampton_County,_Virginia.jpg",
       "fact": "The Chesapeake Bay Bridge-Tunnel uses bridges, trestles, islands, and tunnels to cross the mouth of Chesapeake Bay.",
       "stats": [
         {
@@ -2239,10 +2239,10 @@
     {
       "id": "laerdal-tunnel",
       "name": "Laerdal Tunnel",
-      "image": "/burrow-assets/bridges-and-tunnels/laerdal-tunnel.svg",
-      "imageAlt": "Laerdal Tunnel stylized tunnel card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/L%C3%A6rdal_Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/laerdal-tunnel.jpg",
+      "imageAlt": "Laerdal Tunnel photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Lærdalstunnelen_Norway.JPG",
       "fact": "The Laerdal Tunnel is a very long road tunnel in Norway with special caverns that break up the drive.",
       "stats": [
         {
@@ -2300,10 +2300,10 @@
     {
       "id": "yamate-tunnel",
       "name": "Yamate Tunnel",
-      "image": "/burrow-assets/bridges-and-tunnels/yamate-tunnel.svg",
-      "imageAlt": "Yamate Tunnel stylized tunnel card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Yamate_Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/yamate-tunnel.jpg",
+      "imageAlt": "Yamate Tunnel photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Shutoko-YamateTunnel.JPG",
       "fact": "The Yamate Tunnel is a long urban road tunnel carrying expressway traffic under Tokyo.",
       "stats": [
         {
@@ -2361,10 +2361,10 @@
     {
       "id": "zhongnanshan-tunnel",
       "name": "Zhongnanshan Tunnel",
-      "image": "/burrow-assets/bridges-and-tunnels/zhongnanshan-tunnel.svg",
-      "imageAlt": "Zhongnanshan Tunnel stylized tunnel card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Zhongnanshan_Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/zhongnanshan-tunnel.jpg",
+      "imageAlt": "Zhongnanshan Tunnel photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:柞水_秦岭终南山公路隧道南口.jpg",
       "fact": "The Zhongnanshan Tunnel is a major road tunnel through China's Qinling mountains.",
       "stats": [
         {
@@ -2422,10 +2422,10 @@
     {
       "id": "gotthard-road-tunnel",
       "name": "Gotthard Road Tunnel",
-      "image": "/burrow-assets/bridges-and-tunnels/gotthard-road-tunnel.svg",
-      "imageAlt": "Gotthard Road Tunnel stylized tunnel card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Gotthard_Road_Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/gotthard-road-tunnel.jpg",
+      "imageAlt": "Gotthard Road Tunnel photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Gotthard_Road_Tunnel_Switzerland.jpg",
       "fact": "The Gotthard Road Tunnel gives highway traffic a long route through the Swiss Alps.",
       "stats": [
         {
@@ -2483,10 +2483,10 @@
     {
       "id": "tokyo-bay-aqua-line",
       "name": "Tokyo Bay Aqua-Line",
-      "image": "/burrow-assets/bridges-and-tunnels/tokyo-bay-aqua-line.svg",
-      "imageAlt": "Tokyo Bay Aqua-Line stylized tunnel card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Tokyo_Bay_Aqua-Line",
+      "image": "/burrow-assets/bridges-and-tunnels/tokyo-bay-aqua-line.jpg",
+      "imageAlt": "Tokyo Bay Aqua-Line photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tokyo_Wan_Aqua-Line.jpg",
       "fact": "The Tokyo Bay Aqua-Line combines a bridge, an artificial island, and a tunnel under Tokyo Bay.",
       "stats": [
         {
@@ -2544,10 +2544,10 @@
     {
       "id": "ryfylke-tunnel",
       "name": "Ryfylke Tunnel",
-      "image": "/burrow-assets/bridges-and-tunnels/ryfylke-tunnel.svg",
-      "imageAlt": "Ryfylke Tunnel stylized tunnel card",
-      "imageCredit": "Burrow original SVG",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Ryfylke_Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/ryfylke-tunnel.jpg",
+      "imageAlt": "Ryfylke Tunnel photo",
+      "imageCredit": "Wikimedia Commons",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ryfylketunnelen.jpg",
       "fact": "The Ryfylke Tunnel dives under a Norwegian fjord and is one of the world's longest undersea road tunnels.",
       "stats": [
         {
