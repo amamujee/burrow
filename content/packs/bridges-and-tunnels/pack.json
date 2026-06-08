@@ -1,0 +1,2606 @@
+{
+  "$schema": "../pack.schema.json",
+  "id": "bridges-and-tunnels",
+  "title": "Bridges & Tunnels",
+  "summary": "Famous bridge icons, major New York area crossings, record-setting viaducts, and long tunnels become length, history, and engineering challenges.",
+  "status": "playable",
+  "audience": {
+    "minAge": 6,
+    "maxAge": 11,
+    "readingLevel": "short landmark facts with rounded distance comparisons"
+  },
+  "recommendedModes": [
+    "trumps",
+    "sort",
+    "fact",
+    "peek",
+    "number",
+    "odd"
+  ],
+  "sources": [
+    {
+      "label": "Wikipedia list of bridges",
+      "url": "https://en.wikipedia.org/wiki/List_of_bridges",
+      "note": "General bridge index for landmark cross-checking."
+    },
+    {
+      "label": "Wikipedia list of longest bridges",
+      "url": "https://en.wikipedia.org/wiki/List_of_longest_bridges",
+      "note": "Length context for record-setting viaducts and sea crossings."
+    },
+    {
+      "label": "Wikipedia list of longest tunnels",
+      "url": "https://en.wikipedia.org/wiki/List_of_longest_tunnels",
+      "note": "Tunnel length context for rail, road, mountain, and undersea tunnels."
+    },
+    {
+      "label": "Britannica tunnel list",
+      "url": "https://www.britannica.com/topic/list-of-tunnels-2197876",
+      "note": "Secondary tunnel landmark reference."
+    }
+  ],
+  "cards": [
+    {
+      "id": "brooklyn-bridge",
+      "name": "Brooklyn Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/brooklyn-bridge.svg",
+      "imageAlt": "Brooklyn Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Brooklyn_Bridge",
+      "fact": "A New York icon, the Brooklyn Bridge joined Manhattan and Brooklyn with Gothic stone towers and a daring suspended span.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.13,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1883,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "new-york-area",
+        "new-york-area",
+        "suspension",
+        "historic"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "suspension"
+      },
+      "readingPrompts": [
+        "What clue tells you Brooklyn Bridge is a bridge?",
+        "How does Brooklyn Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "manhattan-bridge",
+      "name": "Manhattan Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/manhattan-bridge.svg",
+      "imageAlt": "Manhattan Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Manhattan_Bridge",
+      "fact": "The Manhattan Bridge carries road, subway, bike, and foot traffic between Lower Manhattan and Brooklyn.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.29,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1909,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "new-york-area",
+        "new-york-area",
+        "suspension",
+        "transit"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "suspension"
+      },
+      "readingPrompts": [
+        "What clue tells you Manhattan Bridge is a bridge?",
+        "How does Manhattan Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "williamsburg-bridge",
+      "name": "Williamsburg Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/williamsburg-bridge.svg",
+      "imageAlt": "Williamsburg Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Williamsburg_Bridge",
+      "fact": "The Williamsburg Bridge links Manhattan's Lower East Side with Brooklyn and was once the world's longest suspension span.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.38,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1903,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "new-york-area",
+        "new-york-area",
+        "suspension",
+        "historic"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "suspension"
+      },
+      "readingPrompts": [
+        "What clue tells you Williamsburg Bridge is a bridge?",
+        "How does Williamsburg Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "queensboro-bridge",
+      "name": "Queensboro Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/queensboro-bridge.svg",
+      "imageAlt": "Queensboro Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Queensboro_Bridge",
+      "fact": "The Queensboro Bridge crosses the East River by Roosevelt Island and is also known as the Ed Koch Queensboro Bridge.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.71,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1909,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "cantilever",
+        "new-york-area",
+        "new-york-area",
+        "cantilever",
+        "transit"
+      ],
+      "tags": [
+        "bridge",
+        "cantilever",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "cantilever"
+      },
+      "readingPrompts": [
+        "What clue tells you Queensboro Bridge is a bridge?",
+        "How does Queensboro Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "verrazzano-narrows-bridge",
+      "name": "Verrazzano-Narrows Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/verrazzano-narrows-bridge.svg",
+      "imageAlt": "Verrazzano-Narrows Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Verrazzano-Narrows_Bridge",
+      "fact": "The Verrazzano-Narrows Bridge connects Brooklyn and Staten Island with a giant suspension span over the Narrows.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 2.6,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1964,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "new-york-area",
+        "new-york-area",
+        "suspension",
+        "long-span"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "suspension"
+      },
+      "readingPrompts": [
+        "What clue tells you Verrazzano-Narrows Bridge is a bridge?",
+        "How does Verrazzano-Narrows Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "george-washington-bridge",
+      "name": "George Washington Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/george-washington-bridge.svg",
+      "imageAlt": "George Washington Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/George_Washington_Bridge",
+      "fact": "The George Washington Bridge crosses the Hudson River and is one of the world's busiest motor-vehicle bridges.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.91,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1931,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "new-york-area",
+        "new-york-area",
+        "suspension",
+        "hudson-river"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "suspension"
+      },
+      "readingPrompts": [
+        "What clue tells you George Washington Bridge is a bridge?",
+        "How does George Washington Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "rfk-triborough-bridge",
+      "name": "Robert F. Kennedy Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/rfk-triborough-bridge.svg",
+      "imageAlt": "Robert F. Kennedy Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Triborough_Bridge",
+      "fact": "The Robert F. Kennedy Bridge, often called the Triborough, ties Manhattan, Queens, and the Bronx together.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.38,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1936,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "complex",
+        "new-york-area",
+        "new-york-area",
+        "complex",
+        "transit"
+      ],
+      "tags": [
+        "bridge",
+        "complex",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "complex"
+      },
+      "readingPrompts": [
+        "What clue tells you Robert F. Kennedy Bridge is a bridge?",
+        "How does Robert F. Kennedy Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "bronx-whitestone-bridge",
+      "name": "Bronx-Whitestone Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/bronx-whitestone-bridge.svg",
+      "imageAlt": "Bronx-Whitestone Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Bronx-Whitestone_Bridge",
+      "fact": "The Bronx-Whitestone Bridge gives drivers a direct East River route between the Bronx and Queens.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.71,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1939,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "new-york-area",
+        "new-york-area",
+        "suspension",
+        "east-river"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "suspension"
+      },
+      "readingPrompts": [
+        "What clue tells you Bronx-Whitestone Bridge is a bridge?",
+        "How does Bronx-Whitestone Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "throgs-neck-bridge",
+      "name": "Throgs Neck Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/throgs-neck-bridge.svg",
+      "imageAlt": "Throgs Neck Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Throgs_Neck_Bridge",
+      "fact": "The Throgs Neck Bridge is a major suspension bridge connecting the Bronx and Queens near Long Island Sound.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.55,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1961,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "new-york-area",
+        "new-york-area",
+        "suspension",
+        "east-river"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "suspension"
+      },
+      "readingPrompts": [
+        "What clue tells you Throgs Neck Bridge is a bridge?",
+        "How does Throgs Neck Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "henry-hudson-bridge",
+      "name": "Henry Hudson Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/henry-hudson-bridge.svg",
+      "imageAlt": "Henry Hudson Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Henry_Hudson_Bridge",
+      "fact": "The Henry Hudson Bridge is a tall steel arch crossing the Harlem River Ship Canal in northern Manhattan.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.42,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1936,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 5,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "arch",
+        "new-york-area",
+        "new-york-area",
+        "arch",
+        "hudson-river"
+      ],
+      "tags": [
+        "bridge",
+        "arch",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 3,
+        "taxonomyGroup": "arch"
+      },
+      "readingPrompts": [
+        "What clue tells you Henry Hudson Bridge is a bridge?",
+        "How does Henry Hudson Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "bayonne-bridge",
+      "name": "Bayonne Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/bayonne-bridge.svg",
+      "imageAlt": "Bayonne Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Bayonne_Bridge",
+      "fact": "The Bayonne Bridge's roadway was raised so larger ships could pass beneath its graceful steel arch.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.03,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1931,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "arch",
+        "new-york-area",
+        "new-york-area",
+        "arch",
+        "port"
+      ],
+      "tags": [
+        "bridge",
+        "arch",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "arch"
+      },
+      "readingPrompts": [
+        "What clue tells you Bayonne Bridge is a bridge?",
+        "How does Bayonne Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "goethals-bridge",
+      "name": "Goethals Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/goethals-bridge.svg",
+      "imageAlt": "Goethals Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Goethals_Bridge",
+      "fact": "The modern Goethals Bridge uses cable-stayed towers to connect Staten Island with Elizabeth, New Jersey.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.4,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2018,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "cable-stayed",
+        "new-york-area",
+        "new-york-area",
+        "cable-stayed",
+        "port"
+      ],
+      "tags": [
+        "bridge",
+        "cable-stayed",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 3,
+        "taxonomyGroup": "cable-stayed"
+      },
+      "readingPrompts": [
+        "What clue tells you Goethals Bridge is a bridge?",
+        "How does Goethals Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "governor-mario-cuomo-bridge",
+      "name": "Governor Mario M. Cuomo Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/governor-mario-cuomo-bridge.svg",
+      "imageAlt": "Governor Mario M. Cuomo Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Governor_Mario_M._Cuomo_Bridge",
+      "fact": "The Governor Mario M. Cuomo Bridge replaced the old Tappan Zee Bridge across one of the Hudson River's widest points.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 3.1,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2018,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "cable-stayed",
+        "new-york-area",
+        "new-york-area",
+        "cable-stayed",
+        "hudson-river"
+      ],
+      "tags": [
+        "bridge",
+        "cable-stayed",
+        "new-york-area"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "cable-stayed"
+      },
+      "readingPrompts": [
+        "What clue tells you Governor Mario M. Cuomo Bridge is a bridge?",
+        "How does Governor Mario M. Cuomo Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "golden-gate-bridge",
+      "name": "Golden Gate Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/golden-gate-bridge.svg",
+      "imageAlt": "Golden Gate Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Golden_Gate_Bridge",
+      "fact": "The Golden Gate Bridge's orange towers and foggy bay setting make it one of the most recognizable bridges on Earth.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.7,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1937,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "world",
+        "global-icon",
+        "suspension",
+        "long-span"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "suspension"
+      },
+      "readingPrompts": [
+        "What clue tells you Golden Gate Bridge is a bridge?",
+        "How does Golden Gate Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "tower-bridge",
+      "name": "Tower Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/tower-bridge.svg",
+      "imageAlt": "Tower Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Tower_Bridge",
+      "fact": "Tower Bridge combines two castle-like towers with a roadway that can lift for tall ships on the Thames.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.15,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1894,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "bascule",
+        "world",
+        "global-icon",
+        "bascule",
+        "historic"
+      ],
+      "tags": [
+        "bridge",
+        "bascule",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "bascule"
+      },
+      "readingPrompts": [
+        "What clue tells you Tower Bridge is a bridge?",
+        "How does Tower Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "london-bridge",
+      "name": "London Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/london-bridge.svg",
+      "imageAlt": "London Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/London_Bridge",
+      "fact": "London Bridge is famous because bridges at this crossing have linked the City of London and Southwark for centuries.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.17,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1973,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 4,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "box-girder",
+        "world",
+        "global-icon",
+        "historic",
+        "river-crossing"
+      ],
+      "tags": [
+        "bridge",
+        "box-girder",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "box-girder"
+      },
+      "readingPrompts": [
+        "What clue tells you London Bridge is a bridge?",
+        "How does London Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "sydney-harbour-bridge",
+      "name": "Sydney Harbour Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/sydney-harbour-bridge.svg",
+      "imageAlt": "Sydney Harbour Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Sydney_Harbour_Bridge",
+      "fact": "Sydney Harbour Bridge is nicknamed the Coathanger because of its huge steel arch over the harbor.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.71,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1932,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "arch",
+        "world",
+        "global-icon",
+        "arch",
+        "harbor"
+      ],
+      "tags": [
+        "bridge",
+        "arch",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "arch"
+      },
+      "readingPrompts": [
+        "What clue tells you Sydney Harbour Bridge is a bridge?",
+        "How does Sydney Harbour Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "akashi-kaikyo-bridge",
+      "name": "Akashi Kaikyo Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.svg",
+      "imageAlt": "Akashi Kaikyo Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Akashi_Kaikyo_Bridge",
+      "fact": "The Akashi Kaikyo Bridge has one of the longest central spans ever built for a suspension bridge.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 2.43,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1998,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "world",
+        "global-icon",
+        "suspension",
+        "long-span"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "suspension"
+      },
+      "readingPrompts": [
+        "What clue tells you Akashi Kaikyo Bridge is a bridge?",
+        "How does Akashi Kaikyo Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "millau-viaduct",
+      "name": "Millau Viaduct",
+      "image": "/burrow-assets/bridges-and-tunnels/millau-viaduct.svg",
+      "imageAlt": "Millau Viaduct stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Millau_Viaduct",
+      "fact": "The Millau Viaduct soars above France's Tarn valley and is famous for its very tall, elegant piers.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.53,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2004,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "cable-stayed",
+        "world",
+        "global-icon",
+        "cable-stayed",
+        "viaduct"
+      ],
+      "tags": [
+        "bridge",
+        "cable-stayed",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "cable-stayed"
+      },
+      "readingPrompts": [
+        "What clue tells you Millau Viaduct is a bridge?",
+        "How does Millau Viaduct's length compare with another card?"
+      ]
+    },
+    {
+      "id": "ponte-vecchio",
+      "name": "Ponte Vecchio",
+      "image": "/burrow-assets/bridges-and-tunnels/ponte-vecchio.svg",
+      "imageAlt": "Ponte Vecchio stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Ponte_Vecchio",
+      "fact": "Ponte Vecchio is a medieval Florence bridge lined with shops, making it feel like a tiny street over water.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.06,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1345,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 4,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "arch",
+        "world",
+        "global-icon",
+        "arch",
+        "historic"
+      ],
+      "tags": [
+        "bridge",
+        "arch",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "arch"
+      },
+      "readingPrompts": [
+        "What clue tells you Ponte Vecchio is a bridge?",
+        "How does Ponte Vecchio's length compare with another card?"
+      ]
+    },
+    {
+      "id": "rialto-bridge",
+      "name": "Rialto Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/rialto-bridge.svg",
+      "imageAlt": "Rialto Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Rialto_Bridge",
+      "fact": "The Rialto Bridge is Venice's famous stone crossing over the Grand Canal.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.03,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1591,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 4,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "arch",
+        "world",
+        "global-icon",
+        "arch",
+        "historic"
+      ],
+      "tags": [
+        "bridge",
+        "arch",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "arch"
+      },
+      "readingPrompts": [
+        "What clue tells you Rialto Bridge is a bridge?",
+        "How does Rialto Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "charles-bridge",
+      "name": "Charles Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/charles-bridge.svg",
+      "imageAlt": "Charles Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Charles_Bridge",
+      "fact": "Charles Bridge is a stone bridge lined with statues and is one of Prague's best-known landmarks.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.32,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1402,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 5,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "arch",
+        "world",
+        "global-icon",
+        "arch",
+        "historic"
+      ],
+      "tags": [
+        "bridge",
+        "arch",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "arch"
+      },
+      "readingPrompts": [
+        "What clue tells you Charles Bridge is a bridge?",
+        "How does Charles Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "forth-bridge",
+      "name": "Forth Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/forth-bridge.svg",
+      "imageAlt": "Forth Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Forth_Bridge",
+      "fact": "The Forth Bridge is a bold red railway cantilever bridge and a UNESCO-listed engineering landmark.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.54,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1890,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "cantilever",
+        "world",
+        "global-icon",
+        "cantilever",
+        "railway"
+      ],
+      "tags": [
+        "bridge",
+        "cantilever",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "cantilever"
+      },
+      "readingPrompts": [
+        "What clue tells you Forth Bridge is a bridge?",
+        "How does Forth Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "oresund-bridge",
+      "name": "Oresund Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/oresund-bridge.svg",
+      "imageAlt": "Oresund Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/%C3%98resund_Bridge",
+      "fact": "The Oresund Bridge links Denmark and Sweden, then continues through a tunnel on the same crossing.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 4.9,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2000,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "cable-stayed",
+        "world",
+        "global-icon",
+        "cable-stayed",
+        "bridge-tunnel"
+      ],
+      "tags": [
+        "bridge",
+        "cable-stayed",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "cable-stayed"
+      },
+      "readingPrompts": [
+        "What clue tells you Oresund Bridge is a bridge?",
+        "How does Oresund Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "bosphorus-bridge",
+      "name": "15 July Martyrs Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/bosphorus-bridge.svg",
+      "imageAlt": "15 July Martyrs Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/15_July_Martyrs_Bridge",
+      "fact": "The 15 July Martyrs Bridge, often called the Bosphorus Bridge, links Europe and Asia across Istanbul's strait.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.97,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1973,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "world",
+        "global-icon",
+        "suspension",
+        "intercontinental"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "suspension"
+      },
+      "readingPrompts": [
+        "What clue tells you 15 July Martyrs Bridge is a bridge?",
+        "How does 15 July Martyrs Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "danyang-kunshan-grand-bridge",
+      "name": "Danyang-Kunshan Grand Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/danyang-kunshan-grand-bridge.svg",
+      "imageAlt": "Danyang-Kunshan Grand Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Danyang%E2%80%93Kunshan_Grand_Bridge",
+      "fact": "The Danyang-Kunshan Grand Bridge carries high-speed rail and is widely listed as the longest bridge in the world.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 102.4,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2011,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "viaduct",
+        "world",
+        "longest",
+        "viaduct",
+        "railway"
+      ],
+      "tags": [
+        "bridge",
+        "viaduct",
+        "longest"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "viaduct"
+      },
+      "readingPrompts": [
+        "What clue tells you Danyang-Kunshan Grand Bridge is a bridge?",
+        "How does Danyang-Kunshan Grand Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "hong-kong-zhuhai-macau-bridge",
+      "name": "Hong Kong-Zhuhai-Macau Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/hong-kong-zhuhai-macau-bridge.svg",
+      "imageAlt": "Hong Kong-Zhuhai-Macau Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Hong_Kong%E2%80%93Zhuhai%E2%80%93Macau_Bridge",
+      "fact": "The Hong Kong-Zhuhai-Macau crossing mixes long sea bridges, artificial islands, and an undersea tunnel.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 34.2,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2018,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "bridge-tunnel",
+        "world",
+        "longest",
+        "bridge-tunnel",
+        "sea-crossing"
+      ],
+      "tags": [
+        "bridge",
+        "bridge-tunnel",
+        "longest"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "bridge-tunnel"
+      },
+      "readingPrompts": [
+        "What clue tells you Hong Kong-Zhuhai-Macau Bridge is a bridge?",
+        "How does Hong Kong-Zhuhai-Macau Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "mackinac-bridge",
+      "name": "Mackinac Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/mackinac-bridge.svg",
+      "imageAlt": "Mackinac Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mackinac_Bridge",
+      "fact": "The Mackinac Bridge stretches between Michigan's peninsulas and is one of North America's great suspension bridges.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 5,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1957,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "world",
+        "global-icon",
+        "suspension",
+        "long-span"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "suspension"
+      },
+      "readingPrompts": [
+        "What clue tells you Mackinac Bridge is a bridge?",
+        "How does Mackinac Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "sunshine-skyway-bridge",
+      "name": "Sunshine Skyway Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/sunshine-skyway-bridge.svg",
+      "imageAlt": "Sunshine Skyway Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Sunshine_Skyway_Bridge",
+      "fact": "The Sunshine Skyway Bridge is known for bright yellow cables rising over Tampa Bay.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 4.1,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1987,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "cable-stayed",
+        "world",
+        "global-icon",
+        "cable-stayed",
+        "harbor"
+      ],
+      "tags": [
+        "bridge",
+        "cable-stayed",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "cable-stayed"
+      },
+      "readingPrompts": [
+        "What clue tells you Sunshine Skyway Bridge is a bridge?",
+        "How does Sunshine Skyway Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "bixby-creek-bridge",
+      "name": "Bixby Creek Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/bixby-creek-bridge.svg",
+      "imageAlt": "Bixby Creek Bridge stylized bridge card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Bixby_Creek_Bridge",
+      "fact": "Bixby Creek Bridge is a beloved concrete arch on California's Pacific Coast Highway.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.14,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1932,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 5,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "arch",
+        "world",
+        "global-icon",
+        "arch",
+        "coastal"
+      ],
+      "tags": [
+        "bridge",
+        "arch",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "arch"
+      },
+      "readingPrompts": [
+        "What clue tells you Bixby Creek Bridge is a bridge?",
+        "How does Bixby Creek Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "gotthard-base-tunnel",
+      "name": "Gotthard Base Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/gotthard-base-tunnel.svg",
+      "imageAlt": "Gotthard Base Tunnel stylized tunnel card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Gotthard_Base_Tunnel",
+      "fact": "The Gotthard Base Tunnel runs under the Alps and is one of the longest railway tunnels in the world.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 35.5,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2016,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "rail",
+        "world",
+        "longest",
+        "rail",
+        "mountain"
+      ],
+      "tags": [
+        "tunnel",
+        "rail",
+        "longest"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "rail"
+      },
+      "readingPrompts": [
+        "What clue tells you Gotthard Base Tunnel is a tunnel?",
+        "How does Gotthard Base Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "seikan-tunnel",
+      "name": "Seikan Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/seikan-tunnel.svg",
+      "imageAlt": "Seikan Tunnel stylized tunnel card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Seikan_Tunnel",
+      "fact": "The Seikan Tunnel carries trains between Honshu and Hokkaido with a long section under the seabed.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 33.5,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1988,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "rail",
+        "world",
+        "longest",
+        "rail",
+        "undersea"
+      ],
+      "tags": [
+        "tunnel",
+        "rail",
+        "longest"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "rail"
+      },
+      "readingPrompts": [
+        "What clue tells you Seikan Tunnel is a tunnel?",
+        "How does Seikan Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "channel-tunnel",
+      "name": "Channel Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/channel-tunnel.svg",
+      "imageAlt": "Channel Tunnel stylized tunnel card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Channel_Tunnel",
+      "fact": "The Channel Tunnel, or Chunnel, lets trains travel beneath the English Channel between Britain and France.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 31.4,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1994,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "rail",
+        "world",
+        "global-icon",
+        "rail",
+        "undersea"
+      ],
+      "tags": [
+        "tunnel",
+        "rail",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "rail"
+      },
+      "readingPrompts": [
+        "What clue tells you Channel Tunnel is a tunnel?",
+        "How does Channel Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "loetschberg-base-tunnel",
+      "name": "Loetschberg Base Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/loetschberg-base-tunnel.svg",
+      "imageAlt": "Loetschberg Base Tunnel stylized tunnel card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/L%C3%B6tschberg_Base_Tunnel",
+      "fact": "The Loetschberg Base Tunnel is a long Swiss railway tunnel that slices through the Alps.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 21.5,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2007,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "rail",
+        "world",
+        "longest",
+        "rail",
+        "mountain"
+      ],
+      "tags": [
+        "tunnel",
+        "rail",
+        "longest"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "rail"
+      },
+      "readingPrompts": [
+        "What clue tells you Loetschberg Base Tunnel is a tunnel?",
+        "How does Loetschberg Base Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "guadarrama-tunnel",
+      "name": "Guadarrama Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/guadarrama-tunnel.svg",
+      "imageAlt": "Guadarrama Tunnel stylized tunnel card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Guadarrama_Tunnel",
+      "fact": "The Guadarrama Tunnel carries high-speed trains through the mountains north of Madrid.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 17.6,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2007,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "rail",
+        "world",
+        "longest",
+        "rail",
+        "mountain"
+      ],
+      "tags": [
+        "tunnel",
+        "rail",
+        "longest"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 3,
+        "taxonomyGroup": "rail"
+      },
+      "readingPrompts": [
+        "What clue tells you Guadarrama Tunnel is a tunnel?",
+        "How does Guadarrama Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "chesapeake-bay-bridge-tunnel",
+      "name": "Chesapeake Bay Bridge-Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/chesapeake-bay-bridge-tunnel.svg",
+      "imageAlt": "Chesapeake Bay Bridge-Tunnel stylized tunnel card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Chesapeake_Bay_Bridge%E2%80%93Tunnel",
+      "fact": "The Chesapeake Bay Bridge-Tunnel uses bridges, trestles, islands, and tunnels to cross the mouth of Chesapeake Bay.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 17.6,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1964,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "bridge-tunnel",
+        "world",
+        "global-icon",
+        "bridge-tunnel",
+        "sea-crossing"
+      ],
+      "tags": [
+        "tunnel",
+        "bridge-tunnel",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "bridge-tunnel"
+      },
+      "readingPrompts": [
+        "What clue tells you Chesapeake Bay Bridge-Tunnel is a tunnel?",
+        "How does Chesapeake Bay Bridge-Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "laerdal-tunnel",
+      "name": "Laerdal Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/laerdal-tunnel.svg",
+      "imageAlt": "Laerdal Tunnel stylized tunnel card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/L%C3%A6rdal_Tunnel",
+      "fact": "The Laerdal Tunnel is a very long road tunnel in Norway with special caverns that break up the drive.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 15.2,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2000,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "road",
+        "world",
+        "longest",
+        "road",
+        "mountain"
+      ],
+      "tags": [
+        "tunnel",
+        "road",
+        "longest"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "road"
+      },
+      "readingPrompts": [
+        "What clue tells you Laerdal Tunnel is a tunnel?",
+        "How does Laerdal Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "yamate-tunnel",
+      "name": "Yamate Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/yamate-tunnel.svg",
+      "imageAlt": "Yamate Tunnel stylized tunnel card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Yamate_Tunnel",
+      "fact": "The Yamate Tunnel is a long urban road tunnel carrying expressway traffic under Tokyo.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 11.3,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2015,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "road",
+        "world",
+        "longest",
+        "road",
+        "urban"
+      ],
+      "tags": [
+        "tunnel",
+        "road",
+        "longest"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "road"
+      },
+      "readingPrompts": [
+        "What clue tells you Yamate Tunnel is a tunnel?",
+        "How does Yamate Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "zhongnanshan-tunnel",
+      "name": "Zhongnanshan Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/zhongnanshan-tunnel.svg",
+      "imageAlt": "Zhongnanshan Tunnel stylized tunnel card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Zhongnanshan_Tunnel",
+      "fact": "The Zhongnanshan Tunnel is a major road tunnel through China's Qinling mountains.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 11.2,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2007,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "road",
+        "world",
+        "longest",
+        "road",
+        "mountain"
+      ],
+      "tags": [
+        "tunnel",
+        "road",
+        "longest"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 3,
+        "taxonomyGroup": "road"
+      },
+      "readingPrompts": [
+        "What clue tells you Zhongnanshan Tunnel is a tunnel?",
+        "How does Zhongnanshan Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "gotthard-road-tunnel",
+      "name": "Gotthard Road Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/gotthard-road-tunnel.svg",
+      "imageAlt": "Gotthard Road Tunnel stylized tunnel card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Gotthard_Road_Tunnel",
+      "fact": "The Gotthard Road Tunnel gives highway traffic a long route through the Swiss Alps.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 10.5,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1980,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "road",
+        "world",
+        "longest",
+        "road",
+        "mountain"
+      ],
+      "tags": [
+        "tunnel",
+        "road",
+        "longest"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "road"
+      },
+      "readingPrompts": [
+        "What clue tells you Gotthard Road Tunnel is a tunnel?",
+        "How does Gotthard Road Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "tokyo-bay-aqua-line",
+      "name": "Tokyo Bay Aqua-Line",
+      "image": "/burrow-assets/bridges-and-tunnels/tokyo-bay-aqua-line.svg",
+      "imageAlt": "Tokyo Bay Aqua-Line stylized tunnel card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Tokyo_Bay_Aqua-Line",
+      "fact": "The Tokyo Bay Aqua-Line combines a bridge, an artificial island, and a tunnel under Tokyo Bay.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 9.3,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1997,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "bridge-tunnel",
+        "world",
+        "global-icon",
+        "bridge-tunnel",
+        "sea-crossing"
+      ],
+      "tags": [
+        "tunnel",
+        "bridge-tunnel",
+        "global-icon"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "bridge-tunnel"
+      },
+      "readingPrompts": [
+        "What clue tells you Tokyo Bay Aqua-Line is a tunnel?",
+        "How does Tokyo Bay Aqua-Line's length compare with another card?"
+      ]
+    },
+    {
+      "id": "ryfylke-tunnel",
+      "name": "Ryfylke Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/ryfylke-tunnel.svg",
+      "imageAlt": "Ryfylke Tunnel stylized tunnel card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Ryfylke_Tunnel",
+      "fact": "The Ryfylke Tunnel dives under a Norwegian fjord and is one of the world's longest undersea road tunnels.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 8.9,
+          "unit": "mi",
+          "direction": "higher"
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2019,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "road",
+        "world",
+        "longest",
+        "road",
+        "undersea"
+      ],
+      "tags": [
+        "tunnel",
+        "road",
+        "longest"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 3,
+        "taxonomyGroup": "road"
+      },
+      "readingPrompts": [
+        "What clue tells you Ryfylke Tunnel is a tunnel?",
+        "How does Ryfylke Tunnel's length compare with another card?"
+      ]
+    }
+  ]
+}

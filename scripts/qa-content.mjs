@@ -41,6 +41,7 @@ const isImageFile = (target) => {
     textStart.startsWith("<svg")
   );
 };
+const isSvgFile = (target) => fs.readFileSync(target).subarray(0, 120).toString("utf8").trimStart().toLowerCase().startsWith("<svg");
 
 const localImagePath = (item) => {
   if (!item.image || item.image.startsWith("http") || !item.image.startsWith("/")) return null;
@@ -95,7 +96,7 @@ const checkImage = async (item) => {
     critical.push(`${item.topic}/${item.id}: missing local image ${target}`);
     return;
   }
-  if (fs.statSync(target).size < 1024) {
+  if (fs.statSync(target).size < 1024 && !isSvgFile(target)) {
     critical.push(`${item.topic}/${item.id}: image is too small`);
     return;
   }
@@ -136,7 +137,7 @@ const checkFeaturedMetadata = (item) => {
   requireText(item, "imageSourceUrl", 8);
 
   if (item.topic === "peppers" && !(item.shuMin <= item.shuMax && item.shuMax >= 0)) critical.push(`${item.topic}/${item.id}: bad Scoville range`);
-  if (item.topic === "buildings" && !(item.heightFt > 250 && item.city && item.country)) critical.push(`${item.topic}/${item.id}: bad building metadata`);
+  if (item.topic === "buildings" && !(item.heightFt > 150 && item.city && item.country)) critical.push(`${item.topic}/${item.id}: bad building metadata`);
   if (item.topic === "sharks" && !(item.lengthFt > 0 && item.speedMph > 0 && item.power > 0 && item.family)) critical.push(`${item.topic}/${item.id}: bad shark metadata`);
   if (item.topic === "sharks" && item.family) {
     const family = normalizeLabel(item.family);

@@ -466,6 +466,9 @@ const buildingCompletedYear = (building: Building) => {
     "central-park-tower": 2020,
     "merdeka-118": 2023,
     "jeddah-tower": 2030,
+    "big-ben": 1859,
+    "eiffel-tower": 1889,
+    "leaning-tower-of-pisa": 1372,
   };
   return years[building.id] ?? (building.status === "under construction" ? 2030 : 2018);
 };

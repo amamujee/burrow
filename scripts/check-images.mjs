@@ -50,9 +50,10 @@ const isImageFile = (target) => {
     textStart.startsWith("<svg")
   );
 };
+const isSvgFile = (target) => fs.readFileSync(target).subarray(0, 120).toString("utf8").trimStart().toLowerCase().startsWith("<svg");
 
 const missing = assets.filter((asset) => !fs.existsSync(asset.target));
-const tiny = assets.filter((asset) => fs.existsSync(asset.target) && fs.statSync(asset.target).size < 1024);
+const tiny = assets.filter((asset) => fs.existsSync(asset.target) && fs.statSync(asset.target).size < 1024 && !isSvgFile(asset.target));
 const invalid = assets.filter((asset) => fs.existsSync(asset.target) && fs.statSync(asset.target).size >= 1024 && !isImageFile(asset.target));
 const duplicateTargets = assets
   .map((asset) => asset.target)

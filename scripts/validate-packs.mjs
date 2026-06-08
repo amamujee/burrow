@@ -33,6 +33,7 @@ const isImageFile = (target) => {
     textStart.startsWith("<svg")
   );
 };
+const isSvgFile = (target) => fs.readFileSync(target).subarray(0, 120).toString("utf8").trimStart().toLowerCase().startsWith("<svg");
 
 const addError = (packId, message) => errors.push(`${packId}: ${message}`);
 const addWarning = (packId, message) => warnings.push(`${packId}: ${message}`);
@@ -128,7 +129,7 @@ const validateImage = (packId, card) => {
     addError(packId, `${card.id}: missing local image ${target}`);
     return;
   }
-  if (fs.statSync(target).size < 1024) {
+  if (fs.statSync(target).size < 1024 && !isSvgFile(target)) {
     addError(packId, `${card.id}: image is too small`);
     return;
   }

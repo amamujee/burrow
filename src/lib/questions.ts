@@ -142,20 +142,30 @@ const roundedComparisonCard = (card: ComparisonCard, value: number, unit: string
   meterValue: value,
 });
 
+const heightChoiceStep = (value: number, difficulty: Difficulty) => {
+  if (difficulty === 3) return 1;
+  if (value < 300) return 50;
+  return difficulty === 1 ? 500 : 100;
+};
+
 const displayHeightChoice = (value: number, difficulty: Difficulty) => {
   if (difficulty === 3) return feet(value);
-  return `about ${formatNumber(roundTo(value, difficulty === 1 ? 500 : 100))} ft`;
+  return `about ${formatNumber(roundTo(value, heightChoiceStep(value, difficulty)))} ft`;
 };
 
 const buildingHeightChoices = (building: Building, difficulty: Difficulty, seed: number) => {
   const correct = displayHeightChoice(building.heightFt, difficulty);
-  const correctValue = difficulty === 3 ? building.heightFt : roundTo(building.heightFt, difficulty === 1 ? 500 : 100);
-  const minGap = difficulty === 1 ? 500 : difficulty === 2 ? 250 : 160;
+  const correctValue = difficulty === 3 ? building.heightFt : roundTo(building.heightFt, heightChoiceStep(building.heightFt, difficulty));
+  const minGap = building.heightFt < 300 ? 50 : difficulty === 1 ? 500 : difficulty === 2 ? 250 : 160;
   const generated = [
     correctValue - minGap * 2,
     correctValue - minGap,
     correctValue + minGap,
     correctValue + minGap * 2,
+    150,
+    200,
+    250,
+    300,
     1000,
     1500,
     2000,
@@ -164,9 +174,9 @@ const buildingHeightChoices = (building: Building, difficulty: Difficulty, seed:
   ];
   const fromBuildings = buildings
     .filter((item) => item.id !== building.id)
-    .map((item) => (difficulty === 3 ? item.heightFt : roundTo(item.heightFt, difficulty === 1 ? 500 : 100)));
+    .map((item) => (difficulty === 3 ? item.heightFt : roundTo(item.heightFt, heightChoiceStep(item.heightFt, difficulty))));
   const labels = [...fromBuildings, ...generated]
-    .filter((value) => value >= 300 && value <= maxHeight + 250)
+    .filter((value) => value >= 100 && value <= maxHeight + 250)
     .filter((value) => Math.abs(value - correctValue) >= minGap)
     .map((value) => (difficulty === 3 ? feet(value) : `about ${formatNumber(value)} ft`))
     .filter((label) => label !== correct);

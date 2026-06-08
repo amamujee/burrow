@@ -1,0 +1,3164 @@
+{
+  "$schema": "../pack.schema.json",
+  "id": "tallest-mountains",
+  "title": "Tallest Mountains",
+  "summary": "The world's highest Himalaya and Karakoram peaks plus famous global mountains become elevation, prominence, history, and fame challenges.",
+  "status": "playable",
+  "audience": {
+    "minAge": 6,
+    "maxAge": 11,
+    "readingLevel": "short mountain facts with rounded elevation comparisons"
+  },
+  "recommendedModes": [
+    "trumps",
+    "sort",
+    "fact",
+    "peek",
+    "number",
+    "odd"
+  ],
+  "sources": [
+    {
+      "label": "Wikipedia list of highest mountains on Earth",
+      "url": "https://en.wikipedia.org/wiki/List_of_highest_mountains_on_Earth",
+      "note": "Primary source for top-ranked Himalaya and Karakoram elevations, prominence, and ascent years."
+    },
+    {
+      "label": "Wikipedia Seven Summits",
+      "url": "https://en.wikipedia.org/wiki/Seven_Summits",
+      "note": "Context for famous continental high points such as Kilimanjaro, Denali, Aconcagua, and Vinson."
+    },
+    {
+      "label": "Wikimedia mountain articles",
+      "url": "https://en.wikipedia.org/wiki/Mountain",
+      "note": "Individual linked mountain pages are used for special-case facts and famous non-Himalayan peaks."
+    }
+  ],
+  "cards": [
+    {
+      "id": "mount-everest",
+      "name": "Mount Everest",
+      "image": "/burrow-assets/tallest-mountains/mount-everest.svg",
+      "imageAlt": "Mount Everest stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Everest",
+      "fact": "Mount Everest is the highest mountain above sea level and is known in Nepal as Sagarmatha and in Tibet as Chomolungma.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 29032,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8849,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 8849,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1953,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Nepal/China",
+        "top-15",
+        "eight-thousander",
+        "himalaya",
+        "record-holder"
+      ],
+      "tags": [
+        "himalaya",
+        "nepal-china",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Mount Everest special?",
+        "How does Mount Everest's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "k2",
+      "name": "K2",
+      "image": "/burrow-assets/tallest-mountains/k2.svg",
+      "imageAlt": "K2 stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/K2",
+      "fact": "K2 is the second-highest mountain on Earth and is famous for steep routes and severe Karakoram weather.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 28251,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8611,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 4020,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1954,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Karakoram",
+        "Pakistan/China",
+        "top-15",
+        "eight-thousander",
+        "karakoram",
+        "famous-climb"
+      ],
+      "tags": [
+        "karakoram",
+        "pakistan-china",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Karakoram"
+      },
+      "readingPrompts": [
+        "What makes K2 special?",
+        "How does K2's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "kangchenjunga",
+      "name": "Kangchenjunga",
+      "image": "/burrow-assets/tallest-mountains/kangchenjunga.svg",
+      "imageAlt": "Kangchenjunga stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Kangchenjunga",
+      "fact": "Kangchenjunga is the world's third-highest mountain and rises on the border of Nepal and India.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 28169,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8586,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 3922,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1955,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Nepal/India",
+        "top-15",
+        "eight-thousander",
+        "himalaya",
+        "border-peak"
+      ],
+      "tags": [
+        "himalaya",
+        "nepal-india",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Kangchenjunga special?",
+        "How does Kangchenjunga's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "lhotse",
+      "name": "Lhotse",
+      "image": "/burrow-assets/tallest-mountains/lhotse.svg",
+      "imageAlt": "Lhotse stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Lhotse",
+      "fact": "Lhotse sits next to Everest and has one of the most dramatic south faces in the Himalaya.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 27940,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8516,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 610,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1956,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Nepal/China",
+        "top-15",
+        "eight-thousander",
+        "himalaya",
+        "everest-region"
+      ],
+      "tags": [
+        "himalaya",
+        "nepal-china",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Lhotse special?",
+        "How does Lhotse's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "makalu",
+      "name": "Makalu",
+      "image": "/burrow-assets/tallest-mountains/makalu.svg",
+      "imageAlt": "Makalu stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Makalu",
+      "fact": "Makalu is a sharply pyramid-shaped Himalayan giant east of Everest.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 27838,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8485,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 2378,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1955,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Nepal/China",
+        "top-15",
+        "eight-thousander",
+        "himalaya",
+        "pyramid-peak"
+      ],
+      "tags": [
+        "himalaya",
+        "nepal-china",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Makalu special?",
+        "How does Makalu's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "cho-oyu",
+      "name": "Cho Oyu",
+      "image": "/burrow-assets/tallest-mountains/cho-oyu.svg",
+      "imageAlt": "Cho Oyu stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Cho_Oyu",
+      "fact": "Cho Oyu is often called one of the more approachable eight-thousanders, though it is still extremely high.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 26864,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8188,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 2340,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1954,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "China/Nepal",
+        "top-15",
+        "eight-thousander",
+        "himalaya",
+        "everest-region"
+      ],
+      "tags": [
+        "himalaya",
+        "china-nepal",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Cho Oyu special?",
+        "How does Cho Oyu's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "dhaulagiri-i",
+      "name": "Dhaulagiri I",
+      "image": "/burrow-assets/tallest-mountains/dhaulagiri-i.svg",
+      "imageAlt": "Dhaulagiri I stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Dhaulagiri",
+      "fact": "Dhaulagiri I towers over central Nepal and was once thought to be the world's highest mountain.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 26795,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8167,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 3357,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1960,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Nepal",
+        "top-15",
+        "eight-thousander",
+        "himalaya",
+        "nepal"
+      ],
+      "tags": [
+        "himalaya",
+        "nepal",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Dhaulagiri I special?",
+        "How does Dhaulagiri I's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "manaslu",
+      "name": "Manaslu",
+      "image": "/burrow-assets/tallest-mountains/manaslu.svg",
+      "imageAlt": "Manaslu stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Manaslu",
+      "fact": "Manaslu means Mountain of the Spirit and is the eighth-highest mountain in the world.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 26781,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8163,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 3092,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1956,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Nepal",
+        "top-15",
+        "eight-thousander",
+        "himalaya",
+        "nepal"
+      ],
+      "tags": [
+        "himalaya",
+        "nepal",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Manaslu special?",
+        "How does Manaslu's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "nanga-parbat",
+      "name": "Nanga Parbat",
+      "image": "/burrow-assets/tallest-mountains/nanga-parbat.svg",
+      "imageAlt": "Nanga Parbat stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Nanga_Parbat",
+      "fact": "Nanga Parbat has enormous relief from nearby valleys and is sometimes called a contender for tallest land rise.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 26660,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8126,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 4608,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1953,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Pakistan",
+        "top-15",
+        "eight-thousander",
+        "himalaya",
+        "famous-climb"
+      ],
+      "tags": [
+        "himalaya",
+        "pakistan",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Nanga Parbat special?",
+        "How does Nanga Parbat's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "annapurna-i",
+      "name": "Annapurna I",
+      "image": "/burrow-assets/tallest-mountains/annapurna-i.svg",
+      "imageAlt": "Annapurna I stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Annapurna",
+      "fact": "Annapurna I was the first eight-thousander climbed, reached by a French expedition in 1950.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 26545,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8091,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 2984,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1950,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Nepal",
+        "top-15",
+        "eight-thousander",
+        "himalaya",
+        "historic-ascent"
+      ],
+      "tags": [
+        "himalaya",
+        "nepal",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Annapurna I special?",
+        "How does Annapurna I's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "gasherbrum-i",
+      "name": "Gasherbrum I",
+      "image": "/burrow-assets/tallest-mountains/gasherbrum-i.svg",
+      "imageAlt": "Gasherbrum I stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Gasherbrum_I",
+      "fact": "Gasherbrum I is also called Hidden Peak because it sits deep inside the Karakoram.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 26509,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8080,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 2155,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1958,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Karakoram",
+        "Pakistan/China",
+        "top-15",
+        "eight-thousander",
+        "karakoram",
+        "hidden-peak"
+      ],
+      "tags": [
+        "karakoram",
+        "pakistan-china",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Karakoram"
+      },
+      "readingPrompts": [
+        "What makes Gasherbrum I special?",
+        "How does Gasherbrum I's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "broad-peak",
+      "name": "Broad Peak",
+      "image": "/burrow-assets/tallest-mountains/broad-peak.svg",
+      "imageAlt": "Broad Peak stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Broad_Peak",
+      "fact": "Broad Peak gets its name from its wide summit ridge near K2.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 26414,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8051,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 1701,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1957,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Karakoram",
+        "Pakistan/China",
+        "top-15",
+        "eight-thousander",
+        "karakoram",
+        "k2-region"
+      ],
+      "tags": [
+        "karakoram",
+        "pakistan-china",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Karakoram"
+      },
+      "readingPrompts": [
+        "What makes Broad Peak special?",
+        "How does Broad Peak's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "gasherbrum-ii",
+      "name": "Gasherbrum II",
+      "image": "/burrow-assets/tallest-mountains/gasherbrum-ii.svg",
+      "imageAlt": "Gasherbrum II stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Gasherbrum_II",
+      "fact": "Gasherbrum II is another Karakoram eight-thousander in the Baltoro region.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 26362,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8035,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 1524,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1956,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Karakoram",
+        "Pakistan/China",
+        "top-15",
+        "eight-thousander",
+        "karakoram",
+        "baltoro"
+      ],
+      "tags": [
+        "karakoram",
+        "pakistan-china",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Karakoram"
+      },
+      "readingPrompts": [
+        "What makes Gasherbrum II special?",
+        "How does Gasherbrum II's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "shishapangma",
+      "name": "Shishapangma",
+      "image": "/burrow-assets/tallest-mountains/shishapangma.svg",
+      "imageAlt": "Shishapangma stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Shishapangma",
+      "fact": "Shishapangma is the only eight-thousander located entirely in Tibet.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 26335,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 8027,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 2897,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1964,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "China",
+        "top-15",
+        "eight-thousander",
+        "himalaya",
+        "tibet"
+      ],
+      "tags": [
+        "himalaya",
+        "china",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Shishapangma special?",
+        "How does Shishapangma's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "gyachung-kang",
+      "name": "Gyachung Kang",
+      "image": "/burrow-assets/tallest-mountains/gyachung-kang.svg",
+      "imageAlt": "Gyachung Kang stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Gyachung_Kang",
+      "fact": "Gyachung Kang is the highest peak below 8,000 meters and sits between Everest and Cho Oyu.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 26089,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7952,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 672,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1964,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Nepal/China",
+        "top-15",
+        "himalaya",
+        "everest-region",
+        "near-eight-thousander"
+      ],
+      "tags": [
+        "himalaya",
+        "nepal-china",
+        "top-15"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 3,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Gyachung Kang special?",
+        "How does Gyachung Kang's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "annapurna-ii",
+      "name": "Annapurna II",
+      "image": "/burrow-assets/tallest-mountains/annapurna-ii.svg",
+      "imageAlt": "Annapurna II stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Annapurna_II",
+      "fact": "Annapurna II is a major peak on the eastern side of Nepal's Annapurna massif.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 26040,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7937,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 2437,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1960,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Nepal",
+        "top-30",
+        "himalaya",
+        "nepal",
+        "annapurna"
+      ],
+      "tags": [
+        "himalaya",
+        "nepal",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 3,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Annapurna II special?",
+        "How does Annapurna II's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "gasherbrum-iv",
+      "name": "Gasherbrum IV",
+      "image": "/burrow-assets/tallest-mountains/gasherbrum-iv.svg",
+      "imageAlt": "Gasherbrum IV stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Gasherbrum_IV",
+      "fact": "Gasherbrum IV is famous among climbers for its beautiful shape and difficult ridges.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 26024,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7932,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 712,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1958,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Karakoram",
+        "Pakistan",
+        "top-30",
+        "karakoram",
+        "baltoro",
+        "famous-climb"
+      ],
+      "tags": [
+        "karakoram",
+        "pakistan",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 3,
+        "taxonomyGroup": "Karakoram"
+      },
+      "readingPrompts": [
+        "What makes Gasherbrum IV special?",
+        "How does Gasherbrum IV's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "himalchuli",
+      "name": "Himalchuli",
+      "image": "/burrow-assets/tallest-mountains/himalchuli.svg",
+      "imageAlt": "Himalchuli stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Himalchuli",
+      "fact": "Himalchuli is a high peak in the Manaslu Himal of Nepal.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25896,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7893,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 1633,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1960,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 5,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Nepal",
+        "top-30",
+        "himalaya",
+        "nepal",
+        "manaslu-region"
+      ],
+      "tags": [
+        "himalaya",
+        "nepal",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 3,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Himalchuli special?",
+        "How does Himalchuli's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "distaghil-sar",
+      "name": "Distaghil Sar",
+      "image": "/burrow-assets/tallest-mountains/distaghil-sar.svg",
+      "imageAlt": "Distaghil Sar stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Distaghil_Sar",
+      "fact": "Distaghil Sar is the highest mountain in the Hispar Muztagh of the Karakoram.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25866,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7884,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 2525,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1960,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 5,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Karakoram",
+        "Pakistan",
+        "top-30",
+        "karakoram",
+        "pakistan",
+        "high-prominence"
+      ],
+      "tags": [
+        "karakoram",
+        "pakistan",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 3,
+        "taxonomyGroup": "Karakoram"
+      },
+      "readingPrompts": [
+        "What makes Distaghil Sar special?",
+        "How does Distaghil Sar's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "ngadi-chuli",
+      "name": "Ngadi Chuli",
+      "image": "/burrow-assets/tallest-mountains/ngadi-chuli.svg",
+      "imageAlt": "Ngadi Chuli stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Ngadi_Chuli",
+      "fact": "Ngadi Chuli is a high Manaslu-area peak with a remote, complex climbing history.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25823,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7871,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 1011,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1979,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 4,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Nepal",
+        "top-30",
+        "himalaya",
+        "nepal",
+        "manaslu-region"
+      ],
+      "tags": [
+        "himalaya",
+        "nepal",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 2,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Ngadi Chuli special?",
+        "How does Ngadi Chuli's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "khunyang-chhish",
+      "name": "Khunyang Chhish",
+      "image": "/burrow-assets/tallest-mountains/khunyang-chhish.svg",
+      "imageAlt": "Khunyang Chhish stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Khunyang_Chhish",
+      "fact": "Khunyang Chhish rises in Pakistan's Hispar region and is one of the highest Karakoram peaks.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25666,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7823,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 1765,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1971,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 5,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Karakoram",
+        "Pakistan",
+        "top-30",
+        "karakoram",
+        "pakistan",
+        "hispar"
+      ],
+      "tags": [
+        "karakoram",
+        "pakistan",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 3,
+        "taxonomyGroup": "Karakoram"
+      },
+      "readingPrompts": [
+        "What makes Khunyang Chhish special?",
+        "How does Khunyang Chhish's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "masherbrum",
+      "name": "Masherbrum",
+      "image": "/burrow-assets/tallest-mountains/masherbrum.svg",
+      "imageAlt": "Masherbrum stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Masherbrum",
+      "fact": "Masherbrum is also known as K1 and stands above the Baltoro Glacier region.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25659,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7821,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 2457,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1960,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Karakoram",
+        "Pakistan",
+        "top-30",
+        "karakoram",
+        "pakistan",
+        "baltoro"
+      ],
+      "tags": [
+        "karakoram",
+        "pakistan",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 3,
+        "taxonomyGroup": "Karakoram"
+      },
+      "readingPrompts": [
+        "What makes Masherbrum special?",
+        "How does Masherbrum's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "nanda-devi",
+      "name": "Nanda Devi",
+      "image": "/burrow-assets/tallest-mountains/nanda-devi.svg",
+      "imageAlt": "Nanda Devi stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Nanda_Devi",
+      "fact": "Nanda Devi is one of India's most sacred and famous Himalayan mountains.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25646,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7817,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 3139,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1936,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "India",
+        "top-30",
+        "himalaya",
+        "india",
+        "sacred-mountain"
+      ],
+      "tags": [
+        "himalaya",
+        "india",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Nanda Devi special?",
+        "How does Nanda Devi's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "chomo-lonzo",
+      "name": "Chomo Lonzo",
+      "image": "/burrow-assets/tallest-mountains/chomo-lonzo.svg",
+      "imageAlt": "Chomo Lonzo stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Chomo_Lonzo",
+      "fact": "Chomo Lonzo is a high Tibetan peak close to Makalu.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25604,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7804,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 590,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1954,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 4,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "China",
+        "top-30",
+        "himalaya",
+        "tibet",
+        "makalu-region"
+      ],
+      "tags": [
+        "himalaya",
+        "china",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 2,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Chomo Lonzo special?",
+        "How does Chomo Lonzo's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "batura-sar",
+      "name": "Batura Sar",
+      "image": "/burrow-assets/tallest-mountains/batura-sar.svg",
+      "imageAlt": "Batura Sar stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Batura_Sar",
+      "fact": "Batura Sar is the highest peak of the Batura Muztagh in the western Karakoram.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25574,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7795,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 3118,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1976,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 5,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Karakoram",
+        "Pakistan",
+        "top-30",
+        "karakoram",
+        "pakistan",
+        "batura"
+      ],
+      "tags": [
+        "karakoram",
+        "pakistan",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 3,
+        "taxonomyGroup": "Karakoram"
+      },
+      "readingPrompts": [
+        "What makes Batura Sar special?",
+        "How does Batura Sar's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "rakaposhi",
+      "name": "Rakaposhi",
+      "image": "/burrow-assets/tallest-mountains/rakaposhi.svg",
+      "imageAlt": "Rakaposhi stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Rakaposhi",
+      "fact": "Rakaposhi is famous for rising dramatically above the Hunza Valley.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25551,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7788,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 2818,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1958,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Karakoram",
+        "Pakistan",
+        "top-30",
+        "karakoram",
+        "pakistan",
+        "famous-view"
+      ],
+      "tags": [
+        "karakoram",
+        "pakistan",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Karakoram"
+      },
+      "readingPrompts": [
+        "What makes Rakaposhi special?",
+        "How does Rakaposhi's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "namcha-barwa",
+      "name": "Namcha Barwa",
+      "image": "/burrow-assets/tallest-mountains/namcha-barwa.svg",
+      "imageAlt": "Namcha Barwa stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Namcha_Barwa",
+      "fact": "Namcha Barwa stands near the great bend of the Yarlung Tsangpo River in eastern Tibet.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25531,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7782,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 4106,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1992,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "China",
+        "top-30",
+        "himalaya",
+        "tibet",
+        "high-prominence"
+      ],
+      "tags": [
+        "himalaya",
+        "china",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 3,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Namcha Barwa special?",
+        "How does Namcha Barwa's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "kanjut-sar",
+      "name": "Kanjut Sar",
+      "image": "/burrow-assets/tallest-mountains/kanjut-sar.svg",
+      "imageAlt": "Kanjut Sar stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Kanjut_Sar",
+      "fact": "Kanjut Sar is a high peak in the Hispar Muztagh of the Karakoram.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25459,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7760,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 1660,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1959,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 4,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Karakoram",
+        "Pakistan",
+        "top-30",
+        "karakoram",
+        "pakistan",
+        "hispar"
+      ],
+      "tags": [
+        "karakoram",
+        "pakistan",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "Karakoram"
+      },
+      "readingPrompts": [
+        "What makes Kanjut Sar special?",
+        "How does Kanjut Sar's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "kamet",
+      "name": "Kamet",
+      "image": "/burrow-assets/tallest-mountains/kamet.svg",
+      "imageAlt": "Kamet stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Kamet",
+      "fact": "Kamet was one of the earliest very high Himalayan peaks to be climbed.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25446,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7756,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 2825,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1931,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 6,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "India",
+        "top-30",
+        "himalaya",
+        "india",
+        "historic-ascent"
+      ],
+      "tags": [
+        "himalaya",
+        "india",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 3,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Kamet special?",
+        "How does Kamet's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "dhaulagiri-ii",
+      "name": "Dhaulagiri II",
+      "image": "/burrow-assets/tallest-mountains/dhaulagiri-ii.svg",
+      "imageAlt": "Dhaulagiri II stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Dhaulagiri_II",
+      "fact": "Dhaulagiri II is part of the Dhaulagiri massif in Nepal.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 25430,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 7751,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 2397,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1971,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 4,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Himalaya",
+        "Nepal",
+        "top-30",
+        "himalaya",
+        "nepal",
+        "dhaulagiri"
+      ],
+      "tags": [
+        "himalaya",
+        "nepal",
+        "top-30"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 2,
+        "taxonomyGroup": "Himalaya"
+      },
+      "readingPrompts": [
+        "What makes Dhaulagiri II special?",
+        "How does Dhaulagiri II's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "aconcagua",
+      "name": "Aconcagua",
+      "image": "/burrow-assets/tallest-mountains/aconcagua.svg",
+      "imageAlt": "Aconcagua stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Aconcagua",
+      "fact": "Aconcagua is the highest mountain outside Asia and the tallest peak in the Americas.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 22841,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 6962,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 6962,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1897,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Andes",
+        "Argentina",
+        "seven-summits",
+        "andes",
+        "record-holder",
+        "famous-climb"
+      ],
+      "tags": [
+        "andes",
+        "argentina",
+        "seven-summits"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Andes"
+      },
+      "readingPrompts": [
+        "What makes Aconcagua special?",
+        "How does Aconcagua's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "denali",
+      "name": "Denali",
+      "image": "/burrow-assets/tallest-mountains/denali.svg",
+      "imageAlt": "Denali stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Denali",
+      "fact": "Denali is North America's highest mountain and rises powerfully from the Alaska Range.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 20308,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 6190,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 6138,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1913,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Alaska Range",
+        "United States",
+        "seven-summits",
+        "north-america",
+        "high-prominence",
+        "famous-climb"
+      ],
+      "tags": [
+        "alaska-range",
+        "united-states",
+        "seven-summits"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Alaska Range"
+      },
+      "readingPrompts": [
+        "What makes Denali special?",
+        "How does Denali's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "mount-kilimanjaro",
+      "name": "Mount Kilimanjaro",
+      "image": "/burrow-assets/tallest-mountains/mount-kilimanjaro.svg",
+      "imageAlt": "Mount Kilimanjaro stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Kilimanjaro",
+      "fact": "Mount Kilimanjaro is Africa's highest mountain and a huge freestanding volcano.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 19341,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 5895,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 5885,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1889,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Eastern Rift",
+        "Tanzania",
+        "seven-summits",
+        "volcano",
+        "africa",
+        "freestanding"
+      ],
+      "tags": [
+        "eastern-rift",
+        "tanzania",
+        "seven-summits"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Eastern Rift"
+      },
+      "readingPrompts": [
+        "What makes Mount Kilimanjaro special?",
+        "How does Mount Kilimanjaro's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "mount-elbrus",
+      "name": "Mount Elbrus",
+      "image": "/burrow-assets/tallest-mountains/mount-elbrus.svg",
+      "imageAlt": "Mount Elbrus stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Elbrus",
+      "fact": "Mount Elbrus is a dormant volcano and is often counted as Europe's highest mountain.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 18510,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 5642,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 4741,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1874,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Caucasus",
+        "Russia",
+        "seven-summits",
+        "volcano",
+        "europe",
+        "caucasus"
+      ],
+      "tags": [
+        "caucasus",
+        "russia",
+        "seven-summits"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Caucasus"
+      },
+      "readingPrompts": [
+        "What makes Mount Elbrus special?",
+        "How does Mount Elbrus's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "mount-vinson",
+      "name": "Mount Vinson",
+      "image": "/burrow-assets/tallest-mountains/mount-vinson.svg",
+      "imageAlt": "Mount Vinson stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Vinson_Massif",
+      "fact": "Mount Vinson is Antarctica's highest mountain and one of the Seven Summits.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 16050,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 4892,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 4892,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1966,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Sentinel Range",
+        "Antarctica",
+        "seven-summits",
+        "antarctica",
+        "polar",
+        "remote"
+      ],
+      "tags": [
+        "sentinel-range",
+        "antarctica",
+        "seven-summits"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Sentinel Range"
+      },
+      "readingPrompts": [
+        "What makes Mount Vinson special?",
+        "How does Mount Vinson's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "puncak-jaya",
+      "name": "Puncak Jaya",
+      "image": "/burrow-assets/tallest-mountains/puncak-jaya.svg",
+      "imageAlt": "Puncak Jaya stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Puncak_Jaya",
+      "fact": "Puncak Jaya is the highest island peak in the world and one version of Oceania's Seven Summit.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 16024,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 4884,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 4884,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1962,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Sudirman Range",
+        "Indonesia",
+        "seven-summits",
+        "oceania",
+        "island-peak",
+        "limestone"
+      ],
+      "tags": [
+        "sudirman-range",
+        "indonesia",
+        "seven-summits"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Sudirman Range"
+      },
+      "readingPrompts": [
+        "What makes Puncak Jaya special?",
+        "How does Puncak Jaya's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "mont-blanc",
+      "name": "Mont Blanc",
+      "image": "/burrow-assets/tallest-mountains/mont-blanc.svg",
+      "imageAlt": "Mont Blanc stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mont_Blanc",
+      "fact": "Mont Blanc is the highest mountain in the Alps and a classic symbol of European mountaineering.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 15771,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 4807,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 4696,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1786,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Alps",
+        "France/Italy",
+        "alps",
+        "europe",
+        "famous-climb",
+        "snow-peak"
+      ],
+      "tags": [
+        "alps",
+        "france-italy"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Alps"
+      },
+      "readingPrompts": [
+        "What makes Mont Blanc special?",
+        "How does Mont Blanc's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "matterhorn",
+      "name": "Matterhorn",
+      "image": "/burrow-assets/tallest-mountains/matterhorn.svg",
+      "imageAlt": "Matterhorn stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Matterhorn",
+      "fact": "The Matterhorn's sharp pyramid shape makes it one of the most recognizable mountains in the world.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 14692,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 4478,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 1042,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1865,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Alps",
+        "Switzerland/Italy",
+        "alps",
+        "famous-shape",
+        "famous-climb",
+        "europe"
+      ],
+      "tags": [
+        "alps",
+        "switzerland-italy"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Alps"
+      },
+      "readingPrompts": [
+        "What makes Matterhorn special?",
+        "How does Matterhorn's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "mount-whitney",
+      "name": "Mount Whitney",
+      "image": "/burrow-assets/tallest-mountains/mount-whitney.svg",
+      "imageAlt": "Mount Whitney stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Whitney",
+      "fact": "Mount Whitney is the highest summit in the contiguous United States.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 14505,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 4421,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 3071,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1873,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Sierra Nevada",
+        "United States",
+        "north-america",
+        "united-states",
+        "record-holder",
+        "sierra-nevada"
+      ],
+      "tags": [
+        "sierra-nevada",
+        "united-states",
+        "north-america"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Sierra Nevada"
+      },
+      "readingPrompts": [
+        "What makes Mount Whitney special?",
+        "How does Mount Whitney's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "mauna-kea",
+      "name": "Mauna Kea",
+      "image": "/burrow-assets/tallest-mountains/mauna-kea.svg",
+      "imageAlt": "Mauna Kea stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mauna_Kea",
+      "fact": "Mauna Kea is modest above sea level, but from the Pacific seafloor it rises higher than Everest.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 13802,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 4207,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 4207,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1823,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Hawaii",
+        "United States",
+        "volcano",
+        "island-peak",
+        "special-measure",
+        "hawaii"
+      ],
+      "tags": [
+        "hawaii",
+        "united-states",
+        "volcano"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Hawaii"
+      },
+      "readingPrompts": [
+        "What makes Mauna Kea special?",
+        "How does Mauna Kea's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "mount-fuji",
+      "name": "Mount Fuji",
+      "image": "/burrow-assets/tallest-mountains/mount-fuji.svg",
+      "imageAlt": "Mount Fuji stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Fuji",
+      "fact": "Mount Fuji is Japan's highest mountain and one of the world's most famous volcano silhouettes.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 12388,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 3776,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 3776,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 663,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 10,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Japanese Alps",
+        "Japan",
+        "volcano",
+        "asia",
+        "famous-shape",
+        "sacred-mountain"
+      ],
+      "tags": [
+        "japanese-alps",
+        "japan",
+        "volcano"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Japanese Alps"
+      },
+      "readingPrompts": [
+        "What makes Mount Fuji special?",
+        "How does Mount Fuji's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "aoraki-mount-cook",
+      "name": "Aoraki / Mount Cook",
+      "image": "/burrow-assets/tallest-mountains/aoraki-mount-cook.svg",
+      "imageAlt": "Aoraki / Mount Cook stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Aoraki_/_Mount_Cook",
+      "fact": "Aoraki / Mount Cook is New Zealand's highest mountain and a centerpiece of the Southern Alps.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 12218,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 3724,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 3724,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1894,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Southern Alps",
+        "New Zealand",
+        "oceania",
+        "southern-alps",
+        "record-holder",
+        "famous-climb"
+      ],
+      "tags": [
+        "southern-alps",
+        "new-zealand",
+        "oceania"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Southern Alps"
+      },
+      "readingPrompts": [
+        "What makes Aoraki / Mount Cook special?",
+        "How does Aoraki / Mount Cook's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "mount-rainier",
+      "name": "Mount Rainier",
+      "image": "/burrow-assets/tallest-mountains/mount-rainier.svg",
+      "imageAlt": "Mount Rainier stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Rainier",
+      "fact": "Mount Rainier is a heavily glaciated volcano that dominates the skyline near Seattle and Tacoma.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 14409,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 4392,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 4027,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1870,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Cascade Range",
+        "United States",
+        "volcano",
+        "north-america",
+        "cascade-range",
+        "famous-view"
+      ],
+      "tags": [
+        "cascade-range",
+        "united-states",
+        "volcano"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "Cascade Range"
+      },
+      "readingPrompts": [
+        "What makes Mount Rainier special?",
+        "How does Mount Rainier's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "chimborazo",
+      "name": "Chimborazo",
+      "image": "/burrow-assets/tallest-mountains/chimborazo.svg",
+      "imageAlt": "Chimborazo stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Chimborazo",
+      "fact": "Chimborazo's summit is often described as the farthest point from Earth's center because of the equatorial bulge.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 20548,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 6263,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 4118,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1880,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Andes",
+        "Ecuador",
+        "andes",
+        "volcano",
+        "special-measure",
+        "ecuador"
+      ],
+      "tags": [
+        "andes",
+        "ecuador"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Andes"
+      },
+      "readingPrompts": [
+        "What makes Chimborazo special?",
+        "How does Chimborazo's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "mount-kenya",
+      "name": "Mount Kenya",
+      "image": "/burrow-assets/tallest-mountains/mount-kenya.svg",
+      "imageAlt": "Mount Kenya stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Kenya",
+      "fact": "Mount Kenya is Africa's second-highest mountain and an eroded volcanic massif.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 17057,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 5199,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 3825,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1899,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Eastern Rift",
+        "Kenya",
+        "africa",
+        "volcano",
+        "famous-climb",
+        "east-africa"
+      ],
+      "tags": [
+        "eastern-rift",
+        "kenya",
+        "africa"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Eastern Rift"
+      },
+      "readingPrompts": [
+        "What makes Mount Kenya special?",
+        "How does Mount Kenya's elevation compare with another mountain?"
+      ]
+    },
+    {
+      "id": "mount-kosciuszko",
+      "name": "Mount Kosciuszko",
+      "image": "/burrow-assets/tallest-mountains/mount-kosciuszko.svg",
+      "imageAlt": "Mount Kosciuszko stylized mountain card",
+      "imageCredit": "Burrow original SVG",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/Mount_Kosciuszko",
+      "fact": "Mount Kosciuszko is Australia's highest mainland mountain and one version of the Seven Summits.",
+      "stats": [
+        {
+          "id": "elevation-ft",
+          "label": "Elevation",
+          "value": 7310,
+          "unit": "ft",
+          "direction": "higher"
+        },
+        {
+          "id": "elevation-m",
+          "label": "Elevation",
+          "value": 2228,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "prominence-m",
+          "label": "Prominence",
+          "value": 2228,
+          "unit": "m",
+          "direction": "higher"
+        },
+        {
+          "id": "first-ascent-year",
+          "label": "First ascent",
+          "value": 1840,
+          "unit": "year",
+          "direction": "lower"
+        },
+        {
+          "id": "fame",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "Snowy Mountains",
+        "Australia",
+        "seven-summits",
+        "australia",
+        "record-holder",
+        "easy-hike"
+      ],
+      "tags": [
+        "snowy-mountains",
+        "australia",
+        "seven-summits"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "Snowy Mountains"
+      },
+      "readingPrompts": [
+        "What makes Mount Kosciuszko special?",
+        "How does Mount Kosciuszko's elevation compare with another mountain?"
+      ]
+    }
+  ]
+}
