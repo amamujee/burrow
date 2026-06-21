@@ -42,7 +42,7 @@ export type Building = {
   country: string;
   heightFt: number;
   floors?: number;
-  status: "finished" | "under construction";
+  status: "finished" | "under construction" | "proposed";
   image: string;
   imageSourceFile: string;
   imageSourceUrl: string;
@@ -922,6 +922,21 @@ export const buildings: Building[] = [
     fact: "Jeddah Tower is planned to be more than 3,000 feet tall when finished.",
   },
   {
+    id: "rise-tower",
+    name: "Rise Tower",
+    city: "Riyadh",
+    country: "Saudi Arabia",
+    heightFt: 6562,
+    floors: 400,
+    status: "proposed",
+    image: "/burrow-assets/buildings/rise-tower.svg",
+    imageSourceFile: "burrow-original-rise-tower.svg",
+    imageSourceUrl: "https://en.wikipedia.org/wiki/Rise_Tower",
+    imageCredit: "Burrow original SVG",
+    imageFit: "contain",
+    fact: "Rise Tower is a proposed 2-kilometer megatall skyscraper planned for Riyadh.",
+  },
+  {
     id: "wuhan-greenland-center",
     name: "Wuhan Greenland Center",
     city: "Wuhan",
@@ -1100,6 +1115,21 @@ export const buildings: Building[] = [
     ...contentImage("buildings", "the-spiral", "The Spiral Sep 2021.jpg"),
     imageCredit: "Wikimedia Commons",
     fact: "The Spiral has outdoor terraces that step around the tower as it rises.",
+  },
+  {
+    id: "cayan-tower",
+    name: "Cayan Tower",
+    city: "Dubai",
+    country: "United Arab Emirates",
+    heightFt: 1005,
+    floors: 75,
+    status: "finished",
+    image: "/burrow-assets/buildings/cayan-tower.svg",
+    imageSourceFile: "burrow-original-cayan-tower.svg",
+    imageSourceUrl: "https://en.wikipedia.org/wiki/Cayan_Tower",
+    imageCredit: "Burrow original SVG",
+    imageFit: "contain",
+    fact: "Cayan Tower twists 90 degrees as it rises over Dubai Marina.",
   },
   {
     id: "one57",

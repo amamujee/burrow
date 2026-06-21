@@ -466,12 +466,22 @@ const buildingCompletedYear = (building: Building) => {
     "central-park-tower": 2020,
     "merdeka-118": 2023,
     "jeddah-tower": 2030,
+    "rise-tower": 2030,
+    "cayan-tower": 2013,
     "big-ben": 1859,
     "eiffel-tower": 1889,
     "leaning-tower-of-pisa": 1372,
   };
-  return years[building.id] ?? (building.status === "under construction" ? 2030 : 2018);
+  return years[building.id] ?? (building.status === "finished" ? 2018 : 2030);
 };
+
+const buildingStatusLabel = (building: Building) => {
+  if (building.status === "finished") return "a completed building";
+  if (building.status === "under construction") return "under construction";
+  return "still proposed";
+};
+const buildingFalseStatusLabel = (building: Building) => building.status === "finished" ? "under construction" : "a completed building";
+const buildingYearDisplay = (building: Building) => building.status === "proposed" ? "Proposed" : `${buildingCompletedYear(building)} (older wins)`;
 
 const buildingIsInAsia = (building: Building) =>
   ["China", "Hong Kong", "Malaysia", "Saudi Arabia", "South Korea", "Taiwan", "United Arab Emirates", "Vietnam"].includes(building.country);
@@ -685,7 +695,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       stats: [
         { id: "height", label: "Height", value: building.heightFt, display: feet(building.heightFt), direction: "higher" },
         { id: "floors", label: "Floors", value: building.floors ?? 0, display: `${building.floors ?? "?"}`, direction: "higher" },
-        { id: "year", label: "Year built", value: buildingCompletedYear(building), display: `${buildingCompletedYear(building)} (older wins)`, direction: "lower" },
+        { id: "year", label: "Year built", value: buildingCompletedYear(building), display: buildingYearDisplay(building), direction: "lower" },
         { id: "fame", label: "Skyline fame", value: Math.min(10, Math.max(5, Math.round(building.heightFt / 350) + (building.status === "finished" ? 2 : 0))), display: `${Math.min(10, Math.max(5, Math.round(building.heightFt / 350) + (building.status === "finished" ? 2 : 0)))}/10`, direction: "higher" },
       ],
     };
@@ -1471,11 +1481,11 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
       },
       {
         id: "status",
-        prompt: "Which building is still being built?",
+        prompt: "Which building is not finished yet?",
         same: (building) => building.status === "finished",
         odd: (building) => building.status !== "finished",
-        reason: (odd) => `${odd.name} is ${odd.status}; the others are finished.`,
-        explanation: (odd) => `The rule is building status. ${odd.name} is the odd one out because it is ${odd.status}.`,
+        reason: (odd) => `${odd.name} is ${buildingStatusLabel(odd)}; the others are finished.`,
+        explanation: (odd) => `The rule is building status. ${odd.name} is the odd one out because it is ${buildingStatusLabel(odd)}.`,
       },
     ];
     const preferredEligibleRules = rules.filter((rule) => preferred.filter(rule.same).length >= 3 && preferred.some(rule.odd));
@@ -1680,12 +1690,12 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       ? factType === "height"
         ? `${building.name} is ${feet(building.heightFt)} tall.`
         : factType === "status"
-          ? `${building.name} is ${building.status}.`
+          ? `${building.name} is ${buildingStatusLabel(building)}.`
           : `${building.name} is in ${building.city}.`
       : factType === "height"
         ? `${building.name} is ${feet(fakeHeight.heightFt)} tall.`
         : factType === "status"
-          ? `${building.name} is ${building.status === "finished" ? "under construction" : "finished"}.`
+          ? `${building.name} is ${buildingFalseStatusLabel(building)}.`
           : `${building.name} is in ${fakeCity.city}.`;
     return {
       id: `${seed}-fact-building-${building.id}`,

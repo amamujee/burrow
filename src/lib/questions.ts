@@ -99,7 +99,7 @@ export type Question = {
 
 const sessionLength = 16;
 const maxShu = 2693000;
-const maxHeight = 3281;
+const maxHeight = 6562;
 const maxSharkLength = 65;
 const maxSharkSpeed = 45;
 const maxSharkPower = 5;
@@ -201,7 +201,11 @@ const buildingDifferenceChoices = (diff: number, difficulty: Difficulty, seed: n
   return shuffle([correct, ...distractors], seed + 2);
 };
 
-const buildingStatusLabel = (building: Building) => building.status === "finished" ? "a completed skyscraper" : "still being built";
+const buildingStatusLabel = (building: Building) => {
+  if (building.status === "finished") return "a completed skyscraper";
+  if (building.status === "under construction") return "still being built";
+  return "still proposed";
+};
 const brooklynBuildingIds = new Set(["brooklyn-tower", "brooklyn-point", "ava-dobro", "11-hoyt", "the-everly"]);
 const falseHeightComparisons = (building: Building, thresholds: number[]) =>
   thresholds.flatMap((threshold) => {
@@ -260,10 +264,12 @@ const buildingReadingQuestion = (seed: number, building: Building, difficulty: D
             answer: `It is ${buildingStatusLabel(building)}.`,
             distractors: [
               "It is a completed skyscraper.",
+              "It is still being built.",
+              "It is still proposed.",
               "It is a pepper variety.",
               "It is a shark species.",
               "It is a planet.",
-            ],
+            ].filter((choice) => choice !== `It is ${buildingStatusLabel(building)}.`),
             explanation: `${building.name} is ${buildingStatusLabel(building)}.`,
           },
         ]),
