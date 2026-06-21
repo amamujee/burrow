@@ -153,6 +153,25 @@ const displayHeightChoice = (value: number, difficulty: Difficulty) => {
   return `about ${formatNumber(roundTo(value, heightChoiceStep(value, difficulty)))} ft`;
 };
 
+const buildingHeightLabel = (building: Building) => building.heightLabel ?? (building.status === "finished" ? "Height" : "Planned height");
+const buildingHeightSentence = (building: Building) => {
+  const label = buildingHeightLabel(building);
+  return label === "Height" ? `${building.name} is ${feet(building.heightFt)} tall` : `${building.name}'s ${label.toLowerCase()} is ${feet(building.heightFt)}`;
+};
+const buildingHeightClause = (building: Building) => {
+  const label = buildingHeightLabel(building);
+  return label === "Height" ? `is ${feet(building.heightFt)} tall` : `has a ${label.toLowerCase()} of ${feet(building.heightFt)}`;
+};
+const buildingHeightAnswer = (building: Building) => {
+  const label = buildingHeightLabel(building);
+  return label === "Height" ? `It is ${feet(building.heightFt)} tall.` : `Its ${label.toLowerCase()} is ${feet(building.heightFt)}.`;
+};
+const buildingHeightPrompt = (building: Building, difficulty: Difficulty) => {
+  const label = buildingHeightLabel(building);
+  if (label === "Height") return difficulty === 3 ? `How tall is ${building.name}?` : `About how tall is ${building.name}?`;
+  return difficulty === 3 ? `What is ${building.name}'s ${label.toLowerCase()}?` : `About what is ${building.name}'s ${label.toLowerCase()}?`;
+};
+
 const buildingHeightChoices = (building: Building, difficulty: Difficulty, seed: number) => {
   const correct = displayHeightChoice(building.heightFt, difficulty);
   const correctValue = difficulty === 3 ? building.heightFt : roundTo(building.heightFt, heightChoiceStep(building.heightFt, difficulty));
@@ -239,20 +258,20 @@ const buildingReadingQuestion = (seed: number, building: Building, difficulty: D
     {
       id: "height-compare",
       prompt: "Which height sentence is true?",
-      clue: `${building.name} is ${feet(building.heightFt)} tall.`,
+      clue: `${buildingHeightSentence(building)}.`,
       answer: heightAnswer,
       distractors: falseHeightComparisons(building, thresholds),
-      explanation: `${building.name} is ${feet(building.heightFt)} tall, so ${heightAnswer.toLowerCase()}`,
+      explanation: `${buildingHeightSentence(building)}, so ${heightAnswer.toLowerCase()}`,
     },
     {
       id: "floors",
       prompt: "Which floor count matches?",
-      clue: `${building.name} has ${building.floors ?? "many"} floors and is ${feet(building.heightFt)} tall.`,
-      answer: building.floors ? `It has ${building.floors} floors.` : `It is ${feet(building.heightFt)} tall.`,
+      clue: `${building.name} has ${building.floors ?? "many"} floors and ${buildingHeightClause(building)}.`,
+      answer: building.floors ? `It has ${building.floors} floors.` : buildingHeightAnswer(building),
       distractors: building.floors
         ? shuffle(otherFloors, seed + 35).map((floors) => `It has ${floors} floors.`)
         : falseHeightComparisons(building, thresholds),
-      explanation: building.floors ? `${building.name} has ${building.floors} floors.` : `${building.name} is ${feet(building.heightFt)} tall.`,
+      explanation: building.floors ? `${building.name} has ${building.floors} floors.` : `${buildingHeightSentence(building)}.`,
     },
     ...(building.status === "finished"
       ? []
@@ -351,7 +370,7 @@ const buildingCard = (building: Building, label: "A" | "B"): ComparisonCard => (
   image: building.image,
   imageAlt: building.name,
   imageCredit: building.imageCredit,
-  statLabel: "Height",
+  statLabel: buildingHeightLabel(building),
   statValue: feet(building.heightFt),
   subStat: `${building.city}, ${building.country}`,
   meterValue: building.heightFt,
@@ -479,7 +498,7 @@ const buildingTallerQuestion = (seed: number, first: Building, second: Building)
     comparison: cards,
     choices: cards.map((card) => `${card.label}: ${card.title}`),
     answer: comparisonAnswer(cards, taller.name),
-    explanation: `${taller.name} is ${feet(taller.heightFt)} tall. Taller means the bigger number wins.`,
+    explanation: `${buildingHeightSentence(taller)}. Taller means the bigger number wins.`,
     numberLine: { label: taller.name, value: taller.heightFt, max: maxHeight, unit: "ft" },
   };
 };
@@ -824,13 +843,13 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
     id: `${seed}-building-height-${building.id}`,
     topic: "buildings",
     kind: "building-height",
-    prompt: difficulty === 3 ? `How tall is ${building.name}?` : `About how tall is ${building.name}?`,
+    prompt: buildingHeightPrompt(building, difficulty),
     image: building.image,
     imageAlt: building.name,
     imageCredit: building.imageCredit,
     choices: buildingHeightChoices(building, difficulty, seed + 32),
     answer: correct,
-    explanation: `${building.name} is ${feet(building.heightFt)} tall. It is in ${building.city}, ${building.country}.`,
+    explanation: `${buildingHeightSentence(building)}. It is in ${building.city}, ${building.country}.`,
     numberLine: { label: "Height", value: building.heightFt, max: maxHeight, unit: "ft" },
   };
 };

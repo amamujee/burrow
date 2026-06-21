@@ -214,6 +214,12 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   qualityFlags: scoreFeaturedContent({ ...pepper, statValue: pepper.shuMax }).flags,
 });
 
+const buildingHeightLabel = (building: Building) => building.heightLabel ?? (building.status === "finished" ? "Height" : "Planned height");
+const buildingHeightSentence = (building: Building) => {
+  const label = buildingHeightLabel(building);
+  return label === "Height" ? `${building.name} is ${feet(building.heightFt)} tall` : `${building.name}'s ${label.toLowerCase()} is ${feet(building.heightFt)}`;
+};
+
 const buildingCard = (building: Building): KnowledgeCard => ({
   id: building.id,
   topic: "buildings",
@@ -221,7 +227,7 @@ const buildingCard = (building: Building): KnowledgeCard => ({
   image: building.image,
   imageAlt: building.name,
   imageCredit: building.imageCredit,
-  statLabel: "Height",
+  statLabel: buildingHeightLabel(building),
   statValue: building.heightFt,
   statDisplay: feet(building.heightFt),
   subStat: `${building.city}, ${building.country}`,
@@ -467,7 +473,13 @@ const buildingCompletedYear = (building: Building) => {
     "merdeka-118": 2023,
     "jeddah-tower": 2030,
     "rise-tower": 2030,
+    "dubai-creek-tower": 2030,
     "cayan-tower": 2013,
+    "520-fifth-avenue": 2026,
+    "35-hudson-yards": 2019,
+    "one-manhattan-west": 2019,
+    "50-hudson-yards": 2022,
+    "28-liberty": 1961,
     "big-ben": 1859,
     "eiffel-tower": 1889,
     "leaning-tower-of-pisa": 1372,
@@ -693,7 +705,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       subStat: `${building.city}, ${building.country}`,
       fact: building.fact,
       stats: [
-        { id: "height", label: "Height", value: building.heightFt, display: feet(building.heightFt), direction: "higher" },
+        { id: "height", label: buildingHeightLabel(building), value: building.heightFt, display: feet(building.heightFt), direction: "higher" },
         { id: "floors", label: "Floors", value: building.floors ?? 0, display: `${building.floors ?? "?"}`, direction: "higher" },
         { id: "year", label: "Year built", value: buildingCompletedYear(building), display: buildingYearDisplay(building), direction: "lower" },
         { id: "fame", label: "Skyline fame", value: Math.min(10, Math.max(5, Math.round(building.heightFt / 350) + (building.status === "finished" ? 2 : 0))), display: `${Math.min(10, Math.max(5, Math.round(building.heightFt / 350) + (building.status === "finished" ? 2 : 0)))}/10`, direction: "higher" },
@@ -1688,7 +1700,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     const fakeHeight = sampleSafe(pool.filter((item) => item.id !== building.id && item.heightFt !== building.heightFt), pool.filter((item) => item.id !== building.id), seed + 18);
     const statement = truthful
       ? factType === "height"
-        ? `${building.name} is ${feet(building.heightFt)} tall.`
+        ? `${buildingHeightSentence(building)}.`
         : factType === "status"
           ? `${building.name} is ${buildingStatusLabel(building)}.`
           : `${building.name} is in ${building.city}.`
