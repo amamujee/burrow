@@ -53,29 +53,78 @@ const cards = [
 const metadataRecognitionFor = (recognition) => Math.max(1, Math.min(5, Math.round(recognition / 2)));
 const difficultyFor = (recognition, scale) => recognition >= 7 ? "easy" : scale >= 9 ? "medium" : "hard";
 
-const cardObject = ([id, name, kind, structure, location, lengthMi, opened, recognition, scale, fact, sourceUrl, categories]) => ({
-  id,
-  name,
-  image: `/burrow-assets/${packId}/${id}.jpg`,
-  imageAlt: `${name} photo`,
-  imageCredit: "Wikimedia Commons",
-  imageSourceUrl: sourceUrl,
-  fact,
-  stats: [
-    { id: "length-mi", label: "Length", value: lengthMi, unit: "mi", direction: "higher" },
-    { id: "opened-year", label: "Opened", value: opened, unit: "year", direction: "lower" },
-    { id: "recognition", label: "Fame", value: recognition, unit: "/10", direction: "higher" },
-    { id: "engineering-scale", label: "Engineering scale", value: scale, unit: "/10", direction: "higher" },
-  ],
-  categories: [kind, structure, location.includes("New York") ? "new-york-area" : "world", ...categories],
-  tags: [kind, structure.replace(/[^a-z0-9]+/g, "-"), categories[0].replace(/[^a-z0-9]+/g, "-")],
-  metadata: {
-    difficultyBand: difficultyFor(recognition, scale),
-    recognition: metadataRecognitionFor(recognition),
-    taxonomyGroup: structure,
+const continentByCountry = {
+  Australia: "Oceania",
+  China: "Asia",
+  "Czech Republic": "Europe",
+  France: "Europe",
+  Italy: "Europe",
+  Japan: "Asia",
+  Norway: "Europe",
+  Spain: "Europe",
+  Switzerland: "Europe",
+  "United Kingdom": "Europe",
+  "United States": "North America",
+};
+
+const specialWorldLocations = {
+  "Denmark-Sweden": {
+    countries: ["Denmark", "Sweden"],
+    continents: ["Europe"],
   },
-  readingPrompts: [`What clue tells you ${name} is a ${kind}?`, `How does ${name}'s length compare with another card?`],
-});
+  "United Kingdom-France": {
+    countries: ["United Kingdom", "France"],
+    continents: ["Europe"],
+  },
+  "Istanbul, Turkey": {
+    countries: ["Turkey"],
+    continents: ["Europe", "Asia"],
+  },
+};
+
+const worldLocationFor = (label) => {
+  const special = specialWorldLocations[label];
+  if (special) return { label, ...special };
+  const country = label.includes(", ") ? label.split(", ").at(-1) : label;
+  return {
+    label,
+    countries: [country],
+    continents: [continentByCountry[country]],
+  };
+};
+
+const existingPackFile = path.join(packDir, "pack.json");
+const existingCardsById = fs.existsSync(existingPackFile)
+  ? new Map(JSON.parse(fs.readFileSync(existingPackFile, "utf8")).cards.map((card) => [card.id, card]))
+  : new Map();
+
+const cardObject = ([id, name, kind, structure, location, lengthMi, opened, recognition, scale, fact, sourceUrl, categories]) => {
+  const existingCard = existingCardsById.get(id);
+  return {
+    id,
+    name,
+    image: `/burrow-assets/${packId}/${id}.jpg`,
+    imageAlt: `${name} photo`,
+    imageCredit: existingCard?.imageCredit ?? "Wikimedia Commons",
+    imageSourceUrl: existingCard?.imageSourceUrl ?? sourceUrl,
+    fact,
+    stats: [
+      { id: "length-mi", label: "Length", value: lengthMi, unit: "mi", direction: "higher" },
+      { id: "opened-year", label: "Opened", value: opened, unit: "year", direction: "lower" },
+      { id: "recognition", label: "Fame", value: recognition, unit: "/10", direction: "higher" },
+      { id: "engineering-scale", label: "Engineering scale", value: scale, unit: "/10", direction: "higher" },
+    ],
+    categories: [kind, structure, location.includes("New York") ? "new-york-area" : "world", ...categories],
+    tags: [kind, structure.replace(/[^a-z0-9]+/g, "-"), categories[0].replace(/[^a-z0-9]+/g, "-")],
+    metadata: {
+      difficultyBand: difficultyFor(recognition, scale),
+      recognition: metadataRecognitionFor(recognition),
+      taxonomyGroup: structure,
+      location: worldLocationFor(location),
+    },
+    readingPrompts: [`What clue tells you ${name} is a ${kind}?`, `How does ${name}'s length compare with another card?`],
+  };
+};
 
 const svgFor = ([, name, kind, structure, location]) => {
   const isTunnel = kind === "tunnel";

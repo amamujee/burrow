@@ -9099,8 +9099,8 @@ export const buildingLibrary = [
     "name": "Empire State Building",
     "city": "Manhattan",
     "country": "United States",
-    "heightMeters": 457.2,
-    "heightFeet": 1500,
+    "heightMeters": 443.2,
+    "heightFeet": 1454,
     "sourceUrl": "https://www.wikidata.org/wiki/Q9188"
   },
   {

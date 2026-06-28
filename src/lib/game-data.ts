@@ -1,5 +1,5 @@
 import { contentLibraryStats } from "./content-library";
-import type { CardMetadata } from "./card-metadata";
+import type { CardMetadata, WorldContinent } from "./card-metadata";
 
 export type TopicId = "peppers" | "buildings" | "sharks" | "space" | "jets" | "mixed";
 export type KnowledgeTopic = Exclude<TopicId, "mixed">;
@@ -51,6 +51,7 @@ export type Building = {
   imageFit?: VisualFit;
   imagePosition?: string;
   fact: string;
+  metadata: CardMetadata;
 };
 
 export type Shark = {
@@ -679,7 +680,22 @@ export const peppers = pepperSeeds.map((pepper) => ({
   heat: heatBandForScoville(pepper.shuMax),
 }));
 
-export const buildings: Building[] = [
+const buildingContinentsByCountry: Record<string, WorldContinent[]> = {
+  China: ["Asia"],
+  France: ["Europe"],
+  Italy: ["Europe"],
+  Malaysia: ["Asia"],
+  Russia: ["Europe", "Asia"],
+  "Saudi Arabia": ["Asia"],
+  "South Korea": ["Asia"],
+  Taiwan: ["Asia"],
+  "United Arab Emirates": ["Asia"],
+  "United Kingdom": ["Europe"],
+  "United States": ["North America"],
+  Vietnam: ["Asia"],
+};
+
+const buildingSeeds: Omit<Building, "metadata">[] = [
   {
     id: "burj-khalifa",
     name: "Burj Khalifa",
@@ -1017,12 +1033,12 @@ export const buildings: Building[] = [
     name: "Empire State Building",
     city: "New York City",
     country: "United States",
-    heightFt: 1250,
+    heightFt: 1454,
     floors: 102,
     status: "finished",
-    ...contentImage("buildings", "empire-state", "Empire State Building.png"),
-    imageCredit: "NegweS, Wikimedia Commons",
-    fact: "The Empire State Building was the world's tallest building for decades after opening in 1931.",
+    ...contentImage("buildings", "empire-state", "The Empire State Building (1).jpg"),
+    imageCredit: "PortableNYCTours, Wikimedia Commons (CC BY-SA 4.0)",
+    fact: "The Empire State Building was the world's tallest building for nearly 40 years after opening in 1931.",
   },
   {
     id: "270-park-avenue",
@@ -1295,6 +1311,66 @@ export const buildings: Building[] = [
     fact: "The Everly is one of Brooklyn's tallest topped-out residential towers.",
   },
   {
+    id: "dominion-tower",
+    name: "Dominion Tower",
+    city: "Norfolk",
+    country: "United States",
+    heightFt: 341,
+    floors: 26,
+    status: "finished",
+    ...contentImage("buildings", "dominion-tower", "DominionTowerNorfolk.jpeg"),
+    imageCredit: "PghPhxNfk, Wikimedia Commons (CC0)",
+    fact: "Dominion Tower opened on Norfolk's Elizabeth River waterfront in 1987 and remains the city's tallest building.",
+  },
+  {
+    id: "icon-norfolk",
+    name: "Icon Norfolk",
+    city: "Norfolk",
+    country: "United States",
+    heightFt: 305,
+    floors: 23,
+    status: "finished",
+    ...contentImage("buildings", "icon-norfolk", "BankOfAmericaNorfolk.jpeg"),
+    imageCredit: "PghPhxNfk, Wikimedia Commons (CC0)",
+    fact: "Icon Norfolk opened as the Virginia National Bank Tower in 1967 and was converted from offices to apartments in 2017.",
+  },
+  {
+    id: "wells-fargo-center-norfolk",
+    name: "Wells Fargo Center",
+    city: "Norfolk",
+    country: "United States",
+    heightFt: 298,
+    floors: 23,
+    status: "finished",
+    ...contentImage("buildings", "wells-fargo-center-norfolk", "WellsFargoNorfolk.jpeg"),
+    imageCredit: "PghPhxNfk, Wikimedia Commons (CC0)",
+    fact: "Wells Fargo Center was completed in 2010 and is Norfolk's third-tallest building.",
+  },
+  {
+    id: "150-west-main-street",
+    name: "150 West Main Street",
+    city: "Norfolk",
+    country: "United States",
+    heightFt: 292,
+    floors: 20,
+    status: "finished",
+    ...contentImage("buildings", "150-west-main-street", "150WestMainStreetNorfolk.jpeg"),
+    imageCredit: "PghPhxNfk, Wikimedia Commons (CC0)",
+    fact: "150 West Main Street is a 20-story office tower completed in 2002 and ranks fourth among Norfolk's tallest buildings.",
+  },
+  {
+    id: "norfolk-waterside-marriott",
+    name: "Norfolk Waterside Marriott",
+    city: "Norfolk",
+    country: "United States",
+    heightFt: 285,
+    floors: 23,
+    status: "finished",
+    ...contentImage("buildings", "norfolk-waterside-marriott", "MarriottNorfolk.jpeg"),
+    imageCredit: "PghPhxNfk, Wikimedia Commons (CC0)",
+    fact: "Norfolk Waterside Marriott is a 23-story hotel completed in 1991 and ranks fifth among Norfolk's tallest buildings.",
+  },
+  {
     id: "bank-of-china",
     name: "Bank of China Tower",
     city: "Hong Kong",
@@ -1352,6 +1428,17 @@ export const buildings: Building[] = [
     fact: "The Leaning Tower of Pisa is short beside modern skyscrapers, but its famous tilt makes it a tower legend.",
   },
 ];
+
+export const buildings: Building[] = buildingSeeds.map((building) => ({
+  ...building,
+  metadata: {
+    location: {
+      label: `${building.city}, ${building.country}`,
+      countries: [building.country],
+      continents: building.city === "Saint Petersburg" ? ["Europe"] : buildingContinentsByCountry[building.country],
+    },
+  },
+}));
 
 export const sharks: Shark[] = [
   {

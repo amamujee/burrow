@@ -28,6 +28,7 @@ const userAgent = "BurrowContentQA/1.0";
 const critical = [];
 const warnings = [];
 const validDifficultyBands = new Set(["easy", "medium", "hard"]);
+const validWorldContinents = new Set(["Africa", "Asia", "Europe", "North America", "South America", "Oceania"]);
 
 const isImageFile = (target) => {
   const buffer = fs.readFileSync(target);
@@ -166,6 +167,16 @@ const checkCardMetadata = (item, label) => {
   if (item.metadata.recognition !== undefined && (!Number.isInteger(item.metadata.recognition) || item.metadata.recognition < 1 || item.metadata.recognition > 5)) critical.push(`${label}: recognition must be 1-5`);
   if (item.metadata.difficultyBand === "easy" && item.metadata.recognition !== undefined && item.metadata.recognition < 4) critical.push(`${label}: easy cards need recognition >= 4`);
   if (item.metadata.difficultyBand === "hard" && item.metadata.recognition !== undefined && item.metadata.recognition > 3) critical.push(`${label}: hard cards should not have recognition > 3`);
+  if (item.metadata.location !== undefined) {
+    const location = item.metadata.location;
+    if (!location || typeof location !== "object" || Array.isArray(location)) {
+      critical.push(`${label}: location metadata must be an object`);
+    } else {
+      if (typeof location.label !== "string" || location.label.trim().length < 2) critical.push(`${label}: location metadata needs a label`);
+      if (!Array.isArray(location.countries) || location.countries.length < 1 || location.countries.some((country) => typeof country !== "string" || country.trim().length < 2)) critical.push(`${label}: location metadata needs countries`);
+      if (!Array.isArray(location.continents) || location.continents.length < 1 || location.continents.some((continent) => !validWorldContinents.has(continent))) critical.push(`${label}: location metadata has invalid continents`);
+    }
+  }
 };
 
 const featuredItems = [
@@ -183,6 +194,9 @@ for (const item of featuredItems) {
 assertDistinctImageGroups(featuredItems, "featuredItems");
 
 const cards = collectionCards();
+for (const card of cards.filter((item) => item.topic === "buildings")) {
+  if (!card.metadata?.location) critical.push(`buildings/${card.id}: missing world location metadata`);
+}
 const lowConfidence = cards.filter((card) => card.qualityScore < 75);
 for (const card of lowConfidence) {
   warnings.push(`${card.topic}/${card.id}: low confidence ${card.qualityScore} (${card.qualityFlags.join(", ")})`);
@@ -252,6 +266,7 @@ const checkPackMetadata = (pack) => {
     if (!card.metadata?.difficultyBand) critical.push(`${label}: missing metadata.difficultyBand`);
     if (!Number.isInteger(card.metadata?.recognition)) critical.push(`${label}: missing metadata.recognition`);
     if (!card.metadata?.taxonomyGroup) critical.push(`${label}: missing metadata.taxonomyGroup`);
+    if (pack.id === "bridges-and-tunnels" && !card.metadata?.location) critical.push(`${label}: missing world location metadata`);
     if (card.tags?.includes("not-dinosaur") && !card.metadata?.accuracyNote) critical.push(`${label}: not-dinosaur cards need metadata.accuracyNote`);
   }
 
@@ -397,6 +412,7 @@ for (const shark of library.sharkLibrary) {
 
 for (const building of library.buildingLibrary) {
   if (!building.id || !building.name || !building.sourceUrl) critical.push(`buildingLibrary/${building.id ?? "missing"}: missing identity/source`);
+  if (!building.city || !building.country) critical.push(`buildingLibrary/${building.id}: missing city/country geography`);
   if (!(building.heightMeters > 100 && building.heightFeet > 300)) critical.push(`buildingLibrary/${building.id}: bad height`);
 }
 

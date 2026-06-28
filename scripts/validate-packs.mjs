@@ -3,6 +3,7 @@ import path from "node:path";
 
 const packsRoot = "content/packs";
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const worldContinents = new Set(["Africa", "Asia", "Europe", "North America", "South America", "Oceania"]);
 const args = process.argv.slice(2);
 const packArg = args.includes("--pack") ? args[args.indexOf("--pack") + 1] : undefined;
 const includeTemplate = args.includes("--include-template");
@@ -95,7 +96,7 @@ const validateCardMetadata = (packId, card, cardLabel) => {
       addError(packId, `${cardLabel}: metadata must be an object`);
       return;
     }
-    const allowedKeys = new Set(["difficultyBand", "recognition", "taxonomyGroup", "accuracyNote", "imageDistinctGroup"]);
+    const allowedKeys = new Set(["difficultyBand", "recognition", "taxonomyGroup", "accuracyNote", "imageDistinctGroup", "location"]);
     for (const key of Object.keys(card.metadata)) {
       if (!allowedKeys.has(key)) addError(packId, `${cardLabel}: metadata.${key} is not supported`);
     }
@@ -104,6 +105,24 @@ const validateCardMetadata = (packId, card, cardLabel) => {
     if (card.metadata.taxonomyGroup !== undefined && !hasText(card.metadata.taxonomyGroup, 2)) addError(packId, `${cardLabel}: metadata.taxonomyGroup needs text`);
     if (card.metadata.accuracyNote !== undefined && !hasText(card.metadata.accuracyNote, 8)) addError(packId, `${cardLabel}: metadata.accuracyNote needs text`);
     if (card.metadata.imageDistinctGroup !== undefined && (!hasText(card.metadata.imageDistinctGroup) || !slugPattern.test(card.metadata.imageDistinctGroup))) addError(packId, `${cardLabel}: metadata.imageDistinctGroup must be a lowercase slug`);
+    if (card.metadata.location !== undefined) {
+      const location = card.metadata.location;
+      if (!isObject(location)) {
+        addError(packId, `${cardLabel}: metadata.location must be an object`);
+      } else {
+        if (!hasText(location.label, 2)) addError(packId, `${cardLabel}: metadata.location.label needs text`);
+        if (!Array.isArray(location.countries) || location.countries.length < 1 || location.countries.some((country) => !hasText(country, 2))) {
+          addError(packId, `${cardLabel}: metadata.location.countries needs at least one country`);
+        } else {
+          uniqueCheck(packId, location.countries, `${cardLabel} metadata.location country`);
+        }
+        if (!Array.isArray(location.continents) || location.continents.length < 1 || location.continents.some((continent) => !worldContinents.has(continent))) {
+          addError(packId, `${cardLabel}: metadata.location.continents contains an invalid continent`);
+        } else {
+          uniqueCheck(packId, location.continents, `${cardLabel} metadata.location continent`);
+        }
+      }
+    }
   }
 };
 

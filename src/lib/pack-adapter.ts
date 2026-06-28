@@ -1,5 +1,6 @@
 import type { GenericKnowledgeCard, TopTrumpStat } from "./game-modes";
 import type { Pack, PackStat } from "./pack-types";
+import { worldLocationDisplay } from "./card-metadata";
 
 export type PlayablePackDeck = {
   id: string;
@@ -41,7 +42,7 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
         statLabel: primary.label,
         statValue: primary.value,
         statDisplay: statDisplay(primary),
-        subStat: card.categories[0] ?? pack.title,
+        subStat: card.metadata?.location ? worldLocationDisplay(card.metadata.location) : card.categories[0] ?? pack.title,
         fact: card.fact,
         qualityScore,
         qualityFlags: [],

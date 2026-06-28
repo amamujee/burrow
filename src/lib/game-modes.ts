@@ -20,7 +20,7 @@ import {
   type TopicId,
 } from "./game-data";
 import { scoreFeaturedContent } from "./content-quality";
-import type { CardMetadata } from "./card-metadata";
+import { worldLocationDisplay, type CardMetadata } from "./card-metadata";
 import { poolForDifficulty } from "./difficulty-pool";
 import { sample, sampleSafe, seedRandom, shuffle } from "./random";
 
@@ -230,10 +230,11 @@ const buildingCard = (building: Building): KnowledgeCard => ({
   statLabel: buildingHeightLabel(building),
   statValue: building.heightFt,
   statDisplay: feet(building.heightFt),
-  subStat: `${building.city}, ${building.country}`,
+  subStat: worldLocationDisplay(building.metadata.location!),
   fact: building.fact,
   qualityScore: scoreFeaturedContent({ ...building, statValue: building.heightFt }).score,
   qualityFlags: scoreFeaturedContent({ ...building, statValue: building.heightFt }).flags,
+  metadata: building.metadata,
 });
 
 const sharkCard = (shark: Shark, metric: "length" | "speed" | "power" = "length"): KnowledgeCard => ({
@@ -480,6 +481,11 @@ const buildingCompletedYear = (building: Building) => {
     "one-manhattan-west": 2019,
     "50-hudson-yards": 2022,
     "28-liberty": 1961,
+    "dominion-tower": 1987,
+    "icon-norfolk": 1967,
+    "wells-fargo-center-norfolk": 2010,
+    "150-west-main-street": 2002,
+    "norfolk-waterside-marriott": 1991,
     "big-ben": 1859,
     "eiffel-tower": 1889,
     "leaning-tower-of-pisa": 1372,
@@ -702,8 +708,9 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       image: building.image,
       imageAlt: building.name,
       imageCredit: building.imageCredit,
-      subStat: `${building.city}, ${building.country}`,
+      subStat: worldLocationDisplay(building.metadata.location!),
       fact: building.fact,
+      metadata: building.metadata,
       stats: [
         { id: "height", label: buildingHeightLabel(building), value: building.heightFt, display: feet(building.heightFt), direction: "higher" },
         { id: "floors", label: "Floors", value: building.floors ?? 0, display: `${building.floors ?? "?"}`, direction: "higher" },

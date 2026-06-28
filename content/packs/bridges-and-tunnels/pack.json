@@ -94,7 +94,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "suspension"
+        "taxonomyGroup": "suspension",
+        "location": {
+          "label": "New York City, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Brooklyn Bridge is a bridge?",
@@ -155,7 +164,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "suspension"
+        "taxonomyGroup": "suspension",
+        "location": {
+          "label": "New York City, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Manhattan Bridge is a bridge?",
@@ -216,7 +234,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "suspension"
+        "taxonomyGroup": "suspension",
+        "location": {
+          "label": "New York City, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Williamsburg Bridge is a bridge?",
@@ -277,7 +304,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "cantilever"
+        "taxonomyGroup": "cantilever",
+        "location": {
+          "label": "New York City, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Queensboro Bridge is a bridge?",
@@ -338,7 +374,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "suspension"
+        "taxonomyGroup": "suspension",
+        "location": {
+          "label": "New York City, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Verrazzano-Narrows Bridge is a bridge?",
@@ -399,7 +444,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "suspension"
+        "taxonomyGroup": "suspension",
+        "location": {
+          "label": "New York-New Jersey, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you George Washington Bridge is a bridge?",
@@ -460,7 +514,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "complex"
+        "taxonomyGroup": "complex",
+        "location": {
+          "label": "New York City, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Robert F. Kennedy Bridge is a bridge?",
@@ -521,7 +584,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "suspension"
+        "taxonomyGroup": "suspension",
+        "location": {
+          "label": "New York City, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Bronx-Whitestone Bridge is a bridge?",
@@ -582,7 +654,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "suspension"
+        "taxonomyGroup": "suspension",
+        "location": {
+          "label": "New York City, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Throgs Neck Bridge is a bridge?",
@@ -643,7 +724,16 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 3,
-        "taxonomyGroup": "arch"
+        "taxonomyGroup": "arch",
+        "location": {
+          "label": "New York City, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Henry Hudson Bridge is a bridge?",
@@ -704,7 +794,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "arch"
+        "taxonomyGroup": "arch",
+        "location": {
+          "label": "New York-New Jersey, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Bayonne Bridge is a bridge?",
@@ -765,7 +864,16 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 3,
-        "taxonomyGroup": "cable-stayed"
+        "taxonomyGroup": "cable-stayed",
+        "location": {
+          "label": "New York-New Jersey, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Goethals Bridge is a bridge?",
@@ -826,7 +934,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "cable-stayed"
+        "taxonomyGroup": "cable-stayed",
+        "location": {
+          "label": "New York, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Governor Mario M. Cuomo Bridge is a bridge?",
@@ -887,7 +1004,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "suspension"
+        "taxonomyGroup": "suspension",
+        "location": {
+          "label": "San Francisco, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Golden Gate Bridge is a bridge?",
@@ -948,7 +1074,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "bascule"
+        "taxonomyGroup": "bascule",
+        "location": {
+          "label": "London, United Kingdom",
+          "countries": [
+            "United Kingdom"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Tower Bridge is a bridge?",
@@ -1009,7 +1144,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "box-girder"
+        "taxonomyGroup": "box-girder",
+        "location": {
+          "label": "London, United Kingdom",
+          "countries": [
+            "United Kingdom"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you London Bridge is a bridge?",
@@ -1070,7 +1214,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "arch"
+        "taxonomyGroup": "arch",
+        "location": {
+          "label": "Sydney, Australia",
+          "countries": [
+            "Australia"
+          ],
+          "continents": [
+            "Oceania"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Sydney Harbour Bridge is a bridge?",
@@ -1131,7 +1284,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "suspension"
+        "taxonomyGroup": "suspension",
+        "location": {
+          "label": "Kobe-Awaji, Japan",
+          "countries": [
+            "Japan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Akashi Kaikyo Bridge is a bridge?",
@@ -1192,7 +1354,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "cable-stayed"
+        "taxonomyGroup": "cable-stayed",
+        "location": {
+          "label": "Millau, France",
+          "countries": [
+            "France"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Millau Viaduct is a bridge?",
@@ -1253,7 +1424,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "arch"
+        "taxonomyGroup": "arch",
+        "location": {
+          "label": "Florence, Italy",
+          "countries": [
+            "Italy"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Ponte Vecchio is a bridge?",
@@ -1314,7 +1494,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "arch"
+        "taxonomyGroup": "arch",
+        "location": {
+          "label": "Venice, Italy",
+          "countries": [
+            "Italy"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Rialto Bridge is a bridge?",
@@ -1375,7 +1564,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "arch"
+        "taxonomyGroup": "arch",
+        "location": {
+          "label": "Prague, Czech Republic",
+          "countries": [
+            "Czech Republic"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Charles Bridge is a bridge?",
@@ -1436,7 +1634,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "cantilever"
+        "taxonomyGroup": "cantilever",
+        "location": {
+          "label": "Scotland, United Kingdom",
+          "countries": [
+            "United Kingdom"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Forth Bridge is a bridge?",
@@ -1497,7 +1704,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "cable-stayed"
+        "taxonomyGroup": "cable-stayed",
+        "location": {
+          "label": "Denmark-Sweden",
+          "countries": [
+            "Denmark",
+            "Sweden"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Oresund Bridge is a bridge?",
@@ -1558,7 +1775,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "suspension"
+        "taxonomyGroup": "suspension",
+        "location": {
+          "label": "Istanbul, Turkey",
+          "countries": [
+            "Turkey"
+          ],
+          "continents": [
+            "Europe",
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you 15 July Martyrs Bridge is a bridge?",
@@ -1619,7 +1846,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "viaduct"
+        "taxonomyGroup": "viaduct",
+        "location": {
+          "label": "Jiangsu, China",
+          "countries": [
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Danyang-Kunshan Grand Bridge is a bridge?",
@@ -1680,7 +1916,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "bridge-tunnel"
+        "taxonomyGroup": "bridge-tunnel",
+        "location": {
+          "label": "Pearl River Delta, China",
+          "countries": [
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Hong Kong-Zhuhai-Macau Bridge is a bridge?",
@@ -1741,7 +1986,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "suspension"
+        "taxonomyGroup": "suspension",
+        "location": {
+          "label": "Michigan, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Mackinac Bridge is a bridge?",
@@ -1802,7 +2056,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "cable-stayed"
+        "taxonomyGroup": "cable-stayed",
+        "location": {
+          "label": "Florida, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Sunshine Skyway Bridge is a bridge?",
@@ -1863,7 +2126,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "arch"
+        "taxonomyGroup": "arch",
+        "location": {
+          "label": "California, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Bixby Creek Bridge is a bridge?",
@@ -1924,7 +2196,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "rail"
+        "taxonomyGroup": "rail",
+        "location": {
+          "label": "Swiss Alps, Switzerland",
+          "countries": [
+            "Switzerland"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Gotthard Base Tunnel is a tunnel?",
@@ -1985,7 +2266,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "rail"
+        "taxonomyGroup": "rail",
+        "location": {
+          "label": "Tsugaru Strait, Japan",
+          "countries": [
+            "Japan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Seikan Tunnel is a tunnel?",
@@ -2046,7 +2336,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "rail"
+        "taxonomyGroup": "rail",
+        "location": {
+          "label": "United Kingdom-France",
+          "countries": [
+            "United Kingdom",
+            "France"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Channel Tunnel is a tunnel?",
@@ -2107,7 +2407,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "rail"
+        "taxonomyGroup": "rail",
+        "location": {
+          "label": "Swiss Alps, Switzerland",
+          "countries": [
+            "Switzerland"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Loetschberg Base Tunnel is a tunnel?",
@@ -2168,7 +2477,16 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 3,
-        "taxonomyGroup": "rail"
+        "taxonomyGroup": "rail",
+        "location": {
+          "label": "Spain",
+          "countries": [
+            "Spain"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Guadarrama Tunnel is a tunnel?",
@@ -2229,7 +2547,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "bridge-tunnel"
+        "taxonomyGroup": "bridge-tunnel",
+        "location": {
+          "label": "Virginia, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Chesapeake Bay Bridge-Tunnel is a tunnel?",
@@ -2290,7 +2617,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "road"
+        "taxonomyGroup": "road",
+        "location": {
+          "label": "Norway",
+          "countries": [
+            "Norway"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Laerdal Tunnel is a tunnel?",
@@ -2351,7 +2687,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "road"
+        "taxonomyGroup": "road",
+        "location": {
+          "label": "Tokyo, Japan",
+          "countries": [
+            "Japan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Yamate Tunnel is a tunnel?",
@@ -2412,7 +2757,16 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 3,
-        "taxonomyGroup": "road"
+        "taxonomyGroup": "road",
+        "location": {
+          "label": "Shaanxi, China",
+          "countries": [
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Zhongnanshan Tunnel is a tunnel?",
@@ -2473,7 +2827,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "road"
+        "taxonomyGroup": "road",
+        "location": {
+          "label": "Swiss Alps, Switzerland",
+          "countries": [
+            "Switzerland"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Gotthard Road Tunnel is a tunnel?",
@@ -2534,7 +2897,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "bridge-tunnel"
+        "taxonomyGroup": "bridge-tunnel",
+        "location": {
+          "label": "Tokyo Bay, Japan",
+          "countries": [
+            "Japan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Tokyo Bay Aqua-Line is a tunnel?",
@@ -2595,7 +2967,16 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 3,
-        "taxonomyGroup": "road"
+        "taxonomyGroup": "road",
+        "location": {
+          "label": "Norway",
+          "countries": [
+            "Norway"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What clue tells you Ryfylke Tunnel is a tunnel?",
