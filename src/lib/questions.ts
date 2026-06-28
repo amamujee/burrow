@@ -21,6 +21,7 @@ import {
 } from "./game-data";
 import { poolForDifficulty } from "./difficulty-pool";
 import { sample, seedRandom, shuffle } from "./random";
+import { worldLocationDisplay, type WorldLocation } from "./card-metadata";
 
 export type TopicScope = TopicId | readonly KnowledgeTopic[];
 
@@ -82,6 +83,7 @@ export type Question = {
   choices: string[];
   answer: string;
   explanation: string;
+  locations?: WorldLocation[];
   comparison?: ComparisonCard[];
   heatMeter?: {
     label: HeatBand;
@@ -329,6 +331,7 @@ const buildingReadingQuestion = (seed: number, building: Building, difficulty: D
     choices,
     answer: template.answer,
     explanation: template.explanation,
+    locations: buildingLocations(building),
     numberLine: template.id === "height-compare" || template.id === "floors" ? { label: "Height", value: building.heightFt, max: maxHeight, unit: "ft" } : undefined,
   };
 };
@@ -372,10 +375,13 @@ const buildingCard = (building: Building, label: "A" | "B"): ComparisonCard => (
   imageCredit: building.imageCredit,
   statLabel: buildingHeightLabel(building),
   statValue: feet(building.heightFt),
-  subStat: `${building.city}, ${building.country}`,
+  subStat: building.metadata?.location ? worldLocationDisplay(building.metadata.location) : `${building.city}, ${building.country}`,
   meterValue: building.heightFt,
   meterMax: maxHeight,
 });
+
+const buildingLocations = (...items: Building[]): WorldLocation[] =>
+  items.flatMap((item) => (item.metadata?.location ? [item.metadata.location] : []));
 
 const sharkCard = (shark: Shark, label: "A" | "B", stat: "length" | "speed" | "power"): ComparisonCard => ({
   label,
@@ -499,6 +505,7 @@ const buildingTallerQuestion = (seed: number, first: Building, second: Building)
     choices: cards.map((card) => `${card.label}: ${card.title}`),
     answer: comparisonAnswer(cards, taller.name),
     explanation: `${buildingHeightSentence(taller)}. Taller means the bigger number wins.`,
+    locations: buildingLocations(first, second),
     numberLine: { label: taller.name, value: taller.heightFt, max: maxHeight, unit: "ft" },
   };
 };
@@ -801,6 +808,7 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
       choices: shuffle([building.name, ...options], seed + 25),
       answer: building.name,
       explanation: `That is ${building.name} in ${building.city}. ${building.fact}`,
+      locations: buildingLocations(building),
       numberLine: { label: "Height", value: building.heightFt, max: maxHeight, unit: "ft" },
     };
   }
@@ -830,6 +838,7 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
       choices,
       answer: correct,
       explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(diff)}. So ${taller.name} is about ${formatNumber(diff)} feet taller.`,
+      locations: buildingLocations(taller, shorter),
       numberLine: { label: "Difference", value: diff, max: 1000, unit: "ft" },
     };
   }
@@ -850,6 +859,7 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
     choices: buildingHeightChoices(building, difficulty, seed + 32),
     answer: correct,
     explanation: `${buildingHeightSentence(building)}. It is in ${building.city}, ${building.country}.`,
+    locations: buildingLocations(building),
     numberLine: { label: "Height", value: building.heightFt, max: maxHeight, unit: "ft" },
   };
 };

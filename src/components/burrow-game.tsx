@@ -33,6 +33,7 @@ import {
 import { packToPlayableDeck, type PlayablePackDeck } from "@/lib/pack-adapter";
 import type { Pack } from "@/lib/pack-types";
 import { buildHeadToHeadSession, buildSession, type ComparisonCard, type Question } from "@/lib/questions";
+import type { WorldLocation } from "@/lib/card-metadata";
 
 type Progress = {
   xp: number;
@@ -1629,6 +1630,7 @@ function QuestionRun({
             celebration={celebration}
             correctAnswer={question.answer}
             explanation={question.explanation}
+            locations={question.locations}
             note={note}
             isLast={questionIndex === questions.length - 1}
             onNext={onNext}
@@ -1872,6 +1874,7 @@ function FactMode({
             celebration={celebration}
             correctAnswer={round.answer}
             explanation={round.explanation}
+            locations={round.locations}
             note="Good try."
             isLast={false}
             onNext={onNext}
@@ -2013,6 +2016,7 @@ function RevealMode({
             celebration={celebration}
             correctAnswer={round.answer}
             explanation={round.explanation}
+            locations={round.card.metadata?.location ? [round.card.metadata.location] : undefined}
             note="Good try."
             isLast={false}
             onNext={onNext}
@@ -2840,6 +2844,7 @@ function FeedbackPanel({
   celebration,
   correctAnswer,
   explanation,
+  locations,
   note,
   isLast,
   onNext,
@@ -2850,6 +2855,7 @@ function FeedbackPanel({
   celebration: string;
   correctAnswer: string;
   explanation: string;
+  locations?: readonly WorldLocation[];
   note: string;
   isLast: boolean;
   onNext: () => void;
@@ -2897,6 +2903,7 @@ function FeedbackPanel({
             <p className="mt-1 text-sm font-semibold leading-5 text-[#24373b]">
               {explanation}
             </p>
+            {locations && locations.length > 0 && <WorldLocationPanel locations={locations} />}
           </div>
         </div>
         <button onClick={onNext} className="mt-2 w-full rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2.5 text-base font-black text-white shadow-[3px_3px_0_#092421] hover:bg-[#23564f]">
@@ -2904,6 +2911,31 @@ function FeedbackPanel({
         </button>
       </div>
     </div>
+  );
+}
+
+function WorldLocationPanel({ locations }: { locations: readonly WorldLocation[] }) {
+  const uniqueLocations = locations.filter(
+    (location, index) => locations.findIndex((candidate) => candidate.label === location.label) === index,
+  );
+
+  return (
+    <aside aria-label="Where in the world" className="mt-2 rounded-lg border-2 border-[#092421] bg-[#dcefe8] p-2 shadow-[2px_2px_0_#092421]">
+      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#2f665d]">Where in the world?</p>
+      <div className="mt-1.5 grid gap-1.5">
+        {uniqueLocations.map((location) => (
+          <div key={location.label} className="flex flex-wrap items-center gap-1.5">
+            <span aria-hidden="true" className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-[#092421] bg-[#f0c84b] text-xs font-black">◎</span>
+            <span className="text-sm font-black leading-tight text-[#102f36]">{location.label}</span>
+            {location.continents.map((continent) => (
+              <span key={continent} className="rounded-full border border-[#2f665d] bg-white px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.08em] text-[#2f665d]">
+                {continent}
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </aside>
   );
 }
 

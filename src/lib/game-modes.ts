@@ -20,7 +20,7 @@ import {
   type TopicId,
 } from "./game-data";
 import { scoreFeaturedContent } from "./content-quality";
-import { worldLocationDisplay, type CardMetadata } from "./card-metadata";
+import { worldLocationDisplay, type CardMetadata, type WorldLocation } from "./card-metadata";
 import { poolForDifficulty } from "./difficulty-pool";
 import { sample, sampleSafe, seedRandom, shuffle } from "./random";
 
@@ -85,6 +85,7 @@ export type FactRound = {
   imageCredit: string;
   answer: "True" | "False";
   explanation: string;
+  locations?: WorldLocation[];
 };
 
 export type RevealRound = {
@@ -949,6 +950,7 @@ export const buildFactRoundFromCards = (
     imageCredit: card.imageCredit,
     answer: truthful ? "True" : "False",
     explanation: `${card.title} has ${card.statDisplay}. ${card.fact}`,
+    locations: card.metadata?.location ? [card.metadata.location] : undefined,
   };
 };
 
@@ -1726,6 +1728,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       imageCredit: building.imageCredit,
       answer: truthful ? "True" : "False",
       explanation: `${building.name} is ${feet(building.heightFt)} tall and is in ${building.city}, ${building.country}.`,
+      locations: building.metadata?.location ? [building.metadata.location] : undefined,
     };
   }
 

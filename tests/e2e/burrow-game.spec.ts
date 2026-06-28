@@ -13,6 +13,15 @@ const chooseOnlyMode = async (page: Page, target: string) => {
   await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
 };
 
+const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
+  await setupSummary(page).click();
+  for (const label of ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Universe", "Jet Hangar"]) {
+    const button = page.getByRole("button", { name: new RegExp(label) });
+    if (label !== target && (await button.getAttribute("aria-pressed")) === "true") await button.click();
+  }
+  await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
+};
+
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/content-issues", async (route) => {
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
@@ -74,6 +83,31 @@ test("number rounds show an arithmetic equation and accept an answer", async ({ 
 
   await page.locator("button").filter({ hasText: /\d[\d,]*\s(?:ft|mph|SHU|mi|moons)/ }).first().click();
   await expect(page.getByText(/Answer:/)).toBeVisible();
+});
+
+test("building answers teach location without spoiling the question", async ({ page }) => {
+  await chooseOnlyMode(page, "True/False");
+  await chooseOnlyBuiltInTopic(page, "Sky Scrapers");
+
+  await expect(page.getByLabel("Where in the world")).toHaveCount(0);
+  await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
+
+  const geography = page.getByLabel("Where in the world");
+  await expect(geography).toBeVisible();
+  await expect(geography).toContainText(/North America|South America|Europe|Asia|Africa|Oceania/);
+});
+
+test("bridge pack answers surface their world location", async ({ page }) => {
+  await chooseOnlyMode(page, "True/False");
+  await setupSummary(page).click();
+  await page.getByRole("button", { name: /Bridges & Tunnels/ }).click();
+  await page.getByRole("button", { name: /Shark Tank selected/ }).click();
+  await page.getByRole("button", { name: /Jet Hangar selected/ }).click();
+  await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
+
+  await expect(page.getByLabel("Where in the world")).toHaveCount(0);
+  await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
+  await expect(page.getByLabel("Where in the world")).toBeVisible();
 });
 
 test("peek rounds reset their reveal count after skip", async ({ page }) => {
