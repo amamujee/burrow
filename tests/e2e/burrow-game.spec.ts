@@ -15,6 +15,10 @@ const chooseOnlyMode = async (page: Page, target: string) => {
 
 const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
   await setupSummary(page).click();
+  const targetButton = page.getByRole("button", { name: new RegExp(target) });
+  if ((await targetButton.getAttribute("aria-pressed")) !== "true") await targetButton.click();
+  await expect(targetButton).toHaveAttribute("aria-pressed", "true");
+
   for (const label of ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Universe", "Jet Hangar"]) {
     const button = page.getByRole("button", { name: new RegExp(label) });
     if (label !== target && (await button.getAttribute("aria-pressed")) === "true") await button.click();

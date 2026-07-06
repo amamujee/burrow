@@ -135,6 +135,13 @@ const contentImage = (topic: KnowledgeTopic, id: string, sourceFile: string) => 
   imageSourceUrl: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(sourceFile).replaceAll("%20", "_")}`,
 });
 
+const generatedContentImage = (topic: KnowledgeTopic, id: string, extension = "png") => ({
+  image: `/burrow-assets/${topic}/${id}.${extension}`,
+  imageSourceFile: `AI-generated ${id}.${extension}`,
+  imageSourceUrl: "https://openai.com/",
+  imageCredit: "AI-generated for Burrow",
+});
+
 export const heatBands: HeatBand[] = ["not spicy", "mild", "warm", "hot", "very hot", "insane"];
 
 export const heatProfiles: Record<HeatBand, { label: string; icons: number; emoji: string; kidLine: string }> = {
@@ -182,6 +189,15 @@ const pepperSeeds: PepperSeed[] = [
     ...contentImage("peppers", "bell-pepper", "Red Bell Pepper.jpg"),
     imageCredit: "Bambi Cia, Wikimedia Commons",
     fact: "Bell peppers have 0 Scoville Heat Units. They are sweet, not spicy.",
+  },
+  {
+    id: "jimmy-nardello",
+    name: "Jimmy Nardello",
+    shuMin: 0,
+    shuMax: 0,
+    color: "red",
+    ...generatedContentImage("peppers", "jimmy-nardello"),
+    fact: "Jimmy Nardello peppers are long, red Italian frying peppers known for sweetness instead of heat.",
   },
   {
     id: "banana-pepper",
@@ -364,14 +380,22 @@ const pepperSeeds: PepperSeed[] = [
     fact: "Dragon's Breath is a legendary super-hot pepper name.",
   },
   {
+    id: "apollo",
+    name: "Apollo",
+    shuMin: 2000000,
+    shuMax: 2500000,
+    color: "red",
+    ...generatedContentImage("peppers", "apollo"),
+    fact: "Apollo is a Hot Ones super-hot from Smokin' Ed Currie; this card uses an estimated super-hot SHU range.",
+  },
+  {
     id: "pepper-x",
     name: "Pepper X",
     shuMin: 2693000,
     shuMax: 2693000,
-    color: "greenish yellow",
-    ...contentImage("peppers", "pepper-x", "Capsicum chinense.jpg"),
-    imageCredit: "Eric in SF, Wikimedia Commons",
-    fact: "Pepper X is known for an extremely high Scoville score.",
+    color: "mustard yellow-green",
+    ...generatedContentImage("peppers", "pepper-x"),
+    fact: "Pepper X is the Guinness-recognized hottest pepper, averaging 2,693,000 Scoville Heat Units.",
   },
   {
     id: "shishito",

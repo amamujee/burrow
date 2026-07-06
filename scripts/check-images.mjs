@@ -13,6 +13,12 @@ const coreAssets = [...source.matchAll(/contentImage\("([^"]+)", "([^"]+)", "([^
   sourceFile: match[3],
   target: path.join("public", "burrow-assets", match[1], `${match[2]}.jpg`),
 }));
+const generatedAssets = [...source.matchAll(/generatedContentImage\("([^"]+)", "([^"]+)"(?:, "([^"]+)")?\)/g)].map((match) => ({
+  topic: match[1],
+  id: match[2],
+  sourceFile: "AI-generated local asset",
+  target: path.join("public", "burrow-assets", match[1], `${match[2]}.${match[3] ?? "png"}`),
+}));
 
 const packAssets = () => {
   const packsRoot = "content/packs";
@@ -36,7 +42,7 @@ const packAssets = () => {
     });
 };
 
-const assets = [...coreAssets, ...packAssets()];
+const assets = [...coreAssets, ...generatedAssets, ...packAssets()];
 
 const isImageFile = (target) => {
   const buffer = fs.readFileSync(target);
