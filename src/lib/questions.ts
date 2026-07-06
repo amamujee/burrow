@@ -146,6 +146,7 @@ const roundedComparisonCard = (card: ComparisonCard, value: number, unit: string
 
 const heightChoiceStep = (value: number, difficulty: Difficulty) => {
   if (difficulty === 3) return 1;
+  if (value < 100) return 10;
   if (value < 300) return 50;
   return difficulty === 1 ? 500 : 100;
 };
@@ -177,7 +178,8 @@ const buildingHeightPrompt = (building: Building, difficulty: Difficulty) => {
 const buildingHeightChoices = (building: Building, difficulty: Difficulty, seed: number) => {
   const correct = displayHeightChoice(building.heightFt, difficulty);
   const correctValue = difficulty === 3 ? building.heightFt : roundTo(building.heightFt, heightChoiceStep(building.heightFt, difficulty));
-  const minGap = building.heightFt < 300 ? 50 : difficulty === 1 ? 500 : difficulty === 2 ? 250 : 160;
+  const minGap = building.heightFt < 100 ? 20 : building.heightFt < 300 ? 50 : difficulty === 1 ? 500 : difficulty === 2 ? 250 : 160;
+  const minDistractor = building.heightFt < 100 ? 10 : 100;
   const generated = [
     correctValue - minGap * 2,
     correctValue - minGap,
@@ -197,7 +199,7 @@ const buildingHeightChoices = (building: Building, difficulty: Difficulty, seed:
     .filter((item) => item.id !== building.id)
     .map((item) => (difficulty === 3 ? item.heightFt : roundTo(item.heightFt, heightChoiceStep(item.heightFt, difficulty))));
   const labels = [...fromBuildings, ...generated]
-    .filter((value) => value >= 100 && value <= maxHeight + 250)
+    .filter((value) => value >= minDistractor && value <= maxHeight + 250)
     .filter((value) => Math.abs(value - correctValue) >= minGap)
     .map((value) => (difficulty === 3 ? feet(value) : `about ${formatNumber(value)} ft`))
     .filter((label) => label !== correct);
@@ -223,11 +225,11 @@ const buildingDifferenceChoices = (diff: number, difficulty: Difficulty, seed: n
 };
 
 const buildingStatusLabel = (building: Building) => {
-  if (building.status === "finished") return "a completed skyscraper";
+  if (building.status === "finished") return "a completed building";
   if (building.status === "under construction") return "still being built";
   return "still proposed";
 };
-const brooklynBuildingIds = new Set(["brooklyn-tower", "brooklyn-point", "ava-dobro", "11-hoyt", "the-everly"]);
+const brooklynBuildingIds = new Set(["brooklyn-tower", "brooklyn-point", "ava-dobro", "11-hoyt", "the-everly", "385-atlantic-avenue"]);
 const falseHeightComparisons = (building: Building, thresholds: number[]) =>
   thresholds.flatMap((threshold) => {
     const taller = building.heightFt > threshold;
@@ -284,7 +286,7 @@ const buildingReadingQuestion = (seed: number, building: Building, difficulty: D
             clue: `${building.name} is ${buildingStatusLabel(building)} in ${building.city}.`,
             answer: `It is ${buildingStatusLabel(building)}.`,
             distractors: [
-              "It is a completed skyscraper.",
+              "It is a completed building.",
               "It is still being built.",
               "It is still proposed.",
               "It is a pepper variety.",
@@ -302,7 +304,7 @@ const buildingReadingQuestion = (seed: number, building: Building, difficulty: D
             clue: `${building.name} rises in Brooklyn, New York City.`,
             answer: "It is in Brooklyn.",
             distractors: ["It is in Chicago.", "It is in Dubai.", "It is in Hong Kong.", "It is in Shanghai."],
-            explanation: `${building.name} is one of Brooklyn's tallest buildings.`,
+            explanation: `${building.name} is one of the Brooklyn buildings in this deck.`,
           },
         ]
       : []),
@@ -801,7 +803,7 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
       id: `${seed}-building-name-${building.id}`,
       topic: "buildings",
       kind,
-      prompt: `Which tall building is this?`,
+      prompt: `Which building is this?`,
       image: building.image,
       imageAlt: building.name,
       imageCredit: building.imageCredit,

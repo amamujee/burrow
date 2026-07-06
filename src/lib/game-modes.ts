@@ -504,7 +504,7 @@ const buildingYearDisplay = (building: Building) => building.status === "propose
 
 const buildingIsInAsia = (building: Building) =>
   ["China", "Hong Kong", "Malaysia", "Saudi Arabia", "South Korea", "Taiwan", "United Arab Emirates", "Vietnam"].includes(building.country);
-const buildingIsInBrooklyn = (building: Building) => ["brooklyn-tower", "brooklyn-point", "ava-dobro", "11-hoyt", "the-everly"].includes(building.id);
+const buildingIsInBrooklyn = (building: Building) => ["brooklyn-tower", "brooklyn-point", "ava-dobro", "11-hoyt", "the-everly", "385-atlantic-avenue"].includes(building.id);
 const buildingIsSupertall = (building: Building) => building.heightFt >= 984;
 const buildingIsMegaTall = (building: Building) => building.heightFt >= 1968;
 
@@ -1457,8 +1457,8 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
         prompt: "Which building is not in Brooklyn?",
         same: buildingIsInBrooklyn,
         odd: (building) => !buildingIsInBrooklyn(building),
-        reason: (odd) => `${odd.name} is not in Brooklyn; the others are Brooklyn towers.`,
-        explanation: (odd) => `The rule is borough. ${odd.name} is the odd one out because it is not one of the Brooklyn towers.`,
+        reason: (odd) => `${odd.name} is not in Brooklyn; the others are Brooklyn buildings.`,
+        explanation: (odd) => `The rule is borough. ${odd.name} is the odd one out because it is not one of the Brooklyn buildings.`,
       },
       {
         id: "asia",

@@ -138,7 +138,7 @@ const checkFeaturedMetadata = (item) => {
   requireText(item, "imageSourceUrl", 8);
 
   if (item.topic === "peppers" && !(item.shuMin <= item.shuMax && item.shuMax >= 0)) critical.push(`${item.topic}/${item.id}: bad Scoville range`);
-  if (item.topic === "buildings" && !(item.heightFt > 150 && item.city && item.country)) critical.push(`${item.topic}/${item.id}: bad building metadata`);
+  if (item.topic === "buildings" && !(item.heightFt > 0 && item.city && item.country)) critical.push(`${item.topic}/${item.id}: bad building metadata`);
   if (item.topic === "sharks" && !(item.lengthFt > 0 && item.speedMph > 0 && item.power > 0 && item.family)) critical.push(`${item.topic}/${item.id}: bad shark metadata`);
   if (item.topic === "sharks" && item.family) {
     const family = normalizeLabel(item.family);

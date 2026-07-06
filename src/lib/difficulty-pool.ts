@@ -16,6 +16,8 @@ const familiarIds = new Set([
   "willis-tower",
   "petronas-towers",
   "taipei-101",
+  "385-atlantic-avenue",
+  "1555-blanford-circle",
   "great-white",
   "whale-shark",
   "tiger-shark",

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="Stylized 385 Atlantic Avenue">
+  <rect width="640" height="480" fill="#e8f2f0"/>
+  <rect y="386" width="640" height="94" fill="#b8c6bf"/>
+  <path d="M0 387h640" stroke="#55736a" stroke-width="8"/>
+  <circle cx="520" cy="76" r="40" fill="#f3c969"/>
+  <rect x="226" y="112" width="188" height="292" rx="8" fill="#bf6f55" stroke="#5b3a34" stroke-width="10"/>
+  <path d="M226 166h188M226 220h188M226 274h188M226 328h188" stroke="#8f503f" stroke-width="8"/>
+  <path d="M252 138h42v34h-42zM346 138h42v34h-42zM252 192h42v34h-42zM346 192h42v34h-42zM252 246h42v34h-42zM346 246h42v34h-42zM252 300h42v34h-42zM346 300h42v34h-42z" fill="#e9f6ff" stroke="#5b3a34" stroke-width="6"/>
+  <rect x="292" y="344" width="56" height="60" rx="4" fill="#39546b" stroke="#5b3a34" stroke-width="6"/>
+  <path d="M214 112h212l-28-38H242z" fill="#414f59" stroke="#5b3a34" stroke-width="10" stroke-linejoin="round"/>
+  <path d="M196 404h248" stroke="#5b3a34" stroke-width="14" stroke-linecap="round"/>
+  <text x="320" y="452" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#2c3c3b">385 Atlantic Avenue</text>
+</svg>
