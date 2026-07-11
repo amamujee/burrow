@@ -340,6 +340,15 @@ const pepperSeeds: PepperSeed[] = [
     fact: "Ghost peppers were once famous as the world's hottest pepper.",
   },
   {
+    id: "naga-jolokia",
+    name: "Naga Jolokia",
+    shuMin: 855000,
+    shuMax: 1041427,
+    color: "red-orange",
+    ...generatedContentImage("peppers", "naga-jolokia"),
+    fact: "Naga Jolokia is a ghost-pepper relative from Northeast India that can pass one million SHU.",
+  },
+  {
     id: "seven-pot-primo",
     name: "7 Pot Primo",
     shuMin: 800000,
@@ -350,6 +359,15 @@ const pepperSeeds: PepperSeed[] = [
     fact: "7 Pot Primo peppers are super-hot and often have a pointy tail.",
   },
   {
+    id: "chocolate-bhutlah",
+    name: "Chocolate Bhutlah",
+    shuMin: 1500000,
+    shuMax: 2000000,
+    color: "chocolate brown",
+    ...generatedContentImage("peppers", "chocolate-bhutlah"),
+    fact: "Chocolate Bhutlah is a dark super-hot pepper bred from ghost pepper and 7 Pot lines.",
+  },
+  {
     id: "trinidad-scorpion",
     name: "Trinidad Moruga Scorpion",
     shuMin: 1200000,
@@ -358,6 +376,15 @@ const pepperSeeds: PepperSeed[] = [
     ...contentImage("peppers", "trinidad-scorpion", "Trinidad Moruga Scorpion.jpg"),
     imageCredit: "Wikimedia Commons",
     fact: "Trinidad Moruga Scorpion peppers are named for their stinger-like shape.",
+  },
+  {
+    id: "trinidad-scorpion-butch-t",
+    name: "Trinidad Scorpion Butch T",
+    shuMin: 800000,
+    shuMax: 1463700,
+    color: "red",
+    ...generatedContentImage("peppers", "trinidad-scorpion-butch-t"),
+    fact: "Trinidad Scorpion Butch T is a super-hot pepper that once held a world heat record.",
   },
   {
     id: "carolina-reaper",
@@ -2784,7 +2811,7 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
       { label: "WikiPepper", url: "https://wikipepper.org/peppers" },
       { label: "PepperScale chile guides", url: "https://pepperscale.com/" },
     ],
-    samples: ["Aji Charapita", "Datil", "Naga Viper", "Carolina Reaper"],
+    samples: ["Naga Jolokia", "Chocolate Bhutlah", "Trinidad Moruga Scorpion", "Carolina Reaper"],
   },
   buildings: {
     id: "buildings",
