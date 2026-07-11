@@ -346,7 +346,7 @@ const pepperSeeds: PepperSeed[] = [
     shuMax: 1041427,
     color: "red-orange",
     ...generatedContentImage("peppers", "naga-jolokia"),
-    fact: "Naga Jolokia is a ghost-pepper relative from Northeast India that can pass one million SHU.",
+    fact: "Naga Jolokia is another name used for the ghost pepper from Northeast India, which can pass one million SHU.",
   },
   {
     id: "seven-pot-primo",
@@ -365,7 +365,7 @@ const pepperSeeds: PepperSeed[] = [
     shuMax: 2000000,
     color: "chocolate brown",
     ...generatedContentImage("peppers", "chocolate-bhutlah"),
-    fact: "Chocolate Bhutlah is a dark super-hot pepper bred from ghost pepper and 7 Pot lines.",
+    fact: "Chocolate Bhutlah is commonly estimated at 1.5 to 2 million SHU, but its heat range is not officially standardized.",
   },
   {
     id: "trinidad-scorpion",
@@ -404,7 +404,7 @@ const pepperSeeds: PepperSeed[] = [
     color: "red",
     ...contentImage("peppers", "dragons-breath", "Dragon's Breath Pepper.jpg"),
     imageCredit: "Houfescu, Wikimedia Commons",
-    fact: "Dragon's Breath is a legendary super-hot pepper name.",
+    fact: "Dragon's Breath was reported at 2.48 million SHU, but that figure was never verified by Guinness World Records.",
   },
   {
     id: "apollo",
