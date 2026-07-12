@@ -48,6 +48,7 @@ export function WordExplorer() {
   const [level, setLevel] = useState<ReadingLevel>("match");
   const [selected, setSelected] = useState<string | null>(null);
   const [mastered, setMastered] = useState<ReadingLevel[]>([]);
+  const [complete, setComplete] = useState(false);
   const activity = activities[level];
   const answer = activity.answer;
   const correct = selected === answer;
@@ -71,11 +72,36 @@ export function WordExplorer() {
     setSelected(null);
   };
 
+  const restart = () => {
+    setLevel("match");
+    setSelected(null);
+    setMastered([]);
+    setComplete(false);
+  };
+
   const speak = () => {
     if (!("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(new SpeechSynthesisUtterance(heardText));
   };
+
+  if (complete) {
+    return (
+      <div className="grid flex-1 place-items-center p-3">
+        <div className="w-full max-w-3xl rounded-xl border-2 border-[#092421] bg-[#e9ffe9] p-5 text-center shadow-[5px_5px_0_#092421]">
+          <p className="text-5xl" aria-hidden="true">📚</p>
+          <p className="mt-3 text-xs font-black uppercase tracking-[0.18em] text-[#2f6547]">Reading trail complete</p>
+          <h2 className="mt-1 text-3xl font-black">Pepper word journal</h2>
+          <div className="mt-4 grid gap-2 text-left sm:grid-cols-3">
+            <div className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3"><p className="text-[10px] font-black uppercase text-[#9f3f2b]">Word match</p><p className="mt-1 font-black">wrinkled</p><p className="mt-1 text-xs font-bold text-[#5f6b5d]">Used a picture to learn a describing word.</p></div>
+            <div className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3"><p className="text-[10px] font-black uppercase text-[#9f3f2b]">Sentence clue</p><p className="mt-1 font-black">spicy</p><p className="mt-1 text-xs font-bold text-[#5f6b5d]">Used context to complete an idea.</p></div>
+            <div className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3"><p className="text-[10px] font-black uppercase text-[#9f3f2b]">Evidence</p><p className="mt-1 font-black">same species</p><p className="mt-1 text-xs font-bold text-[#5f6b5d]">Found a sentence that proves an answer.</p></div>
+          </div>
+          <button onClick={restart} className="mt-5 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-5 py-3 font-black shadow-[3px_3px_0_#092421]">Read the trail again</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="grid flex-1 gap-2 min-[900px]:grid-cols-[280px_minmax(0,1fr)]">
@@ -148,7 +174,7 @@ export function WordExplorer() {
           <div className={`mt-4 rounded-lg border-2 p-3 ${correct ? "border-[#2f7d4f] bg-[#e9ffe9]" : "border-[#9f3f2b] bg-[#fff0ea]"}`}>
             <p className="text-lg font-black">{correct ? "You found the clue!" : "That word does not fit this clue yet."}</p>
             <p className="mt-1 text-sm font-bold text-[#5f6b5d]">{correct ? activity.explanation : "Try the same level again and use the picture or sentence for evidence."}</p>
-            <button onClick={() => correct && nextLevel ? changeLevel(nextLevel) : setSelected(null)} className="mt-3 rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2 font-black text-white">{correct && nextLevel ? "Try the next reading level" : "Try again"}</button>
+            <button onClick={() => correct ? nextLevel ? changeLevel(nextLevel) : setComplete(true) : setSelected(null)} className="mt-3 rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2 font-black text-white">{correct ? nextLevel ? "Try the next reading level" : "Open word journal" : "Try again"}</button>
           </div>
         )}
       </article>

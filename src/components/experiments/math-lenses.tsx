@@ -22,6 +22,7 @@ export function MathLenses() {
   const [problemIndex, setProblemIndex] = useState(1);
   const [lens, setLens] = useState<Lens>("groups");
   const [selected, setSelected] = useState<number | null>(null);
+  const [seenLenses, setSeenLenses] = useState<Lens[]>(["groups"]);
   const problem = problems[problemIndex];
   const total = problem.plants * problem.peppers;
   const correct = selected === total;
@@ -31,6 +32,12 @@ export function MathLenses() {
     setProblemIndex((value) => (value + 1) % problems.length);
     setSelected(null);
     setLens("groups");
+    setSeenLenses(["groups"]);
+  };
+
+  const changeLens = (nextLens: Lens) => {
+    setLens(nextLens);
+    setSeenLenses((current) => current.includes(nextLens) ? current : [...current, nextLens]);
   };
 
   return (
@@ -42,9 +49,10 @@ export function MathLenses() {
 
         <div className="mt-4 grid gap-2" role="tablist" aria-label="Math representations">
           {lenses.map((item) => (
-            <button key={item.id} role="tab" aria-selected={lens === item.id} onClick={() => setLens(item.id)} className={`grid grid-cols-[2.5rem_1fr] items-center gap-2 rounded-lg border-2 p-2 text-left ${lens === item.id ? "border-[#f0c84b] bg-[#f0c84b] text-[#102f36]" : "border-white/25 bg-white/10 hover:border-white/60"}`}>
+            <button key={item.id} role="tab" aria-selected={lens === item.id} onClick={() => changeLens(item.id)} className={`grid grid-cols-[2.5rem_1fr_auto] items-center gap-2 rounded-lg border-2 p-2 text-left ${lens === item.id ? "border-[#f0c84b] bg-[#f0c84b] text-[#102f36]" : "border-white/25 bg-white/10 hover:border-white/60"}`}>
               <span className="grid h-10 w-10 place-items-center rounded-md border-2 border-current text-xl font-black" aria-hidden="true">{item.icon}</span>
               <span><span className="block font-black">{item.label}</span><span className="mt-0.5 block text-[10px] font-bold leading-tight opacity-70">{item.clue}</span></span>
+              <span className="text-sm font-black" aria-label={seenLenses.includes(item.id) ? "viewed" : "not viewed"}>{seenLenses.includes(item.id) ? "✓" : "○"}</span>
             </button>
           ))}
         </div>
@@ -58,7 +66,7 @@ export function MathLenses() {
       <article className="relative z-10 flex min-w-0 flex-col rounded-lg border-2 border-[#d9c7a7] bg-white p-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div><p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#9f3f2b]">Pepper garden problem</p><h3 className="mt-1 text-2xl font-black sm:text-3xl">{problem.plants} plants grow {problem.peppers} peppers each.</h3></div>
-          <p className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-2 text-2xl font-black">{problem.plants} × {problem.peppers} = ?</p>
+          <div className="text-right"><p className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-2 text-2xl font-black">{problem.plants} × {problem.peppers} = ?</p><p className="mt-1 text-[10px] font-black uppercase tracking-[0.1em] text-[#72543e]">{seenLenses.length}/4 views tried</p></div>
         </div>
         <p className="mt-2 text-base font-bold text-[#5f6b5d]">How many peppers are there altogether?</p>
 
@@ -80,7 +88,7 @@ export function MathLenses() {
         {selected !== null && (
           <div className={`mt-3 rounded-lg border-2 p-3 ${correct ? "border-[#2f7d4f] bg-[#e9ffe9]" : "border-[#9f3f2b] bg-[#fff0ea]"}`}>
             <p className="text-lg font-black">{correct ? "All four lenses agree!" : "Keep the equation and try another lens."}</p>
-            <p className="mt-1 text-sm font-bold text-[#5f6b5d]">{correct ? `${problem.plants} equal groups of ${problem.peppers} make ${total}.` : "Switch the picture above, then count again."}</p>
+            <p className="mt-1 text-sm font-bold text-[#5f6b5d]">{correct ? `${problem.plants} equal groups of ${problem.peppers} make ${total}. You explored ${seenLenses.length} of 4 math views.` : "Switch the picture above, then count again."}</p>
             <button onClick={correct ? next : () => setSelected(null)} className="mt-3 rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2 font-black text-white">{correct ? "New garden problem" : "Try again"}</button>
           </div>
         )}

@@ -13,6 +13,7 @@ type Stop = {
   choices: string[];
   answer: string;
   journal: string;
+  deepFact: string;
 };
 
 const stops: Stop[] = [
@@ -26,6 +27,7 @@ const stops: Stop[] = [
     choices: ["A little wet", "Completely dry", "Covered in ice"],
     answer: "A little wet",
     journal: "Damp soil is a little wet—not dry and not flooded.",
+    deepFact: "A seed takes in water through its coat. That wakes up the tiny plant embryo inside.",
   },
   {
     id: "find-mexico",
@@ -37,6 +39,7 @@ const stops: Stop[] = [
     choices: ["South of the United States", "Next to India", "At the South Pole"],
     answer: "South of the United States",
     journal: "Xalapa is in Mexico, south of the United States in North America.",
+    deepFact: "The name jalapeño means “from Xalapa.” In Spanish, the letter ñ sounds a little like “ny.”",
   },
   {
     id: "count-harvest",
@@ -48,6 +51,7 @@ const stops: Stop[] = [
     choices: ["18 peppers", "24 peppers", "26 peppers"],
     answer: "24 peppers",
     journal: "Four equal groups of six make 24: 6 + 6 + 6 + 6 = 24.",
+    deepFact: "The factors can trade places: 4 × 6 and 6 × 4 both equal 24. The array simply turns around.",
   },
   {
     id: "heat-science",
@@ -59,6 +63,7 @@ const stops: Stop[] = [
     choices: ["The pale inner tissue", "The green stem", "The flower petals"],
     answer: "The pale inner tissue",
     journal: "Capsaicin is concentrated in the pale inner tissue, not inside the seeds themselves.",
+    deepFact: "Birds do not react to capsaicin the way mammals do. That helps wild peppers spread their seeds.",
   },
   {
     id: "word-capsaicin",
@@ -70,6 +75,7 @@ const stops: Stop[] = [
     choices: ["Makes peppers feel hot", "Makes roots grow wings", "Turns soil into sand"],
     answer: "Makes peppers feel hot",
     journal: "Capsaicin (cap-SAY-uh-sin) is the chemical behind a pepper’s heat.",
+    deepFact: "Capsaicin does not raise your mouth’s temperature. It activates heat-sensing nerves, so your brain receives a hot signal.",
   },
 ];
 
@@ -78,6 +84,7 @@ export function PepperExpedition() {
   const [selected, setSelected] = useState<string | null>(null);
   const [journal, setJournal] = useState<string[]>([]);
   const [complete, setComplete] = useState(false);
+  const [showDeepFact, setShowDeepFact] = useState(false);
   const stop = stops[stopIndex];
   const correct = selected === stop.answer;
 
@@ -90,6 +97,7 @@ export function PepperExpedition() {
   const next = () => {
     if (!correct) {
       setSelected(null);
+      setShowDeepFact(false);
       return;
     }
     if (stopIndex === stops.length - 1) {
@@ -98,6 +106,7 @@ export function PepperExpedition() {
     }
     setStopIndex((value) => value + 1);
     setSelected(null);
+    setShowDeepFact(false);
   };
 
   const restart = () => {
@@ -105,6 +114,7 @@ export function PepperExpedition() {
     setSelected(null);
     setJournal([]);
     setComplete(false);
+    setShowDeepFact(false);
   };
 
   if (complete) {
@@ -174,6 +184,12 @@ export function PepperExpedition() {
           <div className={`mt-3 rounded-lg border-2 p-3 ${correct ? "border-[#2f7d4f] bg-[#e9ffe9]" : "border-[#9f3f2b] bg-[#fff0ea]"}`}>
             <p className="text-lg font-black">{correct ? "Discovery collected!" : "Good theory—look at the clue once more."}</p>
             <p className="mt-1 text-sm font-bold text-[#5f6b5d]">{correct ? stop.journal : `Try again. The field note helps you find “${stop.answer}.”`}</p>
+            {correct && (
+              <div className="mt-3">
+                <button onClick={() => setShowDeepFact((value) => !value)} aria-expanded={showDeepFact} className="rounded-lg border-2 border-[#092421] bg-white px-3 py-2 text-sm font-black hover:bg-[#fff1bf]">🔎 {showDeepFact ? "Hide deep fact" : "Go deeper"}</button>
+                {showDeepFact && <p className="mt-2 rounded-lg border-2 border-[#b8d7b8] bg-white p-3 text-sm font-bold leading-snug text-[#315847]">{stop.deepFact}</p>}
+              </div>
+            )}
             <button onClick={next} className="mt-3 rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2 font-black text-white shadow-[2px_2px_0_#092421]">{correct ? stopIndex === stops.length - 1 ? "Open journal" : "Next stop" : "Try again"}</button>
           </div>
         )}
