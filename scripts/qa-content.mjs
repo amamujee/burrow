@@ -28,7 +28,7 @@ const userAgent = "BurrowContentQA/1.0";
 const critical = [];
 const warnings = [];
 const validDifficultyBands = new Set(["easy", "medium", "hard"]);
-const validWorldContinents = new Set(["Africa", "Asia", "Europe", "North America", "South America", "Oceania"]);
+const validWorldContinents = new Set(["Africa", "Antarctica", "Asia", "Europe", "North America", "South America", "Oceania"]);
 
 const isImageFile = (target) => {
   const buffer = fs.readFileSync(target);
@@ -266,7 +266,7 @@ const checkPackMetadata = (pack) => {
     if (!card.metadata?.difficultyBand) critical.push(`${label}: missing metadata.difficultyBand`);
     if (!Number.isInteger(card.metadata?.recognition)) critical.push(`${label}: missing metadata.recognition`);
     if (!card.metadata?.taxonomyGroup) critical.push(`${label}: missing metadata.taxonomyGroup`);
-    if (pack.id === "bridges-and-tunnels" && !card.metadata?.location) critical.push(`${label}: missing world location metadata`);
+    if (["bridges-and-tunnels", "tallest-mountains"].includes(pack.id) && !card.metadata?.location) critical.push(`${label}: missing world location metadata`);
     if (card.tags?.includes("not-dinosaur") && !card.metadata?.accuracyNote) critical.push(`${label}: not-dinosaur cards need metadata.accuracyNote`);
   }
 

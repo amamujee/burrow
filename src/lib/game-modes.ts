@@ -213,6 +213,7 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   fact: pepper.fact,
   qualityScore: scoreFeaturedContent({ ...pepper, statValue: pepper.shuMax }).score,
   qualityFlags: scoreFeaturedContent({ ...pepper, statValue: pepper.shuMax }).flags,
+  metadata: pepper.metadata,
 });
 
 const buildingHeightLabel = (building: Building) => building.heightLabel ?? (building.status === "finished" ? "Height" : "Planned height");
@@ -694,6 +695,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       imageCredit: pepper.imageCredit,
       subStat: `${heatProfiles[pepper.heat].label} · ${pepper.color}`,
       fact: pepper.fact,
+      metadata: pepper.metadata,
       stats: [
         { id: "scoville", label: "Scoville", value: pepper.shuMax, display: `${formatNumber(pepper.shuMax)} SHU`, direction: "higher" },
         { id: "size", label: "Fruit size", value: pepperSizeInches[pepper.id] ?? 2, display: inches(pepperSizeInches[pepper.id] ?? 2), direction: "higher" },
@@ -877,6 +879,23 @@ const pluralTitle = (title: string) => {
   return `${title}s`;
 };
 
+const hasLocationMetadata = <T extends { metadata?: CardMetadata }>(card: T): card is T & { metadata: CardMetadata & { location: WorldLocation } } =>
+  Boolean(card.metadata?.location);
+
+const uniqueLocationLabels = <T extends { metadata?: CardMetadata }>(cards: readonly T[]) =>
+  Array.from(new Set(cards.filter(hasLocationMetadata).map((card) => card.metadata.location.label)));
+
+const locationChoicesFromCards = <T extends { metadata?: CardMetadata }>(
+  cards: readonly T[],
+  correct: T & { metadata: CardMetadata & { location: WorldLocation } },
+  seed: number,
+  count: number,
+) => {
+  const answer = correct.metadata.location.label;
+  const distractors = uniqueLocationLabels(cards).filter((label) => label !== answer);
+  return shuffle([answer, ...shuffle(distractors, seed).slice(0, count - 1)], seed + 1);
+};
+
 export const buildSortRoundFromCards = (
   cards: readonly GenericKnowledgeCard[],
   topic: RoundTopic,
@@ -910,7 +929,25 @@ export const buildRevealRoundFromCards = (
 ): RevealRound => {
   if (cards.length < 3) throw new Error(`Need at least 3 cards to build a peek round for ${topic}`);
   const pool = preferredPool(cards, difficulty);
+  const locationPool = preferredPool(cards.filter(hasLocationMetadata), difficulty);
   const count = Math.min(pool.length, difficulty === 1 ? 3 : 4);
+  const askLocation = locationPool.length >= count && uniqueLocationLabels(locationPool).length >= count && seedRandom(seed + 4) > 0.42;
+
+  if (askLocation) {
+    const card = sample(locationPool, seed + 1);
+    const location = card.metadata.location;
+
+    return {
+      id: `${seed}-peek-location-${topic}-${card.id}`,
+      topic,
+      prompt: "Where in the world is this found?",
+      card,
+      choices: locationChoicesFromCards(locationPool, card, seed + 2, count),
+      answer: location.label,
+      explanation: `${card.title} is found in ${location.label}. ${card.fact}`,
+    };
+  }
+
   const card = sample(pool, seed + 1);
   const distractors = shuffle(pool.filter((item) => item.id !== card.id).map((item) => item.title), seed + 2).slice(0, count - 1);
 
@@ -934,6 +971,35 @@ export const buildFactRoundFromCards = (
   const pool = preferredPool(cardsWithStats(cards), difficulty);
   if (pool.length < 2) throw new Error(`Need at least 2 stat cards to build a fact round for ${topic}`);
   const truthful = seedRandom(seed + 11) > 0.46;
+  const locationPool = pool.filter(hasLocationMetadata);
+  const useLocation = locationPool.length >= 2 && uniqueLocationLabels(locationPool).length >= 2 && (difficulty === 1 || seedRandom(seed + 14) > 0.5);
+
+  if (useLocation) {
+    const card = sample(locationPool, seed + 12);
+    const location = card.metadata.location;
+    const fakeCard = sampleSafe(
+      locationPool.filter((item) => item.id !== card.id && item.metadata.location.label !== location.label),
+      locationPool.filter((item) => item.id !== card.id),
+      seed + 13,
+    );
+    const statement = truthful
+      ? `${card.title} is found in ${location.label}.`
+      : `${card.title} is found in ${fakeCard.metadata.location.label}.`;
+
+    return {
+      id: `${seed}-fact-location-${topic}-${card.id}`,
+      topic,
+      prompt: "True or false?",
+      statement,
+      image: card.image,
+      imageAlt: card.imageAlt,
+      imageCredit: card.imageCredit,
+      answer: truthful ? "True" : "False",
+      explanation: `The real location is ${location.label}. ${card.fact}`,
+      locations: [location],
+    };
+  }
+
   const card = sample(pool, seed + 12);
   const fakeCard = sampleSafe(pool.filter((item) => item.id !== card.id && item.statValue !== card.statValue), pool.filter((item) => item.id !== card.id), seed + 13);
   const useStat = difficulty > 1 || seedRandom(seed + 14) > 0.45;
@@ -1681,6 +1747,34 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   if (currentTopic === "peppers") {
     const pool = preferredPool(peppers, difficulty);
     const pepper = sample(pool, seed + 12);
+    const locationPool = pool.filter(hasLocationMetadata);
+    const useLocation = locationPool.length >= 2 && (difficulty === 1 ? seedRandom(seed + 15) > 0.35 : seedRandom(seed + 15) > 0.55);
+    if (useLocation) {
+      const locatedPepper = hasLocationMetadata(pepper) ? pepper : sample(locationPool, seed + 16);
+      const location = locatedPepper.metadata.location;
+      const fakePepper = sampleSafe(
+        locationPool.filter((item) => item.id !== locatedPepper.id && item.metadata.location.label !== location.label),
+        locationPool.filter((item) => item.id !== locatedPepper.id),
+        seed + 17,
+      );
+      const statement = truthful
+        ? `${locatedPepper.name} is linked to ${location.label}.`
+        : `${locatedPepper.name} is linked to ${fakePepper.metadata.location.label}.`;
+
+      return {
+        id: `${seed}-fact-pepper-location-${locatedPepper.id}`,
+        topic: currentTopic,
+        prompt: "True or false?",
+        statement,
+        image: locatedPepper.image,
+        imageAlt: locatedPepper.name,
+        imageCredit: locatedPepper.imageCredit,
+        answer: truthful ? "True" : "False",
+        explanation: `${locatedPepper.name} is linked to ${location.label}. It can reach ${formatNumber(locatedPepper.shuMax)} SHU, so it is ${locatedPepper.heat}.`,
+        locations: [location],
+      };
+    }
+
     const fakeHeat = sample(pool.filter((item) => item.id !== pepper.id && item.heat !== pepper.heat), seed + 13);
     const fakeShu = sampleSafe(pool.filter((item) => item.id !== pepper.id && item.shuMax !== pepper.shuMax), pool.filter((item) => item.id !== pepper.id), seed + 14);
     const useMath = difficulty > 1 && seedRandom(seed + 14) > 0.5;
@@ -1707,19 +1801,26 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   if (currentTopic === "buildings") {
     const pool = preferredPool(buildings, difficulty);
     const building = sample(pool, seed + 15);
-    const factType = difficulty === 1 ? "city" : sample(["city", "height", "status"] as const, seed + 17);
+    const factType = difficulty === 1 ? sample(["city", "location"] as const, seed + 17) : sample(["city", "location", "height", "status"] as const, seed + 17);
+    const locationLabel = (item: Building) => item.metadata.location?.label ?? `${item.city}, ${item.country}`;
+    const buildingLocationLabel = locationLabel(building);
     const fakeCity = sampleSafe(pool.filter((item) => item.id !== building.id && item.city !== building.city), pool.filter((item) => item.id !== building.id), seed + 16);
+    const fakeLocation = sampleSafe(pool.filter((item) => item.id !== building.id && locationLabel(item) !== buildingLocationLabel), pool.filter((item) => item.id !== building.id), seed + 19);
     const fakeHeight = sampleSafe(pool.filter((item) => item.id !== building.id && item.heightFt !== building.heightFt), pool.filter((item) => item.id !== building.id), seed + 18);
     const statement = truthful
       ? factType === "height"
         ? `${buildingHeightSentence(building)}.`
         : factType === "status"
           ? `${building.name} is ${buildingStatusLabel(building)}.`
+          : factType === "location"
+            ? `${building.name} is in ${buildingLocationLabel}.`
           : `${building.name} is in ${building.city}.`
       : factType === "height"
         ? `${building.name} is ${feet(fakeHeight.heightFt)} tall.`
         : factType === "status"
           ? `${building.name} is ${buildingFalseStatusLabel(building)}.`
+          : factType === "location"
+            ? `${building.name} is in ${locationLabel(fakeLocation)}.`
           : `${building.name} is in ${fakeCity.city}.`;
     return {
       id: `${seed}-fact-building-${building.id}`,

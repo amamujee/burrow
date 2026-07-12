@@ -3,7 +3,7 @@ import path from "node:path";
 
 const packsRoot = "content/packs";
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const worldContinents = new Set(["Africa", "Asia", "Europe", "North America", "South America", "Oceania"]);
+const worldContinents = new Set(["Africa", "Antarctica", "Asia", "Europe", "North America", "South America", "Oceania"]);
 const args = process.argv.slice(2);
 const packArg = args.includes("--pack") ? args[args.indexOf("--pack") + 1] : undefined;
 const includeTemplate = args.includes("--include-template");

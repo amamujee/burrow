@@ -94,7 +94,7 @@
       ],
       "categories": ["tree type", "broadleaf", "europe"],
       "tags": ["oak", "broadleaf", "reference-tree"],
-      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "broadleaf" },
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "broadleaf", "location": { "label": "United Kingdom and Europe", "countries": ["United Kingdom"], "continents": ["Europe"] } },
       "readingPrompts": ["About how many Daves tall is this oak?"]
     },
     {
@@ -132,7 +132,7 @@
       ],
       "categories": ["specific tree", "conifer", "europe"],
       "tags": ["douglas-fir", "conifer", "wales"],
-      "metadata": { "difficultyBand": "easy", "recognition": 4, "taxonomyGroup": "conifer" },
+      "metadata": { "difficultyBand": "easy", "recognition": 4, "taxonomyGroup": "conifer", "location": { "label": "Betws-y-Coed, United Kingdom", "countries": ["United Kingdom"], "continents": ["Europe"] } },
       "readingPrompts": ["How much taller is this Douglas fir than Atlantis?"]
     },
     {
@@ -151,7 +151,7 @@
       ],
       "categories": ["tree type", "eucalyptus relative", "australia"],
       "tags": ["karri", "eucalyptus", "tall-tree"],
-      "metadata": { "difficultyBand": "easy", "recognition": 4, "taxonomyGroup": "eucalyptus" },
+      "metadata": { "difficultyBand": "easy", "recognition": 4, "taxonomyGroup": "eucalyptus", "location": { "label": "Australia", "countries": ["Australia"], "continents": ["Oceania"] } },
       "readingPrompts": ["How many 6-foot people would stack to this karri's height?"]
     },
     {
@@ -170,7 +170,7 @@
       ],
       "categories": ["specific tree", "conifer", "california"],
       "tags": ["general-sherman", "giant-sequoia", "famous-tree"],
-      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "conifer" },
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "conifer", "location": { "label": "California, United States", "countries": ["United States"], "continents": ["North America"] } },
       "readingPrompts": ["Why can General Sherman be biggest but not tallest?"]
     },
     {
@@ -189,7 +189,7 @@
       ],
       "categories": ["reference", "building-scale"],
       "tags": ["reference", "big-ben", "london"],
-      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "reference" },
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "reference", "location": { "label": "London, United Kingdom", "countries": ["United Kingdom"], "continents": ["Europe"] } },
       "readingPrompts": ["Which trees are taller than Big Ben?"]
     },
     {
@@ -212,7 +212,8 @@
         "difficultyBand": "easy",
         "recognition": 4,
         "taxonomyGroup": "eucalyptus",
-        "accuracyNote": "The famous 100 m measurement predates later fire damage; current rounded height is lower."
+        "accuracyNote": "The famous 100 m measurement predates later fire damage; current rounded height is lower.",
+        "location": { "label": "Tasmania, Australia", "countries": ["Australia"], "continents": ["Oceania"] }
       },
       "readingPrompts": ["How close is Centurion to Big Ben's height?"]
     },
@@ -232,7 +233,7 @@
       ],
       "categories": ["specific tree", "conifer", "california"],
       "tags": ["hyperion", "coast-redwood", "record-holder"],
-      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "conifer" },
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "conifer", "location": { "label": "California, United States", "countries": ["United States"], "continents": ["North America"] } },
       "readingPrompts": ["About how many giraffes tall is Hyperion?"]
     },
     {
@@ -251,7 +252,7 @@
       ],
       "categories": ["tree type", "conifer", "asia"],
       "tags": ["cypress", "asia", "record-tree"],
-      "metadata": { "difficultyBand": "hard", "recognition": 2, "taxonomyGroup": "conifer" },
+      "metadata": { "difficultyBand": "hard", "recognition": 2, "taxonomyGroup": "conifer", "location": { "label": "Tibet, China", "countries": ["China"], "continents": ["Asia"] } },
       "readingPrompts": ["Is this cypress taller or shorter than Hyperion?"]
     },
     {
@@ -270,7 +271,7 @@
       ],
       "categories": ["specific tree", "conifer", "california"],
       "tags": ["sitka-spruce", "ravens-tower", "conifer"],
-      "metadata": { "difficultyBand": "medium", "recognition": 3, "taxonomyGroup": "conifer" },
+      "metadata": { "difficultyBand": "medium", "recognition": 3, "taxonomyGroup": "conifer", "location": { "label": "California, United States", "countries": ["United States"], "continents": ["North America"] } },
       "readingPrompts": ["How many feet separate Raven's Tower and Hyperion?"]
     },
     {
@@ -289,7 +290,7 @@
       ],
       "categories": ["specific tree", "conifer", "oregon"],
       "tags": ["douglas-fir", "oregon", "record-tree"],
-      "metadata": { "difficultyBand": "medium", "recognition": 3, "taxonomyGroup": "conifer" },
+      "metadata": { "difficultyBand": "medium", "recognition": 3, "taxonomyGroup": "conifer", "location": { "label": "Oregon, United States", "countries": ["United States"], "continents": ["North America"] } },
       "readingPrompts": ["How many 6-foot people fit into the Doerner Fir's height?"]
     },
     {
@@ -308,7 +309,7 @@
       ],
       "categories": ["specific tree", "tropical", "borneo"],
       "tags": ["yellow-meranti", "borneo", "tropical-tree"],
-      "metadata": { "difficultyBand": "hard", "recognition": 3, "taxonomyGroup": "flowering tree" },
+      "metadata": { "difficultyBand": "hard", "recognition": 3, "taxonomyGroup": "flowering tree", "location": { "label": "Borneo, Malaysia", "countries": ["Malaysia"], "continents": ["Asia"] } },
       "readingPrompts": ["Is Menara closer in height to Big Ben or Hyperion?"]
     },
     {
@@ -327,7 +328,7 @@
       ],
       "categories": ["tree type", "conifer", "california"],
       "tags": ["giant-sequoia", "conifer", "large-tree"],
-      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "conifer" },
+      "metadata": { "difficultyBand": "easy", "recognition": 5, "taxonomyGroup": "conifer", "location": { "label": "California, United States", "countries": ["United States"], "continents": ["North America"] } },
       "readingPrompts": ["Why is giant sequoia a large-tree champion?"]
     },
     {
@@ -346,7 +347,7 @@
       ],
       "categories": ["tree type", "eucalyptus", "australia"],
       "tags": ["mountain-ash", "eucalyptus", "flowering-tree"],
-      "metadata": { "difficultyBand": "medium", "recognition": 4, "taxonomyGroup": "eucalyptus" },
+      "metadata": { "difficultyBand": "medium", "recognition": 4, "taxonomyGroup": "eucalyptus", "location": { "label": "Australia", "countries": ["Australia"], "continents": ["Oceania"] } },
       "readingPrompts": ["How much taller is mountain ash than General Sherman?"]
     },
     {
@@ -365,7 +366,7 @@
       ],
       "categories": ["tree type", "eucalyptus", "australia"],
       "tags": ["blue-gum", "eucalyptus", "tasmania"],
-      "metadata": { "difficultyBand": "hard", "recognition": 3, "taxonomyGroup": "eucalyptus" },
+      "metadata": { "difficultyBand": "hard", "recognition": 3, "taxonomyGroup": "eucalyptus", "location": { "label": "Tasmania, Australia", "countries": ["Australia"], "continents": ["Oceania"] } },
       "readingPrompts": ["How much shorter is southern blue gum than Hyperion?"]
     },
     {
@@ -384,7 +385,7 @@
       ],
       "categories": ["tree type", "eucalyptus", "australia"],
       "tags": ["manna-gum", "eucalyptus", "tasmania"],
-      "metadata": { "difficultyBand": "hard", "recognition": 3, "taxonomyGroup": "eucalyptus" },
+      "metadata": { "difficultyBand": "hard", "recognition": 3, "taxonomyGroup": "eucalyptus", "location": { "label": "Tasmania, Australia", "countries": ["Australia"], "continents": ["Oceania"] } },
       "readingPrompts": ["How many giraffes tall is a 300-foot tree?"]
     },
     {
@@ -403,7 +404,7 @@
       ],
       "categories": ["tree type", "conifer", "pacific northwest"],
       "tags": ["noble-fir", "conifer", "washington"],
-      "metadata": { "difficultyBand": "hard", "recognition": 3, "taxonomyGroup": "conifer" },
+      "metadata": { "difficultyBand": "hard", "recognition": 3, "taxonomyGroup": "conifer", "location": { "label": "Washington, United States", "countries": ["United States"], "continents": ["North America"] } },
       "readingPrompts": ["Which is taller, noble fir or General Sherman?"]
     }
   ]

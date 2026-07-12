@@ -58,35 +58,74 @@ const cards = [
 
 const metadataRecognitionFor = (recognition) => Math.max(1, Math.min(5, Math.round(recognition / 2)));
 const difficultyFor = (recognition, elevationM) => recognition >= 7 ? "easy" : elevationM >= 7800 ? "medium" : "hard";
+const continentByCountry = {
+  Antarctica: "Antarctica",
+  Argentina: "South America",
+  Australia: "Oceania",
+  China: "Asia",
+  Ecuador: "South America",
+  France: "Europe",
+  India: "Asia",
+  Indonesia: "Oceania",
+  Italy: "Europe",
+  Japan: "Asia",
+  Kenya: "Africa",
+  Nepal: "Asia",
+  "New Zealand": "Oceania",
+  Pakistan: "Asia",
+  Russia: "Europe",
+  Switzerland: "Europe",
+  Tanzania: "Africa",
+  "United States": "North America",
+};
 
-const cardObject = ([id, name, range, location, elevationM, prominenceM, firstAscent, recognition, fact, sourceUrl, categories]) => ({
-  id,
-  name,
-  image: `/burrow-assets/${packId}/${id}.jpg`,
-  imageAlt: `${name} photo`,
-  imageCredit: "Wikimedia Commons",
-  imageSourceUrl: sourceUrl,
-  fact,
-  stats: [
-    { id: "elevation-ft", label: "Elevation", value: metersToFeet(elevationM), unit: "ft", direction: "higher" },
-    { id: "elevation-m", label: "Elevation", value: elevationM, unit: "m", direction: "higher" },
-    { id: "prominence-m", label: "Prominence", value: prominenceM, unit: "m", direction: "higher" },
-    { id: "first-ascent-year", label: "First ascent", value: firstAscent, unit: "year", direction: "lower" },
-    { id: "fame", label: "Fame", value: recognition, unit: "/10", direction: "higher" },
-  ],
-  categories: [range, location, ...categories],
-  tags: Array.from(new Set([
-    range.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-    location.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-    categories[0].replace(/[^a-z0-9]+/g, "-"),
-  ])),
-  metadata: {
-    difficultyBand: difficultyFor(recognition, elevationM),
-    recognition: metadataRecognitionFor(recognition),
-    taxonomyGroup: range,
-  },
-  readingPrompts: [`What makes ${name} special?`, `How does ${name}'s elevation compare with another mountain?`],
-});
+const worldLocationFor = (label) => {
+  const countries = label.split("/").map((country) => country.trim());
+  const continents = Array.from(new Set(countries.flatMap((country) => continentByCountry[country] ? [continentByCountry[country]] : [])));
+  return {
+    label,
+    countries,
+    continents,
+  };
+};
+
+const existingPackFile = path.join(packDir, "pack.json");
+const existingCardsById = fs.existsSync(existingPackFile)
+  ? new Map(JSON.parse(fs.readFileSync(existingPackFile, "utf8")).cards.map((card) => [card.id, card]))
+  : new Map();
+
+const cardObject = ([id, name, range, location, elevationM, prominenceM, firstAscent, recognition, fact, sourceUrl, categories]) => {
+  const existingCard = existingCardsById.get(id);
+  return {
+    id,
+    name,
+    image: `/burrow-assets/${packId}/${id}.jpg`,
+    imageAlt: `${name} photo`,
+    imageCredit: existingCard?.imageCredit ?? "Wikimedia Commons",
+    imageSourceUrl: existingCard?.imageSourceUrl ?? sourceUrl,
+    fact,
+    stats: [
+      { id: "elevation-ft", label: "Elevation", value: metersToFeet(elevationM), unit: "ft", direction: "higher" },
+      { id: "elevation-m", label: "Elevation", value: elevationM, unit: "m", direction: "higher" },
+      { id: "prominence-m", label: "Prominence", value: prominenceM, unit: "m", direction: "higher" },
+      { id: "first-ascent-year", label: "First ascent", value: firstAscent, unit: "year", direction: "lower" },
+      { id: "fame", label: "Fame", value: recognition, unit: "/10", direction: "higher" },
+    ],
+    categories: [range, location, ...categories],
+    tags: Array.from(new Set([
+      range.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+      location.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+      categories[0].replace(/[^a-z0-9]+/g, "-"),
+    ])),
+    metadata: {
+      difficultyBand: difficultyFor(recognition, elevationM),
+      recognition: metadataRecognitionFor(recognition),
+      taxonomyGroup: range,
+      location: worldLocationFor(location),
+    },
+    readingPrompts: [`What makes ${name} special?`, `How does ${name}'s elevation compare with another mountain?`],
+  };
+};
 
 const hashValue = (value) => [...value].reduce((total, char) => total + char.charCodeAt(0), 0);
 

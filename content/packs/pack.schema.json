@@ -206,7 +206,7 @@
                     "minItems": 1,
                     "items": {
                       "type": "string",
-                      "enum": ["Africa", "Asia", "Europe", "North America", "South America", "Oceania"]
+                      "enum": ["Africa", "Antarctica", "Asia", "Europe", "North America", "South America", "Oceania"]
                     },
                     "uniqueItems": true
                   }

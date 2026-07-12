@@ -1,6 +1,6 @@
 export type CardDifficultyBand = "easy" | "medium" | "hard";
 
-export type WorldContinent = "Africa" | "Asia" | "Europe" | "North America" | "South America" | "Oceania";
+export type WorldContinent = "Africa" | "Antarctica" | "Asia" | "Europe" | "North America" | "South America" | "Oceania";
 
 export type WorldLocation = {
   label: string;

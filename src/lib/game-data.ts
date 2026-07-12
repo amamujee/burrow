@@ -1,5 +1,5 @@
 import { contentLibraryStats } from "./content-library";
-import type { CardMetadata, WorldContinent } from "./card-metadata";
+import type { CardMetadata, WorldContinent, WorldLocation } from "./card-metadata";
 
 export type TopicId = "peppers" | "buildings" | "sharks" | "space" | "jets" | "mixed";
 export type KnowledgeTopic = Exclude<TopicId, "mixed">;
@@ -31,6 +31,7 @@ export type Pepper = {
   imageFit?: VisualFit;
   imagePosition?: string;
   fact: string;
+  metadata?: CardMetadata;
 };
 
 type PepperSeed = Omit<Pepper, "heat">;
@@ -726,9 +727,62 @@ const pepperSeeds: PepperSeed[] = [
   },
 ];
 
+const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
+  poblano: { label: "Puebla, Mexico", countries: ["Mexico"], continents: ["North America"] },
+  anaheim: { label: "Anaheim, United States", countries: ["United States"], continents: ["North America"] },
+  jalapeno: { label: "Xalapa, Mexico", countries: ["Mexico"], continents: ["North America"] },
+  fresno: { label: "Fresno, United States", countries: ["United States"], continents: ["North America"] },
+  serrano: { label: "Puebla and Hidalgo, Mexico", countries: ["Mexico"], continents: ["North America"] },
+  cayenne: { label: "Cayenne, French Guiana", countries: ["French Guiana"], continents: ["South America"] },
+  tabasco: { label: "Tabasco, Mexico", countries: ["Mexico"], continents: ["North America"] },
+  "thai-chili": { label: "Thailand", countries: ["Thailand"], continents: ["Asia"] },
+  "scotch-bonnet": { label: "Jamaica and Trinidad and Tobago", countries: ["Jamaica", "Trinidad and Tobago"], continents: ["North America"] },
+  habanero: { label: "Yucatan, Mexico and the Caribbean", countries: ["Mexico", "Cuba"], continents: ["North America"] },
+  "ghost-pepper": { label: "Northeast India, India", countries: ["India"], continents: ["Asia"] },
+  "naga-jolokia": { label: "Northeast India, India", countries: ["India"], continents: ["Asia"] },
+  "seven-pot-primo": { label: "Louisiana, United States", countries: ["United States"], continents: ["North America"] },
+  "trinidad-scorpion": { label: "Trinidad and Tobago", countries: ["Trinidad and Tobago"], continents: ["North America"] },
+  "trinidad-scorpion-butch-t": { label: "Trinidad and Tobago", countries: ["Trinidad and Tobago"], continents: ["North America"] },
+  "carolina-reaper": { label: "Fort Mill, United States", countries: ["United States"], continents: ["North America"] },
+  "dragons-breath": { label: "Wales, United Kingdom", countries: ["United Kingdom"], continents: ["Europe"] },
+  "pepper-x": { label: "Fort Mill, United States", countries: ["United States"], continents: ["North America"] },
+  shishito: { label: "Japan", countries: ["Japan"], continents: ["Asia"] },
+  padron: { label: "Padron, Spain", countries: ["Spain"], continents: ["Europe"] },
+  ancho: { label: "Puebla, Mexico", countries: ["Mexico"], continents: ["North America"] },
+  guajillo: { label: "Mexico", countries: ["Mexico"], continents: ["North America"] },
+  "chile-de-arbol": { label: "Mexico", countries: ["Mexico"], continents: ["North America"] },
+  "aji-amarillo": { label: "Peru", countries: ["Peru"], continents: ["South America"] },
+  rocoto: { label: "Andes, South America", countries: ["Peru", "Bolivia", "Ecuador"], continents: ["South America"] },
+  chiltepin: { label: "Mexico", countries: ["Mexico"], continents: ["North America"] },
+  cubanelle: { label: "Cuba and the Caribbean", countries: ["Cuba"], continents: ["North America"] },
+  pasilla: { label: "Mexico", countries: ["Mexico"], continents: ["North America"] },
+  mulato: { label: "Puebla, Mexico", countries: ["Mexico"], continents: ["North America"] },
+  cascabel: { label: "Mexico", countries: ["Mexico"], continents: ["North America"] },
+  "hatch-chile": { label: "Hatch, United States", countries: ["United States"], continents: ["North America"] },
+  "new-mexico-chile": { label: "New Mexico, United States", countries: ["United States"], continents: ["North America"] },
+  datil: { label: "St. Augustine, United States", countries: ["United States"], continents: ["North America"] },
+  "aji-limo": { label: "Peru", countries: ["Peru"], continents: ["South America"] },
+  "aji-charapita": { label: "Peru", countries: ["Peru"], continents: ["South America"] },
+  "lemon-drop": { label: "Peru", countries: ["Peru"], continents: ["South America"] },
+  "bishop-crown": { label: "Barbados", countries: ["Barbados"], continents: ["North America"] },
+  "fish-pepper": { label: "Chesapeake Bay, United States", countries: ["United States"], continents: ["North America"] },
+  "goat-pepper": { label: "Bahamas", countries: ["Bahamas"], continents: ["North America"] },
+  pequin: { label: "Tabasco, Mexico", countries: ["Mexico"], continents: ["North America"] },
+  "naga-viper": { label: "Cumbria, United Kingdom", countries: ["United Kingdom"], continents: ["Europe"] },
+  "komodo-dragon": { label: "Bedfordshire, United Kingdom", countries: ["United Kingdom"], continents: ["Europe"] },
+  "trinidad-perfume": { label: "Trinidad and Tobago", countries: ["Trinidad and Tobago"], continents: ["North America"] },
+  "madame-jeanette": { label: "Suriname", countries: ["Suriname"], continents: ["South America"] },
+};
+
+const pepperMetadataFor = (id: string): CardMetadata | undefined => {
+  const location = pepperLocationsById[id];
+  return location ? { location } : undefined;
+};
+
 export const peppers = pepperSeeds.map((pepper) => ({
   ...pepper,
   heat: heatBandForScoville(pepper.shuMax),
+  metadata: pepper.metadata ?? pepperMetadataFor(pepper.id),
 }));
 
 const buildingContinentsByCountry: Record<string, WorldContinent[]> = {

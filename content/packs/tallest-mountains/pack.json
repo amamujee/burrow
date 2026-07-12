@@ -96,7 +96,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Nepal/China",
+          "countries": [
+            "Nepal",
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Mount Everest special?",
@@ -164,7 +174,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Karakoram"
+        "taxonomyGroup": "Karakoram",
+        "location": {
+          "label": "Pakistan/China",
+          "countries": [
+            "Pakistan",
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes K2 special?",
@@ -232,7 +252,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Nepal/India",
+          "countries": [
+            "Nepal",
+            "India"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Kangchenjunga special?",
@@ -300,7 +330,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Nepal/China",
+          "countries": [
+            "Nepal",
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Lhotse special?",
@@ -368,7 +408,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Nepal/China",
+          "countries": [
+            "Nepal",
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Makalu special?",
@@ -436,7 +486,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "China/Nepal",
+          "countries": [
+            "China",
+            "Nepal"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Cho Oyu special?",
@@ -504,7 +564,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Nepal",
+          "countries": [
+            "Nepal"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Dhaulagiri I special?",
@@ -572,7 +641,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Nepal",
+          "countries": [
+            "Nepal"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Manaslu special?",
@@ -640,7 +718,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Pakistan",
+          "countries": [
+            "Pakistan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Nanga Parbat special?",
@@ -708,7 +795,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Nepal",
+          "countries": [
+            "Nepal"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Annapurna I special?",
@@ -776,7 +872,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Karakoram"
+        "taxonomyGroup": "Karakoram",
+        "location": {
+          "label": "Pakistan/China",
+          "countries": [
+            "Pakistan",
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Gasherbrum I special?",
@@ -844,7 +950,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Karakoram"
+        "taxonomyGroup": "Karakoram",
+        "location": {
+          "label": "Pakistan/China",
+          "countries": [
+            "Pakistan",
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Broad Peak special?",
@@ -912,7 +1028,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Karakoram"
+        "taxonomyGroup": "Karakoram",
+        "location": {
+          "label": "Pakistan/China",
+          "countries": [
+            "Pakistan",
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Gasherbrum II special?",
@@ -980,7 +1106,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "China",
+          "countries": [
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Shishapangma special?",
@@ -1048,7 +1183,17 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 3,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Nepal/China",
+          "countries": [
+            "Nepal",
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Gyachung Kang special?",
@@ -1116,7 +1261,16 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 3,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Nepal",
+          "countries": [
+            "Nepal"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Annapurna II special?",
@@ -1184,7 +1338,16 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 3,
-        "taxonomyGroup": "Karakoram"
+        "taxonomyGroup": "Karakoram",
+        "location": {
+          "label": "Pakistan",
+          "countries": [
+            "Pakistan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Gasherbrum IV special?",
@@ -1252,7 +1415,16 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 3,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Nepal",
+          "countries": [
+            "Nepal"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Himalchuli special?",
@@ -1320,7 +1492,16 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 3,
-        "taxonomyGroup": "Karakoram"
+        "taxonomyGroup": "Karakoram",
+        "location": {
+          "label": "Pakistan",
+          "countries": [
+            "Pakistan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Distaghil Sar special?",
@@ -1388,7 +1569,16 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 2,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Nepal",
+          "countries": [
+            "Nepal"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Ngadi Chuli special?",
@@ -1456,7 +1646,16 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 3,
-        "taxonomyGroup": "Karakoram"
+        "taxonomyGroup": "Karakoram",
+        "location": {
+          "label": "Pakistan",
+          "countries": [
+            "Pakistan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Khunyang Chhish special?",
@@ -1524,7 +1723,16 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 3,
-        "taxonomyGroup": "Karakoram"
+        "taxonomyGroup": "Karakoram",
+        "location": {
+          "label": "Pakistan",
+          "countries": [
+            "Pakistan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Masherbrum special?",
@@ -1592,7 +1800,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "India",
+          "countries": [
+            "India"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Nanda Devi special?",
@@ -1660,7 +1877,16 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 2,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "China",
+          "countries": [
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Chomo Lonzo special?",
@@ -1728,7 +1954,16 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 3,
-        "taxonomyGroup": "Karakoram"
+        "taxonomyGroup": "Karakoram",
+        "location": {
+          "label": "Pakistan",
+          "countries": [
+            "Pakistan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Batura Sar special?",
@@ -1796,7 +2031,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Karakoram"
+        "taxonomyGroup": "Karakoram",
+        "location": {
+          "label": "Pakistan",
+          "countries": [
+            "Pakistan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Rakaposhi special?",
@@ -1864,7 +2108,16 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 3,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "China",
+          "countries": [
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Namcha Barwa special?",
@@ -1932,7 +2185,16 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "Karakoram"
+        "taxonomyGroup": "Karakoram",
+        "location": {
+          "label": "Pakistan",
+          "countries": [
+            "Pakistan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Kanjut Sar special?",
@@ -2000,7 +2262,16 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 3,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "India",
+          "countries": [
+            "India"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Kamet special?",
@@ -2068,7 +2339,16 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "Himalaya"
+        "taxonomyGroup": "Himalaya",
+        "location": {
+          "label": "Nepal",
+          "countries": [
+            "Nepal"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Dhaulagiri II special?",
@@ -2136,7 +2416,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Andes"
+        "taxonomyGroup": "Andes",
+        "location": {
+          "label": "Argentina",
+          "countries": [
+            "Argentina"
+          ],
+          "continents": [
+            "South America"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Aconcagua special?",
@@ -2204,7 +2493,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Alaska Range"
+        "taxonomyGroup": "Alaska Range",
+        "location": {
+          "label": "United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Denali special?",
@@ -2272,7 +2570,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Eastern Rift"
+        "taxonomyGroup": "Eastern Rift",
+        "location": {
+          "label": "Tanzania",
+          "countries": [
+            "Tanzania"
+          ],
+          "continents": [
+            "Africa"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Mount Kilimanjaro special?",
@@ -2340,7 +2647,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Caucasus"
+        "taxonomyGroup": "Caucasus",
+        "location": {
+          "label": "Russia",
+          "countries": [
+            "Russia"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Mount Elbrus special?",
@@ -2408,7 +2724,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Sentinel Range"
+        "taxonomyGroup": "Sentinel Range",
+        "location": {
+          "label": "Antarctica",
+          "countries": [
+            "Antarctica"
+          ],
+          "continents": [
+            "Antarctica"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Mount Vinson special?",
@@ -2476,7 +2801,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Sudirman Range"
+        "taxonomyGroup": "Sudirman Range",
+        "location": {
+          "label": "Indonesia",
+          "countries": [
+            "Indonesia"
+          ],
+          "continents": [
+            "Oceania"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Puncak Jaya special?",
@@ -2543,7 +2877,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Alps"
+        "taxonomyGroup": "Alps",
+        "location": {
+          "label": "France/Italy",
+          "countries": [
+            "France",
+            "Italy"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Mont Blanc special?",
@@ -2610,7 +2954,17 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Alps"
+        "taxonomyGroup": "Alps",
+        "location": {
+          "label": "Switzerland/Italy",
+          "countries": [
+            "Switzerland",
+            "Italy"
+          ],
+          "continents": [
+            "Europe"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Matterhorn special?",
@@ -2678,7 +3032,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Sierra Nevada"
+        "taxonomyGroup": "Sierra Nevada",
+        "location": {
+          "label": "United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Mount Whitney special?",
@@ -2746,7 +3109,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Hawaii"
+        "taxonomyGroup": "Hawaii",
+        "location": {
+          "label": "United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Mauna Kea special?",
@@ -2814,7 +3186,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Japanese Alps"
+        "taxonomyGroup": "Japanese Alps",
+        "location": {
+          "label": "Japan",
+          "countries": [
+            "Japan"
+          ],
+          "continents": [
+            "Asia"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Mount Fuji special?",
@@ -2882,7 +3263,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Southern Alps"
+        "taxonomyGroup": "Southern Alps",
+        "location": {
+          "label": "New Zealand",
+          "countries": [
+            "New Zealand"
+          ],
+          "continents": [
+            "Oceania"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Aoraki / Mount Cook special?",
@@ -2950,7 +3340,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "Cascade Range"
+        "taxonomyGroup": "Cascade Range",
+        "location": {
+          "label": "United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Mount Rainier special?",
@@ -3017,7 +3416,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Andes"
+        "taxonomyGroup": "Andes",
+        "location": {
+          "label": "Ecuador",
+          "countries": [
+            "Ecuador"
+          ],
+          "continents": [
+            "South America"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Chimborazo special?",
@@ -3085,7 +3493,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Eastern Rift"
+        "taxonomyGroup": "Eastern Rift",
+        "location": {
+          "label": "Kenya",
+          "countries": [
+            "Kenya"
+          ],
+          "continents": [
+            "Africa"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Mount Kenya special?",
@@ -3153,7 +3570,16 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
-        "taxonomyGroup": "Snowy Mountains"
+        "taxonomyGroup": "Snowy Mountains",
+        "location": {
+          "label": "Australia",
+          "countries": [
+            "Australia"
+          ],
+          "continents": [
+            "Oceania"
+          ]
+        }
       },
       "readingPrompts": [
         "What makes Mount Kosciuszko special?",
