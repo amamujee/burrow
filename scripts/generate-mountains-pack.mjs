@@ -176,7 +176,7 @@ const pack = {
     maxAge: 11,
     readingLevel: "short mountain facts with rounded elevation comparisons",
   },
-  recommendedModes: ["trumps", "sort", "fact", "peek", "number", "odd"],
+  recommendedModes: ["trumps", "sort", "fact", "peek", "number", "odd", "geo"],
   sources: [
     {
       label: "Wikipedia list of highest mountains on Earth",

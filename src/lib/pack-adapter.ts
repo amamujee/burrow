@@ -27,6 +27,9 @@ const toTopTrumpStat = (stat: PackStat): TopTrumpStat => ({
 });
 
 export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
+  const defaultRecommendedModes: NonNullable<Pack["recommendedModes"]> = pack.cards.some((card) => card.metadata?.location)
+    ? ["trumps", "sort", "fact", "peek", "number", "odd", "geo"]
+    : ["trumps", "sort", "fact", "peek", "number", "odd"];
   const cards = pack.cards
     .filter((card) => card.stats.length)
     .map((card) => {
@@ -59,7 +62,7 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
     summary: pack.summary,
     eyebrow: `${cards.length} cards`,
     roundLabel: `${pack.title} round`,
-    recommendedModes: pack.recommendedModes ?? ["trumps", "sort", "fact", "peek", "number", "odd"],
+    recommendedModes: pack.recommendedModes ?? defaultRecommendedModes,
     sources: pack.sources,
     samples: cards.slice(0, 4).map((card) => card.title),
     cards,

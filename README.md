@@ -110,6 +110,14 @@ Use `npm run sync:assets -- --only=sharks/great-white --force` to refresh one as
 
 The in-game "Flag image" control stores a local report in the browser and posts it to `POST /api/content-issues`. In local development, the API appends reports to `.burrow/content-issues.jsonl`, which is intentionally ignored by git.
 
+## Play Quality Signals
+
+Burrow records anonymous play events for views, answers, skips, flags, and setup changes. The browser keeps the latest events in `localStorage` under `burrow-play-events-v1`, queues unsent events under `burrow-play-events-pending-v1`, and posts batches to `POST /api/play-events`. In local development, the API appends JSONL to `.burrow/play-events.jsonl`; in hosted environments it also emits structured `burrow.play_event` server logs.
+
+Production still sends compact `Burrow Play` custom events to Vercel Analytics with mode, topic, stable question key/hash, difficulty, outcome, and answer time. Player names are not sent. Browser/profile identity uses a local anonymous install id plus profile id, then hashes that value before logging.
+
+Run `npm run analyze:play-events` to summarize `.burrow/play-events.jsonl` by repeated views, skip rate, accuracy, and flags. Pass a path to inspect an exported log: `npm run analyze:play-events -- path/to/play-events.jsonl`.
+
 ## Publishing Notes
 
 - Keep `public/burrow-assets` committed so the game works offline and does not hotlink topic images.

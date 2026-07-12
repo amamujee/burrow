@@ -9,6 +9,8 @@ const library = jiti("./src/lib/content-library.ts");
 const {
   buildFactRound,
   buildFactRoundFromCards,
+  buildGeoRound,
+  buildGeoRoundFromCards,
   buildNumberRound,
   buildNumberRoundFromCards,
   buildOddRound,
@@ -19,6 +21,8 @@ const {
   buildSortRoundFromCards,
   buildTopTrumpRound,
   buildTopTrumpRoundFromCards,
+  canBuildGeoRound,
+  canBuildGeoRoundFromCards,
   collectionCards,
 } = jiti("./src/lib/game-modes.ts");
 const { packToPlayableDeck } = jiti("./src/lib/pack-adapter.ts");
@@ -316,6 +320,14 @@ const checkRoundBuilders = async () => {
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${topic}/peek/d${difficulty}`, revealRound);
       await assertRoundCardImages(`${topic}/peek/d${difficulty}`, revealRound);
 
+      if (canBuildGeoRound(topic, difficulty)) {
+        const geoRound = buildGeoRound(topic, difficulty, seed + 40);
+        if (!geoRound.choices.some((choice) => choice.id === geoRound.answerId)) critical.push(`${topic}/geo/d${difficulty}: answer missing from choices`);
+        if (new Set(geoRound.choices.map((choice) => choice.id)).size !== geoRound.choices.length) critical.push(`${topic}/geo/d${difficulty}: duplicate geo choices`);
+        if (difficulty === 1) assertNoHardCardsInEasyRound(`${topic}/geo/d${difficulty}`, geoRound);
+        await assertRoundCardImages(`${topic}/geo/d${difficulty}`, geoRound);
+      }
+
       const numberRound = buildNumberRound(topic, difficulty, seed + 50);
       if (!numberRound.choices.includes(numberRound.answer) || numberRound.cards.length < 2 || numberRound.cards.length !== numberRound.termValues.length) critical.push(`${topic}/number/d${difficulty}: bad number choices`);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${topic}/number/d${difficulty}`, numberRound);
@@ -372,6 +384,14 @@ const checkPlayablePackRoundBuilders = async () => {
       if (!revealRound.choices.includes(revealRound.answer)) critical.push(`${deck.id}/peek/d${difficulty}: answer missing from choices`);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${deck.id}/peek/d${difficulty}`, revealRound);
       await assertRoundCardImages(`${deck.id}/peek/d${difficulty}`, revealRound);
+
+      if (canBuildGeoRoundFromCards(deck.cards, difficulty)) {
+        const geoRound = buildGeoRoundFromCards(deck.cards, deck.id, difficulty, seed + 40);
+        if (!geoRound.choices.some((choice) => choice.id === geoRound.answerId)) critical.push(`${deck.id}/geo/d${difficulty}: answer missing from choices`);
+        if (new Set(geoRound.choices.map((choice) => choice.id)).size !== geoRound.choices.length) critical.push(`${deck.id}/geo/d${difficulty}: duplicate geo choices`);
+        if (difficulty === 1) assertNoHardCardsInEasyRound(`${deck.id}/geo/d${difficulty}`, geoRound);
+        await assertRoundCardImages(`${deck.id}/geo/d${difficulty}`, geoRound);
+      }
 
       const numberRound = buildNumberRoundFromCards(deck.cards, deck.id, difficulty, seed + 50);
       if (!numberRound.choices.includes(numberRound.answer) || numberRound.cards.length < 2 || numberRound.cards.length !== numberRound.termValues.length) critical.push(`${deck.id}/number/d${difficulty}: bad number choices`);

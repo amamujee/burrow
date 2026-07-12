@@ -1,10 +1,13 @@
 "use client";
 
+import { track } from "@vercel/analytics";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
 import {
   buildFactRoundFromCards,
   buildFactRound,
+  buildGeoRoundFromCards,
+  buildGeoRound,
   buildNumberRoundFromCards,
   buildNumberRound,
   buildOddRoundFromCards,
@@ -16,8 +19,11 @@ import {
   buildTopTrumpRoundFromCards,
   buildTopTrumpRound,
   collectionCards,
+  canBuildGeoRoundFromCards,
+  canBuildGeoRound,
   modeOptions,
   type FactRound,
+  type GeoRound,
   type GameMode,
   type KnowledgeCard,
   type KnowledgeTopic,
@@ -32,7 +38,7 @@ import {
 } from "@/lib/game-modes";
 import { packToPlayableDeck, type PlayablePackDeck } from "@/lib/pack-adapter";
 import type { Pack } from "@/lib/pack-types";
-import { buildHeadToHeadSession, buildSession, type ComparisonCard, type Question } from "@/lib/questions";
+import { buildHeadToHeadSession, buildSession, questionMemoryKey, type ComparisonCard, type Question } from "@/lib/questions";
 import type { WorldLocation } from "@/lib/card-metadata";
 
 type Progress = {
@@ -69,6 +75,10 @@ type ResultState = {
   leveledUp: boolean;
 };
 
+type ChallengeMode = Exclude<GameMode, "mix">;
+type PlayTelemetryAction = "view" | "answer" | "skip" | "flag" | "configure";
+type PlayTelemetryChallengeMode = ChallengeMode | "collection" | "setup";
+
 type ContentIssueReport = {
   id: string;
   createdAt: string;
@@ -77,11 +87,69 @@ type ContentIssueReport = {
   topic: RoundTopic | "mixed";
   itemId: string;
   questionId?: string;
+  questionKey?: string;
   questionKind?: Question["kind"];
   title: string;
   prompt: string;
   image?: string;
 };
+
+type PlayTelemetryEvent = {
+  schemaVersion: 2;
+  id: string;
+  sequence: number;
+  sessionId: string;
+  createdAt: string;
+  profileHash: string;
+  action: PlayTelemetryAction;
+  mode: GameMode;
+  challengeMode: PlayTelemetryChallengeMode;
+  topic: RoundTopic | "mixed";
+  itemId: string;
+  itemKey: string;
+  itemHash: string;
+  questionKind?: string;
+  prompt?: string;
+  promptHash?: string;
+  title?: string;
+  titleHash?: string;
+  choice?: string;
+  answer?: string;
+  correct?: boolean;
+  difficulty: Difficulty;
+  level: number;
+  streak: number;
+  answeredCount: number;
+  correctCount: number;
+  accuracy: number;
+  roundIndex?: number;
+  answerMs?: number;
+};
+
+type PlayTelemetryInput = Omit<
+  PlayTelemetryEvent,
+  | "schemaVersion"
+  | "id"
+  | "sequence"
+  | "sessionId"
+  | "createdAt"
+  | "profileHash"
+  | "difficulty"
+  | "itemKey"
+  | "itemHash"
+  | "promptHash"
+  | "titleHash"
+  | "level"
+  | "streak"
+  | "answeredCount"
+  | "correctCount"
+  | "accuracy"
+> & {
+  difficulty?: Difficulty;
+  itemKey?: string;
+};
+
+type PlayTelemetryTarget = Omit<PlayTelemetryInput, "action">;
 
 const allKnowledgeTopics: KnowledgeTopic[] = [...topicIds];
 const emptyTopicCounts = () => Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, 0])) as Record<KnowledgeTopic, number>;
@@ -101,13 +169,21 @@ const initialProgress: Progress = {
   unlockedCards: [],
   topicWins: emptyTopicCounts(),
   topicStats: emptyTopicStats(),
-  modeWins: { mix: 0, quiz: 0, versus: 0, trumps: 0, sort: 0, fact: 0, peek: 0, number: 0, odd: 0 },
+  modeWins: { mix: 0, quiz: 0, versus: 0, trumps: 0, sort: 0, fact: 0, peek: 0, number: 0, odd: 0, geo: 0 },
 };
 
 const profilesKey = "burrow-profiles-v1";
 const legacyProfilesKey = "rabbit-hole-profiles-v1";
 const legacyProgressKey = "rabbit-hole-progress-v1";
 const contentIssuesKey = "burrow-content-issues-v1";
+const anonymousInstallKey = "burrow-anonymous-install-v1";
+const playEventsKey = "burrow-play-events-v1";
+const pendingPlayEventsKey = "burrow-play-events-pending-v1";
+const playEventsEndpoint = "/api/play-events";
+const playEventSchemaVersion = 2;
+const playEventHistoryLimit = 1500;
+const playEventPendingLimit = 500;
+const playEventBatchLimit = 25;
 const difficultyOptions: { id: Difficulty; label: string }[] = [
   { id: 1, label: "Easy" },
   { id: 2, label: "Med" },
@@ -116,8 +192,7 @@ const difficultyOptions: { id: Difficulty; label: string }[] = [
 const levelFromXp = (xp: number) => Math.max(1, Math.floor(xp / 120) + 1);
 const praise = ["Nice reading!", "Big brain move!", "You measured it!", "Hot answer!", "Sky-high thinking!", "Sharp thinking!"];
 const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
-type ChallengeMode = Exclude<GameMode, "mix">;
-const defaultMixPattern: ChallengeMode[] = ["quiz", "peek", "versus", "trumps", "number", "odd", "sort", "fact"];
+const defaultMixPattern: ChallengeMode[] = ["quiz", "peek", "geo", "versus", "trumps", "number", "odd", "sort", "fact"];
 const selectableModeOptions = modeOptions.filter((item): item is (typeof modeOptions)[number] & { id: ChallengeMode } => item.id !== "mix");
 const defaultStarterTopics: RoundTopic[] = ["sharks", "jets"];
 const starterMixModes: ChallengeMode[] = ["quiz"];
@@ -199,6 +274,78 @@ const loadContentIssues = (): ContentIssueReport[] => {
   } catch {
     return [];
   }
+};
+
+const loadPlayEvents = (): PlayTelemetryEvent[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(playEventsKey) ?? "[]") as PlayTelemetryEvent[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
+const stableRoundKey = (id: string) => id.replace(/^\d+-/, "");
+
+const makeBrowserId = (prefix: string) => {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) return `${prefix}-${crypto.randomUUID()}`;
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+};
+
+const hashText = (value: string) => {
+  let hash = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = Math.imul(31, hash) + value.charCodeAt(index);
+  }
+  return Math.abs(hash).toString(36);
+};
+
+const shortTelemetryValue = (value: string) => value.slice(0, 120);
+
+const loadAnonymousInstallId = () => {
+  if (typeof window === "undefined") return "server";
+  const saved = window.localStorage.getItem(anonymousInstallKey);
+  if (saved) return saved;
+  const installId = makeBrowserId("install");
+  window.localStorage.setItem(anonymousInstallKey, installId);
+  return installId;
+};
+
+const loadPendingPlayEvents = (): PlayTelemetryEvent[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(pendingPlayEventsKey) ?? "[]") as PlayTelemetryEvent[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+};
+
+const writePendingPlayEvents = (events: PlayTelemetryEvent[]) => {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(pendingPlayEventsKey, JSON.stringify(events.slice(-playEventPendingLimit)));
+};
+
+const queuePendingPlayEvent = (event: PlayTelemetryEvent) => {
+  const pending = [...loadPendingPlayEvents(), event].slice(-playEventPendingLimit);
+  writePendingPlayEvents(pending);
+  return pending;
+};
+
+const dropPendingPlayEvents = (eventIds: Set<string>) => {
+  writePendingPlayEvents(loadPendingPlayEvents().filter((event) => !eventIds.has(event.id)));
+};
+
+const flushPendingPlayEventsWithBeacon = () => {
+  if (typeof navigator === "undefined" || !navigator.sendBeacon) return;
+  const batch = loadPendingPlayEvents().slice(0, playEventBatchLimit);
+  if (!batch.length) return;
+  const sent = navigator.sendBeacon(
+    playEventsEndpoint,
+    new Blob([JSON.stringify({ events: batch })], { type: "application/json" }),
+  );
+  if (sent) dropPendingPlayEvents(new Set(batch.map((event) => event.id)));
 };
 
 const addUnique = (items: string[], additions: string[]) => {
@@ -298,12 +445,15 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   }, [packDecks]);
   const topicMeta = (topicId: RoundTopic) => topicMetaById.get(topicId) ?? { label: "Mixed topics", eyebrow: "All labs", roundLabel: "Mixed round", isPack: false };
   const topicLabel = (topicId: RoundTopic) => topicMeta(topicId).label;
-  const pickTopic = useCallback((scope: PlayableTopicScope, seed: number): RoundTopic => {
+  const scopeTopics = useCallback((scope: PlayableTopicScope): RoundTopic[] => {
     const scopedTopics = typeof scope === "string" ? (scope === "mixed" ? playableTopics : [scope]) : scope.length ? [...scope] : playableTopics;
     const safeTopics = scopedTopics.filter((item) => playableTopics.includes(item));
-    const topics = safeTopics.length ? safeTopics : playableTopics;
-    return topics[Math.floor(Math.abs(Math.sin(seed * 999)) * 10000) % topics.length];
+    return safeTopics.length ? safeTopics : playableTopics;
   }, [playableTopics]);
+  const pickTopic = useCallback((scope: PlayableTopicScope, seed: number): RoundTopic => {
+    const topics = scopeTopics(scope);
+    return topics[Math.floor(Math.abs(Math.sin(seed * 999)) * 10000) % topics.length];
+  }, [scopeTopics]);
   const buildSortForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number) => {
     const topicId = pickTopic(scope, seed);
     const deck = packDeckById.get(topicId);
@@ -319,6 +469,26 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const deck = packDeckById.get(topicId);
     return deck ? buildRevealRoundFromCards(deck.cards, topicId, difficulty, seed) : buildRevealRound(topicId as KnowledgeTopic, difficulty, seed);
   }, [packDeckById, pickTopic]);
+  const buildGeoForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number) => {
+    const scopedTopics = scopeTopics(scope);
+    const fallbackTopics = playableTopics.filter((topicId) => !scopedTopics.includes(topicId));
+    const orderedTopics = [...scopedTopics, ...fallbackTopics].sort((a, b) => {
+      const scoreA = Math.sin((seed + a.length * 17) * 97);
+      const scoreB = Math.sin((seed + b.length * 17) * 97);
+      return scoreA - scoreB;
+    });
+
+    for (const topicId of orderedTopics) {
+      const deck = packDeckById.get(topicId);
+      if (deck) {
+        if (canBuildGeoRoundFromCards(deck.cards, difficulty)) return buildGeoRoundFromCards(deck.cards, topicId, difficulty, seed + topicId.length);
+      } else if (isKnowledgeTopic(topicId) && canBuildGeoRound(topicId, difficulty)) {
+        return buildGeoRound(topicId, difficulty, seed + topicId.length);
+      }
+    }
+
+    return buildGeoRound("mixed", difficulty, seed + 997);
+  }, [packDeckById, playableTopics, scopeTopics]);
   const buildNumberForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number) => {
     const topicId = pickTopic(scope, seed);
     const deck = packDeckById.get(topicId);
@@ -354,6 +524,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const [factSelected, setFactSelected] = useState<"True" | "False" | null>(null);
   const [revealRound, setRevealRound] = useState<RevealRound>(() => buildRevealForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430));
   const [revealSelected, setRevealSelected] = useState<string | null>(null);
+  const [geoRound, setGeoRound] = useState<GeoRound>(() => buildGeoForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430));
+  const [geoSelected, setGeoSelected] = useState<string | null>(null);
   const [numberRound, setNumberRound] = useState<NumberRound>(() => buildNumberForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430));
   const [numberSelected, setNumberSelected] = useState<number | null>(null);
   const [oddRound, setOddRound] = useState<OddRound>(() => buildOddForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430));
@@ -367,12 +539,29 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const [lastResult, setLastResult] = useState<ResultState | null>(null);
   const [issueCount, setIssueCount] = useState(0);
   const [issueFlash, setIssueFlash] = useState(false);
+  const anonymousInstallIdRef = useRef<string | null>(null);
+  const playSessionIdRef = useRef("");
+  const playEventSequenceRef = useRef(0);
+  const playFlushInFlightRef = useRef(false);
+  const roundStartedAtRef = useRef(0);
+  const lastViewedPlayKeyRef = useRef("");
 
   const allCards = useMemo(() => [...collectionCards(), ...packDecks.flatMap((deck) => deck.cards)], [packDecks]);
   const question = questions[questionIndex];
   const hasBuiltInInterests = activeInterests.some(isKnowledgeTopic);
-  const availableMixPattern = hasBuiltInInterests ? defaultMixPattern : defaultMixPattern.filter((item) => item !== "quiz" && item !== "versus");
-  const selectedMixModes = (mixModes.length ? mixModes : availableMixPattern).filter((item) => hasBuiltInInterests || (item !== "quiz" && item !== "versus"));
+  const geoCapableTopics = useMemo(() => new Set(playableTopics.filter((topicId) => {
+    const deck = packDeckById.get(topicId);
+    return deck ? canBuildGeoRoundFromCards(deck.cards, progress.difficulty) : isKnowledgeTopic(topicId) && canBuildGeoRound(topicId, progress.difficulty);
+  })), [packDeckById, playableTopics, progress.difficulty]);
+  const hasGeoInterests = activeInterests.some((interest) => geoCapableTopics.has(interest));
+  const availableMixPattern = defaultMixPattern.filter((item) => {
+    if (!hasBuiltInInterests && (item === "quiz" || item === "versus")) return false;
+    if (!hasGeoInterests && item === "geo") return false;
+    return true;
+  });
+  const selectedMixModes = (mixModes.length ? mixModes : availableMixPattern)
+    .filter((item) => hasBuiltInInterests || (item !== "quiz" && item !== "versus"))
+    .filter((item) => hasGeoInterests || item !== "geo");
   const activeMixPattern: ChallengeMode[] = selectedMixModes.length ? selectedMixModes : ["peek"];
   const activeChallengeMode: ChallengeMode = mode === "mix" ? activeMixPattern[questionIndex % activeMixPattern.length] : mode;
   const isQuestionMode = !showCollection && (activeChallengeMode === "quiz" || activeChallengeMode === "versus");
@@ -386,6 +575,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         ? factSelected !== null
         : activeChallengeMode === "peek"
           ? revealSelected !== null
+          : activeChallengeMode === "geo"
+            ? geoSelected !== null
           : activeChallengeMode === "number"
               ? numberSelected !== null
               : activeChallengeMode === "trumps"
@@ -402,8 +593,24 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
 
   useEffect(() => {
     document.documentElement.dataset.burrowHydrated = "true";
+    anonymousInstallIdRef.current = loadAnonymousInstallId();
+    playSessionIdRef.current = makeBrowserId("session");
+    roundStartedAtRef.current = Date.now();
     return () => {
       delete document.documentElement.dataset.burrowHydrated;
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") flushPendingPlayEventsWithBeacon();
+    };
+
+    window.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", flushPendingPlayEventsWithBeacon);
+    return () => {
+      window.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", flushPendingPlayEventsWithBeacon);
     };
   }, []);
 
@@ -418,6 +625,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       setSortRound(buildSortForScope(loadedScope, loadedProfile.progress.difficulty, 20260461));
       setFactRound(buildFactForScope(loadedScope, loadedProfile.progress.difficulty, 20260477));
       setRevealRound(buildRevealForScope(loadedScope, loadedProfile.progress.difficulty, 20260493));
+      setGeoRound(buildGeoForScope(loadedScope, loadedProfile.progress.difficulty, 20260503));
       setNumberRound(buildNumberForScope(loadedScope, loadedProfile.progress.difficulty, 20260513));
       setOddRound(buildOddForScope(loadedScope, loadedProfile.progress.difficulty, 20260523));
       setTopTrumpRound(buildTopTrumpForScope(loadedScope, loadedProfile.progress.difficulty, 20260531));
@@ -426,7 +634,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     }, 0);
 
     return () => window.clearTimeout(loadSavedProfiles);
-  }, [buildFactForScope, buildNumberForScope, buildOddForScope, buildRevealForScope, buildSortForScope, buildTopTrumpForScope, playableTopics]);
+  }, [buildFactForScope, buildGeoForScope, buildNumberForScope, buildOddForScope, buildRevealForScope, buildSortForScope, buildTopTrumpForScope, playableTopics]);
 
   useEffect(() => {
     if (!profilesReady) return;
@@ -437,29 +645,297 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     };
   }, [profilesReady, profilesState]);
 
+  const flushPlayEvents = useCallback(async () => {
+    if (playFlushInFlightRef.current || typeof window === "undefined") return;
+    const batch = loadPendingPlayEvents().slice(0, playEventBatchLimit);
+    if (!batch.length) return;
+
+    playFlushInFlightRef.current = true;
+    try {
+      const response = await fetch(playEventsEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ events: batch }),
+        keepalive: true,
+      });
+      if (!response.ok) throw new Error(`Play event log failed with ${response.status}`);
+      dropPendingPlayEvents(new Set(batch.map((playEvent) => playEvent.id)));
+    } catch (error) {
+      console.warn("Play events could not be written to the server log.", error);
+    } finally {
+      playFlushInFlightRef.current = false;
+    }
+  }, []);
+
+  const recordPlayEvent = useCallback((event: PlayTelemetryInput) => {
+    const itemKey = event.itemKey ?? stableRoundKey(event.itemId);
+    const installId = anonymousInstallIdRef.current ?? loadAnonymousInstallId();
+    anonymousInstallIdRef.current = installId;
+    if (!playSessionIdRef.current) playSessionIdRef.current = makeBrowserId("session");
+    const profileHash = hashText(`${installId}:${activeProfile.id}`);
+    const actionNeedsElapsed = event.action === "answer" || event.action === "skip" || event.action === "flag";
+    const playEvent: PlayTelemetryEvent = {
+      ...event,
+      schemaVersion: playEventSchemaVersion,
+      itemKey,
+      itemHash: hashText(itemKey),
+      promptHash: event.prompt ? hashText(event.prompt) : undefined,
+      titleHash: event.title ? hashText(event.title) : undefined,
+      id: makeBrowserId("play"),
+      sequence: playEventSequenceRef.current + 1,
+      sessionId: playSessionIdRef.current,
+      createdAt: new Date().toISOString(),
+      profileHash,
+      difficulty: event.difficulty ?? progress.difficulty,
+      level: progress.level,
+      streak: progress.streak,
+      answeredCount: progress.answered,
+      correctCount: progress.correct,
+      accuracy,
+      answerMs: event.answerMs ?? (actionNeedsElapsed ? Math.max(0, Date.now() - roundStartedAtRef.current) : undefined),
+    };
+    playEventSequenceRef.current = playEvent.sequence;
+
+    try {
+      const nextEvents = [playEvent, ...loadPlayEvents()].slice(0, playEventHistoryLimit);
+      window.localStorage.setItem(playEventsKey, JSON.stringify(nextEvents));
+      queuePendingPlayEvent(playEvent);
+      void flushPlayEvents();
+    } catch (error) {
+      console.warn("Play event could not be written to browser storage.", error);
+    }
+
+    try {
+      track("Burrow Play", {
+        action: playEvent.action,
+        mode: playEvent.mode,
+        challengeMode: playEvent.challengeMode,
+        topic: playEvent.topic,
+        itemKey: shortTelemetryValue(playEvent.itemKey),
+        itemHash: playEvent.itemHash,
+        profileHash: playEvent.profileHash,
+        questionKind: playEvent.questionKind ?? null,
+        correct: playEvent.correct ?? null,
+        difficulty: playEvent.difficulty,
+        roundIndex: playEvent.roundIndex ?? null,
+        answerMs: playEvent.answerMs ?? null,
+      });
+    } catch (error) {
+      console.warn("Play event could not be sent to analytics.", error);
+    }
+  }, [accuracy, activeProfile.id, flushPlayEvents, progress.answered, progress.correct, progress.difficulty, progress.level, progress.streak]);
+
+  const recordChallengeEvent = useCallback((challengeMode: ChallengeMode, event: Omit<PlayTelemetryInput, "mode" | "challengeMode">) => {
+    recordPlayEvent({
+      ...event,
+      mode: mode === "mix" ? "mix" : challengeMode,
+      challengeMode,
+    });
+  }, [mode, recordPlayEvent]);
+
+  const recordSetupEvent = useCallback((kind: string, choice: string, eventDifficulty = progress.difficulty) => {
+    recordPlayEvent({
+      action: "configure",
+      mode,
+      challengeMode: "setup",
+      topic,
+      itemId: `setup:${kind}`,
+      itemKey: `setup:${kind}:${hashText(choice)}`,
+      questionKind: `setup-${kind}`,
+      prompt: "Setup changed",
+      title: kind,
+      choice,
+      difficulty: eventDifficulty,
+    });
+  }, [mode, progress.difficulty, recordPlayEvent, topic]);
+
+  const currentPlayTarget = useMemo<PlayTelemetryTarget | null>(() => {
+    const roundIndex = mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1;
+
+    if (showCollection) {
+      return {
+        mode,
+        challengeMode: "collection",
+        topic,
+        itemId: "collection",
+        itemKey: `collection:${topic}`,
+        questionKind: "collection",
+        prompt: "Collection opened",
+        title: "Collection",
+      };
+    }
+
+    if (activeChallengeMode === "sort") {
+      return {
+        mode: mode === "mix" ? "mix" : "sort",
+        challengeMode: "sort",
+        topic: sortRound.topic,
+        itemId: sortRound.id,
+        itemKey: stableRoundKey(sortRound.id),
+        questionKind: "sort",
+        prompt: sortRound.prompt,
+        title: "Sort round",
+        answer: sortRound.answerIds.join(","),
+        roundIndex,
+      };
+    }
+
+    if (activeChallengeMode === "fact") {
+      return {
+        mode: mode === "mix" ? "mix" : "fact",
+        challengeMode: "fact",
+        topic: factRound.topic,
+        itemId: factRound.id,
+        itemKey: stableRoundKey(factRound.id),
+        questionKind: "fact",
+        prompt: factRound.statement,
+        title: factRound.imageAlt,
+        answer: factRound.answer,
+        roundIndex,
+      };
+    }
+
+    if (activeChallengeMode === "peek") {
+      return {
+        mode: mode === "mix" ? "mix" : "peek",
+        challengeMode: "peek",
+        topic: revealRound.topic,
+        itemId: revealRound.id,
+        itemKey: stableRoundKey(revealRound.id),
+        questionKind: "peek",
+        prompt: revealRound.prompt,
+        title: revealRound.card.title,
+        answer: revealRound.answer,
+        roundIndex,
+      };
+    }
+
+    if (activeChallengeMode === "geo") {
+      return {
+        mode: mode === "mix" ? "mix" : "geo",
+        challengeMode: "geo",
+        topic: geoRound.topic,
+        itemId: geoRound.id,
+        itemKey: stableRoundKey(geoRound.id),
+        questionKind: "geo",
+        prompt: geoRound.prompt,
+        title: geoRound.card.title,
+        answer: geoRound.answerLabel,
+        roundIndex,
+      };
+    }
+
+    if (activeChallengeMode === "number") {
+      return {
+        mode: mode === "mix" ? "mix" : "number",
+        challengeMode: "number",
+        topic: numberRound.topic,
+        itemId: numberRound.id,
+        itemKey: stableRoundKey(numberRound.id),
+        questionKind: `number-${numberRound.operation}`,
+        prompt: numberRound.prompt,
+        title: numberRound.biggerLabel,
+        answer: String(numberRound.answer),
+        roundIndex,
+      };
+    }
+
+    if (activeChallengeMode === "odd") {
+      const answerCard = oddRound.cards.find((card) => card.id === oddRound.answerId);
+      return {
+        mode: mode === "mix" ? "mix" : "odd",
+        challengeMode: "odd",
+        topic: oddRound.topic,
+        itemId: oddRound.id,
+        itemKey: stableRoundKey(oddRound.id),
+        questionKind: "odd",
+        prompt: oddRound.prompt,
+        title: "Odd one round",
+        answer: answerCard?.title ?? oddRound.answerId,
+        roundIndex,
+      };
+    }
+
+    if (activeChallengeMode === "trumps") {
+      return {
+        mode: mode === "mix" ? "mix" : "trumps",
+        challengeMode: "trumps",
+        topic: topTrumpRound.topic,
+        itemId: topTrumpRound.id,
+        itemKey: stableRoundKey(topTrumpRound.id),
+        questionKind: "trumps",
+        prompt: topTrumpRound.prompt,
+        title: topTrumpRound.player.title,
+        roundIndex,
+      };
+    }
+
+    if (!question) return null;
+    return {
+      mode: mode === "mix" ? "mix" : activeChallengeMode,
+      challengeMode: activeChallengeMode,
+      topic: question.topic,
+      itemId: question.id,
+      itemKey: questionMemoryKey(question),
+      questionKind: question.kind,
+      prompt: question.prompt,
+      title: question.imageAlt,
+      answer: question.answer,
+      roundIndex,
+    };
+  }, [
+    activeChallengeMode,
+    factRound,
+    geoRound,
+    miniRunAnswered,
+    mode,
+    numberRound,
+    oddRound,
+    question,
+    questionIndex,
+    revealRound,
+    showCollection,
+    sortRound,
+    topTrumpRound,
+    topic,
+  ]);
+
+  useEffect(() => {
+    if (!profilesReady || !currentPlayTarget) return;
+    const itemKey = currentPlayTarget.itemKey ?? stableRoundKey(currentPlayTarget.itemId);
+    const viewKey = `${currentPlayTarget.challengeMode}:${currentPlayTarget.itemId}:${itemKey}`;
+    if (lastViewedPlayKeyRef.current === viewKey) return;
+    lastViewedPlayKeyRef.current = viewKey;
+    roundStartedAtRef.current = Date.now();
+    recordPlayEvent({ ...currentPlayTarget, action: "view", itemKey });
+  }, [currentPlayTarget, profilesReady, recordPlayEvent]);
+
   const currentIssueTarget = (): Omit<ContentIssueReport, "id" | "createdAt" | "profileId"> => {
     if (showCollection) {
       return {
         mode: "collection",
         topic,
         itemId: "collection",
+        questionKey: "collection",
         title: "Collection",
         prompt: "Collection card or source issue",
       };
     }
 
-    if (activeChallengeMode === "sort") return { mode: activeChallengeMode, topic: sortRound.topic, itemId: sortRound.id, title: "Sort round", prompt: sortRound.prompt, image: sortRound.cards[0]?.image };
-    if (activeChallengeMode === "fact") return { mode: activeChallengeMode, topic: factRound.topic, itemId: factRound.id, title: factRound.imageAlt, prompt: factRound.statement, image: factRound.image };
-    if (activeChallengeMode === "peek") return { mode: activeChallengeMode, topic: revealRound.topic, itemId: revealRound.id, title: revealRound.card.title, prompt: revealRound.prompt, image: revealRound.card.image };
-    if (activeChallengeMode === "number") return { mode: activeChallengeMode, topic: numberRound.topic, itemId: numberRound.id, title: numberRound.biggerLabel, prompt: numberRound.prompt, image: numberRound.cards[0]?.image };
-    if (activeChallengeMode === "odd") return { mode: activeChallengeMode, topic: oddRound.topic, itemId: oddRound.id, title: "Odd one round", prompt: oddRound.prompt, image: oddRound.cards[0]?.image };
-    if (activeChallengeMode === "trumps") return { mode: activeChallengeMode, topic: topTrumpRound.topic, itemId: topTrumpRound.id, title: topTrumpRound.player.title, prompt: topTrumpRound.prompt, image: topTrumpRound.player.image };
+    if (activeChallengeMode === "sort") return { mode: activeChallengeMode, topic: sortRound.topic, itemId: sortRound.id, questionKey: stableRoundKey(sortRound.id), title: "Sort round", prompt: sortRound.prompt, image: sortRound.cards[0]?.image };
+    if (activeChallengeMode === "fact") return { mode: activeChallengeMode, topic: factRound.topic, itemId: factRound.id, questionKey: stableRoundKey(factRound.id), title: factRound.imageAlt, prompt: factRound.statement, image: factRound.image };
+    if (activeChallengeMode === "peek") return { mode: activeChallengeMode, topic: revealRound.topic, itemId: revealRound.id, questionKey: stableRoundKey(revealRound.id), title: revealRound.card.title, prompt: revealRound.prompt, image: revealRound.card.image };
+    if (activeChallengeMode === "geo") return { mode: activeChallengeMode, topic: geoRound.topic, itemId: geoRound.id, questionKey: stableRoundKey(geoRound.id), title: geoRound.card.title, prompt: geoRound.prompt, image: geoRound.card.image };
+    if (activeChallengeMode === "number") return { mode: activeChallengeMode, topic: numberRound.topic, itemId: numberRound.id, questionKey: stableRoundKey(numberRound.id), title: numberRound.biggerLabel, prompt: numberRound.prompt, image: numberRound.cards[0]?.image };
+    if (activeChallengeMode === "odd") return { mode: activeChallengeMode, topic: oddRound.topic, itemId: oddRound.id, questionKey: stableRoundKey(oddRound.id), title: "Odd one round", prompt: oddRound.prompt, image: oddRound.cards[0]?.image };
+    if (activeChallengeMode === "trumps") return { mode: activeChallengeMode, topic: topTrumpRound.topic, itemId: topTrumpRound.id, questionKey: stableRoundKey(topTrumpRound.id), title: topTrumpRound.player.title, prompt: topTrumpRound.prompt, image: topTrumpRound.player.image };
 
     return {
       mode: activeChallengeMode,
       topic: question?.topic ?? topic,
       itemId: question?.id ?? "unknown",
       questionId: question?.id,
+      questionKey: question ? questionMemoryKey(question) : undefined,
       questionKind: question?.kind,
       title: question?.imageAlt ?? "Question",
       prompt: question?.prompt ?? "Question issue",
@@ -480,6 +956,18 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setIssueFlash(true);
     window.setTimeout(() => setIssueFlash(false), 1800);
     setCelebration("Flagged for content review. Saving the note locally...");
+    recordPlayEvent({
+      action: "flag",
+      mode: mode === "mix" ? "mix" : activeChallengeMode,
+      challengeMode: showCollection ? "collection" : activeChallengeMode,
+      topic: report.topic,
+      itemId: report.itemId,
+      itemKey: report.questionKey,
+      questionKind: report.questionKind,
+      prompt: report.prompt,
+      title: report.title,
+      roundIndex: showCollection ? undefined : questionIndex + 1,
+    });
 
     try {
       const response = await fetch("/api/content-issues", {
@@ -565,6 +1053,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setSortChecked(false);
     setFactSelected(null);
     setRevealSelected(null);
+    setGeoSelected(null);
     setNumberSelected(null);
     setOddSelected(null);
     setTopTrumpSelected(null);
@@ -591,6 +1080,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setSortRound(buildSortForScope(scope, nextProfile.progress.difficulty, seed + 31));
     setFactRound(buildFactForScope(scope, nextProfile.progress.difficulty, seed + 47));
     setRevealRound(buildRevealForScope(scope, nextProfile.progress.difficulty, seed + 61));
+    setGeoRound(buildGeoForScope(scope, nextProfile.progress.difficulty, seed + 73));
     setNumberRound(buildNumberForScope(scope, nextProfile.progress.difficulty, seed + 89));
     setOddRound(buildOddForScope(scope, nextProfile.progress.difficulty, seed + 97));
     setTopTrumpRound(buildTopTrumpForScope(scope, nextProfile.progress.difficulty, seed + 113));
@@ -599,12 +1089,14 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const setQuestionDifficulty = (nextDifficulty: Difficulty) => {
     if (nextDifficulty === progress.difficulty) return;
     const seed = freshSeed(nextDifficulty * 53);
+    recordSetupEvent("difficulty", difficultyLabel(nextDifficulty), nextDifficulty);
     setProgress((current) => ({ ...current, difficulty: nextDifficulty }));
     resetRunState();
     setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, nextDifficulty, seed, progress.seenIds, selectedMixModes));
     setSortRound(buildSortForScope(currentTopicScope, nextDifficulty, seed + 41));
     setFactRound(buildFactForScope(currentTopicScope, nextDifficulty, seed + 47));
     setRevealRound(buildRevealForScope(currentTopicScope, nextDifficulty, seed + 53));
+    setGeoRound(buildGeoForScope(currentTopicScope, nextDifficulty, seed + 59));
     setNumberRound(buildNumberForScope(currentTopicScope, nextDifficulty, seed + 67));
     setOddRound(buildOddForScope(currentTopicScope, nextDifficulty, seed + 71));
     setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, nextDifficulty, seed + 79));
@@ -661,6 +1153,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const nextProfile = { ...activeProfile, interests: safeInterests };
     const nextTopic = playableTopic(topic, safeInterests);
     const seed = freshSeed(seedBasis.length + safeInterests.length * 41);
+    recordSetupEvent("topics", safeInterests.join(","));
 
     setProfilesState((current) => ({
       ...current,
@@ -690,6 +1183,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const applyMixModes = (nextModes: ChallengeMode[], seedBasis: string, message: string) => {
     const safeModes = nextModes.length ? nextModes : starterMixModes;
     const seed = freshSeed(seedBasis.length + safeModes.length * 31);
+    recordSetupEvent("game-types", safeModes.join(","));
     setMode("mix");
     setShowCollection(false);
     setMixModes(safeModes);
@@ -698,6 +1192,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setSortRound(buildSortForScope(currentTopicScope, progress.difficulty, seed + 29));
     setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed + 37));
     setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed + 43));
+    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed + 47));
     setNumberRound(buildNumberForScope(currentTopicScope, progress.difficulty, seed + 53));
     setOddRound(buildOddForScope(currentTopicScope, progress.difficulty, seed + 59));
     setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed + 67));
@@ -725,20 +1220,51 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const answer = (choice: string) => {
     if (!question || selected !== null) return;
     const correct = isQuestionAnswerCorrect(question, choice);
+    const itemKey = questionMemoryKey(question);
     const xpGain = correct ? (activeChallengeMode === "versus" ? 24 : 18) + progress.difficulty * 4 : 6;
     const result = reward({
       correct,
       xpGain,
       topicName: question.topic,
       modeName: mode === "mix" ? "mix" : activeChallengeMode,
-      seenId: question.id,
+      seenId: itemKey,
       unlockTitles: [question.imageAlt],
+    });
+    recordChallengeEvent(activeChallengeMode, {
+      action: "answer",
+      topic: question.topic,
+      itemId: question.id,
+      itemKey,
+      questionKind: question.kind,
+      prompt: question.prompt,
+      title: question.imageAlt,
+      choice,
+      answer: question.answer,
+      correct,
+      roundIndex: questionIndex + 1,
     });
 
     setSelected(choice);
     setSessionCorrect((value) => value + (correct ? 1 : 0));
     setCelebration(correct ? praise[(questionIndex + progress.streak) % praise.length] : "Good try. The clue below helps.");
     setLastResult(result);
+  };
+
+  const skipQuestion = () => {
+    if (question) {
+      recordChallengeEvent(activeChallengeMode, {
+        action: "skip",
+        topic: question.topic,
+        itemId: question.id,
+        itemKey: questionMemoryKey(question),
+        questionKind: question.kind,
+        prompt: question.prompt,
+        title: question.imageAlt,
+        answer: question.answer,
+        roundIndex: questionIndex + 1,
+      });
+    }
+    advance();
   };
 
   const advanceMix = () => {
@@ -759,12 +1285,14 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setSortChecked(false);
     setFactSelected(null);
     setRevealSelected(null);
+    setGeoSelected(null);
     setNumberSelected(null);
     setOddSelected(null);
     setTopTrumpSelected(null);
     setSortRound(buildSortForScope(currentTopicScope, progress.difficulty, seed + 29));
     setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed + 37));
     setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed + 43));
+    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed + 47));
     setNumberRound(buildNumberForScope(currentTopicScope, progress.difficulty, seed + 53));
     setOddRound(buildOddForScope(currentTopicScope, progress.difficulty, seed + 59));
     setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed + 67));
@@ -796,6 +1324,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const checkSort = () => {
     if (sortChecked || sortPicked.length !== sortRound.answerIds.length) return;
     const correct = isSortAnswerCorrect(sortRound, sortPicked);
+    const itemKey = stableRoundKey(sortRound.id);
     const xpGain = correct ? 30 + progress.difficulty * 6 : 8;
     const unlocked = sortRound.cards.filter((card) => sortRound.answerIds.includes(card.id)).map((card) => card.title);
     const result = reward({
@@ -803,8 +1332,21 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       xpGain,
       topicName: sortRound.topic,
       modeName: mode === "mix" ? "mix" : "sort",
-      seenId: sortRound.id,
+      seenId: itemKey,
       unlockTitles: unlocked,
+    });
+    recordChallengeEvent("sort", {
+      action: "answer",
+      topic: sortRound.topic,
+      itemId: sortRound.id,
+      itemKey,
+      questionKind: "sort",
+      prompt: sortRound.prompt,
+      title: "Sort round",
+      choice: sortPicked.join(","),
+      answer: sortRound.answerIds.join(","),
+      correct,
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
     });
     setSortChecked(true);
     setMiniRunAnswered((value) => value + 1);
@@ -823,17 +1365,47 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setCelebration("New sort board.");
   };
 
+  const skipSortRound = () => {
+    recordChallengeEvent("sort", {
+      action: "skip",
+      topic: sortRound.topic,
+      itemId: sortRound.id,
+      itemKey: stableRoundKey(sortRound.id),
+      questionKind: "sort",
+      prompt: sortRound.prompt,
+      title: "Sort round",
+      answer: sortRound.answerIds.join(","),
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
+    });
+    if (mode === "mix") advanceMix();
+    else nextSortRound();
+  };
+
   const answerFact = (choice: "True" | "False") => {
     if (factSelected) return;
     const correct = choice === factRound.answer;
+    const itemKey = stableRoundKey(factRound.id);
     const xpGain = correct ? 22 + progress.difficulty * 5 : 7;
     const result = reward({
       correct,
       xpGain,
       topicName: factRound.topic,
       modeName: mode === "mix" ? "mix" : "fact",
-      seenId: factRound.id,
+      seenId: itemKey,
       unlockTitles: [factRound.imageAlt],
+    });
+    recordChallengeEvent("fact", {
+      action: "answer",
+      topic: factRound.topic,
+      itemId: factRound.id,
+      itemKey,
+      questionKind: "fact",
+      prompt: factRound.statement,
+      title: factRound.imageAlt,
+      choice,
+      answer: factRound.answer,
+      correct,
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
     });
     setFactSelected(choice);
     setMiniRunAnswered((value) => value + 1);
@@ -851,9 +1423,26 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setCelebration("New fact card.");
   };
 
+  const skipFactRound = () => {
+    recordChallengeEvent("fact", {
+      action: "skip",
+      topic: factRound.topic,
+      itemId: factRound.id,
+      itemKey: stableRoundKey(factRound.id),
+      questionKind: "fact",
+      prompt: factRound.statement,
+      title: factRound.imageAlt,
+      answer: factRound.answer,
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
+    });
+    if (mode === "mix") advanceMix();
+    else nextFactRound();
+  };
+
   const answerReveal = (choice: string, revealedCount: number) => {
     if (revealSelected) return;
     const correct = choice === revealRound.answer;
+    const itemKey = stableRoundKey(revealRound.id);
     const speedBonus = Math.max(0, 6 - Math.floor(revealedCount / 3));
     const xpGain = correct ? 24 + progress.difficulty * 5 + speedBonus : 7;
     const result = reward({
@@ -861,8 +1450,21 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       xpGain,
       topicName: revealRound.topic,
       modeName: mode === "mix" ? "mix" : "peek",
-      seenId: revealRound.id,
+      seenId: itemKey,
       unlockTitles: [revealRound.card.title],
+    });
+    recordChallengeEvent("peek", {
+      action: "answer",
+      topic: revealRound.topic,
+      itemId: revealRound.id,
+      itemKey,
+      questionKind: "peek",
+      prompt: revealRound.prompt,
+      title: revealRound.card.title,
+      choice,
+      answer: revealRound.answer,
+      correct,
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
     });
 
     setRevealSelected(choice);
@@ -881,17 +1483,105 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setCelebration("New picture peek.");
   };
 
+  const skipRevealRound = () => {
+    recordChallengeEvent("peek", {
+      action: "skip",
+      topic: revealRound.topic,
+      itemId: revealRound.id,
+      itemKey: stableRoundKey(revealRound.id),
+      questionKind: "peek",
+      prompt: revealRound.prompt,
+      title: revealRound.card.title,
+      answer: revealRound.answer,
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
+    });
+    if (mode === "mix") advanceMix();
+    else nextRevealRound();
+  };
+
+  const answerGeo = (choiceId: string) => {
+    if (geoSelected !== null) return;
+    const correct = choiceId === geoRound.answerId;
+    const itemKey = stableRoundKey(geoRound.id);
+    const xpGain = correct ? 26 + progress.difficulty * 6 : 8;
+    const result = reward({
+      correct,
+      xpGain,
+      topicName: geoRound.topic,
+      modeName: mode === "mix" ? "mix" : "geo",
+      seenId: itemKey,
+      unlockTitles: [geoRound.card.title],
+    });
+    recordChallengeEvent("geo", {
+      action: "answer",
+      topic: geoRound.topic,
+      itemId: geoRound.id,
+      itemKey,
+      questionKind: "geo",
+      prompt: geoRound.prompt,
+      title: geoRound.card.title,
+      choice: geoRound.choices.find((choice) => choice.id === choiceId)?.label ?? choiceId,
+      answer: geoRound.answerLabel,
+      correct,
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
+    });
+    setGeoSelected(choiceId);
+    setMiniRunAnswered((value) => value + 1);
+    setMiniRunCorrect((value) => value + (correct ? 1 : 0));
+    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
+    setCelebration(correct ? "Map found!" : "Good try. Trace it on the map.");
+    setLastResult(result);
+  };
+
+  const nextGeoRound = () => {
+    const seed = freshSeed(miniRunAnswered * 29);
+    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed));
+    setGeoSelected(null);
+    setLastResult(null);
+    setCelebration("New map clue.");
+  };
+
+  const skipGeoRound = () => {
+    recordChallengeEvent("geo", {
+      action: "skip",
+      topic: geoRound.topic,
+      itemId: geoRound.id,
+      itemKey: stableRoundKey(geoRound.id),
+      questionKind: "geo",
+      prompt: geoRound.prompt,
+      title: geoRound.card.title,
+      answer: geoRound.answerLabel,
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
+    });
+    if (mode === "mix") advanceMix();
+    else nextGeoRound();
+  };
+
   const answerNumber = (choice: number) => {
     if (numberSelected !== null) return;
     const correct = choice === numberRound.answer;
+    const itemKey = stableRoundKey(numberRound.id);
     const xpGain = correct ? 28 + progress.difficulty * 6 : 8;
     const result = reward({
       correct,
       xpGain,
       topicName: numberRound.topic,
       modeName: mode === "mix" ? "mix" : "number",
-      seenId: numberRound.id,
+      seenId: itemKey,
       unlockTitles: numberRound.cards.map((card) => card.title),
+    });
+    recordChallengeEvent("number", {
+      action: "answer",
+      topic: numberRound.topic,
+      itemId: numberRound.id,
+      itemKey,
+      questionKind: `number-${numberRound.operation}`,
+      prompt: numberRound.prompt,
+      title: numberRound.biggerLabel,
+      choice: String(choice),
+      answer: String(numberRound.answer),
+      correct,
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
     });
     setNumberSelected(choice);
     setMiniRunAnswered((value) => value + 1);
@@ -909,17 +1599,49 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setCelebration("New number case.");
   };
 
+  const skipNumberRound = () => {
+    recordChallengeEvent("number", {
+      action: "skip",
+      topic: numberRound.topic,
+      itemId: numberRound.id,
+      itemKey: stableRoundKey(numberRound.id),
+      questionKind: `number-${numberRound.operation}`,
+      prompt: numberRound.prompt,
+      title: numberRound.biggerLabel,
+      answer: String(numberRound.answer),
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
+    });
+    if (mode === "mix") advanceMix();
+    else nextNumberRound();
+  };
+
   const answerOdd = (cardId: string) => {
     if (oddSelected !== null) return;
     const correct = cardId === oddRound.answerId;
+    const itemKey = stableRoundKey(oddRound.id);
+    const choiceCard = oddRound.cards.find((card) => card.id === cardId);
+    const answerCard = oddRound.cards.find((card) => card.id === oddRound.answerId);
     const xpGain = correct ? 26 + progress.difficulty * 5 : 7;
     const result = reward({
       correct,
       xpGain,
       topicName: oddRound.topic,
       modeName: mode === "mix" ? "mix" : "odd",
-      seenId: oddRound.id,
+      seenId: itemKey,
       unlockTitles: oddRound.cards.map((card) => card.title),
+    });
+    recordChallengeEvent("odd", {
+      action: "answer",
+      topic: oddRound.topic,
+      itemId: oddRound.id,
+      itemKey,
+      questionKind: "odd",
+      prompt: oddRound.prompt,
+      title: "Odd one round",
+      choice: choiceCard?.title ?? cardId,
+      answer: answerCard?.title ?? oddRound.answerId,
+      correct,
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
     });
     setOddSelected(cardId);
     setMiniRunAnswered((value) => value + 1);
@@ -935,6 +1657,23 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setOddSelected(null);
     setLastResult(null);
     setCelebration("New logic set.");
+  };
+
+  const skipOddRound = () => {
+    const answerCard = oddRound.cards.find((card) => card.id === oddRound.answerId);
+    recordChallengeEvent("odd", {
+      action: "skip",
+      topic: oddRound.topic,
+      itemId: oddRound.id,
+      itemKey: stableRoundKey(oddRound.id),
+      questionKind: "odd",
+      prompt: oddRound.prompt,
+      title: "Odd one round",
+      answer: answerCard?.title ?? oddRound.answerId,
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
+    });
+    if (mode === "mix") advanceMix();
+    else nextOddRound();
   };
 
   const topTrumpStat = (round: TopTrumpRound, statId: string) => {
@@ -953,14 +1692,28 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const stats = topTrumpStat(topTrumpRound, statId);
     if (!stats) return;
     const correct = playerWinsTopTrump(stats.playerStat, stats.computerStat);
+    const itemKey = stableRoundKey(topTrumpRound.id);
     const xpGain = correct ? 30 + progress.difficulty * 6 : 8;
     const result = reward({
       correct,
       xpGain,
       topicName: topTrumpRound.topic,
       modeName: mode === "mix" ? "mix" : "trumps",
-      seenId: topTrumpRound.id,
+      seenId: itemKey,
       unlockTitles: [topTrumpRound.player.title, topTrumpRound.computer.title],
+    });
+    recordChallengeEvent("trumps", {
+      action: "answer",
+      topic: topTrumpRound.topic,
+      itemId: topTrumpRound.id,
+      itemKey,
+      questionKind: "trumps",
+      prompt: topTrumpRound.prompt,
+      title: topTrumpRound.player.title,
+      choice: stats.playerStat.label,
+      answer: `${stats.playerStat.display} vs ${stats.computerStat.display}`,
+      correct,
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
     });
     setTopTrumpSelected(statId);
     setMiniRunAnswered((value) => value + 1);
@@ -978,16 +1731,33 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setCelebration("New Top Trumps deal.");
   };
 
+  const skipTopTrumpRound = () => {
+    recordChallengeEvent("trumps", {
+      action: "skip",
+      topic: topTrumpRound.topic,
+      itemId: topTrumpRound.id,
+      itemKey: stableRoundKey(topTrumpRound.id),
+      questionKind: "trumps",
+      prompt: topTrumpRound.prompt,
+      title: topTrumpRound.player.title,
+      roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
+    });
+    if (mode === "mix") advanceMix();
+    else nextTopTrumpRound();
+  };
+
   const resetProgress = () => {
     if (typeof window !== "undefined" && !window.confirm("Reset this player's progress?")) return;
     const seed = freshSeed(211);
     const reset = freshProgress();
+    recordSetupEvent("reset-progress", "confirmed", reset.difficulty);
     setProgress(reset);
     setShowCollection(false);
     setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, reset.difficulty, seed, reset.seenIds, selectedMixModes));
     setSortRound(buildSortForScope(currentTopicScope, reset.difficulty, seed + 29));
     setFactRound(buildFactForScope(currentTopicScope, reset.difficulty, seed + 37));
     setRevealRound(buildRevealForScope(currentTopicScope, reset.difficulty, seed + 43));
+    setGeoRound(buildGeoForScope(currentTopicScope, reset.difficulty, seed + 47));
     setNumberRound(buildNumberForScope(currentTopicScope, reset.difficulty, seed + 53));
     setOddRound(buildOddForScope(currentTopicScope, reset.difficulty, seed + 59));
     setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, reset.difficulty, seed + 67));
@@ -1066,7 +1836,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             roundContext={currentRoundContext}
             onAnswer={answer}
             onNext={advance}
-            onSkip={advance}
+            onSkip={skipQuestion}
             issueFlash={issueFlash}
             onFlagIssue={flagCurrentIssue}
           />
@@ -1092,7 +1862,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             }}
             onCheck={checkSort}
             onNext={mode === "mix" ? advanceMix : nextSortRound}
-            onSkip={mode === "mix" ? advanceMix : nextSortRound}
+            onSkip={skipSortRound}
           />
         )}
 
@@ -1108,7 +1878,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             roundContext={`${topicLabel(factRound.topic)} · ${gameTypeLabel("fact")}`}
             onAnswer={answerFact}
             onNext={mode === "mix" ? advanceMix : nextFactRound}
-            onSkip={mode === "mix" ? advanceMix : nextFactRound}
+            onSkip={skipFactRound}
           />
         )}
 
@@ -1125,7 +1895,23 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             roundContext={`${topicLabel(revealRound.topic)} · ${gameTypeLabel("peek")}`}
             onAnswer={answerReveal}
             onNext={mode === "mix" ? advanceMix : nextRevealRound}
-            onSkip={mode === "mix" ? advanceMix : nextRevealRound}
+            onSkip={skipRevealRound}
+          />
+        )}
+
+        {!showCollection && activeChallengeMode === "geo" && (
+          <GeoMode
+            round={geoRound}
+            selected={geoSelected}
+            result={lastResult}
+            miniRunAnswered={miniRunAnswered}
+            miniRunCorrect={miniRunCorrect}
+            celebration={celebration}
+            difficulty={progress.difficulty}
+            roundContext={`${topicLabel(geoRound.topic)} · ${gameTypeLabel("geo")}`}
+            onAnswer={answerGeo}
+            onNext={mode === "mix" ? advanceMix : nextGeoRound}
+            onSkip={skipGeoRound}
           />
         )}
 
@@ -1141,7 +1927,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             roundContext={`${topicLabel(numberRound.topic)} · ${gameTypeLabel("number")}`}
             onAnswer={answerNumber}
             onNext={mode === "mix" ? advanceMix : nextNumberRound}
-            onSkip={mode === "mix" ? advanceMix : nextNumberRound}
+            onSkip={skipNumberRound}
           />
         )}
 
@@ -1157,7 +1943,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             roundContext={`${topicLabel(topTrumpRound.topic)} · ${gameTypeLabel("trumps")}`}
             onAnswer={answerTopTrump}
             onNext={mode === "mix" ? advanceMix : nextTopTrumpRound}
-            onSkip={mode === "mix" ? advanceMix : nextTopTrumpRound}
+            onSkip={skipTopTrumpRound}
           />
         )}
 
@@ -1173,7 +1959,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             roundContext={`${topicLabel(oddRound.topic)} · ${gameTypeLabel("odd")}`}
             onAnswer={answerOdd}
             onNext={mode === "mix" ? advanceMix : nextOddRound}
-            onSkip={mode === "mix" ? advanceMix : nextOddRound}
+            onSkip={skipOddRound}
           />
         )}
       </section>
@@ -2029,6 +2815,204 @@ function RevealMode({
   );
 }
 
+function GeoMode({
+  round,
+  selected,
+  result,
+  miniRunAnswered,
+  miniRunCorrect,
+  celebration,
+  difficulty,
+  roundContext,
+  onAnswer,
+  onNext,
+  onSkip,
+}: {
+  round: GeoRound;
+  selected: string | null;
+  result: ResultState | null;
+  miniRunAnswered: number;
+  miniRunCorrect: number;
+  celebration: string;
+  difficulty: Difficulty;
+  roundContext: string;
+  onAnswer: (choiceId: string) => void;
+  onNext: () => void;
+  onSkip: () => void;
+}) {
+  const answered = selected !== null;
+  const selectedChoice = round.choices.find((choice) => choice.id === selected);
+
+  return (
+    <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+      <GeoLocatorStage round={round} selected={selected} answered={answered} onAnswer={onAnswer} />
+
+      <article className="flex min-h-0 flex-col rounded-lg border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421] min-[900px]:overflow-y-auto">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex min-w-0 items-center gap-2">
+            <DifficultyPill difficulty={difficulty} />
+            <RoundContextPill label={roundContext} />
+          </div>
+          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} mapped</p>
+        </div>
+
+        <h2 className="mt-2 text-[clamp(1.25rem,2.8vw,2.4rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+
+        <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-3">
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Map clue</p>
+          <p className="mt-1 text-sm font-black leading-snug text-[#102f36] md:text-base">
+            {answered ? `${round.answerLabel} is the place to remember.` : round.mapHint}
+          </p>
+          {selectedChoice && selectedChoice.id !== round.answerId && (
+            <p className="mt-1 text-xs font-bold leading-tight text-[#9f3f2b]">Your pin: {selectedChoice.label}</p>
+          )}
+        </div>
+
+        <div className="mt-3 grid shrink-0 gap-2">
+          {round.choices.map((choice, index) => {
+            const letter = String.fromCharCode(65 + index);
+            const correctChoice = answered && choice.id === round.answerId;
+            const chosenWrong = selected === choice.id && choice.id !== round.answerId;
+            return (
+              <button
+                key={`${round.id}-${choice.id}-choice`}
+                type="button"
+                onClick={() => onAnswer(choice.id)}
+                className={`min-h-14 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
+                  correctChoice
+                    ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
+                    : chosenWrong
+                      ? "border-[#092421] bg-[#f59a7d] shadow-[3px_3px_0_#092421]"
+                      : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf]"
+                }`}
+              >
+                <span className="grid grid-cols-[2rem_1fr] items-center gap-2">
+                  <span className="grid h-8 w-8 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-sm font-black text-[#102f36]">{letter}</span>
+                  <span className="min-w-0">
+                    <span className="block text-base font-black leading-tight text-[#102f36] md:text-lg">{choice.label}</span>
+                    <span className="block text-[10px] font-black uppercase tracking-[0.1em] text-[#72543e]">{choice.mapNote}</span>
+                  </span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {answered && result && (
+          <FeedbackPanel
+            isCorrect={result.correct}
+            xpGain={result.xpGain}
+            leveledUp={result.leveledUp}
+            celebration={celebration}
+            correctAnswer={round.answerLabel}
+            explanation={round.explanation}
+            locations={[round.location]}
+            note="Good try."
+            isLast={false}
+            onNext={onNext}
+          />
+        )}
+
+        {!answered && <SkipButton onClick={onSkip} />}
+      </article>
+    </section>
+  );
+}
+
+function GeoLocatorStage({
+  round,
+  selected,
+  answered,
+  onAnswer,
+}: {
+  round: GeoRound;
+  selected: string | null;
+  answered: boolean;
+  onAnswer: (choiceId: string) => void;
+}) {
+  return (
+    <article className="grid min-h-[540px] gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0 min-[900px]:grid-rows-[minmax(168px,.42fr)_minmax(292px,.58fr)]">
+      <div className="relative min-h-[180px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
+        <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.card.topic} />
+        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421]">
+          Find this place
+        </div>
+        <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-2 shadow-[2px_2px_0_#092421]">
+          <p className="text-lg font-black leading-tight text-[#102f36]">{round.card.title}</p>
+          <p className="mt-0.5 text-xs font-bold leading-tight text-[#5f6b5d]">Image: {round.card.imageCredit}</p>
+        </div>
+      </div>
+
+      <GeoMap round={round} selected={selected} answered={answered} onAnswer={onAnswer} />
+    </article>
+  );
+}
+
+function GeoMap({
+  round,
+  selected,
+  answered,
+  onAnswer,
+}: {
+  round: GeoRound;
+  selected: string | null;
+  answered: boolean;
+  onAnswer: (choiceId: string) => void;
+}) {
+  return (
+    <div className="relative min-h-[320px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#b9dfdf]">
+      <svg aria-hidden="true" viewBox="0 0 100 56" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
+        <rect width="100" height="56" fill="#b9dfdf" />
+        <path d="M8 15 L16 9 L28 10 L35 17 L31 26 L22 28 L15 24 Z" fill="#d9c77e" stroke="#375b52" strokeWidth="0.7" />
+        <path d="M24 29 L31 31 L35 40 L31 51 L24 48 L21 37 Z" fill="#d9c77e" stroke="#375b52" strokeWidth="0.7" />
+        <path d="M44 11 L52 9 L60 13 L57 20 L49 21 L43 17 Z" fill="#d9c77e" stroke="#375b52" strokeWidth="0.7" />
+        <path d="M50 22 L58 21 L64 28 L62 40 L55 46 L49 37 Z" fill="#d9c77e" stroke="#375b52" strokeWidth="0.7" />
+        <path d="M60 11 L76 9 L91 16 L86 29 L72 27 L64 21 Z" fill="#d9c77e" stroke="#375b52" strokeWidth="0.7" />
+        <path d="M77 35 L87 34 L93 41 L89 48 L78 46 Z" fill="#d9c77e" stroke="#375b52" strokeWidth="0.7" />
+        <path d="M16 51 L87 51 L95 55 L8 55 Z" fill="#e8efe9" stroke="#375b52" strokeWidth="0.7" />
+        <line x1="0" y1="28" x2="100" y2="28" stroke="#23645b" strokeDasharray="2 2" strokeWidth="0.7" />
+        <line x1="50" y1="0" x2="50" y2="56" stroke="#23645b" strokeDasharray="2 2" strokeWidth="0.55" />
+      </svg>
+
+      <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white/95 px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#092421]">
+        World map
+      </div>
+      <div className="absolute left-2 top-[50%] -translate-y-1/2 rounded-md bg-white/85 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-[0.08em] text-[#23645b]">
+        Equator
+      </div>
+      {round.choices.map((choice, index) => {
+        const letter = String.fromCharCode(65 + index);
+        const correctPin = answered && choice.id === round.answerId;
+        const chosenWrong = selected === choice.id && choice.id !== round.answerId;
+        const quiet = answered && !correctPin && !chosenWrong;
+        return (
+          <button
+            key={`${round.id}-${choice.id}-pin`}
+            type="button"
+            aria-label={`Choose map pin ${letter}: ${choice.label}`}
+            onClick={() => onAnswer(choice.id)}
+            className={`absolute z-10 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition active:translate-y-[-45%] ${
+              correctPin
+                ? "border-[#092421] bg-[#70d392]"
+                : chosenWrong
+                  ? "border-[#092421] bg-[#f59a7d]"
+                  : quiet
+                    ? "border-[#375b52] bg-white/65"
+                    : "border-[#092421] bg-[#f0c84b] hover:bg-[#fff1bf]"
+            }`}
+            style={{ left: `${choice.point.x}%`, top: `${choice.point.y}%` }}
+          >
+            {letter}
+          </button>
+        );
+      })}
+      <div className="absolute bottom-2 left-2 right-2 rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">
+        {answered ? `Answer: ${round.answerLabel}` : "Tap a lettered pin, then match it to the place list."}
+      </div>
+    </div>
+  );
+}
+
 function NumberMode({
   round,
   selected,
@@ -2462,6 +3446,7 @@ function CollectionBook({
           <HudStat label="Peek" value={modeWins.peek.toString()} />
           <HudStat label="Numbers" value={modeWins.number.toString()} />
           <HudStat label="Odd" value={modeWins.odd.toString()} />
+          <HudStat label="Geo" value={modeWins.geo.toString()} />
         </div>
         <div className="mt-4 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
           <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#72543e]">Research library</p>

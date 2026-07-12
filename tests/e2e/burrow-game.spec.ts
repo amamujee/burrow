@@ -1,34 +1,44 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One"];
+const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
+const topicLabels = ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Universe", "Jet Hangar", "Dinosaur Lab", "Tallest Mountains", "Tall Trees", "Bridges & Tunnels"];
 
 const setupSummary = (page: Page) => page.locator("summary").filter({ hasText: "Setup" });
 const setupDetails = (page: Page) => setupSummary(page).locator("xpath=..");
+const buttonForLabel = (page: Page, label: string) => page.getByRole("button", { name: new RegExp(label.replace("/", "\\/")) });
 
 const chooseOnlyMode = async (page: Page, target: string) => {
   await setupSummary(page).click();
   for (const label of modeLabels) {
-    if (label !== target) await page.getByRole("button", { name: new RegExp(label.replace("/", "\\/")) }).click();
+    const button = buttonForLabel(page, label);
+    const selected = (await button.getAttribute("aria-pressed")) === "true";
+    if (label === target && !selected) await button.click();
+    if (label !== target && selected) await button.click();
   }
   await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
+  await expect(setupSummary(page)).toContainText("1 games");
 };
 
 const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
   await setupSummary(page).click();
-  const targetButton = page.getByRole("button", { name: new RegExp(target) });
+  const targetButton = buttonForLabel(page, target);
   if ((await targetButton.getAttribute("aria-pressed")) !== "true") await targetButton.click();
   await expect(targetButton).toHaveAttribute("aria-pressed", "true");
 
-  for (const label of ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Universe", "Jet Hangar"]) {
-    const button = page.getByRole("button", { name: new RegExp(label) });
+  for (const label of topicLabels) {
+    const button = buttonForLabel(page, label);
     if (label !== target && (await button.getAttribute("aria-pressed")) === "true") await button.click();
   }
   await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
+  await expect(setupSummary(page)).toContainText("1 topics");
 };
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/content-issues", async (route) => {
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
+  });
+  await page.route("**/api/play-events", async (route) => {
+    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, accepted: 1 }) });
   });
   await page.addInitScript(() => {
     window.localStorage.clear();
@@ -79,6 +89,35 @@ test("head to head comparison images can submit an answer", async ({ page }) => 
   await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
 });
 
+test("play events capture anonymous question quality context", async ({ page }) => {
+  await chooseOnlyMode(page, "Head to Head");
+
+  await page.getByRole("button", { name: /^Choose [AB]:/ }).first().click();
+  await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
+
+  const events = await page.evaluate(() => JSON.parse(window.localStorage.getItem("burrow-play-events-v1") ?? "[]") as Record<string, unknown>[]);
+  const answerEvent = events.find((event) => event.action === "answer" && event.challengeMode === "versus");
+  const viewEvent = events.find((event) => event.action === "view" && event.challengeMode === "versus");
+
+  expect(viewEvent).toBeTruthy();
+  expect(answerEvent).toMatchObject({
+    schemaVersion: 2,
+    action: "answer",
+    challengeMode: "versus",
+    mode: "mix",
+    questionKind: expect.any(String),
+    itemKey: expect.any(String),
+    itemHash: expect.any(String),
+    promptHash: expect.any(String),
+    titleHash: expect.any(String),
+    sessionId: expect.any(String),
+    profileHash: expect.any(String),
+    answerMs: expect.any(Number),
+  });
+  expect(answerEvent?.profileHash).not.toBe("player-1");
+  expect(answerEvent?.itemKey).not.toMatch(/^\d+-/);
+});
+
 test("number rounds show an arithmetic equation and accept an answer", async ({ page }) => {
   await chooseOnlyMode(page, "Numbers");
 
@@ -86,7 +125,7 @@ test("number rounds show an arithmetic equation and accept an answer", async ({ 
   await expect(page.getByText(/\d[\d,]*\s[+-]\s\d[\d,]*(\s\+\s\d[\d,]*)?\s=\s\?/)).toBeVisible();
 
   await page.locator("button").filter({ hasText: /\d[\d,]*\s(?:ft|mph|SHU|mi|moons)/ }).first().click();
-  await expect(page.getByText(/Answer:/)).toBeVisible();
+  await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
 });
 
 test("building answers teach location without spoiling the question", async ({ page }) => {
@@ -149,6 +188,14 @@ test("top trumps lets player choose a category against the computer", async ({ p
   await page.locator("button").filter({ hasText: /higher wins|lower wins/ }).first().click();
   await expect(page.getByText(/Player wins the matchup|Computer wins the matchup/)).toBeVisible();
   await expect(page.getByText("Computer card", { exact: true })).not.toBeVisible();
+});
+
+test("pepper top trumps uses concrete plant stats", async ({ page }) => {
+  await chooseOnlyMode(page, "Top Trumps");
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+
+  await expect(page.getByText("Plant height").first()).toBeVisible();
+  await expect(page.getByText("Natural roots")).toHaveCount(0);
 });
 
 test("setup menu opens and fits on mobile", async ({ page, isMobile }) => {

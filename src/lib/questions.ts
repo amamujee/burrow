@@ -162,6 +162,46 @@ const roundedComparisonCard = (card: ComparisonCard, value: number, unit: string
   meterValue: value,
 });
 
+const seedPrefixPattern = /^\d+-/;
+const compactKeyPart = (value: string) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 72);
+
+const questionIdWithoutSeed = (id: string) => id.replace(seedPrefixPattern, "");
+
+export const questionMemoryKey = (question: Pick<Question, "id" | "topic" | "kind" | "comparison">) => {
+  if (question.comparison?.length) {
+    const stat = compactKeyPart(question.comparison[0]?.statLabel ?? "comparison");
+    const cards = question.comparison.map((card) => compactKeyPart(card.title)).sort().join("-");
+    return `${question.topic}:${question.kind}:${stat}:${cards}`;
+  }
+
+  return `${question.topic}:${questionIdWithoutSeed(question.id)}`;
+};
+
+const questionHistoryKeySet = (seenIds: readonly string[]) => {
+  const keys = new Set<string>();
+  for (const id of seenIds) {
+    keys.add(id);
+    keys.add(questionIdWithoutSeed(id));
+  }
+  return keys;
+};
+
+const rememberFreshQuestion = (question: Question, keys: Set<string>) => {
+  const memoryKey = questionMemoryKey(question);
+  const seedlessId = questionIdWithoutSeed(question.id);
+  if (keys.has(question.id) || keys.has(seedlessId) || keys.has(memoryKey)) return false;
+
+  keys.add(question.id);
+  keys.add(seedlessId);
+  keys.add(memoryKey);
+  return true;
+};
+
 const heightChoiceStep = (value: number, difficulty: Difficulty) => {
   if (difficulty === 3) return 1;
   if (value < 100) return 10;
@@ -1244,6 +1284,7 @@ export const buildHeadToHeadSession = (topic: TopicScope, difficulty: Difficulty
   const questions: Question[] = [];
   const topicOrder = topicsForScope(topic);
   const curatedOrder = shuffle(curatedHeadToHeads.filter((spec) => topicOrder.includes(spec.topic)), sessionSeed + 313);
+  const usedKeys = questionHistoryKeySet(seenIds);
   let attempt = 0;
 
   while (questions.length < sessionLength && attempt < 180) {
@@ -1253,14 +1294,23 @@ export const buildHeadToHeadSession = (topic: TopicScope, difficulty: Difficulty
       ? headToHeadQuestionFromSpec(curated, seed)
       : randomHeadToHeadQuestion(topicOrder[(questions.length + attempt) % topicOrder.length], difficulty, seed);
 
-    if (question?.comparison && !seenIds.includes(question.id) && !questions.some((item) => item.id === question.id)) {
+    if (question?.comparison && rememberFreshQuestion(question, usedKeys)) {
       questions.push(question);
     }
     attempt += 1;
   }
 
+  let fallbackAttempt = 0;
+  while (questions.length < sessionLength && fallbackAttempt < 240) {
+    const seed = sessionSeed + questions.length * 101 + attempt + fallbackAttempt * 37;
+    const currentTopic = topicOrder[questions.length % topicOrder.length];
+    const question = randomHeadToHeadQuestion(currentTopic, difficulty, seed);
+    if (rememberFreshQuestion(question, usedKeys)) questions.push(question);
+    fallbackAttempt += 1;
+  }
+
   while (questions.length < sessionLength) {
-    const seed = sessionSeed + questions.length * 101 + attempt;
+    const seed = sessionSeed + questions.length * 101 + attempt + fallbackAttempt;
     const currentTopic = topicOrder[questions.length % topicOrder.length];
     questions.push(randomHeadToHeadQuestion(currentTopic, difficulty, seed));
   }
@@ -1271,20 +1321,30 @@ export const buildHeadToHeadSession = (topic: TopicScope, difficulty: Difficulty
 export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionSeed: number, seenIds: string[]) => {
   const questions: Question[] = [];
   const topicOrder = topicsForScope(topic);
+  const usedKeys = questionHistoryKeySet(seenIds);
   let attempt = 0;
 
   while (questions.length < sessionLength && attempt < 160) {
     const currentTopic = topicOrder[(questions.length + attempt) % topicOrder.length];
     const seed = sessionSeed + attempt * 17 + questions.length * 31;
     const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty);
-    if (!seenIds.includes(question.id) && !questions.some((item) => item.id === question.id)) {
+    if (rememberFreshQuestion(question, usedKeys)) {
       questions.push(question);
     }
     attempt += 1;
   }
 
+  let fallbackAttempt = 0;
+  while (questions.length < sessionLength && fallbackAttempt < 240) {
+    const seed = sessionSeed + questions.length * 101 + attempt + fallbackAttempt * 37;
+    const currentTopic = topicOrder[questions.length % topicOrder.length];
+    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty);
+    if (rememberFreshQuestion(question, usedKeys)) questions.push(question);
+    fallbackAttempt += 1;
+  }
+
   while (questions.length < sessionLength) {
-    const seed = sessionSeed + questions.length * 101 + attempt;
+    const seed = sessionSeed + questions.length * 101 + attempt + fallbackAttempt;
     const currentTopic = topicOrder[questions.length % topicOrder.length];
     questions.push(currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty));
   }

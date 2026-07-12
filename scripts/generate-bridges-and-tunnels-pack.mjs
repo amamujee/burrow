@@ -186,7 +186,7 @@ const pack = {
     maxAge: 11,
     readingLevel: "short landmark facts with rounded distance comparisons",
   },
-  recommendedModes: ["trumps", "sort", "fact", "peek", "number", "odd"],
+  recommendedModes: ["trumps", "sort", "fact", "peek", "number", "odd", "geo"],
   sources: [
     { label: "Wikipedia list of bridges", url: "https://en.wikipedia.org/wiki/List_of_bridges", note: "General bridge index for landmark cross-checking." },
     { label: "Wikipedia list of longest bridges", url: "https://en.wikipedia.org/wiki/List_of_longest_bridges", note: "Length context for record-setting viaducts and sea crossings." },

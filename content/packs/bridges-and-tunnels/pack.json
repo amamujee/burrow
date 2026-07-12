@@ -15,7 +15,8 @@
     "fact",
     "peek",
     "number",
-    "odd"
+    "odd",
+    "geo"
   ],
   "sources": [
     {

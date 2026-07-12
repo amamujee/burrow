@@ -20,11 +20,11 @@ import {
   type TopicId,
 } from "./game-data";
 import { scoreFeaturedContent } from "./content-quality";
-import { worldLocationDisplay, type CardMetadata, type WorldLocation } from "./card-metadata";
+import { worldLocationDisplay, type CardMetadata, type WorldContinent, type WorldLocation } from "./card-metadata";
 import { poolForDifficulty } from "./difficulty-pool";
 import { sample, sampleSafe, seedRandom, shuffle } from "./random";
 
-export type GameMode = "mix" | "quiz" | "versus" | "trumps" | "sort" | "fact" | "peek" | "number" | "odd";
+export type GameMode = "mix" | "quiz" | "versus" | "trumps" | "sort" | "fact" | "peek" | "number" | "odd" | "geo";
 
 export const modeOptions: {
   id: GameMode;
@@ -41,6 +41,7 @@ export const modeOptions: {
   { id: "peek", label: "Peek", eyebrow: "picture clue", loop: "reveal guess" },
   { id: "number", label: "Numbers", eyebrow: "math clue", loop: "solve gap" },
   { id: "odd", label: "Odd One", eyebrow: "spot rule", loop: "logic pick" },
+  { id: "geo", label: "Geo Finder", eyebrow: "map clue", loop: "tap pin" },
 ];
 
 export type { KnowledgeTopic } from "./game-data";
@@ -95,6 +96,35 @@ export type RevealRound = {
   card: KnowledgeCard;
   choices: string[];
   answer: string;
+  explanation: string;
+};
+
+export type GeoPoint = {
+  lat: number;
+  lon: number;
+  x: number;
+  y: number;
+};
+
+export type GeoChoice = {
+  id: string;
+  label: string;
+  location: WorldLocation;
+  point: GeoPoint;
+  mapNote: string;
+};
+
+export type GeoRound = {
+  id: string;
+  topic: RoundTopic;
+  prompt: string;
+  card: KnowledgeCard;
+  choices: GeoChoice[];
+  answerId: string;
+  answerLabel: string;
+  location: WorldLocation;
+  point: GeoPoint;
+  mapHint: string;
   explanation: string;
 };
 
@@ -387,12 +417,65 @@ const pepperSizeInches: Record<string, number> = {
   "madame-jeanette": 3,
 };
 
-const pepperWildness = (pepper: Pepper) => {
-  if (["chiltepin", "pequin", "aji-charapita"].includes(pepper.id)) return 10;
-  if (["padron", "shishito", "rocoto", "manzano", "aji-amarillo", "aji-limo", "lemon-drop", "bishop-crown", "tabasco", "cayenne", "poblano", "jalapeno", "serrano", "fish-pepper"].includes(pepper.id)) return 7;
-  if (["bell-pepper", "banana-pepper", "pepperoncini", "anaheim", "fresno", "thai-chili", "habanero", "scotch-bonnet", "cubanelle", "cherry-pepper", "pasilla", "mulato", "cascabel", "hatch-chile", "new-mexico-chile", "datil", "goat-pepper", "trinidad-perfume", "peter-pepper", "purple-beauty", "madame-jeanette"].includes(pepper.id)) return 5;
-  return 2;
+const pepperPlantHeightInches: Record<string, number> = {
+  "bell-pepper": 30,
+  "jimmy-nardello": 30,
+  "banana-pepper": 24,
+  pepperoncini: 24,
+  poblano: 30,
+  anaheim: 30,
+  jalapeno: 30,
+  fresno: 28,
+  serrano: 36,
+  cayenne: 36,
+  tabasco: 54,
+  "thai-chili": 24,
+  "scotch-bonnet": 48,
+  habanero: 42,
+  fatalii: 42,
+  "ghost-pepper": 48,
+  "naga-jolokia": 48,
+  "seven-pot-primo": 48,
+  "chocolate-bhutlah": 48,
+  "trinidad-scorpion": 48,
+  "trinidad-scorpion-butch-t": 48,
+  "carolina-reaper": 48,
+  "dragons-breath": 42,
+  "pepper-x": 42,
+  shishito: 24,
+  padron: 24,
+  ancho: 30,
+  guajillo: 36,
+  "chile-de-arbol": 48,
+  "aji-amarillo": 60,
+  rocoto: 60,
+  chiltepin: 36,
+  cubanelle: 30,
+  "cherry-pepper": 24,
+  pasilla: 36,
+  mulato: 30,
+  cascabel: 30,
+  "hatch-chile": 30,
+  "new-mexico-chile": 30,
+  datil: 36,
+  manzano: 60,
+  "aji-limo": 48,
+  "aji-charapita": 36,
+  "lemon-drop": 48,
+  "bishop-crown": 48,
+  "fish-pepper": 24,
+  "goat-pepper": 36,
+  pequin: 36,
+  "naga-viper": 42,
+  "komodo-dragon": 42,
+  "trinidad-perfume": 36,
+  "peter-pepper": 30,
+  "purple-beauty": 24,
+  "madame-jeanette": 48,
 };
+
+const pepperPlantHeight = (pepper: Pepper) => pepperPlantHeightInches[pepper.id] ?? (pepper.shuMax >= 500000 ? 48 : pepper.shuMax >= 50000 ? 42 : 30);
+const plantHeight = (value: number) => (value >= 24 && value % 12 === 0 ? `${value / 12} ft` : `${value} in`);
 
 const sharkWeightLb = (shark: Shark) => Math.round(Math.max(10, shark.lengthFt ** 2.85 * (shark.power >= 4 ? 0.85 : 0.55)));
 const sharkRarity = (shark: Shark) => {
@@ -699,7 +782,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       stats: [
         { id: "scoville", label: "Scoville", value: pepper.shuMax, display: `${formatNumber(pepper.shuMax)} SHU`, direction: "higher" },
         { id: "size", label: "Fruit size", value: pepperSizeInches[pepper.id] ?? 2, display: inches(pepperSizeInches[pepper.id] ?? 2), direction: "higher" },
-        { id: "wildness", label: "Natural roots", value: pepperWildness(pepper), display: `${pepperWildness(pepper)}/10`, direction: "higher" },
+        { id: "plant-height", label: "Plant height", value: pepperPlantHeight(pepper), display: plantHeight(pepperPlantHeight(pepper)), direction: "higher" },
       ],
     };
   }
@@ -894,6 +977,254 @@ const locationChoicesFromCards = <T extends { metadata?: CardMetadata }>(
   const answer = correct.metadata.location.label;
   const distractors = uniqueLocationLabels(cards).filter((label) => label !== answer);
   return shuffle([answer, ...shuffle(distractors, seed).slice(0, count - 1)], seed + 1);
+};
+
+type LatLon = readonly [number, number];
+
+const geoChoiceCountForDifficulty = (difficulty: Difficulty) => (difficulty === 1 ? 3 : 4);
+const clampGeo = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
+const continentCoordinates: Record<WorldContinent, LatLon> = {
+  Africa: [2, 20],
+  Antarctica: [-82, 0],
+  Asia: [34, 88],
+  Europe: [50, 10],
+  "North America": [42, -102],
+  Oceania: [-25, 135],
+  "South America": [-15, -60],
+};
+const countryCoordinates: Record<string, LatLon> = {
+  Argentina: [-34, -64],
+  Australia: [-25, 134],
+  Bahamas: [25, -77],
+  Barbados: [13, -59.5],
+  Bolivia: [-17, -65],
+  Canada: [57, -106],
+  China: [35, 104],
+  Cuba: [21.5, -79.5],
+  "Czech Republic": [49.8, 15.5],
+  Denmark: [56, 10],
+  Ecuador: [-1.5, -78],
+  France: [46, 2],
+  "French Guiana": [4, -53],
+  India: [22, 79],
+  Indonesia: [-2, 118],
+  Italy: [42, 12],
+  Jamaica: [18, -77],
+  Japan: [36, 138],
+  Kenya: [0, 38],
+  Malaysia: [4, 102],
+  Mexico: [23, -102],
+  Nepal: [28, 84],
+  "New Zealand": [-41, 174],
+  Norway: [61, 8],
+  Pakistan: [30, 70],
+  Peru: [-9, -75],
+  Russia: [61, 105],
+  "Saudi Arabia": [24, 45],
+  "South Korea": [36, 128],
+  Spain: [40, -4],
+  Suriname: [4, -56],
+  Sweden: [62, 15],
+  Switzerland: [47, 8],
+  Taiwan: [23.7, 121],
+  Tanzania: [-6, 35],
+  Thailand: [15, 101],
+  "Trinidad and Tobago": [10.5, -61],
+  Turkey: [39, 35],
+  "United Arab Emirates": [24, 54],
+  "United Kingdom": [54, -2],
+  "United States": [39, -98],
+  Vietnam: [16, 108],
+};
+const locationCoordinateOverrides: Record<string, LatLon> = {
+  "Puebla, Mexico": [19.1, -98.2],
+  "Anaheim, United States": [33.8, -117.9],
+  "Xalapa, Mexico": [19.5, -96.9],
+  "Fresno, United States": [36.7, -119.8],
+  "Puebla and Hidalgo, Mexico": [20.0, -98.3],
+  "Cayenne, French Guiana": [4.9, -52.3],
+  "Tabasco, Mexico": [17.9, -92.6],
+  "Jamaica and Trinidad and Tobago": [14.3, -69],
+  "Yucatan, Mexico and the Caribbean": [20.8, -89],
+  "Northeast India, India": [26.2, 92.9],
+  "Louisiana, United States": [31, -92],
+  "Fort Mill, United States": [35, -80.9],
+  "Wales, United Kingdom": [52.3, -3.8],
+  "Padron, Spain": [42.7, -8.7],
+  "Andes, South America": [-13, -73],
+  "Cuba and the Caribbean": [21.5, -79.5],
+  "Hatch, United States": [32.7, -107.2],
+  "New Mexico, United States": [34.5, -106],
+  "St. Augustine, United States": [29.9, -81.3],
+  "Chesapeake Bay, United States": [37.8, -76.2],
+  "Cumbria, United Kingdom": [54.6, -3.1],
+  "Bedfordshire, United Kingdom": [52.1, -0.5],
+  "Dubai, United Arab Emirates": [25.2, 55.3],
+  "Kuala Lumpur, Malaysia": [3.1, 101.7],
+  "Shanghai, China": [31.2, 121.5],
+  "Mecca, Saudi Arabia": [21.4, 39.8],
+  "Shenzhen, China": [22.5, 114.1],
+  "Seoul, South Korea": [37.6, 127],
+  "New York City, United States": [40.7, -74],
+  "Guangzhou, China": [23.1, 113.3],
+  "Tianjin, China": [39.1, 117.2],
+  "Beijing, China": [39.9, 116.4],
+  "Taipei, Taiwan": [25, 121.6],
+  "Hong Kong, China": [22.3, 114.2],
+  "Saint Petersburg, Russia": [59.9, 30.3],
+  "Ho Chi Minh City, Vietnam": [10.8, 106.7],
+  "Chicago, United States": [41.9, -87.6],
+  "Jeddah, Saudi Arabia": [21.5, 39.2],
+  "Riyadh, Saudi Arabia": [24.7, 46.7],
+  "Wuhan, China": [30.6, 114.3],
+  "Brooklyn, United States": [40.7, -73.9],
+  "Norfolk, United States": [36.9, -76.3],
+  "London, United Kingdom": [51.5, -0.1],
+  "Paris, France": [48.9, 2.3],
+  "Pisa, Italy": [43.7, 10.4],
+  "New York-New Jersey, United States": [40.8, -74.5],
+  "New York, United States": [42.9, -75.5],
+  "San Francisco, United States": [37.8, -122.4],
+  "Sydney, Australia": [-33.9, 151.2],
+  "Kobe-Awaji, Japan": [34.6, 135],
+  "Millau, France": [44.1, 3.1],
+  "Florence, Italy": [43.8, 11.3],
+  "Venice, Italy": [45.4, 12.3],
+  "Prague, Czech Republic": [50.1, 14.4],
+  "Scotland, United Kingdom": [56.8, -4.2],
+  "Denmark-Sweden": [56, 12.7],
+  "Istanbul, Turkey": [41, 29],
+  "Jiangsu, China": [32.8, 119.8],
+  "Pearl River Delta, China": [22.6, 113.8],
+  "Michigan, United States": [44.3, -85.6],
+  "Florida, United States": [27.8, -81.7],
+  "California, United States": [36.8, -119.4],
+  "Swiss Alps, Switzerland": [46.6, 8.1],
+  "Tsugaru Strait, Japan": [41.5, 140.5],
+  "United Kingdom-France": [50.8, 1.6],
+  "Virginia, United States": [37.5, -76],
+  "Tokyo, Japan": [35.7, 139.7],
+  "Shaanxi, China": [34.3, 108.9],
+  "Tokyo Bay, Japan": [35.4, 139.9],
+  "Nepal/China": [28, 86.9],
+  "Pakistan/China": [35.8, 76.5],
+  "Nepal/India": [27.7, 88],
+  "China/Nepal": [28, 87.1],
+  "France/Italy": [45.8, 6.9],
+  "Switzerland/Italy": [45.9, 7.7],
+  Antarctica: [-82, 0],
+  "Betws-y-Coed, United Kingdom": [53.1, -3.8],
+  "Tasmania, Australia": [-42, 147],
+  "Tibet, China": [31.7, 88],
+  "Oregon, United States": [44, -120.5],
+  "Borneo, Malaysia": [4, 114],
+  "Washington, United States": [47.5, -120.5],
+};
+
+const pointFromLatLon = ([lat, lon]: LatLon): GeoPoint => ({
+  lat,
+  lon,
+  x: clampGeo(((lon + 180) / 360) * 100, 5, 95),
+  y: clampGeo(((90 - lat) / 180) * 100, 7, 93),
+});
+
+const averageLatLon = (coordinates: readonly LatLon[]): LatLon | null => {
+  if (!coordinates.length) return null;
+  const totals = coordinates.reduce((sum, [lat, lon]) => ({ lat: sum.lat + lat, lon: sum.lon + lon }), { lat: 0, lon: 0 });
+  return [totals.lat / coordinates.length, totals.lon / coordinates.length];
+};
+
+const coordinatesForLocation = (location: WorldLocation): LatLon => {
+  const override = locationCoordinateOverrides[location.label];
+  if (override) return override;
+
+  const countryPoints = location.countries.map((country) => countryCoordinates[country]).filter((point): point is LatLon => Boolean(point));
+  const averagedCountry = averageLatLon(countryPoints);
+  if (averagedCountry) return averagedCountry;
+
+  const continent = location.continents[0] ?? "North America";
+  return continentCoordinates[continent];
+};
+
+const pointForLocation = (location: WorldLocation) => pointFromLatLon(coordinatesForLocation(location));
+
+const hemisphereLabel = (point: GeoPoint) => {
+  const northSouth = point.lat >= 0 ? "Northern Hemisphere" : "Southern Hemisphere";
+  const eastWest = point.lon >= 0 ? "Eastern Hemisphere" : "Western Hemisphere";
+  return `${northSouth} · ${eastWest}`;
+};
+
+const geoChoiceForLocation = (location: WorldLocation): GeoChoice => {
+  const point = pointForLocation(location);
+  return {
+    id: location.label,
+    label: location.label,
+    location,
+    point,
+    mapNote: `${location.continents.join(" / ")} · ${hemisphereLabel(point)}`,
+  };
+};
+
+const geoChoiceCandidates = <T extends { metadata?: CardMetadata }>(cards: readonly T[]) => {
+  const byLabel = new Map<string, GeoChoice>();
+  for (const card of cards.filter(hasLocationMetadata)) {
+    const choice = geoChoiceForLocation(card.metadata.location);
+    if (!byLabel.has(choice.id)) byLabel.set(choice.id, choice);
+  }
+  return Array.from(byLabel.values());
+};
+
+const geoCards = <T extends KnowledgeCard>(cards: readonly T[]) => cards.filter(hasLocationMetadata);
+
+export const canBuildGeoRoundFromCards = (cards: readonly KnowledgeCard[], difficulty: Difficulty = 1) =>
+  geoChoiceCandidates(cards).length >= geoChoiceCountForDifficulty(difficulty);
+
+export const canBuildGeoRound = (topic: TopicScope, difficulty: Difficulty = 1) => {
+  const topics = new Set(topicsForScope(topic));
+  return canBuildGeoRoundFromCards(collectionCards().filter((card) => topics.has(card.topic as KnowledgeTopic)), difficulty);
+};
+
+export const buildGeoRoundFromCards = (
+  cards: readonly KnowledgeCard[],
+  topic: RoundTopic,
+  difficulty: Difficulty,
+  seed: number,
+): GeoRound => {
+  const count = geoChoiceCountForDifficulty(difficulty);
+  const allLocatedCards = geoCards(cards);
+  const preferred = preferredPool(allLocatedCards, difficulty);
+  const pool = geoChoiceCandidates(preferred).length >= count ? preferred : allLocatedCards;
+  const choicesPool = geoChoiceCandidates(pool);
+  if (choicesPool.length < count || pool.length < 1) throw new Error(`Need at least ${count} mapped locations to build a geo round for ${topic}`);
+
+  const card = sample(pool, seed + 1);
+  const location = card.metadata.location;
+  const point = pointForLocation(location);
+  const answer = geoChoiceForLocation(location);
+  const choices = shuffle([answer, ...shuffle(choicesPool.filter((choice) => choice.id !== answer.id), seed + 2).slice(0, count - 1)], seed + 3);
+  const continentHint = location.continents.length > 1 ? location.continents.join(" and ") : location.continents[0];
+
+  return {
+    id: `${seed}-geo-${card.topic}-${card.id}`,
+    topic: card.topic || topic,
+    prompt: `Where on the map is ${card.title} found?`,
+    card,
+    choices,
+    answerId: answer.id,
+    answerLabel: answer.label,
+    location,
+    point,
+    mapHint: `${card.title} belongs in ${continentHint}. Look for the pin in the ${hemisphereLabel(point).toLowerCase()}.`,
+    explanation: `${card.title} is found in ${location.label}. That puts it in ${continentHint}. ${card.fact}`,
+  };
+};
+
+export const buildGeoRound = (topic: TopicScope, difficulty: Difficulty, seed: number): GeoRound => {
+  const topics = new Set(topicsForScope(topic));
+  const scopedCards = collectionCards().filter((card) => topics.has(card.topic as KnowledgeTopic));
+  if (canBuildGeoRoundFromCards(scopedCards, difficulty)) return buildGeoRoundFromCards(scopedCards, typeof topic === "string" ? topic : "mixed", difficulty, seed);
+  const fallbackCards = collectionCards().filter((card) => card.topic === "peppers" || card.topic === "buildings");
+  return buildGeoRoundFromCards(fallbackCards, "mixed", difficulty, seed + 97);
 };
 
 export const buildSortRoundFromCards = (

@@ -47,7 +47,7 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": ["quiz", "versus", "trumps", "sort", "fact", "peek", "number", "odd"]
+        "enum": ["quiz", "versus", "trumps", "sort", "fact", "peek", "number", "odd", "geo"]
       },
       "uniqueItems": true
     },

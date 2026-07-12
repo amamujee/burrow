@@ -9,7 +9,7 @@
     "maxAge": 9,
     "readingLevel": "short facts, parent-approved vocabulary"
   },
-  "recommendedModes": ["quiz", "versus", "trumps", "sort", "fact", "peek", "number", "odd"],
+  "recommendedModes": ["quiz", "versus", "trumps", "sort", "fact", "peek", "number", "odd", "geo"],
   "sources": [
     {
       "label": "Source name",

@@ -11,6 +11,7 @@ type ContentIssuePayload = {
   topic?: unknown;
   itemId?: unknown;
   questionId?: unknown;
+  questionKey?: unknown;
   questionKind?: unknown;
   title?: unknown;
   prompt?: unknown;
@@ -40,6 +41,7 @@ export async function POST(request: Request) {
     topic: cleanText(payload.topic),
     itemId: cleanText(payload.itemId),
     questionId: cleanText(payload.questionId),
+    questionKey: cleanText(payload.questionKey),
     questionKind: cleanText(payload.questionKind),
     title: cleanText(payload.title),
     prompt: cleanText(payload.prompt),
