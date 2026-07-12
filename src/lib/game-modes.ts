@@ -131,7 +131,7 @@ export type GeoRound = {
 export type NumberRound = {
   id: string;
   topic: RoundTopic;
-  operation: "addition" | "subtraction" | "fit";
+  operation: "addition" | "subtraction" | "multiplication" | "fit";
   prompt: string;
   cards: KnowledgeCard[];
   statLabel: string;
@@ -146,6 +146,17 @@ export type NumberRound = {
   answer: number;
   choices: number[];
   explanation: string;
+  visual?: {
+    kind: "equal-groups";
+    badge: string;
+    ariaLabel: string;
+    groupSingular: string;
+    groupPlural: string;
+    groupEmoji: string;
+    itemSingular: string;
+    itemPlural: string;
+    itemEmoji: string;
+  };
 };
 
 export type OddRound = {
@@ -925,6 +936,220 @@ const numberChoices = (answer: number, gap: number, seed: number) => {
   return shuffle([answer, ...shuffle(uniqueDistractors, seed + 1).slice(0, 3)], seed);
 };
 
+type NumberOperation = "addition" | "subtraction" | "multiplication";
+
+type MultiplicationScenario = {
+  badge: string;
+  ariaLabel: string;
+  statLabel: string;
+  groupSingular: string;
+  groupPlural: string;
+  groupEmoji: string;
+  itemSingular: string;
+  itemPlural: string;
+  itemEmoji: string;
+  prompt: (title: string, groups: number, itemsPerGroup: number) => string;
+};
+
+const numberOperationForSeed = (seed: number): NumberOperation => {
+  const index = Math.abs(Math.trunc(seed)) % 3;
+  return index === 0 ? "addition" : index === 1 ? "subtraction" : "multiplication";
+};
+
+const factorRangeForDifficulty = (difficulty: Difficulty) => difficulty === 1
+  ? { groups: [2, 4] as const, items: [2, 5] as const }
+  : difficulty === 2
+    ? { groups: [3, 6] as const, items: [3, 8] as const }
+    : { groups: [4, 9] as const, items: [5, 12] as const };
+
+const pickFactor = ([min, max]: readonly [number, number], factorSeed: number) => min + Math.floor(seedRandom(factorSeed) * (max - min + 1));
+
+const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenario => {
+  switch (topic) {
+    case "peppers":
+      return {
+        badge: "Grow case",
+        ariaLabel: "Math picture: equal pepper plant groups",
+        statLabel: "Peppers per plant",
+        groupSingular: "plant",
+        groupPlural: "plants",
+        groupEmoji: "🌱",
+        itemSingular: "pepper",
+        itemPlural: "peppers",
+        itemEmoji: "🌶️",
+        prompt: (title, groups, items) => `${groups} ${title} plants grow ${items} peppers each. How many peppers are there altogether?`,
+      };
+    case "buildings":
+      return {
+        badge: "Window case",
+        ariaLabel: "Math picture: equal building floor groups",
+        statLabel: "Windows per floor",
+        groupSingular: "floor",
+        groupPlural: "floors",
+        groupEmoji: "🏢",
+        itemSingular: "window",
+        itemPlural: "windows",
+        itemEmoji: "🪟",
+        prompt: (title, groups, items) => `A ${title} design puzzle shows ${groups} floors with ${items} windows on each floor. How many windows are shown?`,
+      };
+    case "sharks":
+      return {
+        badge: "Tooth case",
+        ariaLabel: "Math picture: equal shark model groups",
+        statLabel: "Paper teeth per model",
+        groupSingular: "model",
+        groupPlural: "models",
+        groupEmoji: "🦈",
+        itemSingular: "paper tooth",
+        itemPlural: "paper teeth",
+        itemEmoji: "🦷",
+        prompt: (title, groups, items) => `A class makes ${groups} ${title} models with ${items} paper teeth on each model. How many paper teeth do they use?`,
+      };
+    case "space":
+      return {
+        badge: "Mission case",
+        ariaLabel: "Math picture: equal space sample groups",
+        statLabel: "Rocks per box",
+        groupSingular: "sample box",
+        groupPlural: "sample boxes",
+        groupEmoji: "📦",
+        itemSingular: "rock",
+        itemPlural: "rocks",
+        itemEmoji: "🪨",
+        prompt: (title, groups, items) => `On a ${title} mission, ${groups} sample boxes hold ${items} rocks each. How many rocks are packed?`,
+      };
+    case "jets":
+      return {
+        badge: "Air-show case",
+        ariaLabel: "Math picture: equal air-show team groups",
+        statLabel: "Jets per team",
+        groupSingular: "team",
+        groupPlural: "teams",
+        groupEmoji: "🛫",
+        itemSingular: "jet",
+        itemPlural: "jets",
+        itemEmoji: "✈️",
+        prompt: (title, groups, items) => `An air-show plan has ${groups} teams flying ${items} ${title} jets each. How many jets fly altogether?`,
+      };
+    case "dinosaurs":
+      return {
+        badge: "Nest case",
+        ariaLabel: "Math picture: equal dinosaur nest groups",
+        statLabel: "Eggs per nest",
+        groupSingular: "nest",
+        groupPlural: "nests",
+        groupEmoji: "🪺",
+        itemSingular: "egg",
+        itemPlural: "eggs",
+        itemEmoji: "🥚",
+        prompt: (title, groups, items) => `A ${title} nesting scene has ${groups} nests with ${items} eggs in each nest. How many eggs are there?`,
+      };
+    case "tallest-mountains":
+      return {
+        badge: "Climbing case",
+        ariaLabel: "Math picture: equal mountain climbing groups",
+        statLabel: "Climbers per team",
+        groupSingular: "team",
+        groupPlural: "teams",
+        groupEmoji: "🏔️",
+        itemSingular: "climber",
+        itemPlural: "climbers",
+        itemEmoji: "🧗",
+        prompt: (title, groups, items) => `On ${title}, ${groups} climbing teams have ${items} climbers each. How many climbers are there?`,
+      };
+    case "tall-trees":
+      return {
+        badge: "Branch case",
+        ariaLabel: "Math picture: equal tree branch groups",
+        statLabel: "Birds per branch",
+        groupSingular: "branch",
+        groupPlural: "branches",
+        groupEmoji: "🌿",
+        itemSingular: "bird",
+        itemPlural: "birds",
+        itemEmoji: "🐦",
+        prompt: (title, groups, items) => `A ${title} observation scene shows ${groups} branches with ${items} birds on each branch. How many birds are shown?`,
+      };
+    case "bridges-and-tunnels":
+      return {
+        badge: "Light case",
+        ariaLabel: "Math picture: equal bridge or tunnel section groups",
+        statLabel: "Lights per section",
+        groupSingular: "section",
+        groupPlural: "sections",
+        groupEmoji: "🛤️",
+        itemSingular: "light",
+        itemPlural: "lights",
+        itemEmoji: "💡",
+        prompt: (title, groups, items) => `A ${title} lighting plan has ${groups} sections with ${items} lights in each section. How many lights are planned?`,
+      };
+    default:
+      return {
+        badge: "Display case",
+        ariaLabel: "Math picture: equal museum display groups",
+        statLabel: "Models per row",
+        groupSingular: "row",
+        groupPlural: "rows",
+        groupEmoji: "🗂️",
+        itemSingular: "model",
+        itemPlural: "models",
+        itemEmoji: "🔹",
+        prompt: (title, groups, items) => `A ${title} museum display has ${groups} rows with ${items} models in each row. How many models are shown?`,
+      };
+  }
+};
+
+const multiplicationRound = (
+  card: KnowledgeCard,
+  topic: RoundTopic,
+  difficulty: Difficulty,
+  seed: number,
+): NumberRound => {
+  const scenario = multiplicationScenarioForTopic(topic);
+  const ranges = factorRangeForDifficulty(difficulty);
+  const groups = pickFactor(ranges.groups, seed + 41);
+  const itemsPerGroup = pickFactor(ranges.items, seed + 42);
+  const answer = groups * itemsPerGroup;
+  const repeatedAddition = Array.from({ length: groups }, () => itemsPerGroup).join(" + ");
+  const countingCard: KnowledgeCard = {
+    ...card,
+    statLabel: scenario.statLabel,
+    statValue: itemsPerGroup,
+    statDisplay: `${itemsPerGroup} ${scenario.itemPlural} per ${scenario.groupSingular}`,
+  };
+
+  return {
+    id: `${seed}-number-${topic}-multiply-${card.id}-${groups}x${itemsPerGroup}`,
+    topic,
+    operation: "multiplication",
+    prompt: scenario.prompt(card.title, groups, itemsPerGroup),
+    cards: [countingCard],
+    statLabel: scenario.statLabel,
+    unit: scenario.itemPlural,
+    operator: "x",
+    termValues: [groups, itemsPerGroup],
+    resultLabel: `total ${scenario.itemPlural}`,
+    biggerLabel: `${groups} ${scenario.groupPlural}`,
+    smallerLabel: card.title,
+    biggerValue: groups,
+    smallerValue: itemsPerGroup,
+    answer,
+    choices: numberChoices(answer, 1, seed + 43),
+    explanation: `${groups} equal groups of ${itemsPerGroup}: ${repeatedAddition} = ${answer}. So ${groups} x ${itemsPerGroup} = ${answer} ${scenario.itemPlural}.`,
+    visual: {
+      kind: "equal-groups",
+      badge: scenario.badge,
+      ariaLabel: scenario.ariaLabel,
+      groupSingular: scenario.groupSingular,
+      groupPlural: scenario.groupPlural,
+      groupEmoji: scenario.groupEmoji,
+      itemSingular: scenario.itemSingular,
+      itemPlural: scenario.itemPlural,
+      itemEmoji: scenario.itemEmoji,
+    },
+  };
+};
+
 const cardsWithStats = (cards: readonly GenericKnowledgeCard[]) => cards.filter((card) => card.stats.length && Number.isFinite(card.statValue));
 
 const distinctStatCards = <T extends { statValue: number }>(cards: readonly T[], seed: number, requestedCount: number) => {
@@ -1364,10 +1589,15 @@ export const buildNumberRoundFromCards = (
   if (pool.length < 2) throw new Error(`Need at least 2 non-negative stat cards to build a number round for ${topic}`);
   const values = pool.map((card) => card.statValue);
   const gap = statValueGap(values);
-  const shouldAdd = pool.length >= 3 && shouldBuildAdditionRound(difficulty, seed);
+  const requestedOperation = numberOperationForSeed(seed);
+  const shouldAdd = pool.length >= 3 && requestedOperation === "addition";
   const unit = pool[0].stats[0]?.display.replace(formatNumber(pool[0].stats[0].value), "").trim() || "";
 
-  if (shouldBuildFitRound(difficulty, seed)) {
+  if (requestedOperation === "multiplication") {
+    return multiplicationRound(sample(pool, seed + 40), topic, difficulty, seed);
+  }
+
+  if (requestedOperation === "subtraction" && shouldBuildFitRound(difficulty, seed)) {
     const sorted = shuffle(pool, seed + 1).sort((a, b) => b.statValue - a.statValue);
     const bigger = sorted[0];
     const smaller = sorted.find((card) => card.id !== bigger.id && card.statValue > 0 && card.statValue <= bigger.statValue / 2);
@@ -1408,7 +1638,7 @@ export const buildNumberRoundFromCards = (
       id: `${seed}-number-${topic}-add-${selected.map((card) => card.id).join("-")}`,
       topic,
       operation: "addition",
-      prompt: `${additionPromptStart(count)}. What is their total ${selected[0].statLabel}?`,
+      prompt: packAdditionPrompt(topic, count, selected[0].statLabel),
       cards: selected.map((card, index) => sameStatCard(card, termValues[index])),
       statLabel: selected[0].statLabel,
       unit,
@@ -1520,77 +1750,84 @@ export const buildTopTrumpRoundFromCards = (
   };
 };
 
-const shouldBuildAdditionRound = (difficulty: Difficulty, seed: number) => seedRandom(seed + difficulty * 23) > (difficulty === 1 ? 0.45 : 0.35);
 const additionTermCount = (difficulty: Difficulty, seed: number) => difficulty === 1 ? 2 : seedRandom(seed + difficulty * 17) > 0.45 ? 3 : 2;
 const additionPromptStart = (count: number) => count === 2 ? "Add these together" : "Add all three together";
 const stackedTotalLabel = (count: number) => count === 2 ? "stacked total" : "three-part total";
 const sumValues = (values: number[]) => values.reduce((total, value) => total + value, 0);
+const packAdditionPrompt = (topic: RoundTopic, count: number, statLabel: string) => {
+  if (topic === "dinosaurs") return `${additionPromptStart(count)}. If these dinosaurs lined up nose to tail, what is their total length?`;
+  if (topic === "tall-trees") return `${additionPromptStart(count)}. If these trees were placed end to end, what is their total height?`;
+  if (topic === "bridges-and-tunnels") return `${additionPromptStart(count)}. If these routes were joined end to end, what is their total length?`;
+  if (topic === "tallest-mountains") return `${additionPromptStart(count)}. In this number puzzle, what is the sum of their elevations?`;
+  return `${additionPromptStart(count)}. What is their total ${statLabel.toLowerCase()}?`;
+};
 
 export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed: number): NumberRound => {
   const currentTopic = topicOrder(topic, seed);
+  const requestedOperation = numberOperationForSeed(seed);
 
   if (currentTopic === "peppers") {
     const pool = preferredPool(peppers, difficulty);
-    const step = difficulty === 1 ? 1000 : difficulty === 2 ? 5000 : 10000;
-    if (shouldBuildAdditionRound(difficulty, seed)) {
-      const count = additionTermCount(difficulty, seed);
-      const selected = shuffle(pool.filter((pepper) => pepper.shuMax >= step), seed + 1).slice(0, count);
-      const values = selected.map((pepper) => Math.max(step, roundTo(pepper.shuMax, step)));
-      const answer = sumValues(values);
+    if (requestedOperation === "multiplication") return multiplicationRound(pepperCard(sample(pool, seed + 1)), currentTopic, difficulty, seed);
+
+    const [first, second] = shuffle(pool, seed + 1).slice(0, 2);
+    const countRange = difficulty === 1 ? [2, 7] as const : difficulty === 2 ? [4, 12] as const : [7, 20] as const;
+    const firstCount = pickFactor(countRange, seed + 2);
+    const secondCount = pickFactor(countRange, seed + 3);
+
+    if (requestedOperation === "addition") {
+      const answer = firstCount + secondCount;
       return {
-        id: `${seed}-number-peppers-add-${selected.map((pepper) => pepper.id).join("-")}`,
+        id: `${seed}-number-peppers-add-${first.id}-${second.id}`,
         topic: currentTopic,
         operation: "addition",
-        prompt: `${additionPromptStart(count)}. What is their total Scoville score?`,
-        cards: selected.map((pepper, index) => roundedStatCard(pepperCard(pepper), values[index], "SHU")),
-        statLabel: "Scoville",
-        unit: "SHU",
+        prompt: `In this garden, one ${first.name} plant has ${firstCount} ripe peppers and one ${second.name} plant has ${secondCount}. How many peppers are there altogether?`,
+        cards: [roundedStatCard(pepperCard(first), firstCount, "peppers"), roundedStatCard(pepperCard(second), secondCount, "peppers")],
+        statLabel: "Garden count",
+        unit: "peppers",
         operator: "+",
-        termValues: values,
-        resultLabel: stackedTotalLabel(count),
-        biggerLabel: selected[0]?.name ?? "Pepper",
-        smallerLabel: selected[1]?.name ?? "Pepper",
-        biggerValue: values[0] ?? 0,
-        smallerValue: values[1] ?? 0,
+        termValues: [firstCount, secondCount],
+        resultLabel: "total peppers",
+        biggerLabel: first.name,
+        smallerLabel: second.name,
+        biggerValue: firstCount,
+        smallerValue: secondCount,
         answer,
-        choices: numberChoices(answer, Math.max(step * 2, answer > 100000 ? 100000 : step), seed + 3),
-        explanation: `${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} SHU.`,
+        choices: numberChoices(answer, 1, seed + 4),
+        explanation: `${firstCount} + ${secondCount} = ${answer} peppers.`,
       };
     }
 
-    const hotter = sampleSafe(pool.filter((pepper) => pepper.shuMax >= 50000), pool, seed + 1);
-    const nonzeroPeppers = pool.filter((pepper) => pepper.id !== hotter.id && pepper.shuMax >= step);
-    const milder = sampleSafe(
-      nonzeroPeppers.filter((pepper) => pepper.shuMax <= hotter.shuMax * 0.35),
-      nonzeroPeppers,
-      seed + 2,
-    );
-    const { biggerValue, smallerValue, answer } = roundedSubtractionPair(hotter.shuMax, milder.shuMax, step);
+    const biggerCount = Math.max(firstCount, secondCount) + 2;
+    const smallerCount = Math.min(firstCount, secondCount);
+    const answer = biggerCount - smallerCount;
+
     return {
-      id: `${seed}-number-peppers-${hotter.id}-${milder.id}`,
+      id: `${seed}-number-peppers-subtract-${first.id}-${second.id}`,
       topic: currentTopic,
       operation: "subtraction",
-      prompt: `${hotter.name} can reach ${numberWithUnit(biggerValue, "SHU")}. ${milder.name} can reach ${numberWithUnit(smallerValue, "SHU")}. How much spicier is ${hotter.name}?`,
-      cards: [roundedStatCard(pepperCard(hotter), biggerValue, "SHU"), roundedStatCard(pepperCard(milder), smallerValue, "SHU")],
-      statLabel: "Scoville",
-      unit: "SHU",
+      prompt: `In this garden, a ${first.name} plant has ${biggerCount} peppers and a ${second.name} plant has ${smallerCount}. How many more peppers does the ${first.name} plant have?`,
+      cards: [roundedStatCard(pepperCard(first), biggerCount, "peppers"), roundedStatCard(pepperCard(second), smallerCount, "peppers")],
+      statLabel: "Garden count",
+      unit: "peppers",
       operator: "-",
-      termValues: [biggerValue, smallerValue],
+      termValues: [biggerCount, smallerCount],
       resultLabel: "difference",
-      biggerLabel: hotter.name,
-      smallerLabel: milder.name,
-      biggerValue,
-      smallerValue,
+      biggerLabel: first.name,
+      smallerLabel: second.name,
+      biggerValue: biggerCount,
+      smallerValue: smallerCount,
       answer,
-      choices: numberChoices(answer, Math.max(step, answer > 100000 ? 100000 : step * 2), seed + 3),
-      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} SHU.`,
+      choices: numberChoices(answer, 1, seed + 4),
+      explanation: `${biggerCount} - ${smallerCount} = ${answer} more peppers.`,
     };
   }
 
   if (currentTopic === "buildings") {
     const pool = preferredPool(buildings, difficulty);
+    if (requestedOperation === "multiplication") return multiplicationRound(buildingCard(sample(pool, seed + 3)), currentTopic, difficulty, seed);
     const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
-    if (shouldBuildAdditionRound(difficulty, seed)) {
+    if (requestedOperation === "addition") {
       const count = additionTermCount(difficulty, seed);
       const selected = shuffle(pool, seed + 4).slice(0, count);
       const values = selected.map((building) => Math.max(step, roundTo(building.heightFt, step)));
@@ -1642,7 +1879,8 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
 
   if (currentTopic === "space") {
     const pool = preferredPool(spaceCards, difficulty);
-    if (shouldBuildAdditionRound(difficulty, seed)) {
+    if (requestedOperation === "multiplication") return multiplicationRound(spaceCard(sample(pool, seed + 6), "size"), currentTopic, difficulty, seed);
+    if (requestedOperation === "addition") {
       const count = additionTermCount(difficulty, seed);
       const step = difficulty === 1 ? 500 : difficulty === 2 ? 100 : 50;
       const selected = shuffle(pool.filter((space) => space.diameterMiles !== undefined), seed + 7).slice(0, count);
@@ -1696,20 +1934,22 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
 
   if (currentTopic === "jets") {
     const pool = preferredPool(jets, difficulty);
+    if (requestedOperation === "multiplication") return multiplicationRound(jetCard(sample(pool, seed + 9)), currentTopic, difficulty, seed);
     const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
-    if (shouldBuildAdditionRound(difficulty, seed)) {
+    if (requestedOperation === "addition") {
       const count = additionTermCount(difficulty, seed);
       const selected = shuffle(pool, seed + 10).slice(0, count);
-      const values = selected.map((jet) => Math.max(step, roundTo(jet.maxSpeedMph, step)));
+      const countRange = difficulty === 1 ? [2, 7] as const : difficulty === 2 ? [4, 12] as const : [7, 20] as const;
+      const values = selected.map((_, index) => pickFactor(countRange, seed + 20 + index));
       const answer = sumValues(values);
       return {
         id: `${seed}-number-jets-add-${selected.map((jet) => jet.id).join("-")}`,
         topic: currentTopic,
         operation: "addition",
-        prompt: `${additionPromptStart(count)}. What is the total if you add their top speeds?`,
-        cards: selected.map((jet, index) => roundedStatCard(jetCard(jet, "speed"), values[index], "mph")),
-        statLabel: "Speed",
-        unit: "mph",
+        prompt: `${additionPromptStart(count)}. An air museum displays these groups of model jets. How many models are there altogether?`,
+        cards: selected.map((jet, index) => roundedStatCard(jetCard(jet, "speed"), values[index], "model jets")),
+        statLabel: "Display count",
+        unit: "model jets",
         operator: "+",
         termValues: values,
         resultLabel: stackedTotalLabel(count),
@@ -1718,8 +1958,8 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         biggerValue: values[0] ?? 0,
         smallerValue: values[1] ?? 0,
         answer,
-        choices: numberChoices(answer, difficulty === 1 ? 400 : 200, seed + 12),
-        explanation: `${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} mph.`,
+        choices: numberChoices(answer, 1, seed + 12),
+        explanation: `${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} model jets.`,
       };
     }
 
@@ -1749,7 +1989,8 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
 
   const step = difficulty === 1 ? 5 : 2;
   const sharkPool = preferredPool(sharks, difficulty);
-  if (shouldBuildAdditionRound(difficulty, seed)) {
+  if (requestedOperation === "multiplication") return multiplicationRound(sharkCard(sample(sharkPool, seed + 9)), currentTopic, difficulty, seed);
+  if (requestedOperation === "addition") {
     const count = additionTermCount(difficulty, seed);
     const selected = shuffle(sharkPool, seed + 10).slice(0, count);
     const values = selected.map((shark) => Math.max(step, roundTo(shark.lengthFt, step)));

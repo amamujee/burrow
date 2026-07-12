@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { buildNumberRound, buildNumberRoundFromCards, type GenericKnowledgeCard } from "../../src/lib/game-modes";
 
 const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
 const topicLabels = ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Universe", "Jet Hangar", "Dinosaur Lab", "Tallest Mountains", "Tall Trees", "Bridges & Tunnels"];
@@ -32,6 +33,58 @@ const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
   await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
   await expect(setupSummary(page)).toContainText("1 topics");
 };
+
+const mathFixtureCards: GenericKnowledgeCard[] = [12, 20, 35, 48].map((value, index) => ({
+  id: `math-card-${index}`,
+  topic: "fixture",
+  title: `Card ${index + 1}`,
+  image: "/favicon.ico",
+  imageAlt: `Card ${index + 1}`,
+  imageCredit: "Test",
+  statLabel: "Length",
+  statValue: value,
+  statDisplay: `${value} ft`,
+  subStat: "Test card",
+  fact: "Test fact.",
+  qualityScore: 90,
+  qualityFlags: [],
+  categories: ["test"],
+  stats: [{ id: "length", label: "Length", value, display: `${value} ft`, direction: "higher" }],
+}));
+
+test("every topic offers sensible addition, subtraction, and multiplication rounds", () => {
+  const builtInTopics = {
+    peppers: "peppers",
+    buildings: "windows",
+    sharks: "paper teeth",
+    space: "rocks",
+    jets: "jets",
+  } as const;
+  const packTopics = {
+    dinosaurs: "eggs",
+    "tallest-mountains": "climbers",
+    "tall-trees": "birds",
+    "bridges-and-tunnels": "lights",
+  } as const;
+
+  for (const [topic, expectedItems] of Object.entries(builtInTopics) as [keyof typeof builtInTopics, string][]) {
+    const rounds = [0, 1, 2].map((seed) => buildNumberRound(topic, 1, seed));
+    expect(new Set(rounds.map((round) => round.operation))).toEqual(new Set(["addition", "subtraction", "multiplication"]));
+    const multiplication = rounds.find((round) => round.operation === "multiplication");
+    expect(multiplication?.visual?.kind).toBe("equal-groups");
+    expect(multiplication?.visual?.itemPlural).toBe(expectedItems);
+    expect(multiplication?.prompt).toContain(expectedItems);
+  }
+
+  for (const [topic, expectedItems] of Object.entries(packTopics)) {
+    const rounds = [0, 1, 2].map((seed) => buildNumberRoundFromCards(mathFixtureCards, topic, 1, seed));
+    expect(new Set(rounds.map((round) => round.operation))).toEqual(new Set(["addition", "subtraction", "multiplication"]));
+    const multiplication = rounds.find((round) => round.operation === "multiplication");
+    expect(multiplication?.visual?.kind).toBe("equal-groups");
+    expect(multiplication?.visual?.itemPlural).toBe(expectedItems);
+    expect(multiplication?.prompt).toContain(expectedItems);
+  }
+});
 
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/content-issues", async (route) => {
@@ -121,10 +174,31 @@ test("play events capture anonymous question quality context", async ({ page }) 
 test("number rounds show an arithmetic equation and accept an answer", async ({ page }) => {
   await chooseOnlyMode(page, "Numbers");
 
-  await expect(page.getByText(/Stack case|Number case/)).toBeVisible();
-  await expect(page.getByText(/\d[\d,]*\s[+-]\s\d[\d,]*(\s\+\s\d[\d,]*)?\s=\s\?/)).toBeVisible();
+  await expect(page.getByText(/\d[\d,]*\s[+\-x]\s\d[\d,]*(\s\+\s\d[\d,]*)?\s=\s\?/)).toBeVisible();
+  await expect(page.getByLabel(/^Math picture:/)).toBeVisible();
 
-  await page.locator("button").filter({ hasText: /\d[\d,]*\s(?:ft|mph|SHU|mi|moons)/ }).first().click();
+  await page.locator("[data-number-choice]").first().click();
+  await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
+});
+
+test("pepper number rounds teach multiplication with equal plant groups", async ({ page }) => {
+  await chooseOnlyMode(page, "Numbers");
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+
+  for (let attempt = 0; attempt < 3 && await page.getByText("Grow case", { exact: true }).count() === 0; attempt += 1) {
+    await page.getByRole("button", { name: "Skip question" }).click();
+  }
+
+  await expect(page.getByText("Grow case", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /\d+ .* plants grow \d+ peppers each.*How many peppers/ })).toBeVisible();
+  await expect(page.getByText(/\d+ x \d+ = \?/)).toBeVisible();
+
+  const garden = page.getByLabel("Math picture: equal pepper plant groups");
+  await expect(garden).toBeVisible();
+  const plantCount = await garden.locator("[data-math-group]").count();
+  expect(plantCount).toBeGreaterThanOrEqual(2);
+
+  await page.locator("[data-number-choice]").first().click();
   await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
 });
 

@@ -1587,7 +1587,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setMiniRunAnswered((value) => value + 1);
     setMiniRunCorrect((value) => value + (correct ? 1 : 0));
     if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
-    setCelebration(correct ? "Number detective!" : "Good try. Check the subtraction.");
+    setCelebration(correct ? "Number detective!" : "Good try. Check the math picture.");
     setLastResult(result);
   };
 
@@ -3044,10 +3044,12 @@ function NumberMode({
     round.operation === "fit"
       ? `${round.smallerValue.toLocaleString("en-US")} x ? = ${round.biggerValue.toLocaleString("en-US")}`
       : round.termValues.map((value) => value.toLocaleString("en-US")).join(` ${round.operator} `);
-  const stageBadge = round.operation === "addition" ? "Stack case" : round.operation === "fit" ? "Fit case" : "Number case";
+  const stageBadge = round.operation === "addition" ? "Stack case" : round.operation === "multiplication" ? round.visual?.badge ?? "Group case" : round.operation === "fit" ? "Fit case" : "Number case";
   const stageFooter =
     round.operation === "addition"
       ? `${round.cards.map((card) => card.title).join(" + ")} stacked together`
+      : round.operation === "multiplication"
+        ? `${round.biggerValue} ${round.visual?.groupPlural ?? "groups"} · ${round.smallerValue} ${round.visual?.itemPlural ?? round.unit} in every ${round.visual?.groupSingular ?? "group"}`
       : round.operation === "fit"
         ? `${round.smallerLabel} repeated to reach ${round.biggerLabel}`
       : `${round.biggerLabel} minus ${round.smallerLabel}`;
@@ -3067,13 +3069,15 @@ function NumberMode({
 
         <h2 className="mt-2 text-[clamp(1.2rem,2.6vw,2.25rem)] font-black leading-[1.06] text-[#102f36]">{round.prompt}</h2>
 
-        <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-3">
-          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">{round.statLabel}</p>
-          <p className="mt-1 text-3xl font-black leading-none text-[#102f36]">
-            {expressionLabel} = ?
-          </p>
-          <p className="mt-1 text-xs font-black uppercase tracking-[0.1em] text-[#5f6b5d]">{round.resultLabel}</p>
-        </div>
+        {round.operation !== "multiplication" && (
+          <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">{round.statLabel}</p>
+            <p className="mt-1 text-3xl font-black leading-none text-[#102f36]">
+              {expressionLabel} = ?
+            </p>
+            <p className="mt-1 text-xs font-black uppercase tracking-[0.1em] text-[#5f6b5d]">{round.resultLabel}</p>
+          </div>
+        )}
 
         <NumberEquationBoard round={round} />
 
@@ -3084,6 +3088,7 @@ function NumberMode({
             return (
               <button
                 key={`${round.id}-${choice}`}
+                data-number-choice
                 onClick={() => onAnswer(choice)}
                 className={`min-h-14 rounded-lg border-2 px-3 py-2 text-left text-xl font-black leading-snug transition active:translate-y-0.5 ${
                   correctChoice
@@ -3120,75 +3125,127 @@ function NumberMode({
 }
 
 function NumberEquationBoard({ round }: { round: NumberRound }) {
-  const maxValue = Math.max(...round.termValues, round.answer, 1);
   const terms = round.cards.map((card, index) => ({
     card,
     value: round.termValues[index] ?? card.statValue,
     label: String.fromCharCode(65 + index),
   }));
 
-  if (round.operation === "addition") {
+  if (round.operation === "multiplication") {
+    const visual = round.visual ?? {
+      kind: "equal-groups" as const,
+      badge: "Group case",
+      ariaLabel: "Math picture: equal groups",
+      groupSingular: "group",
+      groupPlural: "groups",
+      groupEmoji: "🔵",
+      itemSingular: "item",
+      itemPlural: "items",
+      itemEmoji: "•",
+    };
     return (
-      <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2">
+      <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2" aria-label={visual.ariaLabel}>
         <div className="flex items-center justify-between gap-2">
-          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Stack</p>
-          <p className="text-xs font-black text-[#102f36]">{round.cards.length} parts</p>
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · Equal groups</p>
+            <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">Every plant gets the same number.</p>
+          </div>
+          <p className="rounded-md bg-[#f0c84b] px-2 py-1 text-base font-black text-[#102f36]">{round.biggerValue} x {round.smallerValue} = ?</p>
         </div>
-        <div className="mt-2 flex min-h-28 flex-col-reverse justify-end gap-1 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2">
-          {terms.map((term) => (
-            <div
-              key={`${round.id}-stack-${term.card.id}`}
-              className="grid min-h-9 grid-cols-[2rem_1fr_auto] items-center gap-2 rounded-md border-2 border-[#092421] bg-[#fff9ec] px-2 py-1 shadow-[2px_2px_0_#092421]"
-              style={{ width: `${Math.max(54, Math.min(100, (term.value / maxValue) * 100))}%` }}
-            >
-              <span className="grid h-6 w-6 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs font-black">{term.label}</span>
-              <span className="truncate text-sm font-black text-[#102f36]">{term.card.title}</span>
-              <span className="text-sm font-black text-[#9f3f2b]">{term.value.toLocaleString("en-US")}</span>
+        <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+          {Array.from({ length: round.biggerValue }, (_, index) => (
+            <div data-math-group key={`${round.id}-group-${index}`} className="rounded-lg border-2 border-[#092421] bg-[#e9ffe9] px-1.5 py-1 text-center shadow-[2px_2px_0_#092421]">
+              <p className="text-[10px] font-black uppercase tracking-[0.06em] text-[#2f6547]"><span aria-hidden="true">{visual.groupEmoji} </span>{visual.groupSingular} {index + 1}</p>
+              <p className="mt-0.5 break-words text-sm leading-[1.05]" aria-hidden="true">
+                {Array.from({ length: round.smallerValue }, () => visual.itemEmoji).join("")}
+              </p>
+              <p className="mt-0.5 text-[11px] font-black text-[#9f3f2b]">{round.smallerValue} {round.smallerValue === 1 ? visual.itemSingular : visual.itemPlural}</p>
             </div>
           ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (round.operation === "addition") {
+    const total = Math.max(round.answer, 1);
+    const colors = ["bg-[#f0c84b]", "bg-[#70d392]", "bg-[#77b9d0]"];
+    return (
+      <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2" aria-label="Math picture: addition parts make a whole">
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · Parts make a whole</p>
+            <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">Join every colored part.</p>
+          </div>
+          <p className="rounded-md bg-[#ece5d5] px-2 py-1 text-xs font-black text-[#102f36]">{round.cards.length} parts</p>
+        </div>
+        <div className="mt-3 flex h-16 overflow-hidden rounded-lg border-2 border-[#092421] bg-white shadow-[2px_2px_0_#092421]">
+          {terms.map((term, index) => (
+            <div
+              key={`${round.id}-part-${term.card.id}`}
+              className={`grid min-w-14 place-items-center border-r-2 border-[#092421] px-1 text-center last:border-r-0 ${colors[index % colors.length]}`}
+              style={{ width: `${(term.value / total) * 100}%` }}
+            >
+              <span>
+                <span className="block text-[10px] font-black uppercase text-[#102f36]">Part {term.label}</span>
+                <span className="block text-sm font-black text-[#102f36]">{term.value.toLocaleString("en-US")}</span>
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-1 grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-[#102f36]">
+          <span className="h-2 border-b-2 border-l-2 border-[#092421]" />
+          <span className="text-xs font-black">whole = ?</span>
+          <span className="h-2 border-b-2 border-r-2 border-[#092421]" />
         </div>
       </div>
     );
   }
 
   if (round.operation === "fit") {
+    const unitWidth = Math.max(8, Math.min(100, (round.smallerValue / Math.max(round.biggerValue, 1)) * 100));
     return (
-      <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2">
+      <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2" aria-label="Math picture: measure how many fit">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Fit</p>
-          <p className="text-xs font-black text-[#102f36]">count the small height</p>
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · How many fit?</p>
+            <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">Use the small tile to measure the target.</p>
+          </div>
         </div>
-        <div className="mt-2 grid gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2">
-          {terms.map((term, index) => (
-            <div key={`${round.id}-fit-${term.card.id}`} className="grid grid-cols-[2rem_1fr_auto] items-center gap-2 rounded-md border-2 border-[#092421] bg-[#fff9ec] px-2 py-1 shadow-[2px_2px_0_#092421]">
-              <span className="grid h-6 w-6 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs font-black">{index === 0 ? "1" : "?"}</span>
-              <span className="truncate text-sm font-black text-[#102f36]">{term.card.title}</span>
-              <span className="text-sm font-black text-[#9f3f2b]">{term.value.toLocaleString("en-US")}</span>
-              <span className="col-span-3 h-2 overflow-hidden rounded-full bg-[#e6d7bc]">
-                <span className="block h-full bg-[#9f3f2b]" style={{ width: `${Math.max(2, Math.min(100, (term.value / maxValue) * 100))}%` }} />
-              </span>
+        <div className="mt-3 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[2px_2px_0_#092421]">
+          <div className="h-11 rounded-md border-2 border-dashed border-white bg-white/10 p-1" aria-label="Target length">
+            <div className="grid h-full place-items-center rounded-sm bg-white/10 text-xs font-black text-white">target length</div>
+          </div>
+          <div className="mt-2 h-11">
+            <div className="grid h-full min-w-16 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] px-1 text-center shadow-[2px_2px_0_#000]" style={{ width: `${unitWidth}%` }}>
+              <span className="text-xs font-black leading-tight text-[#102f36]">1 tile<br />{round.smallerValue.toLocaleString("en-US")}</span>
             </div>
-          ))}
+          </div>
         </div>
+        <p className="mt-2 text-center text-xs font-black text-[#9f3f2b]">How many yellow tiles would cover the target?</p>
       </div>
     );
   }
 
+  const smallerPercent = Math.max(4, Math.min(96, (round.smallerValue / Math.max(round.biggerValue, 1)) * 100));
   return (
-    <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2">
-      <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Subtract</p>
-      <div className="mt-2 grid gap-1.5">
-        {terms.map((term, index) => (
-          <div key={`${round.id}-compare-${term.card.id}`} className="grid grid-cols-[2rem_1fr_auto] items-center gap-2">
-            <span className="grid h-6 w-6 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs font-black">{index === 0 ? "+" : "-"}</span>
-            <span className="truncate text-sm font-black text-[#102f36]">{term.card.title}</span>
-            <span className="text-sm font-black text-[#9f3f2b]">{term.value.toLocaleString("en-US")}</span>
-            <span className="col-span-3 h-2 overflow-hidden rounded-full bg-[#e6d7bc]">
-              <span className="block h-full bg-[#9f3f2b]" style={{ width: `${Math.max(2, Math.min(100, (term.value / maxValue) * 100))}%` }} />
-            </span>
-          </div>
-        ))}
+    <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2" aria-label="Math picture: subtraction find the missing part">
+      <div>
+        <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · Find the missing part</p>
+        <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">The whole bar is split into what we know and what is left.</p>
       </div>
+      <div className="mt-3 flex h-16 overflow-hidden rounded-lg border-2 border-[#092421] shadow-[2px_2px_0_#092421]">
+        <div className="grid place-items-center bg-[#70d392] px-1 text-center" style={{ width: `${smallerPercent}%` }}>
+          <span>
+            <span className="block text-[10px] font-black uppercase text-[#102f36]">known</span>
+            <span className="block text-sm font-black text-[#102f36]">{round.smallerValue.toLocaleString("en-US")}</span>
+          </span>
+        </div>
+        <div className="grid min-w-14 flex-1 place-items-center border-l-2 border-dashed border-[#092421] bg-[repeating-linear-gradient(135deg,#fff1bf,#fff1bf_8px,#f0c84b_8px,#f0c84b_16px)] px-1 text-center">
+          <span className="text-sm font-black text-[#102f36]">difference<br />?</span>
+        </div>
+      </div>
+      <p className="mt-2 text-center text-xs font-black text-[#9f3f2b]">known part + difference = {round.biggerValue.toLocaleString("en-US")}</p>
     </div>
   );
 }
@@ -3644,7 +3701,7 @@ function KnowledgeCardsStage({ cards, badge, footer }: { cards: KnowledgeCard[];
     <article className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
       <div
         className="grid h-full min-h-[390px] gap-2 lg:min-h-0"
-        style={{ gridTemplateColumns: cards.length > 2 ? "repeat(auto-fit, minmax(150px, 1fr))" : "repeat(2, minmax(0, 1fr))" }}
+        style={{ gridTemplateColumns: cards.length === 1 ? "minmax(0, 1fr)" : cards.length > 2 ? "repeat(auto-fit, minmax(150px, 1fr))" : "repeat(2, minmax(0, 1fr))" }}
       >
         {cards.map((card, index) => (
           <div key={`${badge}-${card.topic}-${card.id}`} className="relative overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
