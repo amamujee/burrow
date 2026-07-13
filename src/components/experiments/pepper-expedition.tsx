@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type Stop = {
   id: string;
@@ -87,17 +87,13 @@ export function PepperExpedition() {
     setJournal((current) => [...current, stop.journal]);
   };
 
-  useEffect(() => {
-    if (!selected) return;
-    const timer = window.setTimeout(() => {
-      if (stopIndex === stops.length - 1) setComplete(true);
-      else {
-        setStopIndex((value) => value + 1);
-        setSelected(null);
-      }
-    }, 1050);
-    return () => window.clearTimeout(timer);
-  }, [selected, stopIndex]);
+  const next = () => {
+    if (stopIndex === stops.length - 1) setComplete(true);
+    else {
+      setStopIndex((value) => value + 1);
+      setSelected(null);
+    }
+  };
 
   const restart = () => {
     setStopIndex(0);
@@ -173,7 +169,7 @@ export function PepperExpedition() {
           <div className={`mt-3 rounded-lg border-2 p-3 ${correct ? "border-[#2f7d4f] bg-[#e9ffe9]" : "border-[#9f3f2b] bg-[#fff0ea]"}`}>
             <p className="text-lg font-black">{correct ? "Correct!" : `Answer: ${stop.answer}`}</p>
             <p className="mt-1 text-sm font-bold text-[#5f6b5d]">{stop.journal}</p>
-            <p className="mt-2 text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">Moving to the next stop…</p>
+            <button onClick={next} className="mt-3 rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2 font-black text-white shadow-[2px_2px_0_#092421]">{stopIndex === stops.length - 1 ? "View expedition summary" : "Next question"}</button>
           </div>
         )}
       </article>

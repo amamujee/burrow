@@ -9,6 +9,7 @@ test("pepper expedition moves between subjects and collects a journal clue", asy
   await expect(page.getByRole("heading", { name: "Read the seed packet" })).toBeVisible();
   await page.getByRole("button", { name: "A little wet" }).click();
   await expect(page.getByText("Correct!")).toBeVisible();
+  await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Find a pepper homeland" })).toBeVisible();
   await expect(page.getByText("1 of 5 collected")).toBeVisible();
 });
@@ -16,6 +17,7 @@ test("pepper expedition moves between subjects and collects a journal clue", asy
 test("pepper expedition teaches a missed answer and moves on", async ({ page }) => {
   await page.getByRole("button", { name: "Completely dry" }).click();
   await expect(page.getByText("Answer: A little wet")).toBeVisible();
+  await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Find a pepper homeland" })).toBeVisible();
 });
 
@@ -27,9 +29,11 @@ test("word explorer supports matching, sentence context, and evidence", async ({
   await page.getByRole("button", { name: "spicy" }).click();
   await expect(page.getByText("You found the clue!")).toBeVisible();
 
+  await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Evidence Hunt" })).toBeVisible();
   await page.getByRole("button", { name: "A red jalapeño is not a different species." }).click();
   await expect(page.getByText(/That sentence directly says/)).toBeVisible();
+  await page.getByRole("button", { name: "View reading summary" }).click();
   await expect(page.getByRole("heading", { name: "Pepper word journal" })).toBeVisible();
 });
 

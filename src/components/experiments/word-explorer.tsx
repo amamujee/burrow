@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 type ReadingLevel = "match" | "sentence" | "evidence";
 
@@ -84,18 +84,6 @@ export function WordExplorer() {
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(new SpeechSynthesisUtterance(heardText));
   };
-
-  useEffect(() => {
-    if (!selected) return;
-    const timer = window.setTimeout(() => {
-      if (nextLevel) {
-        setLevel(nextLevel);
-        setSelected(null);
-      }
-      else setComplete(true);
-    }, 1050);
-    return () => window.clearTimeout(timer);
-  }, [nextLevel, selected]);
 
   if (complete) {
     return (
@@ -186,7 +174,7 @@ export function WordExplorer() {
           <div className={`mt-4 rounded-lg border-2 p-3 ${correct ? "border-[#2f7d4f] bg-[#e9ffe9]" : "border-[#9f3f2b] bg-[#fff0ea]"}`}>
             <p className="text-lg font-black">{correct ? "You found the clue!" : `Answer: ${answer}`}</p>
             <p className="mt-1 text-sm font-bold text-[#5f6b5d]">{activity.explanation}</p>
-            <p className="mt-2 text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{nextLevel ? "Moving to the next reading level…" : "Opening the word journal…"}</p>
+            <button onClick={() => nextLevel ? changeLevel(nextLevel) : setComplete(true)} className="mt-3 rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2 font-black text-white shadow-[2px_2px_0_#092421]">{nextLevel ? "Next question" : "View reading summary"}</button>
           </div>
         )}
       </article>

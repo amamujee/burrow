@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 type MathView = "groups" | "array" | "addition" | "line";
 
@@ -84,19 +84,15 @@ export function CoreMiniChallenge({ milestone, onComplete }: { milestone: number
   const correct = selected === step.answer;
   const mathView = useMemo<MathView>(() => (["groups", "array", "addition", "line"] as MathView[])[Math.max(0, Math.floor(milestone / 10) - 1) % 4], [milestone]);
 
-  useEffect(() => {
+  const next = () => {
     if (!selected) return;
-    const timer = window.setTimeout(() => {
-      setResults((current) => [...current, selected === step.answer]);
-      if (stepIndex === steps.length - 1) {
-        setComplete(true);
-      } else {
-        setStepIndex((value) => value + 1);
-        setSelected(null);
-      }
-    }, 1050);
-    return () => window.clearTimeout(timer);
-  }, [selected, step.answer, stepIndex]);
+    setResults((current) => [...current, selected === step.answer]);
+    if (stepIndex === steps.length - 1) setComplete(true);
+    else {
+      setStepIndex((value) => value + 1);
+      setSelected(null);
+    }
+  };
 
   if (complete) {
     const correctCount = results.filter(Boolean).length;
@@ -150,7 +146,7 @@ export function CoreMiniChallenge({ milestone, onComplete }: { milestone: number
             return <button key={choice} disabled={selected !== null} onClick={() => setSelected(choice)} className={`min-h-16 rounded-lg border-2 p-3 text-left text-base font-black transition ${answerChoice ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : chosenWrong ? "border-[#092421] bg-[#f59a7d]" : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf] disabled:opacity-70"}`}>{choice}</button>;
           })}
         </div>
-        {selected && <div className={`mt-3 rounded-lg border-2 p-3 ${correct ? "border-[#2f7d4f] bg-[#e9ffe9]" : "border-[#9f3f2b] bg-[#fff0ea]"}`}><p className="text-lg font-black">{correct ? "Correct!" : `Answer: ${step.answer}`}</p><p className="mt-1 text-xs font-black uppercase tracking-[0.12em] text-[#72543e]">Moving to the next stop…</p></div>}
+        {selected && <div className={`mt-3 rounded-lg border-2 p-3 ${correct ? "border-[#2f7d4f] bg-[#e9ffe9]" : "border-[#9f3f2b] bg-[#fff0ea]"}`}><p className="text-lg font-black">{correct ? "Correct!" : `Answer: ${step.answer}`}</p><button onClick={next} className="mt-3 rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2 font-black text-white shadow-[2px_2px_0_#092421]">{stepIndex === steps.length - 1 ? "View challenge summary" : "Next question"}</button></div>}
       </article>
     </section>
   );

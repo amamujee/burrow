@@ -151,18 +151,23 @@ test("every tenth answer opens an automatic mini challenge and returns after its
 
   await page.getByRole("button", { name: "Completely dry" }).click();
   await expect(page.getByText("Answer: A little wet")).toBeVisible();
+  await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Find the pepper homeland" })).toBeVisible();
 
   await page.getByRole("button", { name: "South of the United States" }).click();
+  await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Count the harvest" })).toBeVisible();
   await expect(page.getByText("4 × 6 = ?")).toBeVisible();
   await expect(page.getByLabel("Equal pepper groups")).toBeVisible();
 
   await page.getByRole("button", { name: "24 peppers" }).click();
+  await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Investigate the heat" })).toBeVisible();
   await page.getByRole("button", { name: "The pale inner tissue" }).click();
+  await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Find the evidence" })).toBeVisible();
   await page.getByRole("button", { name: "still the same kind" }).click();
+  await page.getByRole("button", { name: "View challenge summary" }).click();
 
   await expect(page.getByRole("heading", { name: "Pepper field journal" })).toBeVisible();
   await expect(page.getByText("4/5 discoveries solved · all five notes collected")).toBeVisible();
