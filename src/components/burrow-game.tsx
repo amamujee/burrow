@@ -2,6 +2,7 @@
 
 import { track } from "@vercel/analytics";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { CoreMiniChallenge } from "@/components/core-mini-challenge";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
 import {
   buildFactRoundFromCards,
@@ -49,6 +50,7 @@ type Progress = {
   sessions: number;
   correct: number;
   answered: number;
+  challengeMilestone: number;
   difficulty: Difficulty;
   seenIds: string[];
   unlockedCards: string[];
@@ -164,6 +166,7 @@ const initialProgress: Progress = {
   sessions: 0,
   correct: 0,
   answered: 0,
+  challengeMilestone: 0,
   difficulty: 1,
   seenIds: [],
   unlockedCards: [],
@@ -210,6 +213,7 @@ const freshProgress = (): Progress => ({
 const normalizeProgress = (progress?: Partial<Progress>): Progress => ({
   ...freshProgress(),
   ...progress,
+  challengeMilestone: progress?.challengeMilestone ?? Math.floor((progress?.answered ?? 0) / 10) * 10,
   topicWins: { ...emptyTopicCounts(), ...progress?.topicWins },
   topicStats: Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, { correct: 0, answered: 0, ...progress?.topicStats?.[topic] }])) as Progress["topicStats"],
   modeWins: { ...initialProgress.modeWins, ...progress?.modeWins },
@@ -539,6 +543,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const [lastResult, setLastResult] = useState<ResultState | null>(null);
   const [issueCount, setIssueCount] = useState(0);
   const [issueFlash, setIssueFlash] = useState(false);
+  const [miniChallengeActive, setMiniChallengeActive] = useState(false);
   const anonymousInstallIdRef = useRef<string | null>(null);
   const playSessionIdRef = useRef("");
   const playEventSequenceRef = useRef(0);
@@ -1043,10 +1048,15 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         : current.modeWins,
     }));
 
+    if (progress.answered + 1 >= progress.challengeMilestone + 10) {
+      setMiniChallengeActive(true);
+    }
+
     return { correct, xpGain, leveledUp: nextLevel > progress.level };
   };
 
   const resetRunState = () => {
+    setMiniChallengeActive(false);
     setQuestionIndex(0);
     setSelected(null);
     setSortPicked([]);
@@ -1746,6 +1756,23 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     else nextTopTrumpRound();
   };
 
+  const finishMiniChallenge = () => {
+    setProgress((current) => ({ ...current, challengeMilestone: current.answered }));
+    setMiniChallengeActive(false);
+    if (mode === "mix") {
+      advanceMix();
+      return;
+    }
+    if (activeChallengeMode === "quiz" || activeChallengeMode === "versus") advance();
+    else if (activeChallengeMode === "sort") nextSortRound();
+    else if (activeChallengeMode === "fact") nextFactRound();
+    else if (activeChallengeMode === "peek") nextRevealRound();
+    else if (activeChallengeMode === "geo") nextGeoRound();
+    else if (activeChallengeMode === "number") nextNumberRound();
+    else if (activeChallengeMode === "odd") nextOddRound();
+    else nextTopTrumpRound();
+  };
+
   const resetProgress = () => {
     if (typeof window !== "undefined" && !window.confirm("Reset this player's progress?")) return;
     const seed = freshSeed(211);
@@ -1796,6 +1823,11 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           issueCount={issueCount}
           onReset={resetProgress}
         />
+
+        {miniChallengeActive ? (
+          <CoreMiniChallenge milestone={progress.answered} onComplete={finishMiniChallenge} />
+        ) : (
+          <>
 
         {showCollection && (
           <CollectionBook
@@ -1961,6 +1993,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             onNext={mode === "mix" ? advanceMix : nextOddRound}
             onSkip={skipOddRound}
           />
+        )}
+          </>
         )}
       </section>
     </main>

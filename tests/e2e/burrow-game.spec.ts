@@ -94,7 +94,10 @@ test.beforeEach(async ({ page }) => {
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, accepted: 1 }) });
   });
   await page.addInitScript(() => {
-    window.localStorage.clear();
+    if (!window.sessionStorage.getItem("burrow-test-storage-cleared")) {
+      window.localStorage.clear();
+      window.sessionStorage.setItem("burrow-test-storage-cleared", "true");
+    }
   });
   await page.goto("/play");
   await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
@@ -124,6 +127,56 @@ test("setup menu opens and core game controls keep working", async ({ page }) =>
   await page.getByRole("button", { name: /Cards/ }).click();
   await expect(page.getByText("Collection")).toBeVisible();
   await expect(page.getByText("Research library")).toBeVisible();
+});
+
+test("every tenth answer opens an automatic mini challenge and returns after its summary", async ({ page }) => {
+  await page.evaluate(() => {
+    const key = "burrow-profiles-v1";
+    const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
+      activeProfileId: string;
+      profiles: { id: string; progress: { answered: number; challengeMilestone: number } }[];
+    };
+    const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
+    if (!active) throw new Error("Active profile was not saved");
+    active.progress.answered = 9;
+    active.progress.challengeMilestone = 0;
+    window.localStorage.setItem(key, JSON.stringify(profiles));
+  });
+  await page.reload();
+  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+  await chooseOnlyMode(page, "True/False");
+
+  await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
+  await expect(page.getByText("Pepper mini challenge")).toBeVisible();
+
+  await page.getByRole("button", { name: "Completely dry" }).click();
+  await expect(page.getByText("Answer: A little wet")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Find the pepper homeland" })).toBeVisible();
+
+  await page.getByRole("button", { name: "South of the United States" }).click();
+  await expect(page.getByRole("heading", { name: "Count the harvest" })).toBeVisible();
+  await expect(page.getByText("4 × 6 = ?")).toBeVisible();
+  await expect(page.getByLabel("Equal pepper groups")).toBeVisible();
+
+  await page.getByRole("button", { name: "24 peppers" }).click();
+  await expect(page.getByRole("heading", { name: "Investigate the heat" })).toBeVisible();
+  await page.getByRole("button", { name: "The pale inner tissue" }).click();
+  await expect(page.getByRole("heading", { name: "Find the evidence" })).toBeVisible();
+  await page.getByRole("button", { name: "still the same kind" }).click();
+
+  await expect(page.getByRole("heading", { name: "Pepper field journal" })).toBeVisible();
+  await expect(page.getByText("4/5 discoveries solved · all five notes collected")).toBeVisible();
+  await page.getByRole("button", { name: "Continue regular questions" }).click();
+  await expect(page.getByText("True or false?")).toBeVisible();
+  await expect(page.getByText("Pepper mini challenge")).toHaveCount(0);
+
+  await expect.poll(async () => page.evaluate(() => {
+    const profiles = JSON.parse(window.localStorage.getItem("burrow-profiles-v1") ?? "{}") as {
+      activeProfileId: string;
+      profiles: { id: string; progress: { challengeMilestone: number } }[];
+    };
+    return profiles.profiles.find((profile) => profile.id === profiles.activeProfileId)?.progress.challengeMilestone;
+  })).toBe(10);
 });
 
 test("flag image gives local feedback without leaking server details", async ({ page }) => {

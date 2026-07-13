@@ -8,12 +8,15 @@ test.beforeEach(async ({ page }) => {
 test("pepper expedition moves between subjects and collects a journal clue", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Read the seed packet" })).toBeVisible();
   await page.getByRole("button", { name: "A little wet" }).click();
-  await expect(page.getByText("Discovery collected!")).toBeVisible();
-  await page.getByRole("button", { name: "🔎 Go deeper" }).click();
-  await expect(page.getByText(/tiny plant embryo/)).toBeVisible();
-  await page.getByRole("button", { name: "Next stop" }).click();
+  await expect(page.getByText("Correct!")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Find a pepper homeland" })).toBeVisible();
   await expect(page.getByText("1 of 5 collected")).toBeVisible();
+});
+
+test("pepper expedition teaches a missed answer and moves on", async ({ page }) => {
+  await page.getByRole("button", { name: "Completely dry" }).click();
+  await expect(page.getByText("Answer: A little wet")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Find a pepper homeland" })).toBeVisible();
 });
 
 test("word explorer supports matching, sentence context, and evidence", async ({ page }) => {
@@ -24,11 +27,9 @@ test("word explorer supports matching, sentence context, and evidence", async ({
   await page.getByRole("button", { name: "spicy" }).click();
   await expect(page.getByText("You found the clue!")).toBeVisible();
 
-  await page.getByRole("button", { name: "Try the next reading level" }).click();
   await expect(page.getByRole("heading", { name: "Evidence Hunt" })).toBeVisible();
   await page.getByRole("button", { name: "A red jalapeño is not a different species." }).click();
   await expect(page.getByText(/That sentence directly says/)).toBeVisible();
-  await page.getByRole("button", { name: "Open word journal" }).click();
   await expect(page.getByRole("heading", { name: "Pepper word journal" })).toBeVisible();
 });
 
@@ -47,20 +48,6 @@ test("math lenses keep one equation while switching four representations", async
 
   await page.getByRole("button", { name: "24 peppers" }).click();
   await expect(page.getByText("All four lenses agree!")).toBeVisible();
-});
-
-test("parent notebook keeps separate feedback for each prototype", async ({ page }) => {
-  await page.getByText(/Parent feedback notebook/).click();
-  await page.getByRole("button", { name: "😍 Loved it" }).click();
-  await page.getByPlaceholder(/He loved the array/).fill("Loved collecting field notes.");
-
-  await page.getByRole("button", { name: /Word Explorer/ }).click();
-  await expect(page.getByRole("button", { name: "😍 Loved it" })).not.toHaveAttribute("aria-pressed", "true");
-  await page.getByRole("button", { name: "🤔 Promising" }).click();
-
-  await page.getByRole("button", { name: /Pepper Expedition/ }).click();
-  await expect(page.getByRole("button", { name: "😍 Loved it" })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.getByPlaceholder(/He loved the array/)).toHaveValue("Loved collecting field notes.");
 });
 
 test("lab selector fits the mobile viewport", async ({ page, isMobile }) => {

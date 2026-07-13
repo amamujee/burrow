@@ -8,8 +8,6 @@ import { PepperExpedition } from "./pepper-expedition";
 import { WordExplorer } from "./word-explorer";
 
 type LabId = "expedition" | "words" | "math";
-type Verdict = "loved it" | "promising" | "not for us";
-type Feedback = { verdict: Verdict | null; note: string };
 
 const labs: { id: LabId; label: string; eyebrow: string; icon: string; description: string }[] = [
   { id: "expedition", label: "Pepper Expedition", eyebrow: "cross-subject journey", icon: "🧭", description: "A five-stop adventure through reading, geography, science, and math." },
@@ -19,27 +17,7 @@ const labs: { id: LabId; label: string; eyebrow: string; icon: string; descripti
 
 export function LearningLabs() {
   const [activeLab, setActiveLab] = useState<LabId>("expedition");
-  const [feedback, setFeedback] = useState<Record<LabId, Feedback>>({
-    expedition: { verdict: null, note: "" },
-    words: { verdict: null, note: "" },
-    math: { verdict: null, note: "" },
-  });
-  const [copied, setCopied] = useState(false);
   const current = labs.find((lab) => lab.id === activeLab) ?? labs[0];
-
-  const updateFeedback = (patch: Partial<Feedback>) => {
-    setFeedback((state) => ({ ...state, [activeLab]: { ...state[activeLab], ...patch } }));
-    setCopied(false);
-  };
-
-  const copyFeedback = async () => {
-    const summary = labs.map((lab) => {
-      const entry = feedback[lab.id];
-      return `${lab.label}: ${entry.verdict ?? "not rated"}${entry.note.trim() ? `\nNotes: ${entry.note.trim()}` : ""}`;
-    }).join("\n\n");
-    await navigator.clipboard.writeText(`Burrow Learning Labs feedback\n\n${summary}`);
-    setCopied(true);
-  };
 
   return (
     <main className="min-h-dvh bg-[#0d332f] p-2 text-[#102f36] sm:p-4">
@@ -87,25 +65,6 @@ export function LearningLabs() {
           {activeLab === "math" && <MathLenses />}
         </section>
 
-        <details className="mt-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
-          <summary className="cursor-pointer rounded-md px-2 py-1 font-black text-[#102f36]">📝 Parent feedback notebook · {current.label}</summary>
-          <div className="mt-2 grid gap-3 rounded-lg border-2 border-dashed border-[#c8b38f] bg-white/70 p-3 lg:grid-cols-[auto_minmax(260px,1fr)_auto] lg:items-end">
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Quick verdict</p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {(["loved it", "promising", "not for us"] as Verdict[]).map((verdict) => (
-                  <button key={verdict} onClick={() => updateFeedback({ verdict })} aria-pressed={feedback[activeLab].verdict === verdict} className={`rounded-lg border-2 px-3 py-2 text-sm font-black ${feedback[activeLab].verdict === verdict ? "border-[#092421] bg-[#f0c84b] shadow-[2px_2px_0_#092421]" : "border-[#d9c7a7] bg-white hover:border-[#092421]"}`}>{verdict === "loved it" ? "😍 Loved it" : verdict === "promising" ? "🤔 Promising" : "🛑 Not for us"}</button>
-                ))}
-              </div>
-            </div>
-            <label className="block">
-              <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">What did he enjoy, say, or find confusing?</span>
-              <textarea value={feedback[activeLab].note} onChange={(event) => updateFeedback({ note: event.target.value })} rows={2} placeholder="Example: He loved the array, but the number line needed explaining." className="mt-2 w-full rounded-lg border-2 border-[#d9c7a7] bg-white p-2 text-sm font-bold outline-none focus:border-[#092421]" />
-            </label>
-            <button onClick={copyFeedback} className="rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-3 text-sm font-black text-white shadow-[2px_2px_0_#092421]">{copied ? "Copied feedback ✓" : "Copy all feedback"}</button>
-          </div>
-          <p className="mt-2 px-2 text-[10px] font-bold text-[#72543e]">Notes stay in this open page until it reloads. Copying places a plain-text summary on your clipboard; nothing is sent automatically.</p>
-        </details>
       </div>
     </main>
   );
