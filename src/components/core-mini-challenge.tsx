@@ -6,11 +6,10 @@ import { EqualGroupsBoard, type EqualGroupsVisual } from "@/components/equal-gro
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid } from "@/components/game-question-ui";
 import { WorldMapSurface } from "@/components/world-map-surface";
 
-type ConceptVisual = "pepper-anatomy" | "flavor-and-heat" | "heat-signal" | "genes-and-growing";
+export type ConceptVisual = "pepper-anatomy" | "flavor-and-heat" | "heat-signal" | "genes-and-growing";
 
-export type ChallengeStep = {
+type ChallengeStepBase = {
   id: string;
-  skill: "Reading" | "Geography" | "Math" | "Science" | "Words";
   icon: string;
   title: string;
   clue: string;
@@ -18,10 +17,20 @@ export type ChallengeStep = {
   choices: string[];
   answer: string;
   summary: string;
-  evidence?: string;
-  math?: { groups: number; each: number; visual: EqualGroupsVisual };
-  map?: { hint: string; choices: { label: string; x: number; y: number }[] };
-  conceptVisual?: ConceptVisual;
+};
+
+export type ChallengeStep =
+  | (ChallengeStepBase & { skill: "Reading"; evidence: string })
+  | (ChallengeStepBase & { skill: "Geography"; map: { hint: string; choices: { label: string; x: number; y: number }[] } })
+  | (ChallengeStepBase & { skill: "Math"; math: { groups: number; each: number; visual: EqualGroupsVisual } })
+  | (ChallengeStepBase & { skill: "Science"; conceptVisual: ConceptVisual })
+  | (ChallengeStepBase & { skill: "Words" });
+
+export const challengeConceptVisualLabels: Record<ConceptVisual, string> = {
+  "pepper-anatomy": "Labeled pepper anatomy diagram",
+  "flavor-and-heat": "Diagram showing aroma and heat caused by different pepper chemicals",
+  "heat-signal": "Diagram showing capsaicin sending a heat warning through a nerve to the brain",
+  "genes-and-growing": "Diagram showing genes and growing conditions shaping a pepper's heat",
 };
 
 export type ChallengeCampaign = {
@@ -95,7 +104,7 @@ export const pepperChallengeCampaigns: ChallengeCampaign[] = [
     steps: [
       { id: "pepper-x-reading", skill: "Reading", icon: "🏷️", title: "Read the record card", clue: "Pepper X averages 2,693,000 Scoville Heat Units. Individual peppers can measure above or below that number.", question: "Which statement is supported by the record card?", choices: ["Different fruits can measure above or below 2,693,000 SHU", "Every fruit measures exactly 2,693,000 SHU", "Only one Pepper X fruit was measured"], answer: "Different fruits can measure above or below 2,693,000 SHU", summary: "The average summarizes multiple measurements, while individual peppers can be higher or lower.", evidence: "Individual peppers can measure above or below that number" },
       { id: "pepper-x-geography", skill: "Geography", icon: "🌎", title: "Locate the pepper lab", clue: "Pepper X was developed in Fort Mill, South Carolina, in the southeastern United States.", question: "Which pin marks South Carolina?", choices: ["South Carolina", "California", "Alaska"], answer: "South Carolina", summary: "South Carolina is in the southeastern United States near the Atlantic coast.", map: { hint: "Look on the eastern side of the United States.", choices: [{ label: "South Carolina", x: 28, y: 31 }, { label: "California", x: 17, y: 29 }, { label: "Alaska", x: 8, y: 14 }] } },
-      { id: "pepper-x-math", skill: "Math", icon: "🧺", title: "Fill the seed grid", clue: "12 trays hold 12 seeds each.", question: "12 × 12 = ?", choices: ["132 seeds", "140 seeds", "144 seeds"], answer: "144 seeds", summary: "Twelve groups of 12 make 144 seeds.", math: { groups: 12, each: 12, visual: { ariaLabel: "Math picture: 12 equal tray groups of 12 seeds", groupSingular: "tray", groupPlural: "trays", groupEmoji: "🧺", itemSingular: "seed", itemPlural: "seeds", itemEmoji: "•" } } },
+      { id: "pepper-x-math", skill: "Math", icon: "🧺", title: "Fill the seed grid", clue: "12 trays hold 12 seeds each.", question: "12 × 12 = ?", choices: ["132 seeds", "140 seeds", "144 seeds"], answer: "144 seeds", summary: "Twelve equal groups of 12 make 144 seeds.", math: { groups: 12, each: 12, visual: { ariaLabel: "Math picture: 12 equal tray groups of 12 seeds", groupSingular: "tray", groupPlural: "trays", groupEmoji: "🧺", itemSingular: "seed", itemPlural: "seeds", itemEmoji: "•" } } },
       { id: "pepper-x-science", skill: "Science", icon: "🧪", title: "Explain the heat range", clue: "Genes set a pepper's possible traits. Sunlight, water, and temperature also affect how each fruit develops.", question: "Why can two fruits from one cultivar have different heat levels?", choices: ["Their growing conditions can differ", "A measurement changes their species", "Scoville units measure only color"], answer: "Their growing conditions can differ", summary: "Shared genes matter, but different growing conditions can change how each fruit develops.", conceptVisual: "genes-and-growing" },
       { id: "pepper-x-words", skill: "Words", icon: "📖", title: "Unlock a plant word", clue: "Pepper X is a cultivar selected for particular traits.", question: "What is a cultivar?", choices: ["A cultivated plant variety", "A map of a continent", "A tool for measuring rain"], answer: "A cultivated plant variety", summary: "A cultivar is a plant variety people maintain for chosen traits." },
     ],
@@ -169,10 +178,10 @@ export function ChallengeMode({ campaign, milestone, onComplete }: { campaign: C
             const answerChoice = selected !== null && choice === step.answer;
             const chosenWrong = selected === choice && choice !== step.answer;
             const choiceIndex = step.choices.indexOf(choice);
-            return <GameChoiceButton key={choice} disabled={selected !== null} onClick={() => setSelected(choice)} chosen={chosenWrong} correct={answerChoice}>{step.map && <span className="mr-2 inline-grid h-7 w-7 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs">{String.fromCharCode(65 + choiceIndex)}</span>}{choice}</GameChoiceButton>;
+            return <GameChoiceButton key={choice} disabled={selected !== null} onClick={() => setSelected(choice)} chosen={chosenWrong} correct={answerChoice}>{step.skill === "Geography" && <span className="mr-2 inline-grid h-7 w-7 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs">{String.fromCharCode(65 + choiceIndex)}</span>}{choice}</GameChoiceButton>;
           })}
           </GameChoiceGrid>
-          {selected && <GameAnswerFeedback isCorrect={correct} celebration="Correct!" correctAnswer={step.answer} explanation={step.summary} evidence={step.evidence} note="Good try." nextLabel={stepIndex === steps.length - 1 ? "View challenge summary" : "Next question"} onNext={next} />}
+          {selected && <GameAnswerFeedback isCorrect={correct} celebration="Correct!" correctAnswer={step.answer} explanation={step.summary} evidence={step.skill === "Reading" ? step.evidence : undefined} note="Good try." nextLabel={stepIndex === steps.length - 1 ? "View challenge summary" : "Next question"} onNext={next} />}
         </article>
       </div>
     </section>
@@ -198,7 +207,7 @@ function ChallengeModeBanner({ campaign, milestone, stepIndex }: { campaign: Cha
 }
 
 function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign: ChallengeCampaign; step: ChallengeStep; selected: string | null; onSelect: (choice: string) => void }) {
-  if (step.map) {
+  if (step.skill === "Geography") {
     return (
       <aside aria-label="Challenge map story" className="min-h-[430px] rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
         <WorldMapSurface
@@ -212,7 +221,7 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
     );
   }
 
-  if (step.skill === "Math" && step.math) {
+  if (step.skill === "Math") {
     return (
       <aside aria-label="Challenge math story" className="flex min-h-[520px] flex-col gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
         <div className="relative min-h-[130px] max-h-[190px] flex-[.3] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
@@ -224,7 +233,7 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
     );
   }
 
-  if (step.conceptVisual) {
+  if (step.skill === "Science") {
     return <aside aria-label="Challenge science story" className="min-h-[480px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0"><MiniConceptDiagram kind={step.conceptVisual} /></aside>;
   }
 
@@ -239,7 +248,7 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
 
 function MiniConceptDiagram({ kind }: { kind: ConceptVisual }) {
   if (kind === "pepper-anatomy") return (
-    <div className="grid h-full min-h-[470px] grid-rows-[1fr_auto] rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-3" aria-label="Labeled pepper anatomy diagram">
+    <div className="grid h-full min-h-[470px] grid-rows-[1fr_auto] rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-3" aria-label={challengeConceptVisualLabels[kind]}>
       <svg viewBox="0 0 720 470" className="h-full w-full" role="img" aria-label="Cut-open pepper showing the outer wall, pale placenta, seeds, and capsaicin">
         <path d="M265 56 C195 80 145 170 160 285 C174 393 262 424 360 405 C453 387 521 316 508 215 C496 120 419 64 333 60 Z" fill="#d74631" stroke="#092421" strokeWidth="8" />
         <path d="M285 92 C231 120 205 188 218 270 C230 342 287 371 353 359 C421 347 463 292 452 222 C442 153 390 105 329 96 Z" fill="#fff1bf" stroke="#092421" strokeWidth="6" />
@@ -255,11 +264,11 @@ function MiniConceptDiagram({ kind }: { kind: ConceptVisual }) {
     </div>
   );
 
-  const diagrams: Record<Exclude<ConceptVisual, "pepper-anatomy">, { label: string; title: string; items: { icon: string; title: string; text: string }[] }> = {
-    "flavor-and-heat": { label: "Diagram showing aroma and heat caused by different pepper chemicals", title: "One pepper · two sensations", items: [{ icon: "🍍", title: "Aroma chemicals", text: "create a fruity smell" }, { icon: "🌶️", title: "Capsaicin", text: "activates heat-sensing nerves" }] },
-    "heat-signal": { label: "Diagram showing capsaicin sending a heat warning through a nerve to the brain", title: "How the heat signal travels", items: [{ icon: "🌶️", title: "Capsaicin", text: "touches a receptor" }, { icon: "〰️", title: "Nerve", text: "sends a warning" }, { icon: "🧠", title: "Brain", text: "interprets heat" }] },
-    "genes-and-growing": { label: "Diagram showing genes and growing conditions shaping a pepper's heat", title: "What shapes each pepper", items: [{ icon: "🧬", title: "Genes", text: "set possible traits" }, { icon: "☀️💧", title: "Growing conditions", text: "sun, water, temperature" }, { icon: "🌶️", title: "Fruit", text: "develops its final heat" }] },
+  const diagrams: Record<Exclude<ConceptVisual, "pepper-anatomy">, { title: string; items: { icon: string; title: string; text: string }[] }> = {
+    "flavor-and-heat": { title: "One pepper · two sensations", items: [{ icon: "🍍", title: "Aroma chemicals", text: "create a fruity smell" }, { icon: "🌶️", title: "Capsaicin", text: "activates heat-sensing nerves" }] },
+    "heat-signal": { title: "How the heat signal travels", items: [{ icon: "🌶️", title: "Capsaicin", text: "touches a receptor" }, { icon: "〰️", title: "Nerve", text: "sends a warning" }, { icon: "🧠", title: "Brain", text: "interprets heat" }] },
+    "genes-and-growing": { title: "What shapes each pepper", items: [{ icon: "🧬", title: "Genes", text: "set possible traits" }, { icon: "☀️💧", title: "Growing conditions", text: "sun, water, temperature" }, { icon: "🌶️", title: "Fruit", text: "develops its final heat" }] },
   };
   const diagram = diagrams[kind];
-  return <div className="flex h-full min-h-[470px] flex-col justify-center rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-5" aria-label={diagram.label}><p className="text-center text-3xl font-black text-[#102f36]">{diagram.title}</p><div className={`mt-6 grid items-stretch gap-3 ${diagram.items.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>{diagram.items.map((item, index) => <div key={item.title} className="relative rounded-xl border-2 border-[#092421] bg-white p-4 text-center shadow-[3px_3px_0_#092421]"><p className="text-5xl" aria-hidden="true">{item.icon}</p><p className="mt-3 text-lg font-black text-[#102f36]">{item.title}</p><p className="mt-1 text-sm font-bold text-[#5f6b5d]">{item.text}</p>{index < diagram.items.length - 1 && <span className="absolute -right-5 top-1/2 z-10 hidden -translate-y-1/2 text-3xl font-black text-[#9f3f2b] sm:block">→</span>}</div>)}</div></div>;
+  return <div className="flex h-full min-h-[470px] flex-col justify-center rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-5" aria-label={challengeConceptVisualLabels[kind]}><p className="text-center text-3xl font-black text-[#102f36]">{diagram.title}</p><div className={`mt-6 grid items-stretch gap-3 ${diagram.items.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>{diagram.items.map((item, index) => <div key={item.title} className="relative rounded-xl border-2 border-[#092421] bg-white p-4 text-center shadow-[3px_3px_0_#092421]"><p className="text-5xl" aria-hidden="true">{item.icon}</p><p className="mt-3 text-lg font-black text-[#102f36]">{item.title}</p><p className="mt-1 text-sm font-bold text-[#5f6b5d]">{item.text}</p>{index < diagram.items.length - 1 && <span className="absolute -right-5 top-1/2 z-10 hidden -translate-y-1/2 text-3xl font-black text-[#9f3f2b] sm:block">→</span>}</div>)}</div></div>;
 }

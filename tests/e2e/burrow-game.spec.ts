@@ -1,5 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
-import { pepperChallengeCampaigns } from "../../src/components/core-mini-challenge";
+import {
+  challengeConceptVisualLabels,
+  pepperChallengeCampaignForMilestone,
+  pepperChallengeCampaigns,
+} from "../../src/components/core-mini-challenge";
 import { buildNumberRound, buildNumberRoundFromCards, type GenericKnowledgeCard } from "../../src/lib/game-modes";
 
 const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
@@ -40,6 +44,27 @@ const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
   }
   await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
   await expect(setupSummary(page)).toContainText("1 topics");
+};
+
+const openPepperChallengeAt = async (page: Page, milestone: number) => {
+  await page.evaluate((targetMilestone) => {
+    const key = "burrow-profiles-v1";
+    const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
+      activeProfileId: string;
+      profiles: { id: string; progress: { answered: number; challengeMilestone: number } }[];
+    };
+    const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
+    if (!active) throw new Error("Active profile was not saved");
+    active.progress.answered = targetMilestone - 1;
+    active.progress.challengeMilestone = targetMilestone - 10;
+    window.localStorage.setItem(key, JSON.stringify(profiles));
+  }, milestone);
+  await page.reload();
+  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+  await chooseOnlyMode(page, "True/False");
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+  await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
+  await page.getByRole("button", { name: /Next|Finish round/ }).click();
 };
 
 const mathFixtureCards: GenericKnowledgeCard[] = [12, 20, 35, 48].map((value, index) => ({
@@ -125,6 +150,50 @@ test("challenge campaigns use one future-ready five-stop contract", () => {
     expect(math?.visual.groupSingular).toBeTruthy();
     expect(math?.visual.itemPlural).toBeTruthy();
   }
+});
+
+test("every Challenge subject has valid content and its required teaching stage", () => {
+  const stepIds = pepperChallengeCampaigns.flatMap((campaign) => campaign.steps.map((step) => step.id));
+  expect(new Set(stepIds).size).toBe(stepIds.length);
+
+  for (const campaign of pepperChallengeCampaigns) {
+    for (const step of campaign.steps) {
+      expect(step.clue.length, `${step.id} needs a useful clue`).toBeGreaterThan(20);
+      expect(step.summary.length, `${step.id} needs teaching feedback`).toBeGreaterThan(35);
+      expect(step.choices, `${step.id} must contain its answer`).toContain(step.answer);
+      expect(step.choices, `${step.id} needs three choices`).toHaveLength(3);
+      expect(new Set(step.choices).size, `${step.id} choices must be distinct`).toBe(3);
+
+      if (step.skill === "Reading") {
+        expect(step.clue).toContain(step.evidence);
+      } else if (step.skill === "Geography") {
+        expect(step.map.choices.map((choice) => choice.label)).toEqual(step.choices);
+        for (const choice of step.map.choices) {
+          expect(choice.x, `${step.id} map x must be valid`).toBeGreaterThanOrEqual(0);
+          expect(choice.x, `${step.id} map x must be valid`).toBeLessThanOrEqual(100);
+          expect(choice.y, `${step.id} map y must be valid`).toBeGreaterThanOrEqual(0);
+          expect(choice.y, `${step.id} map y must be valid`).toBeLessThanOrEqual(100);
+        }
+      } else if (step.skill === "Math") {
+        expect(step.question).toBe(`${step.math.groups} × ${step.math.each} = ?`);
+        expect(Number.parseInt(step.answer.replaceAll(",", ""), 10)).toBe(step.math.groups * step.math.each);
+        expect(step.math.visual.ariaLabel).toContain(`${step.math.groups}`);
+        expect(step.math.visual.ariaLabel).toContain(`${step.math.each}`);
+      } else if (step.skill === "Science") {
+        expect(challengeConceptVisualLabels[step.conceptVisual].length).toBeGreaterThan(20);
+      }
+    }
+  }
+});
+
+test("campaign selection rotates through every deep dive", () => {
+  expect([10, 20, 30, 40, 50].map((milestone) => pepperChallengeCampaignForMilestone(milestone).id)).toEqual([
+    "jalapeno-fieldwork",
+    "caribbean-pepper-quest",
+    "ghost-pepper-mission",
+    "pepper-x-research-lab",
+    "jalapeno-fieldwork",
+  ]);
 });
 
 test("every automatic Reading stop is grounded in visible evidence", () => {
@@ -269,6 +338,60 @@ test("every tenth answer opens an automatic mini challenge and returns after its
     return profiles.profiles.find((profile) => profile.id === profiles.activeProfileId)?.progress.challengeMilestone;
   })).toBe(10);
 });
+
+for (const [campaignOffset, campaign] of pepperChallengeCampaigns.slice(1).entries()) {
+  test(`every subject stage renders and teaches in ${campaign.name}`, async ({ page }) => {
+    const milestone = (campaignOffset + 2) * 10;
+    await openPepperChallengeAt(page, milestone);
+    await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText(`Deep dive: ${campaign.name}`);
+
+    const reading = campaign.steps.find((step) => step.skill === "Reading");
+    const geography = campaign.steps.find((step) => step.skill === "Geography");
+    const math = campaign.steps.find((step) => step.skill === "Math");
+    const science = campaign.steps.find((step) => step.skill === "Science");
+    const words = campaign.steps.find((step) => step.skill === "Words");
+    if (!reading || reading.skill !== "Reading" || !geography || geography.skill !== "Geography" || !math || math.skill !== "Math" || !science || science.skill !== "Science" || !words || words.skill !== "Words") {
+      throw new Error(`${campaign.id} is missing a required subject`);
+    }
+
+    await expect(page.getByRole("heading", { name: reading.title })).toBeVisible();
+    await expect(page.getByLabel("Challenge picture story")).toBeVisible();
+    await page.getByRole("button", { name: reading.answer }).click();
+    await expect(page.getByLabel("Answer feedback")).toContainText(reading.summary);
+    await expect(page.getByLabel("Answer feedback")).toContainText(reading.evidence);
+    await page.getByRole("button", { name: "Next question" }).click();
+
+    await expect(page.getByRole("heading", { name: geography.title })).toBeVisible();
+    await expect(page.getByLabel("Challenge map story")).toBeVisible();
+    const mapChoiceIndex = geography.map.choices.findIndex((choice) => choice.label === geography.answer);
+    await page.getByRole("button", { name: `Choose map pin ${String.fromCharCode(65 + mapChoiceIndex)}: ${geography.answer}` }).click();
+    await expect(page.getByLabel("Answer feedback")).toContainText(geography.summary);
+    await page.getByRole("button", { name: "Next question" }).click();
+
+    await expect(page.getByRole("heading", { name: math.title })).toBeVisible();
+    await expect(page.getByRole("heading", { name: math.question })).toBeVisible();
+    const mathStory = page.getByLabel("Challenge math story");
+    await expect(mathStory.getByLabel(math.math.visual.ariaLabel)).toBeVisible();
+    await expect(mathStory.locator("[data-math-group]")).toHaveCount(math.math.groups);
+    await page.getByRole("button", { name: math.answer }).click();
+    await expect(page.getByLabel("Answer feedback")).toContainText(math.summary);
+    await page.getByRole("button", { name: "Next question" }).click();
+
+    await expect(page.getByRole("heading", { name: science.title })).toBeVisible();
+    await expect(page.getByLabel("Challenge science story")).toBeVisible();
+    await expect(page.getByLabel(challengeConceptVisualLabels[science.conceptVisual])).toBeVisible();
+    await page.getByRole("button", { name: science.answer }).click();
+    await expect(page.getByLabel("Answer feedback")).toContainText(science.summary);
+    await page.getByRole("button", { name: "Next question" }).click();
+
+    await expect(page.getByRole("heading", { name: words.title })).toBeVisible();
+    await expect(page.getByLabel("Challenge picture story")).toBeVisible();
+    await page.getByRole("button", { name: words.answer }).click();
+    await expect(page.getByLabel("Answer feedback")).toContainText(words.summary);
+    await page.getByRole("button", { name: "View challenge summary" }).click();
+    await expect(page.getByRole("heading", { name: campaign.completionTitle })).toBeVisible();
+  });
+}
 
 test("pepper mini challenges do not interrupt unselected topics", async ({ page }) => {
   await page.evaluate(() => {
