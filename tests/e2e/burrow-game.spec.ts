@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { coreMiniExpeditions } from "../../src/components/core-mini-challenge";
+import { pepperChallengeCampaigns } from "../../src/components/core-mini-challenge";
 import { buildNumberRound, buildNumberRoundFromCards, type GenericKnowledgeCard } from "../../src/lib/game-modes";
 
 const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
@@ -103,24 +103,34 @@ test("hard multiplication reaches the full twelve-by-twelve table", () => {
   expect(round.termValues).toEqual([12, 12]);
 });
 
-test("mini challenges rotate through four deep cross-subject expeditions", () => {
-  expect(coreMiniExpeditions).toHaveLength(4);
-  expect(new Set(coreMiniExpeditions.map((expedition) => expedition.name)).size).toBe(4);
-  for (const expedition of coreMiniExpeditions) {
-    expect(new Set(expedition.steps.map((step) => step.skill))).toEqual(new Set(["Reading", "Geography", "Math", "Science", "Words"]));
+test("challenge campaigns use one future-ready five-stop contract", () => {
+  expect(pepperChallengeCampaigns).toHaveLength(4);
+  expect(new Set(pepperChallengeCampaigns.map((campaign) => campaign.id)).size).toBe(4);
+  expect(new Set(pepperChallengeCampaigns.map((campaign) => campaign.name)).size).toBe(4);
+  for (const campaign of pepperChallengeCampaigns) {
+    expect(campaign.topicId).toBe("peppers");
+    expect(campaign.topicLabel).toBe("Spicy Peppers");
+    expect(campaign.completionTitle.length).toBeGreaterThan(10);
+    expect(new Set(campaign.steps.map((step) => step.skill))).toEqual(new Set(["Reading", "Geography", "Math", "Science", "Words"]));
   }
-  expect(coreMiniExpeditions.map((expedition) => expedition.steps.find((step) => step.skill === "Math")?.question)).toEqual([
+  expect(pepperChallengeCampaigns.map((campaign) => campaign.steps.find((step) => step.skill === "Math")?.question)).toEqual([
     "7 × 8 = ?",
     "9 × 12 = ?",
     "11 × 9 = ?",
     "12 × 12 = ?",
   ]);
+  for (const campaign of pepperChallengeCampaigns) {
+    const math = campaign.steps.find((step) => step.skill === "Math")?.math;
+    expect(math?.visual.ariaLabel).toContain("Math picture:");
+    expect(math?.visual.groupSingular).toBeTruthy();
+    expect(math?.visual.itemPlural).toBeTruthy();
+  }
 });
 
 test("every automatic Reading stop is grounded in visible evidence", () => {
-  const readingSteps = coreMiniExpeditions.flatMap((expedition) => expedition.steps.filter((step) => step.skill === "Reading"));
+  const readingSteps = pepperChallengeCampaigns.flatMap((campaign) => campaign.steps.filter((step) => step.skill === "Reading"));
 
-  expect(readingSteps).toHaveLength(coreMiniExpeditions.length);
+  expect(readingSteps).toHaveLength(pepperChallengeCampaigns.length);
   for (const step of readingSteps) {
     const evidence = step.evidence;
     expect(evidence, `${step.id} needs an evidence quote`).toBeTruthy();
@@ -133,17 +143,17 @@ test("every automatic Reading stop is grounded in visible evidence", () => {
 });
 
 test("every challenge Geography and Science stop has a teaching visual", () => {
-  const geographySteps = coreMiniExpeditions.flatMap((expedition) => expedition.steps.filter((step) => step.skill === "Geography"));
-  const scienceSteps = coreMiniExpeditions.flatMap((expedition) => expedition.steps.filter((step) => step.skill === "Science"));
+  const geographySteps = pepperChallengeCampaigns.flatMap((campaign) => campaign.steps.filter((step) => step.skill === "Geography"));
+  const scienceSteps = pepperChallengeCampaigns.flatMap((campaign) => campaign.steps.filter((step) => step.skill === "Science"));
 
-  expect(geographySteps).toHaveLength(coreMiniExpeditions.length);
+  expect(geographySteps).toHaveLength(pepperChallengeCampaigns.length);
   for (const step of geographySteps) {
     expect(step.map, `${step.id} needs a map`).toBeTruthy();
     expect(step.map?.choices.map((choice) => choice.label)).toEqual(step.choices);
     expect(step.map?.choices.some((choice) => choice.label === step.answer)).toBe(true);
   }
 
-  expect(scienceSteps).toHaveLength(coreMiniExpeditions.length);
+  expect(scienceSteps).toHaveLength(pepperChallengeCampaigns.length);
   for (const step of scienceSteps) {
     expect(step.conceptVisual, `${step.id} needs a concept diagram`).toBeTruthy();
     expect(step.choices).toContain(step.answer);
@@ -219,7 +229,7 @@ test("every tenth answer opens an automatic mini challenge and returns after its
   await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Deep dive: Jalapeño fieldwork");
 
   await page.getByRole("button", { name: "Keep pouring until water covers the soil" }).click();
-  await expect(page.getByText("Answer: Water until the soil is damp, then stop")).toBeVisible();
+  await expect(page.getByLabel("Answer feedback")).toContainText("Answer: Water until the soil is damp, then stop");
   await expect(page.getByText("Evidence:", { exact: true }).locator("..")).toContainText("Keep the soil evenly damp, but never waterlogged");
   await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Map the pepper homeland" })).toBeVisible();
@@ -232,7 +242,7 @@ test("every tenth answer opens an automatic mini challenge and returns after its
   await expect(page.getByRole("heading", { name: "Count the harvest" })).toBeVisible();
   await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Stop 3 of 5");
   await expect(page.getByRole("heading", { name: "7 × 8 = ?" })).toBeVisible();
-  await expect(page.getByLabel("Challenge math story").getByLabel("7 equal pepper groups of 8")).toBeVisible();
+  await expect(page.getByLabel("Challenge math story").getByLabel("Math picture: 7 equal plant groups of 8 peppers")).toBeVisible();
 
   await page.getByRole("button", { name: "56 peppers" }).click();
   await page.getByRole("button", { name: "Next question" }).click();
@@ -245,7 +255,7 @@ test("every tenth answer opens an automatic mini challenge and returns after its
   await page.getByRole("button", { name: "Gathered in a larger amount" }).click();
   await page.getByRole("button", { name: "View challenge summary" }).click();
 
-  await expect(page.getByRole("heading", { name: "Pepper field journal" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Jalapeño field journal" })).toBeVisible();
   await expect(page.getByText("4/5 discoveries solved · all five notes collected")).toBeVisible();
   await page.getByRole("button", { name: "Continue regular questions" }).click();
   await expect(page.getByText("True or false?")).toBeVisible();

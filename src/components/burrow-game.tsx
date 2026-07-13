@@ -2,7 +2,9 @@
 
 import { track } from "@vercel/analytics";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CoreMiniChallenge } from "@/components/core-mini-challenge";
+import { ChallengeMode, pepperChallengeCampaignForMilestone } from "@/components/core-mini-challenge";
+import { EqualGroupsBoard } from "@/components/equal-groups-board";
+import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid } from "@/components/game-question-ui";
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
 import {
@@ -1847,7 +1849,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         />
 
         {miniChallengeActive ? (
-          <CoreMiniChallenge milestone={progress.answered} onComplete={finishMiniChallenge} />
+          <ChallengeMode campaign={pepperChallengeCampaignForMilestone(progress.answered)} milestone={progress.answered} onComplete={finishMiniChallenge} />
         ) : (
           <>
 
@@ -2431,7 +2433,7 @@ function QuestionRun({
           {question.comparison && showComparisonTable && <ComparisonTable cards={question.comparison} />}
         </div>
 
-        <div className="mt-2 grid shrink-0 gap-2 xl:grid-cols-2">
+        <GameChoiceGrid>
           {choices.map((choice) => {
             const chosen = selected === choice;
             const correctChoice = answered && choice === question.answer;
@@ -2440,16 +2442,11 @@ function QuestionRun({
                 ? (choice as HeatBand)
                 : null;
             return (
-              <button
+              <GameChoiceButton
                 key={`${question.id}-${choice}`}
                 onClick={() => onAnswer(choice)}
-                className={`min-h-12 rounded-lg border-2 px-3 py-2 text-left text-base font-black leading-snug transition duration-150 ease-out active:translate-y-0.5 md:min-h-14 md:text-lg ${
-                  correctChoice
-                    ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
-                    : chosen
-                      ? "border-[#092421] bg-[#f59a7d] shadow-[3px_3px_0_#092421]"
-                      : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf] hover:shadow-[2px_2px_0_#092421]"
-                }`}
+                chosen={chosen}
+                correct={correctChoice}
               >
                 <span className="flex items-center justify-between gap-3">
                   <span className="flex min-w-0 items-center gap-2">
@@ -2459,10 +2456,10 @@ function QuestionRun({
                   {correctChoice && <span className="shrink-0 text-2xl leading-none">+</span>}
                   {chosen && !correctChoice && <span className="shrink-0 text-2xl leading-none">x</span>}
                 </span>
-              </button>
+              </GameChoiceButton>
             );
           })}
-        </div>
+        </GameChoiceGrid>
 
         {answered && lastResult && (
           <FeedbackPanel
@@ -3184,28 +3181,7 @@ function NumberEquationBoard({ round }: { round: NumberRound }) {
       itemPlural: "items",
       itemEmoji: "•",
     };
-    return (
-      <div className="h-full min-h-[300px] overflow-y-auto rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-4" aria-label={visual.ariaLabel}>
-        <div className="flex items-center justify-between gap-2">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · Equal groups</p>
-            <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">Every group gets the same number.</p>
-          </div>
-          <p className="rounded-md bg-[#f0c84b] px-3 py-2 text-2xl font-black text-[#102f36]">{round.biggerValue} x {round.smallerValue} = ?</p>
-        </div>
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {Array.from({ length: round.biggerValue }, (_, index) => (
-            <div data-math-group key={`${round.id}-group-${index}`} className="rounded-lg border-2 border-[#092421] bg-[#e9ffe9] px-2 py-2 text-center shadow-[2px_2px_0_#092421]">
-              <p className="text-[10px] font-black uppercase tracking-[0.06em] text-[#2f6547]"><span aria-hidden="true">{visual.groupEmoji} </span>{visual.groupSingular} {index + 1}</p>
-              <p className="mt-1 break-words text-lg leading-[1.05]" aria-hidden="true">
-                {round.smallerValue <= 6 ? Array.from({ length: round.smallerValue }, () => visual.itemEmoji).join("") : `${visual.itemEmoji} × ${round.smallerValue}`}
-              </p>
-              <p className="mt-0.5 text-[11px] font-black text-[#9f3f2b]">{round.smallerValue} {round.smallerValue === 1 ? visual.itemSingular : visual.itemPlural}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+    return <EqualGroupsBoard id={round.id} groups={round.biggerValue} each={round.smallerValue} visual={visual} />;
   }
 
   if (round.operation === "addition") {
@@ -3943,57 +3919,19 @@ function FeedbackPanel({
   isLast: boolean;
   onNext: () => void;
 }) {
-  const panelRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    panelRef.current?.scrollIntoView({ block: "end" });
-  }, [correctAnswer, explanation, isCorrect]);
-
   return (
-    <div ref={panelRef} className="sticky bottom-0 z-20 mt-auto bg-[#fffdf6]/95 pt-2 backdrop-blur">
-      <div className={`rounded-lg border-2 p-2.5 ${isCorrect ? "border-[#2f7d4f] bg-[#e9ffe9]" : "border-[#9f3f2b] bg-[#fff0ea]"}`}>
-        <div className="grid gap-2 md:grid-cols-[auto_1fr] md:items-start">
-          <div className={`relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-lg border-2 border-[#092421] text-2xl font-black shadow-[2px_2px_0_#092421] ${isCorrect ? "bg-[#70d392]" : "bg-[#f59a7d]"}`}>
-            {isCorrect ? (
-              <>
-                <span className="absolute left-1.5 top-1 h-2 w-2 rounded-sm bg-[#fff9ec]" />
-                <span className="absolute bottom-1.5 right-1.5 h-1.5 w-1.5 rounded-sm bg-[#f0c84b]" />
-                <span>+</span>
-              </>
-            ) : (
-              "!"
-            )}
-          </div>
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <p className="text-lg font-black leading-tight text-[#102f36] md:text-xl">
-                {isCorrect ? celebration : note}
-              </p>
-              <span className="rounded-full border-2 border-[#092421] bg-[#f0c84b] px-2 py-0.5 text-sm font-black text-[#102f36]">
-                +{xpGain} glow
-              </span>
-              {leveledUp && (
-                <span className="rounded-full border-2 border-[#092421] bg-[#70d392] px-2 py-0.5 text-sm font-black text-[#102f36]">
-                  Glow up
-                </span>
-              )}
-            </div>
-            {!isCorrect && (
-              <p className="mt-1 text-base font-black text-[#9f3f2b]">
-                Answer: {correctAnswer}
-              </p>
-            )}
-            <p className="mt-1 text-sm font-semibold leading-5 text-[#24373b]">
-              {explanation}
-            </p>
-            {locations && locations.length > 0 && <WorldLocationPanel locations={locations} />}
-          </div>
-        </div>
-        <button onClick={onNext} className="mt-2 w-full rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2.5 text-base font-black text-white shadow-[3px_3px_0_#092421] hover:bg-[#23564f]">
-          {isLast ? "Finish round" : "Next"}
-        </button>
-      </div>
-    </div>
+    <GameAnswerFeedback
+      isCorrect={isCorrect}
+      celebration={celebration}
+      correctAnswer={correctAnswer}
+      explanation={explanation}
+      note={note}
+      nextLabel={isLast ? "Finish round" : "Next"}
+      onNext={onNext}
+      reward={{ xpGain, leveledUp }}
+    >
+      {locations && locations.length > 0 && <WorldLocationPanel locations={locations} />}
+    </GameAnswerFeedback>
   );
 }
 
