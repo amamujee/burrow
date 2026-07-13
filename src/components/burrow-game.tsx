@@ -475,8 +475,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   }, [packDeckById, pickTopic]);
   const buildGeoForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number) => {
     const scopedTopics = scopeTopics(scope);
-    const fallbackTopics = playableTopics.filter((topicId) => !scopedTopics.includes(topicId));
-    const orderedTopics = [...scopedTopics, ...fallbackTopics].sort((a, b) => {
+    const orderedTopics = [...scopedTopics].sort((a, b) => {
       const scoreA = Math.sin((seed + a.length * 17) * 97);
       const scoreB = Math.sin((seed + b.length * 17) * 97);
       return scoreA - scoreB;
@@ -491,8 +490,10 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       }
     }
 
+    // Geo is hidden when none of the selected topics can build a round. Keep a
+    // valid background round so the shared game state can still initialize.
     return buildGeoRound("mixed", difficulty, seed + 997);
-  }, [packDeckById, playableTopics, scopeTopics]);
+  }, [packDeckById, scopeTopics]);
   const buildNumberForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number) => {
     const topicId = pickTopic(scope, seed);
     const deck = packDeckById.get(topicId);
@@ -553,6 +554,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const lastViewedPlayKeyRef = useRef("");
 
   const allCards = useMemo(() => [...collectionCards(), ...packDecks.flatMap((deck) => deck.cards)], [packDecks]);
+  const activeTopicSet = new Set(activeInterests);
+  const selectedCards = allCards.filter((card) => activeTopicSet.has(card.topic));
   const question = questions[questionIndex];
   const hasBuiltInInterests = activeInterests.some(isKnowledgeTopic);
   const geoCapableTopics = useMemo(() => new Set(playableTopics.filter((topicId) => {
@@ -591,7 +594,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
                 ? oddSelected !== null
                 : answered;
   const sessionAnswered = questionIndex + (activeChallengeAnswered ? 1 : 0);
-  const unlockedCount = allCards.filter((card) => progress.unlockedCards.includes(card.title)).length;
+  const unlockedCount = selectedCards.filter((card) => progress.unlockedCards.includes(card.title)).length;
   const currentTopicScope = adaptiveTopicScopeFor(topic, activeInterests, progress, playableTopics);
   const currentTopicLabel = isQuestionMode && question ? topicLabel(question.topic) : typeof currentTopicScope === "string" && currentTopicScope !== "mixed" ? topicLabel(currentTopicScope) : "Mixed topics";
   const currentRoundContext = `${currentTopicLabel} · ${gameTypeLabel(activeChallengeMode)}`;
@@ -1049,7 +1052,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         : current.modeWins,
     }));
 
-    if (progress.answered + 1 >= progress.challengeMilestone + 10) {
+    if (activeInterests.includes("peppers") && progress.answered + 1 >= progress.challengeMilestone + 10) {
       setMiniChallengePending(true);
     }
 
@@ -1823,7 +1826,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           levelProgress={levelProgress}
           streak={progress.streak}
           accuracy={accuracy}
-          collectionValue={`${unlockedCount}/${allCards.length}`}
+          collectionValue={`${unlockedCount}/${selectedCards.length}`}
           showCollection={showCollection}
           onCollection={openCollection}
           difficulty={progress.difficulty}
@@ -1849,11 +1852,11 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
 
         {showCollection && (
           <CollectionBook
-            cards={allCards}
+            cards={selectedCards}
             unlockedCards={progress.unlockedCards}
             topic={topic}
             modeWins={progress.modeWins}
-            topicStats={playableTopics.map((id) => {
+            topicStats={activeInterests.map((id) => {
               const meta = topicMeta(id);
               const deck = packDeckById.get(id);
               const builtInPack = isKnowledgeTopic(id) ? topicPacks[id] : null;

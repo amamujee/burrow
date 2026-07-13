@@ -11,11 +11,18 @@ const buttonForLabel = (page: Page, label: string) => page.getByRole("button", {
 
 const chooseOnlyMode = async (page: Page, target: string) => {
   await setupSummary(page).click();
-  for (const label of modeLabels) {
+  const targetButton = buttonForLabel(page, target);
+  if ((await targetButton.getAttribute("aria-pressed")) !== "true") {
+    await targetButton.click();
+    await expect(targetButton).toHaveAttribute("aria-pressed", "true");
+  }
+
+  for (const label of modeLabels.filter((label) => label !== target)) {
     const button = buttonForLabel(page, label);
-    const selected = (await button.getAttribute("aria-pressed")) === "true";
-    if (label === target && !selected) await button.click();
-    if (label !== target && selected) await button.click();
+    if ((await button.getAttribute("aria-pressed")) === "true") {
+      await button.click();
+      await expect(button).toHaveAttribute("aria-pressed", "false");
+    }
   }
   await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
   await expect(setupSummary(page)).toContainText("1 games");
@@ -169,9 +176,10 @@ test("every tenth answer opens an automatic mini challenge and returns after its
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await chooseOnlyMode(page, "True/False");
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
 
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
-  await expect(page.getByText(/Answer:/)).toBeVisible();
+  await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
   await expect(page.getByText("Pepper mini challenge")).toHaveCount(0);
   await page.getByRole("button", { name: /Next|Finish round/ }).click();
   await expect(page.getByText("Pepper mini challenge")).toBeVisible();
@@ -209,6 +217,30 @@ test("every tenth answer opens an automatic mini challenge and returns after its
     };
     return profiles.profiles.find((profile) => profile.id === profiles.activeProfileId)?.progress.challengeMilestone;
   })).toBe(10);
+});
+
+test("pepper mini challenges do not interrupt unselected topics", async ({ page }) => {
+  await page.evaluate(() => {
+    const key = "burrow-profiles-v1";
+    const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
+      activeProfileId: string;
+      profiles: { id: string; progress: { answered: number; challengeMilestone: number } }[];
+    };
+    const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
+    if (!active) throw new Error("Active profile was not saved");
+    active.progress.answered = 9;
+    active.progress.challengeMilestone = 0;
+    window.localStorage.setItem(key, JSON.stringify(profiles));
+  });
+  await page.reload();
+  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+  await chooseOnlyMode(page, "True/False");
+
+  await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
+  await page.getByRole("button", { name: /Next|Finish round/ }).click();
+
+  await expect(page.getByText("Pepper mini challenge")).toHaveCount(0);
+  await expect(page.getByText("True or false?")).toBeVisible();
 });
 
 test("flag image gives local feedback without leaking server details", async ({ page }) => {
@@ -321,6 +353,28 @@ test("peek rounds reset their reveal count after skip", async ({ page }) => {
 
   await page.getByRole("button", { name: "Skip question" }).click();
   await expect(page.getByText("4/12 open")).toBeVisible();
+});
+
+test("geo finder stays inside the selected topic", async ({ page }) => {
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+  await chooseOnlyMode(page, "Geo Finder");
+
+  for (let round = 0; round < 6; round += 1) {
+    await expect(page.getByText("Spicy Peppers · Geo Finder", { exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /^Where on the map is/ })).toBeVisible();
+    await expect(page.getByText("Tallest Mountains · Geo Finder", { exact: true })).toHaveCount(0);
+    if (round < 5) await page.getByRole("button", { name: "Skip question" }).click();
+  }
+});
+
+test("collection only shows selected topics", async ({ page }) => {
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+  await page.getByRole("button", { name: /Cards/ }).click();
+
+  const collection = page.getByText("Collection", { exact: true }).locator("xpath=ancestor::section[1]");
+  await expect(collection.getByText("Spicy Peppers", { exact: true })).toBeVisible();
+  await expect(collection.getByText("Shark Tank", { exact: true })).toHaveCount(0);
+  await expect(collection.getByText("Tallest Mountains", { exact: true })).toHaveCount(0);
 });
 
 test("playable dinosaur pack appears in setup topics", async ({ page }) => {

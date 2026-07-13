@@ -206,7 +206,15 @@ for (const card of lowConfidence) {
   warnings.push(`${card.topic}/${card.id}: low confidence ${card.qualityScore} (${card.qualityFlags.join(", ")})`);
 }
 
-const assertRoundCardImages = async (roundName, round) => {
+const assertTopicIsolation = (roundName, expectedTopic, round) => {
+  if (round.topic !== expectedTopic) critical.push(`${roundName}: expected topic ${expectedTopic}, received ${round.topic}`);
+  for (const card of cardsInRound(round)) {
+    if (card.topic && card.topic !== expectedTopic) critical.push(`${roundName}: card ${card.id} leaked from topic ${card.topic}`);
+  }
+};
+
+const assertRoundCardImages = async (roundName, round, expectedTopic) => {
+  assertTopicIsolation(roundName, expectedTopic, round);
   const cardsToCheck = [];
   if (round.card) cardsToCheck.push(round.card);
   if (round.cards) cardsToCheck.push(...round.cards);
@@ -277,11 +285,13 @@ const checkPackMetadata = (pack) => {
   assertDistinctImageGroups(playableCards.map((card) => ({ ...card, topic: pack.id })), pack.id);
 };
 
-const assertQuestion = async (roundName, question) => {
+const assertQuestion = async (roundName, question, expectedTopic) => {
+  assertTopicIsolation(roundName, expectedTopic, question);
   if (!question.id || !question.prompt || !question.answer) critical.push(`${roundName}/${question.id ?? "missing"}: incomplete question`);
   if (!question.choices?.includes(question.answer)) critical.push(`${roundName}/${question.id}: answer missing from choices`);
   await checkImage({ id: question.id, topic: question.topic, image: question.image });
   for (const comparison of question.comparison ?? []) {
+    if (comparison.topic !== expectedTopic) critical.push(`${roundName}: comparison ${comparison.title} leaked from topic ${comparison.topic}`);
     await checkImage({ id: comparison.title, topic: comparison.topic, image: comparison.image });
   }
 };
@@ -294,13 +304,13 @@ const checkRoundBuilders = async () => {
       const session = buildSession(topic, difficulty, seed, []);
       if (session.length < 12) critical.push(`${topic}/quiz/d${difficulty}: short session`);
       for (const question of session) {
-        await assertQuestion(`${topic}/quiz/d${difficulty}`, question);
+        await assertQuestion(`${topic}/quiz/d${difficulty}`, question, topic);
       }
 
       const headToHeadSession = buildHeadToHeadSession(topic, difficulty, seed + 5, []);
       if (headToHeadSession.length < 12) critical.push(`${topic}/versus/d${difficulty}: short session`);
       for (const question of headToHeadSession) {
-        await assertQuestion(`${topic}/versus/d${difficulty}`, question);
+        await assertQuestion(`${topic}/versus/d${difficulty}`, question, topic);
         if (!question.comparison || question.comparison.length !== 2) critical.push(`${topic}/versus/d${difficulty}/${question.id}: missing comparison cards`);
       }
 
@@ -308,35 +318,35 @@ const checkRoundBuilders = async () => {
       if (sortRound.cards.length < 3 || sortRound.cards.length !== sortRound.answerIds.length) critical.push(`${topic}/sort/d${difficulty}: bad card count`);
       assertDistinctSortValues(`${topic}/sort/d${difficulty}`, sortRound);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${topic}/sort/d${difficulty}`, sortRound);
-      await assertRoundCardImages(`${topic}/sort/d${difficulty}`, sortRound);
+      await assertRoundCardImages(`${topic}/sort/d${difficulty}`, sortRound, topic);
 
       const factRound = buildFactRound(topic, difficulty, seed + 20);
       if (!["True", "False"].includes(factRound.answer)) critical.push(`${topic}/fact/d${difficulty}: bad answer`);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${topic}/fact/d${difficulty}`, factRound);
-      await assertRoundCardImages(`${topic}/fact/d${difficulty}`, factRound);
+      await assertRoundCardImages(`${topic}/fact/d${difficulty}`, factRound, topic);
 
       const revealRound = buildRevealRound(topic, difficulty, seed + 30);
       if (!revealRound.choices.includes(revealRound.answer)) critical.push(`${topic}/peek/d${difficulty}: answer missing from choices`);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${topic}/peek/d${difficulty}`, revealRound);
-      await assertRoundCardImages(`${topic}/peek/d${difficulty}`, revealRound);
+      await assertRoundCardImages(`${topic}/peek/d${difficulty}`, revealRound, topic);
 
       if (canBuildGeoRound(topic, difficulty)) {
         const geoRound = buildGeoRound(topic, difficulty, seed + 40);
         if (!geoRound.choices.some((choice) => choice.id === geoRound.answerId)) critical.push(`${topic}/geo/d${difficulty}: answer missing from choices`);
         if (new Set(geoRound.choices.map((choice) => choice.id)).size !== geoRound.choices.length) critical.push(`${topic}/geo/d${difficulty}: duplicate geo choices`);
         if (difficulty === 1) assertNoHardCardsInEasyRound(`${topic}/geo/d${difficulty}`, geoRound);
-        await assertRoundCardImages(`${topic}/geo/d${difficulty}`, geoRound);
+        await assertRoundCardImages(`${topic}/geo/d${difficulty}`, geoRound, topic);
       }
 
       const numberRound = buildNumberRound(topic, difficulty, seed + 50);
       if (!numberRound.choices.includes(numberRound.answer) || numberRound.cards.length < 2 || numberRound.cards.length !== numberRound.termValues.length) critical.push(`${topic}/number/d${difficulty}: bad number choices`);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${topic}/number/d${difficulty}`, numberRound);
-      await assertRoundCardImages(`${topic}/number/d${difficulty}`, numberRound);
+      await assertRoundCardImages(`${topic}/number/d${difficulty}`, numberRound, topic);
 
       const oddRound = buildOddRound(topic, difficulty, seed + 60);
       if (oddRound.cards.length !== 4 || !oddRound.cards.some((card) => card.id === oddRound.answerId)) critical.push(`${topic}/odd/d${difficulty}: bad odd-one-out set`);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${topic}/odd/d${difficulty}`, oddRound);
-      await assertRoundCardImages(`${topic}/odd/d${difficulty}`, oddRound);
+      await assertRoundCardImages(`${topic}/odd/d${difficulty}`, oddRound, topic);
 
       const topTrumpRound = buildTopTrumpRound(topic, difficulty, seed + 70);
       if (!topTrumpRound.player?.stats?.length || !topTrumpRound.computer?.stats?.length) critical.push(`${topic}/trumps/d${difficulty}: missing trumps stats`);
@@ -349,7 +359,7 @@ const checkRoundBuilders = async () => {
         id: topTrumpRound.id,
         topic: topTrumpRound.topic,
         cards: [topTrumpRound.player, topTrumpRound.computer],
-      });
+      }, topic);
     }
   }
 };
@@ -373,35 +383,35 @@ const checkPlayablePackRoundBuilders = async () => {
       if (sortRound.cards.length < 3 || sortRound.cards.length !== sortRound.answerIds.length) critical.push(`${deck.id}/sort/d${difficulty}: bad card count`);
       assertDistinctSortValues(`${deck.id}/sort/d${difficulty}`, sortRound);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${deck.id}/sort/d${difficulty}`, sortRound);
-      await assertRoundCardImages(`${deck.id}/sort/d${difficulty}`, sortRound);
+      await assertRoundCardImages(`${deck.id}/sort/d${difficulty}`, sortRound, deck.id);
 
       const factRound = buildFactRoundFromCards(deck.cards, deck.id, difficulty, seed + 20);
       if (!["True", "False"].includes(factRound.answer)) critical.push(`${deck.id}/fact/d${difficulty}: bad answer`);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${deck.id}/fact/d${difficulty}`, factRound);
-      await assertRoundCardImages(`${deck.id}/fact/d${difficulty}`, factRound);
+      await assertRoundCardImages(`${deck.id}/fact/d${difficulty}`, factRound, deck.id);
 
       const revealRound = buildRevealRoundFromCards(deck.cards, deck.id, difficulty, seed + 30);
       if (!revealRound.choices.includes(revealRound.answer)) critical.push(`${deck.id}/peek/d${difficulty}: answer missing from choices`);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${deck.id}/peek/d${difficulty}`, revealRound);
-      await assertRoundCardImages(`${deck.id}/peek/d${difficulty}`, revealRound);
+      await assertRoundCardImages(`${deck.id}/peek/d${difficulty}`, revealRound, deck.id);
 
       if (canBuildGeoRoundFromCards(deck.cards, difficulty)) {
         const geoRound = buildGeoRoundFromCards(deck.cards, deck.id, difficulty, seed + 40);
         if (!geoRound.choices.some((choice) => choice.id === geoRound.answerId)) critical.push(`${deck.id}/geo/d${difficulty}: answer missing from choices`);
         if (new Set(geoRound.choices.map((choice) => choice.id)).size !== geoRound.choices.length) critical.push(`${deck.id}/geo/d${difficulty}: duplicate geo choices`);
         if (difficulty === 1) assertNoHardCardsInEasyRound(`${deck.id}/geo/d${difficulty}`, geoRound);
-        await assertRoundCardImages(`${deck.id}/geo/d${difficulty}`, geoRound);
+        await assertRoundCardImages(`${deck.id}/geo/d${difficulty}`, geoRound, deck.id);
       }
 
       const numberRound = buildNumberRoundFromCards(deck.cards, deck.id, difficulty, seed + 50);
       if (!numberRound.choices.includes(numberRound.answer) || numberRound.cards.length < 2 || numberRound.cards.length !== numberRound.termValues.length) critical.push(`${deck.id}/number/d${difficulty}: bad number choices`);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${deck.id}/number/d${difficulty}`, numberRound);
-      await assertRoundCardImages(`${deck.id}/number/d${difficulty}`, numberRound);
+      await assertRoundCardImages(`${deck.id}/number/d${difficulty}`, numberRound, deck.id);
 
       const oddRound = buildOddRoundFromCards(deck.cards, deck.id, difficulty, seed + 60);
       if (oddRound.cards.length !== 4 || !oddRound.cards.some((card) => card.id === oddRound.answerId)) critical.push(`${deck.id}/odd/d${difficulty}: bad odd-one-out set`);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${deck.id}/odd/d${difficulty}`, oddRound);
-      await assertRoundCardImages(`${deck.id}/odd/d${difficulty}`, oddRound);
+      await assertRoundCardImages(`${deck.id}/odd/d${difficulty}`, oddRound, deck.id);
 
       const topTrumpRound = buildTopTrumpRoundFromCards(deck.cards, deck.id, difficulty, seed + 70);
       if (!topTrumpRound.player?.stats?.length || !topTrumpRound.computer?.stats?.length) critical.push(`${deck.id}/trumps/d${difficulty}: missing trumps stats`);
@@ -414,7 +424,7 @@ const checkPlayablePackRoundBuilders = async () => {
         id: topTrumpRound.id,
         topic: topTrumpRound.topic,
         cards: [topTrumpRound.player, topTrumpRound.computer],
-      });
+      }, deck.id);
     }
   }
 };
