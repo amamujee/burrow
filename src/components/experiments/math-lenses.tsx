@@ -14,7 +14,7 @@ type Challenge = {
   choices: number[];
   answer: number;
   explanation: string;
-  visual: "baskets" | "groups" | "combine" | "take-away";
+  visual: "groups" | "combine" | "take-away";
   scene?: {
     images: { name: string; image: string }[];
     emoji: string;
@@ -47,14 +47,15 @@ export const mathTrailChallenges: Challenge[] = [
   {
     id: "market-baskets",
     category: "Spicy Peppers",
-    eyebrow: "Equal groups",
-    title: "Three market baskets hold four peppers each.",
-    prompt: "How many peppers are in all three baskets?",
-    equation: "3 × 4 = ?",
-    choices: [7, 10, 12, 16],
-    answer: 12,
-    explanation: "Three groups of four make 12 peppers.",
-    visual: "baskets",
+    eyebrow: "Times-table warm-up",
+    title: "Six market stalls display seven peppers each.",
+    prompt: "How many peppers are on all six stalls?",
+    equation: "6 × 7 = ?",
+    choices: [36, 40, 42, 48],
+    answer: 42,
+    explanation: "Six equal groups of seven make 42 peppers.",
+    visual: "groups",
+    scene: { images: peppers.slice(0, 6), emoji: "🌶️", groupCount: 6, each: 7, itemLabel: "peppers" },
   },
   {
     id: "mako-teeth",
@@ -73,92 +74,92 @@ export const mathTrailChallenges: Challenge[] = [
     id: "tower-windows",
     category: "Sky Scrapers",
     eyebrow: "Addition",
-    title: "One tower has 12 glowing windows. Another has nine.",
+    title: "One tower has 38 glowing windows. Another has 27.",
     prompt: "How many glowing windows can you see?",
-    equation: "12 + 9 = ?",
-    choices: [19, 20, 21, 22],
-    answer: 21,
-    explanation: "Twelve windows plus nine windows make 21.",
+    equation: "38 + 27 = ?",
+    choices: [55, 65, 66, 75],
+    answer: 65,
+    explanation: "Thirty-eight plus 27 makes 65. Combine the tens, then the ones.",
     visual: "combine",
-    scene: { images: [{ name: "China Zun", image: "/burrow-assets/buildings/china-zun.jpg" }, { name: "Ping An", image: "/burrow-assets/buildings/ping-an.jpg" }], emoji: "🪟", left: 12, right: 9, itemLabel: "windows" },
+    scene: { images: [{ name: "China Zun", image: "/burrow-assets/buildings/china-zun.jpg" }, { name: "Ping An", image: "/burrow-assets/buildings/ping-an.jpg" }], emoji: "🪟", left: 38, right: 27, itemLabel: "windows" },
   },
   {
     id: "moon-rocks",
     category: "Space Universe",
     eyebrow: "Subtraction",
-    title: "A mission collects 15 rocks and sends six to the lab.",
+    title: "A mission collects 72 rocks and sends 29 to the lab.",
     prompt: "How many rocks stay in the sample box?",
-    equation: "15 − 6 = ?",
-    choices: [8, 9, 10, 11],
-    answer: 9,
-    explanation: "Take six rocks away from 15. Nine remain.",
+    equation: "72 − 29 = ?",
+    choices: [41, 42, 43, 53],
+    answer: 43,
+    explanation: "Seventy-two minus 29 leaves 43. Subtract 30, then add one back.",
     visual: "take-away",
-    scene: { images: [{ name: "Moon", image: "/burrow-assets/space/moon.jpg" }, { name: "Mars", image: "/burrow-assets/space/mars.jpg" }, { name: "Triton", image: "/burrow-assets/space/triton.jpg" }], emoji: "🪨", start: 15, removed: 6, itemLabel: "rocks" },
+    scene: { images: [{ name: "Moon", image: "/burrow-assets/space/moon.jpg" }, { name: "Mars", image: "/burrow-assets/space/mars.jpg" }, { name: "Triton", image: "/burrow-assets/space/triton.jpg" }], emoji: "🪨", start: 72, removed: 29, itemLabel: "rocks" },
   },
   {
     id: "air-show-teams",
     category: "Jet Hangar",
     eyebrow: "Equal groups",
-    title: "Three air-show teams fly four jets each.",
+    title: "Eight air-show teams fly seven jets each.",
     prompt: "How many jets fly altogether?",
-    equation: "3 × 4 = ?",
-    choices: [7, 10, 12, 14],
-    answer: 12,
-    explanation: "Three teams of four make 12 jets.",
+    equation: "8 × 7 = ?",
+    choices: [48, 54, 56, 64],
+    answer: 56,
+    explanation: "Eight equal teams of seven make 56 jets.",
     visual: "groups",
-    scene: { images: [{ name: "F-16", image: "/burrow-assets/jets/f-16-fighting-falcon.jpg" }, { name: "Su-57", image: "/burrow-assets/jets/su-57.jpg" }, { name: "J-10", image: "/burrow-assets/jets/j-10.jpg" }], emoji: "✈️", groupCount: 3, each: 4, itemLabel: "jets" },
+    scene: { images: [{ name: "F-16", image: "/burrow-assets/jets/f-16-fighting-falcon.jpg" }, { name: "Su-57", image: "/burrow-assets/jets/su-57.jpg" }, { name: "J-10", image: "/burrow-assets/jets/j-10.jpg" }, { name: "F-22", image: "/burrow-assets/jets/f-22-raptor.jpg" }], emoji: "✈️", groupCount: 8, each: 7, itemLabel: "jets" },
   },
   {
     id: "dinosaur-eggs",
     category: "Dinosaur Lab",
-    eyebrow: "Addition",
-    title: "One dinosaur nest has five eggs. Another has seven.",
-    prompt: "How many eggs are in both nests?",
-    equation: "5 + 7 = ?",
-    choices: [10, 11, 12, 13],
-    answer: 12,
-    explanation: "Five eggs plus seven eggs make 12.",
-    visual: "combine",
-    scene: { images: [{ name: "Iguanodon", image: "/burrow-assets/dinosaurs/iguanodon.png" }, { name: "Stegosaurus", image: "/burrow-assets/dinosaurs/stegosaurus.png" }], emoji: "🥚", left: 5, right: 7, itemLabel: "eggs" },
+    eyebrow: "Multiplication",
+    title: "Nine dinosaur nests hold six eggs each.",
+    prompt: "How many eggs are in all nine nests?",
+    equation: "9 × 6 = ?",
+    choices: [45, 48, 54, 63],
+    answer: 54,
+    explanation: "Nine equal nests of six make 54 eggs.",
+    visual: "groups",
+    scene: { images: [{ name: "Iguanodon", image: "/burrow-assets/dinosaurs/iguanodon.png" }, { name: "Stegosaurus", image: "/burrow-assets/dinosaurs/stegosaurus.png" }, { name: "Maiasaura", image: "/burrow-assets/dinosaurs/maiasaura.jpg" }], emoji: "🥚", groupCount: 9, each: 6, itemLabel: "eggs" },
   },
   {
     id: "climbing-teams",
     category: "Tallest Mountains",
     eyebrow: "Equal groups",
-    title: "Four climbing teams have three climbers each.",
+    title: "Twelve climbing teams have eight climbers each.",
     prompt: "How many climbers are on the mountain?",
-    equation: "4 × 3 = ?",
-    choices: [7, 10, 12, 16],
-    answer: 12,
-    explanation: "Four teams of three make 12 climbers.",
+    equation: "12 × 8 = ?",
+    choices: [84, 88, 96, 108],
+    answer: 96,
+    explanation: "Twelve teams of eight make 96 climbers: 10 × 8 plus 2 × 8.",
     visual: "groups",
-    scene: { images: [{ name: "Mount Kenya", image: "/burrow-assets/tallest-mountains/mount-kenya.jpg" }, { name: "Himalchuli", image: "/burrow-assets/tallest-mountains/himalchuli.jpg" }, { name: "Gasherbrum I", image: "/burrow-assets/tallest-mountains/gasherbrum-i.jpg" }, { name: "Gyachung Kang", image: "/burrow-assets/tallest-mountains/gyachung-kang.jpg" }], emoji: "🧗", groupCount: 4, each: 3, itemLabel: "climbers" },
+    scene: { images: [{ name: "Mount Kenya", image: "/burrow-assets/tallest-mountains/mount-kenya.jpg" }, { name: "Himalchuli", image: "/burrow-assets/tallest-mountains/himalchuli.jpg" }, { name: "Gasherbrum I", image: "/burrow-assets/tallest-mountains/gasherbrum-i.jpg" }, { name: "Gyachung Kang", image: "/burrow-assets/tallest-mountains/gyachung-kang.jpg" }], emoji: "🧗", groupCount: 12, each: 8, itemLabel: "climbers" },
   },
   {
     id: "tree-birds",
     category: "Tall Trees",
     eyebrow: "Subtraction",
-    title: "Eleven birds rest in a giant tree. Four fly away.",
+    title: "Ninety-one birds rest in a giant tree. Thirty-seven fly away.",
     prompt: "How many birds remain?",
-    equation: "11 − 4 = ?",
-    choices: [6, 7, 8, 15],
-    answer: 7,
-    explanation: "Take four birds away from 11. Seven remain.",
+    equation: "91 − 37 = ?",
+    choices: [44, 54, 56, 64],
+    answer: 54,
+    explanation: "Ninety-one minus 37 leaves 54.",
     visual: "take-away",
-    scene: { images: [{ name: "Centurion", image: "/burrow-assets/tall-trees/centurion.jpg" }, { name: "Giant sequoia", image: "/burrow-assets/tall-trees/giant-sequoia.jpg" }, { name: "Douglas fir", image: "/burrow-assets/tall-trees/douglas-fir.jpg" }], emoji: "🐦", start: 11, removed: 4, itemLabel: "birds" },
+    scene: { images: [{ name: "Centurion", image: "/burrow-assets/tall-trees/centurion.jpg" }, { name: "Giant sequoia", image: "/burrow-assets/tall-trees/giant-sequoia.jpg" }, { name: "Douglas fir", image: "/burrow-assets/tall-trees/douglas-fir.jpg" }], emoji: "🐦", start: 91, removed: 37, itemLabel: "birds" },
   },
   {
     id: "bridge-lights",
     category: "Bridges & Tunnels",
     eyebrow: "Addition",
-    title: "Tower Bridge has eight blue lights and six gold lights.",
+    title: "Tower Bridge has 46 blue lights and 38 gold lights.",
     prompt: "How many lights glow altogether?",
-    equation: "8 + 6 = ?",
-    choices: [12, 13, 14, 16],
-    answer: 14,
-    explanation: "Eight lights plus six lights make 14.",
+    equation: "46 + 38 = ?",
+    choices: [74, 82, 84, 94],
+    answer: 84,
+    explanation: "Forty-six plus 38 makes 84.",
     visual: "combine",
-    scene: { images: [{ name: "Tower Bridge", image: "/burrow-assets/bridges-and-tunnels/tower-bridge.jpg" }, { name: "Manhattan Bridge", image: "/burrow-assets/bridges-and-tunnels/manhattan-bridge.jpg" }], emoji: "💡", left: 8, right: 6, itemLabel: "lights" },
+    scene: { images: [{ name: "Tower Bridge", image: "/burrow-assets/bridges-and-tunnels/tower-bridge.jpg" }, { name: "Manhattan Bridge", image: "/burrow-assets/bridges-and-tunnels/manhattan-bridge.jpg" }], emoji: "💡", left: 46, right: 38, itemLabel: "lights" },
   },
   {
     id: "twelve-times-twelve",
@@ -248,19 +249,10 @@ export function MathLenses() {
 }
 
 function ChallengeVisual({ challenge }: { challenge: Challenge }) {
-  if (challenge.visual === "baskets") return <MixedBaskets />;
   if (!challenge.scene) return null;
   if (challenge.visual === "groups") return <TopicGroups scene={challenge.scene} />;
   if (challenge.visual === "combine") return <TopicCombine scene={challenge.scene} />;
   return <TopicTakeAway scene={challenge.scene} />;
-}
-
-function PepperTile({ pepper, crossed = false }: { pepper: (typeof peppers)[number]; crossed?: boolean }) {
-  return <div className={`relative overflow-hidden rounded-lg border-2 border-[#092421] bg-white ${crossed ? "opacity-45" : ""}`}><div className="relative h-16 sm:h-20"><Image src={pepper.image} alt={pepper.name} fill sizes="100px" className="object-cover" /></div><p className="truncate px-1 py-1 text-center text-[9px] font-black">{pepper.name}</p>{crossed && <span className="absolute inset-0 grid place-items-center text-5xl font-black text-[#9f3f2b]" aria-label="used">×</span>}</div>;
-}
-
-function MixedBaskets() {
-  return <div className="grid w-full gap-3 lg:grid-cols-3" aria-label="Three mixed pepper baskets with four peppers each">{Array.from({ length: 3 }, (_, basket) => <div key={basket} className="rounded-xl border-2 border-[#092421] bg-[#f5d58a] p-2 shadow-[2px_2px_0_#092421]"><p className="mb-2 text-center text-xs font-black uppercase">Basket {basket + 1} · 4 peppers</p><div className="grid grid-cols-4 gap-1">{peppers.slice(basket * 4, basket * 4 + 4).map((pepper) => <PepperTile key={pepper.name} pepper={pepper} />)}</div></div>)}</div>;
 }
 
 function SceneCard({ item, quantity, label }: { item: { name: string; image: string }; quantity: number; label: string }) {
@@ -279,5 +271,5 @@ function TopicCombine({ scene }: { scene: NonNullable<Challenge["scene"]> }) {
 function TopicTakeAway({ scene }: { scene: NonNullable<Challenge["scene"]> }) {
   const start = scene.start ?? 0;
   const removed = scene.removed ?? 0;
-  return <div className="w-full max-w-5xl" aria-label={`${start} ${scene.itemLabel} with ${removed} taken away`}><div className="grid gap-3 sm:grid-cols-3">{scene.images.map((item, index) => <SceneCard key={item.name} item={item} quantity={index === 0 ? start : index === 1 ? removed : start - removed} label={index === 0 ? `${scene.itemLabel} at first` : index === 1 ? `${scene.itemLabel} leave` : `${scene.itemLabel} remain`} />)}</div><div className="mt-4 flex flex-wrap justify-center gap-2" aria-hidden="true">{Array.from({ length: start }, (_, index) => <span key={index} className={`grid h-9 w-9 place-items-center rounded-full border-2 border-[#092421] bg-white text-lg ${index < removed ? "opacity-30 line-through" : ""}`}>{scene.emoji}</span>)}</div></div>;
+  return <div className="w-full max-w-5xl" aria-label={`${start} ${scene.itemLabel} with ${removed} taken away`}><div className="grid gap-3 sm:grid-cols-3">{scene.images.map((item, index) => <SceneCard key={item.name} item={item} quantity={index === 0 ? start : index === 1 ? removed : start - removed} label={index === 0 ? `${scene.itemLabel} at first` : index === 1 ? `${scene.itemLabel} leave` : `${scene.itemLabel} remain`} />)}</div><div className="mt-4 flex items-center justify-center gap-3 rounded-lg border-2 border-dashed border-[#d9c7a7] bg-white p-3 text-lg font-black" aria-hidden="true"><span>{start} {scene.emoji}</span><span>−</span><span>{removed} {scene.emoji}</span><span>=</span><span>?</span></div></div>;
 }

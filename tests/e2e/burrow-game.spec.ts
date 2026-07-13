@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { coreMiniExpeditions } from "../../src/components/core-mini-challenge";
 import { buildNumberRound, buildNumberRoundFromCards, type GenericKnowledgeCard } from "../../src/lib/game-modes";
 
 const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
@@ -95,6 +96,20 @@ test("hard multiplication reaches the full twelve-by-twelve table", () => {
   expect(round.termValues).toEqual([12, 12]);
 });
 
+test("mini challenges rotate through four deep cross-subject expeditions", () => {
+  expect(coreMiniExpeditions).toHaveLength(4);
+  expect(new Set(coreMiniExpeditions.map((expedition) => expedition.name)).size).toBe(4);
+  for (const expedition of coreMiniExpeditions) {
+    expect(new Set(expedition.steps.map((step) => step.skill))).toEqual(new Set(["Reading", "Geography", "Math", "Science", "Words"]));
+  }
+  expect(coreMiniExpeditions.map((expedition) => expedition.steps.find((step) => step.skill === "Math")?.question)).toEqual([
+    "7 × 8 = ?",
+    "9 × 12 = ?",
+    "11 × 9 = ?",
+    "12 × 12 = ?",
+  ]);
+});
+
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/content-issues", async (route) => {
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
@@ -161,24 +176,24 @@ test("every tenth answer opens an automatic mini challenge and returns after its
   await page.getByRole("button", { name: /Next|Finish round/ }).click();
   await expect(page.getByText("Pepper mini challenge")).toBeVisible();
 
-  await page.getByRole("button", { name: "Completely dry" }).click();
-  await expect(page.getByText("Answer: A little wet")).toBeVisible();
+  await page.getByRole("button", { name: "Seeds grow underwater" }).click();
+  await expect(page.getByText("Answer: Roots still need air")).toBeVisible();
   await page.getByRole("button", { name: "Next question" }).click();
-  await expect(page.getByRole("heading", { name: "Find the pepper homeland" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Map the pepper homeland" })).toBeVisible();
 
-  await page.getByRole("button", { name: "South of the United States" }).click();
+  await page.getByRole("button", { name: "Guatemala and Belize" }).click();
   await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Count the harvest" })).toBeVisible();
-  await expect(page.getByText("4 × 6 = ?")).toBeVisible();
-  await expect(page.getByLabel("Equal pepper groups")).toBeVisible();
+  await expect(page.getByText("7 × 8 = ?")).toBeVisible();
+  await expect(page.getByLabel("7 equal pepper groups of 8")).toBeVisible();
 
-  await page.getByRole("button", { name: "24 peppers" }).click();
+  await page.getByRole("button", { name: "56 peppers" }).click();
   await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Investigate the heat" })).toBeVisible();
-  await page.getByRole("button", { name: "The pale inner tissue" }).click();
+  await page.getByRole("button", { name: "Capsaicin coats its surface" }).click();
   await page.getByRole("button", { name: "Next question" }).click();
-  await expect(page.getByRole("heading", { name: "Find the evidence" })).toBeVisible();
-  await page.getByRole("button", { name: "still the same kind" }).click();
+  await expect(page.getByRole("heading", { name: "Unlock a science word" })).toBeVisible();
+  await page.getByRole("button", { name: "Gathered in a larger amount" }).click();
   await page.getByRole("button", { name: "View challenge summary" }).click();
 
   await expect(page.getByRole("heading", { name: "Pepper field journal" })).toBeVisible();

@@ -21,55 +21,55 @@ const stops: Stop[] = [
     skill: "Reading",
     icon: "🏷️",
     title: "Read the seed packet",
-    story: "Jalapeño seeds need warmth, water, and time. The packet says: Keep the soil damp, but not soggy.",
-    question: "What does damp mean here?",
-    choices: ["A little wet", "Completely dry", "Covered in ice"],
-    answer: "A little wet",
-    journal: "Damp soil is a little wet—not dry and not flooded.",
+    story: "Jalapeño seeds need warmth, water, and air. The packet says: Keep the soil evenly damp, but never waterlogged.",
+    question: "Why does the packet warn against waterlogged soil?",
+    choices: ["Roots still need air", "Seeds grow best underwater", "Water makes the soil colder than ice"],
+    answer: "Roots still need air",
+    journal: "Damp soil holds moisture and air. Waterlogged soil can crowd out the air roots need.",
   },
   {
     id: "find-mexico",
     skill: "Geography",
     icon: "🌎",
     title: "Find a pepper homeland",
-    story: "Jalapeños are named for Xalapa, a city in Mexico. Mexico is part of North America.",
-    question: "Which clue points to Mexico?",
-    choices: ["South of the United States", "Next to India", "At the South Pole"],
-    answer: "South of the United States",
-    journal: "Xalapa is in Mexico, south of the United States in North America.",
+    story: "Jalapeños are named for Xalapa, a city in Mexico. Mexico reaches from the United States toward Central America.",
+    question: "Which two countries meet Mexico along its southern border?",
+    choices: ["Guatemala and Belize", "Chile and Peru", "Spain and Portugal"],
+    answer: "Guatemala and Belize",
+    journal: "Mexico borders Guatemala and Belize in the south, and the United States in the north.",
   },
   {
     id: "count-harvest",
     skill: "Math",
     icon: "🧺",
     title: "Count the harvest",
-    story: "4 plants grow 6 peppers each.",
-    question: "4 × 6 = ?",
-    choices: ["18 peppers", "24 peppers", "26 peppers"],
-    answer: "24 peppers",
-    journal: "Four equal groups of six make 24: 6 + 6 + 6 + 6 = 24.",
+    story: "7 plants grow 8 peppers each.",
+    question: "7 × 8 = ?",
+    choices: ["48 peppers", "54 peppers", "56 peppers"],
+    answer: "56 peppers",
+    journal: "Seven equal groups of eight make 56 peppers.",
   },
   {
     id: "heat-science",
     skill: "Science",
     icon: "🧪",
     title: "Investigate the heat",
-    story: "Capsaicin is the chemical that makes a pepper feel hot. Much of it forms in the pale tissue that holds the seeds.",
-    question: "Which part is most connected to a pepper’s heat?",
-    choices: ["The pale inner tissue", "The green stem", "The flower petals"],
-    answer: "The pale inner tissue",
-    journal: "Capsaicin is concentrated in the pale inner tissue, not inside the seeds themselves.",
+    story: "Capsaicin is the chemical that makes a pepper feel hot. Much of it forms in the pale placenta—the tissue that holds the seeds—not inside the seeds themselves.",
+    question: "Why can a seed taste hot even though it does not make much capsaicin?",
+    choices: ["Capsaicin can coat its surface", "The seed turns into a flame", "All seeds are naturally spicy"],
+    answer: "Capsaicin can coat its surface",
+    journal: "A seed can be coated by capsaicin from the nearby placenta even though the seed makes little itself.",
   },
   {
     id: "word-capsaicin",
     skill: "Words",
     icon: "🔤",
     title: "Name the discovery",
-    story: "The scientist writes one new word in the field journal: capsaicin.",
-    question: "What does capsaicin do?",
-    choices: ["Makes peppers feel hot", "Makes roots grow wings", "Turns soil into sand"],
-    answer: "Makes peppers feel hot",
-    journal: "Capsaicin (cap-SAY-uh-sin) is the chemical behind a pepper’s heat.",
+    story: "The scientist writes: Capsaicin is concentrated in the placenta, but only a small amount reaches the outer wall.",
+    question: "What does concentrated mean in this note?",
+    choices: ["Gathered in a larger amount", "Spread perfectly evenly", "Changed into a different chemical"],
+    answer: "Gathered in a larger amount",
+    journal: "Concentrated means a larger amount is gathered in one place.",
   },
 ];
 
@@ -144,8 +144,8 @@ export function PepperExpedition({ onComplete }: { onComplete: () => void }) {
         <p className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-3 text-lg font-bold leading-snug text-[#4f5e57]">{stop.story}</p>
 
         {stop.skill === "Math" && (
-          <div className="mt-3 grid grid-cols-4 gap-2" aria-label="Four equal groups of six peppers">
-            {Array.from({ length: 4 }, (_, index) => <div key={index} className="rounded-lg border-2 border-[#092421] bg-[#e9ffe9] p-2 text-center"><p className="text-[10px] font-black uppercase">Plant {index + 1}</p><p className="mt-1 text-xl leading-tight" aria-hidden="true">🌶️🌶️🌶️🌶️🌶️🌶️</p></div>)}
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-7" aria-label="Seven equal groups of eight peppers">
+            {Array.from({ length: 7 }, (_, index) => <div key={index} className="rounded-lg border-2 border-[#092421] bg-[#e9ffe9] p-2 text-center"><p className="text-[10px] font-black uppercase">Plant {index + 1}</p><p className="mt-1 text-lg leading-tight" aria-hidden="true">🌶️ × 8</p></div>)}
           </div>
         )}
 

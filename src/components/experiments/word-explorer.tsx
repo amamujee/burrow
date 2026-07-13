@@ -13,34 +13,34 @@ const levels: { id: ReadingLevel; label: string; eyebrow: string }[] = [
 
 const activities = {
   match: {
-    word: "wrinkled",
-    syllables: "wrin-kled",
-    prompt: "Which pepper best matches the word wrinkled?",
+    word: "lobed",
+    syllables: "lobed",
+    prompt: "Which pepper best matches the word lobed—divided into rounded sections?",
     choices: [
-      { id: "bell", label: "Smooth Bell Pepper", image: "/burrow-assets/peppers/bell-pepper.jpg" },
+      { id: "purple", label: "Lobed Purple Beauty", image: "/burrow-assets/peppers/purple-beauty.jpg" },
       { id: "reaper", label: "Wrinkled Carolina Reaper", image: "/burrow-assets/peppers/carolina-reaper.jpg" },
-      { id: "poblano", label: "Long Poblano", image: "/burrow-assets/peppers/poblano.jpg" },
+      { id: "banana", label: "Long Banana Pepper", image: "/burrow-assets/peppers/banana-pepper.jpg" },
     ],
-    answer: "reaper",
-    explanation: "Wrinkled means covered with little folds or creases. The Carolina Reaper’s skin has visible folds.",
+    answer: "purple",
+    explanation: "Lobed means divided into rounded sections. The Purple Beauty has several clear lobes around its base.",
   },
   sentence: {
-    sentenceStart: "The gardener wore gloves because the habanero was very",
-    prompt: "Choose the word that completes the idea.",
-    choices: ["spicy", "silent", "square"],
-    answer: "spicy",
-    explanation: "The clue “wore gloves” tells us the pepper’s heat matters, so spicy completes the meaning.",
+    sentenceStart: "The cook called the pepper pungent because its smell was",
+    prompt: "Use the clue in the sentence to choose the most precise ending.",
+    choices: ["strong and sharp", "almost impossible to notice", "shaped like a perfect square"],
+    answer: "strong and sharp",
+    explanation: "Pungent describes a strong, sharp smell or taste. The ending explains the new word inside the sentence.",
   },
   evidence: {
-    passage: "A jalapeño begins green. If it stays on the plant longer, it can ripen to red. A red jalapeño is not a different species—it is a more mature fruit from the same kind of plant.",
-    prompt: "Which sentence proves that green and red jalapeños can be the same kind?",
+    passage: "A jalapeño begins green because it contains chlorophyll. As the same fruit ripens, chlorophyll breaks down and red pigments become easier to see. Ripening can change color and sweetness, but color alone cannot tell you exactly how much capsaicin a pepper contains. Genetics and growing conditions matter too.",
+    prompt: "Which conclusion is best supported by the whole field note?",
     choices: [
-      "A jalapeño begins green.",
-      "If it stays on the plant longer, it can ripen to red.",
-      "A red jalapeño is not a different species.",
+      "Every red jalapeño is hotter than every green one.",
+      "Color alone cannot tell you exactly how hot a pepper is.",
+      "All peppers contain the same amount of capsaicin.",
     ],
-    answer: "A red jalapeño is not a different species.",
-    explanation: "That sentence directly says the color change does not make it a different species. That is evidence.",
+    answer: "Color alone cannot tell you exactly how hot a pepper is.",
+    explanation: "The note says heat also depends on genetics and growing conditions, so color by itself is not enough evidence.",
   },
 } as const;
 
@@ -87,9 +87,9 @@ export function WordExplorer({ onComplete }: { onComplete: () => void }) {
           <p className="mt-3 text-xs font-black uppercase tracking-[0.18em] text-[#2f6547]">Reading trail complete</p>
           <h2 className="mt-1 text-3xl font-black">Pepper word journal</h2>
           <div className="mt-4 grid gap-2 text-left sm:grid-cols-3">
-            <div className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3"><p className="text-[10px] font-black uppercase text-[#9f3f2b]">Word match</p><p className="mt-1 font-black">wrinkled</p><p className="mt-1 text-xs font-bold text-[#5f6b5d]">Used a picture to learn a describing word.</p></div>
-            <div className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3"><p className="text-[10px] font-black uppercase text-[#9f3f2b]">Sentence clue</p><p className="mt-1 font-black">spicy</p><p className="mt-1 text-xs font-bold text-[#5f6b5d]">Used context to complete an idea.</p></div>
-            <div className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3"><p className="text-[10px] font-black uppercase text-[#9f3f2b]">Evidence</p><p className="mt-1 font-black">same species</p><p className="mt-1 text-xs font-bold text-[#5f6b5d]">Found a sentence that proves an answer.</p></div>
+            <div className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3"><p className="text-[10px] font-black uppercase text-[#9f3f2b]">Word match</p><p className="mt-1 font-black">lobed</p><p className="mt-1 text-xs font-bold text-[#5f6b5d]">Used shape and a definition to learn a precise word.</p></div>
+            <div className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3"><p className="text-[10px] font-black uppercase text-[#9f3f2b]">Sentence clue</p><p className="mt-1 font-black">pungent</p><p className="mt-1 text-xs font-bold text-[#5f6b5d]">Used context to unlock a new word.</p></div>
+            <div className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3"><p className="text-[10px] font-black uppercase text-[#9f3f2b]">Evidence</p><p className="mt-1 font-black">color ≠ exact heat</p><p className="mt-1 text-xs font-bold text-[#5f6b5d]">Combined clues to choose a supported conclusion.</p></div>
           </div>
           <button onClick={onComplete} className="mt-5 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-5 py-3 font-black shadow-[3px_3px_0_#092421]">Continue to Math Trail</button>
         </div>
