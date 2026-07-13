@@ -9,6 +9,12 @@ const batchSize = 25;
 const force = process.argv.includes("--force");
 const onlyArg = process.argv.find((arg) => arg.startsWith("--only="));
 const only = onlyArg?.replace("--only=", "");
+const topicArg = process.argv.find((arg) => arg.startsWith("--topic="));
+const topic = topicArg?.replace("--topic=", "");
+const idsArg = process.argv.find((arg) => arg.startsWith("--ids="));
+const ids = idsArg ? new Set(idsArg.replace("--ids=", "").split(",").filter(Boolean)) : null;
+const delayArg = process.argv.find((arg) => arg.startsWith("--delay="));
+const downloadDelay = Number(delayArg?.replace("--delay=", "") ?? 750);
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const source = fs.readFileSync(dataFile, "utf8");
@@ -19,7 +25,9 @@ const assets = [...source.matchAll(/contentImage\("([^"]+)", "([^"]+)", "([^"]+)
     sourceFile: match[3],
     target: path.join(outputRoot, match[1], `${match[2]}.jpg`),
   }))
-  .filter((asset) => !only || `${asset.topic}/${asset.id}` === only);
+  .filter((asset) => !only || `${asset.topic}/${asset.id}` === only)
+  .filter((asset) => !topic || asset.topic === topic)
+  .filter((asset) => !ids || ids.has(asset.id));
 
 if (!assets.length) {
   throw new Error("No contentImage(...) assets found in game-data.ts.");
@@ -51,7 +59,7 @@ const resolveUrls = async () => {
     const batch = assets.slice(index, index + batchSize);
     const titles = batch.map((asset) => `File:${asset.sourceFile}`).join("|");
     const url =
-      "https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=url&iiurlwidth=" +
+      "https://commons.wikimedia.org/w/api.php?action=query&format=json&redirects=1&prop=imageinfo&iiprop=url&iiurlwidth=" +
       width +
       "&titles=" +
       encodeURIComponent(titles);
@@ -64,21 +72,30 @@ const resolveUrls = async () => {
         byFile.set(sourceFile, imageInfo.thumburl ?? imageInfo.url);
       }
     }
+    for (const redirect of result.query?.redirects ?? []) {
+      const from = redirect.from?.replace(/^File:/, "");
+      const to = redirect.to?.replace(/^File:/, "");
+      if (from && to && byFile.has(to)) byFile.set(from, byFile.get(to));
+    }
     await sleep(500);
   }
 
-  return assets.map((asset) => {
+  const unresolved = assets.filter((asset) => !byFile.has(asset.sourceFile));
+  if (unresolved.length) {
+    console.warn(`Skipping unresolved Wikimedia files:\n${unresolved.map((asset) => `- ${asset.topic}/${asset.id}: ${asset.sourceFile}`).join("\n")}`);
+  }
+
+  return assets.filter((asset) => byFile.has(asset.sourceFile)).map((asset) => {
     const url = byFile.get(asset.sourceFile);
-    if (!url) throw new Error(`Could not resolve ${asset.sourceFile}`);
     return { ...asset, url };
   });
 };
 
-const download = (asset, attempt = 1) =>
+const download = (asset) =>
   new Promise((resolve, reject) => {
     fs.mkdirSync(path.dirname(asset.target), { recursive: true });
 
-    const request = (url, redirectsLeft = 4) => {
+    const request = (url, redirectsLeft = 4, allowProxy = true) => {
       https
         .get(url, { headers: { "User-Agent": "BurrowContentSync/1.0" } }, (response) => {
           if (response.statusCode && response.statusCode >= 300 && response.statusCode < 400 && response.headers.location && redirectsLeft > 0) {
@@ -89,10 +106,10 @@ const download = (asset, attempt = 1) =>
 
           if (response.statusCode !== 200) {
             response.resume();
-            if ((response.statusCode === 429 || response.statusCode === 503) && attempt < 2) {
-              const retryAfter = Number(response.headers["retry-after"]);
-              const waitMs = Number.isFinite(retryAfter) && retryAfter > 0 ? Math.min(retryAfter * 1000, 2000) : 2000;
-              sleep(waitMs).then(() => download(asset, attempt + 1).then(resolve).catch(reject));
+            if ((response.statusCode === 429 || response.statusCode === 503) && allowProxy) {
+              const commonsRedirect = `commons.wikimedia.org/wiki/Special:Redirect/file/${encodeURIComponent(asset.sourceFile)}?width=${width}`;
+              const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(commonsRedirect)}&w=${width}&output=jpg`;
+              request(proxyUrl, 4, false);
               return;
             }
             reject(new Error(`${asset.topic}/${asset.id}: ${response.statusCode} for ${asset.sourceFile}`));
@@ -128,7 +145,7 @@ for (const asset of resolvedAssets) {
   } catch (error) {
     failed.push({ topic: asset.topic, id: asset.id, sourceFile: asset.sourceFile, error: error.message });
   }
-  await sleep(750);
+  await sleep(downloadDelay);
 }
 
 if (failed.length) {
