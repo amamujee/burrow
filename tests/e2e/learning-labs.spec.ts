@@ -56,21 +56,27 @@ test("word explorer supports matching, sentence context, and evidence", async ({
   await expect(page.getByRole("heading", { name: "Pepper word journal" })).toBeVisible();
 });
 
-test("math lenses keep one equation while switching four representations", async ({ page }) => {
-  await page.getByRole("button", { name: /Math Lenses/ }).click();
-  await expect(page.getByText("4 × 6 = ?")).toBeVisible();
-  await expect(page.getByLabel("Equal groups representation")).toBeVisible();
+test("math trail chooses varied question types and pepper pictures for the child", async ({ page }) => {
+  await page.getByRole("button", { name: /Math Trail/ }).click();
+  await expect(page.getByText("3 × 4 = ?")).toBeVisible();
+  await expect(page.getByLabel("Three mixed pepper baskets with four peppers each")).toBeVisible();
+  await expect(page.getByRole("img", { name: "Pepper X" })).toBeVisible();
+  await expect(page.getByRole("img", { name: "Bell pepper" })).toBeVisible();
+  await expect(page.getByText("Parent observation")).toHaveCount(0);
+  await expect(page.getByRole("tab")).toHaveCount(0);
 
-  await page.getByRole("tab", { name: /Pepper array/ }).click();
-  await expect(page.getByLabel("Pepper array representation")).toBeVisible();
-  await page.getByRole("tab", { name: /Repeated addition/ }).click();
-  await expect(page.getByLabel("Repeated addition representation")).toBeVisible();
-  await page.getByRole("tab", { name: /Number line/ }).click();
-  await expect(page.getByLabel("Number line representation")).toBeVisible();
-  await expect(page.getByText("4/4 views tried")).toBeVisible();
+  await page.getByRole("button", { name: "12" }).click();
+  await expect(page.getByText("Correct!")).toBeVisible();
+  await page.getByRole("button", { name: "Next question" }).click();
 
-  await page.getByRole("button", { name: "24 peppers" }).click();
-  await expect(page.getByText("All four lenses agree!")).toBeVisible();
+  await expect(page.getByText("2 + 5 = ?")).toBeVisible();
+  await expect(page.getByLabel("Two red peppers plus five green peppers")).toBeVisible();
+  await page.getByRole("button", { name: "5" }).click();
+  await expect(page.getByText("Answer: 7")).toBeVisible();
+  await page.getByRole("button", { name: "Next question" }).click();
+
+  await expect(page.getByText("8 − 3 = ?")).toBeVisible();
+  await expect(page.getByLabel("Eight peppers with three crossed out")).toBeVisible();
 });
 
 test("lab selector fits the mobile viewport", async ({ page, isMobile }) => {
