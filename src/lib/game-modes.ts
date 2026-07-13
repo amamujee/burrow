@@ -957,10 +957,10 @@ const numberOperationForSeed = (seed: number): NumberOperation => {
 };
 
 const factorRangeForDifficulty = (difficulty: Difficulty) => difficulty === 1
-  ? { groups: [2, 4] as const, items: [2, 5] as const }
+  ? { groups: [1, 5] as const, items: [1, 5] as const }
   : difficulty === 2
-    ? { groups: [3, 6] as const, items: [3, 8] as const }
-    : { groups: [4, 9] as const, items: [5, 12] as const };
+    ? { groups: [2, 9] as const, items: [2, 9] as const }
+    : { groups: [2, 12] as const, items: [2, 12] as const };
 
 const pickFactor = ([min, max]: readonly [number, number], factorSeed: number) => min + Math.floor(seedRandom(factorSeed) * (max - min + 1));
 

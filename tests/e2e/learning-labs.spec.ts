@@ -16,6 +16,7 @@ test("math trail content covers every playable topic with mixed operations", () 
   expect(mathTrailChallenges.some((challenge) => challenge.equation.includes("+"))).toBe(true);
   expect(mathTrailChallenges.some((challenge) => challenge.equation.includes("−"))).toBe(true);
   expect(mathTrailChallenges.some((challenge) => challenge.equation.includes("×"))).toBe(true);
+  expect(mathTrailChallenges).toContainEqual(expect.objectContaining({ equation: "12 × 12 = ?", answer: 144 }));
   expect(new Set(mathTrailChallenges.flatMap((challenge) => challenge.scene?.images.map((image) => image.image) ?? [] )).size).toBeGreaterThanOrEqual(20);
 });
 

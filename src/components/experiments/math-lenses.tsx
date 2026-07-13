@@ -160,6 +160,19 @@ export const mathTrailChallenges: Challenge[] = [
     visual: "combine",
     scene: { images: [{ name: "Tower Bridge", image: "/burrow-assets/bridges-and-tunnels/tower-bridge.jpg" }, { name: "Manhattan Bridge", image: "/burrow-assets/bridges-and-tunnels/manhattan-bridge.jpg" }], emoji: "💡", left: 8, right: 6, itemLabel: "lights" },
   },
+  {
+    id: "twelve-times-twelve",
+    category: "Spicy Peppers",
+    eyebrow: "12 × 12 mastery",
+    title: "Twelve pepper seed trays hold 12 seeds each.",
+    prompt: "How many seeds are ready to grow?",
+    equation: "12 × 12 = ?",
+    choices: [120, 132, 144, 156],
+    answer: 144,
+    explanation: "Twelve groups of 12 make 144 seeds.",
+    visual: "groups",
+    scene: { images: peppers, emoji: "🌱", groupCount: 12, each: 12, itemLabel: "seeds" },
+  },
 ];
 
 export function MathLenses() {
@@ -187,7 +200,7 @@ export function MathLenses() {
         <div className="w-full max-w-4xl rounded-xl border-2 border-[#092421] bg-[#e9ffe9] p-5 text-center shadow-[5px_5px_0_#092421]">
           <p className="text-5xl" aria-hidden="true">🌶️</p>
           <p className="mt-3 text-xs font-black uppercase tracking-[0.18em] text-[#2f6547]">World math trail complete</p>
-          <h2 className="mt-1 text-3xl font-black">Nine worlds of numbers</h2>
+          <h2 className="mt-1 text-3xl font-black">Nine worlds of numbers—and 12 × 12</h2>
           <p className="mt-2 font-bold text-[#5f6b5d]">{correctCount}/{mathTrailChallenges.length} solved · every answer explored</p>
           <div className="mt-4 grid gap-2 text-left sm:grid-cols-3 lg:grid-cols-5">
             {mathTrailChallenges.map((item, index) => <div key={item.id} className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3"><p className="text-xl">{results[index] ? "✓" : "●"}</p><p className="mt-1 text-[10px] font-black uppercase text-[#9f3f2b]">{item.eyebrow}</p><p className="mt-1 text-lg font-black">{item.equation.replace("?", String(item.answer))}</p></div>)}

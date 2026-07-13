@@ -3182,7 +3182,7 @@ function NumberEquationBoard({ round }: { round: NumberRound }) {
         <div className="flex items-center justify-between gap-2">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · Equal groups</p>
-            <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">Every plant gets the same number.</p>
+            <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">Every group gets the same number.</p>
           </div>
           <p className="rounded-md bg-[#f0c84b] px-2 py-1 text-base font-black text-[#102f36]">{round.biggerValue} x {round.smallerValue} = ?</p>
         </div>
@@ -3191,7 +3191,7 @@ function NumberEquationBoard({ round }: { round: NumberRound }) {
             <div data-math-group key={`${round.id}-group-${index}`} className="rounded-lg border-2 border-[#092421] bg-[#e9ffe9] px-1.5 py-1 text-center shadow-[2px_2px_0_#092421]">
               <p className="text-[10px] font-black uppercase tracking-[0.06em] text-[#2f6547]"><span aria-hidden="true">{visual.groupEmoji} </span>{visual.groupSingular} {index + 1}</p>
               <p className="mt-0.5 break-words text-sm leading-[1.05]" aria-hidden="true">
-                {Array.from({ length: round.smallerValue }, () => visual.itemEmoji).join("")}
+                {round.smallerValue <= 6 ? Array.from({ length: round.smallerValue }, () => visual.itemEmoji).join("") : `${visual.itemEmoji} × ${round.smallerValue}`}
               </p>
               <p className="mt-0.5 text-[11px] font-black text-[#9f3f2b]">{round.smallerValue} {round.smallerValue === 1 ? visual.itemSingular : visual.itemPlural}</p>
             </div>

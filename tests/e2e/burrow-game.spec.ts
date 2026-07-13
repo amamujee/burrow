@@ -86,6 +86,15 @@ test("every topic offers sensible addition, subtraction, and multiplication roun
   }
 });
 
+test("hard multiplication reaches the full twelve-by-twelve table", () => {
+  const round = buildNumberRound("peppers", 3, 137);
+  expect(round.operation).toBe("multiplication");
+  expect(round.biggerValue).toBe(12);
+  expect(round.smallerValue).toBe(12);
+  expect(round.answer).toBe(144);
+  expect(round.termValues).toEqual([12, 12]);
+});
+
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/content-issues", async (route) => {
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
