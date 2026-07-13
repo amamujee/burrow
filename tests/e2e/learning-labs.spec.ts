@@ -1,4 +1,23 @@
 import { expect, test } from "@playwright/test";
+import { mathTrailChallenges } from "../../src/components/experiments/math-lenses";
+
+test("math trail content covers every playable topic with mixed operations", () => {
+  expect(new Set(mathTrailChallenges.map((challenge) => challenge.category))).toEqual(new Set([
+    "Spicy Peppers",
+    "Sky Scrapers",
+    "Shark Tank",
+    "Space Universe",
+    "Jet Hangar",
+    "Dinosaur Lab",
+    "Tallest Mountains",
+    "Tall Trees",
+    "Bridges & Tunnels",
+  ]));
+  expect(mathTrailChallenges.some((challenge) => challenge.equation.includes("+"))).toBe(true);
+  expect(mathTrailChallenges.some((challenge) => challenge.equation.includes("−"))).toBe(true);
+  expect(mathTrailChallenges.some((challenge) => challenge.equation.includes("×"))).toBe(true);
+  expect(new Set(mathTrailChallenges.flatMap((challenge) => challenge.scene?.images.map((image) => image.image) ?? [] )).size).toBeGreaterThanOrEqual(20);
+});
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/experiments");
@@ -56,7 +75,7 @@ test("word explorer supports matching, sentence context, and evidence", async ({
   await expect(page.getByRole("heading", { name: "Pepper word journal" })).toBeVisible();
 });
 
-test("math trail chooses varied question types and pepper pictures for the child", async ({ page }) => {
+test("math trail chooses varied question types and moves across topic worlds", async ({ page }) => {
   await page.getByRole("button", { name: /Math Trail/ }).click();
   await expect(page.getByText("3 × 4 = ?")).toBeVisible();
   await expect(page.getByLabel("Three mixed pepper baskets with four peppers each")).toBeVisible();
@@ -69,14 +88,17 @@ test("math trail chooses varied question types and pepper pictures for the child
   await expect(page.getByText("Correct!")).toBeVisible();
   await page.getByRole("button", { name: "Next question" }).click();
 
-  await expect(page.getByText("2 + 5 = ?")).toBeVisible();
-  await expect(page.getByLabel("Two red peppers plus five green peppers")).toBeVisible();
-  await page.getByRole("button", { name: "5" }).click();
-  await expect(page.getByText("Answer: 7")).toBeVisible();
+  await expect(page.getByText("Shark Tank · Large multiplication")).toBeVisible();
+  await expect(page.getByText("4 × 50 = ?")).toBeVisible();
+  await expect(page.getByLabel("4 groups with 50 paper teeth each")).toBeVisible();
+  await expect(page.getByRole("img", { name: "Longfin mako" })).toBeVisible();
+  await page.getByRole("button", { name: "150" }).click();
+  await expect(page.getByText("Answer: 200")).toBeVisible();
   await page.getByRole("button", { name: "Next question" }).click();
 
-  await expect(page.getByText("8 − 3 = ?")).toBeVisible();
-  await expect(page.getByLabel("Eight peppers with three crossed out")).toBeVisible();
+  await expect(page.getByText("Sky Scrapers · Addition")).toBeVisible();
+  await expect(page.getByText("12 + 9 = ?")).toBeVisible();
+  await expect(page.getByLabel("12 plus 9 windows")).toBeVisible();
 });
 
 test("lab selector fits the mobile viewport", async ({ page, isMobile }) => {

@@ -12,7 +12,7 @@ type LabId = "expedition" | "words" | "math";
 const labs: { id: LabId; label: string; eyebrow: string; icon: string; description: string }[] = [
   { id: "expedition", label: "Pepper Expedition", eyebrow: "cross-subject journey", icon: "🧭", description: "A five-stop adventure through reading, geography, science, and math." },
   { id: "words", label: "Word Explorer", eyebrow: "reading that grows", icon: "📖", description: "Move from matching a word to finding evidence in a short field note." },
-  { id: "math", label: "Math Trail", eyebrow: "a new puzzle each stop", icon: "🔎", description: "Move through multiplication, addition, subtraction, arrays, and skip counting." },
+  { id: "math", label: "Math Trail", eyebrow: "nine worlds of numbers", icon: "🔎", description: "Travel through every topic with multiplication, addition, and subtraction." },
 ];
 
 export function LearningLabs() {
