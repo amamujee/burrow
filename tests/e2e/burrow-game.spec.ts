@@ -40,7 +40,10 @@ const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
 
   for (const label of topicLabels) {
     const button = buttonForLabel(page, label);
-    if (label !== target && (await button.getAttribute("aria-pressed")) === "true") await button.click();
+    if (label !== target && (await button.getAttribute("aria-pressed")) === "true") {
+      await button.click();
+      await expect(button).toHaveAttribute("aria-pressed", "false");
+    }
   }
   await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
   await expect(setupSummary(page)).toContainText("1 topics");
@@ -56,7 +59,7 @@ const openPepperChallengeAt = async (page: Page, milestone: number) => {
     const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
     if (!active) throw new Error("Active profile was not saved");
     active.progress.answered = targetMilestone - 1;
-    active.progress.challengeMilestone = targetMilestone - 10;
+    active.progress.challengeMilestone = targetMilestone - 20;
     window.localStorage.setItem(key, JSON.stringify(profiles));
   }, milestone);
   await page.reload();
@@ -186,8 +189,8 @@ test("every Challenge subject has valid content and its required teaching stage"
   }
 });
 
-test("campaign selection rotates through every deep dive", () => {
-  expect([10, 20, 30, 40, 50].map((milestone) => pepperChallengeCampaignForMilestone(milestone).id)).toEqual([
+test("campaign selection rotates through every deep dive every twenty questions", () => {
+  expect([20, 40, 60, 80, 100].map((milestone) => pepperChallengeCampaignForMilestone(milestone).id)).toEqual([
     "jalapeno-fieldwork",
     "caribbean-pepper-quest",
     "ghost-pepper-mission",
@@ -227,6 +230,11 @@ test("every challenge Geography and Science stop has a teaching visual", () => {
     expect(step.conceptVisual, `${step.id} needs a concept diagram`).toBeTruthy();
     expect(step.choices).toContain(step.answer);
     expect(step.summary.length).toBeGreaterThan(40);
+    expect(step.clue.split(/\s+/).length, `${step.id} clue should be quick to read`).toBeLessThanOrEqual(24);
+    expect(step.question.split(/\s+/).length, `${step.id} question should be quick to read`).toBeLessThanOrEqual(10);
+    for (const choice of step.choices) {
+      expect(choice.split(/\s+/).length, `${step.id} choices should be scannable`).toBeLessThanOrEqual(6);
+    }
   }
 });
 
@@ -251,6 +259,7 @@ test.beforeEach(async ({ page }) => {
 
 test("setup menu opens and core game controls keep working", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
+  await expect(setupSummary(page)).toContainText("9 games · 9 topics");
 
   await setupSummary(page).click();
   await expect(page.getByText("Game Types")).toBeVisible();
@@ -263,7 +272,7 @@ test("setup menu opens and core game controls keep working", async ({ page }) =>
   await expect(page.getByText("True or false?")).toBeVisible();
 
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
-  await expect(page.getByText(/Answer:/)).toBeVisible();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
 
   await page.getByRole("button", { name: /Next|Finish round/ }).click();
   await expect(page.getByText("True or false?")).toBeVisible();
@@ -273,7 +282,7 @@ test("setup menu opens and core game controls keep working", async ({ page }) =>
   await expect(page.getByText("Research library")).toBeVisible();
 });
 
-test("every tenth answer opens an automatic mini challenge and returns after its summary", async ({ page }) => {
+test("every twentieth answer opens an automatic mini challenge and returns after its summary", async ({ page }) => {
   await page.evaluate(() => {
     const key = "burrow-profiles-v1";
     const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
@@ -282,7 +291,7 @@ test("every tenth answer opens an automatic mini challenge and returns after its
     };
     const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
     if (!active) throw new Error("Active profile was not saved");
-    active.progress.answered = 9;
+    active.progress.answered = 19;
     active.progress.challengeMilestone = 0;
     window.localStorage.setItem(key, JSON.stringify(profiles));
   });
@@ -311,14 +320,18 @@ test("every tenth answer opens an automatic mini challenge and returns after its
   await expect(page.getByRole("heading", { name: "Count the harvest" })).toBeVisible();
   await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Stop 3 of 5");
   await expect(page.getByRole("heading", { name: "7 × 8 = ?" })).toBeVisible();
-  await expect(page.getByLabel("Challenge math story").getByLabel("Math picture: 7 equal plant groups of 8 peppers")).toBeVisible();
+  const challengeMath = page.getByLabel("Challenge math story").getByLabel("Math picture: 7 equal plant groups of 8 peppers");
+  await expect(challengeMath).toBeVisible();
+  await expect(challengeMath.getByLabel("Break apart multiplication strategy")).toContainText("5 × 8 = 40");
+  await expect(challengeMath.getByLabel("Break apart multiplication strategy")).toContainText("2 × 8 = 16");
+  await expect(challengeMath.getByLabel("Break apart multiplication strategy")).toContainText("40 + 16 = ?");
 
   await page.getByRole("button", { name: "56 peppers" }).click();
   await page.getByRole("button", { name: "Next question" }).click();
-  await expect(page.getByRole("heading", { name: "See where pepper heat begins" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Find the pepper's heat factory" })).toBeVisible();
   await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Stop 4 of 5");
   await expect(page.getByLabel("Labeled pepper anatomy diagram")).toBeVisible();
-  await page.getByRole("button", { name: "The nearby placenta" }).click();
+  await page.getByRole("button", { name: "The pale placenta" }).click();
   await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Unlock a science word" })).toBeVisible();
   await page.getByRole("button", { name: "Gathered in a larger amount" }).click();
@@ -326,7 +339,8 @@ test("every tenth answer opens an automatic mini challenge and returns after its
 
   await expect(page.getByRole("heading", { name: "Jalapeño field journal" })).toBeVisible();
   await expect(page.getByText("4/5 discoveries solved · all five notes collected")).toBeVisible();
-  await page.getByRole("button", { name: "Continue regular questions" }).click();
+  await expect(page.getByText("Your next regular question is ready.")).toBeVisible();
+  await page.getByRole("button", { name: "Back to the game" }).click();
   await expect(page.getByText("True or false?")).toBeVisible();
   await expect(page.getByLabel("Challenge Mode", { exact: true })).toHaveCount(0);
 
@@ -336,12 +350,12 @@ test("every tenth answer opens an automatic mini challenge and returns after its
       profiles: { id: string; progress: { challengeMilestone: number } }[];
     };
     return profiles.profiles.find((profile) => profile.id === profiles.activeProfileId)?.progress.challengeMilestone;
-  })).toBe(10);
+  })).toBe(20);
 });
 
 for (const [campaignOffset, campaign] of pepperChallengeCampaigns.slice(1).entries()) {
   test(`every subject stage renders and teaches in ${campaign.name}`, async ({ page }) => {
-    const milestone = (campaignOffset + 2) * 10;
+    const milestone = (campaignOffset + 2) * 20;
     await openPepperChallengeAt(page, milestone);
     await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText(`Deep dive: ${campaign.name}`);
 
@@ -373,6 +387,7 @@ for (const [campaignOffset, campaign] of pepperChallengeCampaigns.slice(1).entri
     const mathStory = page.getByLabel("Challenge math story");
     await expect(mathStory.getByLabel(math.math.visual.ariaLabel)).toBeVisible();
     await expect(mathStory.locator("[data-math-group]")).toHaveCount(math.math.groups);
+    await expect(mathStory.getByLabel("Break apart multiplication strategy")).toBeVisible();
     await page.getByRole("button", { name: math.answer }).click();
     await expect(page.getByLabel("Answer feedback")).toContainText(math.summary);
     await page.getByRole("button", { name: "Next question" }).click();
@@ -402,13 +417,14 @@ test("pepper mini challenges do not interrupt unselected topics", async ({ page 
     };
     const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
     if (!active) throw new Error("Active profile was not saved");
-    active.progress.answered = 9;
+    active.progress.answered = 19;
     active.progress.challengeMilestone = 0;
     window.localStorage.setItem(key, JSON.stringify(profiles));
   });
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await chooseOnlyMode(page, "True/False");
+  await chooseOnlyBuiltInTopic(page, "Shark Tank");
 
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
   await page.getByRole("button", { name: /Next|Finish round/ }).click();
@@ -489,7 +505,12 @@ test("pepper number rounds teach multiplication with equal plant groups", async 
   const garden = page.getByLabel("Numbers story stage").getByLabel("Math picture: equal pepper plant groups");
   await expect(garden).toBeVisible();
   const plantCount = await garden.locator("[data-math-group]").count();
-  expect(plantCount).toBeGreaterThanOrEqual(2);
+  expect(plantCount).toBeGreaterThanOrEqual(1);
+  if (plantCount > 5) {
+    await expect(garden.getByLabel("Break apart multiplication strategy")).toBeVisible();
+  } else {
+    await expect(garden.getByLabel("Skip counting multiplication strategy")).toBeVisible();
+  }
 
   await page.locator("[data-number-choice]").first().click();
   await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
@@ -567,13 +588,10 @@ test("playable dinosaur pack appears in setup topics", async ({ page }) => {
   await setupSummary(page).click();
   const dinosaurTopic = page.getByRole("button", { name: /Dinosaur Lab/ });
   await expect(dinosaurTopic).toBeVisible();
-
-  await dinosaurTopic.click();
   await expect(dinosaurTopic).toHaveAttribute("aria-pressed", "true");
-  await page.getByRole("button", { name: /Shark Tank selected/ }).click();
-  await expect(page.getByRole("button", { name: /Shark Tank selected/ })).toHaveCount(0);
-  await page.getByRole("button", { name: /Jet Hangar selected/ }).click();
-  await expect(page.getByRole("button", { name: /Jet Hangar selected/ })).toHaveCount(0);
+  await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
+
+  await chooseOnlyBuiltInTopic(page, "Dinosaur Lab");
   await expect(page.getByText("Dinosaur Lab · Peek")).toBeVisible();
 });
 

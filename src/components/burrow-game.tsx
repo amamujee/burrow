@@ -200,7 +200,8 @@ const praise = ["Nice reading!", "Big brain move!", "You measured it!", "Hot ans
 const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
 const defaultMixPattern: ChallengeMode[] = ["quiz", "peek", "geo", "versus", "trumps", "number", "odd", "sort", "fact"];
 const selectableModeOptions = modeOptions.filter((item): item is (typeof modeOptions)[number] & { id: ChallengeMode } => item.id !== "mix");
-const defaultStarterTopics: RoundTopic[] = ["sharks", "jets"];
+const defaultSelectedTopics: RoundTopic[] = [...allKnowledgeTopics];
+const minimumStarterTopics: RoundTopic[] = ["sharks", "jets"];
 const starterMixModes: ChallengeMode[] = ["quiz"];
 const gameTypeLabel = (modeId: ChallengeMode) => modeOptions.find((item) => item.id === modeId)?.label ?? "Game";
 
@@ -216,7 +217,7 @@ const freshProgress = (): Progress => ({
 const normalizeProgress = (progress?: Partial<Progress>): Progress => ({
   ...freshProgress(),
   ...progress,
-  challengeMilestone: progress?.challengeMilestone ?? Math.floor((progress?.answered ?? 0) / 10) * 10,
+  challengeMilestone: progress?.challengeMilestone ?? Math.floor((progress?.answered ?? 0) / 20) * 20,
   topicWins: { ...emptyTopicCounts(), ...progress?.topicWins },
   topicStats: Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, { correct: 0, answered: 0, ...progress?.topicStats?.[topic] }])) as Progress["topicStats"],
   modeWins: { ...initialProgress.modeWins, ...progress?.modeWins },
@@ -226,12 +227,12 @@ const normalizeProgress = (progress?: Partial<Progress>): Progress => ({
 
 const normalizeInterests = (interests?: readonly RoundTopic[], availableTopics: readonly RoundTopic[] = allKnowledgeTopics) => {
   const available = new Set(availableTopics);
-  const fallback = defaultStarterTopics.filter((topic) => available.has(topic));
+  const fallback = [...availableTopics];
   const cleaned = (interests ?? fallback).filter((topic) => available.has(topic));
   return cleaned.length ? Array.from(new Set(cleaned)) : fallback.length ? fallback : availableTopics.slice(0, 1);
 };
 
-const defaultProfiles = (legacyProgress?: Partial<Progress>, interests: RoundTopic[] = [...defaultStarterTopics]): ProfilesState => ({
+const defaultProfiles = (legacyProgress?: Partial<Progress>, interests: RoundTopic[] = [...defaultSelectedTopics]): ProfilesState => ({
   activeProfileId: "player-1",
   profiles: [
     { id: "player-1", name: "Player 1", interests: [...interests], progress: normalizeProgress(legacyProgress) },
@@ -240,7 +241,7 @@ const defaultProfiles = (legacyProgress?: Partial<Progress>, interests: RoundTop
 });
 
 const loadProfiles = (availableTopics: readonly RoundTopic[] = allKnowledgeTopics): ProfilesState => {
-  const starterTopics = normalizeInterests(defaultStarterTopics, availableTopics);
+  const starterTopics = [...availableTopics];
   if (typeof window === "undefined") return defaultProfiles(undefined, starterTopics);
 
   const savedProfiles = window.localStorage.getItem(profilesKey) ?? window.localStorage.getItem(legacyProfilesKey);
@@ -1055,7 +1056,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         : current.modeWins,
     }));
 
-    if (activeInterests.includes("peppers") && progress.answered + 1 >= progress.challengeMilestone + 10) {
+    if (activeInterests.includes("peppers") && progress.answered + 1 >= progress.challengeMilestone + 20) {
       setMiniChallengePending(true);
     }
 
@@ -1150,7 +1151,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const newProfile: LearnerProfile = {
       id: `profile-${Date.now()}`,
       name: cleanName.slice(0, 18),
-      interests: normalizeInterests(defaultStarterTopics, playableTopics),
+      interests: [...playableTopics],
       progress: freshProgress(),
     };
     const seed = freshSeed(cleanName.length + 29);
@@ -1202,7 +1203,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const clearInterests = () => {
-    applyInterests([...defaultStarterTopics], "starter-topics", "Starter topics selected.");
+    applyInterests([...minimumStarterTopics], "starter-topics", "Starter topics selected.");
   };
 
   const applyMixModes = (nextModes: ChallengeMode[], seedBasis: string, message: string) => {
