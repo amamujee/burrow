@@ -61,7 +61,7 @@ export function LearningLabs() {
 
         <section className="mt-2 flex min-w-0 flex-1 flex-col rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-2 shadow-[3px_3px_0_#092421]" aria-label={current.label}>
           {activeLab === "expedition" && <PepperExpedition onComplete={() => setActiveLab("words")} />}
-          {activeLab === "words" && <WordExplorer />}
+          {activeLab === "words" && <WordExplorer onComplete={() => setActiveLab("math")} />}
           {activeLab === "math" && <MathLenses />}
         </section>
 

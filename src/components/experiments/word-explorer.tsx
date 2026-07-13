@@ -18,11 +18,11 @@ const activities = {
     prompt: "Which pepper best matches the word wrinkled?",
     choices: [
       { id: "bell", label: "Smooth Bell Pepper", image: "/burrow-assets/peppers/bell-pepper.jpg" },
-      { id: "habanero", label: "Wrinkled Carolina Reaper", image: "/burrow-assets/peppers/carolina-reaper.jpg" },
+      { id: "reaper", label: "Wrinkled Carolina Reaper", image: "/burrow-assets/peppers/carolina-reaper.jpg" },
       { id: "poblano", label: "Long Poblano", image: "/burrow-assets/peppers/poblano.jpg" },
     ],
-    answer: "habanero",
-    explanation: "Wrinkled means covered with little folds or creases. The habanero’s skin has visible folds.",
+    answer: "reaper",
+    explanation: "Wrinkled means covered with little folds or creases. The Carolina Reaper’s skin has visible folds.",
   },
   sentence: {
     sentenceStart: "The gardener wore gloves because the habanero was very",
@@ -44,13 +44,14 @@ const activities = {
   },
 } as const;
 
-export function WordExplorer() {
+export function WordExplorer({ onComplete }: { onComplete: () => void }) {
   const [level, setLevel] = useState<ReadingLevel>("match");
   const [selected, setSelected] = useState<string | null>(null);
   const [mastered, setMastered] = useState<ReadingLevel[]>([]);
   const [complete, setComplete] = useState(false);
   const activity = activities[level];
   const answer = activity.answer;
+  const answerLabel = level === "match" ? activities.match.choices.find((choice) => choice.id === answer)?.label ?? answer : answer;
   const correct = selected === answer;
   const levelIndex = levels.findIndex((item) => item.id === level);
   const nextLevel = levels[levelIndex + 1]?.id;
@@ -64,19 +65,12 @@ export function WordExplorer() {
   const choose = (choice: string) => {
     if (selected) return;
     setSelected(choice);
-    if (choice === answer) setMastered((current) => current.includes(level) ? current : [...current, level]);
+    setMastered((current) => current.includes(level) ? current : [...current, level]);
   };
 
   const changeLevel = (next: ReadingLevel) => {
     setLevel(next);
     setSelected(null);
-  };
-
-  const restart = () => {
-    setLevel("match");
-    setSelected(null);
-    setMastered([]);
-    setComplete(false);
   };
 
   const speak = () => {
@@ -97,7 +91,7 @@ export function WordExplorer() {
             <div className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3"><p className="text-[10px] font-black uppercase text-[#9f3f2b]">Sentence clue</p><p className="mt-1 font-black">spicy</p><p className="mt-1 text-xs font-bold text-[#5f6b5d]">Used context to complete an idea.</p></div>
             <div className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3"><p className="text-[10px] font-black uppercase text-[#9f3f2b]">Evidence</p><p className="mt-1 font-black">same species</p><p className="mt-1 text-xs font-bold text-[#5f6b5d]">Found a sentence that proves an answer.</p></div>
           </div>
-          <button onClick={restart} className="mt-5 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-5 py-3 font-black shadow-[3px_3px_0_#092421]">Read the trail again</button>
+          <button onClick={onComplete} className="mt-5 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-5 py-3 font-black shadow-[3px_3px_0_#092421]">Continue to Math Trail</button>
         </div>
       </div>
     );
@@ -115,11 +109,11 @@ export function WordExplorer() {
             const active = level === item.id;
             const done = mastered.includes(item.id);
             return (
-              <button key={item.id} onClick={() => changeLevel(item.id)} aria-pressed={active} className={`grid grid-cols-[2.25rem_1fr_auto] items-center gap-2 rounded-lg border-2 p-2 text-left ${active ? "border-[#f0c84b] bg-[#f0c84b] text-[#102f36]" : "border-white/25 bg-white/10 hover:border-white/60"}`}>
+              <div key={item.id} aria-current={active ? "step" : undefined} className={`grid grid-cols-[2.25rem_1fr_auto] items-center gap-2 rounded-lg border-2 p-2 text-left ${active ? "border-[#f0c84b] bg-[#f0c84b] text-[#102f36]" : done ? "border-[#70d392] bg-[#70d392] text-[#102f36]" : "border-white/25 bg-white/10"}`}>
                 <span className="grid h-9 w-9 place-items-center rounded-md border-2 border-current font-black">{index + 1}</span>
                 <span><span className="block text-[9px] font-black uppercase tracking-[0.1em] opacity-70">{item.eyebrow}</span><span className="block font-black">{item.label}</span></span>
                 <span className="text-lg" aria-label={done ? "completed" : "not completed"}>{done ? "✓" : "○"}</span>
-              </button>
+              </div>
             );
           })}
         </div>
@@ -172,7 +166,7 @@ export function WordExplorer() {
 
         {selected && (
           <div className={`mt-4 rounded-lg border-2 p-3 ${correct ? "border-[#2f7d4f] bg-[#e9ffe9]" : "border-[#9f3f2b] bg-[#fff0ea]"}`}>
-            <p className="text-lg font-black">{correct ? "You found the clue!" : `Answer: ${answer}`}</p>
+            <p className="text-lg font-black">{correct ? "You found the clue!" : `Answer: ${answerLabel}`}</p>
             <p className="mt-1 text-sm font-bold text-[#5f6b5d]">{activity.explanation}</p>
             <button onClick={() => nextLevel ? changeLevel(nextLevel) : setComplete(true)} className="mt-3 rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2 font-black text-white shadow-[2px_2px_0_#092421]">{nextLevel ? "Next question" : "View reading summary"}</button>
           </div>
@@ -185,11 +179,11 @@ export function WordExplorer() {
 function PictureChoice({ choice, selected, answer, onChoose }: { choice: { id: string; label: string; image: string }; selected: string | null; answer: string; onChoose: (id: string) => void }) {
   const correct = selected && choice.id === answer;
   const wrong = selected === choice.id && choice.id !== answer;
-  return <button onClick={() => onChoose(choice.id)} className={`overflow-hidden rounded-lg border-2 text-left ${correct ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]" : wrong ? "border-[#092421] bg-[#f59a7d]" : "border-[#d9c7a7] bg-white hover:border-[#092421]"}`}><span className="relative block h-40"><Image src={choice.image} alt="" fill sizes="(max-width: 640px) 100vw, 30vw" className="object-cover" /></span><span className="block p-3 font-black">{choice.label}</span></button>;
+  return <button disabled={selected !== null} onClick={() => onChoose(choice.id)} className={`overflow-hidden rounded-lg border-2 text-left ${correct ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]" : wrong ? "border-[#092421] bg-[#f59a7d]" : "border-[#d9c7a7] bg-white hover:border-[#092421] disabled:opacity-70"}`}><span className="relative block h-40"><Image src={choice.image} alt="" fill sizes="(max-width: 640px) 100vw, 30vw" className="object-cover" /></span><span className="block p-3 font-black">{choice.label}</span></button>;
 }
 
 function TextChoice({ choice, selected, answer, onChoose }: { choice: string; selected: string | null; answer: string; onChoose: (choice: string) => void }) {
   const correct = selected && choice === answer;
   const wrong = selected === choice && choice !== answer;
-  return <button onClick={() => onChoose(choice)} className={`min-h-14 rounded-lg border-2 p-3 text-left text-base font-black ${correct ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : wrong ? "border-[#092421] bg-[#f59a7d]" : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf]"}`}>{choice}</button>;
+  return <button disabled={selected !== null} onClick={() => onChoose(choice)} className={`min-h-14 rounded-lg border-2 p-3 text-left text-base font-black ${correct ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : wrong ? "border-[#092421] bg-[#f59a7d]" : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf] disabled:opacity-70"}`}>{choice}</button>;
 }

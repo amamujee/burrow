@@ -154,7 +154,7 @@ export function PepperExpedition({ onComplete }: { onComplete: () => void }) {
           {stop.choices.map((choice) => {
             const isCorrect = selected && choice === stop.answer;
             const isWrong = selected === choice && choice !== stop.answer;
-            return <button key={choice} onClick={() => answer(choice)} className={`min-h-16 rounded-lg border-2 p-3 text-left text-base font-black transition ${isCorrect ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : isWrong ? "border-[#092421] bg-[#f59a7d]" : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf]"}`}>{choice}</button>;
+            return <button key={choice} disabled={selected !== null} onClick={() => answer(choice)} className={`min-h-16 rounded-lg border-2 p-3 text-left text-base font-black transition ${isCorrect ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : isWrong ? "border-[#092421] bg-[#f59a7d]" : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf] disabled:opacity-70"}`}>{choice}</button>;
           })}
         </div>
 

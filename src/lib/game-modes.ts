@@ -1101,6 +1101,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
 
 const multiplicationRound = (
   card: KnowledgeCard,
+  companion: KnowledgeCard,
   topic: RoundTopic,
   difficulty: Difficulty,
   seed: number,
@@ -1117,13 +1118,19 @@ const multiplicationRound = (
     statValue: itemsPerGroup,
     statDisplay: `${itemsPerGroup} ${scenario.itemPlural} per ${scenario.groupSingular}`,
   };
+  const companionCard: KnowledgeCard = {
+    ...companion,
+    statLabel: scenario.statLabel,
+    statValue: itemsPerGroup,
+    statDisplay: `${itemsPerGroup} ${scenario.itemPlural} per ${scenario.groupSingular}`,
+  };
 
   return {
     id: `${seed}-number-${topic}-multiply-${card.id}-${groups}x${itemsPerGroup}`,
     topic,
     operation: "multiplication",
     prompt: scenario.prompt(card.title, groups, itemsPerGroup),
-    cards: [countingCard],
+    cards: [countingCard, companionCard],
     statLabel: scenario.statLabel,
     unit: scenario.itemPlural,
     operator: "x",
@@ -1594,7 +1601,8 @@ export const buildNumberRoundFromCards = (
   const unit = pool[0].stats[0]?.display.replace(formatNumber(pool[0].stats[0].value), "").trim() || "";
 
   if (requestedOperation === "multiplication") {
-    return multiplicationRound(sample(pool, seed + 40), topic, difficulty, seed);
+    const [card, companion] = shuffle(pool, seed + 40).slice(0, 2);
+    return multiplicationRound(card, companion, topic, difficulty, seed);
   }
 
   if (requestedOperation === "subtraction" && shouldBuildFitRound(difficulty, seed)) {
@@ -1768,7 +1776,10 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
 
   if (currentTopic === "peppers") {
     const pool = preferredPool(peppers, difficulty);
-    if (requestedOperation === "multiplication") return multiplicationRound(pepperCard(sample(pool, seed + 1)), currentTopic, difficulty, seed);
+    if (requestedOperation === "multiplication") {
+      const [first, second] = shuffle(pool, seed + 1).slice(0, 2);
+      return multiplicationRound(pepperCard(first), pepperCard(second), currentTopic, difficulty, seed);
+    }
 
     const [first, second] = shuffle(pool, seed + 1).slice(0, 2);
     const countRange = difficulty === 1 ? [2, 7] as const : difficulty === 2 ? [4, 12] as const : [7, 20] as const;
@@ -1825,7 +1836,10 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
 
   if (currentTopic === "buildings") {
     const pool = preferredPool(buildings, difficulty);
-    if (requestedOperation === "multiplication") return multiplicationRound(buildingCard(sample(pool, seed + 3)), currentTopic, difficulty, seed);
+    if (requestedOperation === "multiplication") {
+      const [first, second] = shuffle(pool, seed + 3).slice(0, 2);
+      return multiplicationRound(buildingCard(first), buildingCard(second), currentTopic, difficulty, seed);
+    }
     const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
     if (requestedOperation === "addition") {
       const count = additionTermCount(difficulty, seed);
@@ -1879,7 +1893,10 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
 
   if (currentTopic === "space") {
     const pool = preferredPool(spaceCards, difficulty);
-    if (requestedOperation === "multiplication") return multiplicationRound(spaceCard(sample(pool, seed + 6), "size"), currentTopic, difficulty, seed);
+    if (requestedOperation === "multiplication") {
+      const [first, second] = shuffle(pool, seed + 6).slice(0, 2);
+      return multiplicationRound(spaceCard(first, "size"), spaceCard(second, "size"), currentTopic, difficulty, seed);
+    }
     if (requestedOperation === "addition") {
       const count = additionTermCount(difficulty, seed);
       const step = difficulty === 1 ? 500 : difficulty === 2 ? 100 : 50;
@@ -1934,7 +1951,10 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
 
   if (currentTopic === "jets") {
     const pool = preferredPool(jets, difficulty);
-    if (requestedOperation === "multiplication") return multiplicationRound(jetCard(sample(pool, seed + 9)), currentTopic, difficulty, seed);
+    if (requestedOperation === "multiplication") {
+      const [first, second] = shuffle(pool, seed + 9).slice(0, 2);
+      return multiplicationRound(jetCard(first), jetCard(second), currentTopic, difficulty, seed);
+    }
     const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
     if (requestedOperation === "addition") {
       const count = additionTermCount(difficulty, seed);
@@ -1989,7 +2009,10 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
 
   const step = difficulty === 1 ? 5 : 2;
   const sharkPool = preferredPool(sharks, difficulty);
-  if (requestedOperation === "multiplication") return multiplicationRound(sharkCard(sample(sharkPool, seed + 9)), currentTopic, difficulty, seed);
+  if (requestedOperation === "multiplication") {
+    const [first, second] = shuffle(sharkPool, seed + 9).slice(0, 2);
+    return multiplicationRound(sharkCard(first), sharkCard(second), currentTopic, difficulty, seed);
+  }
   if (requestedOperation === "addition") {
     const count = additionTermCount(difficulty, seed);
     const selected = shuffle(sharkPool, seed + 10).slice(0, count);

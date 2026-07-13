@@ -37,6 +37,7 @@ test("pepper expedition moves between subjects and collects a journal clue", asy
 test("pepper expedition teaches a missed answer and moves on", async ({ page }) => {
   await page.getByRole("button", { name: "Completely dry" }).click();
   await expect(page.getByText("Answer: A little wet")).toBeVisible();
+  await expect(page.getByRole("button", { name: "A little wet" })).toBeDisabled();
   await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Find a pepper homeland" })).toBeVisible();
 });
@@ -64,7 +65,12 @@ test("word explorer supports matching, sentence context, and evidence", async ({
   await page.getByRole("button", { name: /Word Explorer/ }).click();
   await expect(page.getByRole("heading", { name: "Word Match" })).toBeVisible();
 
-  await page.getByRole("button", { name: /Sentence Builder/ }).click();
+  await expect(page.getByRole("button", { name: /Sentence Builder/ })).toHaveCount(0);
+  await page.getByRole("button", { name: "Smooth Bell Pepper" }).click();
+  await expect(page.getByText("Answer: Wrinkled Carolina Reaper")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Wrinkled Carolina Reaper" })).toBeDisabled();
+  await page.getByRole("button", { name: "Next question" }).click();
+  await expect(page.getByRole("heading", { name: "Sentence Builder" })).toBeVisible();
   await page.getByRole("button", { name: "spicy" }).click();
   await expect(page.getByText("You found the clue!")).toBeVisible();
 
@@ -74,6 +80,8 @@ test("word explorer supports matching, sentence context, and evidence", async ({
   await expect(page.getByText(/That sentence directly says/)).toBeVisible();
   await page.getByRole("button", { name: "View reading summary" }).click();
   await expect(page.getByRole("heading", { name: "Pepper word journal" })).toBeVisible();
+  await page.getByRole("button", { name: "Continue to Math Trail" }).click();
+  await expect(page.getByText("3 × 4 = ?")).toBeVisible();
 });
 
 test("math trail chooses varied question types and moves across topic worlds", async ({ page }) => {
@@ -100,6 +108,21 @@ test("math trail chooses varied question types and moves across topic worlds", a
   await expect(page.getByText("Sky Scrapers · Addition")).toBeVisible();
   await expect(page.getByText("12 + 9 = ?")).toBeVisible();
   await expect(page.getByLabel("12 plus 9 windows")).toBeVisible();
+});
+
+test("math trail completes all ten stops and continues to Burrow", async ({ page }) => {
+  await page.getByRole("button", { name: /Math Trail/ }).click();
+
+  for (const [index, challenge] of mathTrailChallenges.entries()) {
+    await page.getByRole("button", { name: String(challenge.answer), exact: true }).click();
+    await page.getByRole("button", { name: index === mathTrailChallenges.length - 1 ? "View math summary" : "Next question" }).click();
+  }
+
+  await expect(page.getByRole("heading", { name: "Nine worlds of numbers—and 12 × 12" })).toBeVisible();
+  await expect(page.getByText("10/10 solved · every answer explored")).toBeVisible();
+  await page.getByRole("link", { name: "Continue to Burrow" }).click();
+  await expect(page).toHaveURL(/\/play$/);
+  await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
 });
 
 test("lab selector fits the mobile viewport", async ({ page, isMobile }) => {

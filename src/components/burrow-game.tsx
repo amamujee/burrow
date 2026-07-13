@@ -544,6 +544,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const [issueCount, setIssueCount] = useState(0);
   const [issueFlash, setIssueFlash] = useState(false);
   const [miniChallengeActive, setMiniChallengeActive] = useState(false);
+  const [miniChallengePending, setMiniChallengePending] = useState(false);
   const anonymousInstallIdRef = useRef<string | null>(null);
   const playSessionIdRef = useRef("");
   const playEventSequenceRef = useRef(0);
@@ -1049,7 +1050,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     }));
 
     if (progress.answered + 1 >= progress.challengeMilestone + 10) {
-      setMiniChallengeActive(true);
+      setMiniChallengePending(true);
     }
 
     return { correct, xpGain, leveledUp: nextLevel > progress.level };
@@ -1057,6 +1058,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
 
   const resetRunState = () => {
     setMiniChallengeActive(false);
+    setMiniChallengePending(false);
     setQuestionIndex(0);
     setSelected(null);
     setSortPicked([]);
@@ -1072,6 +1074,13 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setMiniRunAnswered(0);
     setMiniRunCorrect(0);
     setCelebration("Fresh round.");
+  };
+
+  const startPendingMiniChallenge = () => {
+    if (!miniChallengePending) return false;
+    setMiniChallengePending(false);
+    setMiniChallengeActive(true);
+    return true;
   };
 
   const freshSeed = (offset = 0) => {
@@ -1278,6 +1287,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const advanceMix = () => {
+    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(101 + questionIndex);
     if (questionIndex === questions.length - 1) {
       setProgress((current) => ({ ...current, sessions: current.sessions + 1 }));
@@ -1309,6 +1319,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const advance = () => {
+    if (startPendingMiniChallenge()) return;
     if (mode === "mix") {
       advanceMix();
       return;
@@ -1367,6 +1378,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextSortRound = () => {
+    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 13);
     setSortRound(buildSortForScope(currentTopicScope, progress.difficulty, seed));
     setSortPicked([]);
@@ -1426,6 +1438,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextFactRound = () => {
+    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 19);
     setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed));
     setFactSelected(null);
@@ -1486,6 +1499,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextRevealRound = () => {
+    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 23);
     setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed));
     setRevealSelected(null);
@@ -1544,6 +1558,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextGeoRound = () => {
+    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 29);
     setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed));
     setGeoSelected(null);
@@ -1602,6 +1617,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextNumberRound = () => {
+    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 31);
     setNumberRound(buildNumberForScope(currentTopicScope, progress.difficulty, seed));
     setNumberSelected(null);
@@ -1662,6 +1678,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextOddRound = () => {
+    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 37);
     setOddRound(buildOddForScope(currentTopicScope, progress.difficulty, seed));
     setOddSelected(null);
@@ -1734,6 +1751,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextTopTrumpRound = () => {
+    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 41);
     setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed));
     setTopTrumpSelected(null);

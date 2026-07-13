@@ -156,6 +156,9 @@ test("every tenth answer opens an automatic mini challenge and returns after its
   await chooseOnlyMode(page, "True/False");
 
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
+  await expect(page.getByText(/Answer:/)).toBeVisible();
+  await expect(page.getByText("Pepper mini challenge")).toHaveCount(0);
+  await page.getByRole("button", { name: /Next|Finish round/ }).click();
   await expect(page.getByText("Pepper mini challenge")).toBeVisible();
 
   await page.getByRole("button", { name: "Completely dry" }).click();
