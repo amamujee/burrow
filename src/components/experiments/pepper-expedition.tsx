@@ -73,7 +73,7 @@ const stops: Stop[] = [
   },
 ];
 
-export function PepperExpedition() {
+export function PepperExpedition({ onComplete }: { onComplete: () => void }) {
   const [stopIndex, setStopIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [journal, setJournal] = useState<string[]>([]);
@@ -95,13 +95,6 @@ export function PepperExpedition() {
     }
   };
 
-  const restart = () => {
-    setStopIndex(0);
-    setSelected(null);
-    setJournal([]);
-    setComplete(false);
-  };
-
   if (complete) {
     return (
       <div className="grid flex-1 place-items-center p-3">
@@ -112,7 +105,7 @@ export function PepperExpedition() {
           <div className="mt-4 grid gap-2 text-left sm:grid-cols-2">
             {journal.map((note, index) => <p key={note} className="rounded-lg border-2 border-[#b8d7b8] bg-white p-3 text-sm font-bold"><span className="mr-2 text-[#9f3f2b]">{index + 1}.</span>{note}</p>)}
           </div>
-          <button onClick={restart} className="mt-5 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-5 py-3 font-black shadow-[3px_3px_0_#092421]">Take expedition again</button>
+          <button onClick={onComplete} className="mt-5 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-5 py-3 font-black shadow-[3px_3px_0_#092421]">Continue to Word Explorer</button>
         </div>
       </div>
     );

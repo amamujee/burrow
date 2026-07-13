@@ -21,6 +21,25 @@ test("pepper expedition teaches a missed answer and moves on", async ({ page }) 
   await expect(page.getByRole("heading", { name: "Find a pepper homeland" })).toBeVisible();
 });
 
+test("pepper expedition summary continues into word explorer", async ({ page }) => {
+  const answers = [
+    "A little wet",
+    "South of the United States",
+    "24 peppers",
+    "The pale inner tissue",
+    "Makes peppers feel hot",
+  ];
+
+  for (const [index, answer] of answers.entries()) {
+    await page.getByRole("button", { name: answer }).click();
+    await page.getByRole("button", { name: index === answers.length - 1 ? "View expedition summary" : "Next question" }).click();
+  }
+
+  await expect(page.getByRole("heading", { name: "Jalapeño field journal" })).toBeVisible();
+  await page.getByRole("button", { name: "Continue to Word Explorer" }).click();
+  await expect(page.getByRole("heading", { name: "Word Explorer" })).toBeVisible();
+});
+
 test("word explorer supports matching, sentence context, and evidence", async ({ page }) => {
   await page.getByRole("button", { name: /Word Explorer/ }).click();
   await expect(page.getByRole("heading", { name: "Word Match" })).toBeVisible();
