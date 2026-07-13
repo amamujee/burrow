@@ -132,6 +132,25 @@ test("every automatic Reading stop is grounded in visible evidence", () => {
   }
 });
 
+test("every challenge Geography and Science stop has a teaching visual", () => {
+  const geographySteps = coreMiniExpeditions.flatMap((expedition) => expedition.steps.filter((step) => step.skill === "Geography"));
+  const scienceSteps = coreMiniExpeditions.flatMap((expedition) => expedition.steps.filter((step) => step.skill === "Science"));
+
+  expect(geographySteps).toHaveLength(coreMiniExpeditions.length);
+  for (const step of geographySteps) {
+    expect(step.map, `${step.id} needs a map`).toBeTruthy();
+    expect(step.map?.choices.map((choice) => choice.label)).toEqual(step.choices);
+    expect(step.map?.choices.some((choice) => choice.label === step.answer)).toBe(true);
+  }
+
+  expect(scienceSteps).toHaveLength(coreMiniExpeditions.length);
+  for (const step of scienceSteps) {
+    expect(step.conceptVisual, `${step.id} needs a concept diagram`).toBeTruthy();
+    expect(step.choices).toContain(step.answer);
+    expect(step.summary.length).toBeGreaterThan(40);
+  }
+});
+
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/content-issues", async (route) => {
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
@@ -195,26 +214,32 @@ test("every tenth answer opens an automatic mini challenge and returns after its
 
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
   await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
-  await expect(page.getByText("Pepper mini challenge")).toHaveCount(0);
+  await expect(page.getByLabel("Challenge Mode", { exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: /Next|Finish round/ }).click();
-  await expect(page.getByText("Pepper mini challenge")).toBeVisible();
+  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Deep dive: Jalapeño fieldwork");
 
   await page.getByRole("button", { name: "Keep pouring until water covers the soil" }).click();
   await expect(page.getByText("Answer: Water until the soil is damp, then stop")).toBeVisible();
   await expect(page.getByText("Evidence:", { exact: true }).locator("..")).toContainText("Keep the soil evenly damp, but never waterlogged");
   await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Map the pepper homeland" })).toBeVisible();
+  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Stop 2 of 5");
+  await expect(page.getByLabel("Challenge map story")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Choose map pin A: Mexico" })).toBeVisible();
 
-  await page.getByRole("button", { name: "Guatemala and Belize" }).click();
+  await page.getByRole("button", { name: "Choose map pin A: Mexico" }).click();
   await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Count the harvest" })).toBeVisible();
-  await expect(page.getByText("7 × 8 = ?")).toBeVisible();
-  await expect(page.getByLabel("7 equal pepper groups of 8")).toBeVisible();
+  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Stop 3 of 5");
+  await expect(page.getByRole("heading", { name: "7 × 8 = ?" })).toBeVisible();
+  await expect(page.getByLabel("Challenge math story").getByLabel("7 equal pepper groups of 8")).toBeVisible();
 
   await page.getByRole("button", { name: "56 peppers" }).click();
   await page.getByRole("button", { name: "Next question" }).click();
-  await expect(page.getByRole("heading", { name: "Investigate the heat" })).toBeVisible();
-  await page.getByRole("button", { name: "Capsaicin coats its surface" }).click();
+  await expect(page.getByRole("heading", { name: "See where pepper heat begins" })).toBeVisible();
+  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Stop 4 of 5");
+  await expect(page.getByLabel("Labeled pepper anatomy diagram")).toBeVisible();
+  await page.getByRole("button", { name: "The nearby placenta" }).click();
   await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Unlock a science word" })).toBeVisible();
   await page.getByRole("button", { name: "Gathered in a larger amount" }).click();
@@ -224,7 +249,7 @@ test("every tenth answer opens an automatic mini challenge and returns after its
   await expect(page.getByText("4/5 discoveries solved · all five notes collected")).toBeVisible();
   await page.getByRole("button", { name: "Continue regular questions" }).click();
   await expect(page.getByText("True or false?")).toBeVisible();
-  await expect(page.getByText("Pepper mini challenge")).toHaveCount(0);
+  await expect(page.getByLabel("Challenge Mode", { exact: true })).toHaveCount(0);
 
   await expect.poll(async () => page.evaluate(() => {
     const profiles = JSON.parse(window.localStorage.getItem("burrow-profiles-v1") ?? "{}") as {
@@ -255,7 +280,7 @@ test("pepper mini challenges do not interrupt unselected topics", async ({ page 
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
   await page.getByRole("button", { name: /Next|Finish round/ }).click();
 
-  await expect(page.getByText("Pepper mini challenge")).toHaveCount(0);
+  await expect(page.getByLabel("Challenge Mode", { exact: true })).toHaveCount(0);
   await expect(page.getByText("True or false?")).toBeVisible();
 });
 
@@ -307,8 +332,10 @@ test("play events capture anonymous question quality context", async ({ page }) 
 test("number rounds show an arithmetic equation and accept an answer", async ({ page }) => {
   await chooseOnlyMode(page, "Numbers");
 
-  await expect(page.getByText(/\d[\d,]*\s[+\-x]\s\d[\d,]*(\s\+\s\d[\d,]*)?\s=\s\?/)).toBeVisible();
-  await expect(page.getByLabel(/^Math picture:/)).toBeVisible();
+  await expect(page.getByLabel("Number equation")).toContainText(/\d[\d,]*\s[+\-x]\s\d[\d,]*(\s\+\s\d[\d,]*)?\s=\s\?/);
+  const storyStage = page.getByLabel("Numbers story stage");
+  await expect(storyStage).toBeVisible();
+  await expect(storyStage.getByLabel(/^Math picture:/)).toBeVisible();
 
   await page.locator("[data-number-choice]").first().click();
   await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
@@ -324,9 +351,9 @@ test("pepper number rounds teach multiplication with equal plant groups", async 
 
   await expect(page.getByText("Grow case", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: /\d+ .* plants grow \d+ peppers each.*How many peppers/ })).toBeVisible();
-  await expect(page.getByText(/\d+ x \d+ = \?/)).toBeVisible();
+  await expect(page.getByLabel("Number equation")).toContainText(/\d+ x \d+ = \?/);
 
-  const garden = page.getByLabel("Math picture: equal pepper plant groups");
+  const garden = page.getByLabel("Numbers story stage").getByLabel("Math picture: equal pepper plant groups");
   await expect(garden).toBeVisible();
   const plantCount = await garden.locator("[data-math-group]").count();
   expect(plantCount).toBeGreaterThanOrEqual(2);

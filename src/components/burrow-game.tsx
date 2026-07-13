@@ -3,6 +3,7 @@
 import { track } from "@vercel/analytics";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CoreMiniChallenge } from "@/components/core-mini-challenge";
+import { WorldMapSurface } from "@/components/world-map-surface";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
 import {
   buildFactRoundFromCards,
@@ -3014,84 +3015,25 @@ function GeoMap({
   answered: boolean;
   onAnswer: (choiceId: string) => void;
 }) {
-  const continentLabels = [
-    { label: "North America", left: "19%", top: "26%" },
-    { label: "South America", left: "32%", top: "61%" },
-    { label: "Europe", left: "52%", top: "22%" },
-    { label: "Africa", left: "54%", top: "49%" },
-    { label: "Asia", left: "72%", top: "27%" },
-    { label: "Australia", left: "85%", top: "66%" },
-    { label: "Antarctica", left: "50%", top: "88%" },
-  ];
-
   return (
-    <div className="relative min-h-[320px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#b9dfdf]">
-      <svg aria-hidden="true" viewBox="0 0 100 56" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="geo-ocean" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#c9e9e9" />
-            <stop offset="1" stopColor="#acd6d8" />
-          </linearGradient>
-        </defs>
-        <rect width="100" height="56" fill="url(#geo-ocean)" />
-        {[18.67, 28, 37.33].map((y) => (
-          <line key={`latitude-${y}`} x1="0" y1={y} x2="100" y2={y} stroke="#4e8a83" strokeWidth="0.18" opacity="0.42" />
-        ))}
-        {[25, 50, 75].map((x) => (
-          <line key={`longitude-${x}`} x1={x} y1="0" x2={x} y2="56" stroke="#4e8a83" strokeWidth="0.18" opacity="0.34" />
-        ))}
-        <image href="/world-map-land.svg" x="0" y="0" width="100" height="56" preserveAspectRatio="none" />
-        <line x1="0" y1="28" x2="100" y2="28" stroke="#23645b" strokeDasharray="1.25 1.25" strokeWidth="0.5" opacity="0.9" />
-      </svg>
-
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        {continentLabels.map((continent) => (
-          <span
-            key={continent.label}
-            className="absolute -translate-x-1/2 -translate-y-1/2 rounded bg-[#fff9ec]/80 px-1.5 py-0.5 text-center text-[7px] font-black uppercase leading-none tracking-[0.08em] text-[#23453f] shadow-[0_1px_0_rgba(9,36,33,.22)] min-[700px]:text-[9px]"
-            style={{ left: continent.left, top: continent.top }}
-          >
-            {continent.label}
-          </span>
-        ))}
-      </div>
-
-      <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white/95 px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#092421]">
-        World map
-      </div>
-      <div className="absolute left-2 top-[50%] -translate-y-1/2 rounded-md bg-white/85 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-[0.08em] text-[#23645b]">
-        Equator
-      </div>
-      {round.choices.map((choice, index) => {
-        const letter = String.fromCharCode(65 + index);
-        const correctPin = answered && choice.id === round.answerId;
-        const chosenWrong = selected === choice.id && choice.id !== round.answerId;
-        const quiet = answered && !correctPin && !chosenWrong;
-        return (
-          <button
-            key={`${round.id}-${choice.id}-pin`}
-            type="button"
-            aria-label={`Choose map pin ${letter}: ${choice.label}`}
-            onClick={() => onAnswer(choice.id)}
-            className={`absolute z-10 grid h-10 w-10 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition active:translate-y-[-45%] ${
-              correctPin
-                ? "border-[#092421] bg-[#70d392]"
-                : chosenWrong
-                  ? "border-[#092421] bg-[#f59a7d]"
-                  : quiet
-                    ? "border-[#375b52] bg-white/65"
-                    : "border-[#092421] bg-[#f0c84b] hover:bg-[#fff1bf]"
-            }`}
-            style={{ left: `${choice.point.x}%`, top: `${choice.point.y}%` }}
-          >
-            {letter}
-          </button>
-        );
-      })}
-      <div className="absolute bottom-2 left-2 right-2 rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">
-        {answered ? `Answer: ${round.answerLabel}` : "Tap a lettered pin, then match it to the place list."}
-      </div>
-    </div>
+    <WorldMapSurface
+      markers={round.choices.map((choice) => ({
+        id: choice.id,
+        label: choice.label,
+        x: choice.point.x,
+        y: choice.point.y,
+        tone: answered
+          ? choice.id === round.answerId
+            ? "correct" as const
+            : choice.id === selected
+              ? "wrong" as const
+              : "quiet" as const
+          : "default" as const,
+      }))}
+      footer={answered ? `Answer: ${round.answerLabel}` : "Tap a lettered pin, then match it to the place list."}
+      onSelect={onAnswer}
+      disabled={answered}
+    />
   );
 }
 
@@ -3126,6 +3068,7 @@ function NumberMode({
     round.operation === "fit"
       ? `${round.smallerValue.toLocaleString("en-US")} x ? = ${round.biggerValue.toLocaleString("en-US")}`
       : round.termValues.map((value) => value.toLocaleString("en-US")).join(` ${round.operator} `);
+  const equationLabel = round.operation === "fit" ? expressionLabel : `${expressionLabel} = ?`;
   const stageBadge = round.operation === "addition" ? "Stack case" : round.operation === "multiplication" ? round.visual?.badge ?? "Group case" : round.operation === "fit" ? "Fit case" : "Number case";
   const stageFooter =
     round.operation === "addition"
@@ -3138,7 +3081,7 @@ function NumberMode({
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <KnowledgeCardsStage cards={round.cards} badge={stageBadge} footer={stageFooter} />
+      <NumberStoryStage round={round} badge={stageBadge} footer={stageFooter} />
 
       <article className="flex min-h-0 flex-col rounded-lg min-[900px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
         <div className="flex items-center justify-between gap-2">
@@ -3150,18 +3093,7 @@ function NumberMode({
         </div>
 
         <h2 className="mt-2 text-[clamp(1.2rem,2.6vw,2.25rem)] font-black leading-[1.06] text-[#102f36]">{round.prompt}</h2>
-
-        {round.operation !== "multiplication" && (
-          <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-3">
-            <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">{round.statLabel}</p>
-            <p className="mt-1 text-3xl font-black leading-none text-[#102f36]">
-              {expressionLabel} = ?
-            </p>
-            <p className="mt-1 text-xs font-black uppercase tracking-[0.1em] text-[#5f6b5d]">{round.resultLabel}</p>
-          </div>
-        )}
-
-        <NumberEquationBoard round={round} />
+        <p aria-label="Number equation" className="mt-3 whitespace-nowrap text-[clamp(2.25rem,3.5vw,3.25rem)] font-black leading-none tracking-[-0.04em] text-[#9f3f2b]">{equationLabel}</p>
 
         <div className="mt-3 grid shrink-0 gap-2 xl:grid-cols-2">
           {round.choices.map((choice) => {
@@ -3206,6 +3138,33 @@ function NumberMode({
   );
 }
 
+function NumberStoryStage({ round, badge, footer }: { round: NumberRound; badge: string; footer: string }) {
+  return (
+    <article aria-label="Numbers story stage" className="flex min-h-[560px] flex-col gap-2 overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
+      <div
+        className="grid min-h-[150px] max-h-[220px] flex-[.36] gap-2"
+        style={{ gridTemplateColumns: round.cards.length === 1 ? "minmax(0, 1fr)" : "repeat(2, minmax(0, 1fr))" }}
+      >
+        {round.cards.map((card, index) => (
+          <div key={`${round.id}-story-${card.id}`} className="relative min-h-0 overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
+            <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} compact />
+            <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-xs font-black shadow-[2px_2px_0_#092421]">
+              {String.fromCharCode(65 + index)} · {card.title}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="min-h-[300px] flex-1">
+        <NumberEquationBoard round={round} />
+      </div>
+      <div className="grid gap-2 sm:grid-cols-[auto_1fr] sm:items-center">
+        <div className="rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">{badge}</div>
+        <p className="rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">{footer}</p>
+      </div>
+    </article>
+  );
+}
+
 function NumberEquationBoard({ round }: { round: NumberRound }) {
   const terms = round.cards.map((card, index) => ({
     card,
@@ -3226,19 +3185,19 @@ function NumberEquationBoard({ round }: { round: NumberRound }) {
       itemEmoji: "•",
     };
     return (
-      <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2" aria-label={visual.ariaLabel}>
+      <div className="h-full min-h-[300px] overflow-y-auto rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-4" aria-label={visual.ariaLabel}>
         <div className="flex items-center justify-between gap-2">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · Equal groups</p>
             <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">Every group gets the same number.</p>
           </div>
-          <p className="rounded-md bg-[#f0c84b] px-2 py-1 text-base font-black text-[#102f36]">{round.biggerValue} x {round.smallerValue} = ?</p>
+          <p className="rounded-md bg-[#f0c84b] px-3 py-2 text-2xl font-black text-[#102f36]">{round.biggerValue} x {round.smallerValue} = ?</p>
         </div>
-        <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: round.biggerValue }, (_, index) => (
-            <div data-math-group key={`${round.id}-group-${index}`} className="rounded-lg border-2 border-[#092421] bg-[#e9ffe9] px-1.5 py-1 text-center shadow-[2px_2px_0_#092421]">
+            <div data-math-group key={`${round.id}-group-${index}`} className="rounded-lg border-2 border-[#092421] bg-[#e9ffe9] px-2 py-2 text-center shadow-[2px_2px_0_#092421]">
               <p className="text-[10px] font-black uppercase tracking-[0.06em] text-[#2f6547]"><span aria-hidden="true">{visual.groupEmoji} </span>{visual.groupSingular} {index + 1}</p>
-              <p className="mt-0.5 break-words text-sm leading-[1.05]" aria-hidden="true">
+              <p className="mt-1 break-words text-lg leading-[1.05]" aria-hidden="true">
                 {round.smallerValue <= 6 ? Array.from({ length: round.smallerValue }, () => visual.itemEmoji).join("") : `${visual.itemEmoji} × ${round.smallerValue}`}
               </p>
               <p className="mt-0.5 text-[11px] font-black text-[#9f3f2b]">{round.smallerValue} {round.smallerValue === 1 ? visual.itemSingular : visual.itemPlural}</p>
@@ -3253,7 +3212,7 @@ function NumberEquationBoard({ round }: { round: NumberRound }) {
     const total = Math.max(round.answer, 1);
     const colors = ["bg-[#f0c84b]", "bg-[#70d392]", "bg-[#77b9d0]"];
     return (
-      <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2" aria-label="Math picture: addition parts make a whole">
+      <div className="h-full min-h-[300px] rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-4" aria-label="Math picture: addition parts make a whole">
         <div className="flex items-center justify-between gap-2">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · Parts make a whole</p>
@@ -3261,7 +3220,7 @@ function NumberEquationBoard({ round }: { round: NumberRound }) {
           </div>
           <p className="rounded-md bg-[#ece5d5] px-2 py-1 text-xs font-black text-[#102f36]">{round.cards.length} parts</p>
         </div>
-        <div className="mt-3 flex h-16 overflow-hidden rounded-lg border-2 border-[#092421] bg-white shadow-[2px_2px_0_#092421]">
+        <div className="mt-8 flex h-32 overflow-hidden rounded-lg border-2 border-[#092421] bg-white shadow-[2px_2px_0_#092421]">
           {terms.map((term, index) => (
             <div
               key={`${round.id}-part-${term.card.id}`}
@@ -3287,18 +3246,18 @@ function NumberEquationBoard({ round }: { round: NumberRound }) {
   if (round.operation === "fit") {
     const unitWidth = Math.max(8, Math.min(100, (round.smallerValue / Math.max(round.biggerValue, 1)) * 100));
     return (
-      <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2" aria-label="Math picture: measure how many fit">
+      <div className="h-full min-h-[300px] rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-4" aria-label="Math picture: measure how many fit">
         <div className="flex items-center justify-between gap-2">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · How many fit?</p>
             <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">Use the small tile to measure the target.</p>
           </div>
         </div>
-        <div className="mt-3 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[2px_2px_0_#092421]">
-          <div className="h-11 rounded-md border-2 border-dashed border-white bg-white/10 p-1" aria-label="Target length">
+        <div className="mt-8 rounded-lg border-2 border-[#092421] bg-[#102f36] p-4 shadow-[2px_2px_0_#092421]">
+          <div className="h-20 rounded-md border-2 border-dashed border-white bg-white/10 p-1" aria-label="Target length">
             <div className="grid h-full place-items-center rounded-sm bg-white/10 text-xs font-black text-white">target length</div>
           </div>
-          <div className="mt-2 h-11">
+          <div className="mt-4 h-20">
             <div className="grid h-full min-w-16 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] px-1 text-center shadow-[2px_2px_0_#000]" style={{ width: `${unitWidth}%` }}>
               <span className="text-xs font-black leading-tight text-[#102f36]">1 tile<br />{round.smallerValue.toLocaleString("en-US")}</span>
             </div>
@@ -3311,12 +3270,12 @@ function NumberEquationBoard({ round }: { round: NumberRound }) {
 
   const smallerPercent = Math.max(4, Math.min(96, (round.smallerValue / Math.max(round.biggerValue, 1)) * 100));
   return (
-    <div className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-2" aria-label="Math picture: subtraction find the missing part">
+    <div className="h-full min-h-[300px] rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-4" aria-label="Math picture: subtraction find the missing part">
       <div>
         <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · Find the missing part</p>
         <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">The whole bar is split into what we know and what is left.</p>
       </div>
-      <div className="mt-3 flex h-16 overflow-hidden rounded-lg border-2 border-[#092421] shadow-[2px_2px_0_#092421]">
+      <div className="mt-8 flex h-32 overflow-hidden rounded-lg border-2 border-[#092421] shadow-[2px_2px_0_#092421]">
         <div className="grid place-items-center bg-[#70d392] px-1 text-center" style={{ width: `${smallerPercent}%` }}>
           <span>
             <span className="block text-[10px] font-black uppercase text-[#102f36]">known</span>
