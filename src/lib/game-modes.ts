@@ -1214,6 +1214,11 @@ const locationChoicesFromCards = <T extends { metadata?: CardMetadata }>(
 type LatLon = readonly [number, number];
 
 const geoChoiceCountForDifficulty = (difficulty: Difficulty) => (difficulty === 1 ? 3 : 4);
+export const geoChoiceSeparationForDifficulty = (difficulty: Difficulty) => difficulty === 1
+  ? { kilometers: 2500, mapPercent: 18 }
+  : difficulty === 2
+    ? { kilometers: 1500, mapPercent: 13 }
+    : { kilometers: 750, mapPercent: 9 };
 const clampGeo = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 const continentCoordinates: Record<WorldContinent, LatLon> = {
   Africa: [2, 20],
@@ -1380,6 +1385,21 @@ const coordinatesForLocation = (location: WorldLocation): LatLon => {
 
 const pointForLocation = (location: WorldLocation) => pointFromLatLon(coordinatesForLocation(location));
 
+const degreesToRadians = (degrees: number) => degrees * (Math.PI / 180);
+
+export const geoPointDistanceKm = (first: GeoPoint, second: GeoPoint) => {
+  const latitudeDelta = degreesToRadians(second.lat - first.lat);
+  const longitudeDelta = degreesToRadians(second.lon - first.lon);
+  const firstLatitude = degreesToRadians(first.lat);
+  const secondLatitude = degreesToRadians(second.lat);
+  const haversine = Math.sin(latitudeDelta / 2) ** 2
+    + Math.cos(firstLatitude) * Math.cos(secondLatitude) * Math.sin(longitudeDelta / 2) ** 2;
+  return 12742 * Math.asin(Math.min(1, Math.sqrt(haversine)));
+};
+
+export const geoPointMapDistance = (first: GeoPoint, second: GeoPoint) =>
+  Math.hypot(second.x - first.x, second.y - first.y);
+
 const hemisphereLabel = (point: GeoPoint) => {
   const northSouth = point.lat >= 0 ? "Northern Hemisphere" : "Southern Hemisphere";
   const eastWest = point.lon >= 0 ? "Eastern Hemisphere" : "Western Hemisphere";
@@ -1406,10 +1426,49 @@ const geoChoiceCandidates = <T extends { metadata?: CardMetadata }>(cards: reado
   return Array.from(byLabel.values());
 };
 
+const diverseGeoChoices = (
+  answer: GeoChoice,
+  candidates: readonly GeoChoice[],
+  count: number,
+  difficulty: Difficulty,
+  seed: number,
+) => {
+  const minimum = geoChoiceSeparationForDifficulty(difficulty);
+  const selected = [answer];
+  const remaining = shuffle(candidates.filter((choice) => choice.id !== answer.id), seed);
+
+  while (selected.length < count) {
+    const ranked = remaining
+      .map((choice, index) => {
+        const separations = selected.map((selectedChoice) => ({
+          kilometers: geoPointDistanceKm(choice.point, selectedChoice.point),
+          mapPercent: geoPointMapDistance(choice.point, selectedChoice.point),
+        }));
+        const qualifies = separations.every((separation) => separation.kilometers >= minimum.kilometers && separation.mapPercent >= minimum.mapPercent);
+        const score = Math.min(...separations.map((separation) => Math.min(
+          separation.kilometers / minimum.kilometers,
+          separation.mapPercent / minimum.mapPercent,
+        )));
+        return { choice, index, qualifies, score };
+      })
+      .filter((candidate) => candidate.qualifies)
+      .sort((first, second) => second.score - first.score || first.index - second.index);
+    const next = ranked[0];
+    if (!next) return null;
+    selected.push(next.choice);
+    remaining.splice(remaining.findIndex((choice) => choice.id === next.choice.id), 1);
+  }
+
+  return selected;
+};
+
 const geoCards = <T extends KnowledgeCard>(cards: readonly T[]) => cards.filter(hasLocationMetadata);
 
-export const canBuildGeoRoundFromCards = (cards: readonly KnowledgeCard[], difficulty: Difficulty = 1) =>
-  geoChoiceCandidates(cards).length >= geoChoiceCountForDifficulty(difficulty);
+export const canBuildGeoRoundFromCards = (cards: readonly KnowledgeCard[], difficulty: Difficulty = 1) => {
+  const count = geoChoiceCountForDifficulty(difficulty);
+  const candidates = geoChoiceCandidates(cards);
+  return candidates.some((answer, index) => diverseGeoChoices(answer, candidates, count, difficulty, index) !== null);
+};
 
 export const canBuildGeoRound = (topic: TopicScope, difficulty: Difficulty = 1) => {
   const topics = new Set(topicsForScope(topic));
@@ -1425,15 +1484,21 @@ export const buildGeoRoundFromCards = (
   const count = geoChoiceCountForDifficulty(difficulty);
   const allLocatedCards = geoCards(cards);
   const preferred = preferredPool(allLocatedCards, difficulty);
-  const pool = geoChoiceCandidates(preferred).length >= count ? preferred : allLocatedCards;
+  const pool = canBuildGeoRoundFromCards(preferred, difficulty) ? preferred : allLocatedCards;
   const choicesPool = geoChoiceCandidates(pool);
-  if (choicesPool.length < count || pool.length < 1) throw new Error(`Need at least ${count} mapped locations to build a geo round for ${topic}`);
+  const eligibleCards = pool.filter((card, index) => {
+    const answer = geoChoiceForLocation(card.metadata.location);
+    return diverseGeoChoices(answer, choicesPool, count, difficulty, seed + index) !== null;
+  });
+  if (!eligibleCards.length) throw new Error(`Need at least ${count} well-separated mapped locations to build a geo round for ${topic}`);
 
-  const card = sample(pool, seed + 1);
+  const card = sample(eligibleCards, seed + 1);
   const location = card.metadata.location;
   const point = pointForLocation(location);
   const answer = geoChoiceForLocation(location);
-  const choices = shuffle([answer, ...shuffle(choicesPool.filter((choice) => choice.id !== answer.id), seed + 2).slice(0, count - 1)], seed + 3);
+  const diverseChoices = diverseGeoChoices(answer, choicesPool, count, difficulty, seed + 2);
+  if (!diverseChoices) throw new Error(`Could not separate mapped choices for ${topic}`);
+  const choices = shuffle(diverseChoices, seed + 3);
   const continentHint = location.continents.length > 1 ? location.continents.join(" and ") : location.continents[0];
 
   return {

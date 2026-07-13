@@ -24,6 +24,9 @@ const {
   canBuildGeoRound,
   canBuildGeoRoundFromCards,
   collectionCards,
+  geoChoiceSeparationForDifficulty,
+  geoPointDistanceKm,
+  geoPointMapDistance,
 } = jiti("./src/lib/game-modes.ts");
 const { packToPlayableDeck } = jiti("./src/lib/pack-adapter.ts");
 const { buildHeadToHeadSession, buildSession } = jiti("./src/lib/questions.ts");
@@ -261,6 +264,21 @@ const assertDistinctSortValues = (roundName, round) => {
   if (new Set(values).size !== values.length) critical.push(`${roundName}: duplicate ${round.statLabel} values in sort round`);
 };
 
+const assertGeoChoiceSeparation = (roundName, round, difficulty) => {
+  const minimum = geoChoiceSeparationForDifficulty(difficulty);
+  for (let first = 0; first < round.choices.length; first += 1) {
+    for (let second = first + 1; second < round.choices.length; second += 1) {
+      const firstChoice = round.choices[first];
+      const secondChoice = round.choices[second];
+      const kilometers = geoPointDistanceKm(firstChoice.point, secondChoice.point);
+      const mapPercent = geoPointMapDistance(firstChoice.point, secondChoice.point);
+      if (kilometers < minimum.kilometers || mapPercent < minimum.mapPercent) {
+        critical.push(`${roundName}: ${firstChoice.label} and ${secondChoice.label} are too close (${Math.round(kilometers)} km, ${mapPercent.toFixed(1)}% map distance)`);
+      }
+    }
+  }
+};
+
 const assertPackPrimarySortStat = (deck) => {
   const labels = new Set(deck.cards.map((card) => card.statLabel));
   if (labels.size > 1) critical.push(`${deck.id}: mixed primary sort labels (${Array.from(labels).join(", ")})`);
@@ -334,6 +352,7 @@ const checkRoundBuilders = async () => {
         const geoRound = buildGeoRound(topic, difficulty, seed + 40);
         if (!geoRound.choices.some((choice) => choice.id === geoRound.answerId)) critical.push(`${topic}/geo/d${difficulty}: answer missing from choices`);
         if (new Set(geoRound.choices.map((choice) => choice.id)).size !== geoRound.choices.length) critical.push(`${topic}/geo/d${difficulty}: duplicate geo choices`);
+        assertGeoChoiceSeparation(`${topic}/geo/d${difficulty}`, geoRound, difficulty);
         if (difficulty === 1) assertNoHardCardsInEasyRound(`${topic}/geo/d${difficulty}`, geoRound);
         await assertRoundCardImages(`${topic}/geo/d${difficulty}`, geoRound, topic);
       }
@@ -399,6 +418,7 @@ const checkPlayablePackRoundBuilders = async () => {
         const geoRound = buildGeoRoundFromCards(deck.cards, deck.id, difficulty, seed + 40);
         if (!geoRound.choices.some((choice) => choice.id === geoRound.answerId)) critical.push(`${deck.id}/geo/d${difficulty}: answer missing from choices`);
         if (new Set(geoRound.choices.map((choice) => choice.id)).size !== geoRound.choices.length) critical.push(`${deck.id}/geo/d${difficulty}: duplicate geo choices`);
+        assertGeoChoiceSeparation(`${deck.id}/geo/d${difficulty}`, geoRound, difficulty);
         if (difficulty === 1) assertNoHardCardsInEasyRound(`${deck.id}/geo/d${difficulty}`, geoRound);
         await assertRoundCardImages(`${deck.id}/geo/d${difficulty}`, geoRound, deck.id);
       }

@@ -13,19 +13,21 @@ type Stop = {
   choices: string[];
   answer: string;
   journal: string;
+  evidence?: string;
 };
 
-const stops: Stop[] = [
+export const pepperExpeditionStops: Stop[] = [
   {
     id: "read-label",
     skill: "Reading",
     icon: "🏷️",
     title: "Read the seed packet",
-    story: "Jalapeño seeds need warmth, water, and air. The packet says: Keep the soil evenly damp, but never waterlogged.",
-    question: "Why does the packet warn against waterlogged soil?",
-    choices: ["Roots still need air", "Seeds grow best underwater", "Water makes the soil colder than ice"],
-    answer: "Roots still need air",
-    journal: "Damp soil holds moisture and air. Waterlogged soil can crowd out the air roots need.",
+    story: "Jalapeño roots need both moisture and air. The packet says: Keep the soil evenly damp, but never waterlogged, because flooded soil leaves too little air around the roots.",
+    question: "Which watering plan follows the packet?",
+    choices: ["Water until the soil is damp, then stop", "Keep pouring until water covers the soil", "Let the soil stay completely dry"],
+    answer: "Water until the soil is damp, then stop",
+    journal: "The packet recommends damp soil, not flooded or dry soil, so roots receive moisture and air.",
+    evidence: "Keep the soil evenly damp, but never waterlogged",
   },
   {
     id: "find-mexico",
@@ -78,7 +80,7 @@ export function PepperExpedition({ onComplete }: { onComplete: () => void }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [journal, setJournal] = useState<string[]>([]);
   const [complete, setComplete] = useState(false);
-  const stop = stops[stopIndex];
+  const stop = pepperExpeditionStops[stopIndex];
   const correct = selected === stop.answer;
 
   const answer = (choice: string) => {
@@ -88,7 +90,7 @@ export function PepperExpedition({ onComplete }: { onComplete: () => void }) {
   };
 
   const next = () => {
-    if (stopIndex === stops.length - 1) setComplete(true);
+    if (stopIndex === pepperExpeditionStops.length - 1) setComplete(true);
     else {
       setStopIndex((value) => value + 1);
       setSelected(null);
@@ -121,8 +123,8 @@ export function PepperExpedition({ onComplete }: { onComplete: () => void }) {
             <p className="mt-1 text-xl font-black">From seed packet to field journal</p>
           </div>
         </div>
-        <div className="mt-2 grid grid-cols-5 gap-1" aria-label={`Expedition stop ${stopIndex + 1} of ${stops.length}`}>
-          {stops.map((item, index) => (
+        <div className="mt-2 grid grid-cols-5 gap-1" aria-label={`Expedition stop ${stopIndex + 1} of ${pepperExpeditionStops.length}`}>
+          {pepperExpeditionStops.map((item, index) => (
             <div key={item.id} className={`rounded-md border-2 px-1 py-2 text-center ${index < stopIndex ? "border-[#70d392] bg-[#70d392] text-[#092421]" : index === stopIndex ? "border-[#f0c84b] bg-[#f0c84b] text-[#092421]" : "border-white/30 bg-white/10"}`}>
               <span className="block text-lg" aria-hidden="true">{index < stopIndex ? "✓" : item.icon}</span>
               <span className="mt-1 block truncate text-[9px] font-black uppercase">{item.skill}</span>
@@ -131,14 +133,14 @@ export function PepperExpedition({ onComplete }: { onComplete: () => void }) {
         </div>
         <div className="mt-2 rounded-lg bg-black/25 p-2">
           <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#a8ead4]">Journal discoveries</p>
-          <p className="mt-1 text-sm font-bold">{journal.length} of {stops.length} collected</p>
+          <p className="mt-1 text-sm font-bold">{journal.length} of {pepperExpeditionStops.length} collected</p>
         </div>
       </aside>
 
       <article className="flex flex-col rounded-lg border-2 border-[#d9c7a7] bg-white p-3">
         <div className="flex items-center justify-between gap-3">
           <p className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1 text-xs font-black uppercase tracking-[0.12em]">{stop.icon} {stop.skill}</p>
-          <p className="text-xs font-black text-[#72543e]">Stop {stopIndex + 1}/{stops.length}</p>
+          <p className="text-xs font-black text-[#72543e]">Stop {stopIndex + 1}/{pepperExpeditionStops.length}</p>
         </div>
         <h2 className="mt-3 text-[clamp(1.8rem,4vw,3.5rem)] font-black leading-[0.95]">{stop.title}</h2>
         <p className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-3 text-lg font-bold leading-snug text-[#4f5e57]">{stop.story}</p>
@@ -161,8 +163,9 @@ export function PepperExpedition({ onComplete }: { onComplete: () => void }) {
         {selected && (
           <div className={`mt-3 rounded-lg border-2 p-3 ${correct ? "border-[#2f7d4f] bg-[#e9ffe9]" : "border-[#9f3f2b] bg-[#fff0ea]"}`}>
             <p className="text-lg font-black">{correct ? "Correct!" : `Answer: ${stop.answer}`}</p>
+            {stop.evidence && <p className="mt-2 text-sm font-bold text-[#72543e]"><span className="font-black">Evidence:</span> “{stop.evidence}”</p>}
             <p className="mt-1 text-sm font-bold text-[#5f6b5d]">{stop.journal}</p>
-            <button onClick={next} className="mt-3 rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2 font-black text-white shadow-[2px_2px_0_#092421]">{stopIndex === stops.length - 1 ? "View expedition summary" : "Next question"}</button>
+            <button onClick={next} className="mt-3 rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2 font-black text-white shadow-[2px_2px_0_#092421]">{stopIndex === pepperExpeditionStops.length - 1 ? "View expedition summary" : "Next question"}</button>
           </div>
         )}
       </article>

@@ -117,6 +117,21 @@ test("mini challenges rotate through four deep cross-subject expeditions", () =>
   ]);
 });
 
+test("every automatic Reading stop is grounded in visible evidence", () => {
+  const readingSteps = coreMiniExpeditions.flatMap((expedition) => expedition.steps.filter((step) => step.skill === "Reading"));
+
+  expect(readingSteps).toHaveLength(coreMiniExpeditions.length);
+  for (const step of readingSteps) {
+    const evidence = step.evidence;
+    expect(evidence, `${step.id} needs an evidence quote`).toBeTruthy();
+    if (!evidence) throw new Error(`${step.id} needs an evidence quote`);
+    expect(step.clue, `${step.id} must display its evidence`).toContain(evidence);
+    expect(step.choices, `${step.id} must include its answer`).toContain(step.answer);
+    expect(new Set(step.choices).size, `${step.id} choices must be distinct`).toBe(3);
+    expect(step.summary.length, `${step.id} needs explanatory feedback`).toBeGreaterThan(40);
+  }
+});
+
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/content-issues", async (route) => {
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
@@ -184,8 +199,9 @@ test("every tenth answer opens an automatic mini challenge and returns after its
   await page.getByRole("button", { name: /Next|Finish round/ }).click();
   await expect(page.getByText("Pepper mini challenge")).toBeVisible();
 
-  await page.getByRole("button", { name: "Seeds grow underwater" }).click();
-  await expect(page.getByText("Answer: Roots still need air")).toBeVisible();
+  await page.getByRole("button", { name: "Keep pouring until water covers the soil" }).click();
+  await expect(page.getByText("Answer: Water until the soil is damp, then stop")).toBeVisible();
+  await expect(page.getByText("Evidence:", { exact: true }).locator("..")).toContainText("Keep the soil evenly damp, but never waterlogged");
   await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Map the pepper homeland" })).toBeVisible();
 
@@ -363,6 +379,16 @@ test("geo finder stays inside the selected topic", async ({ page }) => {
     await expect(page.getByText("Spicy Peppers · Geo Finder", { exact: true })).toBeVisible();
     await expect(page.getByRole("heading", { name: /^Where on the map is/ })).toBeVisible();
     await expect(page.getByText("Tallest Mountains · Geo Finder", { exact: true })).toHaveCount(0);
+    const pinBoxes = await page.getByRole("button", { name: /^Choose map pin/ }).evaluateAll((pins) => pins.map((pin) => {
+      const box = pin.getBoundingClientRect();
+      return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+    }));
+    expect(pinBoxes).toHaveLength(3);
+    for (let first = 0; first < pinBoxes.length; first += 1) {
+      for (let second = first + 1; second < pinBoxes.length; second += 1) {
+        expect(Math.hypot(pinBoxes[second].x - pinBoxes[first].x, pinBoxes[second].y - pinBoxes[first].y)).toBeGreaterThanOrEqual(48);
+      }
+    }
     if (round < 5) await page.getByRole("button", { name: "Skip question" }).click();
   }
 });

@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { mathTrailChallenges } from "../../src/components/experiments/math-lenses";
+import { pepperExpeditionStops } from "../../src/components/experiments/pepper-expedition";
 
 test("math trail content covers every playable topic with mixed operations", () => {
   expect(new Set(mathTrailChallenges.map((challenge) => challenge.category))).toEqual(new Set([
@@ -20,6 +21,21 @@ test("math trail content covers every playable topic with mixed operations", () 
   expect(new Set(mathTrailChallenges.flatMap((challenge) => challenge.scene?.images.map((image) => image.image) ?? [] )).size).toBeGreaterThanOrEqual(20);
 });
 
+test("every standalone Reading stop is grounded in visible evidence", () => {
+  const readingStops = pepperExpeditionStops.filter((stop) => stop.skill === "Reading");
+
+  expect(readingStops).not.toHaveLength(0);
+  for (const stop of readingStops) {
+    const evidence = stop.evidence;
+    expect(evidence, `${stop.id} needs an evidence quote`).toBeTruthy();
+    if (!evidence) throw new Error(`${stop.id} needs an evidence quote`);
+    expect(stop.story, `${stop.id} must display its evidence`).toContain(evidence);
+    expect(stop.choices, `${stop.id} must include its answer`).toContain(stop.answer);
+    expect(new Set(stop.choices).size, `${stop.id} choices must be distinct`).toBe(3);
+    expect(stop.journal.length, `${stop.id} needs explanatory feedback`).toBeGreaterThan(40);
+  }
+});
+
 test.beforeEach(async ({ page }) => {
   await page.goto("/experiments");
   await expect(page.getByRole("heading", { name: "Learning Labs" })).toBeVisible();
@@ -27,24 +43,25 @@ test.beforeEach(async ({ page }) => {
 
 test("pepper expedition moves between subjects and collects a journal clue", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Read the seed packet" })).toBeVisible();
-  await page.getByRole("button", { name: "Roots still need air" }).click();
+  await page.getByRole("button", { name: "Water until the soil is damp, then stop" }).click();
   await expect(page.getByText("Correct!")).toBeVisible();
+  await expect(page.getByText("Evidence:", { exact: true }).locator("..")).toContainText("Keep the soil evenly damp, but never waterlogged");
   await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Find a pepper homeland" })).toBeVisible();
   await expect(page.getByText("1 of 5 collected")).toBeVisible();
 });
 
 test("pepper expedition teaches a missed answer and moves on", async ({ page }) => {
-  await page.getByRole("button", { name: "Seeds grow best underwater" }).click();
-  await expect(page.getByText("Answer: Roots still need air")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Roots still need air" })).toBeDisabled();
+  await page.getByRole("button", { name: "Keep pouring until water covers the soil" }).click();
+  await expect(page.getByText("Answer: Water until the soil is damp, then stop")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Water until the soil is damp, then stop" })).toBeDisabled();
   await page.getByRole("button", { name: "Next question" }).click();
   await expect(page.getByRole("heading", { name: "Find a pepper homeland" })).toBeVisible();
 });
 
 test("pepper expedition summary continues into word explorer", async ({ page }) => {
   const answers = [
-    "Roots still need air",
+    "Water until the soil is damp, then stop",
     "Guatemala and Belize",
     "56 peppers",
     "Capsaicin can coat its surface",
