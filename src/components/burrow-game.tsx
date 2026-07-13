@@ -3011,20 +3011,47 @@ function GeoMap({
   answered: boolean;
   onAnswer: (choiceId: string) => void;
 }) {
+  const continentLabels = [
+    { label: "North America", left: "19%", top: "26%" },
+    { label: "South America", left: "32%", top: "61%" },
+    { label: "Europe", left: "52%", top: "22%" },
+    { label: "Africa", left: "54%", top: "49%" },
+    { label: "Asia", left: "72%", top: "27%" },
+    { label: "Australia", left: "85%", top: "66%" },
+    { label: "Antarctica", left: "50%", top: "88%" },
+  ];
+
   return (
     <div className="relative min-h-[320px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#b9dfdf]">
       <svg aria-hidden="true" viewBox="0 0 100 56" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
-        <rect width="100" height="56" fill="#b9dfdf" />
-        <path d="M8 15 L16 9 L28 10 L35 17 L31 26 L22 28 L15 24 Z" fill="#d9c77e" stroke="#375b52" strokeWidth="0.7" />
-        <path d="M24 29 L31 31 L35 40 L31 51 L24 48 L21 37 Z" fill="#d9c77e" stroke="#375b52" strokeWidth="0.7" />
-        <path d="M44 11 L52 9 L60 13 L57 20 L49 21 L43 17 Z" fill="#d9c77e" stroke="#375b52" strokeWidth="0.7" />
-        <path d="M50 22 L58 21 L64 28 L62 40 L55 46 L49 37 Z" fill="#d9c77e" stroke="#375b52" strokeWidth="0.7" />
-        <path d="M60 11 L76 9 L91 16 L86 29 L72 27 L64 21 Z" fill="#d9c77e" stroke="#375b52" strokeWidth="0.7" />
-        <path d="M77 35 L87 34 L93 41 L89 48 L78 46 Z" fill="#d9c77e" stroke="#375b52" strokeWidth="0.7" />
-        <path d="M16 51 L87 51 L95 55 L8 55 Z" fill="#e8efe9" stroke="#375b52" strokeWidth="0.7" />
-        <line x1="0" y1="28" x2="100" y2="28" stroke="#23645b" strokeDasharray="2 2" strokeWidth="0.7" />
-        <line x1="50" y1="0" x2="50" y2="56" stroke="#23645b" strokeDasharray="2 2" strokeWidth="0.55" />
+        <defs>
+          <linearGradient id="geo-ocean" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#c9e9e9" />
+            <stop offset="1" stopColor="#acd6d8" />
+          </linearGradient>
+        </defs>
+        <rect width="100" height="56" fill="url(#geo-ocean)" />
+        {[18.67, 28, 37.33].map((y) => (
+          <line key={`latitude-${y}`} x1="0" y1={y} x2="100" y2={y} stroke="#4e8a83" strokeWidth="0.18" opacity="0.42" />
+        ))}
+        {[25, 50, 75].map((x) => (
+          <line key={`longitude-${x}`} x1={x} y1="0" x2={x} y2="56" stroke="#4e8a83" strokeWidth="0.18" opacity="0.34" />
+        ))}
+        <image href="/world-map-land.svg" x="0" y="0" width="100" height="56" preserveAspectRatio="none" />
+        <line x1="0" y1="28" x2="100" y2="28" stroke="#23645b" strokeDasharray="1.25 1.25" strokeWidth="0.5" opacity="0.9" />
       </svg>
+
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        {continentLabels.map((continent) => (
+          <span
+            key={continent.label}
+            className="absolute -translate-x-1/2 -translate-y-1/2 rounded bg-[#fff9ec]/80 px-1.5 py-0.5 text-center text-[7px] font-black uppercase leading-none tracking-[0.08em] text-[#23453f] shadow-[0_1px_0_rgba(9,36,33,.22)] min-[700px]:text-[9px]"
+            style={{ left: continent.left, top: continent.top }}
+          >
+            {continent.label}
+          </span>
+        ))}
+      </div>
 
       <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white/95 px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#092421]">
         World map
