@@ -773,12 +773,15 @@ const pepperSeeds: PepperSeed[] = [
     color: "purple, yellow, orange, and red",
     ...contentImage("peppers", "numex-twilight", "Numex Twilight - Fruit.jpg"),
     imageCredit: "Dennis Schubert, Wikimedia Commons",
-    fact: "NuMex Twilight is an edible ornamental pepper whose upright pods ripen through a rainbow of colors.",
+    fact: "Released by New Mexico State University in 1993, NuMex Twilight has upright pods that ripen from purple through yellow and orange to red.",
+    metadata: {
+      accuracyNote: "NMSU has not published a measured SHU range for NuMex Twilight; the heat range shown is a common horticultural estimate.",
+    },
   },
   {
     id: "biquinho",
     name: "Biquinho",
-    shuMin: 500,
+    shuMin: 100,
     shuMax: 1000,
     color: "red",
     ...contentImage("peppers", "biquinho", "Biquinho.jpg"),
@@ -798,11 +801,11 @@ const pepperSeeds: PepperSeed[] = [
   {
     id: "piquillo",
     name: "Piquillo",
-    shuMin: 500,
-    shuMax: 1000,
+    shuMin: 0,
+    shuMax: 500,
     color: "red",
     ...contentImage("peppers", "piquillo", "Piquillo Peppers.jpg"),
-    imageCredit: "sindandune, Wikimedia Commons",
+    imageCredit: "sindändùne, Wikimedia Commons",
     fact: "Piquillo means little beak in Spanish; these sweet peppers are often roasted and stuffed.",
   },
   {
@@ -833,7 +836,7 @@ const pepperSeeds: PepperSeed[] = [
     color: "red",
     ...contentImage("peppers", "red-savina", "Red savina cropped.jpg"),
     imageCredit: "Avriette, Wikimedia Commons",
-    fact: "Red Savina is an extra-hot habanero variety that once held the world record for pepper heat.",
+    fact: "Red Savina is an extra-hot habanero variety that held the Guinness heat record from 1994 to 2006.",
   },
   {
     id: "dorset-naga",
@@ -848,31 +851,37 @@ const pepperSeeds: PepperSeed[] = [
   {
     id: "chocolate-habanero",
     name: "Chocolate Habanero",
-    shuMin: 300000,
+    shuMin: 425000,
     shuMax: 577000,
     color: "chocolate brown",
     ...contentImage("peppers", "chocolate-habanero", "Chocolate habanero peppers.jpg"),
     imageCredit: "Geekcr, Wikimedia Commons",
     fact: "Chocolate habaneros ripen to a deep brown and combine fruity flavor with intense heat.",
+    metadata: {
+      accuracyNote: "The exact origin of the chocolate-fruited habanero cultivar is not well documented, so no specific location is assigned.",
+    },
   },
   {
     id: "chinese-five-color",
     name: "Chinese Five-Color",
-    shuMin: 30000,
+    shuMin: 5000,
     shuMax: 50000,
     color: "purple, cream, yellow, orange, and red",
     ...contentImage("peppers", "chinese-five-color", "Capsicum annuum Chinese Five-Color 2zz.jpg"),
     imageCredit: "David J. Stang, Wikimedia Commons",
     fact: "Chinese Five-Color is an edible ornamental pepper with several pod colors visible at once.",
+    metadata: {
+      accuracyNote: "Published horticultural estimates for Chinese Five-Color heat vary; the range shown covers the commonly reported values.",
+    },
   },
   {
     id: "malagueta",
     name: "Malagueta",
     shuMin: 60000,
-    shuMax: 100000,
+    shuMax: 175000,
     color: "red",
     ...contentImage("peppers", "malagueta", "Pimenta malagueta.jpg"),
-    imageCredit: "Joao Jose da Silva Pereira, Wikimedia Commons",
+    imageCredit: "João José da Silva Pereira, Wikimedia Commons",
     fact: "Malagueta peppers are small, fiery chiles widely used in Brazilian and Portuguese cooking.",
   },
 ];
@@ -930,12 +939,10 @@ const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
   biquinho: { label: "Brazil", countries: ["Brazil"], continents: ["South America"] },
   "piri-piri": { label: "Southern Africa", countries: ["Mozambique"], continents: ["Africa"] },
   piquillo: { label: "Navarra, Spain", countries: ["Spain"], continents: ["Europe"] },
-  "black-pearl": { label: "United States", countries: ["United States"], continents: ["North America"] },
+  "black-pearl": { label: "Beltsville, United States", countries: ["United States"], continents: ["North America"] },
   mirasol: { label: "Mexico", countries: ["Mexico"], continents: ["North America"] },
   "red-savina": { label: "California, United States", countries: ["United States"], continents: ["North America"] },
   "dorset-naga": { label: "Dorset, United Kingdom", countries: ["United Kingdom"], continents: ["Europe"] },
-  "chocolate-habanero": { label: "Caribbean", countries: ["Jamaica"], continents: ["North America"] },
-  "chinese-five-color": { label: "China", countries: ["China"], continents: ["Asia"] },
   malagueta: { label: "Brazil", countries: ["Brazil"], continents: ["South America"] },
 };
 
@@ -947,7 +954,9 @@ const pepperMetadataFor = (id: string): CardMetadata | undefined => {
 export const peppers = pepperSeeds.map((pepper) => ({
   ...pepper,
   heat: heatBandForScoville(pepper.shuMax),
-  metadata: pepper.metadata ?? pepperMetadataFor(pepper.id),
+  metadata: pepper.metadata || pepperMetadataFor(pepper.id)
+    ? { ...pepperMetadataFor(pepper.id), ...pepper.metadata }
+    : undefined,
 }));
 
 const buildingContinentsByCountry: Record<string, WorldContinent[]> = {
