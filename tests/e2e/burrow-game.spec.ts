@@ -90,7 +90,7 @@ const mathFixtureCards: GenericKnowledgeCard[] = [12, 20, 35, 48].map((value, in
   stats: [{ id: "length", label: "Length", value, display: `${value} ft`, direction: "higher" }],
 }));
 
-test("Pepper Y, Armageddon, and The Noah join the game without inventing a Noah heat score", () => {
+test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate marked unofficial", () => {
   const newPeppers = Object.fromEntries(
     peppers
       .filter((pepper) => ["pepper-y", "armageddon", "the-noah"].includes(pepper.id))
@@ -100,10 +100,10 @@ test("Pepper Y, Armageddon, and The Noah join the game without inventing a Noah 
   expect(Object.keys(newPeppers).sort()).toEqual(["armageddon", "pepper-y", "the-noah"]);
   expect(newPeppers.armageddon).toMatchObject({ name: "Armageddon", shuMax: 1300000, image: "/burrow-assets/peppers/armageddon.png" });
   expect(newPeppers["pepper-y"]).toMatchObject({ name: "Pepper Y", shuMax: 3000000, scovilleStatus: "unofficial", image: "/burrow-assets/peppers/pepper-y.png" });
-  expect(newPeppers["the-noah"]).toMatchObject({ name: "The Noah", heat: "insane", scovilleStatus: "unpublished", image: "/burrow-assets/peppers/the-noah.png" });
+  expect(newPeppers["the-noah"]).toMatchObject({ name: "The Noah", shuMin: 2000000, shuMax: null, heat: "insane", scovilleStatus: "unofficial", image: "/burrow-assets/peppers/the-noah.png" });
 
   const noahCard = collectionCards().find((card) => card.id === "the-noah");
-  expect(noahCard?.statDisplay).toBe("SHU not published");
+  expect(noahCard?.statDisplay).toBe("2,000,000+ SHU (unofficial)");
   expect(Number.isNaN(noahCard?.statValue)).toBe(true);
 
   for (let seed = 0; seed < 100; seed += 1) {

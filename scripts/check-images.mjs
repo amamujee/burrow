@@ -85,8 +85,12 @@ const duplicateContents = Array.from(contentGroups.values())
       target: asset.target,
     })),
   );
+const duplicatePepperContents = duplicateContents.filter((group) => group.some((asset) => asset.topic === "peppers"));
+const powderPepperAssets = assets.filter(
+  (asset) => asset.topic === "peppers" && /\b(?:powder(?:ed)?|ground|flakes|seasoning)\b/i.test(asset.sourceFile),
+);
 
-const fatalFailure = !assets.length || remoteImageReferences.length || missing.length || tiny.length || invalid.length || duplicateTargets.length;
+const fatalFailure = !assets.length || remoteImageReferences.length || missing.length || tiny.length || invalid.length || duplicateTargets.length || duplicatePepperContents.length || powderPepperAssets.length;
 
 if (fatalFailure) {
   console.error(
@@ -100,6 +104,8 @@ if (fatalFailure) {
         invalid,
         duplicateTargets: Array.from(new Set(duplicateTargets)),
         duplicateContents,
+        duplicatePepperContents,
+        powderPepperAssets,
       },
       null,
       2,
@@ -123,5 +129,5 @@ if (duplicateContents.length) {
 }
 
 console.log(
-  `All ${assets.length} local Burrow content images are present and valid. External image references: ${externalImageReferences.length}. Duplicate-content warnings: ${duplicateContents.length}.`,
+  `All ${assets.length} local Burrow content images are present and valid. Pepper powder sources: ${powderPepperAssets.length}. Duplicate pepper contents: ${duplicatePepperContents.length}. Other duplicate-content warnings: ${duplicateContents.length}.`,
 );

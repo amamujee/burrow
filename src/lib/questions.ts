@@ -102,7 +102,8 @@ export type Question = {
 };
 
 const sessionLength = 16;
-const hasScovilleMeasurement = (pepper: Pepper) => pepper.scovilleStatus !== "unpublished";
+type MeasuredPepper = Pepper & { shuMin: number; shuMax: number };
+const hasScovilleMeasurement = <T extends Pepper>(pepper: T): pepper is T & MeasuredPepper => pepper.shuMin !== null && pepper.shuMax !== null;
 const maxShu = Math.max(...peppers.filter(hasScovilleMeasurement).map((pepper) => pepper.shuMax));
 const maxHeight = 6562;
 const maxSharkLength = 65;
@@ -123,11 +124,13 @@ const topicsForScope = (topic: TopicScope): KnowledgeTopic[] => {
 
 const formatNumber = (value: number) => value.toLocaleString("en-US");
 const formatShu = (value: number) => `${formatNumber(value)} SHU`;
-const range = (pepper: Pepper) => pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
+const range = (pepper: MeasuredPepper) => pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
 const feet = (value: number) => `${formatNumber(value)} ft`;
 const heatMeter = (heat: HeatBand) => ({ label: heat, icons: heatProfiles[heat].icons, emoji: heatProfiles[heat].emoji, line: heatProfiles[heat].kidLine });
 const heatBandExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
   ? `${pepper.name} is ${pepper.heat} because its top Scoville score is ${pepper.scovilleStatus === "unofficial" ? "unofficially " : ""}${formatShu(pepper.shuMax)}, which fits the ${heatBandRangeLabel(pepper.heat)} band.`
+  : pepper.shuMin !== null
+    ? `${pepper.name} is placed above ${formatShu(pepper.shuMin)} as an unofficial estimate, which puts it in the ${pepper.heat} band; no lab score has been published.`
   : `${pepper.name} is described by its breeder as an extremely hot super-hot, but no Scoville measurement has been published.`;
 const choiceSet = <T,>(correct: T, options: T[], seed: number, count: number) => {
   const distractors = shuffle(options.filter((option) => option !== correct), seed).slice(0, count - 1);
@@ -415,7 +418,7 @@ const differenceChoices = (diff: number, unit: string, gap: number, difficulty: 
   return shuffle([correct, ...distractors], seed + 2);
 };
 
-const pepperCard = (pepper: Pepper, label: "A" | "B"): ComparisonCard => ({
+const pepperCard = (pepper: MeasuredPepper, label: "A" | "B"): ComparisonCard => ({
   label,
   topic: "peppers",
   title: pepper.name,
@@ -534,7 +537,7 @@ const spaceCard = (item: SpaceCard, label: "A" | "B", stat: "temp" | "radius" | 
 
 const comparisonAnswer = (cards: ComparisonCard[], winnerName: string) => `${cards.find((card) => card.title === winnerName)?.label}: ${winnerName}`;
 
-const pepperHotterQuestion = (seed: number, first: Pepper, second: Pepper): Question => {
+const pepperHotterQuestion = (seed: number, first: MeasuredPepper, second: MeasuredPepper): Question => {
   const hotter = first.shuMax >= second.shuMax ? first : second;
   const cards = shuffle([pepperCard(first, "A"), pepperCard(second, "B")], seed + 12);
   return {
@@ -701,7 +704,9 @@ const headToHeadQuestionFromSpec = (spec: HeadToHeadSpec, seed: number): Questio
   if (spec.topic === "peppers") {
     const first = findById(peppers, spec.firstId);
     const second = findById(peppers, spec.secondId);
-    return first && second ? pepperHotterQuestion(seed, first, second) : null;
+    return first && second && hasScovilleMeasurement(first) && hasScovilleMeasurement(second)
+      ? pepperHotterQuestion(seed, first, second)
+      : null;
   }
 
   if (spec.topic === "buildings") {

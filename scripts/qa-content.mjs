@@ -144,7 +144,12 @@ const checkFeaturedMetadata = (item) => {
   requireText(item, "imageCredit");
   requireText(item, "imageSourceUrl", 8);
 
-  if (item.topic === "peppers" && !(item.shuMin <= item.shuMax && item.shuMax >= 0)) critical.push(`${item.topic}/${item.id}: bad Scoville range`);
+  if (item.topic === "peppers") {
+    const hasRange = typeof item.shuMin === "number" && typeof item.shuMax === "number" && item.shuMin <= item.shuMax && item.shuMax >= 0;
+    const isUnpublished = item.shuMin === null && item.shuMax === null && item.scovilleStatus === "unpublished";
+    const hasUnofficialLowerBound = typeof item.shuMin === "number" && item.shuMin >= 0 && item.shuMax === null && item.scovilleStatus === "unofficial";
+    if (!hasRange && !isUnpublished && !hasUnofficialLowerBound) critical.push(`${item.topic}/${item.id}: bad Scoville range`);
+  }
   if (item.topic === "buildings" && !(item.heightFt > 0 && item.city && item.country)) critical.push(`${item.topic}/${item.id}: bad building metadata`);
   if (item.topic === "sharks" && !(item.lengthFt > 0 && item.speedMph > 0 && item.power > 0 && item.family)) critical.push(`${item.topic}/${item.id}: bad shark metadata`);
   if (item.topic === "sharks" && item.family) {

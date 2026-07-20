@@ -237,15 +237,19 @@ const topicOrder = (topic: TopicScope, seed: number): KnowledgeTopic => {
   return topics[Math.floor(seedRandom(seed) * topics.length) % topics.length];
 };
 
-const pepperRange = (pepper: Pepper) =>
+type MeasuredPepper = Pepper & { shuMin: number; shuMax: number };
+const hasScovilleMeasurement = <T extends Pepper>(pepper: T): pepper is T & MeasuredPepper => pepper.shuMin !== null && pepper.shuMax !== null;
+const pepperRange = (pepper: MeasuredPepper) =>
   pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
-const hasScovilleMeasurement = (pepper: Pepper) => pepper.scovilleStatus !== "unpublished";
 const pepperScovilleDisplay = (pepper: Pepper) => {
+  if (pepper.shuMin !== null && pepper.shuMax === null) return `${formatNumber(pepper.shuMin)}+ SHU (unofficial)`;
   if (!hasScovilleMeasurement(pepper)) return "SHU not published";
   return `${pepper.scovilleStatus === "unofficial" ? "~" : ""}${formatNumber(pepper.shuMax)} SHU${pepper.scovilleStatus === "unofficial" ? " (unofficial)" : ""}`;
 };
 const pepperHeatExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
   ? `${pepper.name} can reach ${pepperScovilleDisplay(pepper)}, so it is ${pepper.heat} (${heatBandRangeLabel(pepper.heat)}). Its full range is ${pepperRange(pepper)} SHU.`
+  : pepper.shuMin !== null
+    ? `${pepper.name} is placed at ${pepperScovilleDisplay(pepper)}, so it is ${pepper.heat}; that lower bound is unofficial because no lab score has been published.`
   : `${pepper.name} is described by its breeder as an extremely hot super-hot, but no Scoville measurement has been published.`;
 const heatRank = Object.fromEntries(heatBands.map((heat, index) => [heat, index])) as Record<HeatBand, number>;
 const pepperCard = (pepper: Pepper): KnowledgeCard => ({
@@ -529,7 +533,10 @@ const pepperPlantHeightInches: Record<string, number> = {
   malagueta: 36,
 };
 
-const pepperPlantHeight = (pepper: Pepper) => pepperPlantHeightInches[pepper.id] ?? (pepper.shuMax >= 500000 ? 48 : pepper.shuMax >= 50000 ? 42 : 30);
+const pepperPlantHeight = (pepper: Pepper) => {
+  const heatReference = pepper.shuMax ?? pepper.shuMin ?? 0;
+  return pepperPlantHeightInches[pepper.id] ?? (heatReference >= 500000 ? 48 : heatReference >= 50000 ? 42 : 30);
+};
 const plantHeight = (value: number) => (value >= 24 && value % 12 === 0 ? `${value / 12} ft` : `${value} in`);
 
 const sharkWeightLb = (shark: Shark) => Math.round(Math.max(10, shark.lengthFt ** 2.85 * (shark.power >= 4 ? 0.85 : 0.55)));

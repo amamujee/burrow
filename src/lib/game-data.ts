@@ -21,8 +21,8 @@ export type Pepper = {
   id: string;
   name: string;
   heat: HeatBand;
-  shuMin: number;
-  shuMax: number;
+  shuMin: number | null;
+  shuMax: number | null;
   scovilleStatus?: "published" | "unofficial" | "unpublished";
   color: string;
   image: string;
@@ -421,12 +421,12 @@ const pepperSeeds: PepperSeed[] = [
   {
     id: "the-noah",
     name: "The Noah",
-    shuMin: 500001,
-    shuMax: 500001,
-    scovilleStatus: "unpublished",
+    shuMin: 2000000,
+    shuMax: null,
+    scovilleStatus: "unofficial",
     color: "mustard brown",
     ...generatedContentImage("peppers", "the-noah"),
-    fact: "The Noah is an unreleased super-hot named by Ed Currie for a friend. He describes its flavor as deep, earthy, mustardy, and extremely hot, but no Scoville score is published.",
+    fact: "The Noah is an unreleased super-hot named by Ed Currie for a friend. It is placed above 2,000,000 SHU as an unofficial estimate; no lab score has been published.",
   },
   {
     id: "armageddon",
@@ -750,7 +750,7 @@ const pepperSeeds: PepperSeed[] = [
     id: "aji-dulce",
     name: "Aji Dulce",
     shuMin: 0,
-    shuMax: 500,
+    shuMax: 1000,
     color: "red",
     ...contentImage("peppers", "aji-dulce", "A Red Aji Dulce Pepper.jpg"),
     imageCredit: "Ashoka Jegroo, Wikimedia Commons",
@@ -813,7 +813,7 @@ const pepperSeeds: PepperSeed[] = [
     id: "piri-piri",
     name: "Piri Piri",
     shuMin: 50000,
-    shuMax: 175000,
+    shuMax: 100000,
     color: "red",
     ...contentImage("peppers", "piri-piri", "09-07-2017 Piri piri peppers.JPG"),
     imageCredit: "Kolforn, Wikimedia Commons",
@@ -822,8 +822,8 @@ const pepperSeeds: PepperSeed[] = [
   {
     id: "piquillo",
     name: "Piquillo",
-    shuMin: 0,
-    shuMax: 500,
+    shuMin: 500,
+    shuMax: 1000,
     color: "red",
     ...contentImage("peppers", "piquillo", "Piquillo Peppers.jpg"),
     imageCredit: "sindändùne, Wikimedia Commons",
@@ -898,8 +898,8 @@ const pepperSeeds: PepperSeed[] = [
   {
     id: "malagueta",
     name: "Malagueta",
-    shuMin: 60000,
-    shuMax: 175000,
+    shuMin: 50000,
+    shuMax: 100000,
     color: "red",
     ...contentImage("peppers", "malagueta", "Pimenta malagueta.jpg"),
     imageCredit: "João José da Silva Pereira, Wikimedia Commons",
@@ -977,7 +977,7 @@ const pepperMetadataFor = (id: string): CardMetadata | undefined => {
 
 export const peppers = pepperSeeds.map((pepper) => ({
   ...pepper,
-  heat: heatBandForScoville(pepper.shuMax),
+  heat: heatBandForScoville(pepper.shuMax ?? pepper.shuMin ?? 500001),
   metadata: pepper.metadata || pepperMetadataFor(pepper.id)
     ? { ...pepperMetadataFor(pepper.id), ...pepper.metadata }
     : undefined,
