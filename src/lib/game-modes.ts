@@ -239,6 +239,14 @@ const topicOrder = (topic: TopicScope, seed: number): KnowledgeTopic => {
 
 const pepperRange = (pepper: Pepper) =>
   pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
+const hasScovilleMeasurement = (pepper: Pepper) => pepper.scovilleStatus !== "unpublished";
+const pepperScovilleDisplay = (pepper: Pepper) => {
+  if (!hasScovilleMeasurement(pepper)) return "SHU not published";
+  return `${pepper.scovilleStatus === "unofficial" ? "~" : ""}${formatNumber(pepper.shuMax)} SHU${pepper.scovilleStatus === "unofficial" ? " (unofficial)" : ""}`;
+};
+const pepperHeatExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
+  ? `${pepper.name} can reach ${pepperScovilleDisplay(pepper)}, so it is ${pepper.heat} (${heatBandRangeLabel(pepper.heat)}). Its full range is ${pepperRange(pepper)} SHU.`
+  : `${pepper.name} is described by its breeder as an extremely hot super-hot, but no Scoville measurement has been published.`;
 const heatRank = Object.fromEntries(heatBands.map((heat, index) => [heat, index])) as Record<HeatBand, number>;
 const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   id: pepper.id,
@@ -248,12 +256,12 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   imageAlt: pepper.name,
   imageCredit: pepper.imageCredit,
   statLabel: "Scoville",
-  statValue: pepper.shuMax,
-  statDisplay: `${formatNumber(pepper.shuMax)} SHU`,
-  subStat: `${heatProfiles[pepper.heat].label} · ${heatBandRangeLabel(pepper.heat)} · ${heatProfiles[pepper.heat].emoji}`,
+  statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : Number.NaN,
+  statDisplay: pepperScovilleDisplay(pepper),
+  subStat: `${heatProfiles[pepper.heat].label} · ${hasScovilleMeasurement(pepper) ? heatBandRangeLabel(pepper.heat) : "unmeasured super-hot"} · ${heatProfiles[pepper.heat].emoji}`,
   fact: pepper.fact,
-  qualityScore: scoreFeaturedContent({ ...pepper, statValue: pepper.shuMax }).score,
-  qualityFlags: scoreFeaturedContent({ ...pepper, statValue: pepper.shuMax }).flags,
+  qualityScore: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).score,
+  qualityFlags: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).flags,
   metadata: pepper.metadata,
 });
 
@@ -395,6 +403,9 @@ const pepperSizeInches: Record<string, number> = {
   "trinidad-scorpion-butch-t": 2,
   "carolina-reaper": 2,
   "dragons-breath": 1.5,
+  armageddon: 2,
+  "pepper-y": 2,
+  "the-noah": 2,
   "pepper-x": 2,
   shishito: 4,
   padron: 2,
@@ -468,6 +479,9 @@ const pepperPlantHeightInches: Record<string, number> = {
   "carolina-reaper": 48,
   "dragons-breath": 42,
   "pepper-x": 42,
+  armageddon: 30,
+  "pepper-y": 42,
+  "the-noah": 42,
   shishito: 24,
   padron: 24,
   ancho: 30,
@@ -821,7 +835,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       fact: pepper.fact,
       metadata: pepper.metadata,
       stats: [
-        { id: "scoville", label: "Scoville", value: pepper.shuMax, display: `${formatNumber(pepper.shuMax)} SHU`, direction: "higher" },
+        ...(hasScovilleMeasurement(pepper) ? [{ id: "scoville", label: "Scoville", value: pepper.shuMax, display: pepperScovilleDisplay(pepper), direction: "higher" as const }] : []),
         { id: "size", label: "Fruit size", value: pepperSizeInches[pepper.id] ?? 2, display: inches(pepperSizeInches[pepper.id] ?? 2), direction: "higher" },
         { id: "plant-height", label: "Plant height", value: pepperPlantHeight(pepper), display: plantHeight(pepperPlantHeight(pepper)), direction: "higher" },
       ],
@@ -2360,7 +2374,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   const count = difficulty === 1 ? 3 : 4;
 
   if (currentTopic === "peppers") {
-    const cards = distinctStatCards(shuffle(preferredPool(peppers, difficulty), seed + 1).map(pepperCard), seed + 2, count);
+    const cards = distinctStatCards(shuffle(preferredPool(peppers.filter(hasScovilleMeasurement), difficulty), seed + 1).map(pepperCard), seed + 2, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-peppers`,
@@ -2467,14 +2481,16 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
         imageAlt: locatedPepper.name,
         imageCredit: locatedPepper.imageCredit,
         answer: truthful ? "True" : "False",
-        explanation: `${locatedPepper.name} is linked to ${location.label}. It can reach ${formatNumber(locatedPepper.shuMax)} SHU, so it is ${locatedPepper.heat}.`,
+        explanation: `${locatedPepper.name} is linked to ${location.label}. ${pepperHeatExplanation(locatedPepper)}`,
         locations: [location],
       };
     }
 
     const fakeHeat = sample(pool.filter((item) => item.id !== pepper.id && item.heat !== pepper.heat), seed + 13);
-    const fakeShu = sampleSafe(pool.filter((item) => item.id !== pepper.id && item.shuMax !== pepper.shuMax), pool.filter((item) => item.id !== pepper.id), seed + 14);
-    const useMath = difficulty > 1 && seedRandom(seed + 14) > 0.5;
+    const measuredPool = pool.filter(hasScovilleMeasurement);
+    const measuredPepper = hasScovilleMeasurement(pepper) ? pepper : sample(measuredPool, seed + 18);
+    const fakeShu = sampleSafe(measuredPool.filter((item) => item.id !== measuredPepper.id && item.shuMax !== measuredPepper.shuMax), measuredPool.filter((item) => item.id !== measuredPepper.id), seed + 14);
+    const useMath = hasScovilleMeasurement(pepper) && difficulty > 1 && seedRandom(seed + 14) > 0.5;
     const statement = truthful
       ? useMath
         ? `${pepper.name} can reach about ${formatNumber(pepper.shuMax)} Scoville heat units.`
@@ -2491,7 +2507,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       imageAlt: pepper.name,
       imageCredit: pepper.imageCredit,
       answer: truthful ? "True" : "False",
-      explanation: `${pepper.name} can reach ${formatNumber(pepper.shuMax)} SHU, so it is ${pepper.heat} (${heatBandRangeLabel(pepper.heat)}). Its full range is ${pepperRange(pepper)} SHU.`,
+      explanation: pepperHeatExplanation(pepper),
     };
   }
 

@@ -4,7 +4,9 @@ import {
   pepperChallengeCampaignForMilestone,
   pepperChallengeCampaigns,
 } from "../../src/components/core-mini-challenge";
-import { buildNumberRound, buildNumberRoundFromCards, type GenericKnowledgeCard } from "../../src/lib/game-modes";
+import { peppers } from "../../src/lib/game-data";
+import { buildNumberRound, buildNumberRoundFromCards, buildSortRound, collectionCards, type GenericKnowledgeCard } from "../../src/lib/game-modes";
+import { buildSession } from "../../src/lib/questions";
 
 const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
 const topicLabels = ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Universe", "Jet Hangar", "Dinosaur Lab", "Tallest Mountains", "Tall Trees", "Bridges & Tunnels"];
@@ -87,6 +89,34 @@ const mathFixtureCards: GenericKnowledgeCard[] = [12, 20, 35, 48].map((value, in
   categories: ["test"],
   stats: [{ id: "length", label: "Length", value, display: `${value} ft`, direction: "higher" }],
 }));
+
+test("Pepper Y, Armageddon, and The Noah join the game without inventing a Noah heat score", () => {
+  const newPeppers = Object.fromEntries(
+    peppers
+      .filter((pepper) => ["pepper-y", "armageddon", "the-noah"].includes(pepper.id))
+      .map((pepper) => [pepper.id, pepper]),
+  );
+
+  expect(Object.keys(newPeppers).sort()).toEqual(["armageddon", "pepper-y", "the-noah"]);
+  expect(newPeppers.armageddon).toMatchObject({ name: "Armageddon", shuMax: 1300000, image: "/burrow-assets/peppers/armageddon.png" });
+  expect(newPeppers["pepper-y"]).toMatchObject({ name: "Pepper Y", shuMax: 3000000, scovilleStatus: "unofficial", image: "/burrow-assets/peppers/pepper-y.png" });
+  expect(newPeppers["the-noah"]).toMatchObject({ name: "The Noah", heat: "insane", scovilleStatus: "unpublished", image: "/burrow-assets/peppers/the-noah.png" });
+
+  const noahCard = collectionCards().find((card) => card.id === "the-noah");
+  expect(noahCard?.statDisplay).toBe("SHU not published");
+  expect(Number.isNaN(noahCard?.statValue)).toBe(true);
+
+  for (let seed = 0; seed < 100; seed += 1) {
+    const sortRound = buildSortRound("peppers", 3, seed);
+    expect(sortRound.cards.every((card) => card.id !== "the-noah" && Number.isFinite(card.statValue))).toBe(true);
+
+    const quiz = buildSession("peppers", 3, seed * 101, []);
+    for (const question of quiz.filter((item) => item.image === "/burrow-assets/peppers/the-noah.png")) {
+      expect(["pepper-heat", "pepper-reading", "pepper-location"]).toContain(question.kind);
+      expect(question.numberLine).toBeUndefined();
+    }
+  }
+});
 
 test("every topic offers sensible addition, subtraction, and multiplication rounds", () => {
   const builtInTopics = {

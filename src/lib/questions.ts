@@ -102,7 +102,8 @@ export type Question = {
 };
 
 const sessionLength = 16;
-const maxShu = 2693000;
+const hasScovilleMeasurement = (pepper: Pepper) => pepper.scovilleStatus !== "unpublished";
+const maxShu = Math.max(...peppers.filter(hasScovilleMeasurement).map((pepper) => pepper.shuMax));
 const maxHeight = 6562;
 const maxSharkLength = 65;
 const maxSharkSpeed = 45;
@@ -125,7 +126,9 @@ const formatShu = (value: number) => `${formatNumber(value)} SHU`;
 const range = (pepper: Pepper) => pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
 const feet = (value: number) => `${formatNumber(value)} ft`;
 const heatMeter = (heat: HeatBand) => ({ label: heat, icons: heatProfiles[heat].icons, emoji: heatProfiles[heat].emoji, line: heatProfiles[heat].kidLine });
-const heatBandExplanation = (pepper: Pepper) => `${pepper.name} is ${pepper.heat} because its top Scoville score is ${formatShu(pepper.shuMax)}, which fits the ${heatBandRangeLabel(pepper.heat)} band.`;
+const heatBandExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
+  ? `${pepper.name} is ${pepper.heat} because its top Scoville score is ${pepper.scovilleStatus === "unofficial" ? "unofficially " : ""}${formatShu(pepper.shuMax)}, which fits the ${heatBandRangeLabel(pepper.heat)} band.`
+  : `${pepper.name} is described by its breeder as an extremely hot super-hot, but no Scoville measurement has been published.`;
 const choiceSet = <T,>(correct: T, options: T[], seed: number, count: number) => {
   const distractors = shuffle(options.filter((option) => option !== correct), seed).slice(0, count - 1);
   return shuffle([correct, ...distractors], seed + 1);
@@ -726,7 +729,7 @@ const headToHeadQuestionFromSpec = (spec: HeadToHeadSpec, seed: number): Questio
 
 const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty, seed: number): Question => {
   if (topic === "peppers") {
-    const pool = preferredPool(peppers, difficulty);
+    const pool = preferredPool(peppers.filter(hasScovilleMeasurement), difficulty);
     const first = sample(pool, seed + 1);
     const second = sample(pool.filter((item) => item.id !== first.id), seed + 2);
     return pepperHotterQuestion(seed, first, second);
@@ -772,6 +775,7 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
 const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
   const pool = preferredPool(peppers, difficulty);
   const pepper = sample(pool, seed);
+  const measuredPool = pool.filter(hasScovilleMeasurement);
   const locationPool = pool.filter(hasLocationMetadata);
   const baseKinds: QuestionKind[] = difficulty === 1
     ? ["pepper-heat", "pepper-shu", "pepper-hotter", "pepper-reading"]
@@ -814,13 +818,14 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
       explanation: `${heatBandExplanation(pepper)} ${heatProfiles[pepper.heat].kidLine}`,
       locations: itemLocations(pepper),
       heatMeter: heatMeter(pepper.heat),
-      numberLine: { label: "Scoville score", value: pepper.shuMax, max: maxShu, unit: "SHU" },
+      numberLine: hasScovilleMeasurement(pepper) ? { label: "Scoville score", value: pepper.shuMax, max: maxShu, unit: "SHU" } : undefined,
     };
   }
 
   if (kind === "pepper-hotter") {
-    const challenger = sample(pool.filter((item) => item.id !== pepper.id), seed + 11);
-    return pepperHotterQuestion(seed, pepper, challenger);
+    const measuredPepper = hasScovilleMeasurement(pepper) ? pepper : sample(measuredPool, seed + 10);
+    const challenger = sample(measuredPool.filter((item) => item.id !== measuredPepper.id), seed + 11);
+    return pepperHotterQuestion(seed, measuredPepper, challenger);
   }
 
   if (kind === "pepper-reading") {
@@ -850,22 +855,23 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
     };
   }
 
-  const correct = `${range(pepper)} SHU`;
-  const otherRanges = pool.filter((item) => item.id !== pepper.id).map((item) => `${range(item)} SHU`);
+  const measuredPepper = hasScovilleMeasurement(pepper) ? pepper : sample(measuredPool, seed + 16);
+  const correct = `${range(measuredPepper)} SHU`;
+  const otherRanges = measuredPool.filter((item) => item.id !== measuredPepper.id).map((item) => `${range(item)} SHU`);
   return {
-    id: `${seed}-pepper-shu-${pepper.id}`,
+    id: `${seed}-pepper-shu-${measuredPepper.id}`,
     topic: "peppers",
     kind: "pepper-shu",
-    prompt: `What Scoville score range fits ${pepper.name}?`,
-    image: pepper.image,
-    imageAlt: pepper.name,
-    imageCredit: pepper.imageCredit,
+    prompt: `What Scoville score range fits ${measuredPepper.name}?`,
+    image: measuredPepper.image,
+    imageAlt: measuredPepper.name,
+    imageCredit: measuredPepper.imageCredit,
     choices: shuffle([correct, ...shuffle(otherRanges, seed + 17).slice(0, choiceCountForDifficulty(difficulty) - 1)], seed + 18),
     answer: correct,
-    explanation: `${pepper.name} is about ${correct}. Its top score puts it in the ${pepper.heat} band (${heatBandRangeLabel(pepper.heat)}).`,
-    locations: itemLocations(pepper),
-    heatMeter: heatMeter(pepper.heat),
-    numberLine: { label: "Heat", value: pepper.shuMax, max: maxShu, unit: "SHU" },
+    explanation: `${measuredPepper.name} is about ${correct}${measuredPepper.scovilleStatus === "unofficial" ? " in unofficial listings" : ""}. Its top score puts it in the ${measuredPepper.heat} band (${heatBandRangeLabel(measuredPepper.heat)}).`,
+    locations: itemLocations(measuredPepper),
+    heatMeter: heatMeter(measuredPepper.heat),
+    numberLine: { label: "Heat", value: measuredPepper.shuMax, max: maxShu, unit: "SHU" },
   };
 };
 

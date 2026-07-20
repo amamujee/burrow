@@ -23,6 +23,7 @@ export type Pepper = {
   heat: HeatBand;
   shuMin: number;
   shuMax: number;
+  scovilleStatus?: "published" | "unofficial" | "unpublished";
   color: string;
   image: string;
   imageSourceFile: string;
@@ -408,13 +409,33 @@ const pepperSeeds: PepperSeed[] = [
     fact: "Dragon's Breath was reported at 2.48 million SHU, but that figure was never verified by Guinness World Records.",
   },
   {
-    id: "apollo",
-    name: "Apollo",
+    id: "pepper-y",
+    name: "Pepper Y",
     shuMin: 3000000,
     shuMax: 3000000,
+    scovilleStatus: "unofficial",
     color: "red",
-    ...generatedContentImage("peppers", "apollo"),
-    fact: "Apollo is an unofficial Hot Ones super-hot from Smokin' Ed Currie, commonly listed around 3,000,000 SHU.",
+    ...generatedContentImage("peppers", "pepper-y"),
+    fact: "Pepper Y is another name for Ed Currie's Apollo pepper. Its heat has not been officially published, though it is commonly listed around 3,000,000 SHU.",
+  },
+  {
+    id: "the-noah",
+    name: "The Noah",
+    shuMin: 500001,
+    shuMax: 500001,
+    scovilleStatus: "unpublished",
+    color: "mustard brown",
+    ...generatedContentImage("peppers", "the-noah"),
+    fact: "The Noah is an unreleased super-hot named by Ed Currie for a friend. He describes its flavor as deep, earthy, mustardy, and extremely hot, but no Scoville score is published.",
+  },
+  {
+    id: "armageddon",
+    name: "Armageddon",
+    shuMin: 1300000,
+    shuMax: 1300000,
+    color: "red",
+    ...generatedContentImage("peppers", "armageddon"),
+    fact: "Armageddon is the first F1 hybrid super-hot pepper. Tozer Seeds rates the quick-ripening British variety at 1,300,000 SHU.",
   },
   {
     id: "pepper-x",
@@ -904,6 +925,9 @@ const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
   "trinidad-scorpion-butch-t": { label: "Trinidad and Tobago", countries: ["Trinidad and Tobago"], continents: ["North America"] },
   "carolina-reaper": { label: "Fort Mill, United States", countries: ["United States"], continents: ["North America"] },
   "dragons-breath": { label: "Wales, United Kingdom", countries: ["United Kingdom"], continents: ["Europe"] },
+  "pepper-y": { label: "Fort Mill, United States", countries: ["United States"], continents: ["North America"] },
+  "the-noah": { label: "Fort Mill, United States", countries: ["United States"], continents: ["North America"] },
+  armageddon: { label: "United Kingdom", countries: ["United Kingdom"], continents: ["Europe"] },
   "pepper-x": { label: "Fort Mill, United States", countries: ["United States"], continents: ["North America"] },
   shishito: { label: "Japan", countries: ["Japan"], continents: ["Asia"] },
   padron: { label: "Padron, Spain", countries: ["Spain"], continents: ["Europe"] },
@@ -3038,8 +3062,10 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
     sources: [
       { label: "WikiPepper", url: "https://wikipepper.org/peppers" },
       { label: "PepperScale chile guides", url: "https://pepperscale.com/" },
+      { label: "Epicurious pepper tasting", url: "https://www.epicurious.com/video/watch/hot-takes-pepper-x-creator-ed-currie-blind-tastes-12-of-the-worlds-hottest-peppers" },
+      { label: "Tozer Seeds Armageddon profile", url: "https://www.tozerseeds.com/wp-content/uploads/2021/10/Pepper-Armageddon-TZ-6415-2021-TSA.pdf" },
     ],
-    samples: ["Naga Jolokia", "Chocolate Bhutlah", "Trinidad Moruga Scorpion", "Carolina Reaper"],
+    samples: ["Pepper Y", "The Noah", "Armageddon", "Pepper X"],
   },
   buildings: {
     id: "buildings",
