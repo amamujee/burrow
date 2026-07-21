@@ -116,6 +116,15 @@ test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate ma
       expect(question.numberLine).toBeUndefined();
     }
   }
+
+  for (const difficulty of [1, 2, 3] as const) {
+    const firstRun = buildSession(["space", "peppers"], difficulty, 20260720 + difficulty, []);
+    expect(firstRun[0]).toMatchObject({
+      topic: "peppers",
+      image: "/burrow-assets/peppers/the-noah.png",
+    });
+    expect(["pepper-heat", "pepper-reading"]).toContain(firstRun[0].kind);
+  }
 });
 
 test("every topic offers sensible addition, subtraction, and multiplication rounds", () => {
