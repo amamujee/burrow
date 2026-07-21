@@ -777,10 +777,9 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
   return spaceComparisonQuestion(seed, first, second, stat);
 };
 
-const pepperQuestion = (seed: number, difficulty: Difficulty, featuredPepper?: Pepper): Question => {
+const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
   const pool = preferredPool(peppers, difficulty);
-  const featured = featuredPepper && pool.some((item) => item.id === featuredPepper.id) ? featuredPepper : undefined;
-  const pepper = featured ?? sample(pool, seed);
+  const pepper = sample(pool, seed);
   const measuredPool = pool.filter(hasScovilleMeasurement);
   const locationPool = pool.filter(hasLocationMetadata);
   const baseKinds: QuestionKind[] = difficulty === 1
@@ -789,9 +788,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, featuredPepper?: P
       ? ["pepper-heat", "pepper-shu", "pepper-hotter", "pepper-reading"]
       : ["pepper-shu", "pepper-hotter", "pepper-reading", "pepper-heat"];
   const kinds = locationLabels(locationPool).length >= choiceCountForDifficulty(difficulty) ? [...baseKinds, "pepper-location"] : baseKinds;
-  const kind = featured && !hasScovilleMeasurement(pepper)
-    ? sample(["pepper-heat", "pepper-reading"] as QuestionKind[], seed + 3)
-    : sample(kinds, seed + 3);
+  const kind = sample(kinds, seed + 3);
 
   if (kind === "pepper-location") {
     const locatedPepper = sample(locationPool, seed + 4);
@@ -1336,14 +1333,6 @@ export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionS
   const questions: Question[] = [];
   const topicOrder = topicsForScope(topic);
   const usedKeys = questionHistoryKeySet(seenIds);
-  const noah = peppers.find((pepper) => pepper.id === "the-noah");
-
-  if (noah && topicOrder.includes("peppers") && !seenIds.some((id) => id.includes("the-noah"))) {
-    const spotlightQuestion = pepperQuestion(sessionSeed, difficulty, noah);
-    rememberFreshQuestion(spotlightQuestion, usedKeys);
-    questions.push(spotlightQuestion);
-  }
-
   let attempt = 0;
 
   while (questions.length < sessionLength && attempt < 160) {
