@@ -469,6 +469,21 @@ const pepperSizeInches: Record<string, number> = {
   "chocolate-habanero": 2,
   "chinese-five-color": 1.5,
   malagueta: 1.5,
+  habanada: 3,
+  "corno-di-toro": 8,
+  "santa-fe-grande": 4,
+  "bulgarian-carrot": 4,
+  aleppo: 4,
+  "italian-wax": 4,
+  mattapeno: 3,
+  "purple-jalapeno": 3.5,
+  "sugar-rush-peach": 3,
+  "sugar-rush-stripey": 3,
+  "aji-mango": 2.5,
+  "aji-pineapple": 2.5,
+  "purple-thai": 3.5,
+  "naga-morich": 3,
+  "seven-pot-douglah": 2.5,
 };
 
 const pepperPlantHeightInches: Record<string, number> = {
@@ -544,6 +559,21 @@ const pepperPlantHeightInches: Record<string, number> = {
   "chocolate-habanero": 42,
   "chinese-five-color": 24,
   malagueta: 36,
+  habanada: 36,
+  "corno-di-toro": 36,
+  "santa-fe-grande": 30,
+  "bulgarian-carrot": 30,
+  aleppo: 30,
+  "italian-wax": 30,
+  mattapeno: 30,
+  "purple-jalapeno": 30,
+  "sugar-rush-peach": 60,
+  "sugar-rush-stripey": 60,
+  "aji-mango": 36,
+  "aji-pineapple": 36,
+  "purple-thai": 24,
+  "naga-morich": 48,
+  "seven-pot-douglah": 42,
 };
 
 const pepperPlantHeight = (pepper: Pepper) => {
@@ -838,7 +868,11 @@ const jetAltitudeFt = (jet: Jet) => {
   return altitudes[jet.id] ?? 50000;
 };
 
-const spaceTrumpPool = () => spaceCards.filter((card) => card.distanceFromSunMillionMiles !== undefined);
+const spaceTrumpPool = () => spaceCards.filter((card) =>
+  card.diameterMiles !== undefined &&
+  card.distanceFromSunMillionMiles !== undefined &&
+  card.meanSurfaceTempF !== undefined,
+);
 
 const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null => {
   if (topic === "peppers") {

@@ -111,6 +111,59 @@ test("source-verified Scoville ranges stay accurate", () => {
   });
 });
 
+test("15 new peppers share their verified records and real photos across the game", () => {
+  const expected = {
+    habanada: [0, 0],
+    "corno-di-toro": [0, 500],
+    "santa-fe-grande": [500, 700],
+    "bulgarian-carrot": [5000, 30000],
+    aleppo: [10000, 10000],
+    "italian-wax": [12000, 22000],
+    mattapeno: [5000, 10000],
+    "purple-jalapeno": [2500, 8000],
+    "sugar-rush-peach": [50000, 100000],
+    "sugar-rush-stripey": [50000, 100000],
+    "aji-mango": [100000, 150000],
+    "aji-pineapple": [100000, 150000],
+    "purple-thai": [50000, 100000],
+    "naga-morich": [1000000, 1500000],
+    "seven-pot-douglah": [1150000, 1800000],
+  } as const;
+  const newPepperIds = Object.keys(expected);
+  const newPeppers = peppers.filter((pepper) => newPepperIds.includes(pepper.id));
+
+  expect(newPeppers).toHaveLength(15);
+  expect(new Set(newPeppers.map((pepper) => pepper.id)).size).toBe(15);
+  for (const pepper of newPeppers) {
+    expect([pepper.shuMin, pepper.shuMax]).toEqual(expected[pepper.id as keyof typeof expected]);
+    expect(pepper.image).toBe(`/burrow-assets/peppers/${pepper.id}.jpg`);
+    expect(pepper.imageCredit).toBe("Tyler Farms (used with permission)");
+    expect(pepper.imageSourceUrl).toMatch(/^https:\/\/www\.tyler-farms\.com\//);
+  }
+
+  const pepperCards = collectionCards().filter((card) => card.topic === "peppers");
+  for (const pepper of newPeppers) {
+    expect(pepperCards.find((card) => card.id === pepper.id)).toMatchObject({
+      image: pepper.image,
+      statValue: pepper.shuMax,
+    });
+  }
+
+  const naturallySeenImages = new Set(
+    Array.from({ length: 250 }, (_, seed) => buildSession("peppers", 3, seed * 101, []))
+      .flat()
+      .map((question) => question.image),
+  );
+  for (const pepper of newPeppers) expect(naturallySeenImages).toContain(pepper.image);
+
+  const defaultDifficultyImages = new Set(
+    Array.from({ length: 250 }, (_, seed) => buildSession("peppers", 2, seed * 101, []))
+      .flat()
+      .map((question) => question.image),
+  );
+  expect(newPeppers.filter((pepper) => defaultDifficultyImages.has(pepper.image)).length).toBeGreaterThanOrEqual(8);
+});
+
 test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate marked unofficial", () => {
   const newPeppers = Object.fromEntries(
     peppers
@@ -667,7 +720,7 @@ test("collection only shows selected topics", async ({ page }) => {
     };
     const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
     if (!active) throw new Error("Active profile was not saved");
-    active.progress.unlockedCards = ["Naga Jolokia", "Chocolate Bhutlah"];
+    active.progress.unlockedCards = ["Naga Jolokia", "Chocolate Bhutlah", "Habanada", "7 Pot Douglah"];
     window.localStorage.setItem(key, JSON.stringify(profiles));
   });
   await page.reload();
@@ -679,8 +732,8 @@ test("collection only shows selected topics", async ({ page }) => {
   await expect(collection.getByText("Shark Tank", { exact: true })).toHaveCount(0);
   await expect(collection.getByText("Tallest Mountains", { exact: true })).toHaveCount(0);
 
-  const featuredPhotos = collection.getByRole("img", { name: /Naga Jolokia|Chocolate Bhutlah/ });
-  await expect(featuredPhotos).toHaveCount(2);
+  const featuredPhotos = collection.getByRole("img", { name: /Habanada|Naga Jolokia|7 Pot Douglah|Chocolate Bhutlah/ });
+  await expect(featuredPhotos).toHaveCount(4);
   const photoLayout = await featuredPhotos.evaluateAll((photos) => photos.map((photo) => {
     const imageBox = photo.getBoundingClientRect();
     const frameBox = photo.parentElement?.getBoundingClientRect();
@@ -691,7 +744,9 @@ test("collection only shows selected topics", async ({ page }) => {
     };
   }));
   expect(photoLayout).toEqual([
+    expect.objectContaining({ alt: "Habanada", src: "/burrow-assets/peppers/habanada.jpg", fullyContained: true }),
     expect.objectContaining({ alt: "Naga Jolokia", src: "/burrow-assets/peppers/naga-jolokia-closeup.jpg", fullyContained: true }),
+    expect.objectContaining({ alt: "7 Pot Douglah", src: "/burrow-assets/peppers/seven-pot-douglah.jpg", fullyContained: true }),
     expect.objectContaining({ alt: "Chocolate Bhutlah", src: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
   ]);
 });

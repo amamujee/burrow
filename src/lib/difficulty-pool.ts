@@ -123,7 +123,7 @@ export const sortByFamiliarity = <T extends { id: string; metadata?: CardMetadat
   [...items].sort((a, b) => {
     const aScore = bandScore(a.metadata) + recognitionScore(a.metadata) + (a.tags?.includes("popular") ? -500 : 0) + (familiarIds.has(a.id) ? -1000 : 0) + (advancedIds.has(a.id) ? 1000 : 0);
     const bScore = bandScore(b.metadata) + recognitionScore(b.metadata) + (b.tags?.includes("popular") ? -500 : 0) + (familiarIds.has(b.id) ? -1000 : 0) + (advancedIds.has(b.id) ? 1000 : 0);
-    return aScore - bScore;
+    return aScore - bScore || a.id.localeCompare(b.id);
   });
 
 export const poolForDifficulty = <T extends { id: string; metadata?: CardMetadata; tags?: string[] }>(items: readonly T[], difficulty: DifficultyLevel) => {

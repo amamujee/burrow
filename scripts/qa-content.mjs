@@ -38,6 +38,21 @@ const validDifficultyBands = new Set(["easy", "medium", "hard"]);
 const validWorldContinents = new Set(["Africa", "Antarctica", "Asia", "Europe", "North America", "South America", "Oceania"]);
 const sourceVerifiedScovilleRanges = new Map([
   ["jimmy-nardello", { min: 0, max: 100, source: "https://www.tyler-farms.com/jimmy-nardello-sweet-italian-pepper-seeds/" }],
+  ["habanada", { min: 0, max: 0, source: "https://www.tyler-farms.com/habanada-pepper-seeds/" }],
+  ["corno-di-toro", { min: 0, max: 500, source: "https://www.tyler-farms.com/red-corno-di-toro-sweet-italian-pepper-seeds/" }],
+  ["santa-fe-grande", { min: 500, max: 700, source: "https://www.tyler-farms.com/santa-fe-grande-pepper-seeds/" }],
+  ["bulgarian-carrot", { min: 5000, max: 30000, source: "https://www.tyler-farms.com/bulgarian-carrot-pepper-seeds/" }],
+  ["aleppo", { min: 10000, max: 10000, source: "https://www.tyler-farms.com/aleppo-pepper-seeds/" }],
+  ["italian-wax", { min: 12000, max: 22000, source: "https://www.tyler-farms.com/italian-wax-pepper-seeds/" }],
+  ["mattapeno", { min: 5000, max: 10000, source: "https://www.tyler-farms.com/mattapeno-pepper-seeds/" }],
+  ["purple-jalapeno", { min: 2500, max: 8000, source: "https://www.tyler-farms.com/purple-jalapeno-pepper-seeds/" }],
+  ["sugar-rush-peach", { min: 50000, max: 100000, source: "https://www.tyler-farms.com/sugar-rush-peach-pepper-seeds/" }],
+  ["sugar-rush-stripey", { min: 50000, max: 100000, source: "https://www.tyler-farms.com/sugar-rush-stripey-pepper-seeds/" }],
+  ["aji-mango", { min: 100000, max: 150000, source: "https://www.tyler-farms.com/aji-mango-pepper-seeds/" }],
+  ["aji-pineapple", { min: 100000, max: 150000, source: "https://www.tyler-farms.com/aji-pineapple-pepper-seeds/" }],
+  ["purple-thai", { min: 50000, max: 100000, source: "https://www.tyler-farms.com/purple-thai-pepper-seeds/" }],
+  ["naga-morich", { min: 1000000, max: 1500000, source: "https://www.tyler-farms.com/naga-morich-pepper-seeds/" }],
+  ["seven-pot-douglah", { min: 1150000, max: 1800000, source: "https://www.tyler-farms.com/7-pot-douglah-pepper-seeds/" }],
 ]);
 
 const isImageFile = (target) => {
