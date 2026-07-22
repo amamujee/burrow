@@ -366,7 +366,9 @@ const pepperSeeds: PepperSeed[] = [
     shuMin: 1500000,
     shuMax: 2000000,
     color: "chocolate brown",
-    ...generatedContentImage("peppers", "chocolate-bhutlah"),
+    ...contentImage("peppers", "chocolate-bhutlah", "chocolate_bhutlah_pepper_tyler_farms_seeds_and_plants__57085.1581733561.JPG"),
+    imageSourceUrl: "https://www.tyler-farms.com/chocolate-bhutlah-pepper-live-plant/",
+    imageCredit: "Tyler Farms (used with permission)",
     fact: "Chocolate Bhutlah is commonly estimated at 1.5 to 2 million SHU, but its heat range is not officially standardized.",
   },
   {
