@@ -33,6 +33,8 @@ export const challengeConceptVisualLabels: Record<ConceptVisual, string> = {
   "genes-and-growing": "Diagram showing genes and growing conditions shaping a pepper's heat",
 };
 
+export const challengeQuestionInterval = 25;
+
 export type ChallengeCampaign = {
   id: string;
   topicId: string;
@@ -112,7 +114,7 @@ export const pepperChallengeCampaigns: ChallengeCampaign[] = [
 ];
 
 export function pepperChallengeCampaignForMilestone(milestone: number) {
-  const campaignIndex = Math.max(0, Math.floor(milestone / 20) - 1) % pepperChallengeCampaigns.length;
+  const campaignIndex = Math.max(0, Math.floor(milestone / challengeQuestionInterval) - 1) % pepperChallengeCampaigns.length;
   return pepperChallengeCampaigns[campaignIndex];
 }
 

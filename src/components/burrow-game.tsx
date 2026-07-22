@@ -2,7 +2,7 @@
 
 import { track } from "@vercel/analytics";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChallengeMode, pepperChallengeCampaignForMilestone } from "@/components/core-mini-challenge";
+import { ChallengeMode, challengeQuestionInterval, pepperChallengeCampaignForMilestone } from "@/components/core-mini-challenge";
 import { EqualGroupsBoard } from "@/components/equal-groups-board";
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid } from "@/components/game-question-ui";
 import { WorldMapSurface } from "@/components/world-map-surface";
@@ -214,10 +214,22 @@ const freshProgress = (): Progress => ({
   unlockedCards: [],
 });
 
+const normalizedChallengeMilestone = (progress?: Partial<Progress>) => {
+  const answered = progress?.answered ?? 0;
+  const savedMilestone = progress?.challengeMilestone;
+  const currentMilestone = Math.floor(answered / challengeQuestionInterval) * challengeQuestionInterval;
+
+  // Migrate milestones saved by the previous 20-question schedule.
+  if (savedMilestone === undefined || savedMilestone > answered || savedMilestone % challengeQuestionInterval !== 0) {
+    return currentMilestone;
+  }
+  return savedMilestone;
+};
+
 const normalizeProgress = (progress?: Partial<Progress>): Progress => ({
   ...freshProgress(),
   ...progress,
-  challengeMilestone: progress?.challengeMilestone ?? Math.floor((progress?.answered ?? 0) / 20) * 20,
+  challengeMilestone: normalizedChallengeMilestone(progress),
   topicWins: { ...emptyTopicCounts(), ...progress?.topicWins },
   topicStats: Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, { correct: 0, answered: 0, ...progress?.topicStats?.[topic] }])) as Progress["topicStats"],
   modeWins: { ...initialProgress.modeWins, ...progress?.modeWins },
@@ -1064,7 +1076,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         : current.modeWins,
     }));
 
-    if (activeInterests.includes("peppers") && progress.answered + 1 >= progress.challengeMilestone + 20) {
+    if (activeInterests.includes("peppers") && progress.answered + 1 >= progress.challengeMilestone + challengeQuestionInterval) {
       setMiniChallengePending(true);
     }
 

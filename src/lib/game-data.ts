@@ -347,7 +347,7 @@ const pepperSeeds: PepperSeed[] = [
     shuMin: 855000,
     shuMax: 1041427,
     color: "red-orange",
-    ...contentImage("peppers", "naga-jolokia-fruiting-plant", "Bhut-Jolokia-plant.jpg"),
+    ...contentImage("peppers", "naga-jolokia-closeup", "Bhut-Jolokia-plant.jpg"),
     imageCredit: "Chella p, Wikimedia Commons",
     fact: "Naga Jolokia is another name used for the ghost pepper from Northeast India, which can pass one million SHU.",
   },

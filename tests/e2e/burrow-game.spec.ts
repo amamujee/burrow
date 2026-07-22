@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 import {
   challengeConceptVisualLabels,
+  challengeQuestionInterval,
   pepperChallengeCampaignForMilestone,
   pepperChallengeCampaigns,
 } from "../../src/components/core-mini-challenge";
@@ -62,7 +63,7 @@ const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
 };
 
 const openPepperChallengeAt = async (page: Page, milestone: number) => {
-  await page.evaluate((targetMilestone) => {
+  await page.evaluate(({ targetMilestone, interval }) => {
     const key = "burrow-profiles-v1";
     const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
       activeProfileId: string;
@@ -71,9 +72,9 @@ const openPepperChallengeAt = async (page: Page, milestone: number) => {
     const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
     if (!active) throw new Error("Active profile was not saved");
     active.progress.answered = targetMilestone - 1;
-    active.progress.challengeMilestone = targetMilestone - 20;
+    active.progress.challengeMilestone = targetMilestone - interval;
     window.localStorage.setItem(key, JSON.stringify(profiles));
-  }, milestone);
+  }, { targetMilestone: milestone, interval: challengeQuestionInterval });
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await chooseOnlyMode(page, "True/False");
@@ -251,8 +252,8 @@ test("every Challenge subject has valid content and its required teaching stage"
   }
 });
 
-test("campaign selection rotates through every deep dive every twenty questions", () => {
-  expect([20, 40, 60, 80, 100].map((milestone) => pepperChallengeCampaignForMilestone(milestone).id)).toEqual([
+test("campaign selection rotates through every deep dive every twenty-five questions", () => {
+  expect([25, 50, 75, 100, 125].map((milestone) => pepperChallengeCampaignForMilestone(milestone).id)).toEqual([
     "jalapeno-fieldwork",
     "caribbean-pepper-quest",
     "ghost-pepper-mission",
@@ -344,7 +345,7 @@ test("setup menu opens and core game controls keep working", async ({ page }) =>
   await expect(page.getByText("Research library")).toBeVisible();
 });
 
-test("every twentieth answer opens an automatic mini challenge and returns after its summary", async ({ page }) => {
+test("every twenty-fifth answer opens an automatic mini challenge and returns after its summary", async ({ page }) => {
   await page.evaluate(() => {
     const key = "burrow-profiles-v1";
     const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
@@ -353,7 +354,7 @@ test("every twentieth answer opens an automatic mini challenge and returns after
     };
     const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
     if (!active) throw new Error("Active profile was not saved");
-    active.progress.answered = 19;
+    active.progress.answered = 24;
     active.progress.challengeMilestone = 0;
     window.localStorage.setItem(key, JSON.stringify(profiles));
   });
@@ -412,12 +413,12 @@ test("every twentieth answer opens an automatic mini challenge and returns after
       profiles: { id: string; progress: { challengeMilestone: number } }[];
     };
     return profiles.profiles.find((profile) => profile.id === profiles.activeProfileId)?.progress.challengeMilestone;
-  })).toBe(20);
+  })).toBe(25);
 });
 
 for (const [campaignOffset, campaign] of pepperChallengeCampaigns.slice(1).entries()) {
   test(`every subject stage renders and teaches in ${campaign.name}`, async ({ page }) => {
-    const milestone = (campaignOffset + 2) * 20;
+    const milestone = (campaignOffset + 2) * challengeQuestionInterval;
     await openPepperChallengeAt(page, milestone);
     await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText(`Deep dive: ${campaign.name}`);
 
@@ -670,7 +671,7 @@ test("collection only shows selected topics", async ({ page }) => {
     };
   }));
   expect(photoLayout).toEqual([
-    expect.objectContaining({ alt: "Naga Jolokia", src: "/burrow-assets/peppers/naga-jolokia-fruiting-plant.jpg", fullyContained: true }),
+    expect.objectContaining({ alt: "Naga Jolokia", src: "/burrow-assets/peppers/naga-jolokia-closeup.jpg", fullyContained: true }),
     expect.objectContaining({ alt: "Chocolate Bhutlah", src: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
   ]);
 });
