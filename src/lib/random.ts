@@ -12,6 +12,23 @@ export const shuffle = <T,>(items: readonly T[], seed: number) => {
   return copy;
 };
 
+export const discoveryShuffle = <T,>(
+  items: readonly T[],
+  seed: number,
+  unlockedTitles: readonly string[] = [],
+  titleFor: (item: T) => string,
+) => {
+  const shuffled = shuffle(items, seed);
+  if (!unlockedTitles.length) return shuffled;
+
+  const unlocked = new Set(unlockedTitles);
+  const unseen = shuffled.filter((item) => !unlocked.has(titleFor(item)));
+  if (!unseen.length || unseen.length === shuffled.length || seedRandom(seed + 7919) >= 0.7) return shuffled;
+
+  const seen = shuffled.filter((item) => unlocked.has(titleFor(item)));
+  return [...unseen, ...seen];
+};
+
 export const sample = <T,>(items: readonly T[], seed: number) => items[Math.floor(seedRandom(seed) * items.length) % items.length];
 
 export const sampleSafe = <T,>(items: readonly T[], fallback: readonly T[], seed: number) => sample(items.length ? items : fallback, seed);

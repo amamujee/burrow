@@ -5,7 +5,17 @@ import {
   pepperChallengeCampaigns,
 } from "../../src/components/core-mini-challenge";
 import { peppers } from "../../src/lib/game-data";
-import { buildNumberRound, buildNumberRoundFromCards, buildSortRound, collectionCards, type GenericKnowledgeCard } from "../../src/lib/game-modes";
+import {
+  buildFactRound,
+  buildGeoRound,
+  buildNumberRound,
+  buildNumberRoundFromCards,
+  buildRevealRound,
+  buildSortRound,
+  buildTopTrumpRound,
+  collectionCards,
+  type GenericKnowledgeCard,
+} from "../../src/lib/game-modes";
 import { buildSession } from "../../src/lib/questions";
 
 const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
@@ -120,6 +130,23 @@ test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate ma
   for (const difficulty of [1, 2, 3] as const) {
     const ordinaryQuestions = Array.from({ length: 100 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, [])).flat();
     expect(ordinaryQuestions.some((question) => question.image === "/burrow-assets/peppers/the-noah.png")).toBe(true);
+
+    const unlockedOtherPeppers = peppers.filter((pepper) => pepper.id !== "the-noah").map((pepper) => pepper.name);
+    const discoveryQuestions = Array.from({ length: 100 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, [], unlockedOtherPeppers)).flat();
+    const ordinaryNoahCount = ordinaryQuestions.filter((question) => question.image === "/burrow-assets/peppers/the-noah.png").length;
+    const discoveryNoahCount = discoveryQuestions.filter((question) => question.image === "/burrow-assets/peppers/the-noah.png").length;
+    expect(discoveryNoahCount).toBeGreaterThan(ordinaryNoahCount);
+    expect(discoveryNoahCount).toBeLessThan(discoveryQuestions.length);
+
+    const discoveryRounds = Array.from({ length: 100 }, (_, seed) => [
+      buildRevealRound("peppers", difficulty, seed, unlockedOtherPeppers).card.id,
+      buildGeoRound("peppers", difficulty, seed, unlockedOtherPeppers).card.id,
+      buildFactRound("peppers", difficulty, seed, unlockedOtherPeppers).imageAlt,
+      buildTopTrumpRound("peppers", difficulty, seed, unlockedOtherPeppers).player.id,
+    ]).flat();
+    const visibleNoahCount = discoveryRounds.filter((value) => value === "the-noah" || value === "The Noah").length;
+    expect(visibleNoahCount).toBeGreaterThan(200);
+    expect(visibleNoahCount).toBeLessThan(discoveryRounds.length);
   }
 });
 

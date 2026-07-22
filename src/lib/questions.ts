@@ -20,7 +20,7 @@ import {
   type TopicId,
 } from "./game-data";
 import { poolForDifficulty } from "./difficulty-pool";
-import { sample, seedRandom, shuffle } from "./random";
+import { discoveryShuffle, sample, seedRandom, shuffle } from "./random";
 import { worldLocationDisplay, type WorldLocation } from "./card-metadata";
 
 export type TopicScope = TopicId | readonly KnowledgeTopic[];
@@ -777,9 +777,9 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
   return spaceComparisonQuestion(seed, first, second, stat);
 };
 
-const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
+const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: readonly string[] = []): Question => {
   const pool = preferredPool(peppers, difficulty);
-  const pepper = sample(pool, seed);
+  const pepper = discoveryShuffle(pool, seed, unlockedTitles, (item) => item.name)[0];
   const measuredPool = pool.filter(hasScovilleMeasurement);
   const locationPool = pool.filter(hasLocationMetadata);
   const baseKinds: QuestionKind[] = difficulty === 1
@@ -791,7 +791,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty): Question => {
   const kind = sample(kinds, seed + 3);
 
   if (kind === "pepper-location") {
-    const locatedPepper = sample(locationPool, seed + 4);
+    const locatedPepper = discoveryShuffle(locationPool, seed + 4, unlockedTitles, (item) => item.name)[0];
     return {
       id: `${seed}-pepper-location-${locatedPepper.id}`,
       topic: "peppers",
@@ -1329,7 +1329,7 @@ export const buildHeadToHeadSession = (topic: TopicScope, difficulty: Difficulty
   return questions;
 };
 
-export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionSeed: number, seenIds: string[]) => {
+export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionSeed: number, seenIds: string[], unlockedTitles: readonly string[] = []) => {
   const questions: Question[] = [];
   const topicOrder = topicsForScope(topic);
   const usedKeys = questionHistoryKeySet(seenIds);
@@ -1338,7 +1338,7 @@ export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionS
   while (questions.length < sessionLength && attempt < 160) {
     const currentTopic = topicOrder[(questions.length + attempt) % topicOrder.length];
     const seed = sessionSeed + attempt * 17 + questions.length * 31;
-    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty);
+    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty, unlockedTitles) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty);
     if (rememberFreshQuestion(question, usedKeys)) {
       questions.push(question);
     }
@@ -1349,7 +1349,7 @@ export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionS
   while (questions.length < sessionLength && fallbackAttempt < 240) {
     const seed = sessionSeed + questions.length * 101 + attempt + fallbackAttempt * 37;
     const currentTopic = topicOrder[questions.length % topicOrder.length];
-    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty);
+    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty, unlockedTitles) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty);
     if (rememberFreshQuestion(question, usedKeys)) questions.push(question);
     fallbackAttempt += 1;
   }
@@ -1357,7 +1357,7 @@ export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionS
   while (questions.length < sessionLength) {
     const seed = sessionSeed + questions.length * 101 + attempt + fallbackAttempt;
     const currentTopic = topicOrder[questions.length % topicOrder.length];
-    questions.push(currentTopic === "peppers" ? pepperQuestion(seed, difficulty) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty));
+    questions.push(currentTopic === "peppers" ? pepperQuestion(seed, difficulty, unlockedTitles) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty));
   }
 
   return questions;

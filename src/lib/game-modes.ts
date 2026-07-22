@@ -22,7 +22,7 @@ import {
 import { scoreFeaturedContent } from "./content-quality";
 import { worldLocationDisplay, type CardMetadata, type WorldContinent, type WorldLocation } from "./card-metadata";
 import { poolForDifficulty } from "./difficulty-pool";
-import { sample, sampleSafe, seedRandom, shuffle } from "./random";
+import { discoveryShuffle, sample, sampleSafe, seedRandom, shuffle } from "./random";
 
 export type GameMode = "mix" | "quiz" | "versus" | "trumps" | "sort" | "fact" | "peek" | "number" | "odd" | "geo";
 
@@ -938,7 +938,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
   };
 };
 
-export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, seed: number): TopTrumpRound => {
+export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []): TopTrumpRound => {
   const currentTopic = topicOrder(topic, seed);
   const pool =
     currentTopic === "peppers" ? preferredPool(peppers, difficulty) :
@@ -946,9 +946,9 @@ export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, se
     currentTopic === "sharks" ? preferredPool(sharks, difficulty) :
     currentTopic === "space" ? preferredPool(spaceTrumpPool(), difficulty) :
     preferredPool(jets, difficulty);
-  const shuffled = shuffle(pool.map((item) => item.id), seed + difficulty);
-  const first = shuffled[0];
-  const second = shuffled.find((id) => id !== first) ?? shuffled[1];
+  const shuffled = discoveryShuffle(pool.map((item) => ({ id: item.id, title: item.name })), seed + difficulty, unlockedTitles, (item) => item.title);
+  const first = shuffled[0].id;
+  const second = shuffled.find((item) => item.id !== first)?.id ?? shuffled[1].id;
   const player = topTrumpCard(currentTopic, first);
   const computer = topTrumpCard(currentTopic, second);
   if (!player || !computer) throw new Error(`Could not build Top Trumps round for ${currentTopic}`);
@@ -962,12 +962,12 @@ export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, se
   };
 };
 
-export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed: number): RevealRound => {
+export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []): RevealRound => {
   const currentTopic = topicOrder(topic, seed);
   const count = difficulty === 1 ? 3 : 4;
   const allCards = collectionCards();
   const topicCards = preferredPool(allCards.filter((card) => card.topic === currentTopic), difficulty);
-  const card = sample(topicCards, seed + 1);
+  const card = discoveryShuffle(topicCards, seed + 1, unlockedTitles, (item) => item.title)[0];
   const distractors = shuffle(topicCards.filter((item) => item.id !== card.id).map((item) => item.title), seed + 2).slice(0, count - 1);
 
   return {
@@ -1538,6 +1538,7 @@ export const buildGeoRoundFromCards = (
   topic: RoundTopic,
   difficulty: Difficulty,
   seed: number,
+  unlockedTitles: readonly string[] = [],
 ): GeoRound => {
   const count = geoChoiceCountForDifficulty(difficulty);
   const allLocatedCards = geoCards(cards);
@@ -1550,7 +1551,7 @@ export const buildGeoRoundFromCards = (
   });
   if (!eligibleCards.length) throw new Error(`Need at least ${count} well-separated mapped locations to build a geo round for ${topic}`);
 
-  const card = sample(eligibleCards, seed + 1);
+  const card = discoveryShuffle(eligibleCards, seed + 1, unlockedTitles, (item) => item.title)[0];
   const location = card.metadata.location;
   const point = pointForLocation(location);
   const answer = geoChoiceForLocation(location);
@@ -1574,12 +1575,12 @@ export const buildGeoRoundFromCards = (
   };
 };
 
-export const buildGeoRound = (topic: TopicScope, difficulty: Difficulty, seed: number): GeoRound => {
+export const buildGeoRound = (topic: TopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []): GeoRound => {
   const topics = new Set(topicsForScope(topic));
   const scopedCards = collectionCards().filter((card) => topics.has(card.topic as KnowledgeTopic));
-  if (canBuildGeoRoundFromCards(scopedCards, difficulty)) return buildGeoRoundFromCards(scopedCards, typeof topic === "string" ? topic : "mixed", difficulty, seed);
+  if (canBuildGeoRoundFromCards(scopedCards, difficulty)) return buildGeoRoundFromCards(scopedCards, typeof topic === "string" ? topic : "mixed", difficulty, seed, unlockedTitles);
   const fallbackCards = collectionCards().filter((card) => card.topic === "peppers" || card.topic === "buildings");
-  return buildGeoRoundFromCards(fallbackCards, "mixed", difficulty, seed + 97);
+  return buildGeoRoundFromCards(fallbackCards, "mixed", difficulty, seed + 97, unlockedTitles);
 };
 
 export const buildSortRoundFromCards = (
@@ -1612,6 +1613,7 @@ export const buildRevealRoundFromCards = (
   topic: RoundTopic,
   difficulty: Difficulty,
   seed: number,
+  unlockedTitles: readonly string[] = [],
 ): RevealRound => {
   if (cards.length < 3) throw new Error(`Need at least 3 cards to build a peek round for ${topic}`);
   const pool = preferredPool(cards, difficulty);
@@ -1620,7 +1622,7 @@ export const buildRevealRoundFromCards = (
   const askLocation = locationPool.length >= count && uniqueLocationLabels(locationPool).length >= count && seedRandom(seed + 4) > 0.42;
 
   if (askLocation) {
-    const card = sample(locationPool, seed + 1);
+    const card = discoveryShuffle(locationPool, seed + 1, unlockedTitles, (item) => item.title)[0];
     const location = card.metadata.location;
 
     return {
@@ -1634,7 +1636,7 @@ export const buildRevealRoundFromCards = (
     };
   }
 
-  const card = sample(pool, seed + 1);
+  const card = discoveryShuffle(pool, seed + 1, unlockedTitles, (item) => item.title)[0];
   const distractors = shuffle(pool.filter((item) => item.id !== card.id).map((item) => item.title), seed + 2).slice(0, count - 1);
 
   return {
@@ -1653,6 +1655,7 @@ export const buildFactRoundFromCards = (
   topic: RoundTopic,
   difficulty: Difficulty,
   seed: number,
+  unlockedTitles: readonly string[] = [],
 ): FactRound => {
   const pool = preferredPool(cardsWithStats(cards), difficulty);
   if (pool.length < 2) throw new Error(`Need at least 2 stat cards to build a fact round for ${topic}`);
@@ -1661,7 +1664,7 @@ export const buildFactRoundFromCards = (
   const useLocation = locationPool.length >= 2 && uniqueLocationLabels(locationPool).length >= 2 && (difficulty === 1 || seedRandom(seed + 14) > 0.5);
 
   if (useLocation) {
-    const card = sample(locationPool, seed + 12);
+    const card = discoveryShuffle(locationPool, seed + 12, unlockedTitles, (item) => item.title)[0];
     const location = card.metadata.location;
     const fakeCard = sampleSafe(
       locationPool.filter((item) => item.id !== card.id && item.metadata.location.label !== location.label),
@@ -1686,7 +1689,7 @@ export const buildFactRoundFromCards = (
     };
   }
 
-  const card = sample(pool, seed + 12);
+  const card = discoveryShuffle(pool, seed + 12, unlockedTitles, (item) => item.title)[0];
   const fakeCard = sampleSafe(pool.filter((item) => item.id !== card.id && item.statValue !== card.statValue), pool.filter((item) => item.id !== card.id), seed + 13);
   const useStat = difficulty > 1 || seedRandom(seed + 14) > 0.45;
   const statement = truthful
@@ -1862,10 +1865,11 @@ export const buildTopTrumpRoundFromCards = (
   topic: RoundTopic,
   difficulty: Difficulty,
   seed: number,
+  unlockedTitles: readonly string[] = [],
 ): TopTrumpRound => {
   const pool = preferredPool(cards.filter((card) => card.stats.length >= 2), difficulty);
   if (pool.length < 2) throw new Error(`Need at least 2 multi-stat cards to build a Top Trumps round for ${topic}`);
-  const shuffled = shuffle(pool, seed + difficulty);
+  const shuffled = discoveryShuffle(pool, seed + difficulty, unlockedTitles, (item) => item.title);
   const player = shuffled[0];
   const computer = shuffled.find((card) => card.id !== player.id && card.stats.some((stat) => player.stats.some((playerStat) => playerStat.id === stat.id))) ?? shuffled[1];
   const sharedStatIds = new Set(computer.stats.map((stat) => stat.id));
@@ -2458,17 +2462,17 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   };
 };
 
-export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: number): FactRound => {
+export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []): FactRound => {
   const currentTopic = topicOrder(topic, seed);
   const truthful = seedRandom(seed + 11) > 0.46;
 
   if (currentTopic === "peppers") {
     const pool = preferredPool(peppers, difficulty);
-    const pepper = sample(pool, seed + 12);
+    const pepper = discoveryShuffle(pool, seed + 12, unlockedTitles, (item) => item.name)[0];
     const locationPool = pool.filter(hasLocationMetadata);
     const useLocation = locationPool.length >= 2 && (difficulty === 1 ? seedRandom(seed + 15) > 0.35 : seedRandom(seed + 15) > 0.55);
     if (useLocation) {
-      const locatedPepper = hasLocationMetadata(pepper) ? pepper : sample(locationPool, seed + 16);
+      const locatedPepper = hasLocationMetadata(pepper) ? pepper : discoveryShuffle(locationPool, seed + 16, unlockedTitles, (item) => item.name)[0];
       const location = locatedPepper.metadata.location;
       const fakePepper = sampleSafe(
         locationPool.filter((item) => item.id !== locatedPepper.id && item.metadata.location.label !== location.label),

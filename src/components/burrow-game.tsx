@@ -391,11 +391,19 @@ const builtInScopeFor = (scope: PlayableTopicScope): TopicScope => {
   return scope === "mixed" || !isKnowledgeTopic(scope) ? "mixed" : scope;
 };
 
-const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficulty, sessionSeed: number, seenIds: string[], mixModes = defaultMixPattern): Question[] => {
+const buildQuestionRun = (
+  topic: TopicScope,
+  mode: GameMode,
+  difficulty: Difficulty,
+  sessionSeed: number,
+  seenIds: string[],
+  mixModes = defaultMixPattern,
+  unlockedTitles: readonly string[] = [],
+): Question[] => {
   if (mode === "mix") {
     const pattern = mixModes.length ? mixModes : defaultMixPattern;
-    const base = buildSession(topic, difficulty, sessionSeed, seenIds);
-    const versusQuestions = buildQuestionRun(topic, "versus", difficulty, sessionSeed + 503, seenIds);
+    const base = buildSession(topic, difficulty, sessionSeed, seenIds, unlockedTitles);
+    const versusQuestions = buildQuestionRun(topic, "versus", difficulty, sessionSeed + 503, seenIds, mixModes, unlockedTitles);
     let versusIndex = 0;
     return base.map((question, index) => {
       if (pattern[index % pattern.length] !== "versus") return question;
@@ -409,7 +417,7 @@ const buildQuestionRun = (topic: TopicScope, mode: GameMode, difficulty: Difficu
     return buildHeadToHeadSession(topic, difficulty, sessionSeed, seenIds);
   }
 
-  return buildSession(topic, difficulty, sessionSeed, seenIds);
+  return buildSession(topic, difficulty, sessionSeed, seenIds, unlockedTitles);
 };
 
 const difficultyLabel = (difficulty: Difficulty) => difficultyOptions.find((item) => item.id === difficulty)?.label ?? "Easy";
@@ -467,17 +475,17 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const deck = packDeckById.get(topicId);
     return deck ? buildSortRoundFromCards(deck.cards, topicId, difficulty, seed) : buildSortRound(topicId as KnowledgeTopic, difficulty, seed);
   }, [packDeckById, pickTopic]);
-  const buildFactForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number) => {
+  const buildFactForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []) => {
     const topicId = pickTopic(scope, seed);
     const deck = packDeckById.get(topicId);
-    return deck ? buildFactRoundFromCards(deck.cards, topicId, difficulty, seed) : buildFactRound(topicId as KnowledgeTopic, difficulty, seed);
+    return deck ? buildFactRoundFromCards(deck.cards, topicId, difficulty, seed, unlockedTitles) : buildFactRound(topicId as KnowledgeTopic, difficulty, seed, unlockedTitles);
   }, [packDeckById, pickTopic]);
-  const buildRevealForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number) => {
+  const buildRevealForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []) => {
     const topicId = pickTopic(scope, seed);
     const deck = packDeckById.get(topicId);
-    return deck ? buildRevealRoundFromCards(deck.cards, topicId, difficulty, seed) : buildRevealRound(topicId as KnowledgeTopic, difficulty, seed);
+    return deck ? buildRevealRoundFromCards(deck.cards, topicId, difficulty, seed, unlockedTitles) : buildRevealRound(topicId as KnowledgeTopic, difficulty, seed, unlockedTitles);
   }, [packDeckById, pickTopic]);
-  const buildGeoForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number) => {
+  const buildGeoForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []) => {
     const scopedTopics = scopeTopics(scope);
     const orderedTopics = [...scopedTopics].sort((a, b) => {
       const scoreA = Math.sin((seed + a.length * 17) * 97);
@@ -488,15 +496,15 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     for (const topicId of orderedTopics) {
       const deck = packDeckById.get(topicId);
       if (deck) {
-        if (canBuildGeoRoundFromCards(deck.cards, difficulty)) return buildGeoRoundFromCards(deck.cards, topicId, difficulty, seed + topicId.length);
+        if (canBuildGeoRoundFromCards(deck.cards, difficulty)) return buildGeoRoundFromCards(deck.cards, topicId, difficulty, seed + topicId.length, unlockedTitles);
       } else if (isKnowledgeTopic(topicId) && canBuildGeoRound(topicId, difficulty)) {
-        return buildGeoRound(topicId, difficulty, seed + topicId.length);
+        return buildGeoRound(topicId, difficulty, seed + topicId.length, unlockedTitles);
       }
     }
 
     // Geo is hidden when none of the selected topics can build a round. Keep a
     // valid background round so the shared game state can still initialize.
-    return buildGeoRound("mixed", difficulty, seed + 997);
+    return buildGeoRound("mixed", difficulty, seed + 997, unlockedTitles);
   }, [packDeckById, scopeTopics]);
   const buildNumberForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number) => {
     const topicId = pickTopic(scope, seed);
@@ -508,10 +516,10 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const deck = packDeckById.get(topicId);
     return deck ? buildOddRoundFromCards(deck.cards, topicId, difficulty, seed) : buildOddRound(topicId as KnowledgeTopic, difficulty, seed);
   }, [packDeckById, pickTopic]);
-  const buildTopTrumpForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number) => {
+  const buildTopTrumpForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []) => {
     const topicId = pickTopic(scope, seed);
     const deck = packDeckById.get(topicId);
-    return deck ? buildTopTrumpRoundFromCards(deck.cards, topicId, difficulty, seed) : buildTopTrumpRound(topicId as KnowledgeTopic, difficulty, seed);
+    return deck ? buildTopTrumpRoundFromCards(deck.cards, topicId, difficulty, seed, unlockedTitles) : buildTopTrumpRound(topicId as KnowledgeTopic, difficulty, seed, unlockedTitles);
   }, [packDeckById, pickTopic]);
   const [profilesState, setProfilesState] = useState<ProfilesState>(() => defaultProfiles());
   const [profilesReady, setProfilesReady] = useState(false);
@@ -522,24 +530,24 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const [mode, setMode] = useState<GameMode>("mix");
   const [mixModes, setMixModes] = useState<ChallengeMode[]>(() => [...defaultMixPattern]);
   const [showCollection, setShowCollection] = useState(false);
-  const [questions, setQuestions] = useState(() => buildQuestionRun(builtInScopeFor(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics)), "mix", progress.difficulty, 20260430, progress.seenIds));
+  const [questions, setQuestions] = useState(() => buildQuestionRun(builtInScopeFor(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics)), "mix", progress.difficulty, 20260430, progress.seenIds, defaultMixPattern, progress.unlockedCards));
   const [seedCounter, setSeedCounter] = useState(20260430);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [sortRound, setSortRound] = useState<SortRound>(() => buildSortForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430));
   const [sortPicked, setSortPicked] = useState<string[]>([]);
   const [sortChecked, setSortChecked] = useState(false);
-  const [factRound, setFactRound] = useState<FactRound>(() => buildFactForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430));
+  const [factRound, setFactRound] = useState<FactRound>(() => buildFactForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430, progress.unlockedCards));
   const [factSelected, setFactSelected] = useState<"True" | "False" | null>(null);
-  const [revealRound, setRevealRound] = useState<RevealRound>(() => buildRevealForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430));
+  const [revealRound, setRevealRound] = useState<RevealRound>(() => buildRevealForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430, progress.unlockedCards));
   const [revealSelected, setRevealSelected] = useState<string | null>(null);
-  const [geoRound, setGeoRound] = useState<GeoRound>(() => buildGeoForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430));
+  const [geoRound, setGeoRound] = useState<GeoRound>(() => buildGeoForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430, progress.unlockedCards));
   const [geoSelected, setGeoSelected] = useState<string | null>(null);
   const [numberRound, setNumberRound] = useState<NumberRound>(() => buildNumberForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430));
   const [numberSelected, setNumberSelected] = useState<number | null>(null);
   const [oddRound, setOddRound] = useState<OddRound>(() => buildOddForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430));
   const [oddSelected, setOddSelected] = useState<string | null>(null);
-  const [topTrumpRound, setTopTrumpRound] = useState<TopTrumpRound>(() => buildTopTrumpForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430));
+  const [topTrumpRound, setTopTrumpRound] = useState<TopTrumpRound>(() => buildTopTrumpForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430, progress.unlockedCards));
   const [topTrumpSelected, setTopTrumpSelected] = useState<string | null>(null);
   const [sessionCorrect, setSessionCorrect] = useState(0);
   const [miniRunAnswered, setMiniRunAnswered] = useState(0);
@@ -634,14 +642,14 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       const loadedInterests = normalizeInterests(loadedProfile.interests, playableTopics);
       const loadedScope = adaptiveTopicScopeFor("mixed", loadedInterests, loadedProfile.progress, playableTopics);
       setProfilesState(loadedProfiles);
-      setQuestions(buildQuestionRun(builtInScopeFor(loadedScope), "mix", loadedProfile.progress.difficulty, 20260430, loadedProfile.progress.seenIds));
+      setQuestions(buildQuestionRun(builtInScopeFor(loadedScope), "mix", loadedProfile.progress.difficulty, 20260430, loadedProfile.progress.seenIds, defaultMixPattern, loadedProfile.progress.unlockedCards));
       setSortRound(buildSortForScope(loadedScope, loadedProfile.progress.difficulty, 20260461));
-      setFactRound(buildFactForScope(loadedScope, loadedProfile.progress.difficulty, 20260477));
-      setRevealRound(buildRevealForScope(loadedScope, loadedProfile.progress.difficulty, 20260493));
-      setGeoRound(buildGeoForScope(loadedScope, loadedProfile.progress.difficulty, 20260503));
+      setFactRound(buildFactForScope(loadedScope, loadedProfile.progress.difficulty, 20260477, loadedProfile.progress.unlockedCards));
+      setRevealRound(buildRevealForScope(loadedScope, loadedProfile.progress.difficulty, 20260493, loadedProfile.progress.unlockedCards));
+      setGeoRound(buildGeoForScope(loadedScope, loadedProfile.progress.difficulty, 20260503, loadedProfile.progress.unlockedCards));
       setNumberRound(buildNumberForScope(loadedScope, loadedProfile.progress.difficulty, 20260513));
       setOddRound(buildOddForScope(loadedScope, loadedProfile.progress.difficulty, 20260523));
-      setTopTrumpRound(buildTopTrumpForScope(loadedScope, loadedProfile.progress.difficulty, 20260531));
+      setTopTrumpRound(buildTopTrumpForScope(loadedScope, loadedProfile.progress.difficulty, 20260531, loadedProfile.progress.unlockedCards));
       setIssueCount(loadContentIssues().length);
       setProfilesReady(true);
     }, 0);
@@ -1102,14 +1110,14 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const scope = adaptiveTopicScopeFor(safeTopic, nextInterests, nextProfile.progress, playableTopics);
     setTopic(safeTopic);
     resetRunState();
-    setQuestions(buildQuestionRun(builtInScopeFor(scope), nextMode, nextProfile.progress.difficulty, seed, nextProfile.progress.seenIds, selectedMixModes));
+    setQuestions(buildQuestionRun(builtInScopeFor(scope), nextMode, nextProfile.progress.difficulty, seed, nextProfile.progress.seenIds, selectedMixModes, nextProfile.progress.unlockedCards));
     setSortRound(buildSortForScope(scope, nextProfile.progress.difficulty, seed + 31));
-    setFactRound(buildFactForScope(scope, nextProfile.progress.difficulty, seed + 47));
-    setRevealRound(buildRevealForScope(scope, nextProfile.progress.difficulty, seed + 61));
-    setGeoRound(buildGeoForScope(scope, nextProfile.progress.difficulty, seed + 73));
+    setFactRound(buildFactForScope(scope, nextProfile.progress.difficulty, seed + 47, nextProfile.progress.unlockedCards));
+    setRevealRound(buildRevealForScope(scope, nextProfile.progress.difficulty, seed + 61, nextProfile.progress.unlockedCards));
+    setGeoRound(buildGeoForScope(scope, nextProfile.progress.difficulty, seed + 73, nextProfile.progress.unlockedCards));
     setNumberRound(buildNumberForScope(scope, nextProfile.progress.difficulty, seed + 89));
     setOddRound(buildOddForScope(scope, nextProfile.progress.difficulty, seed + 97));
-    setTopTrumpRound(buildTopTrumpForScope(scope, nextProfile.progress.difficulty, seed + 113));
+    setTopTrumpRound(buildTopTrumpForScope(scope, nextProfile.progress.difficulty, seed + 113, nextProfile.progress.unlockedCards));
   };
 
   const setQuestionDifficulty = (nextDifficulty: Difficulty) => {
@@ -1118,14 +1126,14 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     recordSetupEvent("difficulty", difficultyLabel(nextDifficulty), nextDifficulty);
     setProgress((current) => ({ ...current, difficulty: nextDifficulty }));
     resetRunState();
-    setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, nextDifficulty, seed, progress.seenIds, selectedMixModes));
+    setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, nextDifficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards));
     setSortRound(buildSortForScope(currentTopicScope, nextDifficulty, seed + 41));
-    setFactRound(buildFactForScope(currentTopicScope, nextDifficulty, seed + 47));
-    setRevealRound(buildRevealForScope(currentTopicScope, nextDifficulty, seed + 53));
-    setGeoRound(buildGeoForScope(currentTopicScope, nextDifficulty, seed + 59));
+    setFactRound(buildFactForScope(currentTopicScope, nextDifficulty, seed + 47, progress.unlockedCards));
+    setRevealRound(buildRevealForScope(currentTopicScope, nextDifficulty, seed + 53, progress.unlockedCards));
+    setGeoRound(buildGeoForScope(currentTopicScope, nextDifficulty, seed + 59, progress.unlockedCards));
     setNumberRound(buildNumberForScope(currentTopicScope, nextDifficulty, seed + 67));
     setOddRound(buildOddForScope(currentTopicScope, nextDifficulty, seed + 71));
-    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, nextDifficulty, seed + 79));
+    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, nextDifficulty, seed + 79, progress.unlockedCards));
     setCelebration(`${difficultyLabel(nextDifficulty)} questions.`);
   };
 
@@ -1214,14 +1222,14 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setShowCollection(false);
     setMixModes(safeModes);
     resetRunState();
-    setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), "mix", progress.difficulty, seed, progress.seenIds, safeModes));
+    setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), "mix", progress.difficulty, seed, progress.seenIds, safeModes, progress.unlockedCards));
     setSortRound(buildSortForScope(currentTopicScope, progress.difficulty, seed + 29));
-    setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed + 37));
-    setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed + 43));
-    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed + 47));
+    setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed + 37, progress.unlockedCards));
+    setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed + 43, progress.unlockedCards));
+    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed + 47, progress.unlockedCards));
     setNumberRound(buildNumberForScope(currentTopicScope, progress.difficulty, seed + 53));
     setOddRound(buildOddForScope(currentTopicScope, progress.difficulty, seed + 59));
-    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed + 67));
+    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed + 67, progress.unlockedCards));
     setCelebration(message);
   };
 
@@ -1300,7 +1308,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       setProgress((current) => ({ ...current, sessions: current.sessions + 1 }));
       setQuestionIndex(0);
       setSessionCorrect(0);
-      setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, progress.difficulty, seed, progress.seenIds, selectedMixModes));
+      setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, progress.difficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards));
       setCelebration("New mixed run. Fresh shuffle.");
     } else {
       setQuestionIndex((value) => value + 1);
@@ -1317,12 +1325,12 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setOddSelected(null);
     setTopTrumpSelected(null);
     setSortRound(buildSortForScope(currentTopicScope, progress.difficulty, seed + 29));
-    setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed + 37));
-    setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed + 43));
-    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed + 47));
+    setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed + 37, progress.unlockedCards));
+    setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed + 43, progress.unlockedCards));
+    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed + 47, progress.unlockedCards));
     setNumberRound(buildNumberForScope(currentTopicScope, progress.difficulty, seed + 53));
     setOddRound(buildOddForScope(currentTopicScope, progress.difficulty, seed + 59));
-    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed + 67));
+    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed + 67, progress.unlockedCards));
   };
 
   const advance = () => {
@@ -1339,7 +1347,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       setSessionCorrect(0);
       setSelected(null);
       setLastResult(null);
-      setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, progress.difficulty, seed, progress.seenIds, selectedMixModes));
+      setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, progress.difficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards));
       setCelebration("New mini-session. Fresh challenges.");
       return;
     }
@@ -1447,7 +1455,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const nextFactRound = () => {
     if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 19);
-    setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed));
+    setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed, progress.unlockedCards));
     setFactSelected(null);
     setLastResult(null);
     setCelebration("New fact card.");
@@ -1508,7 +1516,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const nextRevealRound = () => {
     if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 23);
-    setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed));
+    setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed, progress.unlockedCards));
     setRevealSelected(null);
     setLastResult(null);
     setCelebration("New picture peek.");
@@ -1567,7 +1575,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const nextGeoRound = () => {
     if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 29);
-    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed));
+    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed, progress.unlockedCards));
     setGeoSelected(null);
     setLastResult(null);
     setCelebration("New map clue.");
@@ -1760,7 +1768,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const nextTopTrumpRound = () => {
     if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 41);
-    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed));
+    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed, progress.unlockedCards));
     setTopTrumpSelected(null);
     setLastResult(null);
     setCelebration("New Top Trumps deal.");
@@ -1805,14 +1813,14 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     recordSetupEvent("reset-progress", "confirmed", reset.difficulty);
     setProgress(reset);
     setShowCollection(false);
-    setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, reset.difficulty, seed, reset.seenIds, selectedMixModes));
+    setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, reset.difficulty, seed, reset.seenIds, selectedMixModes, reset.unlockedCards));
     setSortRound(buildSortForScope(currentTopicScope, reset.difficulty, seed + 29));
-    setFactRound(buildFactForScope(currentTopicScope, reset.difficulty, seed + 37));
-    setRevealRound(buildRevealForScope(currentTopicScope, reset.difficulty, seed + 43));
-    setGeoRound(buildGeoForScope(currentTopicScope, reset.difficulty, seed + 47));
+    setFactRound(buildFactForScope(currentTopicScope, reset.difficulty, seed + 37, reset.unlockedCards));
+    setRevealRound(buildRevealForScope(currentTopicScope, reset.difficulty, seed + 43, reset.unlockedCards));
+    setGeoRound(buildGeoForScope(currentTopicScope, reset.difficulty, seed + 47, reset.unlockedCards));
     setNumberRound(buildNumberForScope(currentTopicScope, reset.difficulty, seed + 53));
     setOddRound(buildOddForScope(currentTopicScope, reset.difficulty, seed + 59));
-    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, reset.difficulty, seed + 67));
+    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, reset.difficulty, seed + 67, reset.unlockedCards));
     resetRunState();
     setCelebration("Progress reset. Fresh start.");
   };
