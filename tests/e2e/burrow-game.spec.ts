@@ -638,12 +638,41 @@ test("geo finder stays inside the selected topic", async ({ page }) => {
 
 test("collection only shows selected topics", async ({ page }) => {
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+  await page.evaluate(() => {
+    const key = "burrow-profiles-v1";
+    const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
+      activeProfileId: string;
+      profiles: { id: string; progress: { unlockedCards: string[] } }[];
+    };
+    const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
+    if (!active) throw new Error("Active profile was not saved");
+    active.progress.unlockedCards = ["Naga Jolokia", "Chocolate Bhutlah"];
+    window.localStorage.setItem(key, JSON.stringify(profiles));
+  });
+  await page.reload();
+  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await page.getByRole("button", { name: /Cards/ }).click();
 
   const collection = page.getByText("Collection", { exact: true }).locator("xpath=ancestor::section[1]");
   await expect(collection.getByText("Spicy Peppers", { exact: true })).toBeVisible();
   await expect(collection.getByText("Shark Tank", { exact: true })).toHaveCount(0);
   await expect(collection.getByText("Tallest Mountains", { exact: true })).toHaveCount(0);
+
+  const featuredPhotos = collection.getByRole("img", { name: /Naga Jolokia|Chocolate Bhutlah/ });
+  await expect(featuredPhotos).toHaveCount(2);
+  const photoLayout = await featuredPhotos.evaluateAll((photos) => photos.map((photo) => {
+    const imageBox = photo.getBoundingClientRect();
+    const frameBox = photo.parentElement?.getBoundingClientRect();
+    return {
+      alt: photo.getAttribute("alt"),
+      src: photo.getAttribute("src"),
+      fullyContained: Boolean(frameBox) && imageBox.top >= frameBox.top - 1 && imageBox.bottom <= frameBox.bottom + 1,
+    };
+  }));
+  expect(photoLayout).toEqual([
+    expect.objectContaining({ alt: "Naga Jolokia", src: "/burrow-assets/peppers/naga-jolokia-fruiting-plant.jpg", fullyContained: true }),
+    expect.objectContaining({ alt: "Chocolate Bhutlah", src: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
+  ]);
 });
 
 test("playable dinosaur pack appears in setup topics", async ({ page }) => {
