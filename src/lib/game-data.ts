@@ -196,10 +196,10 @@ const pepperSeeds: PepperSeed[] = [
     id: "jimmy-nardello",
     name: "Jimmy Nardello",
     shuMin: 0,
-    shuMax: 500,
+    shuMax: 100,
     color: "red",
     ...generatedContentImage("peppers", "jimmy-nardello"),
-    fact: "Jimmy Nardello peppers are long, red Italian frying peppers known for sweetness and very little heat.",
+    fact: "Jimmy Nardello peppers are long, sweet Italian frying peppers with only 0 to 100 SHU.",
   },
   {
     id: "banana-pepper",

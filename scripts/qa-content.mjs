@@ -36,6 +36,9 @@ const critical = [];
 const warnings = [];
 const validDifficultyBands = new Set(["easy", "medium", "hard"]);
 const validWorldContinents = new Set(["Africa", "Antarctica", "Asia", "Europe", "North America", "South America", "Oceania"]);
+const sourceVerifiedScovilleRanges = new Map([
+  ["jimmy-nardello", { min: 0, max: 100, source: "https://www.tyler-farms.com/jimmy-nardello-sweet-italian-pepper-seeds/" }],
+]);
 
 const isImageFile = (target) => {
   const buffer = fs.readFileSync(target);
@@ -149,6 +152,12 @@ const checkFeaturedMetadata = (item) => {
     const isUnpublished = item.shuMin === null && item.shuMax === null && item.scovilleStatus === "unpublished";
     const hasUnofficialLowerBound = typeof item.shuMin === "number" && item.shuMin >= 0 && item.shuMax === null && item.scovilleStatus === "unofficial";
     if (!hasRange && !isUnpublished && !hasUnofficialLowerBound) critical.push(`${item.topic}/${item.id}: bad Scoville range`);
+    const expectedHeat = data.heatBandForScoville(item.shuMax ?? item.shuMin ?? 500001);
+    if (item.heat !== expectedHeat) critical.push(`${item.topic}/${item.id}: heat band ${item.heat} does not match its Scoville range (${expectedHeat})`);
+    const verified = sourceVerifiedScovilleRanges.get(item.id);
+    if (verified && (item.shuMin !== verified.min || item.shuMax !== verified.max)) {
+      critical.push(`${item.topic}/${item.id}: expected source-verified ${verified.min}-${verified.max} SHU (${verified.source})`);
+    }
   }
   if (item.topic === "buildings" && !(item.heightFt > 0 && item.city && item.country)) critical.push(`${item.topic}/${item.id}: bad building metadata`);
   if (item.topic === "sharks" && !(item.lengthFt > 0 && item.speedMph > 0 && item.power > 0 && item.family)) critical.push(`${item.topic}/${item.id}: bad shark metadata`);
@@ -206,6 +215,15 @@ for (const item of featuredItems) {
 assertDistinctImageGroups(featuredItems, "featuredItems");
 
 const cards = collectionCards();
+for (const pepper of data.peppers) {
+  const card = cards.find((item) => item.topic === "peppers" && item.id === pepper.id);
+  if (!card) {
+    critical.push(`peppers/${pepper.id}: missing collection card`);
+    continue;
+  }
+  if (pepper.shuMax !== null && card.statValue !== pepper.shuMax) critical.push(`peppers/${pepper.id}: card Scoville value does not match shuMax`);
+  if (pepper.shuMax === null && Number.isFinite(card.statValue)) critical.push(`peppers/${pepper.id}: unpublished maximum must not become a numeric card value`);
+}
 for (const card of cards.filter((item) => item.topic === "buildings")) {
   if (!card.metadata?.location) critical.push(`buildings/${card.id}: missing world location metadata`);
 }
@@ -494,6 +512,10 @@ const result = {
     sharks: library.sharkLibrary.length,
     buildings: library.buildingLibrary.length,
     jets: library.jetLibrary.length,
+  },
+  scovilleValidation: {
+    pepperRanges: data.peppers.length,
+    sourceVerifiedRanges: sourceVerifiedScovilleRanges.size,
   },
   warnings: warnings.slice(0, 30),
   warningCount: warnings.length,

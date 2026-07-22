@@ -102,6 +102,15 @@ const mathFixtureCards: GenericKnowledgeCard[] = [12, 20, 35, 48].map((value, in
   stats: [{ id: "length", label: "Length", value, display: `${value} ft`, direction: "higher" }],
 }));
 
+test("source-verified Scoville ranges stay accurate", () => {
+  expect(peppers.find((pepper) => pepper.id === "jimmy-nardello")).toMatchObject({
+    name: "Jimmy Nardello",
+    shuMin: 0,
+    shuMax: 100,
+    heat: "not spicy",
+  });
+});
+
 test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate marked unofficial", () => {
   const newPeppers = Object.fromEntries(
     peppers
