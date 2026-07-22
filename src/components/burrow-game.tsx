@@ -26,6 +26,7 @@ import {
   canBuildGeoRoundFromCards,
   canBuildGeoRound,
   modeOptions,
+  orderCollectionCardsByScoville,
   type FactRound,
   type GeoRound,
   type GameMode,
@@ -3506,7 +3507,7 @@ function CollectionBook({
     wins: number;
   }[];
 }) {
-  const filtered = topic === "mixed" ? cards : cards.filter((card) => card.topic === topic);
+  const filtered = orderCollectionCardsByScoville(topic === "mixed" ? cards : cards.filter((card) => card.topic === topic));
   const unlocked = filtered.filter((card) => unlockedCards.includes(card.title));
   const topicCounts = Object.fromEntries(topicStats.map((item) => [
     item.id,

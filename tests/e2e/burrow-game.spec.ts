@@ -15,6 +15,7 @@ import {
   buildSortRound,
   buildTopTrumpRound,
   collectionCards,
+  orderCollectionCardsByScoville,
   type GenericKnowledgeCard,
 } from "../../src/lib/game-modes";
 import { buildSession } from "../../src/lib/questions";
@@ -149,6 +150,16 @@ test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate ma
     expect(visibleNoahCount).toBeGreaterThan(200);
     expect(visibleNoahCount).toBeLessThan(discoveryRounds.length);
   }
+});
+
+test("pepper collection cards run from least to most Scoville heat", () => {
+  const ordered = orderCollectionCardsByScoville(collectionCards().filter((card) => card.topic === "peppers"));
+  const measured = ordered.filter((card) => Number.isFinite(card.statValue));
+  const unpublished = ordered.filter((card) => !Number.isFinite(card.statValue));
+
+  expect(ordered[0].title).toBe("Bell Pepper");
+  expect(measured.map((card) => card.statValue)).toEqual([...measured].map((card) => card.statValue).sort((a, b) => a - b));
+  expect(ordered.slice(-unpublished.length).map((card) => card.id)).toEqual(unpublished.map((card) => card.id));
 });
 
 test("every topic offers sensible addition, subtraction, and multiplication rounds", () => {

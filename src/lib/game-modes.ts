@@ -384,6 +384,19 @@ export const collectionCards = (): KnowledgeCard[] => [
   ...jets.map((jet) => jetCard(jet)),
 ];
 
+export const orderCollectionCardsByScoville = (cards: readonly KnowledgeCard[]): KnowledgeCard[] => {
+  const peppersByHeat = cards
+    .filter((card) => card.topic === "peppers")
+    .sort((a, b) => {
+      const aScoville = Number.isFinite(a.statValue) ? a.statValue : Number.POSITIVE_INFINITY;
+      const bScoville = Number.isFinite(b.statValue) ? b.statValue : Number.POSITIVE_INFINITY;
+      return aScoville - bScoville || a.title.localeCompare(b.title);
+    });
+  let pepperIndex = 0;
+
+  return cards.map((card) => card.topic === "peppers" ? peppersByHeat[pepperIndex++] : card);
+};
+
 const pepperSizeInches: Record<string, number> = {
   "bell-pepper": 4,
   "banana-pepper": 6,
