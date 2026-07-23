@@ -214,7 +214,7 @@ test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate ma
   }
 });
 
-test("Orange Butch T and Goat Trail join normal pepper play with Goat Trail's SHU left unpublished", () => {
+test("Orange Butch T and Goat Trail join normal pepper play with Goat Trail's cayenne-based estimate marked unofficial", () => {
   const newPeppers = Object.fromEntries(
     peppers
       .filter((pepper) => ["orange-butch-t", "goat-trail"].includes(pepper.id))
@@ -232,19 +232,19 @@ test("Orange Butch T and Goat Trail join normal pepper play with Goat Trail's SH
   });
   expect(newPeppers["goat-trail"]).toMatchObject({
     name: "Goat Trail",
-    shuMin: null,
-    shuMax: null,
+    shuMin: 30000,
+    shuMax: 50000,
     heat: "hot",
-    scovilleStatus: "unpublished",
+    scovilleStatus: "unofficial",
     color: "bright red",
     image: "/burrow-assets/peppers/goat-trail.png",
   });
-  expect(newPeppers["goat-trail"].metadata?.accuracyNote).toContain("publishes no SHU score");
+  expect(newPeppers["goat-trail"].metadata?.accuracyNote).toContain("unofficial estimate");
 
   const goatTrailCard = collectionCards().find((card) => card.id === "goat-trail");
-  expect(goatTrailCard?.statDisplay).toBe("SHU not published");
-  expect(goatTrailCard?.subStat).toContain("SHU not published");
-  expect(Number.isNaN(goatTrailCard?.statValue)).toBe(true);
+  expect(goatTrailCard?.statDisplay).toBe("~50,000 SHU (unofficial)");
+  expect(goatTrailCard?.subStat).toContain("25,001-50,000 SHU");
+  expect(goatTrailCard?.statValue).toBe(50000);
 
   for (const difficulty of [1, 2, 3] as const) {
     const ordinaryQuestions = Array.from({ length: 150 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, [])).flat();
@@ -253,7 +253,7 @@ test("Orange Butch T and Goat Trail join normal pepper play with Goat Trail's SH
   }
 
   for (let seed = 0; seed < 100; seed += 1) {
-    expect(buildSortRound("peppers", 3, seed).cards.every((card) => card.id !== "goat-trail" && Number.isFinite(card.statValue))).toBe(true);
+    expect(buildSortRound("peppers", 3, seed).cards.every((card) => Number.isFinite(card.statValue))).toBe(true);
   }
 });
 
@@ -788,7 +788,7 @@ test("collection only shows selected topics", async ({ page }) => {
   }));
   expect(photoLayout).toEqual([
     expect.objectContaining({ alt: "Habanada", src: "/burrow-assets/peppers/habanada.jpg", fullyContained: true }),
-    expect.objectContaining({ alt: "Naga Jolokia", src: "/burrow-assets/peppers/naga-jolokia-closeup.jpg", fullyContained: true }),
+    expect.objectContaining({ alt: "Naga Jolokia", src: "/burrow-assets/peppers/naga-jolokia.png", fullyContained: true }),
     expect.objectContaining({ alt: "7 Pot Douglah", src: "/burrow-assets/peppers/seven-pot-douglah.jpg", fullyContained: true }),
     expect.objectContaining({ alt: "Chocolate Bhutlah", src: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
   ]);

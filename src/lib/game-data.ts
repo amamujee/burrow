@@ -353,8 +353,7 @@ const pepperSeeds: PepperSeed[] = [
     shuMin: 855000,
     shuMax: 1041427,
     color: "red-orange",
-    ...contentImage("peppers", "naga-jolokia-closeup", "Bhut-Jolokia-plant.jpg"),
-    imageCredit: "Chella p, Wikimedia Commons",
+    ...generatedContentImage("peppers", "naga-jolokia"),
     fact: "Naga Jolokia is another name used for the ghost pepper from Northeast India, which can pass one million SHU.",
   },
   {
@@ -700,15 +699,14 @@ const pepperSeeds: PepperSeed[] = [
   {
     id: "goat-trail",
     name: "Goat Trail",
-    heat: "hot",
-    shuMin: null,
-    shuMax: null,
-    scovilleStatus: "unpublished",
+    shuMin: 30000,
+    shuMax: 50000,
+    scovilleStatus: "unofficial",
     color: "bright red",
     ...generatedContentImage("peppers", "goat-trail"),
     fact: "Goat Trail is a slender cayenne-type pepper that ripens from green to bright red and is enjoyed in China and Southeast Asia.",
     metadata: {
-      accuracyNote: "PuckerButt describes Goat Trail as a spicy cayenne-type pepper but publishes no SHU score, origin, or fruit dimensions. Its hot band and 5-inch fruit size are descriptive cayenne-type estimates; the 3-foot plant height uses the top of the breeder's published 2-to-3-foot range.",
+      accuracyNote: "PuckerButt publishes no Goat Trail SHU measurement. The 30,000-to-50,000 SHU range is an unofficial estimate based on the breeder's cayenne-type description; the 5-inch fruit size is likewise a cayenne-type estimate, and the 3-foot plant height uses the top of the breeder's published 2-to-3-foot range.",
     },
   },
   {
