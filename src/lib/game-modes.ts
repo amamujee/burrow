@@ -250,7 +250,7 @@ const pepperHeatExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
   ? `${pepper.name} can reach ${pepperScovilleDisplay(pepper)}, so it is ${pepper.heat} (${heatBandRangeLabel(pepper.heat)}). Its full range is ${pepperRange(pepper)} SHU.`
   : pepper.shuMin !== null
     ? `${pepper.name} is placed at ${pepperScovilleDisplay(pepper)}, so it is ${pepper.heat}; that lower bound is unofficial because no lab score has been published.`
-  : `${pepper.name} is described by its breeder as an extremely hot super-hot, but no Scoville measurement has been published.`;
+  : `${pepper.name}'s ${pepper.heat} label is descriptive because no Scoville measurement has been published.`;
 const heatRank = Object.fromEntries(heatBands.map((heat, index) => [heat, index])) as Record<HeatBand, number>;
 const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   id: pepper.id,
@@ -262,7 +262,7 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   statLabel: "Scoville",
   statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : Number.NaN,
   statDisplay: pepperScovilleDisplay(pepper),
-  subStat: `${heatProfiles[pepper.heat].label} · ${hasScovilleMeasurement(pepper) ? heatBandRangeLabel(pepper.heat) : "unmeasured super-hot"} · ${heatProfiles[pepper.heat].emoji}`,
+  subStat: `${heatProfiles[pepper.heat].label} · ${hasScovilleMeasurement(pepper) ? heatBandRangeLabel(pepper.heat) : "SHU not published"} · ${heatProfiles[pepper.heat].emoji}`,
   fact: pepper.fact,
   qualityScore: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).score,
   qualityFlags: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).flags,
@@ -418,6 +418,7 @@ const pepperSizeInches: Record<string, number> = {
   "chocolate-bhutlah": 2,
   "trinidad-scorpion": 2,
   "trinidad-scorpion-butch-t": 2,
+  "orange-butch-t": 2,
   "carolina-reaper": 2,
   "dragons-breath": 1.5,
   armageddon: 2,
@@ -447,6 +448,7 @@ const pepperSizeInches: Record<string, number> = {
   "bishop-crown": 2,
   "fish-pepper": 3,
   "goat-pepper": 2,
+  "goat-trail": 5,
   pequin: 0.8,
   "naga-viper": 2,
   "komodo-dragon": 2,
@@ -508,6 +510,7 @@ const pepperPlantHeightInches: Record<string, number> = {
   "chocolate-bhutlah": 48,
   "trinidad-scorpion": 48,
   "trinidad-scorpion-butch-t": 48,
+  "orange-butch-t": 36,
   "carolina-reaper": 48,
   "dragons-breath": 42,
   "pepper-x": 42,
@@ -537,6 +540,7 @@ const pepperPlantHeightInches: Record<string, number> = {
   "bishop-crown": 48,
   "fish-pepper": 24,
   "goat-pepper": 36,
+  "goat-trail": 36,
   pequin: 36,
   "naga-viper": 42,
   "komodo-dragon": 42,

@@ -53,6 +53,7 @@ const sourceVerifiedScovilleRanges = new Map([
   ["purple-thai", { min: 50000, max: 100000, source: "https://www.tyler-farms.com/purple-thai-pepper-seeds/" }],
   ["naga-morich", { min: 1000000, max: 1500000, source: "https://www.tyler-farms.com/naga-morich-pepper-seeds/" }],
   ["seven-pot-douglah", { min: 1150000, max: 1800000, source: "https://www.tyler-farms.com/7-pot-douglah-pepper-seeds/" }],
+  ["orange-butch-t", { min: 800000, max: 1463700, source: "https://bonnieplants.com/products/orange-butch-t-hot-pepper" }],
 ]);
 
 const isImageFile = (target) => {
@@ -168,7 +169,8 @@ const checkFeaturedMetadata = (item) => {
     const hasUnofficialLowerBound = typeof item.shuMin === "number" && item.shuMin >= 0 && item.shuMax === null && item.scovilleStatus === "unofficial";
     if (!hasRange && !isUnpublished && !hasUnofficialLowerBound) critical.push(`${item.topic}/${item.id}: bad Scoville range`);
     const expectedHeat = data.heatBandForScoville(item.shuMax ?? item.shuMin ?? 500001);
-    if (item.heat !== expectedHeat) critical.push(`${item.topic}/${item.id}: heat band ${item.heat} does not match its Scoville range (${expectedHeat})`);
+    if (!isUnpublished && item.heat !== expectedHeat) critical.push(`${item.topic}/${item.id}: heat band ${item.heat} does not match its Scoville range (${expectedHeat})`);
+    if (isUnpublished && !item.metadata?.accuracyNote) critical.push(`${item.topic}/${item.id}: unpublished Scoville score needs metadata.accuracyNote`);
     const verified = sourceVerifiedScovilleRanges.get(item.id);
     if (verified && (item.shuMin !== verified.min || item.shuMax !== verified.max)) {
       critical.push(`${item.topic}/${item.id}: expected source-verified ${verified.min}-${verified.max} SHU (${verified.source})`);

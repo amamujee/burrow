@@ -35,7 +35,7 @@ export type Pepper = {
   metadata?: CardMetadata;
 };
 
-type PepperSeed = Omit<Pepper, "heat">;
+type PepperSeed = Omit<Pepper, "heat"> & { heat?: HeatBand };
 
 export type Building = {
   id: string;
@@ -398,6 +398,18 @@ const pepperSeeds: PepperSeed[] = [
     fact: "Trinidad Scorpion Butch T is a super-hot pepper that once held a world heat record.",
   },
   {
+    id: "orange-butch-t",
+    name: "Orange Butch T",
+    shuMin: 800000,
+    shuMax: 1463700,
+    color: "orange",
+    ...generatedContentImage("peppers", "orange-butch-t"),
+    fact: "Orange Butch T is an orange hybrid descended from the record-setting red Butch T, with the same fruity flavor and warning-shaped scorpion stinger.",
+    metadata: {
+      accuracyNote: "Bonnie Plants lists 800,000 to 1,463,700 SHU for this orange hybrid but does not cite a separate cultivar-specific lab test.",
+    },
+  },
+  {
     id: "carolina-reaper",
     name: "Carolina Reaper",
     shuMin: 1400000,
@@ -684,6 +696,20 @@ const pepperSeeds: PepperSeed[] = [
     ...contentImage("peppers", "goat-pepper", "Capsicum chinense fruit.png"),
     imageCredit: "The Lord of the Allosaurs, Wikimedia Commons",
     fact: "Goat peppers are Caribbean hot peppers with fruity habanero-like heat.",
+  },
+  {
+    id: "goat-trail",
+    name: "Goat Trail",
+    heat: "hot",
+    shuMin: null,
+    shuMax: null,
+    scovilleStatus: "unpublished",
+    color: "bright red",
+    ...generatedContentImage("peppers", "goat-trail"),
+    fact: "Goat Trail is a slender cayenne-type pepper that ripens from green to bright red and is enjoyed in China and Southeast Asia.",
+    metadata: {
+      accuracyNote: "PuckerButt describes Goat Trail as a spicy cayenne-type pepper but publishes no SHU score, origin, or fruit dimensions. Its hot band and 5-inch fruit size are descriptive cayenne-type estimates; the 3-foot plant height uses the top of the breeder's published 2-to-3-foot range.",
+    },
   },
   {
     id: "pequin",
@@ -1142,7 +1168,7 @@ const pepperMetadataFor = (id: string): CardMetadata | undefined => {
 
 export const peppers = pepperSeeds.map((pepper) => ({
   ...pepper,
-  heat: heatBandForScoville(pepper.shuMax ?? pepper.shuMin ?? 500001),
+  heat: pepper.heat ?? heatBandForScoville(pepper.shuMax ?? pepper.shuMin ?? 500001),
   metadata: pepper.metadata || pepperMetadataFor(pepper.id)
     ? { ...pepperMetadataFor(pepper.id), ...pepper.metadata }
     : undefined,
@@ -3229,6 +3255,8 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
       { label: "PepperScale chile guides", url: "https://pepperscale.com/" },
       { label: "Epicurious pepper tasting", url: "https://www.epicurious.com/video/watch/hot-takes-pepper-x-creator-ed-currie-blind-tastes-12-of-the-worlds-hottest-peppers" },
       { label: "Tozer Seeds Armageddon profile", url: "https://www.tozerseeds.com/wp-content/uploads/2021/10/Pepper-Armageddon-TZ-6415-2021-TSA.pdf" },
+      { label: "Bonnie Plants Orange Butch T profile", url: "https://bonnieplants.com/products/orange-butch-t-hot-pepper" },
+      { label: "PuckerButt Goat Trail profile", url: "https://puckerbuttpeppercompany.com/products/goat-trail" },
     ],
     samples: ["Pepper Y", "The Noah", "Armageddon", "Pepper X"],
   },

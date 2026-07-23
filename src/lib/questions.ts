@@ -131,7 +131,7 @@ const heatBandExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
   ? `${pepper.name} is ${pepper.heat} because its top Scoville score is ${pepper.scovilleStatus === "unofficial" ? "unofficially " : ""}${formatShu(pepper.shuMax)}, which fits the ${heatBandRangeLabel(pepper.heat)} band.`
   : pepper.shuMin !== null
     ? `${pepper.name} is placed above ${formatShu(pepper.shuMin)} as an unofficial estimate, which puts it in the ${pepper.heat} band; no lab score has been published.`
-  : `${pepper.name} is described by its breeder as an extremely hot super-hot, but no Scoville measurement has been published.`;
+  : `${pepper.name}'s ${pepper.heat} label is descriptive because no Scoville measurement has been published.`;
 const choiceSet = <T,>(correct: T, options: T[], seed: number, count: number) => {
   const distractors = shuffle(options.filter((option) => option !== correct), seed).slice(0, count - 1);
   return shuffle([correct, ...distractors], seed + 1);

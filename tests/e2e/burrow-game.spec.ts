@@ -214,6 +214,49 @@ test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate ma
   }
 });
 
+test("Orange Butch T and Goat Trail join normal pepper play with Goat Trail's SHU left unpublished", () => {
+  const newPeppers = Object.fromEntries(
+    peppers
+      .filter((pepper) => ["orange-butch-t", "goat-trail"].includes(pepper.id))
+      .map((pepper) => [pepper.id, pepper]),
+  );
+
+  expect(Object.keys(newPeppers).sort()).toEqual(["goat-trail", "orange-butch-t"]);
+  expect(newPeppers["orange-butch-t"]).toMatchObject({
+    name: "Orange Butch T",
+    shuMin: 800000,
+    shuMax: 1463700,
+    heat: "insane",
+    color: "orange",
+    image: "/burrow-assets/peppers/orange-butch-t.png",
+  });
+  expect(newPeppers["goat-trail"]).toMatchObject({
+    name: "Goat Trail",
+    shuMin: null,
+    shuMax: null,
+    heat: "hot",
+    scovilleStatus: "unpublished",
+    color: "bright red",
+    image: "/burrow-assets/peppers/goat-trail.png",
+  });
+  expect(newPeppers["goat-trail"].metadata?.accuracyNote).toContain("publishes no SHU score");
+
+  const goatTrailCard = collectionCards().find((card) => card.id === "goat-trail");
+  expect(goatTrailCard?.statDisplay).toBe("SHU not published");
+  expect(goatTrailCard?.subStat).toContain("SHU not published");
+  expect(Number.isNaN(goatTrailCard?.statValue)).toBe(true);
+
+  for (const difficulty of [1, 2, 3] as const) {
+    const ordinaryQuestions = Array.from({ length: 150 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, [])).flat();
+    expect(ordinaryQuestions.some((question) => question.image === "/burrow-assets/peppers/goat-trail.png")).toBe(true);
+    if (difficulty >= 2) expect(ordinaryQuestions.some((question) => question.image === "/burrow-assets/peppers/orange-butch-t.png")).toBe(true);
+  }
+
+  for (let seed = 0; seed < 100; seed += 1) {
+    expect(buildSortRound("peppers", 3, seed).cards.every((card) => card.id !== "goat-trail" && Number.isFinite(card.statValue))).toBe(true);
+  }
+});
+
 test("pepper collection cards run from least to most Scoville heat", () => {
   const ordered = orderCollectionCardsByScoville(collectionCards().filter((card) => card.topic === "peppers"));
   const measured = ordered.filter((card) => Number.isFinite(card.statValue));
