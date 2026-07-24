@@ -119,11 +119,20 @@ const bandScore = (metadata?: CardMetadata) => {
 
 const recognitionScore = (metadata?: CardMetadata) => metadata?.recognition ? (5 - metadata.recognition) * 80 : 0;
 
+const stableIdHash = (id: string) => {
+  let hash = 2166136261;
+  for (const character of `difficulty-pool:${id}`) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+};
+
 export const sortByFamiliarity = <T extends { id: string; metadata?: CardMetadata; tags?: string[] }>(items: readonly T[]) =>
   [...items].sort((a, b) => {
     const aScore = bandScore(a.metadata) + recognitionScore(a.metadata) + (a.tags?.includes("popular") ? -500 : 0) + (familiarIds.has(a.id) ? -1000 : 0) + (advancedIds.has(a.id) ? 1000 : 0);
     const bScore = bandScore(b.metadata) + recognitionScore(b.metadata) + (b.tags?.includes("popular") ? -500 : 0) + (familiarIds.has(b.id) ? -1000 : 0) + (advancedIds.has(b.id) ? 1000 : 0);
-    return aScore - bScore || a.id.localeCompare(b.id);
+    return aScore - bScore || stableIdHash(a.id) - stableIdHash(b.id) || a.id.localeCompare(b.id);
   });
 
 export const poolForDifficulty = <T extends { id: string; metadata?: CardMetadata; tags?: string[] }>(items: readonly T[], difficulty: DifficultyLevel) => {
