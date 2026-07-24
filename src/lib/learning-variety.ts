@@ -66,7 +66,7 @@ export const learningVarietyScore = (identity: LearningIdentity, history: readon
   } else if (conceptGap < 5) {
     score -= (6 - conceptGap) * 360;
   } else if (latestConcept && latestConcept.outcome !== "correct" && latestConcept.outcome !== "scheduled" && conceptGap <= 12) {
-    score += 1100 - Math.abs(8 - conceptGap) * 90;
+    score += 1600 - Math.abs(8 - conceptGap) * 60;
   } else {
     score += Math.min(360, conceptGap * 18);
   }

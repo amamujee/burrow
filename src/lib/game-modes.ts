@@ -1536,6 +1536,23 @@ export const geoPointDistanceKm = (first: GeoPoint, second: GeoPoint) => {
 export const geoPointMapDistance = (first: GeoPoint, second: GeoPoint) =>
   Math.hypot(second.x - first.x, second.y - first.y);
 
+const factLocationMinimum = geoChoiceSeparationForDifficulty(3);
+
+export const geoLocationsAreSeparatedForFact = (first: WorldLocation, second: WorldLocation) => {
+  const firstPoint = pointForLocation(first);
+  const secondPoint = pointForLocation(second);
+  return geoPointDistanceKm(firstPoint, secondPoint) >= factLocationMinimum.kilometers
+    && geoPointMapDistance(firstPoint, secondPoint) >= factLocationMinimum.mapPercent;
+};
+
+const separatedFactLocationPartners = <T extends { id: string; metadata?: CardMetadata }>(
+  card: T & { metadata: CardMetadata & { location: WorldLocation } },
+  pool: readonly (T & { metadata: CardMetadata & { location: WorldLocation } })[],
+) => pool.filter((candidate) =>
+  candidate.id !== card.id
+  && candidate.metadata.location.label !== card.metadata.location.label
+  && geoLocationsAreSeparatedForFact(card.metadata.location, candidate.metadata.location));
+
 const hemisphereLabel = (point: GeoPoint) => {
   const northSouth = point.lat >= 0 ? "Northern Hemisphere" : "Southern Hemisphere";
   const eastWest = point.lon >= 0 ? "Eastern Hemisphere" : "Western Hemisphere";
@@ -1769,16 +1786,16 @@ export const buildFactRoundFromCards = (
   if (pool.length < 2) throw new Error(`Need at least 2 stat cards to build a fact round for ${topic}`);
   const truthful = seedRandom(seed + 11) > 0.46;
   const locationPool = pool.filter(hasLocationMetadata);
-  const useLocation = locationPool.length >= 2 && uniqueLocationLabels(locationPool).length >= 2 && (difficulty === 1 || seedRandom(seed + 14) > 0.5);
+  const falseLocationPool = locationPool.filter((card) => separatedFactLocationPartners(card, locationPool).length > 0);
+  const eligibleLocationPool = truthful ? locationPool : falseLocationPool;
+  const useLocation = eligibleLocationPool.length > 0
+    && uniqueLocationLabels(locationPool).length >= 2
+    && (difficulty === 1 || seedRandom(seed + 14) > 0.5);
 
   if (useLocation) {
-    const card = discoveryShuffle(locationPool, seed + 12, unlockedTitles, (item) => item.title)[0];
+    const card = discoveryShuffle(eligibleLocationPool, seed + 12, unlockedTitles, (item) => item.title)[0];
     const location = card.metadata.location;
-    const fakeCard = sampleSafe(
-      locationPool.filter((item) => item.id !== card.id && item.metadata.location.label !== location.label),
-      locationPool.filter((item) => item.id !== card.id),
-      seed + 13,
-    );
+    const fakeCard = truthful ? card : sample(separatedFactLocationPartners(card, locationPool), seed + 13);
     const statement = truthful
       ? `${card.title} is found in ${location.label}.`
       : `${card.title} is found in ${fakeCard.metadata.location.label}.`;
@@ -2592,15 +2609,15 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     const pool = preferredPool(peppers, difficulty);
     const pepper = discoveryShuffle(pool, seed + 12, unlockedTitles, (item) => item.name)[0];
     const locationPool = pool.filter(hasLocationMetadata);
-    const useLocation = locationPool.length >= 2 && (difficulty === 1 ? seedRandom(seed + 15) > 0.35 : seedRandom(seed + 15) > 0.55);
+    const falseLocationPool = locationPool.filter((card) => separatedFactLocationPartners(card, locationPool).length > 0);
+    const eligibleLocationPool = truthful ? locationPool : falseLocationPool;
+    const useLocation = eligibleLocationPool.length > 0 && (difficulty === 1 ? seedRandom(seed + 15) > 0.35 : seedRandom(seed + 15) > 0.55);
     if (useLocation) {
-      const locatedPepper = hasLocationMetadata(pepper) ? pepper : discoveryShuffle(locationPool, seed + 16, unlockedTitles, (item) => item.name)[0];
+      const locatedPepper = hasLocationMetadata(pepper) && eligibleLocationPool.some((item) => item.id === pepper.id)
+        ? pepper
+        : discoveryShuffle(eligibleLocationPool, seed + 16, unlockedTitles, (item) => item.name)[0];
       const location = locatedPepper.metadata.location;
-      const fakePepper = sampleSafe(
-        locationPool.filter((item) => item.id !== locatedPepper.id && item.metadata.location.label !== location.label),
-        locationPool.filter((item) => item.id !== locatedPepper.id),
-        seed + 17,
-      );
+      const fakePepper = truthful ? locatedPepper : sample(separatedFactLocationPartners(locatedPepper, locationPool), seed + 17);
       const statement = truthful
         ? `${locatedPepper.name} is linked to ${location.label}.`
         : `${locatedPepper.name} is linked to ${fakePepper.metadata.location.label}.`;
@@ -2651,12 +2668,26 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "buildings") {
     const pool = preferredPool(buildings, difficulty);
-    const building = sample(pool, seed + 15);
-    const factType = difficulty === 1 ? sample(["city", "location"] as const, seed + 17) : sample(["city", "location", "height", "status"] as const, seed + 17);
+    const requestedFactType = difficulty === 1 ? sample(["city", "location"] as const, seed + 17) : sample(["city", "location", "height", "status"] as const, seed + 17);
     const locationLabel = (item: Building) => item.metadata.location?.label ?? `${item.city}, ${item.country}`;
+    const falseLocationPartners = (item: Building) => pool.filter((candidate) =>
+      candidate.id !== item.id
+      && candidate.city !== item.city
+      && hasLocationMetadata(item)
+      && hasLocationMetadata(candidate)
+      && geoLocationsAreSeparatedForFact(item.metadata.location, candidate.metadata.location));
+    const falseLocationBuildings = pool.filter((item) => falseLocationPartners(item).length > 0);
+    const locationFact = requestedFactType === "city" || requestedFactType === "location";
+    const factType = !truthful && locationFact && !falseLocationBuildings.length ? "height" : requestedFactType;
+    const building = sample(!truthful && locationFact && falseLocationBuildings.length ? falseLocationBuildings : pool, seed + 15);
     const buildingLocationLabel = locationLabel(building);
-    const fakeCity = sampleSafe(pool.filter((item) => item.id !== building.id && item.city !== building.city), pool.filter((item) => item.id !== building.id), seed + 16);
-    const fakeLocation = sampleSafe(pool.filter((item) => item.id !== building.id && locationLabel(item) !== buildingLocationLabel), pool.filter((item) => item.id !== building.id), seed + 19);
+    const separatedLocationCandidates = falseLocationPartners(building);
+    const fakeCity = factType === "city" && !truthful
+      ? sample(separatedLocationCandidates, seed + 16)
+      : sampleSafe(pool.filter((item) => item.id !== building.id && item.city !== building.city), pool.filter((item) => item.id !== building.id), seed + 16);
+    const fakeLocation = factType === "location" && !truthful
+      ? sample(separatedLocationCandidates.filter((item) => locationLabel(item) !== buildingLocationLabel), seed + 19)
+      : sampleSafe(pool.filter((item) => item.id !== building.id && locationLabel(item) !== buildingLocationLabel), pool.filter((item) => item.id !== building.id), seed + 19);
     const fakeHeight = sampleSafe(pool.filter((item) => item.id !== building.id && item.heightFt !== building.heightFt), pool.filter((item) => item.id !== building.id), seed + 18);
     const statement = truthful
       ? factType === "height"
@@ -2752,12 +2783,20 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "jets") {
     const pool = preferredPool(jets, difficulty);
-    const jet = sample(pool, seed + 18);
-    const factType = difficulty === 1 ? "category" : sample(["category", "speed", "range", "country"] as const, seed + 20);
+    const requestedFactType = difficulty === 1 ? "category" : sample(["category", "speed", "range", "country"] as const, seed + 20);
+    const falseCountryPartners = (item: Jet) => pool.filter((candidate) =>
+      candidate.id !== item.id
+      && candidate.country !== item.country
+      && geoLocationsAreSeparatedForFact(jetWorldLocation(item), jetWorldLocation(candidate)));
+    const falseCountryJets = pool.filter((item) => falseCountryPartners(item).length > 0);
+    const factType = !truthful && requestedFactType === "country" && !falseCountryJets.length ? "category" : requestedFactType;
+    const jet = sample(!truthful && factType === "country" ? falseCountryJets : pool, seed + 18);
     const fakeCategory = sampleSafe(pool.filter((item) => item.id !== jet.id && item.category !== jet.category), pool.filter((item) => item.id !== jet.id), seed + 19);
     const fakeSpeed = sampleSafe(pool.filter((item) => item.id !== jet.id && item.maxSpeedMph !== jet.maxSpeedMph), pool.filter((item) => item.id !== jet.id), seed + 21);
     const fakeRange = sampleSafe(pool.filter((item) => item.id !== jet.id && item.rangeMiles !== jet.rangeMiles), pool.filter((item) => item.id !== jet.id), seed + 22);
-    const fakeCountry = sampleSafe(pool.filter((item) => item.id !== jet.id && item.country !== jet.country), pool.filter((item) => item.id !== jet.id), seed + 23);
+    const fakeCountry = factType === "country" && !truthful
+      ? sample(falseCountryPartners(jet), seed + 23)
+      : sampleSafe(pool.filter((item) => item.id !== jet.id && item.country !== jet.country), pool.filter((item) => item.id !== jet.id), seed + 23);
     const actualLocation = jetWorldLocation(jet);
     const claimedLocation = truthful ? actualLocation : jetWorldLocation(fakeCountry);
     const statement = truthful

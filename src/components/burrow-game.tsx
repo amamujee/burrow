@@ -2658,6 +2658,11 @@ function QuestionRun({
             correctAnswer={question.answer}
             explanation={question.explanation}
             locations={question.locations}
+            showLocationMap={!question.map && (
+              question.id.includes("-building-reading-city-")
+              || question.id.includes("-building-reading-borough-")
+              || (question.kind === "jet-reading" && question.answer.includes(" is from "))
+            )}
             note={note}
             isLast={questionIndex === questions.length - 1}
             onNext={onNext}
@@ -3750,6 +3755,7 @@ function OddOneMode({
             correctAnswer={answer?.title ?? "Odd card"}
             explanation={`${round.reason} ${round.explanation}`}
             locations={round.locations}
+            showLocationMap
             note="Good try."
             isLast={false}
             onNext={onNext}
@@ -4201,6 +4207,7 @@ function FeedbackPanel({
   correctAnswer,
   explanation,
   locations,
+  showLocationMap = false,
   note,
   isLast,
   onNext,
@@ -4212,6 +4219,7 @@ function FeedbackPanel({
   correctAnswer: string;
   explanation: string;
   locations?: readonly WorldLocation[];
+  showLocationMap?: boolean;
   note: string;
   isLast: boolean;
   onNext: () => void;
@@ -4227,12 +4235,12 @@ function FeedbackPanel({
       onNext={onNext}
       reward={{ xpGain, leveledUp }}
     >
-      {locations && locations.length > 0 && <WorldLocationPanel locations={locations} />}
+      {locations && locations.length > 0 && <WorldLocationPanel locations={locations} showMap={showLocationMap} />}
     </GameAnswerFeedback>
   );
 }
 
-function WorldLocationPanel({ locations }: { locations: readonly WorldLocation[] }) {
+function WorldLocationPanel({ locations, showMap }: { locations: readonly WorldLocation[]; showMap: boolean }) {
   const uniqueLocations = locations.filter(
     (location, index) => locations.findIndex((candidate) => candidate.label === location.label) === index,
   );
@@ -4250,13 +4258,15 @@ function WorldLocationPanel({ locations }: { locations: readonly WorldLocation[]
   return (
     <aside aria-label="Where in the world" className="mt-2 rounded-lg border-2 border-[#092421] bg-[#dcefe8] p-2 shadow-[2px_2px_0_#092421]">
       <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#2f665d]">Where in the world?</p>
-      <WorldMapSurface
-        markers={mapMarkers}
-        footer={uniqueLocations.map((location) => location.label).join(" · ")}
-        onSelect={() => undefined}
-        disabled
-        className="mt-1.5 min-h-[180px]"
-      />
+      {showMap && (
+        <WorldMapSurface
+          markers={mapMarkers}
+          footer={uniqueLocations.map((location) => location.label).join(" · ")}
+          onSelect={() => undefined}
+          disabled
+          className="mt-1.5 min-h-[180px]"
+        />
+      )}
       <div className="mt-1.5 grid gap-1.5">
         {uniqueLocations.map((location) => (
           <div key={location.label} className="flex flex-wrap items-center gap-1.5">

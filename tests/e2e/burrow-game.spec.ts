@@ -8,6 +8,7 @@ import {
 import { peppers } from "../../src/lib/game-data";
 import {
   buildFactRound,
+  buildFactRoundFromCards,
   buildGeoRound,
   buildNumberRound,
   buildNumberRoundFromCards,
@@ -150,6 +151,8 @@ test("learning variety blocks exact repeats while timing review of missed concep
 
   expect(learningVarietyScore(original, recentMiss)).toBeLessThan(learningVarietyScore(fresh, recentMiss));
   expect(learningVarietyScore(alternate, spacedMiss)).toBeGreaterThan(learningVarietyScore(alternate, recentMiss));
+  expect(learningVarietyScore(alternate, spacedMiss)).toBeGreaterThan(learningVarietyScore(fresh, spacedMiss));
+  expect(learningVarietyScore(original, spacedMiss)).toBeLessThan(learningVarietyScore(fresh, spacedMiss));
 });
 
 test("every generated Quiz location question carries matching map choices", () => {
@@ -177,15 +180,41 @@ test("every generated Quiz location question carries matching map choices", () =
 });
 
 test("location-based True/False rounds carry claimed and actual map points", () => {
+  const minimum = geoChoiceSeparationForDifficulty(3);
   for (const topic of ["peppers", "buildings", "jets"] as const) {
     const difficulty = topic === "jets" ? 2 : 1;
-    const topicRounds = Array.from({ length: 120 }, (_, seed) => buildFactRound(topic, difficulty, seed * 37));
+    const topicRounds = Array.from({ length: 360 }, (_, seed) => buildFactRound(topic, difficulty, seed * 37));
     const locationRounds = topicRounds.filter((round) => round.statement.includes(" is in ") || round.statement.includes(" is linked to ") || round.statement.includes(" is from "));
     expect(locationRounds.length).toBeGreaterThan(0);
     for (const round of locationRounds) {
       expect(round.map, `${round.id} needs a claimed and actual map point`).toBeTruthy();
       expect(round.map?.actual.label).toBe(round.locations?.[0]?.label);
+      if (round.answer === "False") {
+        expect(geoPointDistanceKm(round.map!.actual.point, round.map!.claimed.point)).toBeGreaterThanOrEqual(minimum.kilometers);
+        expect(geoPointMapDistance(round.map!.actual.point, round.map!.claimed.point)).toBeGreaterThanOrEqual(minimum.mapPercent);
+      }
     }
+  }
+
+  const mappedCards = collectionCards()
+    .filter((card) => card.topic === "buildings")
+    .map((card) => ({
+      ...card,
+      categories: ["building"],
+      stats: [{
+        id: "height",
+        label: card.statLabel,
+        value: card.statValue,
+        display: card.statDisplay,
+        direction: "higher" as const,
+      }],
+    })) satisfies GenericKnowledgeCard[];
+  const packRounds = Array.from({ length: 360 }, (_, seed) => buildFactRoundFromCards(mappedCards, "fixture-pack", 1, seed * 41));
+  const falseLocationRounds = packRounds.filter((round) => round.answer === "False" && round.map);
+  expect(falseLocationRounds.length).toBeGreaterThan(0);
+  for (const round of falseLocationRounds) {
+    expect(geoPointDistanceKm(round.map!.actual.point, round.map!.claimed.point)).toBeGreaterThanOrEqual(minimum.kilometers);
+    expect(geoPointMapDistance(round.map!.actual.point, round.map!.claimed.point)).toBeGreaterThanOrEqual(minimum.mapPercent);
   }
 });
 
@@ -828,6 +857,7 @@ test("building answers teach location without spoiling the question", async ({ p
   const geography = page.getByLabel("Where in the world");
   await expect(geography).toBeVisible();
   await expect(geography).toContainText(/North America|South America|Europe|Asia|Africa|Oceania/);
+  await expect(page.getByLabel("World map")).toHaveCount(1);
 });
 
 test("bridge pack answers surface their world location", async ({ page }) => {
@@ -841,6 +871,7 @@ test("bridge pack answers surface their world location", async ({ page }) => {
   await expect(page.getByLabel("Where in the world")).toHaveCount(0);
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
   await expect(page.getByLabel("Where in the world")).toBeVisible();
+  await expect(page.getByLabel("World map")).toHaveCount(1);
 });
 
 test("peek rounds reset their reveal count after skip", async ({ page }) => {
