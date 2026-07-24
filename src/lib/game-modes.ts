@@ -87,6 +87,10 @@ export type FactRound = {
   answer: "True" | "False";
   explanation: string;
   locations?: WorldLocation[];
+  map?: {
+    claimed: GeoChoice;
+    actual: GeoChoice;
+  };
 };
 
 export type RevealRound = {
@@ -97,6 +101,10 @@ export type RevealRound = {
   choices: string[];
   answer: string;
   explanation: string;
+  map?: {
+    choices: GeoChoice[];
+    answerId: string;
+  };
 };
 
 export type GeoPoint = {
@@ -167,6 +175,7 @@ export type OddRound = {
   answerId: string;
   reason: string;
   explanation: string;
+  locations?: WorldLocation[];
 };
 
 export type TopTrumpDirection = "higher" | "lower";
@@ -360,6 +369,34 @@ const jetCategoryLabels: Record<JetCategory, string> = {
   trainer: "trainer",
 };
 
+const jetCountryContinents: Record<string, WorldContinent[]> = {
+  China: ["Asia"],
+  Czechoslovakia: ["Europe"],
+  France: ["Europe"],
+  Germany: ["Europe"],
+  India: ["Asia"],
+  Israel: ["Asia"],
+  Italy: ["Europe"],
+  Japan: ["Asia"],
+  Russia: ["Europe", "Asia"],
+  "South Korea": ["Asia"],
+  "Soviet Union": ["Europe", "Asia"],
+  Spain: ["Europe"],
+  Sweden: ["Europe"],
+  Taiwan: ["Asia"],
+  "United Kingdom": ["Europe"],
+  "United States": ["North America"],
+};
+
+export const jetWorldLocation = (jet: Pick<Jet, "country">): WorldLocation => {
+  const countries = jet.country.split("/");
+  return {
+    label: jet.country,
+    countries: countries.map((country) => country === "Czechoslovakia" ? "Czech Republic" : country === "Soviet Union" ? "Russia" : country),
+    continents: Array.from(new Set(countries.flatMap((country) => jetCountryContinents[country] ?? []))),
+  };
+};
+
 const jetCard = (jet: Jet, metric: "speed" | "range" | "firepower" = "speed"): KnowledgeCard => ({
   id: jet.id,
   topic: "jets",
@@ -372,6 +409,7 @@ const jetCard = (jet: Jet, metric: "speed" | "range" | "firepower" = "speed"): K
   statDisplay: metric === "speed" ? `${formatNumber(jet.maxSpeedMph)} mph` : metric === "range" ? `${formatNumber(jet.rangeMiles)} mi` : `${jet.firepower}/5`,
   subStat: `${jet.country} · ${jetCategoryLabels[jet.category]}`,
   fact: jet.fact,
+  metadata: { location: jetWorldLocation(jet) },
   qualityScore: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower }).score,
   qualityFlags: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower }).flags,
 });
@@ -1302,17 +1340,6 @@ const hasLocationMetadata = <T extends { metadata?: CardMetadata }>(card: T): ca
 const uniqueLocationLabels = <T extends { metadata?: CardMetadata }>(cards: readonly T[]) =>
   Array.from(new Set(cards.filter(hasLocationMetadata).map((card) => card.metadata.location.label)));
 
-const locationChoicesFromCards = <T extends { metadata?: CardMetadata }>(
-  cards: readonly T[],
-  correct: T & { metadata: CardMetadata & { location: WorldLocation } },
-  seed: number,
-  count: number,
-) => {
-  const answer = correct.metadata.location.label;
-  const distractors = uniqueLocationLabels(cards).filter((label) => label !== answer);
-  return shuffle([answer, ...shuffle(distractors, seed).slice(0, count - 1)], seed + 1);
-};
-
 type LatLon = readonly [number, number];
 
 const geoChoiceCountForDifficulty = (difficulty: Difficulty) => (difficulty === 1 ? 3 : 4);
@@ -1515,7 +1542,7 @@ const hemisphereLabel = (point: GeoPoint) => {
   return `${northSouth} · ${eastWest}`;
 };
 
-const geoChoiceForLocation = (location: WorldLocation): GeoChoice => {
+export const geoChoiceForLocation = (location: WorldLocation): GeoChoice => {
   const point = pointForLocation(location);
   return {
     id: location.label,
@@ -1569,6 +1596,22 @@ const diverseGeoChoices = (
   }
 
   return selected;
+};
+
+export const buildGeoChoicesForLocations = (
+  locations: readonly WorldLocation[],
+  answerLocation: WorldLocation,
+  difficulty: Difficulty,
+  seed: number,
+) => {
+  const byLabel = new Map<string, GeoChoice>();
+  for (const location of locations) {
+    const choice = geoChoiceForLocation(location);
+    if (!byLabel.has(choice.id)) byLabel.set(choice.id, choice);
+  }
+  const answer = geoChoiceForLocation(answerLocation);
+  const diverse = diverseGeoChoices(answer, Array.from(byLabel.values()), geoChoiceCountForDifficulty(difficulty), difficulty, seed);
+  return diverse ? shuffle(diverse, seed + 1) : null;
 };
 
 const geoCards = <T extends KnowledgeCard>(cards: readonly T[]) => cards.filter(hasLocationMetadata);
@@ -1670,10 +1713,20 @@ export const buildRevealRoundFromCards = (
   const pool = preferredPool(cards, difficulty);
   const locationPool = preferredPool(cards.filter(hasLocationMetadata), difficulty);
   const count = Math.min(pool.length, difficulty === 1 ? 3 : 4);
-  const askLocation = locationPool.length >= count && uniqueLocationLabels(locationPool).length >= count && seedRandom(seed + 4) > 0.42;
+  const locationCandidates = locationPool.flatMap((card, index) => {
+    const mapChoices = buildGeoChoicesForLocations(
+      locationPool.map((item) => item.metadata.location),
+      card.metadata.location,
+      difficulty,
+      seed + 2 + index,
+    );
+    return mapChoices ? [{ card, mapChoices }] : [];
+  });
+  const askLocation = locationCandidates.length > 0 && seedRandom(seed + 4) > 0.42;
 
   if (askLocation) {
-    const card = discoveryShuffle(locationPool, seed + 1, unlockedTitles, (item) => item.title)[0];
+    const candidate = discoveryShuffle(locationCandidates, seed + 1, unlockedTitles, (item) => item.card.title)[0];
+    const { card, mapChoices } = candidate;
     const location = card.metadata.location;
 
     return {
@@ -1681,9 +1734,13 @@ export const buildRevealRoundFromCards = (
       topic,
       prompt: "Where in the world is this found?",
       card,
-      choices: locationChoicesFromCards(locationPool, card, seed + 2, count),
+      choices: mapChoices.map((choice) => choice.label),
       answer: location.label,
       explanation: `${card.title} is found in ${location.label}. ${card.fact}`,
+      map: {
+        choices: mapChoices,
+        answerId: location.label,
+      },
     };
   }
 
@@ -1725,6 +1782,7 @@ export const buildFactRoundFromCards = (
     const statement = truthful
       ? `${card.title} is found in ${location.label}.`
       : `${card.title} is found in ${fakeCard.metadata.location.label}.`;
+    const claimedLocation = truthful ? location : fakeCard.metadata.location;
 
     return {
       id: `${seed}-fact-location-${topic}-${card.id}`,
@@ -1737,6 +1795,10 @@ export const buildFactRoundFromCards = (
       answer: truthful ? "True" : "False",
       explanation: `The real location is ${location.label}. ${card.fact}`,
       locations: [location],
+      map: {
+        claimed: geoChoiceForLocation(claimedLocation),
+        actual: geoChoiceForLocation(location),
+      },
     };
   }
 
@@ -2285,6 +2347,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
       odd: (building: Building) => boolean;
       reason: (odd: Building) => string;
       explanation: (odd: Building) => string;
+      usesLocation?: boolean;
     }[] = [
       {
         id: "new-york-city",
@@ -2293,6 +2356,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
         odd: (building) => building.city !== "New York City",
         reason: (odd) => `${odd.name} is in ${odd.city}; the others are in New York City.`,
         explanation: (odd) => `The rule is location. ${odd.name} is the odd one out because it is in ${odd.city}, not New York City.`,
+        usesLocation: true,
       },
       {
         id: "brooklyn",
@@ -2301,6 +2365,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
         odd: (building) => !buildingIsInBrooklyn(building),
         reason: (odd) => `${odd.name} is not in Brooklyn; the others are Brooklyn buildings.`,
         explanation: (odd) => `The rule is borough. ${odd.name} is the odd one out because it is not one of the Brooklyn buildings.`,
+        usesLocation: true,
       },
       {
         id: "asia",
@@ -2309,6 +2374,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
         odd: (building) => !buildingIsInAsia(building),
         reason: (odd) => `${odd.name} is in ${odd.country}; the others are in Asia.`,
         explanation: (odd) => `The rule is region. ${odd.name} is the odd one out because it is not in Asia.`,
+        usesLocation: true,
       },
       {
         id: "united-states",
@@ -2317,6 +2383,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
         odd: (building) => building.country !== "United States",
         reason: (odd) => `${odd.name} is in ${odd.country}; the others are in the United States.`,
         explanation: (odd) => `The rule is country. ${odd.name} is the odd one out because it is in ${odd.country}.`,
+        usesLocation: true,
       },
       {
         id: "china",
@@ -2325,6 +2392,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
         odd: (building) => building.country !== "China",
         reason: (odd) => `${odd.name} is in ${odd.country}; the others are in China.`,
         explanation: (odd) => `The rule is country. ${odd.name} is the odd one out because it is not in China.`,
+        usesLocation: true,
       },
       {
         id: "supertall",
@@ -2366,6 +2434,9 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
       answerId: odd.id,
       reason: rule.reason(odd),
       explanation: rule.explanation(odd),
+      locations: rule.usesLocation
+        ? cards.flatMap((card) => card.metadata?.location ? [card.metadata.location] : [])
+        : undefined,
     };
   }
 
@@ -2533,6 +2604,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       const statement = truthful
         ? `${locatedPepper.name} is linked to ${location.label}.`
         : `${locatedPepper.name} is linked to ${fakePepper.metadata.location.label}.`;
+      const claimedLocation = truthful ? location : fakePepper.metadata.location;
 
       return {
         id: `${seed}-fact-pepper-location-${locatedPepper.id}`,
@@ -2545,6 +2617,10 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
         answer: truthful ? "True" : "False",
         explanation: `${locatedPepper.name} is linked to ${location.label}. ${pepperHeatExplanation(locatedPepper)}`,
         locations: [location],
+        map: {
+          claimed: geoChoiceForLocation(claimedLocation),
+          actual: geoChoiceForLocation(location),
+        },
       };
     }
 
@@ -2597,6 +2673,9 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
           : factType === "location"
             ? `${building.name} is in ${locationLabel(fakeLocation)}.`
           : `${building.name} is in ${fakeCity.city}.`;
+    const claimedBuilding = truthful ? building : factType === "location" ? fakeLocation : fakeCity;
+    const claimedLocation = claimedBuilding.metadata?.location;
+    const actualLocation = building.metadata?.location;
     return {
       id: `${seed}-fact-building-${building.id}`,
       topic: currentTopic,
@@ -2607,7 +2686,13 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       imageCredit: building.imageCredit,
       answer: truthful ? "True" : "False",
       explanation: `${building.name} is ${feet(building.heightFt)} tall and is in ${building.city}, ${building.country}.`,
-      locations: building.metadata?.location ? [building.metadata.location] : undefined,
+      locations: actualLocation ? [actualLocation] : undefined,
+      map: (factType === "city" || factType === "location") && claimedLocation && actualLocation
+        ? {
+            claimed: geoChoiceForLocation(claimedLocation),
+            actual: geoChoiceForLocation(actualLocation),
+          }
+        : undefined,
     };
   }
 
@@ -2673,6 +2758,8 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     const fakeSpeed = sampleSafe(pool.filter((item) => item.id !== jet.id && item.maxSpeedMph !== jet.maxSpeedMph), pool.filter((item) => item.id !== jet.id), seed + 21);
     const fakeRange = sampleSafe(pool.filter((item) => item.id !== jet.id && item.rangeMiles !== jet.rangeMiles), pool.filter((item) => item.id !== jet.id), seed + 22);
     const fakeCountry = sampleSafe(pool.filter((item) => item.id !== jet.id && item.country !== jet.country), pool.filter((item) => item.id !== jet.id), seed + 23);
+    const actualLocation = jetWorldLocation(jet);
+    const claimedLocation = truthful ? actualLocation : jetWorldLocation(fakeCountry);
     const statement = truthful
       ? factType === "speed"
         ? `${jet.name} can reach about ${formatNumber(jet.maxSpeedMph)} mph.`
@@ -2698,6 +2785,13 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       imageCredit: jet.imageCredit,
       answer: truthful ? "True" : "False",
       explanation: `${jet.name} is from ${jet.country}, is a ${jetCategoryLabels[jet.category]} aircraft, reaches about ${formatNumber(jet.maxSpeedMph)} mph, and has about ${formatNumber(jet.rangeMiles)} miles of range.`,
+      locations: factType === "country" ? [actualLocation] : undefined,
+      map: factType === "country"
+        ? {
+            claimed: geoChoiceForLocation(claimedLocation),
+            actual: geoChoiceForLocation(actualLocation),
+          }
+        : undefined,
     };
   }
 

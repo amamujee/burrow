@@ -30,7 +30,7 @@ export function WorldMapSurface({
   ];
 
   return (
-    <div className={`relative overflow-hidden rounded-lg border-2 border-[#092421] bg-[#b9dfdf] ${className}`}>
+    <div aria-label="World map" className={`relative overflow-hidden rounded-lg border-2 border-[#092421] bg-[#b9dfdf] ${className}`}>
       <svg aria-hidden="true" viewBox="0 0 100 56" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
         <rect width="100" height="56" fill="#b9dfdf" />
         {[18.67, 28, 37.33].map((y) => (

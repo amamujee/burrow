@@ -11,14 +11,24 @@ import {
   buildGeoRound,
   buildNumberRound,
   buildNumberRoundFromCards,
+  buildOddRound,
   buildRevealRound,
+  buildRevealRoundFromCards,
   buildSortRound,
   buildTopTrumpRound,
   collectionCards,
+  geoChoiceSeparationForDifficulty,
+  geoPointDistanceKm,
+  geoPointMapDistance,
   orderCollectionCardsByScoville,
   type GenericKnowledgeCard,
 } from "../../src/lib/game-modes";
 import { buildSession } from "../../src/lib/questions";
+import {
+  addLearningExposure,
+  learningIdentity,
+  learningVarietyScore,
+} from "../../src/lib/learning-variety";
 
 const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
 const topicLabels = ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Universe", "Jet Hangar", "Dinosaur Lab", "Tallest Mountains", "Tall Trees", "Bridges & Tunnels"];
@@ -101,6 +111,118 @@ const mathFixtureCards: GenericKnowledgeCard[] = [12, 20, 35, 48].map((value, in
   categories: ["test"],
   stats: [{ id: "length", label: "Length", value, display: `${value} ft`, direction: "higher" }],
 }));
+
+test("learning variety blocks exact repeats while timing review of missed concepts", () => {
+  const original = learningIdentity({
+    exactKey: "geo:pepper:jalapeno:mexico",
+    conceptKey: "location:jalapeno",
+    topic: "peppers",
+    subjects: ["Jalapeno"],
+  });
+  const alternate = learningIdentity({
+    exactKey: "quiz:pepper:jalapeno:location-clue",
+    conceptKey: "location:jalapeno",
+    topic: "peppers",
+    subjects: ["Jalapeno"],
+  });
+  const fresh = learningIdentity({
+    exactKey: "geo:pepper:habanero:mexico",
+    conceptKey: "location:habanero",
+    topic: "peppers",
+    subjects: ["Habanero"],
+  });
+  const recentMiss = addLearningExposure([], original, { mode: "geo", topic: "peppers", outcome: "incorrect" });
+  const spacedMiss = [
+    ...Array.from({ length: 7 }, (_, index) => ({
+      ...learningIdentity({
+        exactKey: `quiz:filler:${index}`,
+        conceptKey: `filler:${index}`,
+        topic: "peppers",
+        subjects: [`Filler ${index}`],
+      }),
+      mode: "quiz",
+      topic: "peppers",
+      outcome: "correct" as const,
+      sequence: 8 - index,
+    })),
+    recentMiss[0],
+  ];
+
+  expect(learningVarietyScore(original, recentMiss)).toBeLessThan(learningVarietyScore(fresh, recentMiss));
+  expect(learningVarietyScore(alternate, spacedMiss)).toBeGreaterThan(learningVarietyScore(alternate, recentMiss));
+});
+
+test("every generated Quiz location question carries matching map choices", () => {
+  for (const topic of ["peppers", "buildings"] as const) {
+    for (const difficulty of [1, 2, 3] as const) {
+      const questions = Array.from({ length: 80 }, (_, seed) => buildSession(topic, difficulty, seed * 101, [])).flat();
+      const locationQuestions = questions.filter((question) => question.kind.endsWith("-location"));
+      expect(locationQuestions.length).toBeGreaterThan(0);
+      for (const question of locationQuestions) {
+        expect(question.map, `${question.id} needs a teaching map`).toBeTruthy();
+        expect(question.map?.answerId).toBe(question.answer);
+        expect(question.map?.choices.map((choice) => choice.label)).toEqual(question.choices);
+        const minimum = geoChoiceSeparationForDifficulty(difficulty);
+        for (let first = 0; first < (question.map?.choices.length ?? 0); first += 1) {
+          for (let second = first + 1; second < (question.map?.choices.length ?? 0); second += 1) {
+            const firstChoice = question.map?.choices[first];
+            const secondChoice = question.map?.choices[second];
+            expect(geoPointDistanceKm(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.kilometers);
+            expect(geoPointMapDistance(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.mapPercent);
+          }
+        }
+      }
+    }
+  }
+});
+
+test("location-based True/False rounds carry claimed and actual map points", () => {
+  for (const topic of ["peppers", "buildings", "jets"] as const) {
+    const difficulty = topic === "jets" ? 2 : 1;
+    const topicRounds = Array.from({ length: 120 }, (_, seed) => buildFactRound(topic, difficulty, seed * 37));
+    const locationRounds = topicRounds.filter((round) => round.statement.includes(" is in ") || round.statement.includes(" is linked to ") || round.statement.includes(" is from "));
+    expect(locationRounds.length).toBeGreaterThan(0);
+    for (const round of locationRounds) {
+      expect(round.map, `${round.id} needs a claimed and actual map point`).toBeTruthy();
+      expect(round.map?.actual.label).toBe(round.locations?.[0]?.label);
+    }
+  }
+});
+
+test("every generated Peek location question carries well-separated map choices", () => {
+  const mappedCards = collectionCards()
+    .filter((card) => card.topic === "buildings")
+    .map((card) => ({ ...card, categories: ["building"], stats: [] })) satisfies GenericKnowledgeCard[];
+
+  for (const difficulty of [1, 2, 3] as const) {
+    const rounds = Array.from({ length: 120 }, (_, seed) =>
+      buildRevealRoundFromCards(mappedCards, "buildings", difficulty, seed * 43),
+    );
+    const locationRounds = rounds.filter((round) => round.prompt === "Where in the world is this found?");
+    expect(locationRounds.length).toBeGreaterThan(0);
+    for (const round of locationRounds) {
+      expect(round.map, `${round.id} needs a teaching map`).toBeTruthy();
+      expect(round.map?.answerId).toBe(round.answer);
+      expect(round.map?.choices.map((choice) => choice.label)).toEqual(round.choices);
+      const minimum = geoChoiceSeparationForDifficulty(difficulty);
+      for (let first = 0; first < (round.map?.choices.length ?? 0); first += 1) {
+        for (let second = first + 1; second < (round.map?.choices.length ?? 0); second += 1) {
+          const firstChoice = round.map?.choices[first];
+          const secondChoice = round.map?.choices[second];
+          expect(geoPointDistanceKm(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.kilometers);
+          expect(geoPointMapDistance(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.mapPercent);
+        }
+      }
+    }
+  }
+});
+
+test("location-based Odd One rounds preserve locations for map feedback", () => {
+  const rounds = Array.from({ length: 160 }, (_, seed) => buildOddRound("buildings", 2, seed * 47));
+  const locationRounds = rounds.filter((round) => /not in (New York City|Brooklyn|Asia|the United States|China)/.test(round.prompt));
+  expect(locationRounds.length).toBeGreaterThan(0);
+  for (const round of locationRounds) expect(round.locations?.length).toBe(4);
+});
 
 test("source-verified Scoville ranges stay accurate", () => {
   expect(peppers.find((pepper) => pepper.id === "jimmy-nardello")).toMatchObject({
@@ -700,6 +822,7 @@ test("building answers teach location without spoiling the question", async ({ p
   await chooseOnlyBuiltInTopic(page, "Sky Scrapers");
 
   await expect(page.getByLabel("Where in the world")).toHaveCount(0);
+  await expect(page.getByLabel("World map")).toBeVisible();
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
 
   const geography = page.getByLabel("Where in the world");
@@ -735,9 +858,15 @@ test("geo finder stays inside the selected topic", async ({ page }) => {
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
   await chooseOnlyMode(page, "Geo Finder");
 
+  const seenPrompts = new Set<string>();
   for (let round = 0; round < 6; round += 1) {
     await expect(page.getByText("Spicy Peppers · Geo Finder", { exact: true })).toBeVisible();
-    await expect(page.getByRole("heading", { name: /^Where on the map is/ })).toBeVisible();
+    const heading = page.getByRole("heading", { name: /^Where on the map is/ });
+    await expect(heading).toBeVisible();
+    const prompt = await heading.textContent();
+    expect(prompt).toBeTruthy();
+    expect(seenPrompts.has(prompt ?? "")).toBe(false);
+    seenPrompts.add(prompt ?? "");
     await expect(page.getByText("Tallest Mountains · Geo Finder", { exact: true })).toHaveCount(0);
     const pinBoxes = await page.getByRole("button", { name: /^Choose map pin/ }).evaluateAll((pins) => pins.map((pin) => {
       const box = pin.getBoundingClientRect();

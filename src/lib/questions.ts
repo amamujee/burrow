@@ -22,6 +22,7 @@ import {
 import { poolForDifficulty } from "./difficulty-pool";
 import { discoveryShuffle, sample, seedRandom, shuffle } from "./random";
 import { worldLocationDisplay, type WorldLocation } from "./card-metadata";
+import { buildGeoChoicesForLocations, jetWorldLocation, type GeoChoice } from "./game-modes";
 
 export type TopicScope = TopicId | readonly KnowledgeTopic[];
 
@@ -86,6 +87,10 @@ export type Question = {
   answer: string;
   explanation: string;
   locations?: WorldLocation[];
+  map?: {
+    choices: GeoChoice[];
+    answerId: string;
+  };
   comparison?: ComparisonCard[];
   heatMeter?: {
     label: HeatBand;
@@ -144,18 +149,17 @@ const hasLocationMetadata = <T extends { metadata?: { location?: WorldLocation }
   Boolean(item.metadata?.location);
 const itemLocations = (...items: { metadata?: { location?: WorldLocation } }[]): WorldLocation[] =>
   items.flatMap((item) => (item.metadata?.location ? [item.metadata.location] : []));
-const locationLabels = (items: readonly { metadata?: { location?: WorldLocation } }[]) =>
-  Array.from(new Set(items.filter(hasLocationMetadata).map((item) => item.metadata.location.label)));
-const locationAnswerChoices = <T extends { metadata?: { location?: WorldLocation } }>(
+const locationQuestionChoices = <T extends { metadata?: { location?: WorldLocation } }>(
   correctItem: T & { metadata: { location: WorldLocation } },
   options: readonly T[],
+  difficulty: Difficulty,
   seed: number,
-  count: number,
-) => {
-  const correct = correctItem.metadata.location.label;
-  const distractors = locationLabels(options).filter((label) => label !== correct);
-  return answerChoices(correct, distractors, seed, count);
-};
+) => buildGeoChoicesForLocations(
+  options.filter(hasLocationMetadata).map((item) => item.metadata.location),
+  correctItem.metadata.location,
+  difficulty,
+  seed,
+);
 const roundTo = (value: number, step: number) => Math.max(step, Math.round(value / step) * step);
 const roundedSubtractionPair = (bigger: number, smaller: number, step: number) => {
   const biggerValue = roundTo(bigger, step);
@@ -782,16 +786,23 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
   const pepper = discoveryShuffle(pool, seed, unlockedTitles, (item) => item.name)[0];
   const measuredPool = pool.filter(hasScovilleMeasurement);
   const locationPool = pool.filter(hasLocationMetadata);
+  const locationCandidates = locationPool.flatMap((item, index) => {
+    const mapChoices = locationQuestionChoices(item, locationPool, difficulty, seed + 5 + index);
+    return mapChoices ? [{ item, mapChoices }] : [];
+  });
   const baseKinds: QuestionKind[] = difficulty === 1
     ? ["pepper-heat", "pepper-shu", "pepper-hotter", "pepper-reading"]
     : difficulty === 2
       ? ["pepper-heat", "pepper-shu", "pepper-hotter", "pepper-reading"]
       : ["pepper-shu", "pepper-hotter", "pepper-reading", "pepper-heat"];
-  const kinds = locationLabels(locationPool).length >= choiceCountForDifficulty(difficulty) ? [...baseKinds, "pepper-location"] : baseKinds;
+  const kinds = locationCandidates.length ? [...baseKinds, "pepper-location"] : baseKinds;
   const kind = sample(kinds, seed + 3);
 
   if (kind === "pepper-location") {
-    const locatedPepper = discoveryShuffle(locationPool, seed + 4, unlockedTitles, (item) => item.name)[0];
+    const locationCandidate = discoveryShuffle(locationCandidates, seed + 4, unlockedTitles, (candidate) => candidate.item.name)[0];
+    const locatedPepper = locationCandidate.item;
+    const mapChoices = locationCandidate.mapChoices;
+    const choices = mapChoices.map((choice) => choice.label);
     return {
       id: `${seed}-pepper-location-${locatedPepper.id}`,
       topic: "peppers",
@@ -800,10 +811,14 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
       image: locatedPepper.image,
       imageAlt: locatedPepper.name,
       imageCredit: locatedPepper.imageCredit,
-      choices: locationAnswerChoices(locatedPepper, locationPool, seed + 5, choiceCountForDifficulty(difficulty)),
+      choices,
       answer: locatedPepper.metadata.location.label,
       explanation: `${locatedPepper.name} is linked to ${locatedPepper.metadata.location.label}. Pepper locations can mean origin, namesake, or a strong regional food connection.`,
       locations: itemLocations(locatedPepper),
+      map: {
+        choices: mapChoices,
+        answerId: locatedPepper.metadata.location.label,
+      },
       heatMeter: heatMeter(locatedPepper.heat),
     };
   }
@@ -871,7 +886,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
     image: measuredPepper.image,
     imageAlt: measuredPepper.name,
     imageCredit: measuredPepper.imageCredit,
-    choices: shuffle([correct, ...shuffle(otherRanges, seed + 17).slice(0, choiceCountForDifficulty(difficulty) - 1)], seed + 18),
+    choices: answerChoices(correct, otherRanges, seed + 17, choiceCountForDifficulty(difficulty)),
     answer: correct,
     explanation: `${measuredPepper.name} is about ${correct}${measuredPepper.scovilleStatus === "unofficial" ? " in unofficial listings" : ""}. Its top score puts it in the ${measuredPepper.heat} band (${heatBandRangeLabel(measuredPepper.heat)}).`,
     locations: itemLocations(measuredPepper),
@@ -884,16 +899,23 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
   const pool = preferredPool(buildings, difficulty);
   const building = sample(pool, seed);
   const locationPool = pool.filter(hasLocationMetadata);
+  const locationCandidates = locationPool.flatMap((item, index) => {
+    const mapChoices = locationQuestionChoices(item, locationPool, difficulty, seed + 25 + index);
+    return mapChoices ? [{ item, mapChoices }] : [];
+  });
   const baseKinds: QuestionKind[] = difficulty === 1
     ? ["building-name", "building-height", "building-taller", "building-reading"]
     : difficulty === 2
       ? ["building-name", "building-height", "building-taller", "building-difference", "building-reading"]
       : ["building-height", "building-taller", "building-difference", "building-reading"];
-  const kinds = locationLabels(locationPool).length >= choiceCountForDifficulty(difficulty) ? [...baseKinds, "building-location"] : baseKinds;
+  const kinds = locationCandidates.length ? [...baseKinds, "building-location"] : baseKinds;
   const kind = sample(kinds, seed + 23);
 
   if (kind === "building-location") {
-    const locatedBuilding = sample(locationPool, seed + 24);
+    const locationCandidate = sample(locationCandidates, seed + 24);
+    const locatedBuilding = locationCandidate.item;
+    const mapChoices = locationCandidate.mapChoices;
+    const choices = mapChoices.map((choice) => choice.label);
     return {
       id: `${seed}-building-location-${locatedBuilding.id}`,
       topic: "buildings",
@@ -902,10 +924,14 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
       image: locatedBuilding.image,
       imageAlt: locatedBuilding.name,
       imageCredit: locatedBuilding.imageCredit,
-      choices: locationAnswerChoices(locatedBuilding, locationPool, seed + 25, choiceCountForDifficulty(difficulty)),
+      choices,
       answer: locatedBuilding.metadata.location.label,
       explanation: `${locatedBuilding.name} is in ${locatedBuilding.metadata.location.label}.`,
       locations: itemLocations(locatedBuilding),
+      map: {
+        choices: mapChoices,
+        answerId: locatedBuilding.metadata.location.label,
+      },
       numberLine: { label: "Height", value: locatedBuilding.heightFt, max: maxHeight, unit: "ft" },
     };
   }
@@ -1144,6 +1170,7 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
       choices: shuffle([correct, ...options], seed + 57),
       answer: correct,
       explanation: `${jet.name} is a ${correct} aircraft from ${jet.country}. ${jet.fact}`,
+      locations: [jetWorldLocation(jet)],
     };
   }
 
@@ -1190,6 +1217,7 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
     choices: reading.choices,
     answer: reading.answer,
     explanation: `${jet.name}: ${jet.fact}`,
+    locations: [jetWorldLocation(jet)],
   };
 };
 
