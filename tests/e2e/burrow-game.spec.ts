@@ -315,6 +315,74 @@ test("15 new peppers share their verified records and real photos across the gam
   expect(newPeppers.filter((pepper) => defaultDifficultyImages.has(pepper.image)).length).toBeGreaterThanOrEqual(8);
 });
 
+test("21 rare and unusual peppers keep verified metadata, honest estimates, and natural rotation", () => {
+  const expected = {
+    "peach-aribibi-gusano": [5000, 30000],
+    "mustard-seven-pot": [800000, 1000000],
+    peachadew: [1000, 1000],
+    "aji-rojo": [40000, 70000],
+    "red-thunder-mountain-longhorn": [20000, 40000],
+    "orange-aji-fantasy": [5000, 10000],
+    "peppapeach-stripey": [1000, 1000],
+    "purple-tiger": [5000, 11000],
+    "purple-taj-mahal": [250000, 400000],
+    "aji-confusion": [10000, 15000],
+    "piccante-calabrese": [25000, 40000],
+    "pink-tiger": [250000, 500000],
+    "orange-seven-pot": [1000000, null],
+    "white-carolina-reaper": [1500000, null],
+    "ghost-breath": [1500000, null],
+    "red-primotalii": [1000000, null],
+    "thors-thunderbolt": [300000, 500000],
+    "gator-jigsaw": [1000000, null],
+    "aji-fantasy": [5000, 30000],
+    santaka: [30000, 50000],
+    "white-aji-fantasy": [5000, 30000],
+  } as const;
+  const newPepperIds = Object.keys(expected);
+  const newPeppers = peppers.filter((pepper) => newPepperIds.includes(pepper.id));
+
+  expect(newPeppers).toHaveLength(21);
+  expect(new Set(newPeppers.map((pepper) => pepper.id)).size).toBe(21);
+  expect(newPeppers.filter((pepper) => pepper.metadata?.location)).toHaveLength(9);
+
+  for (const pepper of newPeppers) {
+    expect([pepper.shuMin, pepper.shuMax]).toEqual(expected[pepper.id as keyof typeof expected]);
+    expect(pepper.image).toBe(`/burrow-assets/peppers/${pepper.id}.jpg`);
+    expect(pepper.imageCredit).toBe("Tyler Farms (used with permission)");
+    expect(pepper.imageSourceUrl).toMatch(/^https:\/\/www\.tyler-farms\.com\//);
+    expect(pepper.fact.length).toBeGreaterThanOrEqual(50);
+    if (pepper.scovilleStatus === "unofficial") {
+      expect(pepper.metadata?.accuracyNote).toBeTruthy();
+    }
+  }
+
+  const pepperCards = collectionCards().filter((card) => card.topic === "peppers");
+  for (const pepper of newPeppers) {
+    const card = pepperCards.find((item) => item.id === pepper.id);
+    expect(card).toMatchObject({ image: pepper.image, metadata: pepper.metadata });
+    if (pepper.shuMax === null) expect(Number.isNaN(card?.statValue)).toBe(true);
+    else expect(card?.statValue).toBe(pepper.shuMax);
+  }
+
+  const imagesByDifficulty = new Map(
+    ([1, 2, 3] as const).map((difficulty) => [
+      difficulty,
+      new Set(
+        Array.from({ length: 180 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, []))
+          .flat()
+          .map((question) => question.image),
+      ),
+    ]),
+  );
+  const seenCount = (difficulty: 1 | 2 | 3) =>
+    newPeppers.filter((pepper) => imagesByDifficulty.get(difficulty)?.has(pepper.image)).length;
+
+  expect(seenCount(1)).toBeGreaterThanOrEqual(5);
+  expect(seenCount(2)).toBeGreaterThanOrEqual(12);
+  expect(seenCount(3)).toBe(21);
+});
+
 test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate marked unofficial", () => {
   const newPeppers = Object.fromEntries(
     peppers
