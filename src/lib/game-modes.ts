@@ -58,6 +58,7 @@ export type KnowledgeCard = {
   statLabel: string;
   statValue: number;
   statDisplay: string;
+  collectionSortValue?: number;
   subStat: string;
   fact: string;
   qualityScore: number;
@@ -271,6 +272,7 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   statLabel: "Scoville",
   statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : Number.NaN,
   statDisplay: pepperScovilleDisplay(pepper),
+  collectionSortValue: pepper.shuMax ?? pepper.shuMin ?? Number.NaN,
   subStat: `${heatProfiles[pepper.heat].label} · ${hasScovilleMeasurement(pepper) ? heatBandRangeLabel(pepper.heat) : "SHU not published"} · ${heatProfiles[pepper.heat].emoji}`,
   fact: pepper.fact,
   qualityScore: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).score,
@@ -426,8 +428,12 @@ export const orderCollectionCardsByScoville = (cards: readonly KnowledgeCard[]):
   const peppersByHeat = cards
     .filter((card) => card.topic === "peppers")
     .sort((a, b) => {
-      const aScoville = Number.isFinite(a.statValue) ? a.statValue : Number.POSITIVE_INFINITY;
-      const bScoville = Number.isFinite(b.statValue) ? b.statValue : Number.POSITIVE_INFINITY;
+      const aScoville = typeof a.collectionSortValue === "number" && Number.isFinite(a.collectionSortValue)
+        ? a.collectionSortValue
+        : Number.POSITIVE_INFINITY;
+      const bScoville = typeof b.collectionSortValue === "number" && Number.isFinite(b.collectionSortValue)
+        ? b.collectionSortValue
+        : Number.POSITIVE_INFINITY;
       return aScoville - bScoville || a.title.localeCompare(b.title);
     });
   let pepperIndex = 0;

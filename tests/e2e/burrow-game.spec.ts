@@ -476,14 +476,21 @@ test("Orange Butch T and Goat Trail join normal pepper play with Goat Trail's ca
   }
 });
 
-test("pepper collection cards run from least to most Scoville heat", () => {
+test("pepper collection cards use their displayed Scoville score from least to hottest", () => {
   const ordered = orderCollectionCardsByScoville(collectionCards().filter((card) => card.topic === "peppers"));
-  const measured = ordered.filter((card) => Number.isFinite(card.statValue));
-  const unpublished = ordered.filter((card) => !Number.isFinite(card.statValue));
+  const displayedScores = new Map(peppers.map((pepper) => [pepper.id, pepper.shuMax ?? pepper.shuMin ?? Number.POSITIVE_INFINITY]));
+  const expectedOrder = [...ordered]
+    .sort((a, b) => (displayedScores.get(a.id) ?? Number.POSITIVE_INFINITY) - (displayedScores.get(b.id) ?? Number.POSITIVE_INFINITY)
+      || a.title.localeCompare(b.title));
+  const lowerBoundOnly = ordered.filter((card) => {
+    const pepper = peppers.find((item) => item.id === card.id);
+    return pepper?.shuMin !== null && pepper?.shuMax === null;
+  });
 
   expect(ordered[0].title).toBe("Bell Pepper");
-  expect(measured.map((card) => card.statValue)).toEqual([...measured].map((card) => card.statValue).sort((a, b) => a - b));
-  expect(ordered.slice(-unpublished.length).map((card) => card.id)).toEqual(unpublished.map((card) => card.id));
+  expect(ordered.map((card) => card.id)).toEqual(expectedOrder.map((card) => card.id));
+  expect(ordered.findIndex((card) => card.id === "orange-seven-pot")).toBeLessThan(ordered.findIndex((card) => card.id === "armageddon"));
+  expect(lowerBoundOnly.every((card) => !Number.isFinite(card.statValue))).toBe(true);
 });
 
 test("every topic offers sensible addition, subtraction, and multiplication rounds", () => {
@@ -991,7 +998,16 @@ test("collection only shows selected topics", async ({ page }) => {
     };
     const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
     if (!active) throw new Error("Active profile was not saved");
-    active.progress.unlockedCards = ["Naga Jolokia", "Chocolate Bhutlah", "Habanada", "7 Pot Douglah"];
+    active.progress.unlockedCards = [
+      "Naga Jolokia",
+      "Chocolate Bhutlah",
+      "Habanada",
+      "7 Pot Douglah",
+      "Orange 7 Pot",
+      "Armageddon",
+      "Ghost Breath",
+      "Pepper X",
+    ];
     window.localStorage.setItem(key, JSON.stringify(profiles));
   });
   await page.reload();
@@ -1002,6 +1018,10 @@ test("collection only shows selected topics", async ({ page }) => {
   await expect(collection.getByText("Spicy Peppers", { exact: true })).toBeVisible();
   await expect(collection.getByText("Shark Tank", { exact: true })).toHaveCount(0);
   await expect(collection.getByText("Tallest Mountains", { exact: true })).toHaveCount(0);
+
+  const scovilleOrder = collection.getByText(/^(Orange 7 Pot|Armageddon|Ghost Breath|Pepper X)$/);
+  await expect(scovilleOrder).toHaveCount(4);
+  expect(await scovilleOrder.allTextContents()).toEqual(["Orange 7 Pot", "Armageddon", "Ghost Breath", "Pepper X"]);
 
   const featuredPhotos = collection.getByRole("img", { name: /Habanada|Naga Jolokia|7 Pot Douglah|Chocolate Bhutlah/ });
   await expect(featuredPhotos).toHaveCount(4);
