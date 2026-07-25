@@ -848,9 +848,9 @@ const pepperSeeds: PepperSeed[] = [
     shuMin: 50000,
     shuMax: 100000,
     color: "red",
-    ...contentImage("peppers", "piri-piri", "09-07-2017 Piri piri peppers.JPG"),
-    imageCredit: "Kolforn, Wikimedia Commons",
-    fact: "Piri piri peppers are small African chiles famous for adding bright heat to sauces and marinades.",
+    ...contentImage("peppers", "piri-piri", "20171014 - Capsicum frutescens L. 'Piri Piri'.jpg"),
+    imageCredit: "Zinnmann, Wikimedia Commons",
+    fact: "Piri Piri, also called African Bird's Eye, grows small upright red pods famous for adding bright heat to sauces and marinades.",
   },
   {
     id: "piquillo",
