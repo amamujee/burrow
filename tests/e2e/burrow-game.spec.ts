@@ -476,6 +476,45 @@ test("Orange Butch T and Goat Trail join normal pepper play with Goat Trail's ca
   }
 });
 
+test("Yellow Bhut Assam joins normal pepper play with its permitted source image and Northeast India origin", () => {
+  const pepper = peppers.find((item) => item.id === "yellow-bhut-assam");
+
+  expect(pepper).toMatchObject({
+    name: "Yellow Bhut Assam",
+    shuMin: 800000,
+    shuMax: 1000000,
+    heat: "insane",
+    color: "golden yellow",
+    image: "/burrow-assets/peppers/yellow-bhut-assam.png",
+    imageSourceUrl: "https://knowthepepper.com/peppers/bhut-jolokia-yellow/",
+    imageCredit: "KnowThePepper.com (used with permission)",
+    metadata: {
+      location: {
+        label: "Northeast India, India",
+        countries: ["India"],
+        continents: ["Asia"],
+      },
+    },
+  });
+  expect(pepper?.fact).toContain("Yellow Bhut Jolokia");
+  expect(pepper?.fact).toContain("fruity, citrusy");
+
+  const card = collectionCards().find((item) => item.id === "yellow-bhut-assam");
+  expect(card).toMatchObject({
+    image: "/burrow-assets/peppers/yellow-bhut-assam.png",
+    statValue: 1000000,
+    statDisplay: "1,000,000 SHU",
+    metadata: pepper?.metadata,
+  });
+
+  for (const difficulty of [1, 2, 3] as const) {
+    const ordinaryQuestions = Array.from({ length: 180 }, (_, seed) =>
+      buildSession("peppers", difficulty, seed * 101, []),
+    ).flat();
+    expect(ordinaryQuestions.some((question) => question.image === pepper?.image)).toBe(true);
+  }
+});
+
 test("pepper collection cards use their displayed Scoville score from least to hottest", () => {
   const ordered = orderCollectionCardsByScoville(collectionCards().filter((card) => card.topic === "peppers"));
   const displayedScores = new Map(peppers.map((pepper) => [pepper.id, pepper.shuMax ?? pepper.shuMin ?? Number.POSITIVE_INFINITY]));
