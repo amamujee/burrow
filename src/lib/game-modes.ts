@@ -252,15 +252,18 @@ const hasScovilleMeasurement = <T extends Pepper>(pepper: T): pepper is T & Meas
 const pepperRange = (pepper: MeasuredPepper) =>
   pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
 const pepperScovilleDisplay = (pepper: Pepper) => {
+  if (pepper.scovilleStatus === "not-applicable") return "Not on the Scoville scale";
   if (pepper.shuMin !== null && pepper.shuMax === null) return `${formatNumber(pepper.shuMin)}+ SHU (unofficial)`;
   if (!hasScovilleMeasurement(pepper)) return "SHU not published";
   return `${pepper.scovilleStatus === "unofficial" ? "~" : ""}${formatNumber(pepper.shuMax)} SHU${pepper.scovilleStatus === "unofficial" ? " (unofficial)" : ""}`;
 };
 const pepperHeatExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
   ? `${pepper.name} can reach ${pepperScovilleDisplay(pepper)}, so it is ${pepper.heat} (${heatBandRangeLabel(pepper.heat)}). Its full range is ${pepperRange(pepper)} SHU.`
+  : pepper.scovilleStatus === "not-applicable"
+    ? `${pepper.name} is not a chile, so the Scoville scale does not apply. Sanshool gives it a tingly, numbing feeling instead of capsaicin heat.`
   : pepper.shuMin !== null
     ? `${pepper.name} is placed at ${pepperScovilleDisplay(pepper)}, so it is ${pepper.heat}; that lower bound is unofficial because no lab score has been published.`
-  : `${pepper.name}'s ${pepper.heat} label is descriptive because no Scoville measurement has been published.`;
+    : `${pepper.name}'s ${pepper.heat} label is descriptive because no Scoville measurement has been published.`;
 const heatRank = Object.fromEntries(heatBands.map((heat, index) => [heat, index])) as Record<HeatBand, number>;
 const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   id: pepper.id,
@@ -273,7 +276,9 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : Number.NaN,
   statDisplay: pepperScovilleDisplay(pepper),
   collectionSortValue: pepper.shuMax ?? pepper.shuMin ?? Number.NaN,
-  subStat: `${heatProfiles[pepper.heat].label} · ${hasScovilleMeasurement(pepper) ? heatBandRangeLabel(pepper.heat) : "SHU not published"} · ${heatProfiles[pepper.heat].emoji}`,
+  subStat: pepper.scovilleStatus === "not-applicable"
+    ? "tingly · not a chile · ✨"
+    : `${heatProfiles[pepper.heat].label} · ${hasScovilleMeasurement(pepper) ? heatBandRangeLabel(pepper.heat) : "SHU not published"} · ${heatProfiles[pepper.heat].emoji}`,
   fact: pepper.fact,
   qualityScore: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).score,
   qualityFlags: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).flags,
@@ -963,6 +968,7 @@ const spaceTrumpPool = () => spaceCards.filter((card) =>
   card.distanceFromSunMillionMiles !== undefined &&
   card.meanSurfaceTempF !== undefined,
 );
+const pepperTrumpPool = () => peppers.filter((pepper) => pepper.scovilleStatus !== "not-applicable");
 
 const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null => {
   if (topic === "peppers") {
@@ -975,7 +981,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       image: pepper.image,
       imageAlt: pepper.name,
       imageCredit: pepper.imageCredit,
-      subStat: `${heatProfiles[pepper.heat].label} · ${pepper.color}`,
+      subStat: pepper.scovilleStatus === "not-applicable" ? `tingly · ${pepper.color}` : `${heatProfiles[pepper.heat].label} · ${pepper.color}`,
       fact: pepper.fact,
       metadata: pepper.metadata,
       stats: [
@@ -1078,7 +1084,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
 export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []): TopTrumpRound => {
   const currentTopic = topicOrder(topic, seed);
   const pool =
-    currentTopic === "peppers" ? preferredPool(peppers, difficulty) :
+    currentTopic === "peppers" ? preferredPool(pepperTrumpPool(), difficulty) :
     currentTopic === "buildings" ? preferredPool(buildings, difficulty) :
     currentTopic === "sharks" ? preferredPool(sharks, difficulty) :
     currentTopic === "space" ? preferredPool(spaceTrumpPool(), difficulty) :

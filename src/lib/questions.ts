@@ -134,9 +134,11 @@ const feet = (value: number) => `${formatNumber(value)} ft`;
 const heatMeter = (heat: HeatBand) => ({ label: heat, icons: heatProfiles[heat].icons, emoji: heatProfiles[heat].emoji, line: heatProfiles[heat].kidLine });
 const heatBandExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
   ? `${pepper.name} is ${pepper.heat} because its top Scoville score is ${pepper.scovilleStatus === "unofficial" ? "unofficially " : ""}${formatShu(pepper.shuMax)}, which fits the ${heatBandRangeLabel(pepper.heat)} band.`
+  : pepper.scovilleStatus === "not-applicable"
+    ? `${pepper.name} is not a chile, so the Scoville scale does not apply. Sanshool gives it a tingly, numbing feeling instead of capsaicin heat.`
   : pepper.shuMin !== null
     ? `${pepper.name} is placed above ${formatShu(pepper.shuMin)} as an unofficial estimate, which puts it in the ${pepper.heat} band; no lab score has been published.`
-  : `${pepper.name}'s ${pepper.heat} label is descriptive because no Scoville measurement has been published.`;
+    : `${pepper.name}'s ${pepper.heat} label is descriptive because no Scoville measurement has been published.`;
 const choiceSet = <T,>(correct: T, options: T[], seed: number, count: number) => {
   const distractors = shuffle(options.filter((option) => option !== correct), seed).slice(0, count - 1);
   return shuffle([correct, ...distractors], seed + 1);

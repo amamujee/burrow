@@ -187,11 +187,12 @@ const checkFeaturedMetadata = (item) => {
   if (item.topic === "peppers") {
     const hasRange = typeof item.shuMin === "number" && typeof item.shuMax === "number" && item.shuMin <= item.shuMax && item.shuMax >= 0;
     const isUnpublished = item.shuMin === null && item.shuMax === null && item.scovilleStatus === "unpublished";
+    const isNotApplicable = item.shuMin === null && item.shuMax === null && item.scovilleStatus === "not-applicable";
     const hasUnofficialLowerBound = typeof item.shuMin === "number" && item.shuMin >= 0 && item.shuMax === null && item.scovilleStatus === "unofficial";
-    if (!hasRange && !isUnpublished && !hasUnofficialLowerBound) critical.push(`${item.topic}/${item.id}: bad Scoville range`);
+    if (!hasRange && !isUnpublished && !isNotApplicable && !hasUnofficialLowerBound) critical.push(`${item.topic}/${item.id}: bad Scoville range`);
     const expectedHeat = data.heatBandForScoville(item.shuMax ?? item.shuMin ?? 500001);
-    if (!isUnpublished && item.heat !== expectedHeat) critical.push(`${item.topic}/${item.id}: heat band ${item.heat} does not match its Scoville range (${expectedHeat})`);
-    if (isUnpublished && !item.metadata?.accuracyNote) critical.push(`${item.topic}/${item.id}: unpublished Scoville score needs metadata.accuracyNote`);
+    if (!isUnpublished && !isNotApplicable && item.heat !== expectedHeat) critical.push(`${item.topic}/${item.id}: heat band ${item.heat} does not match its Scoville range (${expectedHeat})`);
+    if ((isUnpublished || isNotApplicable) && !item.metadata?.accuracyNote) critical.push(`${item.topic}/${item.id}: non-numeric Scoville status needs metadata.accuracyNote`);
     const verified = sourceVerifiedScovilleRanges.get(item.id);
     if (verified && (item.shuMin !== verified.min || item.shuMax !== verified.max)) {
       critical.push(`${item.topic}/${item.id}: expected source-verified ${verified.min}-${verified.max} SHU (${verified.source})`);

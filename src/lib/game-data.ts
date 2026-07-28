@@ -23,7 +23,7 @@ export type Pepper = {
   heat: HeatBand;
   shuMin: number | null;
   shuMax: number | null;
-  scovilleStatus?: "published" | "unofficial" | "unpublished";
+  scovilleStatus?: "published" | "unofficial" | "unpublished" | "not-applicable";
   color: string;
   image: string;
   imageSourceFile: string;
@@ -865,6 +865,21 @@ const pepperSeeds: PepperSeed[] = [
     fact: "Piri Piri, also called African Bird's Eye, grows small upright red pods famous for adding bright heat to sauces and marinades.",
   },
   {
+    id: "sichuan-pepper",
+    name: "Sichuan Pepper",
+    heat: "not spicy",
+    shuMin: null,
+    shuMax: null,
+    scovilleStatus: "not-applicable",
+    color: "reddish brown",
+    ...contentImage("peppers", "sichuan-pepper", "Sichuan pepper.jpg"),
+    imageCredit: "Matt K, Wikimedia Commons (CC BY-SA 4.0)",
+    fact: "Sichuan pepper, also spelled Szechuan pepper, is not a chile. Sanshool in its berry husks makes your mouth feel tingly and numb instead of causing capsaicin heat.",
+    metadata: {
+      accuracyNote: "Sichuan pepper is a Zanthoxylum fruit rather than a Capsicum chile, so the capsaicin-based Scoville scale does not apply.",
+    },
+  },
+  {
     id: "piquillo",
     name: "Piquillo",
     shuMin: 500,
@@ -1370,6 +1385,7 @@ const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
   "numex-twilight": { label: "New Mexico, United States", countries: ["United States"], continents: ["North America"] },
   biquinho: { label: "Brazil", countries: ["Brazil"], continents: ["South America"] },
   "piri-piri": { label: "Southern Africa", countries: ["Mozambique"], continents: ["Africa"] },
+  "sichuan-pepper": { label: "Sichuan, China", countries: ["China"], continents: ["Asia"] },
   piquillo: { label: "Navarra, Spain", countries: ["Spain"], continents: ["Europe"] },
   "black-pearl": { label: "Beltsville, United States", countries: ["United States"], continents: ["North America"] },
   mirasol: { label: "Mexico", countries: ["Mexico"], continents: ["North America"] },

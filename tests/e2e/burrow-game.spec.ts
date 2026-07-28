@@ -476,6 +476,51 @@ test("Orange Butch T and Goat Trail join normal pepper play with Goat Trail's ca
   }
 });
 
+test("Sichuan Pepper joins normal play as a tingly non-chile without a made-up Scoville score", () => {
+  const pepper = peppers.find((item) => item.id === "sichuan-pepper");
+
+  expect(pepper).toMatchObject({
+    name: "Sichuan Pepper",
+    heat: "not spicy",
+    shuMin: null,
+    shuMax: null,
+    scovilleStatus: "not-applicable",
+    color: "reddish brown",
+    image: "/burrow-assets/peppers/sichuan-pepper.jpg",
+    metadata: {
+      location: {
+        label: "Sichuan, China",
+        countries: ["China"],
+        continents: ["Asia"],
+      },
+    },
+  });
+  expect(pepper?.fact).toContain("also spelled Szechuan pepper");
+  expect(pepper?.fact).toContain("Sanshool");
+  expect(pepper?.metadata?.accuracyNote).toContain("Scoville scale does not apply");
+
+  const card = collectionCards().find((item) => item.id === "sichuan-pepper");
+  expect(card?.statDisplay).toBe("Not on the Scoville scale");
+  expect(card?.subStat).toBe("tingly · not a chile · ✨");
+  expect(Number.isNaN(card?.statValue)).toBe(true);
+
+  for (const difficulty of [1, 2, 3] as const) {
+    const ordinaryQuestions = Array.from({ length: 180 }, (_, seed) =>
+      buildSession("peppers", difficulty, seed * 101, []),
+    ).flat();
+    const sichuanQuestions = ordinaryQuestions.filter((question) => question.image === pepper?.image);
+    expect(sichuanQuestions.length).toBeGreaterThan(0);
+    expect(sichuanQuestions.every((question) => ["pepper-heat", "pepper-reading", "pepper-location"].includes(question.kind))).toBe(true);
+    expect(sichuanQuestions.every((question) => question.numberLine === undefined)).toBe(true);
+  }
+
+  for (let seed = 0; seed < 100; seed += 1) {
+    const topTrumps = buildTopTrumpRound("peppers", 3, seed);
+    expect([topTrumps.player.id, topTrumps.computer.id]).not.toContain("sichuan-pepper");
+    expect(buildSortRound("peppers", 3, seed).cards.every((sortCard) => sortCard.id !== "sichuan-pepper")).toBe(true);
+  }
+});
+
 test("Yellow Bhut Assam joins normal pepper play with its permitted source image and Northeast India origin", () => {
   const pepper = peppers.find((item) => item.id === "yellow-bhut-assam");
 

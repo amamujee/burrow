@@ -7,6 +7,7 @@ const familiarIds = new Set([
   "banana-pepper",
   "poblano",
   "jalapeno",
+  "sichuan-pepper",
   "habanero",
   "ghost-pepper",
   "carolina-reaper",
