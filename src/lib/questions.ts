@@ -109,6 +109,7 @@ export type Question = {
 const sessionLength = 16;
 type MeasuredPepper = Pepper & { shuMin: number; shuMax: number };
 const hasScovilleMeasurement = <T extends Pepper>(pepper: T): pepper is T & MeasuredPepper => pepper.shuMin !== null && pepper.shuMax !== null;
+const isPepperFruit = (pepper: Pepper) => !pepper.isCondiment;
 const maxShu = Math.max(...peppers.filter(hasScovilleMeasurement).map((pepper) => pepper.shuMax));
 const maxHeight = 6562;
 const maxSharkLength = 65;
@@ -740,7 +741,7 @@ const headToHeadQuestionFromSpec = (spec: HeadToHeadSpec, seed: number): Questio
 
 const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty, seed: number): Question => {
   if (topic === "peppers") {
-    const pool = preferredPool(peppers.filter(hasScovilleMeasurement), difficulty);
+    const pool = preferredPool(peppers.filter(hasScovilleMeasurement).filter(isPepperFruit), difficulty);
     const first = sample(pool, seed + 1);
     const second = sample(pool.filter((item) => item.id !== first.id), seed + 2);
     return pepperHotterQuestion(seed, first, second);
@@ -786,7 +787,7 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
 const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: readonly string[] = []): Question => {
   const pool = preferredPool(peppers, difficulty);
   const pepper = discoveryShuffle(pool, seed, unlockedTitles, (item) => item.name)[0];
-  const measuredPool = pool.filter(hasScovilleMeasurement);
+  const measuredPool = pool.filter(hasScovilleMeasurement).filter(isPepperFruit);
   const locationPool = pool.filter(hasLocationMetadata);
   const locationCandidates = locationPool.flatMap((item, index) => {
     const mapChoices = locationQuestionChoices(item, locationPool, difficulty, seed + 5 + index);
@@ -831,7 +832,9 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
       id: `${seed}-pepper-heat-${pepper.id}`,
       topic: "peppers",
       kind,
-      prompt: `Look at this ${pepper.color} pepper. What heat zone is ${pepper.name}?`,
+      prompt: pepper.isCondiment
+        ? `Look at this spicy condiment. What heat zone is ${pepper.name}?`
+        : `Look at this ${pepper.color} pepper. What heat zone is ${pepper.name}?`,
       image: pepper.image,
       imageAlt: pepper.name,
       imageCredit: pepper.imageCredit,
@@ -845,7 +848,9 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
   }
 
   if (kind === "pepper-hotter") {
-    const measuredPepper = hasScovilleMeasurement(pepper) ? pepper : sample(measuredPool, seed + 10);
+    const measuredPepper = isPepperFruit(pepper) && hasScovilleMeasurement(pepper)
+      ? pepper
+      : sample(measuredPool, seed + 10);
     const challenger = sample(measuredPool.filter((item) => item.id !== measuredPepper.id), seed + 11);
     return pepperHotterQuestion(seed, measuredPepper, challenger);
   }

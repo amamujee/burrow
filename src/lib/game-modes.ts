@@ -968,7 +968,8 @@ const spaceTrumpPool = () => spaceCards.filter((card) =>
   card.distanceFromSunMillionMiles !== undefined &&
   card.meanSurfaceTempF !== undefined,
 );
-const pepperTrumpPool = () => peppers.filter((pepper) => pepper.scovilleStatus !== "not-applicable");
+const pepperPlantPool = () => peppers.filter((pepper) => !pepper.isCondiment);
+const pepperTrumpPool = () => pepperPlantPool().filter((pepper) => pepper.scovilleStatus !== "not-applicable");
 
 const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null => {
   if (topic === "peppers") {
@@ -1444,6 +1445,7 @@ const countryCoordinates: Record<string, LatLon> = {
   Peru: [-9, -75],
   "Puerto Rico": [18.2, -66.5],
   Russia: [61, 105],
+  Rwanda: [-1.9, 29.9],
   "Saudi Arabia": [24, 45],
   "South Korea": [36, 128],
   Spain: [40, -4],
@@ -2086,7 +2088,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   const requestedOperation = numberOperationForSeed(seed);
 
   if (currentTopic === "peppers") {
-    const pool = preferredPool(peppers, difficulty);
+    const pool = preferredPool(pepperPlantPool(), difficulty);
     if (requestedOperation === "multiplication") {
       const [first, second] = shuffle(pool, seed + 1).slice(0, 2);
       return multiplicationRound(pepperCard(first), pepperCard(second), currentTopic, difficulty, seed);
@@ -2378,13 +2380,14 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
   const currentTopic = topicOrder(topic, seed);
 
   if (currentTopic === "peppers") {
-    const preferred = preferredPool(peppers, difficulty);
+    const pepperPlants = pepperPlantPool();
+    const preferred = preferredPool(pepperPlants, difficulty);
     const preferredEligibleHeats = heatBands.filter((heat) => {
       const sameCount = preferred.filter((pepper) => pepper.heat === heat).length;
       const hasClearOdd = preferred.some((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= 2);
       return sameCount >= 3 && hasClearOdd;
     });
-    const pool = preferredEligibleHeats.length ? preferred : peppers;
+    const pool = preferredEligibleHeats.length ? preferred : pepperPlants;
     const eligibleHeats = (preferredEligibleHeats.length ? preferredEligibleHeats : heatBands).filter((heat) => {
       const sameCount = pool.filter((pepper) => pepper.heat === heat).length;
       const hasClearOdd = pool.some((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= 2);
@@ -2578,7 +2581,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   const count = difficulty === 1 ? 3 : 4;
 
   if (currentTopic === "peppers") {
-    const cards = distinctStatCards(shuffle(preferredPool(peppers.filter(hasScovilleMeasurement), difficulty), seed + 1).map(pepperCard), seed + 2, count);
+    const cards = distinctStatCards(shuffle(preferredPool(pepperPlantPool().filter(hasScovilleMeasurement), difficulty), seed + 1).map(pepperCard), seed + 2, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-peppers`,

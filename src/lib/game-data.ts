@@ -20,6 +20,7 @@ export type ImageFields = {
 export type Pepper = {
   id: string;
   name: string;
+  isCondiment?: boolean;
   heat: HeatBand;
   shuMin: number | null;
   shuMax: number | null;
@@ -865,6 +866,22 @@ const pepperSeeds: PepperSeed[] = [
     fact: "Piri Piri, also called African Bird's Eye, grows small upright red pods famous for adding bright heat to sauces and marinades.",
   },
   {
+    id: "akabanga",
+    name: "Akabanga Chili Oil",
+    isCondiment: true,
+    shuMin: 150000,
+    shuMax: 150000,
+    scovilleStatus: "unofficial",
+    color: "bright orange",
+    ...contentImage("peppers", "akabanga", "ASC Leiden - Rwanda 2021 - 110 - A hotel table with a bottle of Akabanga Chili Oil - Kigali (cropped).jpg"),
+    imageCredit: "Gerard van de Bruinhorst / African Studies Centre Leiden, Wikimedia Commons (CC BY-SA 4.0)",
+    fact: "Akabanga is a Rwandan chili oil, not a separate pepper variety. Its name means little secret in Kinyarwanda, and it is made with 80% Scotch Bonnet and Habanero peppers plus 20% vegetable oil.",
+    metadata: {
+      difficultyBand: "easy",
+      accuracyNote: "A distributor lists Akabanga at 150,000 SHU but does not cite a laboratory test, so Burrow marks the score as unofficial.",
+    },
+  },
+  {
     id: "sichuan-pepper",
     name: "Sichuan Pepper",
     heat: "not spicy",
@@ -1385,6 +1402,7 @@ const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
   "numex-twilight": { label: "New Mexico, United States", countries: ["United States"], continents: ["North America"] },
   biquinho: { label: "Brazil", countries: ["Brazil"], continents: ["South America"] },
   "piri-piri": { label: "Southern Africa", countries: ["Mozambique"], continents: ["Africa"] },
+  akabanga: { label: "Nyirangarama, Rwanda", countries: ["Rwanda"], continents: ["Africa"] },
   "sichuan-pepper": { label: "Sichuan, China", countries: ["China"], continents: ["Asia"] },
   piquillo: { label: "Navarra, Spain", countries: ["Spain"], continents: ["Europe"] },
   "black-pearl": { label: "Beltsville, United States", countries: ["United States"], continents: ["North America"] },

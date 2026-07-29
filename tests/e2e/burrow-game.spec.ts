@@ -521,6 +521,60 @@ test("Sichuan Pepper joins normal play as a tingly non-chile without a made-up S
   }
 });
 
+test("Akabanga joins normal play as Rwanda's chili oil without becoming a pretend pepper plant", () => {
+  const pepper = peppers.find((item) => item.id === "akabanga");
+
+  expect(pepper).toMatchObject({
+    name: "Akabanga Chili Oil",
+    isCondiment: true,
+    shuMin: 150000,
+    shuMax: 150000,
+    heat: "very hot",
+    scovilleStatus: "unofficial",
+    color: "bright orange",
+    image: "/burrow-assets/peppers/akabanga.jpg",
+    metadata: {
+      location: {
+        label: "Nyirangarama, Rwanda",
+        countries: ["Rwanda"],
+        continents: ["Africa"],
+      },
+    },
+  });
+  expect(pepper?.fact).toContain("not a separate pepper variety");
+  expect(pepper?.fact).toContain("80% Scotch Bonnet and Habanero peppers");
+  expect(pepper?.metadata?.accuracyNote).toContain("does not cite a laboratory test");
+
+  const card = collectionCards().find((item) => item.id === "akabanga");
+  expect(card).toMatchObject({
+    image: "/burrow-assets/peppers/akabanga.jpg",
+    statValue: 150000,
+    statDisplay: "~150,000 SHU (unofficial)",
+    metadata: pepper?.metadata,
+  });
+
+  for (const difficulty of [1, 2, 3] as const) {
+    const ordinaryQuestions = Array.from({ length: 220 }, (_, seed) =>
+      buildSession("peppers", difficulty, seed * 101, []),
+    ).flat();
+    const akabangaQuestions = ordinaryQuestions.filter((question) => question.image === pepper?.image);
+    expect(akabangaQuestions.length).toBeGreaterThan(0);
+    expect(akabangaQuestions.every((question) => ["pepper-heat", "pepper-shu", "pepper-reading", "pepper-location"].includes(question.kind))).toBe(true);
+
+    expect(Array.from({ length: 220 }, (_, seed) => buildRevealRound("peppers", difficulty, seed * 101).card.id)).toContain("akabanga");
+    expect(Array.from({ length: 220 }, (_, seed) => buildFactRound("peppers", difficulty, seed * 101).image)).toContain(pepper?.image);
+    expect(Array.from({ length: 220 }, (_, seed) => buildGeoRound("peppers", difficulty, seed * 101).card.id)).toContain("akabanga");
+
+    for (let seed = 0; seed < 120; seed += 1) {
+      const topTrumps = buildTopTrumpRound("peppers", difficulty, seed);
+      expect([topTrumps.player.id, topTrumps.computer.id]).not.toContain("akabanga");
+      expect(buildSortRound("peppers", difficulty, seed).cards.map((item) => item.id)).not.toContain("akabanga");
+      expect(buildNumberRound("peppers", difficulty, seed).cards.map((item) => item.id)).not.toContain("akabanga");
+      expect(buildOddRound("peppers", difficulty, seed).cards.map((item) => item.id)).not.toContain("akabanga");
+    }
+  }
+});
+
 test("Yellow Bhut Assam joins normal pepper play with its permitted source image and Northeast India origin", () => {
   const pepper = peppers.find((item) => item.id === "yellow-bhut-assam");
 
