@@ -383,6 +383,88 @@ test("21 rare and unusual peppers keep verified metadata, honest estimates, and 
   expect(seenCount(3)).toBe(21);
 });
 
+test("Super Chilli, Moruga Red, and three chocolate varieties join normal pepper play", () => {
+  const expected = {
+    "super-chilli": {
+      name: "Super Chilli",
+      range: [40000, 50000],
+      color: "green through orange to red",
+      status: "unofficial",
+    },
+    "moruga-red": {
+      name: "Moruga Red",
+      range: [300000, 500000],
+      color: "blood red",
+      status: undefined,
+    },
+    "chocolate-ghost": {
+      name: "Chocolate Ghost Pepper",
+      range: [800000, 1041427],
+      color: "chocolate brown",
+      status: "unofficial",
+    },
+    "chocolate-moruga-scorpion": {
+      name: "Chocolate Moruga Scorpion",
+      range: [1200000, 2000000],
+      color: "chocolate brown",
+      status: "unofficial",
+    },
+    "chocolate-scotch-bonnet": {
+      name: "Chocolate Scotch Bonnet",
+      range: [100000, 350000],
+      color: "chocolate brown",
+      status: "unofficial",
+    },
+  } as const;
+  const pepperCards = collectionCards().filter((card) => card.topic === "peppers");
+
+  for (const [id, details] of Object.entries(expected)) {
+    const pepper = peppers.find((item) => item.id === id);
+    expect(pepper).toMatchObject({
+      name: details.name,
+      shuMin: details.range[0],
+      shuMax: details.range[1],
+      color: details.color,
+      image: `/burrow-assets/peppers/${id}.png`,
+      imageSourceUrl: "https://openai.com/",
+      imageCredit: "AI-generated for Burrow",
+    });
+    expect(pepper?.scovilleStatus).toBe(details.status);
+    if (details.status === "unofficial") expect(pepper?.metadata?.accuracyNote).toBeTruthy();
+
+    const card = pepperCards.find((item) => item.id === id);
+    expect(card).toMatchObject({
+      image: pepper?.image,
+      metadata: pepper?.metadata,
+      statValue: details.range[1],
+    });
+  }
+
+  expect(peppers.find((item) => item.id === "moruga-red")?.metadata?.location).toEqual({
+    label: "Trinidad and Tobago",
+    countries: ["Trinidad and Tobago"],
+    continents: ["North America"],
+  });
+  expect(peppers.find((item) => item.id === "moruga-red")?.fact).toContain("not the wrinkled Trinidad Moruga Scorpion");
+
+  const expectedByDifficulty = {
+    1: ["super-chilli", "chocolate-scotch-bonnet"],
+    2: ["super-chilli", "moruga-red", "chocolate-ghost", "chocolate-scotch-bonnet"],
+    3: Object.keys(expected),
+  } as const;
+
+  for (const difficulty of [1, 2, 3] as const) {
+    const naturallySeenImages = new Set(
+      Array.from({ length: 260 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, []))
+        .flat()
+        .map((question) => question.image),
+    );
+    for (const id of expectedByDifficulty[difficulty]) {
+      expect(naturallySeenImages).toContain(`/burrow-assets/peppers/${id}.png`);
+    }
+  }
+});
+
 test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate marked unofficial", () => {
   const newPeppers = Object.fromEntries(
     peppers
