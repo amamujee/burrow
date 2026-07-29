@@ -101,7 +101,7 @@ export function GameAnswerFeedback({
             {children}
           </div>
         </div>
-        <button type="button" onClick={onNext} className="mt-2 w-full rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2.5 text-base font-black text-white shadow-[3px_3px_0_#092421] hover:bg-[#23564f]">
+        <button type="button" onClick={() => onNext()} className="mt-2 w-full rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2.5 text-base font-black text-white shadow-[3px_3px_0_#092421] hover:bg-[#23564f]">
           {nextLabel}
         </button>
       </div>

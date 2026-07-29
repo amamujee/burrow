@@ -825,6 +825,27 @@ test("setup menu opens and core game controls keep working", async ({ page }) =>
   await expect(page.getByText("Research library")).toBeVisible();
 });
 
+test("Next builds a different round without passing the click event as learning history", async ({ page }) => {
+  await chooseOnlyMode(page, "Peek");
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+
+  const pageErrors: Error[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error));
+
+  const roundImage = page.locator("main article img");
+  await expect(roundImage).toHaveCount(1);
+  const firstImageAlt = await roundImage.getAttribute("alt");
+  expect(firstImageAlt).toBeTruthy();
+
+  await page.getByRole("button", { name: firstImageAlt ?? "", exact: true }).click();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+
+  await expect(page.getByLabel("Answer feedback")).toHaveCount(0);
+  await expect(roundImage).not.toHaveAttribute("alt", firstImageAlt ?? "");
+  expect(pageErrors).toEqual([]);
+});
+
 test("every twenty-fifth answer opens an automatic mini challenge and returns after its summary", async ({ page }) => {
   await page.evaluate(() => {
     const key = "burrow-profiles-v1";
