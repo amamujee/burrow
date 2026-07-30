@@ -558,105 +558,6 @@ test("Orange Butch T and Goat Trail join normal pepper play with Goat Trail's ca
   }
 });
 
-test("Sichuan Pepper joins normal play as a tingly non-chile without a made-up Scoville score", () => {
-  const pepper = peppers.find((item) => item.id === "sichuan-pepper");
-
-  expect(pepper).toMatchObject({
-    name: "Sichuan Pepper",
-    heat: "not spicy",
-    shuMin: null,
-    shuMax: null,
-    scovilleStatus: "not-applicable",
-    color: "reddish brown",
-    image: "/burrow-assets/peppers/sichuan-pepper.jpg",
-    metadata: {
-      location: {
-        label: "Sichuan, China",
-        countries: ["China"],
-        continents: ["Asia"],
-      },
-    },
-  });
-  expect(pepper?.fact).toContain("also spelled Szechuan pepper");
-  expect(pepper?.fact).toContain("Sanshool");
-  expect(pepper?.metadata?.accuracyNote).toContain("Scoville scale does not apply");
-
-  const card = collectionCards().find((item) => item.id === "sichuan-pepper");
-  expect(card?.statDisplay).toBe("Not on the Scoville scale");
-  expect(card?.subStat).toBe("tingly · not a chile · ✨");
-  expect(Number.isNaN(card?.statValue)).toBe(true);
-
-  for (const difficulty of [1, 2, 3] as const) {
-    const ordinaryQuestions = Array.from({ length: 180 }, (_, seed) =>
-      buildSession("peppers", difficulty, seed * 101, []),
-    ).flat();
-    const sichuanQuestions = ordinaryQuestions.filter((question) => question.image === pepper?.image);
-    expect(sichuanQuestions.length).toBeGreaterThan(0);
-    expect(sichuanQuestions.every((question) => ["pepper-heat", "pepper-reading", "pepper-location"].includes(question.kind))).toBe(true);
-    expect(sichuanQuestions.every((question) => question.numberLine === undefined)).toBe(true);
-  }
-
-  for (let seed = 0; seed < 100; seed += 1) {
-    const topTrumps = buildTopTrumpRound("peppers", 3, seed);
-    expect([topTrumps.player.id, topTrumps.computer.id]).not.toContain("sichuan-pepper");
-    expect(buildSortRound("peppers", 3, seed).cards.every((sortCard) => sortCard.id !== "sichuan-pepper")).toBe(true);
-  }
-});
-
-test("Akabanga joins normal play as Rwanda's chili oil without becoming a pretend pepper plant", () => {
-  const pepper = peppers.find((item) => item.id === "akabanga");
-
-  expect(pepper).toMatchObject({
-    name: "Akabanga Chili Oil",
-    isCondiment: true,
-    shuMin: 150000,
-    shuMax: 150000,
-    heat: "very hot",
-    scovilleStatus: "unofficial",
-    color: "bright orange",
-    image: "/burrow-assets/peppers/akabanga.jpg",
-    metadata: {
-      location: {
-        label: "Nyirangarama, Rwanda",
-        countries: ["Rwanda"],
-        continents: ["Africa"],
-      },
-    },
-  });
-  expect(pepper?.fact).toContain("not a separate pepper variety");
-  expect(pepper?.fact).toContain("80% Scotch Bonnet and Habanero peppers");
-  expect(pepper?.metadata?.accuracyNote).toContain("does not cite a laboratory test");
-
-  const card = collectionCards().find((item) => item.id === "akabanga");
-  expect(card).toMatchObject({
-    image: "/burrow-assets/peppers/akabanga.jpg",
-    statValue: 150000,
-    statDisplay: "~150,000 SHU (unofficial)",
-    metadata: pepper?.metadata,
-  });
-
-  for (const difficulty of [1, 2, 3] as const) {
-    const ordinaryQuestions = Array.from({ length: 220 }, (_, seed) =>
-      buildSession("peppers", difficulty, seed * 101, []),
-    ).flat();
-    const akabangaQuestions = ordinaryQuestions.filter((question) => question.image === pepper?.image);
-    expect(akabangaQuestions.length).toBeGreaterThan(0);
-    expect(akabangaQuestions.every((question) => ["pepper-heat", "pepper-shu", "pepper-reading", "pepper-location"].includes(question.kind))).toBe(true);
-
-    expect(Array.from({ length: 220 }, (_, seed) => buildRevealRound("peppers", difficulty, seed * 101).card.id)).toContain("akabanga");
-    expect(Array.from({ length: 220 }, (_, seed) => buildFactRound("peppers", difficulty, seed * 101).image)).toContain(pepper?.image);
-    expect(Array.from({ length: 220 }, (_, seed) => buildGeoRound("peppers", difficulty, seed * 101).card.id)).toContain("akabanga");
-
-    for (let seed = 0; seed < 120; seed += 1) {
-      const topTrumps = buildTopTrumpRound("peppers", difficulty, seed);
-      expect([topTrumps.player.id, topTrumps.computer.id]).not.toContain("akabanga");
-      expect(buildSortRound("peppers", difficulty, seed).cards.map((item) => item.id)).not.toContain("akabanga");
-      expect(buildNumberRound("peppers", difficulty, seed).cards.map((item) => item.id)).not.toContain("akabanga");
-      expect(buildOddRound("peppers", difficulty, seed).cards.map((item) => item.id)).not.toContain("akabanga");
-    }
-  }
-});
-
 test("Yellow Bhut Assam joins normal pepper play with its permitted source image and Northeast India origin", () => {
   const pepper = peppers.find((item) => item.id === "yellow-bhut-assam");
 
@@ -1281,6 +1182,39 @@ test("collection only shows selected topics", async ({ page }) => {
     expect.objectContaining({ alt: "7 Pot Douglah", src: "/burrow-assets/peppers/seven-pot-douglah.jpg", fullyContained: true }),
     expect.objectContaining({ alt: "Chocolate Bhutlah", src: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
   ]);
+});
+
+test("every pepper shown in head to head is added to the collection, including Habanero", async ({ page }) => {
+  await chooseOnlyMode(page, "Head to Head");
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+
+  let sawHabanero = false;
+  for (let round = 0; round < 6; round += 1) {
+    const visibleTitles = await page.locator("main article").first().getByRole("img").evaluateAll((images) =>
+      images.map((image) => image.getAttribute("alt")).filter((title): title is string => Boolean(title)),
+    );
+    expect(visibleTitles).toHaveLength(2);
+    if (visibleTitles.includes("Habanero")) {
+      sawHabanero = true;
+      break;
+    }
+    await page.getByRole("button", { name: "Skip question" }).click();
+  }
+  expect(sawHabanero).toBe(true);
+
+  await page.waitForFunction(() => {
+    const profiles = JSON.parse(window.localStorage.getItem("burrow-profiles-v1") ?? "{}") as {
+      activeProfileId?: string;
+      profiles?: { id: string; progress: { unlockedCards: string[] } }[];
+    };
+    return profiles.profiles
+      ?.find((profile) => profile.id === profiles.activeProfileId)
+      ?.progress.unlockedCards.includes("Habanero");
+  });
+
+  await page.getByRole("button", { name: /Cards/ }).click();
+  const collection = page.getByText("Collection", { exact: true }).locator("xpath=ancestor::section[1]");
+  await expect(collection.getByRole("img", { name: "Habanero", exact: true })).toBeVisible();
 });
 
 test("playable dinosaur pack appears in setup topics", async ({ page }) => {

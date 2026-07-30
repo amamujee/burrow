@@ -322,8 +322,11 @@ const loadPlayEvents = (): PlayTelemetryEvent[] => {
 
 const stableRoundKey = (id: string) => id.replace(/^\d+-/, "");
 
+const questionCollectionTitles = (question: Question) =>
+  question.comparison?.map((card) => card.title) ?? [question.imageAlt];
+
 const questionLearningIdentity = (question: Question): LearningIdentity => {
-  const subjects = question.comparison?.map((card) => card.title) ?? [question.imageAlt];
+  const subjects = questionCollectionTitles(question);
   return learningIdentity({
     exactKey: `question:${questionMemoryKey(question)}`,
     conceptKey: question.map
@@ -740,6 +743,38 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const currentTopicLabel = isQuestionMode && question ? topicLabel(question.topic) : typeof currentTopicScope === "string" && currentTopicScope !== "mixed" ? topicLabel(currentTopicScope) : "Mixed topics";
   const currentRoundContext = `${currentTopicLabel} · ${gameTypeLabel(activeChallengeMode)}`;
   const accuracy = progress.answered ? Math.round((progress.correct / progress.answered) * 100) : 0;
+  const discoverableTitles = useMemo(() => {
+    if (showCollection || miniChallengeActive) return [];
+    if (isQuestionMode) return question ? questionCollectionTitles(question) : [];
+
+    if (activeChallengeMode === "sort") return sortRound.cards.map((card) => card.title);
+    if (activeChallengeMode === "fact") return [factRound.imageAlt];
+    if (activeChallengeMode === "peek") return [revealRound.card.title];
+    if (activeChallengeMode === "geo") return [geoRound.card.title];
+    if (activeChallengeMode === "number") return numberRound.cards.map((card) => card.title);
+    if (activeChallengeMode === "odd") return oddRound.cards.map((card) => card.title);
+    if (activeChallengeMode === "trumps") {
+      return topTrumpSelected === null
+        ? [topTrumpRound.player.title]
+        : [topTrumpRound.player.title, topTrumpRound.computer.title];
+    }
+
+    return [];
+  }, [
+    activeChallengeMode,
+    factRound,
+    geoRound,
+    isQuestionMode,
+    miniChallengeActive,
+    numberRound,
+    oddRound,
+    question,
+    revealRound,
+    showCollection,
+    sortRound,
+    topTrumpRound,
+    topTrumpSelected,
+  ]);
 
   useEffect(() => {
     document.documentElement.dataset.burrowHydrated = "true";
@@ -1133,17 +1168,31 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     }
   };
 
-  const setProgress = (update: Progress | ((current: Progress) => Progress)) => {
+  const setProgress = useCallback((update: Progress | ((current: Progress) => Progress)) => {
     const activeProfileId = activeProfile.id;
     setProfilesState((current) => ({
       ...current,
       profiles: current.profiles.map((profile) => {
         if (profile.id !== activeProfileId) return profile;
         const nextProgress = typeof update === "function" ? update(profile.progress) : update;
+        if (nextProgress === profile.progress) return profile;
         return { ...profile, progress: normalizeProgress(nextProgress) };
       }),
     }));
-  };
+  }, [activeProfile.id]);
+
+  useEffect(() => {
+    if (!profilesReady || !discoverableTitles.length) return;
+    const discoveryTimer = window.setTimeout(() => {
+      setProgress((current) => {
+        const newlyDiscovered = discoverableTitles.filter((title) => !current.unlockedCards.includes(title));
+        return newlyDiscovered.length
+          ? { ...current, unlockedCards: addUnique(current.unlockedCards, newlyDiscovered) }
+          : current;
+      });
+    }, 0);
+    return () => window.clearTimeout(discoveryTimer);
+  }, [discoverableTitles, profilesReady, setProgress]);
 
   const reward = ({
     correct,
@@ -1181,7 +1230,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         topic: topicName ?? "mixed",
         outcome: correct ? "correct" : "incorrect",
       }),
-      unlockedCards: correct ? addUnique(current.unlockedCards, unlockTitles) : current.unlockedCards,
+      unlockedCards: addUnique(current.unlockedCards, unlockTitles),
       topicWins: topicName && isKnowledgeTopic(topicName) ? { ...current.topicWins, [topicName]: current.topicWins[topicName] + (correct ? 1 : 0) } : current.topicWins,
       topicStats: topicName && isKnowledgeTopic(topicName)
         ? {
@@ -1416,7 +1465,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       modeName: mode === "mix" ? "mix" : activeChallengeMode,
       seenId: itemKey,
       learningIdentity: questionLearningIdentity(question),
-      unlockTitles: [question.imageAlt],
+      unlockTitles: questionCollectionTitles(question),
     });
     recordChallengeEvent(activeChallengeMode, {
       action: "answer",
@@ -3849,13 +3898,13 @@ function CollectionBook({
                 </div>
                 <div className="p-2">
                   <p className="text-base font-black leading-tight text-[#102f36]">{isUnlocked ? card.title : "Locked card"}</p>
-                  <p className="mt-1 text-sm font-black text-[#9f3f2b]">{isUnlocked ? card.statDisplay : "Win a round"}</p>
+                  <p className="mt-1 text-sm font-black text-[#9f3f2b]">{isUnlocked ? card.statDisplay : "Find it in play"}</p>
                   {isUnlocked && (
                     <p className={`mt-1 text-[10px] font-black uppercase tracking-[0.1em] ${card.qualityScore >= 85 ? "text-[#2f7d4f]" : card.qualityScore >= 70 ? "text-[#a36b00]" : "text-[#9f3f2b]"}`}>
                       Quality {card.qualityScore}
                     </p>
                   )}
-                  <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#5f6b5d]">{isUnlocked ? card.fact : "Answer correctly to add it here."}</p>
+                  <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#5f6b5d]">{isUnlocked ? card.fact : "See this card in a round to add it here."}</p>
                 </div>
               </div>
             );
