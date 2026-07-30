@@ -22,6 +22,7 @@ import {
   geoPointDistanceKm,
   geoPointMapDistance,
   orderCollectionCardsByScoville,
+  slotSortCardIds,
   type GenericKnowledgeCard,
 } from "../../src/lib/game-modes";
 import { buildSession } from "../../src/lib/questions";
@@ -513,6 +514,18 @@ test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate ma
     expect(visibleNoahCount).toBeGreaterThan(200);
     expect(visibleNoahCount).toBeLessThan(discoveryRounds.length);
   }
+});
+
+test("Pepper Y snaps directly into the hottest sort slot", () => {
+  const round = Array.from({ length: 500 }, (_, seed) => buildSortRound("peppers", 3, seed))
+    .find((candidate) => candidate.cards.some((card) => card.id === "pepper-y"));
+
+  expect(round).toBeDefined();
+  expect(round?.answerIds.at(-1)).toBe("pepper-y");
+  expect(slotSortCardIds(round!, ["pepper-y"])).toEqual([
+    ...Array(round!.answerIds.length - 1).fill(undefined),
+    "pepper-y",
+  ]);
 });
 
 test("Orange Butch T and Goat Trail join normal pepper play with Goat Trail's cayenne-based estimate marked unofficial", () => {
@@ -1184,7 +1197,30 @@ test("collection only shows selected topics", async ({ page }) => {
   ]);
 });
 
-test("every pepper shown in head to head is added to the collection, including Habanero", async ({ page }) => {
+test("sort cards snap into their ranked slots instead of the next empty slot", async ({ page }) => {
+  await chooseOnlyMode(page, "Sort");
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+
+  const cardButtons = page.locator("main section > article").first().getByRole("button");
+  const cards = await cardButtons.evaluateAll((buttons) => buttons.map((button, index) => {
+    const labels = Array.from(button.querySelectorAll("p")).map((label) => label.textContent?.trim() ?? "");
+    const score = Number(labels[1]?.replace(/[^0-9]/g, ""));
+    return { index, title: labels[0], score };
+  }));
+  expect(cards.length).toBeGreaterThanOrEqual(3);
+
+  const hottest = [...cards].sort((a, b) => b.score - a.score)[0];
+  await cardButtons.nth(hottest.index).click();
+  await expect(page.getByLabel(`Sort slot ${cards.length}: ${hottest.title}`)).toBeVisible();
+
+  for (const card of cards.filter((item) => item.index !== hottest.index)) {
+    await cardButtons.nth(card.index).click();
+  }
+  await page.getByRole("button", { name: "Check order" }).click();
+  await expect(page.getByText("Perfect order!")).toBeVisible();
+});
+
+test("a correct head to head answer unlocks both peppers, while skips do not", async ({ page }) => {
   await chooseOnlyMode(page, "Head to Head");
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
 
@@ -1202,6 +1238,18 @@ test("every pepper shown in head to head is added to the collection, including H
   }
   expect(sawHabanero).toBe(true);
 
+  const unlockedCards = async () => page.evaluate(() => {
+    const profiles = JSON.parse(window.localStorage.getItem("burrow-profiles-v1") ?? "{}") as {
+      activeProfileId?: string;
+      profiles?: { id: string; progress: { unlockedCards: string[] } }[];
+    };
+    return profiles.profiles
+      ?.find((profile) => profile.id === profiles.activeProfileId)
+      ?.progress.unlockedCards ?? [];
+  });
+  expect(await unlockedCards()).not.toContain("Habanero");
+
+  await page.getByRole("button", { name: /Choose [AB]: Ghost Pepper/ }).click();
   await page.waitForFunction(() => {
     const profiles = JSON.parse(window.localStorage.getItem("burrow-profiles-v1") ?? "{}") as {
       activeProfileId?: string;
@@ -1209,7 +1257,10 @@ test("every pepper shown in head to head is added to the collection, including H
     };
     return profiles.profiles
       ?.find((profile) => profile.id === profiles.activeProfileId)
-      ?.progress.unlockedCards.includes("Habanero");
+      ?.progress.unlockedCards.includes("Habanero")
+      && profiles.profiles
+        ?.find((profile) => profile.id === profiles.activeProfileId)
+        ?.progress.unlockedCards.includes("Ghost Pepper");
   });
 
   await page.getByRole("button", { name: /Cards/ }).click();

@@ -77,6 +77,21 @@ export type SortRound = {
   statLabel: string;
 };
 
+export const slotSortCardIds = (round: SortRound, pickedIds: readonly string[]) => {
+  const remaining = [...pickedIds];
+  return round.answerIds.map((answerId) => {
+    const answerCard = round.cards.find((card) => card.id === answerId);
+    if (!answerCard) return undefined;
+
+    const matchIndex = remaining.findIndex((pickedId) => {
+      const pickedCard = round.cards.find((card) => card.id === pickedId);
+      return pickedCard && (pickedCard.statValue === answerCard.statValue || pickedCard.statDisplay === answerCard.statDisplay);
+    });
+    if (matchIndex < 0) return undefined;
+    return remaining.splice(matchIndex, 1)[0];
+  });
+};
+
 export type FactRound = {
   id: string;
   topic: RoundTopic;

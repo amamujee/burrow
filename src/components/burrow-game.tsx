@@ -28,6 +28,7 @@ import {
   geoChoiceForLocation,
   modeOptions,
   orderCollectionCardsByScoville,
+  slotSortCardIds,
   type FactRound,
   type GeoRound,
   type GameMode,
@@ -554,7 +555,8 @@ const isSortSlotCorrect = (round: SortRound, pickedId: string | undefined, index
   const pickedCard = sortCardById(round, pickedId);
   return Boolean(pickedCard && sortAcceptableCardsAt(round, index).some((card) => card.id === pickedCard.id));
 };
-const isSortAnswerCorrect = (round: SortRound, picked: string[]) => round.answerIds.every((_, index) => isSortSlotCorrect(round, picked[index], index));
+const isSortAnswerCorrect = (round: SortRound, picked: readonly (string | undefined)[]) =>
+  round.answerIds.every((_, index) => isSortSlotCorrect(round, picked[index], index));
 
 export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const packDecks = useMemo(() => packs.map(packToPlayableDeck).filter((deck) => deck.cards.length >= 4), [packs]);
@@ -743,38 +745,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const currentTopicLabel = isQuestionMode && question ? topicLabel(question.topic) : typeof currentTopicScope === "string" && currentTopicScope !== "mixed" ? topicLabel(currentTopicScope) : "Mixed topics";
   const currentRoundContext = `${currentTopicLabel} · ${gameTypeLabel(activeChallengeMode)}`;
   const accuracy = progress.answered ? Math.round((progress.correct / progress.answered) * 100) : 0;
-  const discoverableTitles = useMemo(() => {
-    if (showCollection || miniChallengeActive) return [];
-    if (isQuestionMode) return question ? questionCollectionTitles(question) : [];
-
-    if (activeChallengeMode === "sort") return sortRound.cards.map((card) => card.title);
-    if (activeChallengeMode === "fact") return [factRound.imageAlt];
-    if (activeChallengeMode === "peek") return [revealRound.card.title];
-    if (activeChallengeMode === "geo") return [geoRound.card.title];
-    if (activeChallengeMode === "number") return numberRound.cards.map((card) => card.title);
-    if (activeChallengeMode === "odd") return oddRound.cards.map((card) => card.title);
-    if (activeChallengeMode === "trumps") {
-      return topTrumpSelected === null
-        ? [topTrumpRound.player.title]
-        : [topTrumpRound.player.title, topTrumpRound.computer.title];
-    }
-
-    return [];
-  }, [
-    activeChallengeMode,
-    factRound,
-    geoRound,
-    isQuestionMode,
-    miniChallengeActive,
-    numberRound,
-    oddRound,
-    question,
-    revealRound,
-    showCollection,
-    sortRound,
-    topTrumpRound,
-    topTrumpSelected,
-  ]);
 
   useEffect(() => {
     document.documentElement.dataset.burrowHydrated = "true";
@@ -1181,19 +1151,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     }));
   }, [activeProfile.id]);
 
-  useEffect(() => {
-    if (!profilesReady || !discoverableTitles.length) return;
-    const discoveryTimer = window.setTimeout(() => {
-      setProgress((current) => {
-        const newlyDiscovered = discoverableTitles.filter((title) => !current.unlockedCards.includes(title));
-        return newlyDiscovered.length
-          ? { ...current, unlockedCards: addUnique(current.unlockedCards, newlyDiscovered) }
-          : current;
-      });
-    }, 0);
-    return () => window.clearTimeout(discoveryTimer);
-  }, [discoverableTitles, profilesReady, setProgress]);
-
   const reward = ({
     correct,
     xpGain,
@@ -1230,7 +1187,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         topic: topicName ?? "mixed",
         outcome: correct ? "correct" : "incorrect",
       }),
-      unlockedCards: addUnique(current.unlockedCards, unlockTitles),
+      unlockedCards: correct ? addUnique(current.unlockedCards, unlockTitles) : current.unlockedCards,
       topicWins: topicName && isKnowledgeTopic(topicName) ? { ...current.topicWins, [topicName]: current.topicWins[topicName] + (correct ? 1 : 0) } : current.topicWins,
       topicStats: topicName && isKnowledgeTopic(topicName)
         ? {
@@ -1564,7 +1521,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
 
   const checkSort = () => {
     if (sortChecked || sortPicked.length !== sortRound.answerIds.length) return;
-    const correct = isSortAnswerCorrect(sortRound, sortPicked);
+    const slottedPicked = slotSortCardIds(sortRound, sortPicked);
+    const correct = isSortAnswerCorrect(sortRound, slottedPicked);
     const itemKey = stableRoundKey(sortRound.id);
     const xpGain = correct ? 30 + progress.difficulty * 6 : 8;
     const unlocked = sortRound.cards.filter((card) => sortRound.answerIds.includes(card.id)).map((card) => card.title);
@@ -1585,7 +1543,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       questionKind: "sort",
       prompt: sortRound.prompt,
       title: "Sort round",
-      choice: sortPicked.join(","),
+      choice: slottedPicked.filter((id): id is string => Boolean(id)).join(","),
       answer: sortRound.answerIds.join(","),
       correct,
       roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
@@ -2807,6 +2765,7 @@ function SortMode({
     .map((group) => group.titles.join(" / "))
     .join(" -> ");
   const pickedSet = new Set(picked);
+  const slottedPicked = slotSortCardIds(round, picked);
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
@@ -2840,10 +2799,11 @@ function SortMode({
           <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
         </div>
         <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.45rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+        <p className="mt-1 text-sm font-bold text-[#5f6b5d]">Tap any card. It snaps into its correct numbered spot.</p>
 
         <div className="mt-3 grid gap-2">
           {round.answerIds.map((id, index) => {
-            const pickedId = picked[index];
+            const pickedId = slottedPicked[index];
             const card = sortCardById(round, pickedId);
             const acceptableCards = sortAcceptableCardsAt(round, index);
             const correctCard = acceptableCards[0] ?? sortCardById(round, id);
@@ -2857,6 +2817,7 @@ function SortMode({
             return (
               <div
                 key={`${round.id}-slot-${id}`}
+                aria-label={`Sort slot ${index + 1}: ${card?.title ?? "empty"}`}
                 className={`grid min-h-14 grid-cols-[44px_1fr] items-center gap-2 rounded-lg border-2 p-2 ${
                   good ? "border-[#2f7d4f] bg-[#e9ffe9]" : bad ? "border-[#9f3f2b] bg-[#fff0ea]" : "border-[#d9c7a7] bg-[#fff9ec]"
                 }`}
@@ -3898,13 +3859,13 @@ function CollectionBook({
                 </div>
                 <div className="p-2">
                   <p className="text-base font-black leading-tight text-[#102f36]">{isUnlocked ? card.title : "Locked card"}</p>
-                  <p className="mt-1 text-sm font-black text-[#9f3f2b]">{isUnlocked ? card.statDisplay : "Find it in play"}</p>
+                  <p className="mt-1 text-sm font-black text-[#9f3f2b]">{isUnlocked ? card.statDisplay : "Win a round"}</p>
                   {isUnlocked && (
                     <p className={`mt-1 text-[10px] font-black uppercase tracking-[0.1em] ${card.qualityScore >= 85 ? "text-[#2f7d4f]" : card.qualityScore >= 70 ? "text-[#a36b00]" : "text-[#9f3f2b]"}`}>
                       Quality {card.qualityScore}
                     </p>
                   )}
-                  <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#5f6b5d]">{isUnlocked ? card.fact : "See this card in a round to add it here."}</p>
+                  <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#5f6b5d]">{isUnlocked ? card.fact : "Answer correctly to add it here."}</p>
                 </div>
               </div>
             );
