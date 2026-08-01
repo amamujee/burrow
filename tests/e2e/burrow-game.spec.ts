@@ -6,6 +6,7 @@ import {
   pepperChallengeCampaigns,
 } from "../../src/components/core-mini-challenge";
 import { peppers } from "../../src/lib/game-data";
+import { poolForDifficulty } from "../../src/lib/difficulty-pool";
 import {
   buildFactRound,
   buildFactRoundFromCards,
@@ -382,6 +383,95 @@ test("21 rare and unusual peppers keep verified metadata, honest estimates, and 
   expect(seenCount(1)).toBeGreaterThanOrEqual(5);
   expect(seenCount(2)).toBeGreaterThanOrEqual(12);
   expect(seenCount(3)).toBe(21);
+});
+
+test("25 world peppers add credited source photos, honest heat data, geography, and natural rotation", () => {
+  const expected = {
+    "seven-pot-barrackpore": [1000000, null],
+    "aji-cito": [80000, 100000],
+    "aji-cristal": [30000, 30000],
+    "aji-habanero": [5000, 10000],
+    "aji-sivri": [5000, 30000],
+    "brain-strain": [1000000, 1350000],
+    "caribbean-red": [300000, 475000],
+    "carmen-italian-sweet": [0, 500],
+    cascabella: [1500, 6000],
+    "chilhuacle-amarillo": [5000, 5000],
+    chimayo: [4000, 6000],
+    cowhorn: [2500, 5000],
+    "devils-tongue": [125000, 325000],
+    dolmalik: [1000, 5000],
+    "doux-des-landes": [0, 0],
+    dundicut: [55000, 65000],
+    espelette: [0, 4000],
+    "guntur-sannam": [25000, 40000],
+    "gypsy-pepper": [0, 0],
+    "kashmiri-chili": [1000, 2000],
+    "piment-de-bresse": [1500, 2500],
+    "wiri-wiri": [60000, 350000],
+    "aji-panca": [500, 1000],
+    "alma-paprika": [500, 2000],
+    "cheiro-roxa": [60000, 80000],
+  } as const;
+  const newPepperIds = Object.keys(expected);
+  const newPeppers = peppers.filter((pepper) => newPepperIds.includes(pepper.id));
+
+  expect(newPeppers).toHaveLength(25);
+  expect(new Set(newPeppers.map((pepper) => pepper.id)).size).toBe(25);
+  expect(new Set(newPeppers.map((pepper) => pepper.image)).size).toBe(25);
+  expect(newPeppers.filter((pepper) => pepper.metadata?.location)).toHaveLength(21);
+  expect(newPeppers.every((pepper) => !pepper.isCondiment)).toBe(true);
+
+  for (const pepper of newPeppers) {
+    expect([pepper.shuMin, pepper.shuMax]).toEqual(expected[pepper.id as keyof typeof expected]);
+    expect(pepper.image).toBe(`/burrow-assets/peppers/${pepper.id}.jpg`);
+    expect(pepper.imageFit).toBe("contain");
+    expect(pepper.fact.length).toBeGreaterThanOrEqual(50);
+    if (pepper.scovilleStatus === "unofficial") expect(pepper.metadata?.accuracyNote).toBeTruthy();
+  }
+
+  expect(newPeppers.filter((pepper) => pepper.imageCredit === "Chili Pepper Madness (used with permission)")).toHaveLength(23);
+  expect(newPeppers.find((pepper) => pepper.id === "alma-paprika")).toMatchObject({
+    imageCredit: "Chili Peps Wiki (used with permission)",
+    imageSourceUrl: "https://chilipeps.fandom.com/wiki/List_of_Capsicum_cultivars",
+  });
+  expect(newPeppers.find((pepper) => pepper.id === "cheiro-roxa")).toMatchObject({
+    name: "Cheiro Roxa",
+    color: "purple to peach",
+    imageSourceUrl: "https://commons.wikimedia.org/wiki/File:Cheiro_roxa2.jpg",
+    imageCredit: "Mptu22, CC BY-SA 4.0, Wikimedia Commons",
+    metadata: {
+      location: { label: "Brazil", countries: ["Brazil"], continents: ["South America"] },
+    },
+  });
+  expect(newPeppers.find((pepper) => pepper.id === "dundicut")).toMatchObject({
+    name: "Dundicut",
+    color: "ruby red",
+    imageSourceUrl: "https://www.chilipeppermadness.com/chili-pepper-types/medium-hot-chili-peppers/dundicut-chili-peppers/",
+    metadata: {
+      location: { label: "Sindh, Pakistan", countries: ["Pakistan"], continents: ["Asia"] },
+    },
+  });
+
+  const pepperCards = collectionCards().filter((card) => card.topic === "peppers");
+  for (const pepper of newPeppers) {
+    const card = pepperCards.find((item) => item.id === pepper.id);
+    expect(card).toMatchObject({ image: pepper.image, metadata: pepper.metadata });
+    if (pepper.shuMax === null) expect(Number.isNaN(card?.statValue)).toBe(true);
+    else expect(card?.statValue).toBe(pepper.shuMax);
+  }
+  expect(pepperCards.find((card) => card.id === "seven-pot-barrackpore")?.statDisplay).toBe("1,000,000+ SHU (unofficial)");
+
+  for (const difficulty of [1, 2, 3] as const) {
+    const expectedAtDifficulty = poolForDifficulty(peppers, difficulty)
+      .filter((pepper) => newPepperIds.includes(pepper.id));
+    const naturallySeenImages = new Set(
+      Array.from({ length: 360 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, []))
+        .flat()
+        .map((question) => question.image),
+    );
+    for (const pepper of expectedAtDifficulty) expect(naturallySeenImages).toContain(pepper.image);
+  }
 });
 
 test("Super Chilli, Moruga Red, and three chocolate varieties join normal pepper play", () => {
