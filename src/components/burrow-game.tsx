@@ -17,6 +17,7 @@ import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Diffi
 import { cardDiscoveryIdentities, cardUnlockKeysForSubjects, isCardUnlocked } from "@/lib/card-discovery";
 import { autoDifficulty } from "@/lib/difficulty";
 import { migrateTopicSelection } from "@/lib/topic-selection";
+import { useSoundEffects } from "@/lib/sound-effects";
 import {
   buildFactRoundFromCards,
   buildFactRound,
@@ -605,6 +606,7 @@ const isSortAnswerCorrect = (round: SortRound, picked: readonly (string | undefi
   round.answerIds.every((_, index) => isSortSlotCorrect(round, picked[index], index));
 
 export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
+  const soundEffects = useSoundEffects();
   const packDecks = useMemo(() => packs.map(packToPlayableDeck).filter((deck) => deck.cards.length >= 4), [packs]);
   const packDeckById = useMemo(() => new Map(packDecks.map((deck) => [deck.id, deck])), [packDecks]);
   const playableTopics = useMemo<RoundTopic[]>(() => [...allKnowledgeTopics, ...packDecks.map((deck) => deck.id)], [packDecks]);
@@ -1260,6 +1262,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const nextXp = progress.xp + xpGain;
     const nextLevel = levelFromXp(nextXp);
     const feedbackCorrect = correct || neutral;
+    soundEffects.play(feedbackCorrect ? "correct" : "wrong");
     const unlockKeys = topicName
       ? cardUnlockKeysForSubjects(allCards, topicName, unlockTitles)
       : [];
@@ -2100,7 +2103,11 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   return (
-    <main className="field-guide-skin min-h-dvh overflow-x-hidden bg-[#0d332f] text-[#1d2528]">
+    <main
+      className="field-guide-skin min-h-dvh overflow-x-hidden bg-[#0d332f] text-[#1d2528]"
+      data-sound-effects={soundEffects.enabled ? "on" : "off"}
+      onClickCapture={soundEffects.handleClickCapture}
+    >
       <section className="burrow-game-shell field-guide-shell flex min-h-dvh flex-col gap-1.5 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-1.5 md:p-2 min-[900px]:h-dvh min-[900px]:min-h-0 min-[900px]:overflow-hidden">
         <GameHud
           profiles={profilesState.profiles}
@@ -2130,10 +2137,17 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           selectedOfflineImages={selectedOfflineImages}
           warmOfflineImages={warmOfflineImages}
           onConfirmedReset={() => resetProgress(true)}
+          soundEnabled={soundEffects.enabled}
+          onSoundToggle={soundEffects.toggle}
         />
 
         {miniChallengeActive ? (
-          <ChallengeMode campaign={miniChallengeCampaign} milestone={progress.answered} onComplete={finishMiniChallenge} />
+          <ChallengeMode
+            campaign={miniChallengeCampaign}
+            milestone={progress.answered}
+            onComplete={finishMiniChallenge}
+            onAnswer={(correct) => soundEffects.play(correct ? "correct" : "wrong")}
+          />
         ) : (
           <>
 
@@ -2337,6 +2351,8 @@ function GameHud({
   selectedOfflineImages,
   warmOfflineImages,
   onConfirmedReset,
+  soundEnabled,
+  onSoundToggle,
 }: {
   profiles: LearnerProfile[];
   activeProfileId: string;
@@ -2365,6 +2381,8 @@ function GameHud({
   selectedOfflineImages: string[];
   warmOfflineImages: string[];
   onConfirmedReset: () => void;
+  soundEnabled: boolean;
+  onSoundToggle: () => void;
 }) {
   const [openTray, setOpenTray] = useState<"mode" | "topics" | "more" | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
@@ -2381,7 +2399,7 @@ function GameHud({
   return (
     <header className="relative z-30 shrink-0 rounded-xl border-2 border-[#092421] bg-[#0d332f] p-2 shadow-[3px_3px_0_#092421]">
       <div className="relative z-10 flex min-w-0 flex-wrap items-stretch gap-2.5">
-        <div data-hud-info className="flex min-w-0 flex-[1_1_610px] flex-wrap items-stretch gap-2.5">
+        <div data-hud-info className="flex min-w-0 flex-[1_1_620px] flex-wrap items-stretch gap-2.5">
           <div data-hud-identity className="flex min-w-[230px] flex-[.9_1_230px] items-center gap-2.5 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-3.5 py-2 shadow-[3px_3px_0_#092421]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -2405,13 +2423,13 @@ function GameHud({
           </div>
         </div>
 
-        <div className="grid min-w-0 flex-[1_1_340px] grid-cols-[repeat(3,minmax(0,1fr))_52px] items-stretch gap-2.5 min-[900px]:flex-[.65_1_340px] min-[1400px]:max-w-[480px]" aria-label="Play controls">
+        <div className="grid min-w-0 flex-[1_1_356px] grid-cols-[repeat(3,minmax(0,1fr))_44px_52px] items-stretch gap-1.5 min-[900px]:flex-[.65_1_356px] min-[1400px]:max-w-[500px]" aria-label="Play controls">
           <button
             type="button"
             aria-expanded={openTray === "mode"}
             aria-controls="hud-mode-tray"
             onClick={() => toggleTray("mode")}
-            className={`flex min-h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border-2 border-[#092421] px-3.5 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "mode" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
+            className={`flex min-h-11 min-w-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg border-2 border-[#092421] px-1 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "mode" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
           >
             <span className="h-2.5 w-2.5 shrink-0 rounded-[3px] bg-[#9b5538]" />
             <span>Modes</span>
@@ -2422,7 +2440,7 @@ function GameHud({
             aria-expanded={openTray === "topics"}
             aria-controls="hud-topics-tray"
             onClick={() => toggleTray("topics")}
-            className={`flex min-h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border-2 border-[#092421] px-3.5 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "topics" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
+            className={`flex min-h-11 min-w-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg border-2 border-[#092421] px-1 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "topics" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
           >
             <span className="h-2.5 w-2.5 shrink-0 rounded-[3px] bg-[#9b5538]" />
             <span>Topics</span>
@@ -2431,10 +2449,23 @@ function GameHud({
           <button
             type="button"
             onClick={openCollection}
-            className={`flex min-h-11 min-w-0 items-center justify-center rounded-lg border-2 border-[#092421] px-3.5 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${showCollection ? "bg-[#f0c84b]" : "bg-[#fffdf6]"}`}
+            className={`flex min-h-11 min-w-0 items-center justify-center rounded-lg border-2 border-[#092421] px-1 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${showCollection ? "bg-[#f0c84b]" : "bg-[#fffdf6]"}`}
           >
             {showCollection ? "Back to game" : "Collection"}
             <span className="sr-only"> {collectionValue}</span>
+          </button>
+          <button
+            type="button"
+            aria-label={`Turn sound effects ${soundEnabled ? "off" : "on"}`}
+            aria-pressed={soundEnabled}
+            title={`Sound effects ${soundEnabled ? "on" : "off"}`}
+            onClick={onSoundToggle}
+            className={`flex min-h-11 w-11 items-center justify-center rounded-lg border-2 border-[#092421] px-2 py-2 text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${soundEnabled ? "bg-[#70d392]" : "bg-[#fffdf6]"}`}
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 10v4h3l4 3V7l-4 3H4Z" fill="currentColor" stroke="none" />
+              {soundEnabled ? <><path d="M15 9.2c1.2 1.6 1.2 4 0 5.6" /><path d="M18 6.8c2.6 2.9 2.6 7.5 0 10.4" /></> : <path d="m15.5 9.5 5 5m0-5-5 5" />}
+            </svg>
           </button>
           <button
             type="button"

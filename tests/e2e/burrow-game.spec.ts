@@ -1372,6 +1372,32 @@ test("HUD trays share one slot, stay open on selection, and protect the final to
   await expect(page.getByLabel("More controls")).toBeVisible();
 });
 
+test("sound effects start off, toggle from the HUD, and remember the choice", async ({ page }) => {
+  const pageErrors: Error[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error));
+
+  const soundOn = page.getByRole("button", { name: "Turn sound effects on" });
+  await expect(soundOn).toBeVisible();
+  await expect(soundOn).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator("main")).toHaveAttribute("data-sound-effects", "off");
+  await expect.poll(() => page.evaluate(() => window.localStorage.getItem("burrow-sound-effects-v1"))).toBe("off");
+
+  await soundOn.click();
+  const soundOff = page.getByRole("button", { name: "Turn sound effects off" });
+  await expect(soundOff).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("main")).toHaveAttribute("data-sound-effects", "on");
+  await expect.poll(() => page.evaluate(() => window.localStorage.getItem("burrow-sound-effects-v1"))).toBe("on");
+
+  await chooseOnlyMode(page, "True/False");
+  await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+
+  await page.reload();
+  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+  await expect(page.getByRole("button", { name: "Turn sound effects off" })).toHaveAttribute("aria-pressed", "true");
+  expect(pageErrors).toEqual([]);
+});
+
 test("HUD selector trays wrap onto new lines without horizontal scrolling", async ({ page }) => {
   await page.setViewportSize({ width: 834, height: 1194 });
 
@@ -1408,6 +1434,7 @@ test("HUD uses one compact row where space allows and wraps actions together wit
       modeControl(page).boundingBox(),
       topicsControl(page).boundingBox(),
       page.getByRole("button", { name: /^Collection/ }).boundingBox(),
+      page.getByRole("button", { name: /Turn sound effects/ }).boundingBox(),
       page.getByRole("button", { name: "More actions" }).boundingBox(),
     ]);
     expect(actionBoxes.every(Boolean)).toBe(true);
@@ -1416,7 +1443,7 @@ test("HUD uses one compact row where space allows and wraps actions together wit
     if (viewport.width >= 1024) {
       const difficultyBox = await page.locator("[data-hud-difficulty]").boundingBox();
       expect(difficultyBox).not.toBeNull();
-      expect(Math.abs(actionBoxes[0]!.y - difficultyBox!.y)).toBeLessThanOrEqual(4);
+      expect(Math.abs(actionBoxes[0]!.y - difficultyBox!.y), `${viewport.width}px controls should share the HUD row`).toBeLessThanOrEqual(4);
       expect(Math.abs(actionBoxes[0]!.height - difficultyBox!.height)).toBeLessThanOrEqual(1);
     }
     if (viewport.width >= 1440) {
@@ -1429,7 +1456,8 @@ test("HUD uses one compact row where space allows and wraps actions together wit
       expect(controlsBox!.width).toBeLessThanOrEqual(500);
       const primaryControlWidths = actionBoxes.slice(0, 3).map((box) => Math.round(box!.width));
       expect(Math.max(...primaryControlWidths) - Math.min(...primaryControlWidths)).toBeLessThanOrEqual(1);
-      expect(actionBoxes[3]!.width).toBeGreaterThanOrEqual(50);
+      expect(actionBoxes[3]!.width).toBeGreaterThanOrEqual(44);
+      expect(actionBoxes[4]!.width).toBeGreaterThanOrEqual(50);
     }
   }
 });

@@ -393,7 +393,7 @@ export function pepperChallengeCampaignForMilestone(milestone: number) {
   return pepperChallengeCampaigns[campaignIndex];
 }
 
-export function ChallengeMode({ campaign, milestone, onComplete }: { campaign: ChallengeCampaign; milestone: number; onComplete: (correct: number) => void }) {
+export function ChallengeMode({ campaign, milestone, onComplete, onAnswer }: { campaign: ChallengeCampaign; milestone: number; onComplete: (correct: number) => void; onAnswer?: (correct: boolean) => void }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [results, setResults] = useState<boolean[]>([]);
@@ -401,6 +401,12 @@ export function ChallengeMode({ campaign, milestone, onComplete }: { campaign: C
   const steps = campaign.steps;
   const step = steps[stepIndex];
   const correct = selected === step.answer;
+
+  const answer = (choice: string) => {
+    if (selected !== null) return;
+    setSelected(choice);
+    onAnswer?.(choice === step.answer);
+  };
 
   const next = () => {
     if (!selected) return;
@@ -444,7 +450,7 @@ export function ChallengeMode({ campaign, milestone, onComplete }: { campaign: C
     <section className="flex flex-1 flex-col gap-2 overflow-y-auto rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0 min-[900px]:overflow-hidden" aria-label={`Challenge Mode stop ${stepIndex + 1} of ${steps.length}`}>
       <ChallengeModeBanner campaign={campaign} milestone={milestone} stepIndex={stepIndex} />
       <div className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-        <ChallengeStoryStage campaign={campaign} step={step} selected={selected} onSelect={setSelected} />
+        <ChallengeStoryStage campaign={campaign} step={step} selected={selected} onSelect={answer} />
 
         <article key={step.id} className="flex min-w-0 flex-col rounded-lg border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421] min-[900px]:min-h-0 min-[900px]:overflow-y-auto">
           <div className="flex items-center justify-between gap-3"><p className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1 text-xs font-black uppercase tracking-[0.12em]">{step.icon} {step.skill}</p><p className="text-xs font-black text-[#72543e]">Question {stepIndex + 1}/{steps.length}</p></div>
@@ -457,7 +463,7 @@ export function ChallengeMode({ campaign, milestone, onComplete }: { campaign: C
             const chosenWrong = selected === choice && choice !== step.answer;
             const choiceIndex = step.choices.indexOf(choice);
             const isPinChoice = step.skill === "Geography" && /^Pin [A-Z]$/.test(choice);
-            return <GameChoiceButton key={choice} disabled={selected !== null} onClick={() => setSelected(choice)} chosen={chosenWrong} correct={answerChoice}>{step.skill === "Geography" && !isPinChoice && <span className="mr-2 inline-grid h-7 w-7 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs">{String.fromCharCode(65 + choiceIndex)}</span>}{choice}</GameChoiceButton>;
+            return <GameChoiceButton key={choice} disabled={selected !== null} onClick={() => answer(choice)} chosen={chosenWrong} correct={answerChoice}>{step.skill === "Geography" && !isPinChoice && <span className="mr-2 inline-grid h-7 w-7 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs">{String.fromCharCode(65 + choiceIndex)}</span>}{choice}</GameChoiceButton>;
           })}
           </GameChoiceGrid>
           {selected && <GameAnswerFeedback isCorrect={correct} celebration="Correct!" correctAnswer={step.answer} explanation={step.summary} evidence={step.skill === "Reading" ? step.evidence : undefined} note="Good try." nextLabel={stepIndex === steps.length - 1 ? "View challenge summary" : "Next question"} onNext={next} />}
