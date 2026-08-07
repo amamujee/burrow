@@ -50,44 +50,37 @@ import {
 const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
 const topicLabels = ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Universe", "Jet Hangar", "Countries & Flags", "Dinosaur Lab", "Tallest Mountains", "Tall Trees", "Bridges & Tunnels"];
 
-const setupSummary = (page: Page) => page.locator("summary").filter({ hasText: "Setup" });
-const setupDetails = (page: Page) => setupSummary(page).locator("xpath=..");
-const buttonForLabel = (page: Page, label: string) => page.getByRole("button", { name: new RegExp(label.replace("/", "\\/")) });
+const modeControl = (page: Page) => page.getByRole("button", { name: /^Mode:/ });
+const topicsControl = (page: Page) => page.getByRole("button", { name: /^Topics:/ });
+const modeTray = (page: Page) => page.getByLabel("Choose game mode");
+const topicsTray = (page: Page) => page.getByLabel("Choose topics");
+const mixOption = (page: Page, label: string) => modeTray(page).getByRole("button", { name: new RegExp(`^${label}, (included|not included) in Mix$`) });
 
 const chooseOnlyMode = async (page: Page, target: string) => {
-  await setupSummary(page).click();
-  const targetButton = buttonForLabel(page, target);
-  if ((await targetButton.getAttribute("aria-pressed")) !== "true") {
-    await targetButton.click();
-    await expect(targetButton).toHaveAttribute("aria-pressed", "true");
-  }
-
-  for (const label of modeLabels.filter((label) => label !== target)) {
-    const button = buttonForLabel(page, label);
-    if ((await button.getAttribute("aria-pressed")) === "true") {
-      await button.click();
-      await expect(button).toHaveAttribute("aria-pressed", "false");
-    }
-  }
-  await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
-  await expect(setupSummary(page)).toContainText("1 games");
+  await modeControl(page).click();
+  const targetButton = modeTray(page).getByRole("button", { name: target, exact: true });
+  await targetButton.click();
+  await expect(targetButton).toHaveAttribute("aria-pressed", "true");
+  await expect(modeTray(page)).toBeVisible();
+  await expect(modeControl(page)).toContainText(`Mode: ${target}`);
+  await modeControl(page).click();
 };
 
 const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
-  await setupSummary(page).click();
-  const targetButton = buttonForLabel(page, target);
+  await topicsControl(page).click();
+  const targetButton = topicsTray(page).getByRole("button", { name: target, exact: true });
   if ((await targetButton.getAttribute("aria-pressed")) !== "true") await targetButton.click();
   await expect(targetButton).toHaveAttribute("aria-pressed", "true");
 
   for (const label of topicLabels) {
-    const button = buttonForLabel(page, label);
+    const button = topicsTray(page).getByRole("button", { name: label, exact: true });
     if (label !== target && (await button.getAttribute("aria-pressed")) === "true") {
       await button.click();
       await expect(button).toHaveAttribute("aria-pressed", "false");
     }
   }
-  await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
-  await expect(setupSummary(page)).toContainText("1 topics");
+  await expect(topicsControl(page)).toContainText(`Topics: ${target}`);
+  await topicsControl(page).click();
 };
 
 const openChallengeAt = async (page: Page, milestone: number, topicLabel: string) => {
@@ -1263,9 +1256,6 @@ test("flight mode caches the app shell for a real offline reload", { tag: "@mobi
     if (!("serviceWorker" in navigator)) throw new Error("Service workers are unavailable");
     await navigator.serviceWorker.ready;
   });
-  await setupSummary(page).click();
-  await expect(page.getByText("Flight mode", { exact: true })).toBeVisible();
-  await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
 
   await context.setOffline(true);
   try {
@@ -1277,55 +1267,101 @@ test("flight mode caches the app shell for a real offline reload", { tag: "@mobi
   }
 });
 
-test("setup menu opens and core game controls keep working", async ({ page }) => {
+test("Mix selection is a first-class multi-select and setup stays hidden", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
-  await expect(setupSummary(page)).toContainText("9 games · 10 topics");
+  await expect(modeControl(page)).toContainText("Mode: Mix · 9 selected");
+  await expect(topicsControl(page)).toContainText("Topics: 10 topics");
+  await expect(page.getByRole("button", { name: /^Collection/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: "More actions" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Setup", exact: true })).toHaveCount(0);
 
-  await setupSummary(page).click();
-  await expect(page.getByText("Game Types")).toBeVisible();
-  await expect(page.getByText("Topics", { exact: true })).toBeVisible();
-  await expect(page.getByLabel("Learning recap")).toContainText("Ready for the first field note");
-  for (const [label, count] of [
-    ["Spicy Peppers", "143 peppers"],
-    ["Sky Scrapers", "60 towers"],
-    ["Shark Tank", "50 sharks"],
-    ["Space Universe", "50 space cards"],
-    ["Jet Hangar", "50 aircraft"],
-    ["Countries & Flags", "200 flag cards"],
-  ]) {
-    const topicButton = buttonForLabel(page, label);
-    await topicButton.click();
-    await expect(topicButton).toHaveAttribute("aria-pressed", "false");
-    await expect(topicButton).toContainText(count);
-    await topicButton.click();
-    await expect(topicButton).toHaveAttribute("aria-pressed", "true");
-  }
+  await modeControl(page).click();
+  await expect(modeTray(page)).toBeVisible();
+  await expect(modeTray(page).getByText("Build your Mix", { exact: true })).toBeVisible();
+  await expect(modeTray(page).getByText("Choose one or more game types. Green checks are included.")).toBeVisible();
+  await expect(modeTray(page).getByRole("button", { name: "Playing this Mix" })).toHaveAttribute("aria-pressed", "true");
+  for (const label of modeLabels) await expect(mixOption(page, label)).toHaveAttribute("aria-pressed", "true");
 
   for (const label of modeLabels.filter((label) => label !== "True/False")) {
-    await page.getByRole("button", { name: new RegExp(label.replace("/", "\\/")) }).click();
+    await mixOption(page, label).click();
   }
-  await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
+  await expect(modeTray(page)).toBeVisible();
+  await expect(modeControl(page)).toContainText("Mode: Mix · 1 selected");
+  await expect(modeTray(page).getByText("Your Mix:", { exact: false }).locator("..")).toContainText("True/False");
+  await expect(mixOption(page, "True/False")).toHaveAttribute("aria-pressed", "true");
+
+  await mixOption(page, "True/False").click();
+  await expect(mixOption(page, "True/False")).toHaveAttribute("aria-pressed", "true");
+  await expect(modeControl(page)).toContainText("Mode: Mix · 1 selected");
+
+  await topicsControl(page).click();
+  await expect(modeTray(page)).toBeHidden();
+  await expect(topicsTray(page)).toBeVisible();
+  await topicsControl(page).click();
   await expect(page.getByText("True or false?")).toBeVisible();
 
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
   await expect(page.getByLabel("Answer feedback")).toBeVisible();
 
-  await setupSummary(page).click();
-  await expect(page.getByLabel("Learning recap")).toContainText(/1\s*idea practiced/);
-  await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
-
   await page.getByRole("button", { name: /Next|Finish round/ }).click();
   await expect(page.getByText("True or false?")).toBeVisible();
 
-  await page.getByRole("button", { name: /Cards/ }).click();
+  await page.getByRole("button", { name: /^Collection/ }).click();
   await expect(page.getByText("Collection", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Choose a category" })).toBeVisible();
 });
 
+test("HUD trays share one slot, stay open on selection, and protect the final topic", async ({ page }) => {
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+
+  await topicsControl(page).click();
+  const onlyTopic = topicsTray(page).getByRole("button", { name: "Spicy Peppers", exact: true });
+  await onlyTopic.click();
+  await expect(onlyTopic).toHaveAttribute("aria-pressed", "true");
+  await expect(topicsTray(page)).toBeVisible();
+
+  await modeControl(page).click();
+  await expect(topicsTray(page)).toBeHidden();
+  const peekMode = modeTray(page).getByRole("button", { name: "Peek", exact: true });
+  await peekMode.click();
+  await expect(peekMode).toHaveAttribute("aria-pressed", "true");
+  await expect(modeTray(page)).toBeVisible();
+  await expect(modeControl(page)).toContainText("Mode: Peek");
+});
+
+test("HUD controls fit iPad landscape and portrait without horizontal overflow", async ({ page }) => {
+  for (const viewport of [
+    { width: 1194, height: 834 },
+    { width: 834, height: 1194 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await expect(page.getByLabel("Play controls")).toBeVisible();
+    await expect.poll(() => page.evaluate(() => ({
+      viewport: window.innerWidth,
+      page: document.documentElement.scrollWidth,
+    }))).toEqual({ viewport: viewport.width, page: viewport.width });
+    await expect(modeControl(page)).toBeVisible();
+    await expect(topicsControl(page)).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Collection/ })).toBeVisible();
+  }
+});
+
+test("landing page explains the learning model and all ten topic packs", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Burrow", exact: true })).toBeVisible();
+  await expect(page.getByText("whatever's stuck in their head", { exact: false })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Every mode teaches new skills." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Ten content packs from peppers to mountains/ })).toBeVisible();
+  for (const topic of ["Peppers", "Sharks", "Space", "Jets", "Towers", "World", "Dinosaurs", "Tall Trees", "Tallest Mountains", "Bridges & Tunnels"]) {
+    await expect(page.getByRole("heading", { name: topic, exact: true })).toBeVisible();
+  }
+  await expect(page.getByRole("link", { name: "Play Burrow" }).first()).toHaveAttribute("href", "/play");
+});
+
 test("fresh and existing profiles automatically select newly added topics", async ({ page }) => {
-  await setupSummary(page).click();
+  await topicsControl(page).click();
   for (const label of topicLabels) {
-    await expect(buttonForLabel(page, label)).toHaveAttribute("aria-pressed", "true");
+    await expect(topicsTray(page).getByRole("button", { name: label, exact: true })).toHaveAttribute("aria-pressed", "true");
   }
 
   await page.evaluate(() => {
@@ -1341,9 +1377,9 @@ test("fresh and existing profiles automatically select newly added topics", asyn
   });
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
-  await expect(setupSummary(page)).toContainText("10 topics");
-  await setupSummary(page).click();
-  await expect(buttonForLabel(page, "Countries & Flags")).toHaveAttribute("aria-pressed", "true");
+  await expect(topicsControl(page)).toContainText("10 topics");
+  await topicsControl(page).click();
+  await expect(topicsTray(page).getByRole("button", { name: "Countries & Flags", exact: true })).toHaveAttribute("aria-pressed", "true");
   await expect.poll(async () => page.evaluate(() => {
     const saved = JSON.parse(window.localStorage.getItem("burrow-profiles-v1") ?? "{}") as { knownTopics?: string[] };
     return saved.knownTopics ?? [];
@@ -1379,7 +1415,7 @@ test("a mystery flag gives one clue retry and unlocks a country passport", async
 
   await page.getByRole("button", { name: answerCountry!.name, exact: true }).click();
   await expect(page.getByLabel("Answer feedback")).toBeVisible();
-  await page.getByRole("button", { name: /Cards/ }).click();
+  await page.getByRole("button", { name: /^Collection/ }).click();
 
   const passport = page.getByText("Open country passport", { exact: true }).locator("xpath=ancestor::details[1]");
   await expect(passport).toBeVisible();
@@ -1528,8 +1564,7 @@ test("flag image gives local feedback without leaking server details", async ({ 
   await page.getByRole("button", { name: /Flag an issue/ }).click();
 
   await expect(page.getByRole("button", { name: /Flag an issue/ })).toHaveText("Flagged");
-  await setupSummary(page).click();
-  await expect(page.getByText("1 logged")).toBeVisible();
+  await expect.poll(() => page.evaluate(() => JSON.parse(window.localStorage.getItem("burrow-content-issues-v1") ?? "[]").length)).toBe(1);
 });
 
 test("head to head comparison images can submit an answer", async ({ page }) => {
@@ -1565,7 +1600,7 @@ test("play events capture anonymous question quality context", async ({ page }) 
     schemaVersion: 2,
     action: "answer",
     challengeMode: "versus",
-    mode: "mix",
+    mode: "versus",
     questionKind: expect.any(String),
     itemKey: expect.any(String),
     itemHash: expect.any(String),
@@ -1657,11 +1692,7 @@ test("building answers teach location without spoiling the question", async ({ p
 
 test("bridge pack answers surface their world location", async ({ page }) => {
   await chooseOnlyMode(page, "True/False");
-  await setupSummary(page).click();
-  await page.getByRole("button", { name: /Bridges & Tunnels/ }).click();
-  await page.getByRole("button", { name: /Shark Tank selected/ }).click();
-  await page.getByRole("button", { name: /Jet Hangar selected/ }).click();
-  await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
+  await chooseOnlyBuiltInTopic(page, "Bridges & Tunnels");
 
   await expect(page.getByLabel("Where in the world")).toHaveCount(0);
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
@@ -1670,6 +1701,7 @@ test("bridge pack answers surface their world location", async ({ page }) => {
 });
 
 test("peek rounds reset their reveal count after skip", async ({ page }) => {
+  await chooseOnlyBuiltInTopic(page, "Space Universe");
   await chooseOnlyMode(page, "Peek");
 
   await expect(page.getByText("Peek round", { exact: true })).toBeVisible();
@@ -1760,7 +1792,7 @@ test("collection only shows selected topics", async ({ page }) => {
   });
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
-  await page.getByRole("button", { name: /Cards/ }).click();
+  await page.getByRole("button", { name: /^Collection/ }).click();
 
   const collection = page.getByText("Collection", { exact: true }).locator("xpath=ancestor::section[1]");
   await expect(collection.getByText("Spicy Peppers", { exact: true })).toBeVisible();
@@ -1816,7 +1848,7 @@ test("collection category picker shows one category album at a time", { tag: "@m
   });
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
-  await page.getByRole("button", { name: /Cards/ }).click();
+  await page.getByRole("button", { name: /^Collection/ }).click();
 
   const collections = page.getByLabel("Card collections");
   const pepperCategory = collections.getByRole("button", { name: /Spicy Peppers: .* cards collected/ });
@@ -1911,17 +1943,17 @@ test("a correct head to head answer unlocks both peppers, while skips do not", a
         ?.progress.unlockedCards.includes("peppers:ghost-pepper");
   });
 
-  await page.getByRole("button", { name: /Cards/ }).click();
+  await page.getByRole("button", { name: /^Collection/ }).click();
   const collection = page.getByText("Collection", { exact: true }).locator("xpath=ancestor::section[1]");
   await expect(collection.getByRole("img", { name: "Habanero", exact: true })).toBeVisible();
 });
 
-test("playable dinosaur pack appears in setup topics", async ({ page }) => {
-  await setupSummary(page).click();
-  const dinosaurTopic = page.getByRole("button", { name: /Dinosaur Lab/ });
+test("playable dinosaur pack appears in first-class topics", async ({ page }) => {
+  await topicsControl(page).click();
+  const dinosaurTopic = topicsTray(page).getByRole("button", { name: "Dinosaur Lab", exact: true });
   await expect(dinosaurTopic).toBeVisible();
   await expect(dinosaurTopic).toHaveAttribute("aria-pressed", "true");
-  await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
+  await topicsControl(page).click();
 
   await chooseOnlyBuiltInTopic(page, "Dinosaur Lab");
   await expect(page.getByText("Dinosaur Lab · Peek")).toBeVisible();
@@ -1975,12 +2007,13 @@ test("pepper top trumps uses concrete plant stats", async ({ page }) => {
   await expect(page.getByText("Natural roots")).toHaveCount(0);
 });
 
-test("setup menu opens and fits on mobile", { tag: "@mobile" }, async ({ page, isMobile }) => {
+test("Mix configurator opens and fits on mobile", { tag: "@mobile" }, async ({ page, isMobile }) => {
   test.skip(!isMobile, "mobile viewport coverage");
 
-  await setupSummary(page).click();
-  const menu = setupDetails(page).locator(":scope > div");
+  await modeControl(page).click();
+  const menu = modeTray(page);
   await expect(menu).toBeVisible();
+  await expect(menu.getByText("Build your Mix", { exact: true })).toBeVisible();
 
   const box = await menu.boundingBox();
   expect(box).not.toBeNull();

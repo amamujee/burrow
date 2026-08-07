@@ -235,6 +235,18 @@ const praise = ["Nice reading!", "Big brain move!", "You measured it!", "Hot ans
 const tryAgainNotes = ["Good try.", "Almost.", "Nice guess.", "Now you know."];
 const defaultMixPattern: ChallengeMode[] = ["quiz", "peek", "geo", "versus", "trumps", "number", "odd", "sort", "fact"];
 const selectableModeOptions = modeOptions.filter((item): item is (typeof modeOptions)[number] & { id: ChallengeMode } => item.id !== "mix");
+const modeAccent: Record<GameMode, string> = {
+  mix: "#f0c84b",
+  quiz: "#f3c647",
+  versus: "#f59a7d",
+  trumps: "#8fc4e0",
+  sort: "#d9a8e0",
+  fact: "#c9d97a",
+  peek: "#70d392",
+  number: "#e0b8f0",
+  odd: "#d2b45f",
+  geo: "#f0a56a",
+};
 const defaultSelectedTopics: RoundTopic[] = [...allKnowledgeTopics];
 const minimumStarterTopics: RoundTopic[] = ["sharks", "jets"];
 const starterMixModes: ChallengeMode[] = ["quiz"];
@@ -770,6 +782,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const answered = isQuestionMode && selected !== null;
   const isCorrect = isQuestionMode && question ? selected !== null && isQuestionAnswerCorrect(question, selected) : false;
   const levelProgress = Math.min(100, Math.round(((progress.xp % 120) / 120) * 100));
+  const xpToNextLevel = 120 - (progress.xp % 120);
   const activeChallengeAnswered =
     activeChallengeMode === "sort"
       ? sortChecked
@@ -981,7 +994,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     });
   }, [mode, progress.difficulty, recordPlayEvent, topic]);
 
-  const currentPlayTarget = useMemo<PlayTelemetryTarget | null>(() => {
+  const currentPlayTarget: PlayTelemetryTarget | null = (() => {
     const roundIndex = mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1;
 
     if (showCollection) {
@@ -1115,22 +1128,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       answer: question.answer,
       roundIndex,
     };
-  }, [
-    activeChallengeMode,
-    factRound,
-    geoRound,
-    miniRunAnswered,
-    mode,
-    numberRound,
-    oddRound,
-    question,
-    questionIndex,
-    revealRound,
-    showCollection,
-    sortRound,
-    topTrumpRound,
-    topic,
-  ]);
+  })();
 
   useEffect(() => {
     if (!profilesReady || !currentPlayTarget) return;
@@ -1398,13 +1396,13 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const name = window.prompt("Profile name");
     const cleanName = name?.trim();
     if (!cleanName) return;
+    const seed = freshSeed(cleanName.length + 29);
     const newProfile: LearnerProfile = {
-      id: `profile-${Date.now()}`,
+      id: `profile-${seed}`,
       name: cleanName.slice(0, 18),
       interests: [...playableTopics],
       progress: freshProgress(),
     };
-    const seed = freshSeed(cleanName.length + 29);
     setProfilesState((current) => ({
       activeProfileId: newProfile.id,
       profiles: [...current.profiles, newProfile],
@@ -1429,6 +1427,12 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const safeInterests = normalizeInterests(nextInterests, playableTopics);
     const nextProfile = { ...activeProfile, interests: safeInterests };
     const nextTopic = playableTopic(topic, safeInterests);
+    const nextHasBuiltInInterests = safeInterests.some(isKnowledgeTopic);
+    const nextGeoCapableTopics = geoCapableTopicsByDifficulty.get(progress.difficulty) ?? new Set<RoundTopic>();
+    const nextHasGeoInterests = safeInterests.some((item) => nextGeoCapableTopics.has(item));
+    const nextMode = ((mode === "quiz" || mode === "versus") && !nextHasBuiltInInterests) || (mode === "geo" && !nextHasGeoInterests)
+      ? "mix"
+      : mode;
     const seed = freshSeed(seedBasis.length + safeInterests.length * 41);
     recordSetupEvent("topics", safeInterests.join(","));
 
@@ -1436,7 +1440,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       ...current,
       profiles: current.profiles.map((profile) => (profile.id === activeProfile.id ? nextProfile : profile)),
     }));
-    restartPlay(nextTopic, mode, nextProfile, seed);
+    setMode(nextMode);
+    restartPlay(nextTopic, nextMode, nextProfile, seed);
     setCelebration(message);
   };
 
@@ -1492,6 +1497,24 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
 
   const clearMixModes = () => {
     applyMixModes([...starterMixModes], "starter-game-types", "Starter game type selected.");
+  };
+
+  const selectPlayMode = (nextMode: GameMode) => {
+    if (nextMode === mode) return;
+    const seed = freshSeed(nextMode.length * 43);
+    recordSetupEvent("mode", nextMode);
+    setMode(nextMode);
+    setShowCollection(false);
+    resetRunState();
+    setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), nextMode, progress.difficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards, progress.learningHistory));
+    setSortRound(buildSortForScope(currentTopicScope, progress.difficulty, seed + 29, progress.learningHistory));
+    setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed + 37, progress.unlockedCards, progress.learningHistory));
+    setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed + 43, progress.unlockedCards, progress.learningHistory));
+    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed + 47, progress.unlockedCards, progress.learningHistory));
+    setNumberRound(buildNumberForScope(currentTopicScope, progress.difficulty, seed + 53, progress.learningHistory));
+    setOddRound(buildOddForScope(currentTopicScope, progress.difficulty, seed + 59, progress.learningHistory));
+    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed + 67, progress.unlockedCards, progress.learningHistory));
+    setCelebration(`${modeOptions.find((item) => item.id === nextMode)?.label ?? "Game"} mode.`);
   };
 
   const answer = (choice: string) => {
@@ -2079,8 +2102,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     else nextTopTrumpRound();
   };
 
-  const resetProgress = () => {
-    if (typeof window !== "undefined" && !window.confirm("Reset this player's progress?")) return;
+  const resetProgress = (confirmed = false) => {
+    if (!confirmed && typeof window !== "undefined" && !window.confirm("Reset this player's progress?")) return;
     const seed = freshSeed(211);
     const reset = freshProgress();
     recordSetupEvent("reset-progress", "confirmed", reset.difficulty);
@@ -2109,6 +2132,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           onRenameProfile={renameActiveProfile}
           level={progress.level}
           levelProgress={levelProgress}
+          xpToNextLevel={xpToNextLevel}
           streak={progress.streak}
           accuracy={accuracy}
           learningRecap={learningRecap}
@@ -2117,6 +2141,9 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           onCollection={openCollection}
           difficulty={progress.difficulty}
           onDifficultyChange={setQuestionDifficulty}
+          mode={mode}
+          onModeChange={selectPlayMode}
+          availableModes={["mix", ...availableMixPattern]}
           activeInterests={activeInterests}
           topics={playableTopics.map((id) => ({ id, label: topicMeta(id).label, eyebrow: topicMeta(id).eyebrow }))}
           onToggleInterest={toggleInterest}
@@ -2130,7 +2157,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           issueCount={issueCount}
           selectedOfflineImages={selectedOfflineImages}
           warmOfflineImages={warmOfflineImages}
-          onReset={resetProgress}
+          onReset={() => resetProgress()}
         />
 
         {miniChallengeActive ? (
@@ -2318,6 +2345,7 @@ function GameHud({
   onRenameProfile,
   level,
   levelProgress,
+  xpToNextLevel,
   streak,
   accuracy,
   learningRecap,
@@ -2326,6 +2354,9 @@ function GameHud({
   onCollection,
   difficulty,
   onDifficultyChange,
+  mode,
+  onModeChange,
+  availableModes,
   activeInterests,
   topics,
   onToggleInterest,
@@ -2348,6 +2379,7 @@ function GameHud({
   onRenameProfile: () => void;
   level: number;
   levelProgress: number;
+  xpToNextLevel: number;
   streak: number;
   accuracy: number;
   learningRecap: LearningRecap;
@@ -2356,6 +2388,9 @@ function GameHud({
   onCollection: () => void;
   difficulty: Difficulty;
   onDifficultyChange: (difficulty: Difficulty) => void;
+  mode: GameMode;
+  onModeChange: (mode: GameMode) => void;
+  availableModes: GameMode[];
   activeInterests: RoundTopic[];
   topics: { id: RoundTopic; label: string; eyebrow: string }[];
   onToggleInterest: (topic: RoundTopic) => void;
@@ -2372,15 +2407,23 @@ function GameHud({
   onReset: () => void;
 }) {
   const setupSummary = `${activeMixModes.length} games · ${activeInterests.length} topics`;
+  const [openTray, setOpenTray] = useState<"mode" | "topics" | null>(null);
+  const currentMode = modeOptions.find((item) => item.id === mode) ?? modeOptions[0];
+  const selectedTopicLabels = topics.filter((item) => activeInterests.includes(item.id)).map((item) => item.label);
+  const topicSummary = selectedTopicLabels.length <= 2 ? selectedTopicLabels.join(", ") : `${selectedTopicLabels.length} topics`;
+  const mixSummary = selectableModeOptions.filter((item) => activeMixModes.includes(item.id)).map((item) => item.label).join(", ");
+  const toggleTray = (tray: "mode" | "topics") => {
+    setOpenTray((current) => current === tray ? null : tray);
+  };
+  const openCollection = () => {
+    setOpenTray(null);
+    onCollection();
+  };
 
   return (
-    <header className="relative z-30 shrink-0 rounded-lg border-2 border-[#092421] bg-[#f7f0df] px-2 pb-1.5 pt-5 shadow-[3px_3px_0_#092421]">
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 h-4 border-b-2 border-[#092421] bg-[#123d38] bg-[linear-gradient(90deg,rgba(255,253,246,.12)_1px,transparent_1px)] bg-[size:32px_32px]"
-      />
-      <div className="relative z-10 grid min-h-[68px] min-w-0 items-center gap-2 min-[900px]:grid-cols-[minmax(292px,.95fr)_minmax(200px,.85fr)_minmax(380px,1.3fr)_auto]">
-        <div className="flex min-w-0 items-center gap-2">
+    <header className="relative z-30 shrink-0 rounded-xl border-2 border-[#092421] bg-[#0d332f] p-2 shadow-[3px_3px_0_#092421]">
+      <div className="relative z-10 flex min-w-0 flex-wrap items-stretch gap-2 min-[1180px]:flex-nowrap">
+        <div className="flex min-w-0 flex-[1_1_290px] items-center gap-2 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-2 py-1.5 shadow-[3px_3px_0_#092421]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/icons/burrow-icon-64.png"
@@ -2388,21 +2431,149 @@ function GameHud({
             aria-hidden="true"
             className="h-11 w-11 shrink-0 rounded-lg border-2 border-[#092421] bg-[#eac57c] shadow-[2px_2px_0_#092421]"
           />
-          <div className="min-w-0 shrink">
-            <p className="hidden truncate text-[9px] font-black uppercase tracking-[0.18em] text-[#7d5a3f] min-[1240px]:block">Field notes for curious kids</p>
-            <h1 className="truncate text-2xl font-black leading-none text-[#321e16]">Burrow</h1>
+          <div className="min-w-0 flex-1">
+            <h1 className="truncate text-base font-black leading-none text-[#321e16]">Burrow</h1>
+            <div className="mt-1">
+              <ProfilePicker profiles={profiles} activeProfileId={activeProfileId} onChange={onProfileChange} onCreate={onCreateProfile} onRename={onRenameProfile} />
+            </div>
           </div>
-          <ProfilePicker profiles={profiles} activeProfileId={activeProfileId} onChange={onProfileChange} onCreate={onCreateProfile} onRename={onRenameProfile} />
         </div>
 
-        <HudProgress level={level} levelProgress={levelProgress} streak={streak} accuracy={accuracy} learningRecap={learningRecap} />
+        <HudProgress level={level} levelProgress={levelProgress} xpToNextLevel={xpToNextLevel} streak={streak} accuracy={accuracy} learningRecap={learningRecap} />
 
-        <div className="grid min-w-0 grid-cols-[minmax(220px,1fr)_minmax(72px,.32fr)] gap-1.5">
+        <div className="min-w-[224px] flex-[.7_1_224px] rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-1.5 shadow-[3px_3px_0_#092421]">
           <DifficultySelector difficulty={difficulty} onChange={onDifficultyChange} />
-          <CollectionAction active={showCollection} value={collectionValue} onClick={onCollection} />
         </div>
 
-        <SetupMenu
+        <div className="flex min-w-0 flex-[1.6_1_500px] flex-wrap content-center items-center gap-2" aria-label="Play controls">
+          <button
+            type="button"
+            aria-expanded={openTray === "mode"}
+            aria-controls="hud-mode-tray"
+            onClick={() => toggleTray("mode")}
+            className={`flex min-h-11 min-w-0 flex-[1_1_150px] items-center justify-center gap-2 rounded-lg border-2 border-[#092421] px-3 py-2 text-sm font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 max-sm:flex-[1_1_100%] ${openTray === "mode" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
+          >
+            <span className="h-3 w-3 shrink-0 rounded-full border-2 border-[#092421]" style={{ backgroundColor: modeAccent[mode] }} />
+            <span className="truncate">Mode: {currentMode.label}{mode === "mix" ? ` · ${activeMixModes.length} selected` : ""}</span>
+            <span aria-hidden="true">{openTray === "mode" ? "▴" : "▾"}</span>
+          </button>
+          <button
+            type="button"
+            aria-expanded={openTray === "topics"}
+            aria-controls="hud-topics-tray"
+            onClick={() => toggleTray("topics")}
+            className={`flex min-h-11 min-w-0 flex-[1_1_180px] items-center justify-center gap-2 rounded-lg border-2 border-[#092421] px-3 py-2 text-sm font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "topics" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
+          >
+            <span className="h-3 w-3 shrink-0 rounded-[3px] border-2 border-[#092421] bg-[#b45f42]" />
+            <span className="truncate">Topics: {topicSummary}</span>
+            <span aria-hidden="true">{openTray === "topics" ? "▴" : "▾"}</span>
+          </button>
+          <button
+            type="button"
+            onClick={openCollection}
+            className={`min-h-11 rounded-lg border-2 border-[#092421] px-3 py-2 text-sm font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${showCollection ? "bg-[#f0c84b]" : "bg-[#fffdf6]"}`}
+          >
+            {showCollection ? "Back to game" : "Collection"}
+            <span className="ml-1 text-[10px] text-[#72543e]">{collectionValue}</span>
+          </button>
+        </div>
+      </div>
+
+      {openTray === "mode" && (
+        <div id="hud-mode-tray" aria-label="Choose game mode" className="mt-2 rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-3 shadow-[3px_3px_0_#092421]">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-base font-black leading-tight text-[#102f36]">Build your Mix</p>
+              <p className="mt-0.5 text-xs font-bold text-[#72543e]">Choose one or more game types. Green checks are included.</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="rounded-md border-2 border-[#092421] bg-[#dcefe8] px-2 py-1 text-xs font-black text-[#102f36]">{activeMixModes.length} selected</span>
+              <button type="button" onClick={onSelectAllMixModes} className="rounded-md border-2 border-[#092421] bg-white px-2 py-1 text-xs font-black text-[#102f36] hover:bg-[#fff1bf]">Select all</button>
+              <button type="button" onClick={onClearMixModes} className="rounded-md border-2 border-[#092421] bg-white px-2 py-1 text-xs font-black text-[#102f36] hover:bg-[#fff1bf]">Just Quiz</button>
+              <button
+                type="button"
+                aria-pressed={mode === "mix"}
+                onClick={() => onModeChange("mix")}
+                className={`rounded-md border-2 border-[#092421] px-3 py-1 text-xs font-black text-[#102f36] shadow-[2px_2px_0_#092421] ${mode === "mix" ? "bg-[#f0c84b]" : "bg-white hover:bg-[#fff1bf]"}`}
+              >
+                {mode === "mix" ? "Playing this Mix" : "Play this Mix"}
+              </button>
+            </div>
+          </div>
+
+          <div role="group" aria-label="Game types included in Mix" className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {selectableModeOptions.map((item) => {
+              const selected = activeMixModes.includes(item.id);
+              const available = availableModes.includes(item.id);
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-label={`${item.label}, ${selected ? "included" : "not included"} in Mix`}
+                  aria-pressed={selected}
+                  disabled={!available}
+                  onClick={() => onToggleMixMode(item.id)}
+                  className={`flex min-h-11 items-center gap-2 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 ${selected ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : "border-[#d9c7a7] bg-white hover:border-[#092421] hover:bg-[#fff1bf]"}`}
+                >
+                  <span aria-hidden="true" className={`grid h-5 w-5 shrink-0 place-items-center rounded border-2 border-[#092421] text-xs font-black ${selected ? "bg-white" : "bg-[#fffdf6]"}`}>{selected ? "✓" : ""}</span>
+                  <span className="min-w-0">
+                    <span className="block truncate text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
+                    <span className="block text-[9px] font-black uppercase tracking-[0.1em] text-[#72543e]">{selected ? "Included in Mix" : available ? "Not included" : "Unavailable for these topics"}</span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <p className="mt-2 text-xs font-bold leading-snug text-[#5f6b5d]"><span className="font-black text-[#102f36]">Your Mix:</span> {mixSummary}</p>
+
+          <div className="mt-3 border-t-2 border-[#d9c7a7] pt-3">
+            <p className="mb-2 text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Or play one game type only</p>
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              {selectableModeOptions.map((item) => {
+                const selected = item.id === mode;
+                const available = availableModes.includes(item.id);
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    aria-pressed={selected}
+                    disabled={!available}
+                    onClick={() => onModeChange(item.id)}
+                    className={`flex min-h-10 shrink-0 items-center gap-2 rounded-lg border-2 border-[#092421] px-3 py-2 text-sm font-black text-[#102f36] transition active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 ${selected ? "bg-[#fff1bf] shadow-[2px_2px_0_#092421]" : "bg-white hover:bg-[#fff1bf]"}`}
+                  >
+                    <span className="h-3 w-3 rounded-full border-2 border-[#092421]" style={{ backgroundColor: modeAccent[item.id] }} />
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {openTray === "topics" && (
+        <div id="hud-topics-tray" aria-label="Choose topics" className="mt-2 flex gap-2 overflow-x-auto rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-2 shadow-[3px_3px_0_#092421]">
+          {topics.map((item) => {
+            const selected = activeInterests.includes(item.id);
+            return (
+              <button
+                key={item.id}
+                type="button"
+                aria-pressed={selected}
+                onClick={() => onToggleInterest(item.id)}
+                className={`flex min-h-10 shrink-0 items-center gap-2 rounded-lg border-2 border-[#092421] px-3 py-2 text-sm font-black text-[#102f36] transition active:translate-y-0.5 ${selected ? "bg-[#70d392] shadow-[2px_2px_0_#092421]" : "bg-white hover:bg-[#fff1bf]"}`}
+              >
+                <span aria-hidden="true" className="w-3 text-center">{selected ? "✓" : ""}</span>
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      <SetupMenu
+          open={false}
           activeInterests={activeInterests}
           topics={topics}
           onToggleInterest={onToggleInterest}
@@ -2419,8 +2590,8 @@ function GameHud({
           selectedOfflineImages={selectedOfflineImages}
           warmOfflineImages={warmOfflineImages}
           onReset={onReset}
+          onClose={() => undefined}
         />
-      </div>
     </header>
   );
 }
@@ -2428,18 +2599,18 @@ function GameHud({
 function HudProgress({
   level,
   levelProgress,
+  xpToNextLevel,
   streak,
   accuracy,
   learningRecap,
 }: {
   level: number;
   levelProgress: number;
+  xpToNextLevel: number;
   streak: number;
   accuracy: number;
   learningRecap: LearningRecap;
 }) {
-  const sparkSlots = 6;
-  const filledSparks = Math.min(sparkSlots, Math.max(0, Math.ceil((levelProgress / 100) * sparkSlots)));
   const memoryLine = learningRecap.reviewConcepts > 0
     ? `Burrow remembers · ${learningRecap.reviewConcepts} ${learningRecap.reviewConcepts === 1 ? "idea is" : "ideas are"} coming back`
     : learningRecap.strongConcepts > 0
@@ -2449,37 +2620,24 @@ function HudProgress({
         : "Burrow is learning with you";
 
   return (
-    <div className="min-w-0 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] px-2 py-1.5">
+    <div className="min-w-[238px] flex-[.9_1_250px] rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-2 py-1.5 shadow-[3px_3px_0_#092421]">
       <div className="grid grid-cols-[auto_1fr] items-center gap-2">
         <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border-2 border-[#092421] bg-[#f0c84b] text-center shadow-[2px_2px_0_#092421]">
           <span className="block text-[8px] font-black uppercase leading-none tracking-[0.1em] text-[#7d5a3f]">Level</span>
           <span className="block text-2xl font-black leading-none text-[#102f36]">{level}</span>
         </div>
         <div className="min-w-0">
-          <div className="flex min-w-0 items-center justify-between gap-2">
-            <p className="truncate text-sm font-black leading-tight text-[#102f36]">Glow</p>
+          <div className="flex min-w-0 items-center justify-between gap-2 text-sm font-black leading-tight text-[#102f36]">
+            <p className="truncate">{xpToNextLevel} XP to next level</p>
+            <p className="shrink-0 text-xs text-[#72543e]">{streak} streak</p>
           </div>
-          <div className="mt-1 grid grid-cols-6 gap-1" aria-label={`${levelProgress}% of this level filled`}>
-            {Array.from({ length: sparkSlots }, (_, index) => {
-              const filled = index < filledSparks;
-              return (
-                <span
-                  key={`spark-${index}`}
-                  className={`h-3 rounded-sm border-2 border-[#092421] transition-colors duration-300 ${
-                    filled ? "bg-[#70d392] shadow-[1px_1px_0_#092421]" : "bg-white"
-                  }`}
-                />
-              );
-            })}
+          <div className="mt-2 h-3 overflow-hidden rounded-full border-2 border-[#d9c7a7] bg-[#f4e8c8]" aria-label={`${levelProgress}% of this level filled`}>
+            <div className="h-full bg-[#70d392] transition-[width] duration-300" style={{ width: `${levelProgress}%` }} />
           </div>
+          <p className="mt-1 text-[10px] font-black uppercase tracking-[0.08em] text-[#72543e]">{accuracy}% right</p>
         </div>
       </div>
-      <div className="mt-1 flex min-w-0 items-center gap-2 text-[10px] font-black uppercase tracking-[0.08em] text-[#72543e]">
-        <span className="truncate">{streak ? `${streak} in a row` : "Warm up"}</span>
-        <span className="h-1 w-1 rounded-full bg-[#d9c7a7]" />
-        <span className="truncate">{accuracy}% right</span>
-      </div>
-      <p className="mt-1 truncate text-[10px] font-black text-[#2f665d]" aria-label={`${learningRecap.strongConcepts} strong concepts and ${learningRecap.reviewConcepts} recent concepts ready to review`}>
+      <p className="sr-only" aria-label={`${learningRecap.strongConcepts} strong concepts and ${learningRecap.reviewConcepts} recent concepts ready to review`}>
         {memoryLine}
       </p>
     </div>
@@ -2487,6 +2645,7 @@ function HudProgress({
 }
 
 function SetupMenu({
+  open,
   activeInterests,
   topics,
   onToggleInterest,
@@ -2503,7 +2662,9 @@ function SetupMenu({
   selectedOfflineImages,
   warmOfflineImages,
   onReset,
+  onClose,
 }: {
+  open: boolean;
   activeInterests: RoundTopic[];
   topics: { id: RoundTopic; label: string; eyebrow: string }[];
   onToggleInterest: (topic: RoundTopic) => void;
@@ -2520,19 +2681,19 @@ function SetupMenu({
   selectedOfflineImages: string[];
   warmOfflineImages: string[];
   onReset: () => void;
+  onClose: () => void;
 }) {
   const activeModeSet = new Set(activeMixModes);
 
   return (
-    <details className="group relative">
-      <summary className="flex min-h-11 cursor-pointer list-none flex-col items-center justify-center rounded-lg border-2 border-[#092421] bg-white px-3 py-1 text-center text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition hover:bg-[#fff1bf] group-open:bg-[#fff1bf] [&::-webkit-details-marker]:hidden">
-        <span className="flex items-center gap-2 leading-tight">
-          Setup
-          <span className="text-lg leading-none">⌄</span>
-        </span>
-        <span className="mt-0.5 whitespace-nowrap text-[9px] font-black uppercase tracking-[0.1em] text-[#72543e]">{setupSummary}</span>
-      </summary>
-      <div className="absolute right-0 z-40 mt-2 max-h-[calc(100dvh-112px)] w-[min(720px,calc(100vw-24px))] overflow-auto rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-3 shadow-[4px_4px_0_#092421]">
+    <section aria-label="Setup panel" className={`${open ? "block" : "hidden"} absolute right-0 top-full z-40 mt-2 max-h-[calc(100dvh-112px)] w-[min(720px,calc(100vw-12px))] overflow-auto rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-3 shadow-[4px_4px_0_#092421]`}>
+      <div className="mb-3 flex items-center justify-between gap-3 border-b-2 border-[#d9c7a7] pb-2">
+        <div>
+          <p className="text-lg font-black leading-tight text-[#102f36]">Setup</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.1em] text-[#72543e]">{setupSummary}</p>
+        </div>
+        <button type="button" aria-label="Close setup" onClick={onClose} className="min-h-10 rounded-lg border-2 border-[#092421] bg-white px-3 py-2 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition hover:bg-[#fff1bf]">Close</button>
+      </div>
         <LearningRecapPanel recap={learningRecap} />
         <div className="mt-3 grid gap-3 md:grid-cols-[1fr_1.05fr]">
           <div>
@@ -2603,8 +2764,7 @@ function SetupMenu({
             </div>
           </details>
         </div>
-      </div>
-    </details>
+    </section>
   );
 }
 
@@ -4224,7 +4384,7 @@ function ProfilePicker({
         id="profile-picker"
         value={activeProfileId}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 max-w-32 rounded-lg border-2 border-[#092421] bg-white px-2 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#f0c84b]"
+        className="h-8 max-w-28 rounded-lg border-2 border-[#092421] bg-white px-2 text-xs font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#f0c84b]"
       >
         {profiles.map((profile) => (
           <option key={profile.id} value={profile.id}>
@@ -4236,7 +4396,7 @@ function ProfilePicker({
         type="button"
         onClick={onRename}
         aria-label="Edit player name"
-        className="h-10 rounded-lg border-2 border-[#092421] bg-white px-2 text-xs font-black uppercase tracking-[0.06em] text-[#102f36] transition hover:bg-[#fff1bf] active:translate-y-0.5"
+        className="h-8 rounded-lg border-2 border-[#092421] bg-white px-2 text-[10px] font-black uppercase tracking-[0.06em] text-[#102f36] transition hover:bg-[#fff1bf] active:translate-y-0.5"
       >
         Edit
       </button>
@@ -4244,7 +4404,7 @@ function ProfilePicker({
         type="button"
         onClick={onCreate}
         aria-label="Add player"
-        className="h-10 rounded-lg border-2 border-[#092421] bg-white px-3 text-sm font-black text-[#102f36] transition hover:bg-[#fff1bf] active:translate-y-0.5"
+        className="h-8 rounded-lg border-2 border-[#092421] bg-white px-2.5 text-xs font-black text-[#102f36] transition hover:bg-[#fff1bf] active:translate-y-0.5"
       >
         +
       </button>
@@ -4269,20 +4429,6 @@ function DifficultySelector({ difficulty, onChange }: { difficulty: Difficulty; 
         </button>
       ))}
     </div>
-  );
-}
-
-function CollectionAction({ active, value, onClick }: { active: boolean; value: string; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className={`min-w-0 rounded-md border-2 px-2 py-1 text-center transition active:translate-y-0.5 ${
-        active ? "border-[#092421] bg-[#f0c84b] shadow-[2px_2px_0_#092421]" : "border-transparent bg-white hover:border-[#d9c7a7] hover:bg-[#fff1bf]"
-      }`}
-    >
-      <span className="block truncate text-[8px] font-black uppercase tracking-[0.08em] text-[#72543e]">{active ? "Back" : "Cards"}</span>
-      <span className="block truncate text-sm font-black leading-none text-[#102f36]">{active ? "Game" : value}</span>
-    </button>
   );
 }
 
