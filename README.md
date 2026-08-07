@@ -1,6 +1,6 @@
 # Burrow
 
-Burrow is a local-first learning game that turns a kid's current obsession into short, visual reading, math, science, and geography sessions. Choose the topics, build a custom Mix of game types, and let Burrow keep the practice varied while progress and collections grow.
+Burrow is a local-first learning game that turns a kid's current obsession into short, visual reading, math, science, and geography sessions. Choose the topics, combine the game types that fit, and let Burrow keep the practice varied while progress and collections grow.
 
 [![CI](https://github.com/amamujee/burrow/actions/workflows/ci.yml/badge.svg)](https://github.com/amamujee/burrow/actions/workflows/ci.yml)
 
@@ -8,19 +8,19 @@ Burrow is a local-first learning game that turns a kid's current obsession into 
 
 ## What Burrow Does
 
-- Makes **Mix** a first-class multi-select: include any combination of Quiz Run, Head to Head, Top Trumps, Sort, True/False, Peek, Numbers, Odd One, and Geo Finder.
+- Makes game selection a first-class multi-select: include any combination of Quiz Run, Head to Head, Top Trumps, Sort, True/False, Peek, Numbers, Odd One, and Geo Finder.
 - Keeps single-mode play available when a child wants to focus on one game type.
-- Ships with ten topic packs: peppers, skyscrapers, sharks, space, jets, countries and flags, dinosaurs, mountains, tall trees, and bridges and tunnels.
+- Ships with ten topic packs: peppers, skyscrapers, sharks, space, jets, countries and flags, dinosaurs, tallest mountains, tall trees, and bridges and tunnels.
 - Uses real facts, comparable stats, maps, and credited local images to teach in context.
 - Adapts future questions using recent answers and revisits concepts that need more practice.
 - Unlocks collection cards through correct answers while preserving separate progress for each player.
 - Stores player progress locally and caches the app shell and learning assets for offline use.
 
-![Burrow custom Mix and game screen](docs/screenshots/play.png)
+![Burrow game selection and play screen](docs/screenshots/play.png)
 
 ## How the Content Is Organized
 
-The six core catalogs—peppers, skyscrapers, sharks, space, jets, and countries—are wired through `src/lib/game-data.ts`, with country records in `src/lib/countries-data.ts`. Contributor-friendly playable packs live under `content/packs/` and are loaded by the app when their `pack.json` has `"status": "playable"`.
+Five core catalogs—peppers, skyscrapers, sharks, space, and jets—live in `src/lib/game-data.ts`; the 200-country catalog lives in `src/lib/countries-data.ts`. Four contributor-friendly playable packs—dinosaurs, tallest mountains, tall trees, and bridges and tunnels—live under `content/packs/` and are loaded by the app when their `pack.json` has `"status": "playable"`.
 
 Every card includes structured facts, comparable stats, local imagery, and image provenance. Gameplay never needs to hotlink topic images from the internet.
 
@@ -48,7 +48,7 @@ npm run build          # Create a production build
 npm run start          # Run the production build
 npm run lint           # Run ESLint
 npm run validate:packs # Validate repo-authored pack JSON files
-npm run check:images   # Verify gameplay images are local and present
+npm run check:images   # Verify local image files and report duplicates
 npm run qa:content     # Run content-quality checks
 npm run test:logic     # Run logic and content coverage
 npm run test:e2e       # Build and run browser coverage
