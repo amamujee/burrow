@@ -5,6 +5,7 @@ import { useState } from "react";
 import { EqualGroupsBoard, type EqualGroupsVisual } from "@/components/equal-groups-board";
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid } from "@/components/game-question-ui";
 import { WorldMapSurface } from "@/components/world-map-surface";
+import { collectionCards, geoChoiceForLocation, type KnowledgeCard, type RoundTopic } from "@/lib/game-modes";
 
 export type ConceptVisual = "pepper-anatomy" | "flavor-and-heat" | "heat-signal" | "genes-and-growing";
 
@@ -17,13 +18,15 @@ type ChallengeStepBase = {
   choices: string[];
   answer: string;
   summary: string;
+  image?: string;
+  imageAlt?: string;
 };
 
 export type ChallengeStep =
   | (ChallengeStepBase & { skill: "Reading"; evidence: string })
-  | (ChallengeStepBase & { skill: "Geography"; map: { hint: string; choices: { label: string; x: number; y: number }[] } })
+  | (ChallengeStepBase & { skill: "Geography"; map?: { hint: string; choices: { label: string; x: number; y: number }[] } })
   | (ChallengeStepBase & { skill: "Math"; math: { groups: number; each: number; visual: EqualGroupsVisual } })
-  | (ChallengeStepBase & { skill: "Science"; conceptVisual: ConceptVisual })
+  | (ChallengeStepBase & { skill: "Science"; conceptVisual?: ConceptVisual })
   | (ChallengeStepBase & { skill: "Words" });
 
 export const challengeConceptVisualLabels: Record<ConceptVisual, string> = {
@@ -46,7 +49,7 @@ export type ChallengeCampaign = {
   steps: ChallengeStep[];
 };
 
-export const pepperChallengeCampaigns: ChallengeCampaign[] = [
+export const legacyPepperChallengeCampaigns: ChallengeCampaign[] = [
   {
     id: "jalapeno-fieldwork",
     topicId: "peppers",
@@ -112,6 +115,237 @@ export const pepperChallengeCampaigns: ChallengeCampaign[] = [
     ],
   },
 ];
+
+export const challengeCampaignCountPerCategory = 10;
+
+export type ChallengeCategory = {
+  id: RoundTopic;
+  label: string;
+  cards: readonly KnowledgeCard[];
+};
+
+const topicChallengeLanguage: Record<string, { singular: string; plural: string; emoji: string }> = {
+  peppers: { singular: "pepper", plural: "peppers", emoji: "🌶️" },
+  buildings: { singular: "building", plural: "buildings", emoji: "🏙️" },
+  sharks: { singular: "shark", plural: "sharks", emoji: "🦈" },
+  space: { singular: "space subject", plural: "space subjects", emoji: "🪐" },
+  jets: { singular: "jet", plural: "jets", emoji: "✈️" },
+  countries: { singular: "country", plural: "countries", emoji: "🌍" },
+  dinosaurs: { singular: "prehistoric animal", plural: "prehistoric animals", emoji: "🦕" },
+  "tallest-mountains": { singular: "mountain", plural: "mountains", emoji: "🏔️" },
+  "tall-trees": { singular: "tree", plural: "trees", emoji: "🌳" },
+  "bridges-and-tunnels": { singular: "crossing", plural: "crossings", emoji: "🌉" },
+};
+
+const uniqueBy = <T,>(items: readonly T[], keyFor: (item: T) => string) => {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = keyFor(item);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
+const rotate = <T,>(items: readonly T[], offset: number) => items.length ? items[offset % items.length] : undefined;
+
+const threeChoices = (answer: string, candidates: readonly string[], seed: number) => {
+  const values = uniqueBy([answer, ...candidates], (item) => item).slice(0, 3);
+  const fillers = ["Not enough information", "A different field note", "None of these"];
+  for (const filler of fillers) if (values.length < 3 && !values.includes(filler)) values.push(filler);
+  const shift = seed % values.length;
+  return [...values.slice(shift), ...values.slice(0, shift)];
+};
+
+const measurementMeaning = (label: string) => {
+  const normalized = label.toLowerCase();
+  if (/scoville|heat/.test(normalized)) return "how spicy it can be";
+  if (/height|elevation|prominence/.test(normalized)) return "how high or tall it is";
+  if (/length|size|diameter|span/.test(normalized)) return "how long, wide, or large it is";
+  if (/distance|range/.test(normalized)) return "how far it is or can travel";
+  if (/speed/.test(normalized)) return "how fast it can move";
+  if (/population/.test(normalized)) return "how many people live there";
+  if (/area/.test(normalized)) return "how much land or surface it covers";
+  if (/temperature/.test(normalized)) return "how hot or cold it is";
+  if (/year|age/.test(normalized)) return "when it was made or how old it is";
+  if (/floor/.test(normalized)) return "how many building levels it has";
+  return "the main measurement recorded on the card";
+};
+
+const challengeCardPool = (cards: readonly KnowledgeCard[]) => {
+  const byTitle = uniqueBy(cards, (card) => card.title);
+  const byImage = uniqueBy(byTitle, (card) => card.image);
+  return byImage.length >= challengeCampaignCountPerCategory ? byImage : byTitle;
+};
+
+export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLabel, cards }: ChallengeCategory): ChallengeCampaign[] => {
+  const pool = challengeCardPool(cards.filter((card) => card.topic === topicId));
+  if (pool.length < challengeCampaignCountPerCategory) return [];
+  const language = topicChallengeLanguage[topicId] ?? { singular: "card", plural: "cards", emoji: "🔎" };
+  const offsets = [0, 2, 4, 6, 8];
+
+  return Array.from({ length: challengeCampaignCountPerCategory }, (_, campaignIndex) => {
+    const stepCards = offsets.map((offset) => rotate(pool, campaignIndex + offset)!);
+    const [readingCard, geographyCard, mathCard, scienceCard, wordsCard] = stepCards;
+    const distractorTitles = (card: KnowledgeCard) => pool.filter((candidate) => candidate.id !== card.id).map((candidate) => candidate.title);
+    const readingChoices = threeChoices(readingCard.title, distractorTitles(readingCard), campaignIndex);
+
+    const location = geographyCard.metadata?.location;
+    const locatedCards = uniqueBy(pool.filter((card) => card.metadata?.location), (card) => card.metadata!.location!.label);
+    const geographyLocationChoices = location
+      ? threeChoices(location.label, locatedCards.filter((card) => card.id !== geographyCard.id).map((card) => card.metadata!.location!.label), campaignIndex + 1)
+      : [];
+    const geographyMap = location && locatedCards.length >= 3 && geographyLocationChoices.length === 3
+      ? {
+          hint: `Find ${location.label} on the world map.`,
+          choices: geographyLocationChoices.map((label) => {
+            const choiceLocation = label === location.label
+              ? location
+              : locatedCards.find((card) => card.metadata?.location?.label === label)!.metadata!.location!;
+            const point = geoChoiceForLocation(choiceLocation).point;
+            return { label, x: point.x, y: point.y };
+          }),
+        }
+      : undefined;
+    const geographyChoices = geographyMap
+      ? geographyLocationChoices
+      : threeChoices(geographyCard.title, distractorTitles(geographyCard), campaignIndex + 1);
+
+    const groups = 3 + campaignIndex;
+    const each = 2 + ((campaignIndex * 3 + 4) % 11);
+    const product = groups * each;
+    const mathAnswer = `${product.toLocaleString("en-US")} ${language.plural}`;
+    const mathChoices = threeChoices(mathAnswer, [
+      `${(product + groups).toLocaleString("en-US")} ${language.plural}`,
+      `${Math.max(1, product - each).toLocaleString("en-US")} ${language.plural}`,
+    ], campaignIndex + 2);
+
+    const scienceChoices = threeChoices(scienceCard.title, distractorTitles(scienceCard), campaignIndex + 3);
+    const wordAnswer = measurementMeaning(wordsCard.statLabel);
+    const wordChoices = threeChoices(wordAnswer, [
+      "who took the photograph",
+      "how many questions were answered",
+      "which card was collected first",
+    ], campaignIndex + 4);
+
+    const steps: ChallengeStep[] = [
+      {
+        id: `${topicId}-${campaignIndex + 1}-reading-${readingCard.id}`,
+        skill: "Reading",
+        icon: "🏷️",
+        title: `Read the ${language.singular} field note`,
+        clue: readingCard.fact,
+        question: `Which ${language.singular} matches this field note?`,
+        choices: readingChoices,
+        answer: readingCard.title,
+        summary: `${readingCard.title} is the match. ${readingCard.fact}`,
+        evidence: readingCard.fact,
+        image: readingCard.image,
+        imageAlt: readingCard.imageAlt,
+      },
+      {
+        id: `${topicId}-${campaignIndex + 1}-geography-${geographyCard.id}`,
+        skill: "Geography",
+        icon: "🌎",
+        title: location ? `Map ${geographyCard.title}` : `Place ${geographyCard.title}`,
+        clue: location
+          ? `${geographyCard.title} is connected with ${location.label} in ${location.continents.join(" / ")}.`
+          : `${geographyCard.title}'s field-guide group is ${geographyCard.subStat}.`,
+        question: location ? `Where is ${geographyCard.title} found?` : "Which card matches this place or group?",
+        choices: geographyChoices,
+        answer: location ? location.label : geographyCard.title,
+        summary: location
+          ? `${geographyCard.title} belongs with ${location.label}, shown on the map in ${location.continents.join(" / ")}.`
+          : `${geographyCard.title} is the match. Its field-guide group is ${geographyCard.subStat}.`,
+        map: geographyMap,
+        image: geographyCard.image,
+        imageAlt: geographyCard.imageAlt,
+      },
+      {
+        id: `${topicId}-${campaignIndex + 1}-math-${mathCard.id}`,
+        skill: "Math",
+        icon: "🧺",
+        title: `Count the ${topicLabel} research sets`,
+        clue: `${groups} field teams record ${each} ${language.plural} each.`,
+        question: `${groups} × ${each} = ?`,
+        choices: mathChoices,
+        answer: mathAnswer,
+        summary: `${groups} equal groups of ${each} make ${product.toLocaleString("en-US")} ${language.plural} altogether.`,
+        math: {
+          groups,
+          each,
+          visual: {
+            ariaLabel: `Math picture: ${groups} equal team groups of ${each} ${language.plural}`,
+            groupSingular: "team",
+            groupPlural: "teams",
+            groupEmoji: "🧭",
+            itemSingular: language.singular,
+            itemPlural: language.plural,
+            itemEmoji: language.emoji,
+          },
+        },
+        image: mathCard.image,
+        imageAlt: mathCard.imageAlt,
+      },
+      {
+        id: `${topicId}-${campaignIndex + 1}-science-${scienceCard.id}`,
+        skill: "Science",
+        icon: "🧪",
+        title: `Match the ${scienceCard.statLabel.toLowerCase()} evidence`,
+        clue: `${scienceCard.title} has a recorded ${scienceCard.statLabel.toLowerCase()} of ${scienceCard.statDisplay}.`,
+        question: "Which card matches this measurement?",
+        choices: scienceChoices,
+        answer: scienceCard.title,
+        summary: `${scienceCard.title} is the evidence match: its ${scienceCard.statLabel.toLowerCase()} is ${scienceCard.statDisplay}.`,
+        image: scienceCard.image,
+        imageAlt: scienceCard.imageAlt,
+      },
+      {
+        id: `${topicId}-${campaignIndex + 1}-words-${wordsCard.id}`,
+        skill: "Words",
+        icon: "📖",
+        title: `Unlock the word “${wordsCard.statLabel}”`,
+        clue: `${wordsCard.title}'s card lists ${wordsCard.statLabel.toLowerCase()}: ${wordsCard.statDisplay}.`,
+        question: `What does ${wordsCard.statLabel.toLowerCase()} tell us here?`,
+        choices: wordChoices,
+        answer: wordAnswer,
+        summary: `${wordsCard.statLabel} tells us ${wordAnswer}; on this card the recorded value is ${wordsCard.statDisplay}.`,
+        image: wordsCard.image,
+        imageAlt: wordsCard.imageAlt,
+      },
+    ];
+
+    const anchor = readingCard;
+    return {
+      id: `${topicId}-challenge-${campaignIndex + 1}-${anchor.id}`,
+      topicId,
+      topicLabel,
+      name: `${anchor.title} discovery trail`,
+      completionTitle: `${topicLabel} field journal`,
+      image: anchor.image,
+      imageAlt: anchor.imageAlt,
+      steps,
+    };
+  });
+};
+
+export const pepperChallengeCampaigns = buildChallengeCampaignsForCategory({
+  id: "peppers",
+  label: "Spicy Peppers",
+  cards: collectionCards().filter((card) => card.topic === "peppers"),
+});
+
+export const challengeCampaignForMilestone = (milestone: number, categories: readonly ChallengeCategory[]) => {
+  const eligible = categories
+    .map((category) => ({ category, campaigns: buildChallengeCampaignsForCategory(category) }))
+    .filter((item) => item.campaigns.length >= challengeCampaignCountPerCategory);
+  if (!eligible.length) return pepperChallengeCampaigns[0];
+
+  const challengeIndex = Math.max(0, Math.floor(milestone / challengeQuestionInterval) - 1);
+  const topicIndex = challengeIndex % eligible.length;
+  const campaignIndex = Math.floor(challengeIndex / eligible.length) % challengeCampaignCountPerCategory;
+  return eligible[topicIndex].campaigns[campaignIndex];
+};
 
 export function pepperChallengeCampaignForMilestone(milestone: number) {
   const campaignIndex = Math.max(0, Math.floor(milestone / challengeQuestionInterval) - 1) % pepperChallengeCampaigns.length;
@@ -198,7 +432,7 @@ function ChallengeModeBanner({ campaign, milestone, stepIndex }: { campaign: Cha
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-2">
           <p className="rounded-md border-2 border-[#092421] bg-[#f0c84b] px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-[#102f36]">⚡ Challenge Mode</p>
-          <p className="text-sm font-black">Deep dive: {campaign.name}</p>
+          <p className="text-sm font-black">{campaign.topicLabel} · Deep dive: {campaign.name}</p>
         </div>
         <p className="text-xs font-bold text-[#b8e4d8]">Unlocked after {milestone} regular questions · Stop {stepIndex + 1} of {steps.length}</p>
       </div>
@@ -210,7 +444,10 @@ function ChallengeModeBanner({ campaign, milestone, stepIndex }: { campaign: Cha
 }
 
 function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign: ChallengeCampaign; step: ChallengeStep; selected: string | null; onSelect: (choice: string) => void }) {
-  if (step.skill === "Geography") {
+  const image = step.image ?? campaign.image;
+  const imageAlt = step.imageAlt ?? campaign.imageAlt;
+
+  if (step.skill === "Geography" && step.map) {
     return (
       <aside aria-label="Challenge map story" className="min-h-[430px] rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
         <WorldMapSurface
@@ -228,7 +465,7 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
     return (
       <aside aria-label="Challenge math story" className="flex min-h-[520px] flex-col gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
         <div className="relative min-h-[130px] max-h-[190px] flex-[.3] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
-          <Image src={campaign.image} alt={campaign.imageAlt} fill sizes="(max-width: 900px) 100vw, 58vw" className="object-cover" priority />
+          <Image src={image} alt={imageAlt} fill sizes="(max-width: 900px) 100vw, 58vw" className="object-cover" priority />
           <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-2 text-[#102f36] shadow-[2px_2px_0_#092421]"><p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#9f3f2b]">Picture the harvest</p><p className="text-base font-black">{step.clue}</p></div>
         </div>
         <div className="min-h-[300px] flex-1"><EqualGroupsBoard id={step.id} groups={step.math.groups} each={step.math.each} visual={step.math.visual} /></div>
@@ -236,13 +473,13 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
     );
   }
 
-  if (step.skill === "Science") {
+  if (step.skill === "Science" && step.conceptVisual) {
     return <aside aria-label="Challenge science story" className="min-h-[480px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0"><MiniConceptDiagram kind={step.conceptVisual} /></aside>;
   }
 
   return (
     <aside aria-label="Challenge picture story" className="relative min-h-[380px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec] shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
-      <Image src={campaign.image} alt={campaign.imageAlt} fill sizes="(max-width: 900px) 100vw, 58vw" className="object-cover" priority />
+      <Image src={image} alt={imageAlt} fill sizes="(max-width: 900px) 100vw, 58vw" className="object-cover" priority />
       <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421]">{step.icon} {step.skill} story</div>
       <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-3 text-[#102f36] shadow-[2px_2px_0_#092421]"><p className="text-xl font-black">{campaign.name}</p><p className="mt-1 text-sm font-bold text-[#5f6b5d]">{step.title}</p></div>
     </aside>

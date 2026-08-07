@@ -4,6 +4,8 @@ import path from "node:path";
 
 const dataFile = "src/lib/game-data.ts";
 const source = fs.readFileSync(dataFile, "utf8");
+const countriesFile = "src/lib/countries-data.ts";
+const countriesSource = fs.existsSync(countriesFile) ? fs.readFileSync(countriesFile, "utf8") : "";
 
 const remoteImageReferences = [...source.matchAll(/image:\s*["']https?:\/\//g)];
 const externalImageReferences = [...source.matchAll(/externalImage\(/g)];
@@ -18,6 +20,12 @@ const generatedAssets = [...source.matchAll(/generatedContentImage\("([^"]+)", "
   id: match[2],
   sourceFile: "AI-generated local asset",
   target: path.join("public", "burrow-assets", match[1], `${match[2]}.${match[3] ?? "png"}`),
+}));
+const countryAssets = [...countriesSource.matchAll(/id: "([^"]+)"[^\n]+image: "\/burrow-assets\/countries\/([^"]+\.svg)"/g)].map((match) => ({
+  topic: "countries",
+  id: match[1],
+  sourceFile: "flag-icons SVG",
+  target: path.join("public", "burrow-assets", "countries", match[2]),
 }));
 
 const packAssets = () => {
@@ -42,7 +50,7 @@ const packAssets = () => {
     });
 };
 
-const assets = [...coreAssets, ...generatedAssets, ...packAssets()];
+const assets = [...coreAssets, ...generatedAssets, ...countryAssets, ...packAssets()];
 
 const isImageFile = (target) => {
   const buffer = fs.readFileSync(target);

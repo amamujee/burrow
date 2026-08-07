@@ -1,5 +1,6 @@
 import {
   buildings,
+  countries,
   heatBands,
   heatBandRangeLabel,
   heatProfiles,
@@ -9,6 +10,7 @@ import {
   spaceCards,
   topicIds,
   type Building,
+  type Country,
   type Difficulty,
   type HeatBand,
   type Jet,
@@ -65,6 +67,7 @@ export type KnowledgeCard = {
   qualityFlags: string[];
   tags?: string[];
   metadata?: CardMetadata;
+  details?: { label: string; value: string }[];
 };
 
 export type SortRound = {
@@ -444,12 +447,64 @@ const jetCard = (jet: Jet, metric: "speed" | "range" | "firepower" = "speed"): K
   qualityFlags: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower }).flags,
 });
 
+type CountryMetric = "population" | "area";
+const countryPopulationDisplay = (country: Country) => `${formatNumber(country.population)} people`;
+const countryAreaDisplay = (country: Country) => `${formatNumber(country.areaKm2)} km²`;
+const countryQuality = (country: Country, statValue: number) => scoreFeaturedContent({
+  ...country,
+  statValue,
+  sourceCaution: country.populationStatus === "world-bank" ? undefined : country.populationNote,
+});
+
+const countryCard = (country: Country, metric: CountryMetric = "population"): KnowledgeCard => {
+  const statValue = metric === "population" ? country.population : country.areaKm2;
+  const quality = countryQuality(country, statValue);
+  return {
+    id: country.id,
+    topic: "countries",
+    title: country.name,
+    image: country.image,
+    imageAlt: `Flag of ${country.name}`,
+    imageCredit: country.imageCredit,
+    statLabel: metric === "population" ? "Population" : "Land area",
+    statValue,
+    statDisplay: metric === "population" ? countryPopulationDisplay(country) : countryAreaDisplay(country),
+    subStat: `${country.flagEmoji} ${country.capital} · ${country.continents.join(" / ")}`,
+    fact: country.fact,
+    qualityScore: quality.score,
+    qualityFlags: quality.flags,
+    metadata: country.metadata,
+    details: [
+      { label: "Capital", value: country.capital },
+      { label: "Population", value: `${formatNumber(country.population)} (${country.populationYear})` },
+      { label: "Land area", value: countryAreaDisplay(country) },
+      { label: "Continent", value: country.continents.join(" / ") },
+      { label: "Region", value: country.subregion },
+      { label: "Country code", value: `${country.code} · ${country.code3}` },
+    ],
+  };
+};
+
+const countryGenericCard = (country: Country): GenericKnowledgeCard => ({
+  ...countryCard(country),
+  categories: [
+    ...country.continents,
+    country.subregion,
+    country.areaKm2 < 1000 ? "microstate" : country.areaKm2 < 50000 ? "small country" : "large country",
+  ],
+  stats: [
+    { id: "population", label: "Population", value: country.population, display: countryPopulationDisplay(country), direction: "higher" },
+    { id: "area", label: "Land area", value: country.areaKm2, display: countryAreaDisplay(country), direction: "higher" },
+  ],
+});
+
 export const collectionCards = (): KnowledgeCard[] => [
   ...peppers.map(pepperCard),
   ...buildings.map(buildingCard),
   ...sharks.map((shark) => sharkCard(shark)),
   ...spaceCards.map((space) => spaceCard(space, space.kind === "star" ? "temperature" : space.kind === "planet" ? "distance" : "size")),
   ...jets.map((jet) => jetCard(jet)),
+  ...countries.map((country) => countryCard(country)),
 ];
 
 export const orderCollectionCardsByScoville = (cards: readonly KnowledgeCard[]): KnowledgeCard[] => {
@@ -467,6 +522,32 @@ export const orderCollectionCardsByScoville = (cards: readonly KnowledgeCard[]):
   let pepperIndex = 0;
 
   return cards.map((card) => card.topic === "peppers" ? peppersByHeat[pepperIndex++] : card);
+};
+
+const comparableCollectionStatLabel = (cards: readonly KnowledgeCard[]): string | null => {
+  if (cards.length === 0 || !cards.every((card) => Number.isFinite(card.statValue))) return null;
+  if (cards.every((card) => card.topic === "buildings")) return "Height";
+  const statLabels = new Set(cards.map((card) => card.statLabel));
+  return statLabels.size === 1 ? cards[0].statLabel : null;
+};
+
+export const orderCollectionCardsForCategory = (cards: readonly KnowledgeCard[]): KnowledgeCard[] => {
+  if (cards.length === 0) return [];
+  if (cards.every((card) => card.topic === "peppers")) return orderCollectionCardsByScoville(cards);
+
+  const hasComparablePrimaryStat = comparableCollectionStatLabel(cards) !== null;
+  return [...cards].sort((a, b) => hasComparablePrimaryStat
+    ? b.statValue - a.statValue || a.title.localeCompare(b.title)
+    : a.title.localeCompare(b.title));
+};
+
+export const collectionOrderLabel = (cards: readonly KnowledgeCard[]): string => {
+  if (cards.length === 0) return "No cards";
+  if (cards.every((card) => card.topic === "peppers")) return "Scoville · mildest to hottest";
+  const statLabel = comparableCollectionStatLabel(cards);
+  return statLabel
+    ? `${statLabel} · highest to lowest`
+    : "Name · A to Z";
 };
 
 const pepperSizeInches: Record<string, number> = {
@@ -1179,6 +1260,19 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
     };
   }
 
+  if (topic === "countries") {
+    const country = countries.find((item) => item.id === id);
+    if (!country) return null;
+    return {
+      ...countryGenericCard(country),
+      stats: [
+        { id: "population", label: "Population", value: country.population, display: countryPopulationDisplay(country), direction: "higher" },
+        { id: "area", label: "Land area", value: country.areaKm2, display: countryAreaDisplay(country), direction: "higher" },
+        { id: "capital-length", label: "Capital name length", value: country.capital.replace(/[^A-Za-z]/g, "").length, display: `${country.capital.replace(/[^A-Za-z]/g, "").length} letters`, direction: "higher" },
+      ],
+    };
+  }
+
   const jet = jets.find((item) => item.id === id);
   if (!jet) return null;
   return {
@@ -1208,6 +1302,7 @@ export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, se
     currentTopic === "buildings" ? preferredPool(buildings, difficulty) :
     currentTopic === "sharks" ? preferredPool(sharks, difficulty) :
     currentTopic === "space" ? preferredPool(spaceTrumpPool(), difficulty) :
+    currentTopic === "countries" ? preferredPool(countries, difficulty) :
     preferredPool(jets, difficulty);
   const shuffled = discoveryShuffle(pool.map((item) => ({ id: item.id, title: item.name })), seed + difficulty, unlockedTitles, (item) => item.title);
   const first = shuffled[0].id;
@@ -1684,6 +1779,7 @@ const averageLatLon = (coordinates: readonly LatLon[]): LatLon | null => {
 };
 
 const coordinatesForLocation = (location: WorldLocation): LatLon => {
+  if (location.coordinates) return location.coordinates;
   const override = locationCoordinateOverrides[location.label];
   if (override) return override;
 
@@ -1832,18 +1928,17 @@ export const buildGeoRoundFromCards = (
   const preferred = preferredPool(allLocatedCards, difficulty);
   const pool = canBuildGeoRoundFromCards(preferred, difficulty) ? preferred : allLocatedCards;
   const choicesPool = geoChoiceCandidates(pool);
-  const eligibleCards = pool.filter((card, index) => {
+  const orderedCards = discoveryShuffle(pool, seed + 1, unlockedTitles, (item) => item.title);
+  const selected = orderedCards.map((card, index) => {
     const answer = geoChoiceForLocation(card.metadata.location);
-    return diverseGeoChoices(answer, choicesPool, count, difficulty, seed + index) !== null;
-  });
-  if (!eligibleCards.length) throw new Error(`Need at least ${count} well-separated mapped locations to build a geo round for ${topic}`);
+    return { card, choices: diverseGeoChoices(answer, choicesPool, count, difficulty, seed + index) };
+  }).find((candidate) => candidate.choices !== null);
+  if (!selected?.choices) throw new Error(`Need at least ${count} well-separated mapped locations to build a geo round for ${topic}`);
 
-  const card = discoveryShuffle(eligibleCards, seed + 1, unlockedTitles, (item) => item.title)[0];
+  const { card, choices: diverseChoices } = selected;
   const location = card.metadata.location;
   const point = pointForLocation(location);
   const answer = geoChoiceForLocation(location);
-  const diverseChoices = diverseGeoChoices(answer, choicesPool, count, difficulty, seed + 2);
-  if (!diverseChoices) throw new Error(`Could not separate mapped choices for ${topic}`);
   const choices = shuffle(diverseChoices, seed + 3);
   const continentHint = location.continents.length > 1 ? location.continents.join(" and ") : location.continents[0];
 
@@ -2128,41 +2223,20 @@ export const buildOddRoundFromCards = (
   seed: number,
 ): OddRound => {
   const preferred = preferredPool(cards, difficulty);
-  const preferredCategories = Array.from(new Set(preferred.flatMap((card) => card.categories)));
-  const preferredEligibleCategories = preferredCategories.filter((category) => preferred.filter((card) => card.categories.includes(category)).length >= 3);
-  const pool = preferredEligibleCategories.length ? preferred : [...cards];
+  const preferredWithDistinctStats = distinctStatCards(cardsWithStats(preferred), seed + 1, 4);
+  const pool = preferredWithDistinctStats.length === 4
+    ? preferredWithDistinctStats
+    : distinctStatCards(cardsWithStats(cards), seed + 2, 4);
   if (pool.length < 4) throw new Error(`Need at least 4 cards to build an odd-one round for ${topic}`);
-  const categories = Array.from(new Set(pool.flatMap((card) => card.categories)));
-  const eligibleCategories = categories.filter((category) => pool.filter((card) => card.categories.includes(category)).length >= 3);
-  const category = sampleSafe(eligibleCategories, categories, seed + 1);
-
-  if (category) {
-    const same = shuffle(pool.filter((card) => card.categories.includes(category)), seed + 2).slice(0, 3);
-    const odd = sampleSafe(pool.filter((card) => !card.categories.includes(category)), pool.filter((card) => !same.some((sameCard) => sameCard.id === card.id)), seed + 3);
-    const displayCategory = category.toLowerCase();
-    const cardsInRound = shuffle([...same, odd], seed + 4);
-    return {
-      id: `${seed}-odd-${topic}-${category}-${odd.id}`,
-      topic,
-      prompt: "Which card does not fit the category rule?",
-      cards: cardsInRound,
-      answerId: odd.id,
-      reason: `${odd.title} is not ${displayCategory}; the others are.`,
-      explanation: `The rule is category. Three cards share ${displayCategory}.`,
-    };
-  }
-
-  const selected = shuffle(cardsWithStats(pool), seed + 5).slice(0, 4);
-  const sorted = [...selected].sort((a, b) => a.statValue - b.statValue);
-  const odd = sorted.at(-1) ?? selected[0];
+  const odd = [...pool].sort((a, b) => b.statValue - a.statValue)[0];
   return {
     id: `${seed}-odd-${topic}-stat-${odd.id}`,
     topic,
     prompt: `Which card has the highest ${odd.statLabel}?`,
-    cards: shuffle(selected, seed + 6),
+    cards: shuffle(pool, seed + 3),
     answerId: odd.id,
     reason: `${odd.title} has ${odd.statDisplay}.`,
-    explanation: `The rule is highest ${odd.statLabel}.`,
+    explanation: `Compare the ${odd.statLabel.toLowerCase()} shown on each card. ${odd.title} is the highest.`,
   };
 };
 
@@ -2206,6 +2280,66 @@ const packAdditionPrompt = (topic: RoundTopic, count: number, statLabel: string)
 export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed: number): NumberRound => {
   const currentTopic = topicOrder(topic, seed);
   const requestedOperation = numberOperationForSeed(seed);
+
+  if (currentTopic === "countries") {
+    const populationStep = difficulty === 1 ? 10 : difficulty === 2 ? 5 : 1;
+    const pool = preferredPool(countries.filter((country) => country.population >= 1_000_000), difficulty);
+    const first = shuffle(pool, seed + 1)[0];
+    const firstMillions = Math.max(populationStep, roundTo(first.population / 1_000_000, populationStep));
+    const second = shuffle(pool.filter((country) => {
+      const millions = Math.max(populationStep, roundTo(country.population / 1_000_000, populationStep));
+      return country.id !== first.id && millions !== firstMillions;
+    }), seed + 2)[0];
+    const secondMillions = Math.max(populationStep, roundTo(second.population / 1_000_000, populationStep));
+
+    if (requestedOperation === "addition") {
+      const answer = firstMillions + secondMillions;
+      return {
+        id: `${seed}-number-countries-add-${first.id}-${second.id}`,
+        topic: currentTopic,
+        operation: "addition",
+        prompt: `${first.name} has about ${formatNumber(firstMillions)} million people and ${second.name} has about ${formatNumber(secondMillions)} million. About how many million people is that altogether?`,
+        cards: [roundedStatCard(countryCard(first), firstMillions, "million people"), roundedStatCard(countryCard(second), secondMillions, "million people")],
+        statLabel: "Rounded population",
+        unit: "million people",
+        operator: "+",
+        termValues: [firstMillions, secondMillions],
+        resultLabel: "combined population",
+        biggerLabel: first.name,
+        smallerLabel: second.name,
+        biggerValue: firstMillions,
+        smallerValue: secondMillions,
+        answer,
+        choices: numberChoices(answer, populationStep, seed + 3),
+        explanation: `${formatNumber(firstMillions)} + ${formatNumber(secondMillions)} = ${formatNumber(answer)} million people. The numbers are rounded for mental maths.`,
+      };
+    }
+
+    const bigger = firstMillions > secondMillions ? first : second;
+    const smaller = firstMillions > secondMillions ? second : first;
+    const biggerValue = Math.max(firstMillions, secondMillions);
+    const smallerValue = Math.min(firstMillions, secondMillions);
+    const answer = biggerValue - smallerValue;
+    return {
+      id: `${seed}-number-countries-difference-${bigger.id}-${smaller.id}`,
+      topic: currentTopic,
+      operation: "subtraction",
+      prompt: `${bigger.name} has about ${formatNumber(biggerValue)} million people. ${smaller.name} has about ${formatNumber(smallerValue)} million. About how many million more people live in ${bigger.name}?`,
+      cards: [roundedStatCard(countryCard(bigger), biggerValue, "million people"), roundedStatCard(countryCard(smaller), smallerValue, "million people")],
+      statLabel: "Rounded population",
+      unit: "million people",
+      operator: "-",
+      termValues: [biggerValue, smallerValue],
+      resultLabel: "population difference",
+      biggerLabel: bigger.name,
+      smallerLabel: smaller.name,
+      biggerValue,
+      smallerValue,
+      answer,
+      choices: numberChoices(answer, populationStep, seed + 4),
+      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} million people. The numbers are rounded for mental maths.`,
+    };
+  }
 
   if (currentTopic === "peppers") {
     const pool = preferredPool(pepperPlantPool(), difficulty);
@@ -2499,6 +2633,25 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
 export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: number): OddRound => {
   const currentTopic = topicOrder(topic, seed);
 
+  if (currentTopic === "countries") {
+    const pool = preferredPool(countries, difficulty);
+    const continentGroups = (["Africa", "Asia", "Europe", "North America", "South America", "Oceania"] as WorldContinent[])
+      .filter((continent) => pool.filter((country) => country.continents.includes(continent)).length >= 3)
+      .filter((continent) => pool.some((country) => !country.continents.includes(continent)));
+    const continent = sample(continentGroups, seed + 1);
+    const same = shuffle(pool.filter((country) => country.continents.includes(continent)), seed + 2).slice(0, 3);
+    const odd = sample(pool.filter((country) => !country.continents.includes(continent)), seed + 3);
+    return {
+      id: `${seed}-odd-countries-${continent}-${odd.id}`,
+      topic: currentTopic,
+      prompt: "Which flag belongs to a country on a different continent?",
+      cards: shuffle([...same.map((country) => countryCard(country)), countryCard(odd)], seed + 4),
+      answerId: odd.id,
+      reason: `${odd.name} is in ${odd.continents.join(" / ")}; the others are in ${continent}.`,
+      explanation: `The rule is continent. ${odd.name} is the odd one out.`,
+    };
+  }
+
   if (currentTopic === "peppers") {
     const pepperPlants = pepperPlantPool();
     const preferred = preferredPool(pepperPlants, difficulty);
@@ -2700,6 +2853,25 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   const currentTopic = topicOrder(topic, seed);
   const count = difficulty === 1 ? 3 : 4;
 
+  if (currentTopic === "countries") {
+    const metric: CountryMetric = seedRandom(seed + 1) > 0.48 ? "population" : "area";
+    const cards = distinctStatCards(
+      shuffle(preferredPool(countries, difficulty), seed + 2).map((country) => countryCard(country, metric)),
+      seed + 3,
+      count,
+    );
+    const sorted = [...cards].sort((first, second) => first.statValue - second.statValue);
+    return {
+      id: `${seed}-sort-countries-${metric}`,
+      topic: currentTopic,
+      prompt: metric === "population" ? "Tap the countries from fewest people to most people." : "Tap the countries from smallest land area to biggest.",
+      cards: shuffle(cards, seed + 4),
+      answerIds: sorted.map((card) => card.id),
+      explanation: sorted.map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
+      statLabel: metric === "population" ? "Population" : "Land area",
+    };
+  }
+
   if (currentTopic === "peppers") {
     const cards = distinctStatCards(shuffle(preferredPool(pepperPlantPool().filter(hasScovilleMeasurement), difficulty), seed + 1).map(pepperCard), seed + 2, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
@@ -2781,6 +2953,31 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []): FactRound => {
   const currentTopic = topicOrder(topic, seed);
   const truthful = seedRandom(seed + 11) > 0.46;
+
+  if (currentTopic === "countries") {
+    const pool = preferredPool(countries, difficulty);
+    const country = discoveryShuffle(pool, seed + 12, unlockedTitles, (item) => item.name)[0];
+    const factType = sample(["capital", "continent"] as const, seed + 13);
+    const alternate = sample(pool.filter((item) => item.id !== country.id), seed + 14);
+    const claimedCapital = truthful ? country.capital : alternate.capital;
+    const falseContinents = (["Africa", "Asia", "Europe", "North America", "Oceania", "South America"] as WorldContinent[])
+      .filter((continent) => !country.continents.includes(continent));
+    const claimedContinent = truthful ? country.continents[0] : sample(falseContinents, seed + 15);
+    return {
+      id: `${seed}-fact-country-${factType}-${country.id}`,
+      topic: currentTopic,
+      prompt: "True or false?",
+      statement: factType === "capital"
+        ? `${claimedCapital} is the capital of ${country.name}.`
+        : `${country.name} is in ${claimedContinent}.`,
+      image: country.image,
+      imageAlt: `Flag of ${country.name}`,
+      imageCredit: country.imageCredit,
+      answer: truthful ? "True" : "False",
+      explanation: `${country.name}'s capital is ${country.capital}, and it is in ${country.continents.join(" / ")}. ${country.fact}`,
+      locations: country.metadata.location ? [country.metadata.location] : undefined,
+    };
+  }
 
   if (currentTopic === "peppers") {
     const pool = preferredPool(peppers, difficulty);

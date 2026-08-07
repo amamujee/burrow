@@ -6,6 +6,7 @@ export type WorldLocation = {
   label: string;
   countries: string[];
   continents: WorldContinent[];
+  coordinates?: readonly [latitude: number, longitude: number];
 };
 
 export type CardMetadata = {

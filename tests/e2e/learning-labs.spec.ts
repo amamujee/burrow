@@ -2,6 +2,8 @@ import { expect, test } from "@playwright/test";
 import { mathTrailChallenges } from "../../src/components/experiments/math-lenses";
 import { pepperExpeditionStops } from "../../src/components/experiments/pepper-expedition";
 
+test.describe("learning lab content", { tag: "@logic" }, () => {
+
 test("math trail content covers every playable topic with mixed operations", () => {
   expect(new Set(mathTrailChallenges.map((challenge) => challenge.category))).toEqual(new Set([
     "Spicy Peppers",
@@ -35,6 +37,10 @@ test("every standalone Reading stop is grounded in visible evidence", () => {
     expect(stop.journal.length, `${stop.id} needs explanatory feedback`).toBeGreaterThan(40);
   }
 });
+
+});
+
+test.describe("learning lab browser flows", { tag: "@browser" }, () => {
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/experiments");
@@ -127,7 +133,7 @@ test("math trail chooses varied question types and moves across topic worlds", a
   await expect(page.getByLabel("38 plus 27 windows")).toBeVisible();
 });
 
-test("math trail completes all ten stops and continues to Burrow", async ({ page }) => {
+test("math trail completes all ten stops and continues to Burrow", { tag: "@mobile" }, async ({ page }) => {
   await page.getByRole("button", { name: /Math Trail/ }).click();
 
   for (const [index, challenge] of mathTrailChallenges.entries()) {
@@ -142,11 +148,13 @@ test("math trail completes all ten stops and continues to Burrow", async ({ page
   await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
 });
 
-test("lab selector fits the mobile viewport", async ({ page, isMobile }) => {
+test("lab selector fits the mobile viewport", { tag: "@mobile" }, async ({ page, isMobile }) => {
   test.skip(!isMobile, "mobile viewport coverage");
   const navigation = page.getByRole("navigation", { name: "Experimental learning modes" });
   const box = await navigation.boundingBox();
   expect(box).not.toBeNull();
   expect(box!.x).toBeGreaterThanOrEqual(0);
   expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+});
+
 });

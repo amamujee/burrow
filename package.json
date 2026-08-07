@@ -21,11 +21,15 @@
     "lint": "eslint",
     "check:images": "node scripts/check-images.mjs",
     "validate:packs": "node scripts/validate-packs.mjs",
-    "test:e2e": "playwright test",
+    "test:logic": "playwright test --config=playwright.logic.config.ts",
+    "test:e2e:run": "playwright test --project=desktop --project=mobile",
+    "test:e2e": "npm run build && npm run test:e2e:run",
     "qa:content": "node scripts/qa-content.mjs",
     "analyze:play-events": "node scripts/analyze-play-events.mjs",
     "sync:assets": "node scripts/sync-content-assets.mjs",
-    "verify": "npm run lint && npm run validate:packs && npm run check:images && npm run qa:content && npm run build && npm run test:e2e"
+    "qa:fast": "npm run lint && npm run validate:packs && npm run check:images && npm run qa:content && npm run test:logic",
+    "qa:deep": "npm run qa:fast && npm run build && playwright test --project=desktop --project=mobile-full",
+    "verify": "npm run qa:fast && npm run build && npm run test:e2e:run"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

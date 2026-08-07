@@ -1,7 +1,9 @@
 import { contentLibraryStats } from "./content-library";
 import type { CardMetadata, WorldContinent, WorldLocation } from "./card-metadata";
+import { countries } from "./countries-data";
+export { countries, type Country } from "./countries-data";
 
-export type TopicId = "peppers" | "buildings" | "sharks" | "space" | "jets" | "mixed";
+export type TopicId = "peppers" | "buildings" | "sharks" | "space" | "jets" | "countries" | "mixed";
 export type KnowledgeTopic = Exclude<TopicId, "mixed">;
 export type Difficulty = 1 | 2 | 3;
 export type HeatBand = "not spicy" | "mild" | "warm" | "hot" | "very hot" | "insane";
@@ -2338,11 +2340,8 @@ const buildingSeeds: Omit<Building, "metadata">[] = [
     heightFt: 981,
     floors: 58,
     status: "finished",
-    image: "/burrow-assets/buildings/50-hudson-yards.svg",
-    imageSourceFile: "burrow-original-50-hudson-yards.svg",
-    imageSourceUrl: "https://en.wikipedia.org/wiki/50_Hudson_Yards",
-    imageCredit: "Burrow original SVG",
-    imageFit: "contain",
+    ...contentImage("buildings", "50-hudson-yards", "50 Hudson Yards (55379880087).jpg"),
+    imageCredit: "Ajay Suresh, CC BY 4.0 · Wikimedia Commons",
     fact: "50 Hudson Yards completed Phase 1 of Hudson Yards and is anchored by big office tenants.",
   },
   {
@@ -2365,11 +2364,8 @@ const buildingSeeds: Omit<Building, "metadata">[] = [
     heightFt: 813,
     floors: 60,
     status: "finished",
-    image: "/burrow-assets/buildings/28-liberty.svg",
-    imageSourceFile: "burrow-original-28-liberty.svg",
-    imageSourceUrl: "https://en.wikipedia.org/wiki/28_Liberty_Street",
-    imageCredit: "Burrow original SVG",
-    imageFit: "contain",
+    ...contentImage("buildings", "28-liberty", "28 Liberty Street 010.jpg"),
+    imageCredit: "Kidfly182, CC BY 4.0 · Wikimedia Commons",
     fact: "28 Liberty Street is the landmark Lower Manhattan office tower formerly known as One Chase Manhattan Plaza.",
   },
   {
@@ -3856,7 +3852,7 @@ export const jets: Jet[] = [
   { id: "mig-21", name: "MiG-21", country: "Soviet Union", category: "interceptor", maxSpeedMph: 1350, rangeMiles: 750, firepower: 3, ...contentImage("jets", "mig-21", "Croatian MiG-21 (cropped).jpg"), imageCredit: "Christian Volpati/Wikimedia Commons", fact: "The MiG-21 is one of the most-produced supersonic jet fighters in history." },
 ];
 
-export const topicIds = ["peppers", "buildings", "sharks", "space", "jets"] as const satisfies readonly KnowledgeTopic[];
+export const topicIds = ["peppers", "buildings", "sharks", "space", "jets", "countries"] as const satisfies readonly KnowledgeTopic[];
 
 export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
   peppers: {
@@ -3937,6 +3933,20 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
       { label: "Wikidata aircraft records", url: "https://query.wikidata.org/" },
     ],
     samples: ["F-22 Raptor", "SR-71 Blackbird", "Rafale", "MiG-31"],
+  },
+  countries: {
+    id: "countries",
+    label: "Countries & Flags",
+    eyebrow: `${countries.length} flag cards`,
+    roundLabel: "World round",
+    libraryCount: countries.length,
+    featuredCount: countries.length,
+    sources: [
+      { label: "World Bank population data", url: "https://data.worldbank.org/indicator/SP.POP.TOTL" },
+      { label: "mledoze country reference data", url: "https://github.com/mledoze/countries" },
+      { label: "flag-icons SVG collection", url: "https://github.com/lipis/flag-icons" },
+    ],
+    samples: ["India", "Brazil", "Japan", "South Africa"],
   },
 };
 

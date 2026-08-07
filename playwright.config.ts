@@ -10,7 +10,7 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   webServer: {
-    command: "npm run build && npm run start -- -p 3100",
+    command: "npm run start -- -p 3100",
     url: "http://127.0.0.1:3100/play",
     reuseExistingServer: true,
     timeout: 120_000,
@@ -18,10 +18,17 @@ export default defineConfig({
   projects: [
     {
       name: "desktop",
+      grep: /@browser/,
       use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
     },
     {
       name: "mobile",
+      grep: /@mobile/,
+      use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
+    },
+    {
+      name: "mobile-full",
+      grep: /@browser/,
       use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
     },
   ],

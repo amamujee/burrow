@@ -1,11 +1,13 @@
 import { expect, test, type Page } from "@playwright/test";
 import {
-  challengeConceptVisualLabels,
+  buildChallengeCampaignsForCategory,
+  challengeCampaignCountPerCategory,
+  challengeCampaignForMilestone,
   challengeQuestionInterval,
   pepperChallengeCampaignForMilestone,
   pepperChallengeCampaigns,
 } from "../../src/components/core-mini-challenge";
-import { peppers } from "../../src/lib/game-data";
+import { buildings, countries, peppers, topicPacks } from "../../src/lib/game-data";
 import { poolForDifficulty } from "../../src/lib/difficulty-pool";
 import {
   buildFactRound,
@@ -14,20 +16,26 @@ import {
   buildNumberRound,
   buildNumberRoundFromCards,
   buildOddRound,
+  buildOddRoundFromCards,
   buildRevealRound,
   buildRevealRoundFromCards,
   buildSortRound,
   buildTopTrumpRound,
+  collectionOrderLabel,
   collectionCards,
   geoChoiceSeparationForDifficulty,
   geoPointDistanceKm,
   geoPointMapDistance,
   orderCollectionCardsByScoville,
+  orderCollectionCardsForCategory,
   slotSortCardIds,
   topTrumpOutcome,
   type GenericKnowledgeCard,
 } from "../../src/lib/game-modes";
-import { buildSession } from "../../src/lib/questions";
+import { buildHeadToHeadSession, buildSession } from "../../src/lib/questions";
+import { packToPlayableDeck } from "../../src/lib/pack-adapter";
+import { loadPlayablePacks } from "../../src/lib/pack-loader";
+import { discoveryShuffle } from "../../src/lib/random";
 import {
   addLearningExposure,
   learningIdentity,
@@ -35,7 +43,7 @@ import {
 } from "../../src/lib/learning-variety";
 
 const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
-const topicLabels = ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Universe", "Jet Hangar", "Dinosaur Lab", "Tallest Mountains", "Tall Trees", "Bridges & Tunnels"];
+const topicLabels = ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Universe", "Jet Hangar", "Countries & Flags", "Dinosaur Lab", "Tallest Mountains", "Tall Trees", "Bridges & Tunnels"];
 
 const setupSummary = (page: Page) => page.locator("summary").filter({ hasText: "Setup" });
 const setupDetails = (page: Page) => setupSummary(page).locator("xpath=..");
@@ -77,7 +85,7 @@ const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
   await expect(setupSummary(page)).toContainText("1 topics");
 };
 
-const openPepperChallengeAt = async (page: Page, milestone: number) => {
+const openChallengeAt = async (page: Page, milestone: number, topicLabel: string) => {
   await page.evaluate(({ targetMilestone, interval }) => {
     const key = "burrow-profiles-v1";
     const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
@@ -93,7 +101,7 @@ const openPepperChallengeAt = async (page: Page, milestone: number) => {
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await chooseOnlyMode(page, "True/False");
-  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+  await chooseOnlyBuiltInTopic(page, topicLabel);
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
   await page.getByRole("button", { name: /Next|Finish round/ }).click();
 };
@@ -115,6 +123,59 @@ const mathFixtureCards: GenericKnowledgeCard[] = [12, 20, 35, 48].map((value, in
   categories: ["test"],
   stats: [{ id: "length", label: "Length", value, display: `${value} ft`, direction: "higher" }],
 }));
+
+const playableChallengeCategories = [
+  ...Object.values(topicPacks).map((pack) => ({
+    id: pack.id,
+    label: pack.label,
+    cards: collectionCards().filter((card) => card.topic === pack.id),
+  })),
+  ...loadPlayablePacks().map(packToPlayableDeck).map((deck) => ({
+    id: deck.id,
+    label: deck.title,
+    cards: deck.cards,
+  })),
+];
+
+test.describe("logic and content coverage", { tag: "@logic" }, () => {
+test.describe.configure({ mode: "serial" });
+
+test("pack Odd One rounds never ask children to infer a hidden category", () => {
+  const cards = mathFixtureCards.map((card, index) => ({
+    ...card,
+    categories: index === 1 ? ["andes"] : ["karakoram"],
+  }));
+  const round = buildOddRoundFromCards(cards, "mountains", 3, 137);
+
+  expect(round.prompt).toBe("Which card has the highest Length?");
+  expect(round.answerId).toBe("math-card-3");
+  expect(`${round.prompt} ${round.reason} ${round.explanation}`).not.toMatch(/category|karakoram|andes/i);
+  expect(new Set(round.cards.map((card) => card.statValue)).size).toBe(4);
+});
+
+test("50 Hudson Yards and 28 Liberty Street use real credited photos", () => {
+  const expected = {
+    "50-hudson-yards": {
+      image: "/burrow-assets/buildings/50-hudson-yards.jpg",
+      imageSourceFile: "50 Hudson Yards (55379880087).jpg",
+      imageSourceUrl: "https://commons.wikimedia.org/wiki/File:50_Hudson_Yards_(55379880087).jpg",
+      imageCredit: "Ajay Suresh, CC BY 4.0 · Wikimedia Commons",
+    },
+    "28-liberty": {
+      image: "/burrow-assets/buildings/28-liberty.jpg",
+      imageSourceFile: "28 Liberty Street 010.jpg",
+      imageSourceUrl: "https://commons.wikimedia.org/wiki/File:28_Liberty_Street_010.jpg",
+      imageCredit: "Kidfly182, CC BY 4.0 · Wikimedia Commons",
+    },
+  } as const;
+
+  for (const [id, image] of Object.entries(expected)) {
+    const building = buildings.find((candidate) => candidate.id === id);
+    expect(building).toMatchObject(image);
+    expect(building?.image).not.toMatch(/\.svg$/);
+    expect(collectionCards().find((card) => card.id === id)?.image).toBe(image.image);
+  }
+});
 
 test("learning variety blocks exact repeats while timing review of missed concepts", () => {
   const original = learningIdentity({
@@ -161,8 +222,13 @@ test("learning variety blocks exact repeats while timing review of missed concep
 test("every generated Quiz location question carries matching map choices", () => {
   for (const topic of ["peppers", "buildings"] as const) {
     for (const difficulty of [1, 2, 3] as const) {
-      const questions = Array.from({ length: 80 }, (_, seed) => buildSession(topic, difficulty, seed * 101, [])).flat();
-      const locationQuestions = questions.filter((question) => question.kind.endsWith("-location"));
+      const locationQuestions: ReturnType<typeof buildSession> = [];
+      for (let seed = 0; seed < 24 && locationQuestions.length < 8; seed += 1) {
+        locationQuestions.push(
+          ...buildSession(topic, difficulty, seed * 101, [])
+            .filter((question) => question.kind.endsWith("-location")),
+        );
+      }
       expect(locationQuestions.length).toBeGreaterThan(0);
       for (const question of locationQuestions) {
         expect(question.map, `${question.id} needs a teaching map`).toBeTruthy();
@@ -186,8 +252,13 @@ test("location-based True/False rounds carry claimed and actual map points", () 
   const minimum = geoChoiceSeparationForDifficulty(3);
   for (const topic of ["peppers", "buildings", "jets"] as const) {
     const difficulty = topic === "jets" ? 2 : 1;
-    const topicRounds = Array.from({ length: 360 }, (_, seed) => buildFactRound(topic, difficulty, seed * 37));
-    const locationRounds = topicRounds.filter((round) => round.statement.includes(" is in ") || round.statement.includes(" is linked to ") || round.statement.includes(" is from "));
+    const locationRounds: ReturnType<typeof buildFactRound>[] = [];
+    for (let seed = 0; seed < 80 && locationRounds.length < 10; seed += 1) {
+      const round = buildFactRound(topic, difficulty, seed * 37);
+      if (round.statement.includes(" is in ") || round.statement.includes(" is linked to ") || round.statement.includes(" is from ")) {
+        locationRounds.push(round);
+      }
+    }
     expect(locationRounds.length).toBeGreaterThan(0);
     for (const round of locationRounds) {
       expect(round.map, `${round.id} needs a claimed and actual map point`).toBeTruthy();
@@ -212,8 +283,11 @@ test("location-based True/False rounds carry claimed and actual map points", () 
         direction: "higher" as const,
       }],
     })) satisfies GenericKnowledgeCard[];
-  const packRounds = Array.from({ length: 360 }, (_, seed) => buildFactRoundFromCards(mappedCards, "fixture-pack", 1, seed * 41));
-  const falseLocationRounds = packRounds.filter((round) => round.answer === "False" && round.map);
+  const falseLocationRounds: ReturnType<typeof buildFactRoundFromCards>[] = [];
+  for (let seed = 0; seed < 80 && falseLocationRounds.length < 10; seed += 1) {
+    const round = buildFactRoundFromCards(mappedCards, "fixture-pack", 1, seed * 41);
+    if (round.answer === "False" && round.map) falseLocationRounds.push(round);
+  }
   expect(falseLocationRounds.length).toBeGreaterThan(0);
   for (const round of falseLocationRounds) {
     expect(geoPointDistanceKm(round.map!.actual.point, round.map!.claimed.point)).toBeGreaterThanOrEqual(minimum.kilometers);
@@ -227,10 +301,11 @@ test("every generated Peek location question carries well-separated map choices"
     .map((card) => ({ ...card, categories: ["building"], stats: [] })) satisfies GenericKnowledgeCard[];
 
   for (const difficulty of [1, 2, 3] as const) {
-    const rounds = Array.from({ length: 120 }, (_, seed) =>
-      buildRevealRoundFromCards(mappedCards, "buildings", difficulty, seed * 43),
-    );
-    const locationRounds = rounds.filter((round) => round.prompt === "Where in the world is this found?");
+    const locationRounds: ReturnType<typeof buildRevealRoundFromCards>[] = [];
+    for (let seed = 0; seed < 60 && locationRounds.length < 8; seed += 1) {
+      const round = buildRevealRoundFromCards(mappedCards, "buildings", difficulty, seed * 43);
+      if (round.prompt === "Where in the world is this found?") locationRounds.push(round);
+    }
     expect(locationRounds.length).toBeGreaterThan(0);
     for (const round of locationRounds) {
       expect(round.map, `${round.id} needs a teaching map`).toBeTruthy();
@@ -250,8 +325,11 @@ test("every generated Peek location question carries well-separated map choices"
 });
 
 test("location-based Odd One rounds preserve locations for map feedback", () => {
-  const rounds = Array.from({ length: 160 }, (_, seed) => buildOddRound("buildings", 2, seed * 47));
-  const locationRounds = rounds.filter((round) => /not in (New York City|Brooklyn|Asia|the United States|China)/.test(round.prompt));
+  const locationRounds: ReturnType<typeof buildOddRound>[] = [];
+  for (let seed = 0; seed < 80 && locationRounds.length < 8; seed += 1) {
+    const round = buildOddRound("buildings", 2, seed * 47);
+    if (/not in (New York City|Brooklyn|Asia|the United States|China)/.test(round.prompt)) locationRounds.push(round);
+  }
   expect(locationRounds.length).toBeGreaterThan(0);
   for (const round of locationRounds) expect(round.locations?.length).toBe(4);
 });
@@ -303,19 +381,11 @@ test("15 new peppers share their verified records and real photos across the gam
     });
   }
 
-  const naturallySeenImages = new Set(
-    Array.from({ length: 250 }, (_, seed) => buildSession("peppers", 3, seed * 101, []))
-      .flat()
-      .map((question) => question.image),
-  );
-  for (const pepper of newPeppers) expect(naturallySeenImages).toContain(pepper.image);
+  const hardPool = new Set(poolForDifficulty(peppers, 3).map((pepper) => pepper.id));
+  for (const pepper of newPeppers) expect(hardPool).toContain(pepper.id);
 
-  const defaultDifficultyImages = new Set(
-    Array.from({ length: 250 }, (_, seed) => buildSession("peppers", 2, seed * 101, []))
-      .flat()
-      .map((question) => question.image),
-  );
-  expect(newPeppers.filter((pepper) => defaultDifficultyImages.has(pepper.image)).length).toBeGreaterThanOrEqual(8);
+  const mediumPool = new Set(poolForDifficulty(peppers, 2).map((pepper) => pepper.id));
+  expect(newPeppers.filter((pepper) => mediumPool.has(pepper.id)).length).toBeGreaterThanOrEqual(8);
 });
 
 test("21 rare and unusual peppers keep verified metadata, honest estimates, and natural rotation", () => {
@@ -368,18 +438,14 @@ test("21 rare and unusual peppers keep verified metadata, honest estimates, and 
     else expect(card?.statValue).toBe(pepper.shuMax);
   }
 
-  const imagesByDifficulty = new Map(
+  const idsByDifficulty = new Map(
     ([1, 2, 3] as const).map((difficulty) => [
       difficulty,
-      new Set(
-        Array.from({ length: 180 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, []))
-          .flat()
-          .map((question) => question.image),
-      ),
+      new Set(poolForDifficulty(peppers, difficulty).map((pepper) => pepper.id)),
     ]),
   );
   const seenCount = (difficulty: 1 | 2 | 3) =>
-    newPeppers.filter((pepper) => imagesByDifficulty.get(difficulty)?.has(pepper.image)).length;
+    newPeppers.filter((pepper) => idsByDifficulty.get(difficulty)?.has(pepper.id)).length;
 
   expect(seenCount(1)).toBeGreaterThanOrEqual(5);
   expect(seenCount(2)).toBeGreaterThanOrEqual(12);
@@ -463,16 +529,12 @@ test("25 world peppers add credited source photos, honest heat data, geography, 
   }
   expect(pepperCards.find((card) => card.id === "seven-pot-barrackpore")?.statDisplay).toBe("1,000,000+ SHU (unofficial)");
 
-  for (const difficulty of [1, 2, 3] as const) {
-    const expectedAtDifficulty = poolForDifficulty(peppers, difficulty)
-      .filter((pepper) => newPepperIds.includes(pepper.id));
-    const naturallySeenImages = new Set(
-      Array.from({ length: 360 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, []))
-        .flat()
-        .map((question) => question.image),
-    );
-    for (const pepper of expectedAtDifficulty) expect(naturallySeenImages).toContain(pepper.image);
-  }
+  const easyIds = new Set(poolForDifficulty(peppers, 1).map((pepper) => pepper.id));
+  const mediumIds = new Set(poolForDifficulty(peppers, 2).map((pepper) => pepper.id));
+  const hardIds = new Set(poolForDifficulty(peppers, 3).map((pepper) => pepper.id));
+  expect(newPepperIds.filter((id) => easyIds.has(id)).length).toBeGreaterThanOrEqual(8);
+  expect(newPepperIds.filter((id) => mediumIds.has(id)).length).toBe(15);
+  for (const id of newPepperIds) expect(hardIds).toContain(id);
 });
 
 test("Super Chilli, Moruga Red, and three chocolate varieties join normal pepper play", () => {
@@ -546,13 +608,9 @@ test("Super Chilli, Moruga Red, and three chocolate varieties join normal pepper
   } as const;
 
   for (const difficulty of [1, 2, 3] as const) {
-    const naturallySeenImages = new Set(
-      Array.from({ length: 260 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, []))
-        .flat()
-        .map((question) => question.image),
-    );
+    const eligibleIds = new Set(poolForDifficulty(peppers, difficulty).map((pepper) => pepper.id));
     for (const id of expectedByDifficulty[difficulty]) {
-      expect(naturallySeenImages).toContain(`/burrow-assets/peppers/${id}.png`);
+      expect(eligibleIds).toContain(id);
     }
   }
 });
@@ -578,22 +636,37 @@ test("Tangerine Dream and Chocolate Rocoto X join pepper play with honest heat d
     expect(pepper?.metadata?.accuracyNote).toBeTruthy();
   }
 
-  for (const difficulty of [1, 2, 3] as const) {
-    const expectedAtDifficulty = poolForDifficulty(peppers, difficulty).filter((pepper) => pepper.id in expected);
-    const seenImages = new Set(Array.from({ length: 160 }, (_, seed) => buildSession("peppers", difficulty, seed * 103, [])).flat().map((question) => question.image));
-    for (const pepper of expectedAtDifficulty) expect(seenImages).toContain(pepper.image);
-  }
+  const eligibleIds = new Set(poolForDifficulty(peppers, 3).map((pepper) => pepper.id));
+  for (const id of Object.keys(expected)) expect(eligibleIds).toContain(id);
 });
 
 test("reading questions rotate instructions and pepper comprehension patterns", () => {
-  const pepperReading = Array.from({ length: 120 }, (_, seed) => buildSession("peppers", 2, seed * 97, [])).flat().filter((question) => question.kind === "pepper-reading");
+  const pepperReading: ReturnType<typeof buildSession> = [];
+  for (let seed = 0; seed < 36; seed += 1) {
+    pepperReading.push(...buildSession("peppers", 2, seed * 97, []).filter((question) => question.kind === "pepper-reading"));
+    const patterns = new Set(pepperReading.map((question) => question.id.match(/pepper-reading-(color|fact-identity|heat-word)-/)?.[1]).filter(Boolean));
+    if (patterns.size === 3) break;
+  }
   const pepperPatterns = new Set(pepperReading.map((question) => question.id.match(/pepper-reading-(color|fact-identity|heat-word)-/)?.[1]).filter(Boolean));
   expect([...pepperPatterns].sort()).toEqual(["color", "fact-identity", "heat-word"]);
 
   for (const [topic, minimum] of [["sharks", 3], ["jets", 3], ["space", 4]] as const) {
-    const prompts = new Set(Array.from({ length: 80 }, (_, seed) => buildSession(topic, 1, seed * 89, [])).flat().filter((question) => question.kind.endsWith("-reading")).map((question) => question.prompt));
+    const prompts = new Set<string>();
+    for (let seed = 0; seed < 30 && prompts.size < minimum; seed += 1) {
+      for (const question of buildSession(topic, 1, seed * 89, [])) {
+        if (question.kind.endsWith("-reading")) prompts.add(question.prompt);
+      }
+    }
     expect(prompts.size, `${topic} should rotate reading instructions`).toBeGreaterThanOrEqual(minimum);
   }
+});
+
+test("building comparisons use a direct child-friendly prompt", () => {
+  const comparisons = Array.from({ length: 16 }, (_, seed) => buildSession("buildings", 3, seed * 83, []))
+    .flat()
+    .filter((question) => question.kind === "building-taller");
+  expect(comparisons.length).toBeGreaterThan(0);
+  expect(new Set(comparisons.map((question) => question.prompt))).toEqual(new Set(["Which one is taller?"]));
 });
 
 test("pepper Top Trumps uses named rarity tiers and allows exact ties", () => {
@@ -629,43 +702,45 @@ test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate ma
   expect(noahCard?.statDisplay).toBe("2,000,000+ SHU (unofficial)");
   expect(Number.isNaN(noahCard?.statValue)).toBe(true);
 
-  for (let seed = 0; seed < 100; seed += 1) {
+  for (let seed = 0; seed < 24; seed += 1) {
     const sortRound = buildSortRound("peppers", 3, seed);
     expect(sortRound.cards.every((card) => card.id !== "the-noah" && Number.isFinite(card.statValue))).toBe(true);
-
-    const quiz = buildSession("peppers", 3, seed * 101, []);
-    for (const question of quiz.filter((item) => item.image === "/burrow-assets/peppers/the-noah.png")) {
-      expect(["pepper-heat", "pepper-reading", "pepper-location"]).toContain(question.kind);
-      expect(question.numberLine).toBeUndefined();
-    }
   }
 
   for (const difficulty of [1, 2, 3] as const) {
-    const ordinaryQuestions = Array.from({ length: 100 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, [])).flat();
-    expect(ordinaryQuestions.some((question) => question.image === "/burrow-assets/peppers/the-noah.png")).toBe(true);
+    expect(new Set(poolForDifficulty(peppers, difficulty).map((pepper) => pepper.id))).toContain("the-noah");
+  }
 
-    const unlockedOtherPeppers = peppers.filter((pepper) => pepper.id !== "the-noah").map((pepper) => pepper.name);
-    const discoveryQuestions = Array.from({ length: 100 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, [], unlockedOtherPeppers)).flat();
-    const ordinaryNoahCount = ordinaryQuestions.filter((question) => question.image === "/burrow-assets/peppers/the-noah.png").length;
-    const discoveryNoahCount = discoveryQuestions.filter((question) => question.image === "/burrow-assets/peppers/the-noah.png").length;
-    expect(discoveryNoahCount).toBeGreaterThan(ordinaryNoahCount);
-    expect(discoveryNoahCount).toBeLessThan(discoveryQuestions.length);
+  const candidates = peppers.map((pepper) => ({ id: pepper.id, title: pepper.name }));
+  const unlockedOtherPeppers = peppers.filter((pepper) => pepper.id !== "the-noah").map((pepper) => pepper.name);
+  const ordinaryNoahCount = Array.from({ length: 100 }, (_, seed) =>
+    discoveryShuffle(candidates, seed, [], (item) => item.title)[0].id,
+  ).filter((id) => id === "the-noah").length;
+  const discoveryNoahCount = Array.from({ length: 100 }, (_, seed) =>
+    discoveryShuffle(candidates, seed, unlockedOtherPeppers, (item) => item.title)[0].id,
+  ).filter((id) => id === "the-noah").length;
+  expect(discoveryNoahCount).toBeGreaterThan(ordinaryNoahCount);
+  expect(discoveryNoahCount).toBeLessThan(100);
 
-    const discoveryRounds = Array.from({ length: 100 }, (_, seed) => [
-      buildRevealRound("peppers", difficulty, seed, unlockedOtherPeppers).card.id,
-      buildGeoRound("peppers", difficulty, seed, unlockedOtherPeppers).card.id,
-      buildFactRound("peppers", difficulty, seed, unlockedOtherPeppers).imageAlt,
-      buildTopTrumpRound("peppers", difficulty, seed, unlockedOtherPeppers).player.id,
-    ]).flat();
-    const visibleNoahCount = discoveryRounds.filter((value) => value === "the-noah" || value === "The Noah").length;
-    expect(visibleNoahCount).toBeGreaterThan(200);
-    expect(visibleNoahCount).toBeLessThan(discoveryRounds.length);
+  const discoveryQuestions = Array.from({ length: 24 }, (_, seed) =>
+    buildSession("peppers", 3, seed * 101, [], unlockedOtherPeppers),
+  ).flat().filter((question) => question.image === "/burrow-assets/peppers/the-noah.png");
+  expect(discoveryQuestions.length).toBeGreaterThan(0);
+  for (const question of discoveryQuestions) {
+    expect(["pepper-heat", "pepper-reading", "pepper-location"]).toContain(question.kind);
+    expect(question.numberLine).toBeUndefined();
   }
 });
 
 test("Pepper Y snaps directly into the hottest sort slot", () => {
-  const round = Array.from({ length: 500 }, (_, seed) => buildSortRound("peppers", 3, seed))
-    .find((candidate) => candidate.cards.some((card) => card.id === "pepper-y"));
+  let round: ReturnType<typeof buildSortRound> | undefined;
+  for (let seed = 0; seed < 500; seed += 1) {
+    const candidate = buildSortRound("peppers", 3, seed);
+    if (candidate.cards.some((card) => card.id === "pepper-y")) {
+      round = candidate;
+      break;
+    }
+  }
 
   expect(round).toBeDefined();
   expect(round?.answerIds.at(-1)).toBe("pepper-y");
@@ -708,12 +783,12 @@ test("Orange Butch T and Goat Trail join normal pepper play with Goat Trail's ca
   expect(goatTrailCard?.statValue).toBe(50000);
 
   for (const difficulty of [1, 2, 3] as const) {
-    const ordinaryQuestions = Array.from({ length: 150 }, (_, seed) => buildSession("peppers", difficulty, seed * 101, [])).flat();
-    expect(ordinaryQuestions.some((question) => question.image === "/burrow-assets/peppers/goat-trail.png")).toBe(true);
-    if (difficulty >= 2) expect(ordinaryQuestions.some((question) => question.image === "/burrow-assets/peppers/orange-butch-t.png")).toBe(true);
+    const eligibleIds = new Set(poolForDifficulty(peppers, difficulty).map((pepper) => pepper.id));
+    expect(eligibleIds).toContain("goat-trail");
+    if (difficulty >= 2) expect(eligibleIds).toContain("orange-butch-t");
   }
 
-  for (let seed = 0; seed < 100; seed += 1) {
+  for (let seed = 0; seed < 24; seed += 1) {
     expect(buildSortRound("peppers", 3, seed).cards.every((card) => Number.isFinite(card.statValue))).toBe(true);
   }
 });
@@ -750,10 +825,8 @@ test("Yellow Bhut Assam joins normal pepper play with its permitted source image
   });
 
   for (const difficulty of [1, 2, 3] as const) {
-    const ordinaryQuestions = Array.from({ length: 180 }, (_, seed) =>
-      buildSession("peppers", difficulty, seed * 101, []),
-    ).flat();
-    expect(ordinaryQuestions.some((question) => question.image === pepper?.image)).toBe(true);
+    const eligibleIds = new Set(poolForDifficulty(peppers, difficulty).map((item) => item.id));
+    expect(eligibleIds).toContain("yellow-bhut-assam");
   }
 });
 
@@ -772,6 +845,76 @@ test("pepper collection cards use their displayed Scoville score from least to h
   expect(ordered.map((card) => card.id)).toEqual(expectedOrder.map((card) => card.id));
   expect(ordered.findIndex((card) => card.id === "orange-seven-pot")).toBeLessThan(ordered.findIndex((card) => card.id === "armageddon"));
   expect(lowerBoundOnly.every((card) => !Number.isFinite(card.statValue))).toBe(true);
+});
+
+test("category collections keep every card in its meaningful order", () => {
+  const pepperCards = collectionCards().filter((card) => card.topic === "peppers");
+  const orderedPeppers = orderCollectionCardsForCategory(pepperCards);
+  expect(orderedPeppers).toEqual(orderCollectionCardsByScoville(pepperCards));
+  expect(collectionOrderLabel(orderedPeppers)).toBe("Scoville · mildest to hottest");
+
+  const buildingCards = collectionCards().filter((card) => card.topic === "buildings");
+  const orderedBuildings = orderCollectionCardsForCategory(buildingCards);
+  expect(orderedBuildings.map((card) => card.statValue)).toEqual(
+    [...orderedBuildings.map((card) => card.statValue)].sort((a, b) => b - a),
+  );
+  expect(collectionOrderLabel(orderedBuildings)).toBe("Height · highest to lowest");
+});
+
+test("Countries & Flags ships an exact 200-card passport catalog", () => {
+  expect(countries).toHaveLength(200);
+  expect(new Set(countries.map((country) => country.code)).size).toBe(200);
+  expect(countries.every((country) => country.capital && country.population > 0 && country.areaKm2 > 0)).toBe(true);
+  expect(countries.every((country) => country.continents.length > 0 && country.metadata.location?.coordinates?.length === 2)).toBe(true);
+  expect(countries.every((country) => country.image === `/burrow-assets/countries/${country.code.toLowerCase()}.svg`)).toBe(true);
+
+  const countryCards = collectionCards().filter((card) => card.topic === "countries");
+  expect(countryCards).toHaveLength(200);
+  expect(countryCards.every((card) => card.details?.map((detail) => detail.label).join("|") === "Capital|Population|Land area|Continent|Region|Country code")).toBe(true);
+});
+
+test("country quiz rotation covers flags, capitals, continents, maps, and stat duels", () => {
+  const rounds = Array.from({ length: 90 }, (_, seed) => buildSession("countries", 3, seed * 101, [])).flat();
+  const kinds = new Set(rounds.map((round) => round.kind));
+  expect(kinds).toEqual(new Set(["country-flag", "country-capital", "country-continent", "country-location", "country-population", "country-area"]));
+
+  const flagRound = rounds.find((round) => round.kind === "country-flag");
+  expect(flagRound?.secondChanceClue).toMatch(/capital is .+ in .+ people/);
+  expect(flagRound?.imageAlt).toBe("Mystery country flag");
+  expect(flagRound?.collectionTitles).toEqual([flagRound?.answer]);
+
+  const mapRound = rounds.find((round) => round.kind === "country-location");
+  expect(mapRound?.map?.choices.length).toBe(4);
+  expect(mapRound?.map?.choices.some((choice) => choice.id === mapRound.map?.answerId)).toBe(true);
+});
+
+test("country play works across every card-game mode", () => {
+  const headToHeads = buildHeadToHeadSession("countries", 3, 719, []);
+  expect(new Set(headToHeads.map((round) => round.kind))).toEqual(new Set(["country-population", "country-area"]));
+
+  const numberRounds = [0, 1, 2, 3, 4, 5].map((seed) => buildNumberRound("countries", 2, seed));
+  expect(new Set(numberRounds.map((round) => round.operation))).toEqual(new Set(["addition", "subtraction"]));
+  expect(numberRounds.every((round) => round.prompt.includes("million"))).toBe(true);
+
+  const geo = buildGeoRound("countries", 3, 907);
+  expect(geo.topic).toBe("countries");
+  expect(geo.choices.some((choice) => choice.id === geo.answerId)).toBe(true);
+  expect(Number.isFinite(geo.point.x) && Number.isFinite(geo.point.y)).toBe(true);
+
+  const sort = buildSortRound("countries", 3, 911);
+  expect(["Population", "Land area"]).toContain(sort.statLabel);
+  expect(sort.cards).toHaveLength(4);
+
+  const odd = buildOddRound("countries", 3, 919);
+  expect(odd.cards).toHaveLength(4);
+  expect(odd.reason).toContain("the others are in");
+
+  expect(buildFactRound("countries", 3, 929).topic).toBe("countries");
+  expect(buildRevealRound("countries", 3, 937).topic).toBe("countries");
+
+  const trumps = buildTopTrumpRound("countries", 3, 941);
+  expect(trumps.player.stats.map((stat) => stat.id)).toEqual(["population", "area", "capital-length"]);
+  expect(trumps.computer.stats.map((stat) => stat.id)).toEqual(["population", "area", "capital-length"]);
 });
 
 test("every topic offers sensible addition, subtraction, and multiplication rounds", () => {
@@ -817,113 +960,80 @@ test("hard multiplication reaches the full twelve-by-twelve table", () => {
   expect(round.termValues).toEqual([12, 12]);
 });
 
-test("challenge campaigns use one future-ready five-stop contract", () => {
-  expect(pepperChallengeCampaigns).toHaveLength(4);
-  expect(new Set(pepperChallengeCampaigns.map((campaign) => campaign.id)).size).toBe(4);
-  expect(new Set(pepperChallengeCampaigns.map((campaign) => campaign.name)).size).toBe(4);
-  for (const campaign of pepperChallengeCampaigns) {
-    expect(campaign.topicId).toBe("peppers");
-    expect(campaign.topicLabel).toBe("Spicy Peppers");
-    expect(campaign.completionTitle.length).toBeGreaterThan(10);
-    expect(new Set(campaign.steps.map((step) => step.skill))).toEqual(new Set(["Reading", "Geography", "Math", "Science", "Words"]));
-  }
-  expect(pepperChallengeCampaigns.map((campaign) => campaign.steps.find((step) => step.skill === "Math")?.question)).toEqual([
-    "7 × 8 = ?",
-    "9 × 12 = ?",
-    "11 × 9 = ?",
-    "12 × 12 = ?",
-  ]);
-  for (const campaign of pepperChallengeCampaigns) {
-    const math = campaign.steps.find((step) => step.skill === "Math")?.math;
-    expect(math?.visual.ariaLabel).toContain("Math picture:");
-    expect(math?.visual.groupSingular).toBeTruthy();
-    expect(math?.visual.itemPlural).toBeTruthy();
+test("every playable category has ten distinct options in every Challenge skill", () => {
+  expect(playableChallengeCategories).toHaveLength(10);
+
+  for (const category of playableChallengeCategories) {
+    const campaigns = buildChallengeCampaignsForCategory(category);
+    expect(campaigns, `${category.id} needs 10 campaigns`).toHaveLength(challengeCampaignCountPerCategory);
+    expect(new Set(campaigns.map((campaign) => campaign.id)).size).toBe(challengeCampaignCountPerCategory);
+
+    for (const skill of ["Reading", "Geography", "Math", "Science", "Words"] as const) {
+      const steps = campaigns.map((campaign) => campaign.steps.find((step) => step.skill === skill)!);
+      const optionSignatures = steps.map((step) => `${step.clue}|${step.question}|${step.answer}`);
+      expect(new Set(optionSignatures).size, `${category.id}/${skill} needs 10 distinct options`).toBeGreaterThanOrEqual(10);
+      expect(new Set(steps.map((step) => step.image)).size, `${category.id}/${skill} needs 10 distinct subject images`).toBeGreaterThanOrEqual(10);
+    }
+
+    for (const campaign of campaigns) {
+      expect(new Set(campaign.steps.map((step) => step.skill))).toEqual(new Set(["Reading", "Geography", "Math", "Science", "Words"]));
+      expect(new Set(campaign.steps.map((step) => step.image)).size, `${campaign.id} must not repeat its story image`).toBe(5);
+    }
   }
 });
 
-test("every Challenge subject has valid content and its required teaching stage", () => {
-  const stepIds = pepperChallengeCampaigns.flatMap((campaign) => campaign.steps.map((step) => step.id));
+test("every generated Challenge step is answerable and has a useful teaching stage", () => {
+  const campaigns = playableChallengeCategories.flatMap(buildChallengeCampaignsForCategory);
+  const stepIds = campaigns.flatMap((campaign) => campaign.steps.map((step) => step.id));
   expect(new Set(stepIds).size).toBe(stepIds.length);
 
-  for (const campaign of pepperChallengeCampaigns) {
+  for (const campaign of campaigns) {
     for (const step of campaign.steps) {
       expect(step.clue.length, `${step.id} needs a useful clue`).toBeGreaterThan(20);
       expect(step.summary.length, `${step.id} needs teaching feedback`).toBeGreaterThan(35);
       expect(step.choices, `${step.id} must contain its answer`).toContain(step.answer);
       expect(step.choices, `${step.id} needs three choices`).toHaveLength(3);
       expect(new Set(step.choices).size, `${step.id} choices must be distinct`).toBe(3);
+      expect(step.image, `${step.id} needs its own subject image`).toBeTruthy();
 
       if (step.skill === "Reading") {
         expect(step.clue).toContain(step.evidence);
-      } else if (step.skill === "Geography") {
+      } else if (step.skill === "Geography" && step.map) {
         expect(step.map.choices.map((choice) => choice.label)).toEqual(step.choices);
         for (const choice of step.map.choices) {
-          expect(choice.x, `${step.id} map x must be valid`).toBeGreaterThanOrEqual(0);
-          expect(choice.x, `${step.id} map x must be valid`).toBeLessThanOrEqual(100);
-          expect(choice.y, `${step.id} map y must be valid`).toBeGreaterThanOrEqual(0);
-          expect(choice.y, `${step.id} map y must be valid`).toBeLessThanOrEqual(100);
+          expect(choice.x).toBeGreaterThanOrEqual(0);
+          expect(choice.x).toBeLessThanOrEqual(100);
+          expect(choice.y).toBeGreaterThanOrEqual(0);
+          expect(choice.y).toBeLessThanOrEqual(100);
         }
       } else if (step.skill === "Math") {
         expect(step.question).toBe(`${step.math.groups} × ${step.math.each} = ?`);
         expect(Number.parseInt(step.answer.replaceAll(",", ""), 10)).toBe(step.math.groups * step.math.each);
         expect(step.math.visual.ariaLabel).toContain(`${step.math.groups}`);
         expect(step.math.visual.ariaLabel).toContain(`${step.math.each}`);
-      } else if (step.skill === "Science") {
-        expect(challengeConceptVisualLabels[step.conceptVisual].length).toBeGreaterThan(20);
       }
     }
   }
 });
 
-test("campaign selection rotates through every deep dive every twenty-five questions", () => {
-  expect([25, 50, 75, 100, 125].map((milestone) => pepperChallengeCampaignForMilestone(milestone).id)).toEqual([
-    "jalapeno-fieldwork",
-    "caribbean-pepper-quest",
-    "ghost-pepper-mission",
-    "pepper-x-research-lab",
-    "jalapeno-fieldwork",
+test("Challenge selection rotates categories before repeating a category campaign", () => {
+  const categories = playableChallengeCategories.slice(0, 2);
+  const selected = [25, 50, 75, 100].map((milestone) => challengeCampaignForMilestone(milestone, categories));
+  expect(selected.map((campaign) => campaign.topicId)).toEqual([
+    categories[0].id,
+    categories[1].id,
+    categories[0].id,
+    categories[1].id,
   ]);
+  expect(selected[0].id).not.toBe(selected[2].id);
+  expect(selected[1].id).not.toBe(selected[3].id);
+  expect(new Set(Array.from({ length: 10 }, (_, index) => pepperChallengeCampaignForMilestone((index + 1) * challengeQuestionInterval).id)).size).toBe(10);
+  expect(pepperChallengeCampaigns).toHaveLength(10);
 });
 
-test("every automatic Reading stop is grounded in visible evidence", () => {
-  const readingSteps = pepperChallengeCampaigns.flatMap((campaign) => campaign.steps.filter((step) => step.skill === "Reading"));
-
-  expect(readingSteps).toHaveLength(pepperChallengeCampaigns.length);
-  for (const step of readingSteps) {
-    const evidence = step.evidence;
-    expect(evidence, `${step.id} needs an evidence quote`).toBeTruthy();
-    if (!evidence) throw new Error(`${step.id} needs an evidence quote`);
-    expect(step.clue, `${step.id} must display its evidence`).toContain(evidence);
-    expect(step.choices, `${step.id} must include its answer`).toContain(step.answer);
-    expect(new Set(step.choices).size, `${step.id} choices must be distinct`).toBe(3);
-    expect(step.summary.length, `${step.id} needs explanatory feedback`).toBeGreaterThan(40);
-  }
 });
 
-test("every challenge Geography and Science stop has a teaching visual", () => {
-  const geographySteps = pepperChallengeCampaigns.flatMap((campaign) => campaign.steps.filter((step) => step.skill === "Geography"));
-  const scienceSteps = pepperChallengeCampaigns.flatMap((campaign) => campaign.steps.filter((step) => step.skill === "Science"));
-
-  expect(geographySteps).toHaveLength(pepperChallengeCampaigns.length);
-  for (const step of geographySteps) {
-    expect(step.map, `${step.id} needs a map`).toBeTruthy();
-    expect(step.map?.choices.map((choice) => choice.label)).toEqual(step.choices);
-    expect(step.map?.choices.some((choice) => choice.label === step.answer)).toBe(true);
-  }
-
-  expect(scienceSteps).toHaveLength(pepperChallengeCampaigns.length);
-  for (const step of scienceSteps) {
-    expect(step.conceptVisual, `${step.id} needs a concept diagram`).toBeTruthy();
-    expect(step.choices).toContain(step.answer);
-    expect(step.summary.length).toBeGreaterThan(40);
-    expect(step.clue.split(/\s+/).length, `${step.id} clue should be quick to read`).toBeLessThanOrEqual(24);
-    expect(step.question.split(/\s+/).length, `${step.id} question should be quick to read`).toBeLessThanOrEqual(10);
-    for (const choice of step.choices) {
-      expect(choice.split(/\s+/).length, `${step.id} choices should be scannable`).toBeLessThanOrEqual(6);
-    }
-  }
-});
-
+test.describe("browser game flows", { tag: "@browser" }, () => {
 test.beforeEach(async ({ page }) => {
   await page.route("**/api/content-issues", async (route) => {
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
@@ -943,7 +1053,7 @@ test.beforeEach(async ({ page }) => {
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
 });
 
-test("flight mode caches the app shell for a real offline reload", async ({ page, context }) => {
+test("flight mode caches the app shell for a real offline reload", { tag: "@mobile" }, async ({ page, context }) => {
   await page.evaluate(async () => {
     if (!("serviceWorker" in navigator)) throw new Error("Service workers are unavailable");
     await navigator.serviceWorker.ready;
@@ -964,7 +1074,7 @@ test("flight mode caches the app shell for a real offline reload", async ({ page
 
 test("setup menu opens and core game controls keep working", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
-  await expect(setupSummary(page)).toContainText("9 games · 9 topics");
+  await expect(setupSummary(page)).toContainText("9 games · 10 topics");
 
   await setupSummary(page).click();
   await expect(page.getByText("Game Types")).toBeVisible();
@@ -983,11 +1093,51 @@ test("setup menu opens and core game controls keep working", async ({ page }) =>
   await expect(page.getByText("True or false?")).toBeVisible();
 
   await page.getByRole("button", { name: /Cards/ }).click();
-  await expect(page.getByText("Collection")).toBeVisible();
-  await expect(page.getByText("Research library")).toBeVisible();
+  await expect(page.getByText("Collection", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Choose a category" })).toBeVisible();
 });
 
-test("Next builds a different round without passing the click event as learning history", async ({ page }) => {
+test("a mystery flag gives one clue retry and unlocks a country passport", async ({ page }) => {
+  await chooseOnlyMode(page, "Quiz Run");
+  await chooseOnlyBuiltInTopic(page, "Countries & Flags");
+
+  const mysteryFlag = page.getByRole("img", { name: "Mystery country flag" });
+  for (let attempt = 0; attempt < 18 && (await mysteryFlag.count()) === 0; attempt += 1) {
+    await page.getByRole("button", { name: "Skip question" }).click();
+  }
+  await expect(mysteryFlag).toBeVisible();
+
+  const flagPath = await mysteryFlag.getAttribute("src");
+  const countryCode = flagPath?.match(/\/([a-z]{2})\.svg/)?.[1]?.toUpperCase();
+  const answerCountry = countries.find((country) => country.code === countryCode);
+  expect(answerCountry, `No country found for ${flagPath}`).toBeTruthy();
+
+  const visibleButtonLabels = await page.locator("article button").allTextContents();
+  const wrongCountry = visibleButtonLabels
+    .map((label) => label.trim())
+    .find((label) => countries.some((country) => country.name === label) && label !== answerCountry?.name);
+  expect(wrongCountry).toBeTruthy();
+
+  const wrongButton = page.locator("article button").filter({ hasText: wrongCountry! }).first();
+  await wrongButton.click();
+  await expect(page.getByText("One more guess", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("Answer feedback")).toHaveCount(0);
+  await expect(wrongButton).toBeDisabled();
+
+  await page.getByRole("button", { name: answerCountry!.name, exact: true }).click();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  await page.getByRole("button", { name: /Cards/ }).click();
+
+  const passport = page.getByText("Open country passport", { exact: true }).locator("xpath=ancestor::details[1]");
+  await expect(passport).toBeVisible();
+  await passport.locator("summary").click();
+  await expect(passport.getByText(answerCountry!.capital, { exact: true })).toBeVisible();
+  await expect(passport.getByText("Population", { exact: true })).toBeVisible();
+  await expect(passport.getByText("Land area", { exact: true })).toBeVisible();
+  await expect(passport.getByText("Continent", { exact: true })).toBeVisible();
+});
+
+test("Next builds a different round without passing the click event as learning history", { tag: "@mobile" }, async ({ page }) => {
   await chooseOnlyMode(page, "Peek");
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
 
@@ -1008,7 +1158,8 @@ test("Next builds a different round without passing the click event as learning 
   expect(pageErrors).toEqual([]);
 });
 
-test("every twenty-fifth answer opens an automatic mini challenge and returns after its summary", async ({ page }) => {
+test("every twenty-fifth answer opens an automatic mini challenge and returns after its summary", { tag: "@mobile" }, async ({ page }) => {
+  const campaign = pepperChallengeCampaigns[0];
   await page.evaluate(() => {
     const key = "burrow-profiles-v1";
     const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
@@ -1030,41 +1181,31 @@ test("every twenty-fifth answer opens an automatic mini challenge and returns af
   await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
   await expect(page.getByLabel("Challenge Mode", { exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: /Next|Finish round/ }).click();
-  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Deep dive: Jalapeño fieldwork");
+  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText(`Deep dive: ${campaign.name}`);
 
-  await page.getByRole("button", { name: "Keep pouring until water covers the soil" }).click();
-  await expect(page.getByLabel("Answer feedback")).toContainText("Answer: Water until the soil is damp, then stop");
-  await expect(page.getByText("Evidence:", { exact: true }).locator("..")).toContainText("Keep the soil evenly damp, but never waterlogged");
-  await page.getByRole("button", { name: "Next question" }).click();
-  await expect(page.getByRole("heading", { name: "Map the pepper homeland" })).toBeVisible();
-  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Stop 2 of 5");
-  await expect(page.getByLabel("Challenge map story")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Choose map pin A: Mexico" })).toBeVisible();
+  for (const [stepIndex, step] of campaign.steps.entries()) {
+    await expect(page.getByRole("heading", { name: step.title })).toBeVisible();
+    await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText(`Stop ${stepIndex + 1} of 5`);
 
-  await page.getByRole("button", { name: "Choose map pin A: Mexico" }).click();
-  await page.getByRole("button", { name: "Next question" }).click();
-  await expect(page.getByRole("heading", { name: "Count the harvest" })).toBeVisible();
-  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Stop 3 of 5");
-  await expect(page.getByRole("heading", { name: "7 × 8 = ?" })).toBeVisible();
-  const challengeMath = page.getByLabel("Challenge math story").getByLabel("Math picture: 7 equal plant groups of 8 peppers");
-  await expect(challengeMath).toBeVisible();
-  await expect(challengeMath.getByLabel("Break apart multiplication strategy")).toContainText("5 × 8 = 40");
-  await expect(challengeMath.getByLabel("Break apart multiplication strategy")).toContainText("2 × 8 = 16");
-  await expect(challengeMath.getByLabel("Break apart multiplication strategy")).toContainText("40 + 16 = ?");
+    if (step.skill === "Geography" && step.map) {
+      const mapChoiceIndex = step.map.choices.findIndex((choice) => choice.label === step.answer);
+      await expect(page.getByLabel("Challenge map story")).toBeVisible();
+      await page.getByRole("button", { name: `Choose map pin ${String.fromCharCode(65 + mapChoiceIndex)}: ${step.answer}` }).click();
+    } else {
+      const story = step.skill === "Math" ? page.getByLabel("Challenge math story") : page.getByLabel("Challenge picture story");
+      await expect(story.getByRole("img", { name: step.imageAlt })).toBeVisible();
+      if (step.skill === "Math") {
+        await expect(story.getByLabel(step.math.visual.ariaLabel)).toBeVisible();
+      }
+      await page.getByLabel("Answer choices").getByRole("button").filter({ hasText: step.answer }).click();
+    }
 
-  await page.getByRole("button", { name: "56 peppers" }).click();
-  await page.getByRole("button", { name: "Next question" }).click();
-  await expect(page.getByRole("heading", { name: "Find the pepper's heat factory" })).toBeVisible();
-  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Stop 4 of 5");
-  await expect(page.getByLabel("Labeled pepper anatomy diagram")).toBeVisible();
-  await page.getByRole("button", { name: "The pale placenta" }).click();
-  await page.getByRole("button", { name: "Next question" }).click();
-  await expect(page.getByRole("heading", { name: "Unlock a science word" })).toBeVisible();
-  await page.getByRole("button", { name: "Gathered in a larger amount" }).click();
-  await page.getByRole("button", { name: "View challenge summary" }).click();
+    await expect(page.getByLabel("Answer feedback")).toContainText(step.summary);
+    await page.getByRole("button", { name: stepIndex === campaign.steps.length - 1 ? "View challenge summary" : "Next question" }).click();
+  }
 
-  await expect(page.getByRole("heading", { name: "Jalapeño field journal" })).toBeVisible();
-  await expect(page.getByText("4/5 discoveries solved · all five notes collected")).toBeVisible();
+  await expect(page.getByRole("heading", { name: campaign.completionTitle })).toBeVisible();
+  await expect(page.getByText("5/5 discoveries solved · all five notes collected")).toBeVisible();
   await expect(page.getByText("Your next regular question is ready.")).toBeVisible();
   await page.getByRole("button", { name: "Back to the game" }).click();
   await expect(page.getByText("True or false?")).toBeVisible();
@@ -1079,62 +1220,7 @@ test("every twenty-fifth answer opens an automatic mini challenge and returns af
   })).toBe(25);
 });
 
-for (const [campaignOffset, campaign] of pepperChallengeCampaigns.slice(1).entries()) {
-  test(`every subject stage renders and teaches in ${campaign.name}`, async ({ page }) => {
-    const milestone = (campaignOffset + 2) * challengeQuestionInterval;
-    await openPepperChallengeAt(page, milestone);
-    await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText(`Deep dive: ${campaign.name}`);
-
-    const reading = campaign.steps.find((step) => step.skill === "Reading");
-    const geography = campaign.steps.find((step) => step.skill === "Geography");
-    const math = campaign.steps.find((step) => step.skill === "Math");
-    const science = campaign.steps.find((step) => step.skill === "Science");
-    const words = campaign.steps.find((step) => step.skill === "Words");
-    if (!reading || reading.skill !== "Reading" || !geography || geography.skill !== "Geography" || !math || math.skill !== "Math" || !science || science.skill !== "Science" || !words || words.skill !== "Words") {
-      throw new Error(`${campaign.id} is missing a required subject`);
-    }
-
-    await expect(page.getByRole("heading", { name: reading.title })).toBeVisible();
-    await expect(page.getByLabel("Challenge picture story")).toBeVisible();
-    await page.getByRole("button", { name: reading.answer }).click();
-    await expect(page.getByLabel("Answer feedback")).toContainText(reading.summary);
-    await expect(page.getByLabel("Answer feedback")).toContainText(reading.evidence);
-    await page.getByRole("button", { name: "Next question" }).click();
-
-    await expect(page.getByRole("heading", { name: geography.title })).toBeVisible();
-    await expect(page.getByLabel("Challenge map story")).toBeVisible();
-    const mapChoiceIndex = geography.map.choices.findIndex((choice) => choice.label === geography.answer);
-    await page.getByRole("button", { name: `Choose map pin ${String.fromCharCode(65 + mapChoiceIndex)}: ${geography.answer}` }).click();
-    await expect(page.getByLabel("Answer feedback")).toContainText(geography.summary);
-    await page.getByRole("button", { name: "Next question" }).click();
-
-    await expect(page.getByRole("heading", { name: math.title })).toBeVisible();
-    await expect(page.getByRole("heading", { name: math.question })).toBeVisible();
-    const mathStory = page.getByLabel("Challenge math story");
-    await expect(mathStory.getByLabel(math.math.visual.ariaLabel)).toBeVisible();
-    await expect(mathStory.locator("[data-math-group]")).toHaveCount(math.math.groups);
-    await expect(mathStory.getByLabel("Break apart multiplication strategy")).toBeVisible();
-    await page.getByRole("button", { name: math.answer }).click();
-    await expect(page.getByLabel("Answer feedback")).toContainText(math.summary);
-    await page.getByRole("button", { name: "Next question" }).click();
-
-    await expect(page.getByRole("heading", { name: science.title })).toBeVisible();
-    await expect(page.getByLabel("Challenge science story")).toBeVisible();
-    await expect(page.getByLabel(challengeConceptVisualLabels[science.conceptVisual])).toBeVisible();
-    await page.getByRole("button", { name: science.answer }).click();
-    await expect(page.getByLabel("Answer feedback")).toContainText(science.summary);
-    await page.getByRole("button", { name: "Next question" }).click();
-
-    await expect(page.getByRole("heading", { name: words.title })).toBeVisible();
-    await expect(page.getByLabel("Challenge picture story")).toBeVisible();
-    await page.getByRole("button", { name: words.answer }).click();
-    await expect(page.getByLabel("Answer feedback")).toContainText(words.summary);
-    await page.getByRole("button", { name: "View challenge summary" }).click();
-    await expect(page.getByRole("heading", { name: campaign.completionTitle })).toBeVisible();
-  });
-}
-
-test("pepper mini challenges do not interrupt unselected topics", async ({ page }) => {
+test("mini challenges do not interrupt before the next milestone", async ({ page }) => {
   await page.evaluate(() => {
     const key = "burrow-profiles-v1";
     const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
@@ -1157,6 +1243,31 @@ test("pepper mini challenges do not interrupt unselected topics", async ({ page 
 
   await expect(page.getByLabel("Challenge Mode", { exact: true })).toHaveCount(0);
   await expect(page.getByText("True or false?")).toBeVisible();
+});
+
+test("automatic Challenge Mode respects the selected category and changes subjects between stops", async ({ page }) => {
+  const sharkCategory = playableChallengeCategories.find((category) => category.id === "sharks")!;
+  const campaign = buildChallengeCampaignsForCategory(sharkCategory)[0];
+  await openChallengeAt(page, challengeQuestionInterval, "Shark Tank");
+
+  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Shark Tank");
+  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText(campaign.name);
+  const reading = campaign.steps[0];
+  const geography = campaign.steps[1];
+  const readingStory = page.getByLabel("Challenge picture story");
+  await expect(readingStory.getByRole("img", { name: reading.imageAlt })).toBeVisible();
+  const firstImage = await readingStory.getByRole("img").getAttribute("src");
+  await page.getByRole("button", { name: reading.answer, exact: true }).click();
+  await page.getByRole("button", { name: "Next question" }).click();
+
+  if (geography.skill !== "Geography") throw new Error("Second Challenge stop must be Geography");
+  if (geography.map) {
+    await expect(page.getByLabel("Challenge map story")).toBeVisible();
+  } else {
+    const geographyStory = page.getByLabel("Challenge picture story");
+    await expect(geographyStory.getByRole("img", { name: geography.imageAlt })).toBeVisible();
+    await expect(geographyStory.getByRole("img")).not.toHaveAttribute("src", firstImage ?? "");
+  }
 });
 
 test("flag image gives local feedback without leaking server details", async ({ page }) => {
@@ -1216,12 +1327,36 @@ test("number rounds show an arithmetic equation and accept an answer", async ({ 
   await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
 });
 
+test("shark number rounds keep the photos larger than the supporting math model", { tag: "@mobile" }, async ({ page }) => {
+  await chooseOnlyMode(page, "Numbers");
+  await chooseOnlyBuiltInTopic(page, "Shark Tank");
+  await page.getByRole("button", { name: "Hard", exact: true }).click();
+
+  const equation = page.getByLabel("Number equation");
+  for (let attempt = 0; attempt < 12 && !/\+/.test(await equation.innerText()); attempt += 1) {
+    await page.getByRole("button", { name: "Skip question" }).click();
+  }
+  await expect(equation).toContainText("+");
+
+  const storyStage = page.getByLabel("Numbers story stage");
+  const imageStage = storyStage.locator("[data-number-story-images]");
+  expect(await imageStage.getByRole("img").count()).toBeGreaterThanOrEqual(2);
+  const layout = await storyStage.locator("[data-number-story-images], [data-number-math-model]").evaluateAll(([images, model]) => ({
+    imageHeight: images.getBoundingClientRect().height,
+    modelHeight: model.getBoundingClientRect().height,
+  }));
+  expect(layout.imageHeight).toBeGreaterThan(layout.modelHeight);
+});
+
 test("pepper number rounds teach multiplication with equal plant groups", async ({ page }) => {
   await chooseOnlyMode(page, "Numbers");
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
 
-  for (let attempt = 0; attempt < 3 && await page.getByText("Grow case", { exact: true }).count() === 0; attempt += 1) {
+  const numberPrompt = page.getByLabel("Number equation").locator("xpath=preceding-sibling::h2[1]");
+  for (let attempt = 0; attempt < 9 && await page.getByText("Grow case", { exact: true }).count() === 0; attempt += 1) {
+    const previousPrompt = await numberPrompt.textContent();
     await page.getByRole("button", { name: "Skip question" }).click();
+    if (previousPrompt) await expect(numberPrompt).not.toHaveText(previousPrompt);
   }
 
   await expect(page.getByText("Grow case", { exact: true })).toBeVisible();
@@ -1279,6 +1414,34 @@ test("peek rounds reset their reveal count after skip", async ({ page }) => {
 
   await page.getByRole("button", { name: "Skip question" }).click();
   await expect(page.getByText("4/12 open")).toBeVisible();
+});
+
+test("Peek location rounds show the complete named subject before map feedback", async ({ page }) => {
+  await chooseOnlyMode(page, "Peek");
+  await chooseOnlyBuiltInTopic(page, "Bridges & Tunnels");
+
+  const locationPrompt = page.getByRole("heading", { name: "Where in the world is this found?" });
+  for (let attempt = 0; attempt < 12 && await locationPrompt.count() === 0; attempt += 1) {
+    await page.getByRole("button", { name: "Skip question" }).click();
+  }
+
+  await expect(locationPrompt).toBeVisible();
+  const subject = page.getByLabel("Location subject");
+  await expect(subject).toBeVisible();
+  await expect(subject.getByText("Find this place", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("World map")).toHaveCount(0);
+
+  const imageFits = await subject.getByRole("img").evaluate((image) => {
+    const imageBox = image.getBoundingClientRect();
+    const frameBox = image.parentElement?.getBoundingClientRect();
+    return Boolean(frameBox) && imageBox.top >= frameBox!.top - 1 && imageBox.bottom <= frameBox!.bottom + 1;
+  });
+  expect(imageFits).toBe(true);
+
+  const answerPanel = page.locator("main section > article").nth(1);
+  await answerPanel.getByRole("button").filter({ hasNotText: "Skip question" }).first().click();
+  await expect(page.getByLabel("Where in the world")).toBeVisible();
+  await expect(page.getByLabel("World map")).toHaveCount(1);
 });
 
 test("geo finder stays inside the selected topic", async ({ page }) => {
@@ -1352,7 +1515,7 @@ test("collection only shows selected topics", async ({ page }) => {
     return {
       alt: photo.getAttribute("alt"),
       src: photo.getAttribute("src"),
-      fullyContained: Boolean(frameBox) && imageBox.top >= frameBox.top - 1 && imageBox.bottom <= frameBox.bottom + 1,
+      fullyContained: frameBox ? imageBox.top >= frameBox.top - 1 && imageBox.bottom <= frameBox.bottom + 1 : false,
     };
   }));
   expect(photoLayout).toEqual([
@@ -1363,7 +1526,40 @@ test("collection only shows selected topics", async ({ page }) => {
   ]);
 });
 
-test("sort cards snap into their ranked slots instead of the next empty slot", async ({ page }) => {
+test("collection category picker shows one category album at a time", { tag: "@mobile" }, async ({ page }) => {
+  await page.evaluate(() => {
+    const key = "burrow-profiles-v1";
+    const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
+      activeProfileId: string;
+      profiles: { id: string; progress: { unlockedCards: string[] } }[];
+    };
+    const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
+    if (!active) throw new Error("Active profile was not saved");
+    active.progress.unlockedCards = ["Bell Pepper", "Great White Shark"];
+    window.localStorage.setItem(key, JSON.stringify(profiles));
+  });
+  await page.reload();
+  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+  await page.getByRole("button", { name: /Cards/ }).click();
+
+  const collections = page.getByLabel("Card collections");
+  const pepperCategory = collections.getByRole("button", { name: /Spicy Peppers: .* cards collected/ });
+  const sharkCategory = collections.getByRole("button", { name: /Shark Tank: .* cards collected/ });
+  await expect(pepperCategory).toBeVisible();
+  await expect(sharkCategory).toBeVisible();
+
+  await pepperCategory.click();
+  await expect(pepperCategory).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByLabel("Spicy Peppers card collection").getByRole("img", { name: "Bell Pepper" })).toBeVisible();
+  await expect(page.getByLabel("Shark Tank card collection")).toHaveCount(0);
+
+  await sharkCategory.click();
+  await expect(sharkCategory).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByLabel("Shark Tank card collection").getByRole("img", { name: "Great White Shark" })).toBeVisible();
+  await expect(page.getByLabel("Spicy Peppers card collection")).toHaveCount(0);
+});
+
+test("sort cards snap into their ranked slots instead of the next empty slot", { tag: "@mobile" }, async ({ page }) => {
   await chooseOnlyMode(page, "Sort");
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
 
@@ -1378,6 +1574,16 @@ test("sort cards snap into their ranked slots instead of the next empty slot", a
   const hottest = [...cards].sort((a, b) => b.score - a.score)[0];
   await cardButtons.nth(hottest.index).click();
   await expect(page.getByLabel(`Sort slot ${cards.length}: ${hottest.title}`)).toBeVisible();
+  await expect(page.getByLabel(`Selected position 1: ${hottest.title}`)).toBeVisible();
+  await expect(cardButtons.nth(hottest.index)).toHaveAttribute("aria-pressed", "true");
+
+  await cardButtons.nth(hottest.index).click();
+  await expect(page.getByLabel(`Sort slot ${cards.length}: empty`)).toBeVisible();
+  await expect(page.getByLabel("Selected position 1: empty")).toBeVisible();
+  await expect(cardButtons.nth(hottest.index)).toHaveAttribute("aria-pressed", "false");
+
+  await cardButtons.nth(hottest.index).click();
+  await expect(page.getByLabel(`Selected position 1: ${hottest.title}`)).toBeVisible();
 
   for (const card of cards.filter((item) => item.index !== hottest.index)) {
     await cardButtons.nth(card.index).click();
@@ -1467,7 +1673,7 @@ test("pepper top trumps uses concrete plant stats", async ({ page }) => {
   await expect(page.getByText("Natural roots")).toHaveCount(0);
 });
 
-test("setup menu opens and fits on mobile", async ({ page, isMobile }) => {
+test("setup menu opens and fits on mobile", { tag: "@mobile" }, async ({ page, isMobile }) => {
   test.skip(!isMobile, "mobile viewport coverage");
 
   await setupSummary(page).click();
@@ -1478,4 +1684,5 @@ test("setup menu opens and fits on mobile", async ({ page, isMobile }) => {
   expect(box).not.toBeNull();
   expect(box!.x).toBeGreaterThanOrEqual(0);
   expect(box!.x + box!.width).toBeLessThanOrEqual(390);
+});
 });

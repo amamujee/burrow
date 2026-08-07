@@ -2,7 +2,7 @@
 
 import { track } from "@vercel/analytics";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChallengeMode, challengeQuestionInterval, pepperChallengeCampaignForMilestone } from "@/components/core-mini-challenge";
+import { ChallengeMode, challengeCampaignForMilestone, challengeQuestionInterval } from "@/components/core-mini-challenge";
 import { EqualGroupsBoard } from "@/components/equal-groups-board";
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid } from "@/components/game-question-ui";
 import { OfflineReady } from "@/components/offline-ready";
@@ -23,12 +23,13 @@ import {
   buildSortRound,
   buildTopTrumpRoundFromCards,
   buildTopTrumpRound,
+  collectionOrderLabel,
   collectionCards,
   canBuildGeoRoundFromCards,
   canBuildGeoRound,
   geoChoiceForLocation,
   modeOptions,
-  orderCollectionCardsByScoville,
+  orderCollectionCardsForCategory,
   slotSortCardIds,
   topTrumpOutcome,
   type FactRound,
@@ -325,7 +326,7 @@ const loadPlayEvents = (): PlayTelemetryEvent[] => {
 const stableRoundKey = (id: string) => id.replace(/^\d+-/, "");
 
 const questionCollectionTitles = (question: Question) =>
-  question.comparison?.map((card) => card.title) ?? [question.imageAlt];
+  question.comparison?.map((card) => card.title) ?? question.collectionTitles ?? [question.imageAlt];
 
 const questionLearningIdentity = (question: Question): LearningIdentity => {
   const subjects = questionCollectionTitles(question);
@@ -369,7 +370,7 @@ const geoLearningIdentity = (round: GeoRound) => learningIdentity({
 
 const numberLearningIdentity = (round: NumberRound) => learningIdentity({
   exactKey: `number:${stableRoundKey(round.id)}`,
-  conceptKey: `${round.operation}:${round.cards.map((card) => card.title).sort().join("|")}`,
+  conceptKey: `number-operation:${round.topic}:${round.operation}`,
   topic: round.topic,
   subjects: round.cards.map((card) => card.title),
 });
@@ -450,7 +451,7 @@ const flushPendingPlayEventsWithBeacon = () => {
 
 const addUnique = (items: string[], additions: string[]) => {
   const next = [...additions.filter(Boolean), ...items];
-  return Array.from(new Set(next)).slice(0, 120);
+  return Array.from(new Set(next));
 };
 
 const playableTopic = (topic: RoundTopic | "mixed", interests: RoundTopic[]): RoundTopic | "mixed" => (topic !== "mixed" && !interests.includes(topic) ? "mixed" : topic);
@@ -660,6 +661,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const [profilesReady, setProfilesReady] = useState(false);
   const activeProfile = profilesState.profiles.find((profile) => profile.id === profilesState.activeProfileId) ?? profilesState.profiles[0];
   const activeInterests = normalizeInterests(activeProfile.interests, playableTopics);
+  const activeInterestKey = activeInterests.join("|");
   const progress = activeProfile.progress;
   const [topic, setTopic] = useState<RoundTopic | "mixed">("mixed");
   const [mode, setMode] = useState<GameMode>("mix");
@@ -701,6 +703,14 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const lastViewedPlayKeyRef = useRef("");
 
   const allCards = useMemo(() => [...collectionCards(), ...packDecks.flatMap((deck) => deck.cards)], [packDecks]);
+  const miniChallengeCampaign = useMemo(() => challengeCampaignForMilestone(
+    progress.answered,
+    activeInterestKey.split("|").filter(Boolean).map((id) => ({
+      id: id as RoundTopic,
+      label: topicMetaById.get(id as RoundTopic)?.label ?? "Mixed topics",
+      cards: allCards.filter((card) => card.topic === id),
+    })),
+  ), [activeInterestKey, allCards, progress.answered, topicMetaById]);
   const activeTopicSet = new Set(activeInterests);
   const selectedCards = allCards.filter((card) => activeTopicSet.has(card.topic));
   const question = questions[questionIndex];
@@ -1047,7 +1057,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       itemKey: questionMemoryKey(question),
       questionKind: question.kind,
       prompt: question.prompt,
-      title: question.imageAlt,
+      title: question.collectionTitles?.join(" / ") ?? question.imageAlt,
       answer: question.answer,
       roundIndex,
     };
@@ -1222,7 +1232,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         : current.modeWins,
     }));
 
-    if (activeInterests.includes("peppers") && progress.answered + 1 >= progress.challengeMilestone + challengeQuestionInterval) {
+    if (progress.answered + 1 >= progress.challengeMilestone + challengeQuestionInterval) {
       setMiniChallengePending(true);
     }
 
@@ -1447,7 +1457,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       itemKey,
       questionKind: question.kind,
       prompt: question.prompt,
-      title: question.imageAlt,
+      title: question.collectionTitles?.join(" / ") ?? question.imageAlt,
       choice,
       answer: question.answer,
       correct,
@@ -1471,7 +1481,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         itemKey: questionMemoryKey(question),
         questionKind: question.kind,
         prompt: question.prompt,
-        title: question.imageAlt,
+        title: question.collectionTitles?.join(" / ") ?? question.imageAlt,
         answer: question.answer,
         roundIndex: questionIndex + 1,
       });
@@ -2051,7 +2061,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         />
 
         {miniChallengeActive ? (
-          <ChallengeMode campaign={pepperChallengeCampaignForMilestone(progress.answered)} milestone={progress.answered} onComplete={finishMiniChallenge} />
+          <ChallengeMode campaign={miniChallengeCampaign} milestone={progress.answered} onComplete={finishMiniChallenge} />
         ) : (
           <>
 
@@ -2060,7 +2070,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             cards={selectedCards}
             unlockedCards={progress.unlockedCards}
             topic={topic}
-            modeWins={progress.modeWins}
             topicStats={activeInterests.map((id) => {
               const meta = topicMeta(id);
               const deck = packDeckById.get(id);
@@ -2079,6 +2088,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
 
         {!showCollection && isQuestionMode && question && (
           <QuestionRun
+            key={question.id}
             question={question}
             questions={questions}
             questionIndex={questionIndex}
@@ -2112,8 +2122,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             difficulty={progress.difficulty}
             roundContext={`${topicLabel(sortRound.topic)} · ${gameTypeLabel("sort")}`}
             onPick={(id) => {
-              if (sortChecked || sortPicked.includes(id)) return;
-              setSortPicked((value) => [...value, id]);
+              if (sortChecked) return;
+              setSortPicked((value) => value.includes(id) ? value.filter((pickedId) => pickedId !== id) : [...value, id]);
             }}
             onUndo={() => {
               if (!sortChecked) setSortPicked((value) => value.slice(0, -1));
@@ -2578,6 +2588,7 @@ function QuestionRun({
   issueFlash: boolean;
   onFlagIssue: () => void;
 }) {
+  const [firstWrongChoice, setFirstWrongChoice] = useState<string | null>(null);
   const isDifferenceQuestion = question.kind === "building-difference" || question.kind === "shark-difference" || question.kind === "jet-difference";
   const showNumberLine = Boolean(question.numberLine) && (answered || (Boolean(question.comparison) && !isDifferenceQuestion));
   const showComparisonTable = Boolean(question.comparison) && (answered || !isDifferenceQuestion);
@@ -2589,6 +2600,13 @@ function QuestionRun({
       ? "Use the numbers in the question. Subtract smaller from bigger."
       : "Look at both cards. Bigger number wins."
     : `Image: ${question.imageCredit}`;
+  const chooseAnswer = (choice: string) => {
+    if (!answered && question.secondChanceClue && firstWrongChoice === null && choice !== question.answer) {
+      setFirstWrongChoice(choice);
+      return;
+    }
+    onAnswer(choice);
+  };
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
@@ -2649,6 +2667,12 @@ function QuestionRun({
           </h2>
 
           {question.readingClue && <ReadingClue text={question.readingClue} />}
+          {firstWrongChoice && question.secondChanceClue && (
+            <div aria-live="polite" className="mt-2 rounded-lg border-2 border-[#092421] bg-[#fff1bf] p-3 shadow-[2px_2px_0_#092421]">
+              <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#9f3f2b]">One more guess</p>
+              <p className="mt-1 text-sm font-black leading-snug text-[#102f36] md:text-base">{question.secondChanceClue}</p>
+            </div>
+          )}
 
           {question.numberLine && showNumberLine && <NumberLine line={question.numberLine} />}
           {question.heatMeter && answered && <PepperHeatMeter meter={question.heatMeter} />}
@@ -2657,7 +2681,7 @@ function QuestionRun({
 
         <GameChoiceGrid>
           {choices.map((choice) => {
-            const chosen = selected === choice;
+            const chosen = selected === choice || firstWrongChoice === choice;
             const correctChoice = answered && choice === question.answer;
             const heatChoice =
               (question.kind === "pepper-heat" || question.kind === "pepper-reading") && heatBands.includes(choice as HeatBand)
@@ -2666,9 +2690,10 @@ function QuestionRun({
             return (
               <GameChoiceButton
                 key={`${question.id}-${choice}`}
-                onClick={() => onAnswer(choice)}
+                onClick={() => chooseAnswer(choice)}
                 chosen={chosen}
                 correct={correctChoice}
+                disabled={firstWrongChoice === choice && !answered}
               >
                 <span className="flex items-center justify-between gap-3">
                   <span className="flex min-w-0 items-center gap-2">
@@ -2791,29 +2816,39 @@ function SortMode({
     }, [])
     .map((group) => group.titles.join(" / "))
     .join(" -> ");
-  const pickedSet = new Set(picked);
   const slottedPicked = slotSortCardIds(round, picked);
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
       <article className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
         <div className="grid h-full min-h-[390px] grid-cols-2 gap-2 md:grid-cols-4 lg:min-h-0">
-          {round.cards.map((card) => (
-            <button
-              key={card.id}
-              onClick={() => onPick(card.id)}
-              className={`relative flex min-h-[185px] flex-col overflow-hidden rounded-lg border-2 text-left transition active:translate-y-0.5 ${
-                pickedSet.has(card.id) ? "border-[#f0c84b] bg-[#f0c84b] opacity-55" : "border-[#092421] bg-white hover:border-[#f0c84b]"
-              }`}
-            >
-              <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} compact />
-              <div className="m-2 mt-0 rounded-lg border-2 border-[#092421] bg-white/95 p-2 shadow-[2px_2px_0_#092421]">
-                <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
-                <p className="mt-1 text-lg font-black leading-none text-[#9f3f2b]">{card.statDisplay}</p>
-                <p className="mt-1 text-[11px] font-bold leading-tight text-[#5f6b5d]">{card.subStat}</p>
-              </div>
-            </button>
-          ))}
+          {round.cards.map((card) => {
+            const pickedPosition = picked.indexOf(card.id);
+            const isPicked = pickedPosition >= 0;
+            return (
+              <button
+                key={card.id}
+                onClick={() => onPick(card.id)}
+                aria-pressed={isPicked}
+                aria-label={`${card.title}${isPicked ? `, selected ${pickedPosition + 1}` : ""}`}
+                className={`relative flex min-h-[185px] flex-col overflow-hidden rounded-lg border-2 text-left transition active:translate-y-0.5 ${
+                  isPicked ? "border-[#f0c84b] bg-[#f0c84b] opacity-70" : "border-[#092421] bg-white hover:border-[#f0c84b]"
+                }`}
+              >
+                {isPicked && (
+                  <span className="absolute right-2 top-2 z-10 flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#092421] bg-[#f0c84b] text-lg font-black text-[#102f36] shadow-[2px_2px_0_#092421]">
+                    {pickedPosition + 1}
+                  </span>
+                )}
+                <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} compact />
+                <div className="m-2 mt-0 rounded-lg border-2 border-[#092421] bg-white/95 p-2 shadow-[2px_2px_0_#092421]">
+                  <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
+                  <p className="mt-1 text-lg font-black leading-none text-[#9f3f2b]">{card.statDisplay}</p>
+                  <p className="mt-1 text-[11px] font-bold leading-tight text-[#5f6b5d]">{card.subStat}</p>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </article>
 
@@ -2826,7 +2861,30 @@ function SortMode({
           <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
         </div>
         <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.45rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
-        <p className="mt-1 text-sm font-bold text-[#5f6b5d]">Tap any card. It snaps into its correct numbered spot.</p>
+        <p className="mt-1 text-sm font-bold text-[#5f6b5d]">Tap a card to add it. Tap it again to remove it.</p>
+
+        <div aria-label="Your selected order" aria-live="polite" className="mt-3 rounded-lg border-2 border-[#092421] bg-[#fff1bf] p-2 shadow-[2px_2px_0_#092421]">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#102f36]">Your order</p>
+            <p className="text-xs font-black text-[#72543e]">{picked.length}/{round.answerIds.length} picked</p>
+          </div>
+          <ol className="mt-2 grid grid-cols-2 gap-1.5 md:grid-cols-4">
+            {round.answerIds.map((_, index) => {
+              const card = sortCardById(round, picked[index]);
+              return (
+                <li
+                  key={`${round.id}-picked-${index}`}
+                  aria-label={`Selected position ${index + 1}: ${card?.title ?? "empty"}`}
+                  className={`flex min-h-10 items-center gap-2 rounded-md border-2 px-2 py-1.5 ${card ? "border-[#092421] bg-white" : "border-dashed border-[#b7a98d] bg-[#fff9ec]"}`}
+                >
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-[#092421] bg-[#f0c84b] text-xs font-black">{index + 1}</span>
+                  <span className={`truncate text-xs font-black ${card ? "text-[#102f36]" : "text-[#8d806d]"}`}>{card?.title ?? "Empty"}</span>
+                </li>
+              );
+            })}
+          </ol>
+          <p className="mt-2 text-[11px] font-bold text-[#72543e]">Cards also snap into their numbered score spots below.</p>
+        </div>
 
         <div className="mt-3 grid gap-2">
           {round.answerIds.map((id, index) => {
@@ -2866,8 +2924,8 @@ function SortMode({
         </div>
 
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <button onClick={onUndo} className="rounded-lg border-2 border-[#092421] bg-white px-3 py-3 text-base font-black hover:bg-[#fff1bf]">
-            Undo
+          <button onClick={onUndo} disabled={picked.length === 0 || checked} className="rounded-lg border-2 border-[#092421] bg-white px-3 py-3 text-base font-black hover:bg-[#fff1bf] disabled:opacity-45">
+            Undo last
           </button>
           <button
             onClick={onCheck}
@@ -3076,37 +3134,19 @@ function RevealMode({
     return () => window.clearTimeout(timer);
   }, [answered, intervalMs, revealed, round.map, totalTiles]);
 
-  const mapMarkers = round.map?.choices.map((choice) => ({
-    id: choice.id,
-    label: choice.label,
-    x: choice.point.x,
-    y: choice.point.y,
-    tone: answered
-      ? choice.id === round.map?.answerId
-        ? "correct" as const
-        : choice.id === selected
-          ? "wrong" as const
-          : "quiet" as const
-      : "default" as const,
-  }));
-
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      {round.map && mapMarkers ? (
-        <article className="grid min-h-[34dvh] gap-2 overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0 min-[900px]:grid-rows-[minmax(100px,.38fr)_minmax(280px,.62fr)]">
-          <div className="relative min-h-24 overflow-hidden rounded-md border-2 border-[#092421]">
-            <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} compact />
-            <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#092421]">
-              Map peek
-            </div>
+      {round.map ? (
+        <article aria-label="Location subject" className="relative min-h-[42dvh] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
+          <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
+          <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#092421]">
+            Location picture
           </div>
-          <WorldMapSurface
-            markers={mapMarkers}
-            footer={answered ? `${round.answer} is the place to remember.` : "Use the picture, then tap the matching map pin."}
-            onSelect={(choiceId) => onAnswer(choiceId, visibleCount)}
-            disabled={answered}
-            className="min-h-[280px]"
-          />
+          <div className="absolute bottom-2 left-2 right-2 rounded-lg border-2 border-[#092421] bg-white/95 px-3 py-2 shadow-[3px_3px_0_#092421]">
+            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#72543e]">Find this place</p>
+            <p className="mt-0.5 text-lg font-black leading-tight text-[#102f36] md:text-2xl">{round.card.title}</p>
+            <p className="mt-1 text-[10px] font-bold text-[#5f6b5d]">Image: {round.card.imageCredit}</p>
+          </div>
         </article>
       ) : (
         <article className="relative min-h-[34dvh] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
@@ -3147,11 +3187,11 @@ function RevealMode({
         <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
         <div className="mt-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
           <div className="flex items-center justify-between gap-3 text-xs font-black md:text-sm">
-            <span>{round.map ? "Map clue" : "Picture reveal"}</span>
-            <span>{round.map ? `${round.choices.length} pins` : `${Math.round((visibleCount / totalTiles) * 100)}%`}</span>
+            <span>{round.map ? "Picture clue" : "Picture reveal"}</span>
+            <span>{round.map ? `${round.choices.length} places` : `${Math.round((visibleCount / totalTiles) * 100)}%`}</span>
           </div>
           {round.map ? (
-            <p className="mt-1 text-xs font-bold text-[#5f6b5d]">The picture names the subject. The map teaches where it belongs.</p>
+            <p className="mt-1 text-xs font-bold text-[#5f6b5d]">Read the subject name, then choose its location. The map appears after you answer.</p>
           ) : (
             <div className="mt-2 h-3 overflow-hidden rounded-full bg-[#e6d7bc]">
               <div className="h-full bg-[#9f3f2b] transition-[width] duration-500 ease-out" style={{ width: `${Math.round((visibleCount / totalTiles) * 100)}%` }} />
@@ -3194,6 +3234,7 @@ function RevealMode({
             correctAnswer={round.answer}
             explanation={round.explanation}
             locations={round.card.metadata?.location ? [round.card.metadata.location] : undefined}
+            showLocationMap={Boolean(round.map)}
             note="Good try."
             isLast={false}
             onNext={onNext}
@@ -3477,11 +3518,12 @@ function NumberStoryStage({ round, badge, footer }: { round: NumberRound; badge:
   return (
     <article aria-label="Numbers story stage" className="flex min-h-[560px] flex-col gap-2 overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
       <div
-        className="grid min-h-[150px] max-h-[220px] flex-[.36] gap-2"
+        data-number-story-images
+        className="grid min-h-[300px] flex-1 gap-2 min-[900px]:min-h-[360px]"
         style={{ gridTemplateColumns: round.cards.length === 1 ? "minmax(0, 1fr)" : "repeat(2, minmax(0, 1fr))" }}
       >
         {round.cards.map((card, index) => (
-          <div key={`${round.id}-story-${card.id}`} className="relative min-h-0 overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
+          <div key={`${round.id}-story-${card.id}`} className="relative flex min-h-0 overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
             <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} compact />
             <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-xs font-black shadow-[2px_2px_0_#092421]">
               {String.fromCharCode(65 + index)} · {card.title}
@@ -3489,7 +3531,10 @@ function NumberStoryStage({ round, badge, footer }: { round: NumberRound; badge:
           </div>
         ))}
       </div>
-      <div className="min-h-[300px] flex-1">
+      <div
+        data-number-math-model
+        className={round.operation === "multiplication" ? "max-h-[280px] shrink-0 overflow-y-auto" : "h-[164px] shrink-0"}
+      >
         <NumberEquationBoard round={round} />
       </div>
       <div className="grid gap-2 sm:grid-cols-[auto_1fr] sm:items-center">
@@ -3526,15 +3571,12 @@ function NumberEquationBoard({ round }: { round: NumberRound }) {
     const total = Math.max(round.answer, 1);
     const colors = ["bg-[#f0c84b]", "bg-[#70d392]", "bg-[#77b9d0]"];
     return (
-      <div className="h-full min-h-[300px] rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-4" aria-label="Math picture: addition parts make a whole">
+      <div className="h-full rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-3" aria-label="Math picture: addition parts make a whole">
         <div className="flex items-center justify-between gap-2">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · Parts make a whole</p>
-            <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">Join every colored part.</p>
-          </div>
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Parts make a whole</p>
           <p className="rounded-md bg-[#ece5d5] px-2 py-1 text-xs font-black text-[#102f36]">{round.cards.length} parts</p>
         </div>
-        <div className="mt-8 flex h-32 overflow-hidden rounded-lg border-2 border-[#092421] bg-white shadow-[2px_2px_0_#092421]">
+        <div className="mt-3 flex h-16 overflow-hidden rounded-lg border-2 border-[#092421] bg-white shadow-[2px_2px_0_#092421]">
           {terms.map((term, index) => (
             <div
               key={`${round.id}-part-${term.card.id}`}
@@ -3560,36 +3602,33 @@ function NumberEquationBoard({ round }: { round: NumberRound }) {
   if (round.operation === "fit") {
     const unitWidth = Math.max(8, Math.min(100, (round.smallerValue / Math.max(round.biggerValue, 1)) * 100));
     return (
-      <div className="h-full min-h-[300px] rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-4" aria-label="Math picture: measure how many fit">
+      <div className="h-full rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-3" aria-label="Math picture: measure how many fit">
         <div className="flex items-center justify-between gap-2">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · How many fit?</p>
-            <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">Use the small tile to measure the target.</p>
-          </div>
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">How many fit?</p>
+          <p className="text-xs font-black text-[#9f3f2b]">small tile → target</p>
         </div>
-        <div className="mt-8 rounded-lg border-2 border-[#092421] bg-[#102f36] p-4 shadow-[2px_2px_0_#092421]">
-          <div className="h-20 rounded-md border-2 border-dashed border-white bg-white/10 p-1" aria-label="Target length">
+        <div className="mt-3 grid grid-cols-[1fr_1fr] gap-3 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[2px_2px_0_#092421]">
+          <div className="h-16 rounded-md border-2 border-dashed border-white bg-white/10 p-1" aria-label="Target length">
             <div className="grid h-full place-items-center rounded-sm bg-white/10 text-xs font-black text-white">target length</div>
           </div>
-          <div className="mt-4 h-20">
+          <div className="h-16">
             <div className="grid h-full min-w-16 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] px-1 text-center shadow-[2px_2px_0_#000]" style={{ width: `${unitWidth}%` }}>
               <span className="text-xs font-black leading-tight text-[#102f36]">1 tile<br />{round.smallerValue.toLocaleString("en-US")}</span>
             </div>
           </div>
         </div>
-        <p className="mt-2 text-center text-xs font-black text-[#9f3f2b]">How many yellow tiles would cover the target?</p>
       </div>
     );
   }
 
   const smallerPercent = Math.max(4, Math.min(96, (round.smallerValue / Math.max(round.biggerValue, 1)) * 100));
   return (
-    <div className="h-full min-h-[300px] rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-4" aria-label="Math picture: subtraction find the missing part">
-      <div>
-        <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Math picture · Find the missing part</p>
-        <p className="mt-0.5 text-xs font-bold text-[#5f6b5d]">The whole bar is split into what we know and what is left.</p>
+    <div className="h-full rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-3" aria-label="Math picture: subtraction find the missing part">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Find the missing part</p>
+        <p className="text-xs font-black text-[#9f3f2b]">whole = {round.biggerValue.toLocaleString("en-US")}</p>
       </div>
-      <div className="mt-8 flex h-32 overflow-hidden rounded-lg border-2 border-[#092421] shadow-[2px_2px_0_#092421]">
+      <div className="mt-3 flex h-16 overflow-hidden rounded-lg border-2 border-[#092421] shadow-[2px_2px_0_#092421]">
         <div className="grid place-items-center bg-[#70d392] px-1 text-center" style={{ width: `${smallerPercent}%` }}>
           <span>
             <span className="block text-[10px] font-black uppercase text-[#102f36]">known</span>
@@ -3600,7 +3639,6 @@ function NumberEquationBoard({ round }: { round: NumberRound }) {
           <span className="text-sm font-black text-[#102f36]">difference<br />?</span>
         </div>
       </div>
-      <p className="mt-2 text-center text-xs font-black text-[#9f3f2b]">known part + difference = {round.biggerValue.toLocaleString("en-US")}</p>
     </div>
   );
 }
@@ -3751,7 +3789,7 @@ function OddOneMode({
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <KnowledgeCardsStage cards={round.cards} badge="Logic set" footer="Find the card that breaks the rule." />
+      <KnowledgeCardsStage cards={round.cards} badge="Look closely" footer="Use the facts shown on each card." />
 
       <article className="flex min-h-0 flex-col rounded-lg min-[900px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
         <div className="flex items-center justify-between gap-2">
@@ -3812,13 +3850,11 @@ function CollectionBook({
   cards,
   unlockedCards,
   topic,
-  modeWins,
   topicStats,
 }: {
   cards: KnowledgeCard[];
   unlockedCards: string[];
   topic: RoundTopic | "mixed";
-  modeWins: Progress["modeWins"];
   topicStats: {
     id: RoundTopic;
     label: string;
@@ -3828,49 +3864,56 @@ function CollectionBook({
     wins: number;
   }[];
 }) {
-  const filtered = orderCollectionCardsByScoville(topic === "mixed" ? cards : cards.filter((card) => card.topic === topic));
-  const unlocked = filtered.filter((card) => unlockedCards.includes(card.title));
+  const initialTopic = topic !== "mixed" && topicStats.some((item) => item.id === topic) ? topic : topicStats[0]?.id;
+  const [selectedTopic, setSelectedTopic] = useState<RoundTopic | undefined>(initialTopic);
+  const activeTopic = topicStats.find((item) => item.id === selectedTopic) ?? topicStats[0];
+  const categoryCards = activeTopic ? cards.filter((card) => card.topic === activeTopic.id) : [];
+  const orderedCards = orderCollectionCardsForCategory(categoryCards);
+  const unlocked = orderedCards.filter((card) => unlockedCards.includes(card.title));
   const topicCounts = Object.fromEntries(topicStats.map((item) => [
     item.id,
     cards.filter((card) => card.topic === item.id && unlockedCards.includes(card.title)).length,
   ])) as Record<RoundTopic, number>;
-  const totalResearchRecords = topicStats.reduce((total, item) => total + Number(item.libraryValue || 0), 0);
+
+  if (!activeTopic) return null;
 
   return (
-    <section className="grid flex-1 gap-2 min-[900px]:min-h-0 lg:grid-cols-[300px_1fr]">
-      <aside className="rounded-lg border-2 border-[#092421] bg-white p-3 shadow-[4px_4px_0_#092421]">
+    <section aria-label="Card collections" className="grid flex-1 gap-2 min-[900px]:min-h-0 lg:grid-cols-[320px_1fr]">
+      <aside className="min-h-0 overflow-auto rounded-lg border-2 border-[#092421] bg-white p-3 shadow-[4px_4px_0_#092421]">
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#9f3f2b]">Collection</p>
-        <h2 className="mt-1 text-3xl font-black leading-none text-[#102f36]">{unlocked.length}/{filtered.length} cards</h2>
-        <div className="mt-4 grid gap-2">
-          {topicStats.map((item) => (
-            <CollectionStat
-              key={item.id}
-              label={item.label}
-              value={`${topicCounts[item.id]} / ${cards.filter((card) => card.topic === item.id).length}`}
-              libraryValue={item.libraryValue}
-              wins={item.wins}
-              samples={item.samples}
-            />
-          ))}
-        </div>
-        <div className="mt-4 grid grid-cols-2 gap-2">
-          <HudStat label="Mix" value={modeWins.mix.toString()} />
-          <HudStat label="Quiz" value={modeWins.quiz.toString()} />
-          <HudStat label="Versus" value={modeWins.versus.toString()} />
-          <HudStat label="Trumps" value={modeWins.trumps.toString()} />
-          <HudStat label="Sort" value={modeWins.sort.toString()} />
-          <HudStat label="Fact" value={modeWins.fact.toString()} />
-          <HudStat label="Peek" value={modeWins.peek.toString()} />
-          <HudStat label="Numbers" value={modeWins.number.toString()} />
-          <HudStat label="Odd" value={modeWins.odd.toString()} />
-          <HudStat label="Geo" value={modeWins.geo.toString()} />
-        </div>
+        <h2 className="mt-1 text-3xl font-black leading-none text-[#102f36]">Choose a category</h2>
+        <p className="mt-2 text-sm font-bold leading-snug text-[#5f6b5d]">Each category is its own collection with its own card order and facts.</p>
+
+        <nav aria-label="Collection categories" className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-1">
+          {topicStats.map((item) => {
+            const total = cards.filter((card) => card.topic === item.id).length;
+            const isActive = item.id === activeTopic.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                aria-pressed={isActive}
+                aria-label={`${item.label}: ${topicCounts[item.id]} of ${total} cards collected`}
+                onClick={() => setSelectedTopic(item.id)}
+                className={`rounded-lg border-2 p-2 text-left transition active:translate-y-0.5 ${isActive ? "border-[#092421] bg-[#f0c84b] shadow-[3px_3px_0_#092421]" : "border-[#d9c7a7] bg-[#fff9ec] hover:border-[#092421]"}`}
+              >
+                <span className="flex items-center justify-between gap-2">
+                  <span className="text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
+                  <span className="shrink-0 rounded-md bg-white px-2 py-1 text-xs font-black text-[#9f3f2b]">{topicCounts[item.id]}/{total}</span>
+                </span>
+              </button>
+            );
+          })}
+        </nav>
+
         <div className="mt-4 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
-          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#72543e]">Research library</p>
-          <p className="mt-1 text-xl font-black leading-none text-[#102f36]">{totalResearchRecords.toLocaleString("en-US")} records</p>
+          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#72543e]">{activeTopic.label} field notes</p>
+          <p className="mt-1 text-xl font-black leading-none text-[#102f36]">{Number(activeTopic.libraryValue || 0).toLocaleString("en-US")} records</p>
+          <p className="mt-2 text-xs font-bold text-[#5f6b5d]">{activeTopic.wins} correct answers</p>
+          {activeTopic.samples.length > 0 && <p className="mt-1 text-[11px] font-semibold leading-tight text-[#5f6b5d]">Look for: {activeTopic.samples.join(" · ")}</p>}
           <div className="mt-2 grid gap-1.5">
-            {topicStats.flatMap((item) => item.sources.map((source) => ({ ...source, key: `${item.id}-${source.label}` }))).map((source) => (
-              <a key={source.key} href={source.url} target="_blank" rel="noreferrer" className="rounded-md bg-white px-2 py-1.5 text-xs font-bold leading-tight text-[#5f6b5d] underline-offset-2 hover:underline">
+            {activeTopic.sources.map((source) => (
+              <a key={`${activeTopic.id}-${source.label}`} href={source.url} target="_blank" rel="noreferrer" className="rounded-md bg-white px-2 py-1.5 text-xs font-bold leading-tight text-[#5f6b5d] underline-offset-2 hover:underline">
                 {source.label}
               </a>
             ))}
@@ -3878,9 +3921,22 @@ function CollectionBook({
         </div>
       </aside>
 
-      <article className="min-h-0 overflow-auto rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
+      <article aria-label={`${activeTopic.label} card collection`} className="min-h-0 overflow-auto rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
+        <header className="mb-2 rounded-lg border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#9f3f2b]">{activeTopic.label} collection</p>
+              <h2 className="mt-1 text-2xl font-black leading-none text-[#102f36]">Collect them all</h2>
+              <p className="mt-2 text-sm font-bold text-[#5f6b5d]">{unlocked.length} of {orderedCards.length} cards collected</p>
+            </div>
+            <div className="rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] px-3 py-2 text-right">
+              <p className="text-[8px] font-black uppercase tracking-[0.14em] text-[#72543e]">Card order</p>
+              <p className="mt-1 text-xs font-black text-[#102f36]">{collectionOrderLabel(orderedCards)}</p>
+            </div>
+          </div>
+        </header>
         <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
-          {filtered.map((card) => {
+          {orderedCards.map((card) => {
             const isUnlocked = unlockedCards.includes(card.title);
             return (
               <div key={`${card.topic}-${card.id}`} className="overflow-hidden rounded-lg border-2 border-[#092421] bg-white">
@@ -3889,13 +3945,28 @@ function CollectionBook({
                 </div>
                 <div className="p-2">
                   <p className="text-base font-black leading-tight text-[#102f36]">{isUnlocked ? card.title : "Locked card"}</p>
-                  <p className="mt-1 text-sm font-black text-[#9f3f2b]">{isUnlocked ? card.statDisplay : "Win a round"}</p>
-                  {isUnlocked && (
-                    <p className={`mt-1 text-[10px] font-black uppercase tracking-[0.1em] ${card.qualityScore >= 85 ? "text-[#2f7d4f]" : card.qualityScore >= 70 ? "text-[#a36b00]" : "text-[#9f3f2b]"}`}>
-                      Quality {card.qualityScore}
-                    </p>
-                  )}
+                  {isUnlocked && <p className="mt-2 text-[8px] font-black uppercase tracking-[0.14em] text-[#72543e]">{card.statLabel}</p>}
+                  <p className={`${isUnlocked ? "mt-0.5" : "mt-1"} text-sm font-black text-[#9f3f2b]`}>{isUnlocked ? card.statDisplay : "Win a round"}</p>
+                  {isUnlocked && <p className="mt-1 text-[10px] font-black uppercase tracking-[0.08em] text-[#72543e]">{card.subStat}</p>}
                   <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#5f6b5d]">{isUnlocked ? card.fact : "Answer correctly to add it here."}</p>
+                  {isUnlocked && card.details?.length ? (
+                    <details className="group mt-2 rounded-md border-2 border-[#d9c7a7] bg-[#fff9ec] open:border-[#092421] open:shadow-[2px_2px_0_#092421]">
+                      <summary className="cursor-pointer list-none px-2 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#102f36] marker:hidden">
+                        <span className="flex items-center justify-between gap-2">
+                          <span>{card.topic === "countries" ? "Open country passport" : "See all card details"}</span>
+                          <span aria-hidden="true" className="text-base leading-none group-open:rotate-45">+</span>
+                        </span>
+                      </summary>
+                      <dl className="grid grid-cols-2 gap-px border-t-2 border-[#d9c7a7] bg-[#d9c7a7]">
+                        {card.details.map((detail) => (
+                          <div key={`${card.id}-${detail.label}`} className="min-w-0 bg-white p-2">
+                            <dt className="text-[8px] font-black uppercase tracking-[0.12em] text-[#72543e]">{detail.label}</dt>
+                            <dd className="mt-0.5 break-words text-xs font-black leading-tight text-[#102f36]">{detail.value}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    </details>
+                  ) : null}
                 </div>
               </div>
             );
@@ -4031,28 +4102,6 @@ function DifficultyPill({ difficulty }: { difficulty: Difficulty }) {
     <span className="shrink-0 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2.5 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#092421]">
       {label}
     </span>
-  );
-}
-
-function HudStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg border-2 border-[#d9c7a7] bg-white px-1.5 py-1 text-center">
-      <p className="text-[8px] font-black uppercase tracking-[0.1em] text-[#72543e]">{label}</p>
-      <p className="text-lg font-black leading-none text-[#102f36] md:text-xl">{value}</p>
-    </div>
-  );
-}
-
-function CollectionStat({ label, value, libraryValue, wins, samples }: { label: string; value: string; libraryValue: string; wins: number; samples: readonly string[] }) {
-  return (
-    <div className="rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
-      <div className="flex items-center justify-between gap-2">
-        <p className="text-sm font-black text-[#102f36]">{label}</p>
-        <p className="text-sm font-black text-[#9f3f2b]">{value}</p>
-      </div>
-      <p className="mt-1 text-xs font-bold text-[#5f6b5d]">{wins} correct answers · {libraryValue} research records</p>
-      <p className="mt-1 line-clamp-2 text-[11px] font-semibold leading-tight text-[#5f6b5d]">{samples.join(" | ")}</p>
-    </div>
   );
 }
 
@@ -4331,7 +4380,7 @@ function QuestionImage({ question }: { question: Pick<Question, "image" | "image
 function MediaImage({ image, imageAlt, topic, compact = false }: { image: string; imageAlt: string; topic: RoundTopic; compact?: boolean }) {
   const [failedImage, setFailedImage] = useState<string | null>(null);
   const failed = failedImage === image;
-  const imageSurface = topic === "peppers" ? "bg-[#f3d7c8]" : topic === "sharks" ? "bg-[#d6ece8]" : topic === "space" ? "bg-[#dfe4ef]" : "bg-[#f7f0df]";
+  const imageSurface = topic === "peppers" ? "bg-[#f3d7c8]" : topic === "sharks" ? "bg-[#d6ece8]" : topic === "space" ? "bg-[#dfe4ef]" : topic === "countries" ? "bg-[#dbeaf3]" : "bg-[#f7f0df]";
   const frameSize = compact ? "min-h-0 flex-1" : "h-full min-h-[260px]";
 
   if (failed) {
@@ -4339,7 +4388,7 @@ function MediaImage({ image, imageAlt, topic, compact = false }: { image: string
       <div className={`flex ${frameSize} w-full items-center justify-center p-6 ${imageSurface}`}>
         <div className="w-full max-w-sm rounded-lg border-2 border-[#20383d] bg-white p-5 text-center shadow-[4px_4px_0_#20383d]">
           <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full border-2 border-[#20383d] bg-[#f0c84b] text-5xl">
-            {topic === "peppers" ? "!" : topic === "sharks" ? "~" : topic === "space" ? "*" : "^"}
+            {topic === "peppers" ? "!" : topic === "sharks" ? "~" : topic === "space" ? "*" : topic === "countries" ? "◎" : "^"}
           </div>
           <p className="mt-4 text-xs font-black uppercase tracking-[0.18em] text-[#9f3f2b]">Picture clue</p>
           <p className="mt-1 text-3xl font-black leading-tight text-[#192f35]">{imageAlt}</p>
@@ -4351,14 +4400,14 @@ function MediaImage({ image, imageAlt, topic, compact = false }: { image: string
   return (
     <div className={`field-guide-media flex ${frameSize} w-full items-center justify-center overflow-hidden ${imageSurface}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={image} alt={imageAlt} onError={() => setFailedImage(image)} className="max-h-full max-w-full object-contain p-3" />
+      <img src={image} alt={imageAlt} onError={() => setFailedImage(image)} className="h-full w-full object-contain p-3" />
     </div>
   );
 }
 
 function LockedCard({ topic }: { topic: RoundTopic }) {
   return (
-    <div className={`flex h-full min-h-36 items-center justify-center ${topic === "peppers" ? "bg-[#f3d7c8]" : topic === "sharks" ? "bg-[#d6ece8]" : topic === "space" ? "bg-[#dfe4ef]" : "bg-[#e3efe4]"}`}>
+    <div className={`flex h-full min-h-36 items-center justify-center ${topic === "peppers" ? "bg-[#f3d7c8]" : topic === "sharks" ? "bg-[#d6ece8]" : topic === "space" ? "bg-[#dfe4ef]" : topic === "countries" ? "bg-[#dbeaf3]" : "bg-[#e3efe4]"}`}>
       <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#092421] bg-[#f0c84b] text-4xl font-black">?</div>
     </div>
   );

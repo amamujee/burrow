@@ -1,5 +1,6 @@
 import {
   buildings,
+  countries,
   heatBands,
   heatBandRangeLabel,
   heatProfiles,
@@ -9,6 +10,7 @@ import {
   spaceCards,
   topicIds,
   type Building,
+  type Country,
   type Difficulty,
   type HeatBand,
   type Jet,
@@ -58,7 +60,13 @@ export type QuestionKind =
   | "jet-range"
   | "jet-firepower"
   | "jet-difference"
-  | "jet-reading";
+  | "jet-reading"
+  | "country-flag"
+  | "country-capital"
+  | "country-continent"
+  | "country-location"
+  | "country-population"
+  | "country-area";
 
 export type ComparisonCard = {
   label: "A" | "B";
@@ -86,6 +94,7 @@ export type Question = {
   choices: string[];
   answer: string;
   explanation: string;
+  collectionTitles?: string[];
   locations?: WorldLocation[];
   map?: {
     choices: GeoChoice[];
@@ -104,6 +113,7 @@ export type Question = {
     max: number;
     unit: string;
   };
+  secondChanceClue?: string;
 };
 
 const sessionLength = 16;
@@ -118,6 +128,8 @@ const maxSharkPower = 5;
 const maxJetSpeed = 2200;
 const maxJetRange = 8800;
 const maxJetFirepower = 5;
+const maxCountryPopulation = Math.max(...countries.map((country) => country.population));
+const maxCountryArea = Math.max(...countries.map((country) => country.areaKm2));
 const allTopics: KnowledgeTopic[] = [...topicIds];
 const preferredPool = <T extends { id: string }>(items: readonly T[], difficulty: Difficulty) => poolForDifficulty(items, difficulty);
 
@@ -130,6 +142,13 @@ const topicsForScope = (topic: TopicScope): KnowledgeTopic[] => {
 
 const formatNumber = (value: number) => value.toLocaleString("en-US");
 const formatShu = (value: number) => `${formatNumber(value)} SHU`;
+const compactPeople = (value: number) => value >= 1_000_000_000
+  ? `${(value / 1_000_000_000).toFixed(1).replace(/\.0$/, "")} billion`
+  : value >= 1_000_000
+    ? `${Math.round(value / 1_000_000)} million`
+    : value >= 1_000
+      ? `${Math.round(value / 1_000)} thousand`
+      : formatNumber(value);
 const range = (pepper: MeasuredPepper) => pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
 const feet = (value: number) => `${formatNumber(value)} ft`;
 const heatMeter = (heat: HeatBand) => ({ label: heat, icons: heatProfiles[heat].icons, emoji: heatProfiles[heat].emoji, line: heatProfiles[heat].kidLine });
@@ -548,6 +567,20 @@ const spaceCard = (item: SpaceCard, label: "A" | "B", stat: "temp" | "radius" | 
   };
 };
 
+const countryComparisonCard = (country: Country, label: "A" | "B", stat: "population" | "area"): ComparisonCard => ({
+  label,
+  topic: "countries",
+  title: country.name,
+  image: country.image,
+  imageAlt: `Flag of ${country.name}`,
+  imageCredit: country.imageCredit,
+  statLabel: stat === "population" ? "Population" : "Land area",
+  statValue: stat === "population" ? `${formatNumber(country.population)} people` : `${formatNumber(country.areaKm2)} km²`,
+  subStat: `${country.capital} · ${country.continents.join(" / ")}`,
+  meterValue: stat === "population" ? country.population : country.areaKm2,
+  meterMax: stat === "population" ? maxCountryPopulation : maxCountryArea,
+});
+
 const comparisonAnswer = (cards: ComparisonCard[], winnerName: string) => `${cards.find((card) => card.title === winnerName)?.label}: ${winnerName}`;
 
 const pepperHotterQuestion = (seed: number, first: MeasuredPepper, second: MeasuredPepper): Question => {
@@ -575,6 +608,32 @@ const pepperHotterQuestion = (seed: number, first: MeasuredPepper, second: Measu
   };
 };
 
+const countryComparisonQuestion = (seed: number, first: Country, second: Country, stat: "population" | "area"): Question => {
+  const firstValue = stat === "population" ? first.population : first.areaKm2;
+  const secondValue = stat === "population" ? second.population : second.areaKm2;
+  const winner = firstValue >= secondValue ? first : second;
+  const cards = shuffle([countryComparisonCard(first, "A", stat), countryComparisonCard(second, "B", stat)], seed + 19);
+  const unit = stat === "population" ? "people" : "km²";
+  const winningValue = stat === "population" ? winner.population : winner.areaKm2;
+  return {
+    id: `${seed}-country-${stat}-${first.id}-${second.id}`,
+    topic: "countries",
+    kind: stat === "population" ? "country-population" : "country-area",
+    prompt: stat === "population"
+      ? `Which country has more people: ${first.name} or ${second.name}?`
+      : `Which country has the bigger land area: ${first.name} or ${second.name}?`,
+    image: winner.image,
+    imageAlt: `Flag of ${winner.name}`,
+    imageCredit: winner.imageCredit,
+    comparison: cards,
+    choices: cards.map((card) => `${card.label}: ${card.title}`),
+    answer: comparisonAnswer(cards, winner.name),
+    explanation: `${winner.name} wins with ${formatNumber(winningValue)} ${unit}. ${stat === "population" ? `This is a ${winner.populationYear} population figure.` : "Land area compares the size of the country itself."}`,
+    locations: itemLocations(first, second),
+    numberLine: { label: stat === "population" ? "Population" : "Land area", value: winningValue, max: stat === "population" ? maxCountryPopulation : maxCountryArea, unit },
+  };
+};
+
 const buildingTallerQuestion = (seed: number, first: Building, second: Building): Question => {
   const taller = first.heightFt >= second.heightFt ? first : second;
   const cards = shuffle([buildingCard(first, "A"), buildingCard(second, "B")], seed + 27);
@@ -582,12 +641,7 @@ const buildingTallerQuestion = (seed: number, first: Building, second: Building)
     id: `${seed}-building-taller-${first.id}-${second.id}`,
     topic: "buildings",
     kind: "building-taller",
-    prompt: promptVariant(seed + 26, [
-      `Which building is taller: ${first.name} or ${second.name}?`,
-      `Compare their heights. Does ${first.name} or ${second.name} reach higher?`,
-      `The bigger height wins. Pick ${first.name} or ${second.name}.`,
-      `Which tower rises farther into the sky: ${first.name} or ${second.name}?`,
-    ]),
+    prompt: "Which one is taller?",
     image: taller.image,
     imageAlt: taller.name,
     imageCredit: taller.imageCredit,
@@ -788,6 +842,18 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
     return jetComparisonQuestion(seed, first, second, stat);
   }
 
+  if (topic === "countries") {
+    const stat = sample(["population", "area"] as const, seed + 8);
+    const pool = preferredPool(countries, difficulty);
+    const first = sample(pool, seed + 9);
+    const firstValue = stat === "population" ? first.population : first.areaKm2;
+    const second = sample(
+      pool.filter((item) => item.id !== first.id && (stat === "population" ? item.population : item.areaKm2) !== firstValue),
+      seed + 10,
+    );
+    return countryComparisonQuestion(seed, first, second, stat);
+  }
+
   const stats: ("temp" | "radius" | "distance" | "moons")[] = difficulty === 1 ? ["radius", "distance", "temp"] : ["temp", "radius", "distance", "moons"];
   const stat = sample(stats, seed + 8);
   const pool = preferredPool(stat === "distance" || stat === "moons"
@@ -798,6 +864,105 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
   const first = sample(pool, seed + 10);
   const second = sample(pool.filter((item) => item.id !== first.id), seed + 11);
   return spaceComparisonQuestion(seed, first, second, stat);
+};
+
+const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: readonly string[] = []): Question => {
+  const pool = preferredPool(countries, difficulty);
+  const country = discoveryShuffle(pool, seed, unlockedTitles, (item) => item.name)[0];
+  const kinds: QuestionKind[] = difficulty === 1
+    ? ["country-flag", "country-capital", "country-continent", "country-location", "country-flag"]
+    : ["country-flag", "country-capital", "country-continent", "country-location", "country-population", "country-area"];
+  const kind = sample(kinds, seed + 17);
+
+  if (kind === "country-location") {
+    const locatedPool = pool.filter(hasLocationMetadata);
+    const locatedCountry = hasLocationMetadata(country) ? country : locatedPool[0];
+    const mapChoices = locationQuestionChoices(locatedCountry, locatedPool, difficulty, seed + 21);
+    if (!mapChoices) return countryQuestion(seed + 1, difficulty, unlockedTitles);
+    const choices = mapChoices.map((choice) => choice.label);
+    return {
+      id: `${seed}-country-location-${locatedCountry.id}`,
+      topic: "countries",
+      kind,
+      prompt: `Where on the world map is ${locatedCountry.name}?`,
+      image: locatedCountry.image,
+      imageAlt: `Flag of ${locatedCountry.name}`,
+      imageCredit: locatedCountry.imageCredit,
+      choices,
+      answer: locatedCountry.name,
+      explanation: `${locatedCountry.name} is in ${locatedCountry.continents.join(" / ")}, in the ${locatedCountry.subregion} region. Its capital is ${locatedCountry.capital}.`,
+      collectionTitles: [locatedCountry.name],
+      locations: itemLocations(locatedCountry),
+      map: { choices: mapChoices, answerId: locatedCountry.name },
+    };
+  }
+
+  if (kind === "country-capital") {
+    return {
+      id: `${seed}-country-capital-${country.id}`,
+      topic: "countries",
+      kind,
+      prompt: `What is the capital of ${country.name}?`,
+      image: country.image,
+      imageAlt: `Flag of ${country.name}`,
+      imageCredit: country.imageCredit,
+      choices: answerChoices(country.capital, pool.filter((item) => item.id !== country.id).map((item) => item.capital), seed + 19, choiceCountForDifficulty(difficulty)),
+      answer: country.capital,
+      explanation: `${country.capital} is the capital of ${country.name}. ${country.fact}`,
+      collectionTitles: [country.name],
+      locations: itemLocations(country),
+    };
+  }
+
+  if (kind === "country-continent") {
+    const answer = country.continents.join(" / ");
+    const continentOptions = Array.from(new Set(countries.map((item) => item.continents.join(" / "))));
+    return {
+      id: `${seed}-country-continent-${country.id}`,
+      topic: "countries",
+      kind,
+      prompt: `Which continent is ${country.name} in?`,
+      image: country.image,
+      imageAlt: `Flag of ${country.name}`,
+      imageCredit: country.imageCredit,
+      choices: answerChoices(answer, continentOptions, seed + 20, choiceCountForDifficulty(difficulty)),
+      answer,
+      explanation: `${country.name} is in ${answer}. Its region is ${country.subregion}.`,
+      collectionTitles: [country.name],
+      locations: itemLocations(country),
+    };
+  }
+
+  if (kind === "country-population" || kind === "country-area") {
+    const stat = kind === "country-population" ? "population" : "area";
+    const value = stat === "population" ? country.population : country.areaKm2;
+    const challenger = sample(
+      pool.filter((item) => item.id !== country.id && (stat === "population" ? item.population : item.areaKm2) !== value),
+      seed + 22,
+    );
+    return countryComparisonQuestion(seed, country, challenger, stat);
+  }
+
+  const sameContinent = pool.filter((item) => item.id !== country.id && item.continents.some((continent) => country.continents.includes(continent)));
+  const distractors = difficulty === 1 || sameContinent.length < 3
+    ? pool.filter((item) => item.id !== country.id)
+    : sameContinent;
+  return {
+    id: `${seed}-country-flag-${country.id}`,
+    topic: "countries",
+    kind: "country-flag",
+    prompt: "Which country has this flag?",
+    image: country.image,
+    imageAlt: "Mystery country flag",
+    imageCredit: country.imageCredit,
+    choices: answerChoices(country.name, distractors.map((item) => item.name), seed + 23, choiceCountForDifficulty(difficulty)),
+    answer: country.name,
+    secondChanceClue: `Second-chance clue: its capital is ${country.capital}. It is in ${country.continents.join(" / ")} and has about ${compactPeople(country.population)} people.`,
+    explanation: `That is the flag of ${country.name}. ${country.fact} Population: ${country.populationNote}.`,
+    collectionTitles: [country.name],
+    locations: itemLocations(country),
+    numberLine: { label: "Population", value: country.population, max: maxCountryPopulation, unit: "people" },
+  };
 };
 
 const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: readonly string[] = []): Question => {
@@ -1416,7 +1581,7 @@ export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionS
   while (questions.length < sessionLength && attempt < 160) {
     const currentTopic = topicOrder[(questions.length + attempt) % topicOrder.length];
     const seed = sessionSeed + attempt * 17 + questions.length * 31;
-    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty, unlockedTitles) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty);
+    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty, unlockedTitles) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : currentTopic === "countries" ? countryQuestion(seed, difficulty, unlockedTitles) : spaceQuestion(seed, difficulty);
     if (rememberFreshQuestion(question, usedKeys)) {
       questions.push(question);
     }
@@ -1427,7 +1592,7 @@ export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionS
   while (questions.length < sessionLength && fallbackAttempt < 240) {
     const seed = sessionSeed + questions.length * 101 + attempt + fallbackAttempt * 37;
     const currentTopic = topicOrder[questions.length % topicOrder.length];
-    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty, unlockedTitles) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty);
+    const question = currentTopic === "peppers" ? pepperQuestion(seed, difficulty, unlockedTitles) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : currentTopic === "countries" ? countryQuestion(seed, difficulty, unlockedTitles) : spaceQuestion(seed, difficulty);
     if (rememberFreshQuestion(question, usedKeys)) questions.push(question);
     fallbackAttempt += 1;
   }
@@ -1435,7 +1600,7 @@ export const buildSession = (topic: TopicScope, difficulty: Difficulty, sessionS
   while (questions.length < sessionLength) {
     const seed = sessionSeed + questions.length * 101 + attempt + fallbackAttempt;
     const currentTopic = topicOrder[questions.length % topicOrder.length];
-    questions.push(currentTopic === "peppers" ? pepperQuestion(seed, difficulty, unlockedTitles) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : spaceQuestion(seed, difficulty));
+    questions.push(currentTopic === "peppers" ? pepperQuestion(seed, difficulty, unlockedTitles) : currentTopic === "buildings" ? buildingQuestion(seed, difficulty) : currentTopic === "sharks" ? sharkQuestion(seed, difficulty) : currentTopic === "jets" ? jetQuestion(seed, difficulty) : currentTopic === "countries" ? countryQuestion(seed, difficulty, unlockedTitles) : spaceQuestion(seed, difficulty));
   }
 
   return questions;

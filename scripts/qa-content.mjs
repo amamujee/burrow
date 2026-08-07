@@ -492,6 +492,7 @@ const checkPlayablePackRoundBuilders = async () => {
 
       const oddRound = buildOddRoundFromCards(deck.cards, deck.id, difficulty, seed + 60);
       if (oddRound.cards.length !== 4 || !oddRound.cards.some((card) => card.id === oddRound.answerId)) critical.push(`${deck.id}/odd/d${difficulty}: bad odd-one-out set`);
+      if (/category rule|rule is category/i.test(`${oddRound.prompt} ${oddRound.explanation}`)) critical.push(`${deck.id}/odd/d${difficulty}: hidden category rule returned`);
       if (difficulty === 1) assertNoHardCardsInEasyRound(`${deck.id}/odd/d${difficulty}`, oddRound);
       await assertRoundCardImages(`${deck.id}/odd/d${difficulty}`, oddRound, deck.id);
 
