@@ -1494,6 +1494,16 @@ test("head to head comparison images can submit an answer", async ({ page }) => 
   await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
 });
 
+test("odd one image cards can submit an answer", async ({ page }) => {
+  await chooseOnlyMode(page, "Odd One");
+
+  const imageChoice = page.getByRole("button", { name: /^Choose [A-D]:/ }).first();
+  await expect(imageChoice.getByRole("img")).toBeVisible();
+  await imageChoice.click();
+  await expect(imageChoice).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
+});
+
 test("play events capture anonymous question quality context", async ({ page }) => {
   await chooseOnlyMode(page, "Head to Head");
 

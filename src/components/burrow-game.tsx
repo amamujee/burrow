@@ -3833,7 +3833,14 @@ function OddOneMode({
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <KnowledgeCardsStage cards={round.cards} badge="Look closely" footer="Use the facts shown on each card." />
+      <KnowledgeCardsStage
+        cards={round.cards}
+        badge="Look closely"
+        footer="Tap a card to answer, or use the choices."
+        selectedId={selected}
+        answerId={round.answerId}
+        onSelect={onAnswer}
+      />
 
       <article className="flex min-h-0 flex-col rounded-lg min-[900px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
         <div className="flex items-center justify-between gap-2">
@@ -4163,28 +4170,63 @@ function DifficultyPill({ difficulty }: { difficulty: Difficulty }) {
   );
 }
 
-function KnowledgeCardsStage({ cards, badge, footer }: { cards: KnowledgeCard[]; badge: string; footer: string }) {
+function KnowledgeCardsStage({
+  cards,
+  badge,
+  footer,
+  selectedId,
+  answerId,
+  onSelect,
+}: {
+  cards: KnowledgeCard[];
+  badge: string;
+  footer: string;
+  selectedId: string | null;
+  answerId: string;
+  onSelect: (cardId: string) => void;
+}) {
+  const answered = selectedId !== null;
+
   return (
     <article className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
       <div
         className="grid h-full min-h-[390px] gap-2 lg:min-h-0"
         style={{ gridTemplateColumns: cards.length === 1 ? "minmax(0, 1fr)" : cards.length > 2 ? "repeat(auto-fit, minmax(150px, 1fr))" : "repeat(2, minmax(0, 1fr))" }}
       >
-        {cards.map((card, index) => (
-          <div key={`${badge}-${card.topic}-${card.id}`} className="relative overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
-            <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#092421]">
-              {String.fromCharCode(65 + index)}
-            </div>
-            <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} />
-            <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-1.5 shadow-[2px_2px_0_#092421]">
-              <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
-              <div className="mt-1 flex items-end justify-between gap-2">
-                <p className="text-lg font-black leading-none text-[#9f3f2b]">{card.statDisplay}</p>
-                <p className="text-right text-[11px] font-bold leading-tight text-[#5f6b5d]">{card.subStat}</p>
+        {cards.map((card, index) => {
+          const label = String.fromCharCode(65 + index);
+          const correctChoice = answered && card.id === answerId;
+          const chosenWrong = selectedId === card.id && card.id !== answerId;
+          const cardState = correctChoice
+            ? "border-[#70d392] bg-[#70d392] shadow-[3px_3px_0_#70d392]"
+            : chosenWrong
+              ? "border-[#f59a7d] bg-[#f59a7d] shadow-[3px_3px_0_#f59a7d]"
+              : "border-[#092421] bg-[#fff9ec] hover:border-[#f0c84b]";
+
+          return (
+            <button
+              key={`${badge}-${card.topic}-${card.id}`}
+              type="button"
+              onClick={() => onSelect(card.id)}
+              disabled={answered}
+              aria-label={`Choose ${label}: ${card.title}`}
+              aria-pressed={selectedId === card.id}
+              className={`relative overflow-hidden rounded-lg border-2 text-left transition active:translate-y-0.5 disabled:cursor-default ${cardState}`}
+            >
+              <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#092421]">
+                {label}
               </div>
-            </div>
-          </div>
-        ))}
+              <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} />
+              <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-1.5 shadow-[2px_2px_0_#092421]">
+                <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
+                <div className="mt-1 flex items-end justify-between gap-2">
+                  <p className="text-lg font-black leading-none text-[#9f3f2b]">{card.statDisplay}</p>
+                  <p className="text-right text-[11px] font-bold leading-tight text-[#5f6b5d]">{card.subStat}</p>
+                </div>
+              </div>
+            </button>
+          );
+        })}
       </div>
       <div className="mt-2 grid gap-2 sm:grid-cols-[auto_1fr] sm:items-center">
         <div className="rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36]">
