@@ -85,6 +85,7 @@ type Progress = {
   topicWins: Record<KnowledgeTopic, number>;
   topicStats: Record<string, { correct: number; answered: number }>;
   modeWins: Record<GameMode, number>;
+  modeStats: Record<ChallengeMode, { correct: number; answered: number; collected: number }>;
 };
 
 type LearnerProfile = {
@@ -113,6 +114,16 @@ type LearningRecap = {
   focusLabel: string;
   focusAccuracy: number | null;
   topics: { label: string; answered: number; accuracy: number }[];
+};
+
+type ProgressStats = {
+  profileName: string;
+  level: number;
+  answered: number;
+  correct: number;
+  collected: number;
+  topics: { id: RoundTopic; label: string; answered: number; correct: number; color: string }[];
+  modes: { id: ChallengeMode; label: string; answered: number; correct: number; collected: number; color: string }[];
 };
 
 type ChallengeMode = Exclude<GameMode, "mix">;
@@ -194,6 +205,11 @@ type PlayTelemetryTarget = Omit<PlayTelemetryInput, "action">;
 const allKnowledgeTopics: KnowledgeTopic[] = [...topicIds];
 const emptyTopicCounts = () => Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, 0])) as Record<KnowledgeTopic, number>;
 const emptyTopicStats = () => Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, { correct: 0, answered: 0 }])) as Record<string, { correct: number; answered: number }>;
+const emptyModeStats = () => Object.fromEntries(
+  modeOptions
+    .filter((item): item is (typeof modeOptions)[number] & { id: ChallengeMode } => item.id !== "mix")
+    .map((item) => [item.id, { correct: 0, answered: 0, collected: 0 }]),
+) as Record<ChallengeMode, { correct: number; answered: number; collected: number }>;
 const isKnowledgeTopic = (topic: string): topic is KnowledgeTopic => allKnowledgeTopics.includes(topic as KnowledgeTopic);
 
 const initialProgress: Progress = {
@@ -212,6 +228,7 @@ const initialProgress: Progress = {
   topicWins: emptyTopicCounts(),
   topicStats: emptyTopicStats(),
   modeWins: { mix: 0, quiz: 0, versus: 0, trumps: 0, sort: 0, fact: 0, peek: 0, number: 0, odd: 0, geo: 0 },
+  modeStats: emptyModeStats(),
 };
 
 const profilesKey = "burrow-profiles-v1";
@@ -270,6 +287,7 @@ const freshProgress = (): Progress => ({
   topicWins: emptyTopicCounts(),
   topicStats: emptyTopicStats(),
   modeWins: { ...initialProgress.modeWins },
+  modeStats: emptyModeStats(),
   seenIds: [],
   learningHistory: [],
   unlockedCards: [],
@@ -294,6 +312,12 @@ const normalizeProgress = (progress?: Partial<Progress>): Progress => ({
   topicWins: { ...emptyTopicCounts(), ...progress?.topicWins },
   topicStats: { ...emptyTopicStats(), ...(progress?.topicStats ?? {}) },
   modeWins: { ...initialProgress.modeWins, ...progress?.modeWins },
+  modeStats: Object.fromEntries(
+    Object.entries(emptyModeStats()).map(([modeId, defaults]) => [
+      modeId,
+      { ...defaults, ...(progress?.modeStats?.[modeId as ChallengeMode] ?? {}) },
+    ]),
+  ) as Progress["modeStats"],
   seenIds: progress?.seenIds ?? [],
   learningHistory: progress?.learningHistory ?? [],
   unlockedCards: progress?.unlockedCards ?? [],
@@ -815,6 +839,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
                 : answered;
   const sessionAnswered = questionIndex + (activeChallengeAnswered ? 1 : 0);
   const unlockedCount = selectedCards.filter((card) => isCardUnlocked(unlockedCardSet, card)).length;
+  const totalUnlockedCount = allCards.filter((card) => isCardUnlocked(unlockedCardSet, card)).length;
   const currentTopicScope = adaptiveTopicScopeFor(topic, activeInterests, progress, playableTopics);
   const currentTopicLabel = isQuestionMode && question ? topicLabel(question.topic) : typeof currentTopicScope === "string" && currentTopicScope !== "mixed" ? topicLabel(currentTopicScope) : "Mixed topics";
   const currentRoundContext = `${currentTopicLabel} · ${gameTypeLabel(activeChallengeMode)}`;
@@ -836,6 +861,32 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     focusLabel: focusTopic?.label ?? topicMeta(activeInterests[0]).label,
     focusAccuracy: focusTopic?.accuracy ?? null,
     topics: learningTopicRows,
+  };
+  const progressStats: ProgressStats = {
+    profileName: activeProfile.name,
+    level: progress.level,
+    answered: progress.answered,
+    correct: progress.correct,
+    collected: totalUnlockedCount,
+    topics: playableTopics
+      .map((id) => ({
+        id,
+        label: topicMeta(id).label,
+        answered: progress.topicStats[id]?.answered ?? 0,
+        correct: progress.topicStats[id]?.correct ?? 0,
+        color: topicAccentFor(id),
+      }))
+      .sort((first, second) => second.answered - first.answered || first.label.localeCompare(second.label)),
+    modes: selectableModeOptions
+      .map((item) => ({
+        id: item.id,
+        label: item.label,
+        answered: progress.modeStats[item.id]?.answered ?? 0,
+        correct: progress.modeStats[item.id]?.correct ?? 0,
+        collected: progress.modeStats[item.id]?.collected ?? 0,
+        color: modeAccent[item.id],
+      }))
+      .sort((first, second) => second.answered - first.answered || first.label.localeCompare(second.label)),
   };
   const selectedOfflineImages = useMemo(() => selectedCards.map((card) => card.image), [selectedCards]);
   const warmOfflineImages = useMemo(() => [
@@ -1254,7 +1305,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     neutral?: boolean;
     xpGain: number;
     topicName?: RoundTopic;
-    modeName?: GameMode;
+    modeName?: ChallengeMode;
     seenId: string;
     learningIdentity: LearningIdentity;
     unlockTitles?: string[];
@@ -1268,39 +1319,56 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       : [];
 
     setLastResult({ correct: feedbackCorrect, xpGain, leveledUp: nextLevel > progress.level });
-    setProgress((current) => ({
-      ...current,
-      xp: current.xp + xpGain,
-      level: levelFromXp(current.xp + xpGain),
-      streak: neutral ? current.streak : correct ? current.streak + 1 : 0,
-      bestStreak: Math.max(current.bestStreak, correct ? current.streak + 1 : 0),
-      correct: current.correct + (correct ? 1 : 0),
-      answered: current.answered + 1,
-      difficulty: neutral ? current.difficulty : autoDifficulty(current.difficulty, correct, correct ? current.streak + 1 : 0, current.answered + 1, current.correct + (correct ? 1 : 0)),
-      seenIds: [seenId, ...current.seenIds].slice(0, 80),
-      learningHistory: addLearningExposure(current.learningHistory, exposureIdentity, {
-        mode: modeName ?? "quiz",
-        topic: topicName ?? "mixed",
-        outcome: neutral ? "tie" : correct ? "correct" : "incorrect",
-      }),
-      unlockedCards: feedbackCorrect ? addUnique(current.unlockedCards, unlockKeys) : current.unlockedCards,
-      topicWins: topicName && isKnowledgeTopic(topicName) ? { ...current.topicWins, [topicName]: current.topicWins[topicName] + (correct ? 1 : 0) } : current.topicWins,
-      topicStats: topicName
-        ? {
-            ...current.topicStats,
-            [topicName]: {
-              correct: (current.topicStats[topicName]?.correct ?? 0) + (correct ? 1 : 0),
-              answered: (current.topicStats[topicName]?.answered ?? 0) + 1,
-            },
-          }
-        : current.topicStats,
-      modeWins: modeName
-        ? {
-            ...current.modeWins,
-            [modeName]: current.modeWins[modeName] + (correct ? 1 : 0),
-          }
-        : current.modeWins,
-    }));
+    setProgress((current) => {
+      const nextUnlockedCards = feedbackCorrect ? addUnique(current.unlockedCards, unlockKeys) : current.unlockedCards;
+      const currentUnlockSet = new Set(current.unlockedCards);
+      const nextUnlockSet = new Set(nextUnlockedCards);
+      const newlyCollected = allCards.filter((card) => !isCardUnlocked(currentUnlockSet, card) && isCardUnlocked(nextUnlockSet, card)).length;
+
+      return {
+        ...current,
+        xp: current.xp + xpGain,
+        level: levelFromXp(current.xp + xpGain),
+        streak: neutral ? current.streak : correct ? current.streak + 1 : 0,
+        bestStreak: Math.max(current.bestStreak, correct ? current.streak + 1 : 0),
+        correct: current.correct + (correct ? 1 : 0),
+        answered: current.answered + 1,
+        difficulty: neutral ? current.difficulty : autoDifficulty(current.difficulty, correct, correct ? current.streak + 1 : 0, current.answered + 1, current.correct + (correct ? 1 : 0)),
+        seenIds: [seenId, ...current.seenIds].slice(0, 80),
+        learningHistory: addLearningExposure(current.learningHistory, exposureIdentity, {
+          mode: modeName ?? "quiz",
+          topic: topicName ?? "mixed",
+          outcome: neutral ? "tie" : correct ? "correct" : "incorrect",
+        }),
+        unlockedCards: nextUnlockedCards,
+        topicWins: topicName && isKnowledgeTopic(topicName) ? { ...current.topicWins, [topicName]: current.topicWins[topicName] + (correct ? 1 : 0) } : current.topicWins,
+        topicStats: topicName
+          ? {
+              ...current.topicStats,
+              [topicName]: {
+                correct: (current.topicStats[topicName]?.correct ?? 0) + (correct ? 1 : 0),
+                answered: (current.topicStats[topicName]?.answered ?? 0) + 1,
+              },
+            }
+          : current.topicStats,
+        modeWins: modeName
+          ? {
+              ...current.modeWins,
+              [modeName]: current.modeWins[modeName] + (correct ? 1 : 0),
+            }
+          : current.modeWins,
+        modeStats: modeName
+          ? {
+              ...current.modeStats,
+              [modeName]: {
+                correct: current.modeStats[modeName].correct + (correct ? 1 : 0),
+                answered: current.modeStats[modeName].answered + 1,
+                collected: current.modeStats[modeName].collected + newlyCollected,
+              },
+            }
+          : current.modeStats,
+      };
+    });
 
     if (progress.answered + 1 >= progress.challengeMilestone + challengeQuestionInterval) {
       setMiniChallengePending(true);
@@ -1507,7 +1575,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       correct,
       xpGain,
       topicName: question.topic,
-      modeName: mode === "mix" ? "mix" : activeChallengeMode,
+      modeName: activeChallengeMode,
       seenId: itemKey,
       learningIdentity: questionLearningIdentity(question),
       unlockTitles: questionCollectionTitles(question),
@@ -1632,7 +1700,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       correct,
       xpGain,
       topicName: sortRound.topic,
-      modeName: mode === "mix" ? "mix" : "sort",
+      modeName: "sort",
       seenId: itemKey,
       learningIdentity: sortLearningIdentity(sortRound),
       unlockTitles: unlocked,
@@ -1694,7 +1762,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       correct,
       xpGain,
       topicName: factRound.topic,
-      modeName: mode === "mix" ? "mix" : "fact",
+      modeName: "fact",
       seenId: itemKey,
       learningIdentity: factLearningIdentity(factRound),
       unlockTitles: [factRound.imageAlt],
@@ -1756,7 +1824,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       correct,
       xpGain,
       topicName: revealRound.topic,
-      modeName: mode === "mix" ? "mix" : "peek",
+      modeName: "peek",
       seenId: itemKey,
       learningIdentity: revealLearningIdentity(revealRound),
       unlockTitles: [revealRound.card.title],
@@ -1818,7 +1886,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       correct,
       xpGain,
       topicName: geoRound.topic,
-      modeName: mode === "mix" ? "mix" : "geo",
+      modeName: "geo",
       seenId: itemKey,
       learningIdentity: geoLearningIdentity(geoRound),
       unlockTitles: [geoRound.card.title],
@@ -1879,7 +1947,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       correct,
       xpGain,
       topicName: numberRound.topic,
-      modeName: mode === "mix" ? "mix" : "number",
+      modeName: "number",
       seenId: itemKey,
       learningIdentity: numberLearningIdentity(numberRound),
       unlockTitles: numberRound.cards.map((card) => card.title),
@@ -1942,7 +2010,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       correct,
       xpGain,
       topicName: oddRound.topic,
-      modeName: mode === "mix" ? "mix" : "odd",
+      modeName: "odd",
       seenId: itemKey,
       learningIdentity: oddLearningIdentity(oddRound),
       unlockTitles: oddRound.cards.map((card) => card.title),
@@ -2015,7 +2083,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       neutral,
       xpGain,
       topicName: topTrumpRound.topic,
-      modeName: mode === "mix" ? "mix" : "trumps",
+      modeName: "trumps",
       seenId: itemKey,
       learningIdentity: topTrumpLearningIdentity(topTrumpRound),
       unlockTitles: [topTrumpRound.player.title, topTrumpRound.computer.title],
@@ -2121,6 +2189,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           streak={progress.streak}
           accuracy={accuracy}
           learningRecap={learningRecap}
+          progressStats={progressStats}
           collectionValue={`${unlockedCount}/${selectedCards.length}`}
           showCollection={showCollection}
           onCollection={openCollection}
@@ -2335,6 +2404,7 @@ function GameHud({
   streak,
   accuracy,
   learningRecap,
+  progressStats,
   collectionValue,
   showCollection,
   onCollection,
@@ -2365,6 +2435,7 @@ function GameHud({
   streak: number;
   accuracy: number;
   learningRecap: LearningRecap;
+  progressStats: ProgressStats;
   collectionValue: string;
   showCollection: boolean;
   onCollection: () => void;
@@ -2386,6 +2457,8 @@ function GameHud({
 }) {
   const [openTray, setOpenTray] = useState<"mode" | "topics" | "more" | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [showProgressStats, setShowProgressStats] = useState(false);
+  const closeProgressStats = useCallback(() => setShowProgressStats(false), []);
   const toggleTray = (tray: "mode" | "topics" | "more") => {
     setConfirmReset(false);
     setOpenTray((current) => current === tray ? null : tray);
@@ -2416,7 +2489,7 @@ function GameHud({
             </div>
           </div>
 
-          <HudProgress level={level} levelProgress={levelProgress} xpToNextLevel={xpToNextLevel} streak={streak} accuracy={accuracy} learningRecap={learningRecap} />
+          <HudProgress level={level} levelProgress={levelProgress} xpToNextLevel={xpToNextLevel} streak={streak} accuracy={accuracy} learningRecap={learningRecap} onOpenStats={() => setShowProgressStats(true)} />
 
           <div data-hud-difficulty className="min-w-[180px] flex-[1_1_180px] rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-2.5 py-2 shadow-[3px_3px_0_#092421]">
             <DifficultySelector difficulty={difficulty} onChange={onDifficultyChange} />
@@ -2542,6 +2615,8 @@ function GameHud({
           </>
         )}
       </div>
+
+      {showProgressStats && <ProgressStatsModal stats={progressStats} onClose={closeProgressStats} />}
     </header>
   );
 }
@@ -2581,6 +2656,7 @@ function HudProgress({
   streak,
   accuracy,
   learningRecap,
+  onOpenStats,
 }: {
   level: number;
   levelProgress: number;
@@ -2588,6 +2664,7 @@ function HudProgress({
   streak: number;
   accuracy: number;
   learningRecap: LearningRecap;
+  onOpenStats: () => void;
 }) {
   const memoryLine = learningRecap.reviewConcepts > 0
     ? `Burrow remembers · ${learningRecap.reviewConcepts} ${learningRecap.reviewConcepts === 1 ? "idea is" : "ideas are"} coming back`
@@ -2598,22 +2675,187 @@ function HudProgress({
         : "Burrow is learning with you";
 
   return (
-    <div data-hud-progress className="flex min-w-[190px] flex-[1.1_1_190px] items-center gap-3 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-3.5 py-2 shadow-[3px_3px_0_#092421]">
-        <div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border-2 border-[#092421] bg-[#f0c84b] text-center shadow-[2px_2px_0_#092421]">
+    <button
+      type="button"
+      data-hud-progress
+      aria-label={`Level ${level}. View progress stats`}
+      title="View progress stats"
+      onClick={onOpenStats}
+      className="flex min-w-[190px] flex-[1.1_1_190px] items-center gap-3 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-3.5 py-2 text-left shadow-[3px_3px_0_#092421] transition hover:-translate-y-0.5 hover:bg-[#fff9df] hover:shadow-[4px_4px_0_#092421] active:translate-y-0 active:shadow-[2px_2px_0_#092421]"
+    >
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border-2 border-[#092421] bg-[#f0c84b] text-center shadow-[2px_2px_0_#092421]">
           <span className="block text-[7px] font-black uppercase leading-none tracking-[0.1em] text-[#7d5a3f]">Lvl</span>
           <span className="block text-xl font-black leading-none text-[#102f36]">{level}</span>
-        </div>
-        <div className="min-w-0 flex-1">
-          <p className="whitespace-nowrap text-xs font-black leading-tight text-[#102f36]">{xpToNextLevel} XP · streak {streak}</p>
-          <div className="mt-1.5 h-2.5 min-w-28 overflow-hidden rounded-full border border-[#d9c7a7] bg-[#f4e8c8]" aria-label={`${levelProgress}% of this level filled`}>
-            <div className="h-full bg-[#70d392] transition-[width] duration-300" style={{ width: `${levelProgress}%` }} />
-          </div>
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block whitespace-nowrap text-xs font-black leading-tight text-[#102f36]">{xpToNextLevel} XP · streak {streak}</span>
+          <span className="mt-1.5 block h-2.5 min-w-28 overflow-hidden rounded-full border border-[#d9c7a7] bg-[#f4e8c8]" aria-label={`${levelProgress}% of this level filled`}>
+            <span className="block h-full bg-[#70d392] transition-[width] duration-300" style={{ width: `${levelProgress}%` }} />
+          </span>
           <span className="sr-only">{accuracy}% right</span>
-        </div>
-      <p className="sr-only" aria-label={`${learningRecap.strongConcepts} strong concepts and ${learningRecap.reviewConcepts} recent concepts ready to review`}>
+        </span>
+      <span className="sr-only" aria-label={`${learningRecap.strongConcepts} strong concepts and ${learningRecap.reviewConcepts} recent concepts ready to review`}>
         {memoryLine}
-      </p>
+      </span>
+    </button>
+  );
+}
+
+function ProgressStatsModal({ stats, onClose }: { stats: ProgressStats; onClose: () => void }) {
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const practicedTopics = stats.topics.filter((item) => item.answered > 0);
+  const playedModes = stats.modes.filter((item) => item.answered > 0 || item.collected > 0);
+  const modeAnswers = stats.modes.reduce((total, item) => total + item.answered, 0);
+  const modeCollections = stats.modes.reduce((total, item) => total + item.collected, 0);
+  const earlierAnswers = Math.max(0, stats.answered - modeAnswers);
+  const earlierCollections = Math.max(0, stats.collected - modeCollections);
+  const earlierDetail = [
+    earlierAnswers > 0 ? `${earlierAnswers} questions` : "",
+    earlierCollections > 0 ? `${earlierCollections} cards` : "",
+  ].filter(Boolean).join(" and ");
+
+  useEffect(() => {
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousOverflow = document.body.style.overflow;
+    const handleModalKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+      if (event.key === "Tab") {
+        event.preventDefault();
+        closeButtonRef.current?.focus();
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", handleModalKey);
+    closeButtonRef.current?.focus();
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener("keydown", handleModalKey);
+      previousFocus?.focus();
+    };
+  }, [onClose]);
+
+  const summary = [
+    { label: "Questions", value: stats.answered, color: "#f0c84b" },
+    { label: "Correct", value: stats.correct, color: "#70d392" },
+    { label: "Incorrect", value: Math.max(0, stats.answered - stats.correct), color: "#f59a7d" },
+    { label: "Collected", value: stats.collected, color: "#8fc4e0" },
+  ];
+
+  return (
+    <div
+      className="fixed inset-0 z-50 grid place-items-center bg-[#092421]/80 p-3 backdrop-blur-[2px] sm:p-6"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <section
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="progress-stats-title"
+        className="max-h-[calc(100dvh-24px)] w-full max-w-4xl overflow-y-auto rounded-2xl border-2 border-[#092421] bg-[#fffdf6] shadow-[7px_7px_0_#092421] sm:max-h-[calc(100dvh-48px)]"
+      >
+        <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b-2 border-[#092421] bg-[#f4e8c8] px-4 py-3 sm:px-6 sm:py-4">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7d5a3f]">{stats.profileName}&apos;s field notes</p>
+            <h2 id="progress-stats-title" className="mt-1 text-2xl font-black leading-none text-[#102f36] sm:text-3xl">Progress at level {stats.level}</h2>
+            <p className="mt-1.5 text-sm font-bold text-[#5f6b5d]">A simple look at where the learning time is going.</p>
+          </div>
+          <button
+            ref={closeButtonRef}
+            type="button"
+            aria-label="Close progress stats"
+            onClick={onClose}
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border-2 border-[#092421] bg-[#fffdf6] text-2xl font-black leading-none text-[#102f36] shadow-[2px_2px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5"
+          >
+            ×
+          </button>
+        </div>
+
+        <div className="p-4 sm:p-6">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {summary.map((item) => (
+              <div key={item.label} className="rounded-xl border-2 border-[#092421] bg-white p-3 shadow-[2px_2px_0_#d9c7a7]">
+                <span aria-hidden="true" className="mb-2 block h-2 w-8 rounded-full" style={{ backgroundColor: item.color }} />
+                <strong className="block text-2xl font-black leading-none text-[#102f36]">{item.value}</strong>
+                <span className="mt-1 block text-[10px] font-black uppercase tracking-[0.12em] text-[#7d5a3f]">{item.label}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            <ProgressStatsGroup
+              title="Topics explored"
+              description="Questions show which subjects get the most time."
+              emptyLabel="Answer a question to start the topic trail."
+              rows={practicedTopics}
+            />
+            <ProgressStatsGroup
+              title="Game types played"
+              description="Correct, incorrect, and new cards by mode."
+              emptyLabel="New answers will start the game-type trail."
+              rows={playedModes}
+              showCollected
+            />
+          </div>
+
+          {(earlierAnswers > 0 || earlierCollections > 0) && (
+            <p className="mt-4 rounded-lg border border-[#d9c7a7] bg-[#f4e8c8] px-3 py-2 text-xs font-bold leading-snug text-[#5f6b5d]">
+              Earlier play is included in the totals ({earlierDetail}), but game-type detail starts with newly played rounds.
+            </p>
+          )}
+        </div>
+      </section>
     </div>
+  );
+}
+
+function ProgressStatsGroup({
+  title,
+  description,
+  emptyLabel,
+  rows,
+  showCollected = false,
+}: {
+  title: string;
+  description: string;
+  emptyLabel: string;
+  rows: { id: string; label: string; answered: number; correct: number; collected?: number; color: string }[];
+  showCollected?: boolean;
+}) {
+  const maxAnswered = Math.max(1, ...rows.map((item) => item.answered));
+
+  return (
+    <section className="rounded-xl border-2 border-[#092421] bg-[#f9f2df] p-3.5 shadow-[3px_3px_0_#d9c7a7] sm:p-4">
+      <h3 className="text-lg font-black leading-tight text-[#102f36]">{title}</h3>
+      <p className="mt-0.5 text-xs font-bold leading-snug text-[#6b7468]">{description}</p>
+      {rows.length ? (
+        <div className="mt-3 space-y-2.5">
+          {rows.map((item) => {
+            const incorrect = Math.max(0, item.answered - item.correct);
+            return (
+              <div key={item.id} className="rounded-lg border border-[#d9c7a7] bg-[#fffdf6] p-2.5">
+                <div className="flex items-baseline justify-between gap-3">
+                  <p className="min-w-0 truncate text-sm font-black text-[#102f36]">{item.label}</p>
+                  <p className="shrink-0 text-xs font-black text-[#5f6b5d]">{item.answered} {item.answered === 1 ? "question" : "questions"}</p>
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#e6dcc4]" aria-hidden="true">
+                  <div className="h-full rounded-full" style={{ backgroundColor: item.color, width: `${Math.max(8, Math.round((item.answered / maxAnswered) * 100))}%` }} />
+                </div>
+                <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-black">
+                  <span className="text-[#28724b]">+ {item.correct} correct</span>
+                  <span className="text-[#a94735]">× {incorrect} incorrect</span>
+                  {showCollected && <span className="text-[#27657f]">◆ {item.collected ?? 0} collected</span>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p className="mt-3 rounded-lg border border-dashed border-[#b9a98b] bg-[#fffdf6] px-3 py-5 text-center text-sm font-bold text-[#6b7468]">{emptyLabel}</p>
+      )}
+    </section>
   );
 }
 

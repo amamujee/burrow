@@ -1346,6 +1346,67 @@ test("game types use the Topics multi-select pattern and advanced controls stay 
   await expect(page.getByRole("heading", { name: "Choose a category" })).toBeVisible();
 });
 
+test("the level button opens progress stats and tracks topic and game-type activity", async ({ page }) => {
+  await chooseOnlyMode(page, "True/False");
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+
+  await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  await expect.poll(() => page.evaluate(() => {
+    const saved = JSON.parse(window.localStorage.getItem("burrow-profiles-v1") ?? "{}") as {
+      activeProfileId?: string;
+      profiles?: { id: string; progress: { modeStats?: Record<string, { answered: number }> } }[];
+    };
+    return saved.profiles?.find((profile) => profile.id === saved.activeProfileId)?.progress.modeStats?.fact?.answered ?? 0;
+  })).toBe(1);
+
+  const tracked = await page.evaluate(() => {
+    const saved = JSON.parse(window.localStorage.getItem("burrow-profiles-v1") ?? "{}") as {
+      activeProfileId?: string;
+      profiles?: {
+        id: string;
+        progress: {
+          topicStats?: Record<string, { correct: number; answered: number }>;
+          modeStats?: Record<string, { correct: number; answered: number; collected: number }>;
+        };
+      }[];
+    };
+    const progress = saved.profiles?.find((profile) => profile.id === saved.activeProfileId)?.progress;
+    return {
+      topic: progress?.topicStats?.peppers,
+      mode: progress?.modeStats?.fact,
+    };
+  });
+
+  expect(tracked.topic?.answered).toBe(1);
+  expect(tracked.mode?.answered).toBe(1);
+  if (tracked.mode?.correct) expect(tracked.mode.collected).toBeGreaterThan(0);
+  else expect(tracked.mode?.collected).toBe(0);
+
+  const levelButton = page.getByRole("button", { name: /Level \d+\. View progress stats/ });
+  await levelButton.click();
+  const dialog = page.getByRole("dialog", { name: /Progress at level/ });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByText("Questions", { exact: true })).toBeVisible();
+  await expect(dialog.getByText("Correct", { exact: true })).toBeVisible();
+  await expect(dialog.getByText("Incorrect", { exact: true })).toBeVisible();
+  await expect(dialog.getByText("Collected", { exact: true })).toBeVisible();
+
+  const topics = dialog.getByRole("heading", { name: "Topics explored" }).locator("xpath=ancestor::section[1]");
+  await expect(topics.getByText("Spicy Peppers", { exact: true })).toBeVisible();
+  await expect(topics.getByText("1 question", { exact: true })).toBeVisible();
+  await expect(topics.getByText(`+ ${tracked.topic?.correct ?? 0} correct`, { exact: true })).toBeVisible();
+  await expect(topics.getByText(`× ${1 - (tracked.topic?.correct ?? 0)} incorrect`, { exact: true })).toBeVisible();
+
+  const modes = dialog.getByRole("heading", { name: "Game types played" }).locator("xpath=ancestor::section[1]");
+  await expect(modes.getByText("True/False", { exact: true })).toBeVisible();
+  await expect(modes.getByText(`◆ ${tracked.mode?.collected ?? 0} collected`, { exact: true })).toBeVisible();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(levelButton).toBeFocused();
+});
+
 test("HUD trays share one slot, stay open on selection, and protect the final topic", async ({ page }) => {
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
 
