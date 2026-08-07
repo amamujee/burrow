@@ -33,7 +33,7 @@ const savedSignature = () => {
   }
 };
 
-export function OfflineReady({ selectedImageUrls, warmImageUrls }: { selectedImageUrls: readonly string[]; warmImageUrls: readonly string[] }) {
+export function OfflineReady({ selectedImageUrls, warmImageUrls, compact = false }: { selectedImageUrls: readonly string[]; warmImageUrls: readonly string[]; compact?: boolean }) {
   const selectedUrls = useMemo(() => uniqueLocalUrls(selectedImageUrls), [selectedImageUrls]);
   const warmUrls = useMemo(() => uniqueLocalUrls(warmImageUrls).slice(0, 12), [warmImageUrls]);
   const signature = useMemo(() => selectionSignature(selectedUrls), [selectedUrls]);
@@ -133,6 +133,27 @@ export function OfflineReady({ selectedImageUrls, warmImageUrls }: { selectedIma
         : ready
           ? `Saved offline · ${selectedUrls.length} cards`
           : `Save ${selectedUrls.length} selected cards`;
+  const buttonLabel = saving ? `${Math.round((progress.completed / Math.max(1, progress.total)) * 100)}%` : ready ? "Saved" : "Save offline";
+
+  if (compact) {
+    return (
+      <div className="flex min-h-11 min-w-0 flex-[1_1_300px] items-center gap-3 rounded-lg border-2 border-[#1c4941] bg-[#0d332f] px-3 py-1.5" data-offline-ready={ready ? "true" : "false"}>
+        <div className="min-w-0 flex-1">
+          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#75d5c0]">Offline</p>
+          <p className="truncate text-xs font-black leading-tight text-[#fffdf6]">{headline}</p>
+        </div>
+        <button
+          type="button"
+          onClick={saveOffline}
+          disabled={!supported || !online || saving || ready}
+          className="min-h-9 shrink-0 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1.5 text-xs font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition enabled:hover:bg-[#ffd96a] enabled:active:translate-y-0.5 disabled:cursor-default disabled:opacity-60"
+        >
+          {buttonLabel}
+        </button>
+        {saving && <span className="sr-only" aria-live="polite">{progress.completed} of {progress.total} offline cards saved</span>}
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-lg border-2 border-[#092421] bg-[#e5f6e9] p-2.5" data-offline-ready={ready ? "true" : "false"}>
@@ -150,7 +171,7 @@ export function OfflineReady({ selectedImageUrls, warmImageUrls }: { selectedIma
           disabled={!supported || !online || saving || ready}
           className="min-h-10 shrink-0 rounded-lg border-2 border-[#092421] bg-[#f3c647] px-3 py-2 text-xs font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition enabled:hover:bg-[#ffd96a] enabled:active:translate-y-0.5 disabled:cursor-default disabled:opacity-60"
         >
-          {saving ? `${Math.round((progress.completed / Math.max(1, progress.total)) * 100)}%` : ready ? "Saved" : "Save offline"}
+          {buttonLabel}
         </button>
       </div>
       {saving && (

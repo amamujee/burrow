@@ -31,7 +31,7 @@ export function GameChoiceButton({
           ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
           : chosen
             ? "border-[#092421] bg-[#f59a7d] shadow-[3px_3px_0_#092421]"
-            : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf] hover:shadow-[2px_2px_0_#092421]"
+            : "border-[#092421] bg-[#fffdf6] shadow-[3px_3px_0_#092421] hover:bg-[#fff1bf]"
       } disabled:cursor-default ${className}`}
     >
       {children}

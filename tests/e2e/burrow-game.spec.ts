@@ -50,8 +50,8 @@ import {
 const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
 const topicLabels = ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Universe", "Jet Hangar", "Countries & Flags", "Dinosaur Lab", "Tallest Mountains", "Tall Trees", "Bridges & Tunnels"];
 
-const modeControl = (page: Page) => page.getByRole("button", { name: /^Mode:/ });
-const topicsControl = (page: Page) => page.getByRole("button", { name: /^Topics:/ });
+const modeControl = (page: Page) => page.getByRole("button", { name: /^Modes/ });
+const topicsControl = (page: Page) => page.getByRole("button", { name: /^Topics/ });
 const modeTray = (page: Page) => page.getByLabel("Choose game types");
 const topicsTray = (page: Page) => page.getByLabel("Choose topics");
 const mixOption = (page: Page, label: string) => modeTray(page).getByRole("button", { name: label, exact: true });
@@ -70,7 +70,7 @@ const chooseOnlyMode = async (page: Page, target: string) => {
     }
   }
   await expect(modeTray(page)).toBeVisible();
-  await expect(modeControl(page)).toContainText("Mode: Mix · 1 selected");
+  await expect(modeControl(page)).toHaveText(/Modes/);
   await modeControl(page).click();
 };
 
@@ -87,7 +87,7 @@ const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
       await expect(button).toHaveAttribute("aria-pressed", "false");
     }
   }
-  await expect(topicsControl(page)).toContainText(`Topics: ${target}`);
+  await expect(topicsControl(page)).toHaveText(/Topics/);
   await topicsControl(page).click();
 };
 
@@ -1284,8 +1284,8 @@ test("offline saving stays in More and the app shell supports an offline reload"
 
 test("game types use the Topics multi-select pattern and advanced controls stay in More", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
-  await expect(modeControl(page)).toContainText("Mode: Mix · 9 selected");
-  await expect(topicsControl(page)).toContainText("Topics: 10 topics");
+  await expect(modeControl(page)).toHaveText(/Modes/);
+  await expect(topicsControl(page)).toHaveText(/Topics/);
   await expect(page.getByRole("button", { name: /^Collection/ })).toBeVisible();
   const moreButton = page.getByRole("button", { name: "More actions" });
   await expect(moreButton).toBeVisible();
@@ -1294,22 +1294,30 @@ test("game types use the Topics multi-select pattern and advanced controls stay 
   await modeControl(page).click();
   await expect(modeTray(page)).toBeVisible();
   for (const label of modeLabels) await expect(mixOption(page, label)).toHaveAttribute("aria-pressed", "true");
+  const modeChipClass = await mixOption(page, "Quiz Run").getAttribute("class");
+  const modeCheckClass = await mixOption(page, "Quiz Run").locator("span").nth(1).getAttribute("class");
+  const modeDotStyle = await mixOption(page, "Quiz Run").locator("span").first().getAttribute("style");
 
   for (const label of modeLabels.filter((label) => label !== "True/False")) {
     await mixOption(page, label).click();
     await expect(mixOption(page, label)).toHaveAttribute("aria-pressed", "false");
   }
   await expect(modeTray(page)).toBeVisible();
-  await expect(modeControl(page)).toContainText("Mode: Mix · 1 selected");
+  await expect(modeControl(page)).toHaveText(/Modes/);
   await expect(mixOption(page, "True/False")).toHaveAttribute("aria-pressed", "true");
 
   await mixOption(page, "True/False").click();
   await expect(mixOption(page, "True/False")).toHaveAttribute("aria-pressed", "true");
-  await expect(modeControl(page)).toContainText("Mode: Mix · 1 selected");
+  await expect(modeControl(page)).toHaveText(/Modes/);
 
   await topicsControl(page).click();
   await expect(modeTray(page)).toBeHidden();
   await expect(topicsTray(page)).toBeVisible();
+  const topicChip = topicsTray(page).getByRole("button", { name: "Spicy Peppers", exact: true });
+  await expect(topicChip).toHaveAttribute("class", modeChipClass ?? "");
+  await expect(topicChip.locator("span").nth(1)).toHaveAttribute("class", modeCheckClass ?? "");
+  await expect(topicChip.locator("span").nth(1)).toHaveText("✓");
+  expect(await topicChip.locator("span").first().getAttribute("style")).not.toBe(modeDotStyle);
 
   await moreButton.click();
   await expect(topicsTray(page)).toBeHidden();
@@ -1319,10 +1327,10 @@ test("game types use the Topics multi-select pattern and advanced controls stay 
   await expect(moreTray.getByRole("button", { name: "Save offline" })).toBeVisible();
   await expect(moreTray.locator("summary").filter({ hasText: "Learning recap" })).toBeVisible();
   await expect(moreTray.getByText("Image reports", { exact: true })).toBeVisible();
-  await moreTray.getByRole("button", { name: "Reset progress" }).click();
-  await expect(moreTray.getByText("Reset all progress?", { exact: true })).toBeVisible();
+  await moreTray.getByRole("button", { name: "Reset", exact: true }).click();
+  await expect(moreTray.getByText(/Reset all progress\? This can't be undone\./)).toBeVisible();
   await moreTray.getByRole("button", { name: "Cancel" }).click();
-  await expect(moreTray.getByRole("button", { name: "Reset progress" })).toBeVisible();
+  await expect(moreTray.getByRole("button", { name: "Reset", exact: true })).toBeVisible();
   await moreButton.click();
 
   await expect(page.getByText("True or false?")).toBeVisible();
@@ -1357,16 +1365,17 @@ test("HUD trays share one slot, stay open on selection, and protect the final to
     if (await button.isEnabled() && (await button.getAttribute("aria-pressed")) === "true") await button.click();
   }
   await expect(modeTray(page)).toBeVisible();
-  await expect(modeControl(page)).toContainText("Mode: Mix · 1 selected");
+  await expect(modeControl(page)).toHaveText(/Modes/);
 
   await page.getByRole("button", { name: "More actions" }).click();
   await expect(modeTray(page)).toBeHidden();
   await expect(page.getByLabel("More controls")).toBeVisible();
 });
 
-test("HUD controls fit iPad landscape and portrait without horizontal overflow", async ({ page }) => {
+test("HUD uses one compact row where space allows and wraps actions together without overflow", async ({ page }) => {
   for (const viewport of [
     { width: 1194, height: 834 },
+    { width: 1024, height: 768 },
     { width: 834, height: 1194 },
   ]) {
     await page.setViewportSize(viewport);
@@ -1378,6 +1387,19 @@ test("HUD controls fit iPad landscape and portrait without horizontal overflow",
     await expect(modeControl(page)).toBeVisible();
     await expect(topicsControl(page)).toBeVisible();
     await expect(page.getByRole("button", { name: /^Collection/ })).toBeVisible();
+    const actionBoxes = await Promise.all([
+      modeControl(page).boundingBox(),
+      topicsControl(page).boundingBox(),
+      page.getByRole("button", { name: /^Collection/ }).boundingBox(),
+      page.getByRole("button", { name: "More actions" }).boundingBox(),
+    ]);
+    expect(actionBoxes.every(Boolean)).toBe(true);
+    expect(new Set(actionBoxes.map((box) => Math.round(box!.y))).size).toBe(1);
+    if (viewport.width >= 1024) {
+      const difficultyBox = await page.getByRole("button", { name: "Easy", exact: true }).boundingBox();
+      expect(difficultyBox).not.toBeNull();
+      expect(Math.abs(actionBoxes[0]!.y - difficultyBox!.y)).toBeLessThanOrEqual(4);
+    }
   }
 });
 
@@ -1412,7 +1434,7 @@ test("fresh and existing profiles automatically select newly added topics", asyn
   });
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
-  await expect(topicsControl(page)).toContainText("10 topics");
+  await expect(topicsControl(page)).toHaveText(/Topics/);
   await topicsControl(page).click();
   await expect(topicsTray(page).getByRole("button", { name: "Countries & Flags", exact: true })).toHaveAttribute("aria-pressed", "true");
   await expect.poll(async () => page.evaluate(() => {
