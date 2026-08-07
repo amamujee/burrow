@@ -52,17 +52,25 @@ const topicLabels = ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Unive
 
 const modeControl = (page: Page) => page.getByRole("button", { name: /^Mode:/ });
 const topicsControl = (page: Page) => page.getByRole("button", { name: /^Topics:/ });
-const modeTray = (page: Page) => page.getByLabel("Choose game mode");
+const modeTray = (page: Page) => page.getByLabel("Choose game types");
 const topicsTray = (page: Page) => page.getByLabel("Choose topics");
-const mixOption = (page: Page, label: string) => modeTray(page).getByRole("button", { name: new RegExp(`^${label}, (included|not included) in Mix$`) });
+const mixOption = (page: Page, label: string) => modeTray(page).getByRole("button", { name: label, exact: true });
 
 const chooseOnlyMode = async (page: Page, target: string) => {
   await modeControl(page).click();
-  const targetButton = modeTray(page).getByRole("button", { name: target, exact: true });
-  await targetButton.click();
+  const targetButton = mixOption(page, target);
+  if ((await targetButton.getAttribute("aria-pressed")) !== "true") await targetButton.click();
   await expect(targetButton).toHaveAttribute("aria-pressed", "true");
+
+  for (const label of modeLabels) {
+    const button = mixOption(page, label);
+    if (label !== target && await button.isEnabled() && (await button.getAttribute("aria-pressed")) === "true") {
+      await button.click();
+      await expect(button).toHaveAttribute("aria-pressed", "false");
+    }
+  }
   await expect(modeTray(page)).toBeVisible();
-  await expect(modeControl(page)).toContainText(`Mode: ${target}`);
+  await expect(modeControl(page)).toContainText("Mode: Mix · 1 selected");
   await modeControl(page).click();
 };
 
@@ -1251,7 +1259,14 @@ test("mobile keeps the question and first answer in the opening viewport", { tag
   expect(choiceBox!.y).toBeLessThan(viewport!.height);
 });
 
-test("flight mode caches the app shell for a real offline reload", { tag: "@mobile" }, async ({ page, context }) => {
+test("offline saving stays in More and the app shell supports an offline reload", { tag: "@mobile" }, async ({ page, context }) => {
+  const moreButton = page.getByRole("button", { name: "More actions" });
+  await moreButton.click();
+  await expect(page.getByLabel("More controls")).toBeVisible();
+  await expect(page.getByText("Offline", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Save offline" })).toBeVisible();
+  await moreButton.click();
+
   await page.evaluate(async () => {
     if (!("serviceWorker" in navigator)) throw new Error("Service workers are unavailable");
     await navigator.serviceWorker.ready;
@@ -1267,27 +1282,25 @@ test("flight mode caches the app shell for a real offline reload", { tag: "@mobi
   }
 });
 
-test("Mix selection is a first-class multi-select and setup stays hidden", async ({ page }) => {
+test("game types use the Topics multi-select pattern and advanced controls stay in More", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
   await expect(modeControl(page)).toContainText("Mode: Mix · 9 selected");
   await expect(topicsControl(page)).toContainText("Topics: 10 topics");
   await expect(page.getByRole("button", { name: /^Collection/ })).toBeVisible();
-  await expect(page.getByRole("button", { name: "More actions" })).toHaveCount(0);
+  const moreButton = page.getByRole("button", { name: "More actions" });
+  await expect(moreButton).toBeVisible();
   await expect(page.getByRole("button", { name: "Setup", exact: true })).toHaveCount(0);
 
   await modeControl(page).click();
   await expect(modeTray(page)).toBeVisible();
-  await expect(modeTray(page).getByText("Build your Mix", { exact: true })).toBeVisible();
-  await expect(modeTray(page).getByText("Choose one or more game types. Green checks are included.")).toBeVisible();
-  await expect(modeTray(page).getByRole("button", { name: "Playing this Mix" })).toHaveAttribute("aria-pressed", "true");
   for (const label of modeLabels) await expect(mixOption(page, label)).toHaveAttribute("aria-pressed", "true");
 
   for (const label of modeLabels.filter((label) => label !== "True/False")) {
     await mixOption(page, label).click();
+    await expect(mixOption(page, label)).toHaveAttribute("aria-pressed", "false");
   }
   await expect(modeTray(page)).toBeVisible();
   await expect(modeControl(page)).toContainText("Mode: Mix · 1 selected");
-  await expect(modeTray(page).getByText("Your Mix:", { exact: false }).locator("..")).toContainText("True/False");
   await expect(mixOption(page, "True/False")).toHaveAttribute("aria-pressed", "true");
 
   await mixOption(page, "True/False").click();
@@ -1297,7 +1310,21 @@ test("Mix selection is a first-class multi-select and setup stays hidden", async
   await topicsControl(page).click();
   await expect(modeTray(page)).toBeHidden();
   await expect(topicsTray(page)).toBeVisible();
-  await topicsControl(page).click();
+
+  await moreButton.click();
+  await expect(topicsTray(page)).toBeHidden();
+  const moreTray = page.getByLabel("More controls");
+  await expect(moreTray).toBeVisible();
+  await expect(moreTray.getByText("Offline", { exact: true })).toBeVisible();
+  await expect(moreTray.getByRole("button", { name: "Save offline" })).toBeVisible();
+  await expect(moreTray.locator("summary").filter({ hasText: "Learning recap" })).toBeVisible();
+  await expect(moreTray.getByText("Image reports", { exact: true })).toBeVisible();
+  await moreTray.getByRole("button", { name: "Reset progress" }).click();
+  await expect(moreTray.getByText("Reset all progress?", { exact: true })).toBeVisible();
+  await moreTray.getByRole("button", { name: "Cancel" }).click();
+  await expect(moreTray.getByRole("button", { name: "Reset progress" })).toBeVisible();
+  await moreButton.click();
+
   await expect(page.getByText("True or false?")).toBeVisible();
 
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
@@ -1322,11 +1349,19 @@ test("HUD trays share one slot, stay open on selection, and protect the final to
 
   await modeControl(page).click();
   await expect(topicsTray(page)).toBeHidden();
-  const peekMode = modeTray(page).getByRole("button", { name: "Peek", exact: true });
-  await peekMode.click();
+  const peekMode = mixOption(page, "Peek");
+  if ((await peekMode.getAttribute("aria-pressed")) !== "true") await peekMode.click();
   await expect(peekMode).toHaveAttribute("aria-pressed", "true");
+  for (const label of modeLabels.filter((label) => label !== "Peek")) {
+    const button = mixOption(page, label);
+    if (await button.isEnabled() && (await button.getAttribute("aria-pressed")) === "true") await button.click();
+  }
   await expect(modeTray(page)).toBeVisible();
-  await expect(modeControl(page)).toContainText("Mode: Peek");
+  await expect(modeControl(page)).toContainText("Mode: Mix · 1 selected");
+
+  await page.getByRole("button", { name: "More actions" }).click();
+  await expect(modeTray(page)).toBeHidden();
+  await expect(page.getByLabel("More controls")).toBeVisible();
 });
 
 test("HUD controls fit iPad landscape and portrait without horizontal overflow", async ({ page }) => {
@@ -1600,7 +1635,7 @@ test("play events capture anonymous question quality context", async ({ page }) 
     schemaVersion: 2,
     action: "answer",
     challengeMode: "versus",
-    mode: "versus",
+    mode: "mix",
     questionKind: expect.any(String),
     itemKey: expect.any(String),
     itemHash: expect.any(String),
@@ -2007,13 +2042,14 @@ test("pepper top trumps uses concrete plant stats", async ({ page }) => {
   await expect(page.getByText("Natural roots")).toHaveCount(0);
 });
 
-test("Mix configurator opens and fits on mobile", { tag: "@mobile" }, async ({ page, isMobile }) => {
+test("game type tray matches Topics and fits on mobile", { tag: "@mobile" }, async ({ page, isMobile }) => {
   test.skip(!isMobile, "mobile viewport coverage");
 
   await modeControl(page).click();
   const menu = modeTray(page);
   await expect(menu).toBeVisible();
-  await expect(menu.getByText("Build your Mix", { exact: true })).toBeVisible();
+  await expect(mixOption(page, "Quiz Run")).toBeVisible();
+  await expect(mixOption(page, "Quiz Run")).toHaveAttribute("aria-pressed", "true");
 
   const box = await menu.boundingBox();
   expect(box).not.toBeNull();

@@ -248,7 +248,6 @@ const modeAccent: Record<GameMode, string> = {
   geo: "#f0a56a",
 };
 const defaultSelectedTopics: RoundTopic[] = [...allKnowledgeTopics];
-const minimumStarterTopics: RoundTopic[] = ["sharks", "jets"];
 const starterMixModes: ChallengeMode[] = ["quiz"];
 const gameTypeLabel = (modeId: ChallengeMode) => modeOptions.find((item) => item.id === modeId)?.label ?? "Game";
 
@@ -1454,14 +1453,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     applyInterests(nextInterests, interest, `${activeProfile.name}'s topics updated.`);
   };
 
-  const selectAllInterests = () => {
-    applyInterests([...playableTopics], "all-topics", "All topics selected.");
-  };
-
-  const clearInterests = () => {
-    applyInterests([...minimumStarterTopics], "starter-topics", "Starter topics selected.");
-  };
-
   const applyMixModes = (nextModes: ChallengeMode[], seedBasis: string, message: string) => {
     const safeModes = nextModes.length ? nextModes : starterMixModes;
     const seed = freshSeed(seedBasis.length + safeModes.length * 31);
@@ -1489,32 +1480,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         : currentModes.filter((item) => item !== challengeMode)
       : defaultMixPattern.filter((item) => currentModes.includes(item) || item === challengeMode);
     applyMixModes(nextModes, challengeMode, `${nextModes.length} game types selected.`);
-  };
-
-  const selectAllMixModes = () => {
-    applyMixModes([...defaultMixPattern], "all-game-types", "All game types selected.");
-  };
-
-  const clearMixModes = () => {
-    applyMixModes([...starterMixModes], "starter-game-types", "Starter game type selected.");
-  };
-
-  const selectPlayMode = (nextMode: GameMode) => {
-    if (nextMode === mode) return;
-    const seed = freshSeed(nextMode.length * 43);
-    recordSetupEvent("mode", nextMode);
-    setMode(nextMode);
-    setShowCollection(false);
-    resetRunState();
-    setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), nextMode, progress.difficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards, progress.learningHistory));
-    setSortRound(buildSortForScope(currentTopicScope, progress.difficulty, seed + 29, progress.learningHistory));
-    setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed + 37, progress.unlockedCards, progress.learningHistory));
-    setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed + 43, progress.unlockedCards, progress.learningHistory));
-    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed + 47, progress.unlockedCards, progress.learningHistory));
-    setNumberRound(buildNumberForScope(currentTopicScope, progress.difficulty, seed + 53, progress.learningHistory));
-    setOddRound(buildOddForScope(currentTopicScope, progress.difficulty, seed + 59, progress.learningHistory));
-    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed + 67, progress.unlockedCards, progress.learningHistory));
-    setCelebration(`${modeOptions.find((item) => item.id === nextMode)?.label ?? "Game"} mode.`);
   };
 
   const answer = (choice: string) => {
@@ -2141,23 +2106,17 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           onCollection={openCollection}
           difficulty={progress.difficulty}
           onDifficultyChange={setQuestionDifficulty}
-          mode={mode}
-          onModeChange={selectPlayMode}
           availableModes={["mix", ...availableMixPattern]}
           activeInterests={activeInterests}
           topics={playableTopics.map((id) => ({ id, label: topicMeta(id).label, eyebrow: topicMeta(id).eyebrow }))}
           onToggleInterest={toggleInterest}
-          onSelectAllInterests={selectAllInterests}
-          onClearInterests={clearInterests}
           activeMixModes={selectedMixModes}
           onToggleMixMode={toggleMixMode}
-          onSelectAllMixModes={selectAllMixModes}
-          onClearMixModes={clearMixModes}
           issueFlash={issueFlash}
           issueCount={issueCount}
           selectedOfflineImages={selectedOfflineImages}
           warmOfflineImages={warmOfflineImages}
-          onReset={() => resetProgress()}
+          onConfirmedReset={() => resetProgress(true)}
         />
 
         {miniChallengeActive ? (
@@ -2354,23 +2313,17 @@ function GameHud({
   onCollection,
   difficulty,
   onDifficultyChange,
-  mode,
-  onModeChange,
   availableModes,
   activeInterests,
   topics,
   onToggleInterest,
-  onSelectAllInterests,
-  onClearInterests,
   activeMixModes,
   onToggleMixMode,
-  onSelectAllMixModes,
-  onClearMixModes,
   issueFlash,
   issueCount,
   selectedOfflineImages,
   warmOfflineImages,
-  onReset,
+  onConfirmedReset,
 }: {
   profiles: LearnerProfile[];
   activeProfileId: string;
@@ -2388,34 +2341,28 @@ function GameHud({
   onCollection: () => void;
   difficulty: Difficulty;
   onDifficultyChange: (difficulty: Difficulty) => void;
-  mode: GameMode;
-  onModeChange: (mode: GameMode) => void;
   availableModes: GameMode[];
   activeInterests: RoundTopic[];
   topics: { id: RoundTopic; label: string; eyebrow: string }[];
   onToggleInterest: (topic: RoundTopic) => void;
-  onSelectAllInterests: () => void;
-  onClearInterests: () => void;
   activeMixModes: ChallengeMode[];
   onToggleMixMode: (mode: ChallengeMode) => void;
-  onSelectAllMixModes: () => void;
-  onClearMixModes: () => void;
   issueFlash: boolean;
   issueCount: number;
   selectedOfflineImages: string[];
   warmOfflineImages: string[];
-  onReset: () => void;
+  onConfirmedReset: () => void;
 }) {
-  const setupSummary = `${activeMixModes.length} games · ${activeInterests.length} topics`;
-  const [openTray, setOpenTray] = useState<"mode" | "topics" | null>(null);
-  const currentMode = modeOptions.find((item) => item.id === mode) ?? modeOptions[0];
+  const [openTray, setOpenTray] = useState<"mode" | "topics" | "more" | null>(null);
+  const [confirmReset, setConfirmReset] = useState(false);
   const selectedTopicLabels = topics.filter((item) => activeInterests.includes(item.id)).map((item) => item.label);
   const topicSummary = selectedTopicLabels.length <= 2 ? selectedTopicLabels.join(", ") : `${selectedTopicLabels.length} topics`;
-  const mixSummary = selectableModeOptions.filter((item) => activeMixModes.includes(item.id)).map((item) => item.label).join(", ");
-  const toggleTray = (tray: "mode" | "topics") => {
+  const toggleTray = (tray: "mode" | "topics" | "more") => {
+    setConfirmReset(false);
     setOpenTray((current) => current === tray ? null : tray);
   };
   const openCollection = () => {
+    setConfirmReset(false);
     setOpenTray(null);
     onCollection();
   };
@@ -2453,8 +2400,8 @@ function GameHud({
             onClick={() => toggleTray("mode")}
             className={`flex min-h-11 min-w-0 flex-[1_1_150px] items-center justify-center gap-2 rounded-lg border-2 border-[#092421] px-3 py-2 text-sm font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 max-sm:flex-[1_1_100%] ${openTray === "mode" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
           >
-            <span className="h-3 w-3 shrink-0 rounded-full border-2 border-[#092421]" style={{ backgroundColor: modeAccent[mode] }} />
-            <span className="truncate">Mode: {currentMode.label}{mode === "mix" ? ` · ${activeMixModes.length} selected` : ""}</span>
+            <span className="h-3 w-3 shrink-0 rounded-full border-2 border-[#092421]" style={{ backgroundColor: modeAccent.mix }} />
+            <span className="truncate">Mode: Mix · {activeMixModes.length} selected</span>
             <span aria-hidden="true">{openTray === "mode" ? "▴" : "▾"}</span>
           </button>
           <button
@@ -2476,79 +2423,38 @@ function GameHud({
             {showCollection ? "Back to game" : "Collection"}
             <span className="ml-1 text-[10px] text-[#72543e]">{collectionValue}</span>
           </button>
+          <button
+            type="button"
+            aria-label="More actions"
+            aria-expanded={openTray === "more"}
+            aria-controls="hud-more-tray"
+            onClick={() => toggleTray("more")}
+            className={`min-h-11 min-w-11 rounded-lg border-2 border-[#092421] px-3 py-2 text-xl font-black leading-none text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "more" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
+          >
+            ⋯
+          </button>
         </div>
       </div>
 
       {openTray === "mode" && (
-        <div id="hud-mode-tray" aria-label="Choose game mode" className="mt-2 rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-3 shadow-[3px_3px_0_#092421]">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <p className="text-base font-black leading-tight text-[#102f36]">Build your Mix</p>
-              <p className="mt-0.5 text-xs font-bold text-[#72543e]">Choose one or more game types. Green checks are included.</p>
-            </div>
-            <div className="flex flex-wrap items-center gap-1.5">
-              <span className="rounded-md border-2 border-[#092421] bg-[#dcefe8] px-2 py-1 text-xs font-black text-[#102f36]">{activeMixModes.length} selected</span>
-              <button type="button" onClick={onSelectAllMixModes} className="rounded-md border-2 border-[#092421] bg-white px-2 py-1 text-xs font-black text-[#102f36] hover:bg-[#fff1bf]">Select all</button>
-              <button type="button" onClick={onClearMixModes} className="rounded-md border-2 border-[#092421] bg-white px-2 py-1 text-xs font-black text-[#102f36] hover:bg-[#fff1bf]">Just Quiz</button>
+        <div id="hud-mode-tray" aria-label="Choose game types" className="mt-2 flex gap-2 overflow-x-auto rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-2 shadow-[3px_3px_0_#092421]">
+          {selectableModeOptions.map((item) => {
+            const selected = activeMixModes.includes(item.id);
+            const available = availableModes.includes(item.id);
+            return (
               <button
+                key={item.id}
                 type="button"
-                aria-pressed={mode === "mix"}
-                onClick={() => onModeChange("mix")}
-                className={`rounded-md border-2 border-[#092421] px-3 py-1 text-xs font-black text-[#102f36] shadow-[2px_2px_0_#092421] ${mode === "mix" ? "bg-[#f0c84b]" : "bg-white hover:bg-[#fff1bf]"}`}
+                aria-pressed={selected}
+                disabled={!available}
+                onClick={() => onToggleMixMode(item.id)}
+                className={`flex min-h-10 shrink-0 items-center gap-2 rounded-lg border-2 border-[#092421] px-3 py-2 text-sm font-black text-[#102f36] transition active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 ${selected ? "bg-[#70d392] shadow-[2px_2px_0_#092421]" : "bg-white hover:bg-[#fff1bf]"}`}
               >
-                {mode === "mix" ? "Playing this Mix" : "Play this Mix"}
+                <span aria-hidden="true" className="w-3 text-center">{selected ? "✓" : ""}</span>
+                {item.label}
               </button>
-            </div>
-          </div>
-
-          <div role="group" aria-label="Game types included in Mix" className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {selectableModeOptions.map((item) => {
-              const selected = activeMixModes.includes(item.id);
-              const available = availableModes.includes(item.id);
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  aria-label={`${item.label}, ${selected ? "included" : "not included"} in Mix`}
-                  aria-pressed={selected}
-                  disabled={!available}
-                  onClick={() => onToggleMixMode(item.id)}
-                  className={`flex min-h-11 items-center gap-2 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 ${selected ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : "border-[#d9c7a7] bg-white hover:border-[#092421] hover:bg-[#fff1bf]"}`}
-                >
-                  <span aria-hidden="true" className={`grid h-5 w-5 shrink-0 place-items-center rounded border-2 border-[#092421] text-xs font-black ${selected ? "bg-white" : "bg-[#fffdf6]"}`}>{selected ? "✓" : ""}</span>
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
-                    <span className="block text-[9px] font-black uppercase tracking-[0.1em] text-[#72543e]">{selected ? "Included in Mix" : available ? "Not included" : "Unavailable for these topics"}</span>
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          <p className="mt-2 text-xs font-bold leading-snug text-[#5f6b5d]"><span className="font-black text-[#102f36]">Your Mix:</span> {mixSummary}</p>
-
-          <div className="mt-3 border-t-2 border-[#d9c7a7] pt-3">
-            <p className="mb-2 text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Or play one game type only</p>
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              {selectableModeOptions.map((item) => {
-                const selected = item.id === mode;
-                const available = availableModes.includes(item.id);
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    aria-pressed={selected}
-                    disabled={!available}
-                    onClick={() => onModeChange(item.id)}
-                    className={`flex min-h-10 shrink-0 items-center gap-2 rounded-lg border-2 border-[#092421] px-3 py-2 text-sm font-black text-[#102f36] transition active:translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-45 ${selected ? "bg-[#fff1bf] shadow-[2px_2px_0_#092421]" : "bg-white hover:bg-[#fff1bf]"}`}
-                  >
-                    <span className="h-3 w-3 rounded-full border-2 border-[#092421]" style={{ backgroundColor: modeAccent[item.id] }} />
-                    {item.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+            );
+          })}
         </div>
       )}
 
@@ -2572,26 +2478,32 @@ function GameHud({
         </div>
       )}
 
-      <SetupMenu
-          open={false}
-          activeInterests={activeInterests}
-          topics={topics}
-          onToggleInterest={onToggleInterest}
-          onSelectAllInterests={onSelectAllInterests}
-          onClearInterests={onClearInterests}
-          activeMixModes={activeMixModes}
-          onToggleMixMode={onToggleMixMode}
-          onSelectAllMixModes={onSelectAllMixModes}
-          onClearMixModes={onClearMixModes}
-          setupSummary={setupSummary}
-          issueFlash={issueFlash}
-          issueCount={issueCount}
-          learningRecap={learningRecap}
-          selectedOfflineImages={selectedOfflineImages}
-          warmOfflineImages={warmOfflineImages}
-          onReset={onReset}
-          onClose={() => undefined}
-        />
+      <div id="hud-more-tray" aria-label="More controls" className={`${openTray === "more" ? "mt-2 grid" : "hidden"} gap-2 rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-2 shadow-[3px_3px_0_#092421] lg:grid-cols-[minmax(0,1.15fr)_minmax(300px,.85fr)]`}>
+        <OfflineReady selectedImageUrls={selectedOfflineImages} warmImageUrls={warmOfflineImages} />
+        <div className="grid content-start gap-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
+          <details>
+            <summary className="cursor-pointer list-none rounded-lg border-2 border-[#092421] bg-white px-3 py-2 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition hover:bg-[#fff1bf] [&::-webkit-details-marker]:hidden">
+              Learning recap
+            </summary>
+            <div className="mt-2"><LearningRecapPanel recap={learningRecap} /></div>
+          </details>
+          <div className="flex min-h-11 items-center justify-between gap-3 rounded-lg border-2 border-[#d9c7a7] bg-white px-3 py-2">
+            <p className="text-sm font-black text-[#102f36]">Image reports</p>
+            <p className="text-xs font-black text-[#72543e]">{issueFlash ? "Latest saved" : `${issueCount} logged`}</p>
+          </div>
+          {confirmReset ? (
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border-2 border-[#092421] bg-[#ffd7ce] p-2">
+              <p className="mr-auto text-sm font-black text-[#102f36]">Reset all progress?</p>
+              <button type="button" onClick={() => setConfirmReset(false)} className="min-h-10 rounded-lg border-2 border-[#092421] bg-white px-3 py-2 text-sm font-black text-[#102f36]">Cancel</button>
+              <button type="button" onClick={() => { onConfirmedReset(); setConfirmReset(false); setOpenTray(null); }} className="min-h-10 rounded-lg border-2 border-[#092421] bg-[#f59a7d] px-3 py-2 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421]">Yes, reset</button>
+            </div>
+          ) : (
+            <button type="button" onClick={() => setConfirmReset(true)} className="min-h-11 rounded-lg border-2 border-[#092421] bg-white px-3 py-2 text-left text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition hover:bg-[#ffd7ce] active:translate-y-0.5">
+              Reset progress
+            </button>
+          )}
+        </div>
+      </div>
     </header>
   );
 }
@@ -2644,130 +2556,6 @@ function HudProgress({
   );
 }
 
-function SetupMenu({
-  open,
-  activeInterests,
-  topics,
-  onToggleInterest,
-  onSelectAllInterests,
-  onClearInterests,
-  activeMixModes,
-  onToggleMixMode,
-  onSelectAllMixModes,
-  onClearMixModes,
-  setupSummary,
-  issueFlash,
-  issueCount,
-  learningRecap,
-  selectedOfflineImages,
-  warmOfflineImages,
-  onReset,
-  onClose,
-}: {
-  open: boolean;
-  activeInterests: RoundTopic[];
-  topics: { id: RoundTopic; label: string; eyebrow: string }[];
-  onToggleInterest: (topic: RoundTopic) => void;
-  onSelectAllInterests: () => void;
-  onClearInterests: () => void;
-  activeMixModes: ChallengeMode[];
-  onToggleMixMode: (mode: ChallengeMode) => void;
-  onSelectAllMixModes: () => void;
-  onClearMixModes: () => void;
-  setupSummary: string;
-  issueFlash: boolean;
-  issueCount: number;
-  learningRecap: LearningRecap;
-  selectedOfflineImages: string[];
-  warmOfflineImages: string[];
-  onReset: () => void;
-  onClose: () => void;
-}) {
-  const activeModeSet = new Set(activeMixModes);
-
-  return (
-    <section aria-label="Setup panel" className={`${open ? "block" : "hidden"} absolute right-0 top-full z-40 mt-2 max-h-[calc(100dvh-112px)] w-[min(720px,calc(100vw-12px))] overflow-auto rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-3 shadow-[4px_4px_0_#092421]`}>
-      <div className="mb-3 flex items-center justify-between gap-3 border-b-2 border-[#d9c7a7] pb-2">
-        <div>
-          <p className="text-lg font-black leading-tight text-[#102f36]">Setup</p>
-          <p className="text-[10px] font-black uppercase tracking-[0.1em] text-[#72543e]">{setupSummary}</p>
-        </div>
-        <button type="button" aria-label="Close setup" onClick={onClose} className="min-h-10 rounded-lg border-2 border-[#092421] bg-white px-3 py-2 text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition hover:bg-[#fff1bf]">Close</button>
-      </div>
-        <LearningRecapPanel recap={learningRecap} />
-        <div className="mt-3 grid gap-3 md:grid-cols-[1fr_1.05fr]">
-          <div>
-            <SectionHeader title="Game Types" onAll={onSelectAllMixModes} onClear={onClearMixModes} />
-            <div className="mt-2 grid gap-1.5 sm:grid-cols-2">
-              {selectableModeOptions.map((item) => {
-                const selected = activeModeSet.has(item.id);
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    aria-pressed={selected}
-                    onClick={() => onToggleMixMode(item.id)}
-                    className={`min-h-10 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
-                      selected ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : "border-[#d9c7a7] bg-white hover:border-[#092421] hover:bg-[#fff1bf]"
-                    }`}
-                  >
-                    <span className="block truncate text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
-                    <span className="block truncate text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{selected ? "selected" : "tap to add"}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div>
-            <SectionHeader title="Topics" onAll={onSelectAllInterests} onClear={onClearInterests} />
-            <div className="mt-2 grid gap-1.5">
-              {topics.map((item) => {
-                const enabled = activeInterests.includes(item.id);
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    aria-pressed={enabled}
-                    onClick={() => onToggleInterest(item.id)}
-                    className={`min-h-10 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
-                      enabled ? "border-[#092421] bg-[#70d392] shadow-[2px_2px_0_#092421]" : "border-[#d9c7a7] bg-white hover:border-[#092421] hover:bg-[#fff1bf]"
-                    }`}
-                  >
-                    <span className="block text-sm font-black leading-tight text-[#102f36]">{item.label}</span>
-                    <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{enabled ? "selected" : item.eyebrow}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-3 grid gap-2">
-          <OfflineReady selectedImageUrls={selectedOfflineImages} warmImageUrls={warmOfflineImages} />
-          <div className="min-h-11 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] px-3 py-2">
-            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#72543e]">Image reports</p>
-            <p className="text-sm font-black leading-tight text-[#102f36]">{issueFlash ? "Latest saved" : `${issueCount} logged`}</p>
-          </div>
-          <details>
-            <summary className="cursor-pointer list-none rounded-lg border-2 border-[#d9c7a7] bg-white px-3 py-2 text-sm font-black text-[#102f36] transition hover:border-[#092421] hover:bg-[#fff1bf] [&::-webkit-details-marker]:hidden">
-              Advanced
-            </summary>
-            <div className="mt-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
-              <button
-                type="button"
-                onClick={onReset}
-                className="min-h-10 rounded-lg border-2 border-[#092421] bg-white px-3 py-2 text-sm font-black text-[#102f36] transition hover:bg-[#ffd7ce] active:translate-y-0.5"
-              >
-                Reset progress
-              </button>
-            </div>
-          </details>
-        </div>
-    </section>
-  );
-}
-
 function LearningRecapPanel({ recap }: { recap: LearningRecap }) {
   const hasPractice = recap.practicedConcepts > 0;
 
@@ -2809,30 +2597,6 @@ function LearningRecapPanel({ recap }: { recap: LearningRecap }) {
         </div>
       )}
     </section>
-  );
-}
-
-function SectionHeader({ title, onAll, onClear }: { title: string; onAll: () => void; onClear: () => void }) {
-  return (
-    <div className="flex items-center justify-between gap-2">
-      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#72543e]">{title}</p>
-      <div className="flex gap-1">
-        <button
-          type="button"
-          onClick={onAll}
-          className="rounded-md border-2 border-[#d9c7a7] bg-white px-2 py-1 text-[9px] font-black uppercase tracking-[0.08em] text-[#102f36] transition hover:border-[#092421] hover:bg-[#fff1bf]"
-        >
-          All
-        </button>
-        <button
-          type="button"
-          onClick={onClear}
-          className="rounded-md border-2 border-[#d9c7a7] bg-white px-2 py-1 text-[9px] font-black uppercase tracking-[0.08em] text-[#102f36] transition hover:border-[#092421] hover:bg-[#fff1bf]"
-        >
-          Clear
-        </button>
-      </div>
-    </div>
   );
 }
 

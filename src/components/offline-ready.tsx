@@ -106,12 +106,12 @@ export function OfflineReady({ selectedImageUrls, warmImageUrls }: { selectedIma
     });
   }, [warmUrls]);
 
-  const saveForFlight = async () => {
+  const saveOffline = async () => {
     if (!online || saving || !("serviceWorker" in navigator)) return;
     setSaving(true);
     setReady(false);
     setProgress({ completed: 0, total: selectedUrls.length });
-    requestIdRef.current = `flight-${Date.now()}`;
+    requestIdRef.current = `offline-${Date.now()}`;
 
     try {
       if ("storage" in navigator && "persist" in navigator.storage) await navigator.storage.persist();
@@ -127,30 +127,30 @@ export function OfflineReady({ selectedImageUrls, warmImageUrls }: { selectedIma
     : !online
       ? shellReady
         ? "Offline mode is active"
-        : "Connect once to prepare flight mode"
+        : "Connect once to prepare offline mode"
       : saving
         ? `Saving ${progress.completed} of ${progress.total} cards`
         : ready
-          ? `Ready for takeoff · ${selectedUrls.length} cards`
+          ? `Saved offline · ${selectedUrls.length} cards`
           : `Save ${selectedUrls.length} selected cards`;
 
   return (
     <div className="rounded-lg border-2 border-[#092421] bg-[#e5f6e9] p-2.5" data-offline-ready={ready ? "true" : "false"}>
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#45705b]">Flight mode</p>
+          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#45705b]">Offline</p>
           <p className="truncate text-sm font-black leading-tight text-[#102f36]">{headline}</p>
           <p className="mt-0.5 text-[10px] font-bold leading-snug text-[#5f6b5d]">
-            The app and next cards cache automatically. Save the selected topics before leaving Wi-Fi for a full trip library.
+            The app and next cards cache automatically. Save all selected-topic cards before leaving Wi-Fi.
           </p>
         </div>
         <button
           type="button"
-          onClick={saveForFlight}
+          onClick={saveOffline}
           disabled={!supported || !online || saving || ready}
           className="min-h-10 shrink-0 rounded-lg border-2 border-[#092421] bg-[#f3c647] px-3 py-2 text-xs font-black text-[#102f36] shadow-[2px_2px_0_#092421] transition enabled:hover:bg-[#ffd96a] enabled:active:translate-y-0.5 disabled:cursor-default disabled:opacity-60"
         >
-          {saving ? `${Math.round((progress.completed / Math.max(1, progress.total)) * 100)}%` : ready ? "Saved" : "Save for flight"}
+          {saving ? `${Math.round((progress.completed / Math.max(1, progress.total)) * 100)}%` : ready ? "Saved" : "Save offline"}
         </button>
       </div>
       {saving && (
