@@ -2450,7 +2450,7 @@ function GameHud({
       </div>
 
       {openTray === "mode" && (
-        <div id="hud-mode-tray" aria-label="Choose game types" className="mt-2 flex gap-2 overflow-x-auto pb-1 pr-1">
+        <div id="hud-mode-tray" aria-label="Choose game types" className="mt-2 flex flex-wrap gap-2 pb-1 pr-1">
           {selectableModeOptions.map((item) => {
             const selected = activeMixModes.includes(item.id);
             const available = availableModes.includes(item.id);
@@ -2469,7 +2469,7 @@ function GameHud({
       )}
 
       {openTray === "topics" && (
-        <div id="hud-topics-tray" aria-label="Choose topics" className="mt-2 flex gap-2 overflow-x-auto pb-1 pr-1">
+        <div id="hud-topics-tray" aria-label="Choose topics" className="mt-2 flex flex-wrap gap-2 pb-1 pr-1">
           {topics.map((item) => {
             const selected = activeInterests.includes(item.id);
             return (

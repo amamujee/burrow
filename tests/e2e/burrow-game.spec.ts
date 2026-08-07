@@ -1372,6 +1372,22 @@ test("HUD trays share one slot, stay open on selection, and protect the final to
   await expect(page.getByLabel("More controls")).toBeVisible();
 });
 
+test("HUD selector trays wrap onto new lines without horizontal scrolling", async ({ page }) => {
+  await page.setViewportSize({ width: 834, height: 1194 });
+
+  await topicsControl(page).click();
+  const topicButtons = topicsTray(page).getByRole("button");
+  await expect(topicButtons.first()).toBeVisible();
+  expect(await topicsTray(page).evaluate((tray) => tray.scrollWidth <= tray.clientWidth + 1)).toBe(true);
+  expect(await topicButtons.evaluateAll((buttons) => new Set(buttons.map((button) => Math.round(button.getBoundingClientRect().y))).size)).toBeGreaterThan(1);
+
+  await modeControl(page).click();
+  const modeButtons = modeTray(page).getByRole("button");
+  await expect(modeButtons.first()).toBeVisible();
+  expect(await modeTray(page).evaluate((tray) => tray.scrollWidth <= tray.clientWidth + 1)).toBe(true);
+  expect(await modeButtons.evaluateAll((buttons) => new Set(buttons.map((button) => Math.round(button.getBoundingClientRect().y))).size)).toBeGreaterThan(1);
+});
+
 test("HUD uses one compact row where space allows and wraps actions together without overflow", async ({ page }) => {
   for (const viewport of [
     { width: 2048, height: 900 },
