@@ -21,6 +21,10 @@
       "type": "string",
       "minLength": 20
     },
+    "dataNote": {
+      "type": "string",
+      "minLength": 20
+    },
     "status": {
       "type": "string",
       "enum": ["draft", "needs-review", "playable"]

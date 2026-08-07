@@ -308,6 +308,7 @@ test("every collection card has a structured fact profile", () => {
   ];
   for (const card of cards) {
     expect(card.details?.length, `${card.topic}/${card.id} needs structured details`).toBeGreaterThanOrEqual(2);
+    expect(card.details?.some((detail) => detail.label === "Data note"), `${card.topic}/${card.id} needs a data note`).toBe(true);
     expect(new Set(card.details?.map((detail) => detail.label)).size, `${card.topic}/${card.id} detail labels must be distinct`).toBe(card.details?.length);
     for (const detail of card.details ?? []) {
       expect(detail.label.trim(), `${card.topic}/${card.id} has an empty detail label`).toBeTruthy();
@@ -969,7 +970,7 @@ test("Countries & Flags ships an exact 200-card passport catalog", () => {
 
   const countryCards = collectionCards().filter((card) => card.topic === "countries");
   expect(countryCards).toHaveLength(200);
-  expect(countryCards.every((card) => card.details?.map((detail) => detail.label).join("|") === "Capital|Population|Land area|Land neighbors|Highest point|Continent|Region|Country code")).toBe(true);
+  expect(countryCards.every((card) => card.details?.map((detail) => detail.label).join("|") === "Capital|Population|Land area|Land neighbors|Highest point|Continent|Region|Country code|Data note")).toBe(true);
 
   expect(countries.find((country) => country.code === "CM")).toMatchObject({ landNeighborCount: 6, highestPointM: 4045 });
   expect(countries.find((country) => country.code === "CN")).toMatchObject({ landNeighborCount: 14, highestPointName: "Mount Everest", highestPointM: 8849 });

@@ -284,6 +284,7 @@ const pepperScovilleDisplay = (pepper: Pepper) => {
   if (!hasScovilleMeasurement(pepper)) return "SHU not published";
   return `${pepper.scovilleStatus === "unofficial" ? "~" : ""}${formatNumber(pepper.shuMax)} SHU${pepper.scovilleStatus === "unofficial" ? " (unofficial)" : ""}`;
 };
+const pepperDataNote = "Scoville values are rounded published ranges or clearly marked estimates; natural pods can vary in heat.";
 const pepperHeatExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
   ? `${pepper.name} can reach ${pepperScovilleDisplay(pepper)}, so it is ${pepper.heat} (${heatBandRangeLabel(pepper.heat)}). Its full range is ${pepperRange(pepper)} SHU.`
   : pepper.scovilleStatus === "not-applicable"
@@ -319,7 +320,7 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
       { label: "Origin", value: pepper.metadata.location.label },
       { label: "Continent", value: pepper.metadata.location.continents.join(" / ") },
     ] : []),
-    ...(pepper.metadata?.accuracyNote ? [{ label: "Data note", value: pepper.metadata.accuracyNote }] : []),
+    { label: "Data note", value: pepper.metadata?.accuracyNote ?? pepperDataNote },
   ],
 });
 
@@ -351,6 +352,7 @@ const buildingCard = (building: Building): KnowledgeCard => ({
     { label: "City", value: building.city },
     { label: "Country", value: building.country },
     { label: "Continent", value: building.metadata.location?.continents.join(" / ") ?? "Not listed" },
+    { label: "Data note", value: building.metadata.accuracyNote ?? "Published reference figures can vary by height definition and source." },
   ],
 });
 
@@ -377,6 +379,7 @@ const sharkCard = (shark: Shark, metric: "length" | "speed" | "power" = "length"
     { label: "Family", value: shark.family },
     { label: "Diet", value: shark.diet },
     ...(shark.metadata?.location ? [{ label: "Range", value: shark.metadata.location.label }] : []),
+    { label: "Data note", value: "Length is an approximate reported maximum and speed varies by study. Power is a Burrow 1-5 gameplay rating." },
   ],
 });
 
@@ -427,7 +430,7 @@ const spaceCard = (space: SpaceCard, metric: "distance" | "temperature" | "size"
     ...(space.meanSurfaceTempF !== undefined ? [{ label: "Temperature", value: `${formatNumber(space.meanSurfaceTempF)}°F` }] : []),
     ...(space.surfaceTempK !== undefined ? [{ label: "Temperature", value: `${formatNumber(space.surfaceTempK)} K` }] : []),
     ...(space.moons !== undefined ? [{ label: "Moons", value: formatNumber(space.moons) }] : []),
-    ...(space.statNote ? [{ label: "Data note", value: space.statNote }] : []),
+    { label: "Data note", value: space.statNote ?? "Values are rounded representative measurements; temperatures, distances, and object sizes can be estimates." },
   ],
 });
 
@@ -492,6 +495,7 @@ const jetCard = (jet: Jet, metric: "speed" | "range" | "firepower" = "speed"): K
     { label: "Country", value: jet.country },
     { label: "Aircraft type", value: jetCategoryLabels[jet.category].replace(/^./, (letter) => letter.toUpperCase()) },
     { label: "Continent", value: jetWorldLocation(jet).continents.join(" / ") },
+    { label: "Data note", value: "Performance varies by variant, load, altitude, and mission. Firepower is a Burrow 1-5 gameplay rating." },
   ],
 });
 
@@ -539,6 +543,7 @@ const countryCard = (country: Country, metric: CountryMetric = "population"): Kn
       { label: "Continent", value: country.continents.join(" / ") },
       { label: "Region", value: country.subregion },
       { label: "Country code", value: `${country.code} · ${country.code3}` },
+      { label: "Data note", value: country.metadata.accuracyNote ?? country.populationNote },
     ],
   };
 };

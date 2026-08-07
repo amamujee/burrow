@@ -546,6 +546,9 @@ const pepperSeeds: PepperSeed[] = [
     color: "red",
     ...generatedContentImage("peppers", "pepper-y"),
     fact: "Pepper Y is another name for Ed Currie's Apollo pepper. Its heat has not been officially published, though it is commonly listed around 3,000,000 SHU.",
+    metadata: {
+      accuracyNote: "3,000,000 SHU is an unofficial gameplay estimate; no published laboratory result is available.",
+    },
   },
   {
     id: "the-noah",
@@ -556,6 +559,9 @@ const pepperSeeds: PepperSeed[] = [
     color: "mustard brown",
     ...generatedContentImage("peppers", "the-noah"),
     fact: "The Noah is an unreleased super-hot named by Ed Currie for a friend. It is placed above 2,000,000 SHU as an unofficial estimate; no lab score has been published.",
+    metadata: {
+      accuracyNote: "2,000,000+ SHU is an unofficial lower-bound estimate; no published laboratory result is available.",
+    },
   },
   {
     id: "armageddon",
@@ -2566,9 +2572,19 @@ const buildingSeeds: Omit<Building, "metadata">[] = [
   },
 ];
 
+const buildingAccuracyNote = (building: Omit<Building, "metadata">) => {
+  if (building.id === "rise-tower") return "This is a reported proposal; official final specifications and approval have not been published.";
+  if (building.id === "dubai-creek-tower") return "This is the original design figure; the redesigned tower's final height has not been announced.";
+  if (building.heightLabel === "Estimated height") return "This is an educational height estimate, not a surveyed architectural measurement.";
+  if (building.status === "proposed") return "Proposal figures can change, and the building may not be constructed as shown.";
+  if (building.status === "under construction") return "Published construction figures can change before completion.";
+  return "Published reference height; architectural-height, roof, and antenna definitions can differ by source.";
+};
+
 export const buildings: Building[] = buildingSeeds.map((building) => ({
   ...building,
   metadata: {
+    accuracyNote: buildingAccuracyNote(building),
     location: {
       label: `${building.city}, ${building.country}`,
       countries: [building.country],

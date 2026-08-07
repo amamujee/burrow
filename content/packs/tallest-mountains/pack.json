@@ -3,6 +3,7 @@
   "id": "tallest-mountains",
   "title": "Tallest Mountains",
   "summary": "The world's highest Himalaya and Karakoram peaks plus famous global mountains become elevation, prominence, history, and fame challenges.",
+  "dataNote": "Elevations and prominence are rounded reference values. First ascent means the recorded ascent, and Fame is a Burrow gameplay rating.",
   "status": "playable",
   "audience": {
     "minAge": 6,

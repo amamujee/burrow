@@ -3,6 +3,7 @@
   "id": "bridges-and-tunnels",
   "title": "Bridges & Tunnels",
   "summary": "Famous bridge icons, major New York area crossings, record-setting viaducts, and long tunnels become length, history, and engineering challenges.",
+  "dataNote": "Lengths and opening years are rounded reference values. Fame and Engineering are Burrow gameplay ratings, not official measurements.",
   "status": "playable",
   "audience": {
     "minAge": 6,

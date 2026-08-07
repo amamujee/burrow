@@ -103,6 +103,7 @@ const localImageHash = (item) => {
 };
 
 const normalizeLabel = (value) => value.toLowerCase().replace(/[^a-z0-9]+/g, "");
+const isFiniteBetween = (value, minimum, maximum) => Number.isFinite(value) && value >= minimum && value <= maximum;
 
 const cardsInRound = (round) => [
   ...(round.card ? [round.card] : []),
@@ -192,25 +193,48 @@ const checkFeaturedMetadata = (item) => {
     if (!hasRange && !isUnpublished && !isNotApplicable && !hasUnofficialLowerBound) critical.push(`${item.topic}/${item.id}: bad Scoville range`);
     const expectedHeat = data.heatBandForScoville(item.shuMax ?? item.shuMin ?? 500001);
     if (!isUnpublished && !isNotApplicable && item.heat !== expectedHeat) critical.push(`${item.topic}/${item.id}: heat band ${item.heat} does not match its Scoville range (${expectedHeat})`);
-    if ((isUnpublished || isNotApplicable) && !item.metadata?.accuracyNote) critical.push(`${item.topic}/${item.id}: non-numeric Scoville status needs metadata.accuracyNote`);
+    if ((isUnpublished || isNotApplicable || item.scovilleStatus === "unofficial") && !item.metadata?.accuracyNote) critical.push(`${item.topic}/${item.id}: uncertain Scoville status needs metadata.accuracyNote`);
     const verified = sourceVerifiedScovilleRanges.get(item.id);
     if (verified && (item.shuMin !== verified.min || item.shuMax !== verified.max)) {
       critical.push(`${item.topic}/${item.id}: expected source-verified ${verified.min}-${verified.max} SHU (${verified.source})`);
     }
   }
-  if (item.topic === "buildings" && !(item.heightFt > 0 && item.city && item.country)) critical.push(`${item.topic}/${item.id}: bad building metadata`);
-  if (item.topic === "sharks" && !(item.lengthFt > 0 && item.speedMph > 0 && item.power > 0 && item.family)) critical.push(`${item.topic}/${item.id}: bad shark metadata`);
+  if (item.topic === "buildings") {
+    if (!isFiniteBetween(item.heightFt, 15, 7000) || !item.city || !item.country) critical.push(`${item.topic}/${item.id}: bad building metadata`);
+    if (item.floors !== undefined && !isFiniteBetween(item.floors, 1, 1000)) critical.push(`${item.topic}/${item.id}: implausible floor count`);
+    if (!item.metadata?.accuracyNote) critical.push(`${item.topic}/${item.id}: missing height/status data note`);
+  }
+  if (item.topic === "sharks" && !(isFiniteBetween(item.lengthFt, 0.4, 80) && isFiniteBetween(item.speedMph, 0.5, 50) && Number.isInteger(item.power) && isFiniteBetween(item.power, 1, 5) && item.family)) critical.push(`${item.topic}/${item.id}: bad shark metadata`);
   if (item.topic === "sharks" && item.family) {
     const family = normalizeLabel(item.family);
     const name = normalizeLabel(item.name);
     if (family === name || normalizeLabel(`${item.family} shark`) === name) critical.push(`${item.topic}/${item.id}: circular shark family label "${item.family}"`);
   }
   if (item.metadata) checkCardMetadata(item, `${item.topic}/${item.id}`);
-  if (item.topic === "jets" && !(item.maxSpeedMph > 0 && item.rangeMiles > 0 && item.firepower > 0 && item.country && item.category)) critical.push(`${item.topic}/${item.id}: bad jet metadata`);
+  if (item.topic === "jets" && !(isFiniteBetween(item.maxSpeedMph, 100, 5000) && isFiniteBetween(item.rangeMiles, 50, 20000) && Number.isInteger(item.firepower) && isFiniteBetween(item.firepower, 1, 5) && item.country && item.category)) critical.push(`${item.topic}/${item.id}: bad jet metadata`);
   if (item.topic === "space") {
     if (item.kind === "planet" && !(item.diameterMiles && item.distanceFromSunMillionMiles !== undefined && item.meanSurfaceTempF !== undefined)) critical.push(`${item.topic}/${item.id}: bad planet metadata`);
     if (item.kind === "star" && !(item.surfaceTempK && item.radiusSolar && item.distanceLightYears)) warnings.push(`${item.topic}/${item.id}: star has thin numeric metadata`);
     if (item.kind === "concept" && !(item.conceptQuestion && item.conceptAnswer)) critical.push(`${item.topic}/${item.id}: concept needs question and answer`);
+  }
+};
+
+const checkCountries = () => {
+  const ids = new Set();
+  const codes = new Set();
+  for (const country of data.countries) {
+    const label = `countries/${country.id}`;
+    if (ids.has(country.id)) critical.push(`${label}: duplicate id`);
+    if (codes.has(country.code3)) critical.push(`${label}: duplicate country code`);
+    ids.add(country.id);
+    codes.add(country.code3);
+    if (!/^[A-Z]{2}$/.test(country.code) || !/^[A-Z]{3}$/.test(country.code3)) critical.push(`${label}: invalid country code`);
+    if (!isFiniteBetween(country.population, 1, 2_000_000_000) || !isFiniteBetween(country.populationYear, 2020, 2026)) critical.push(`${label}: implausible population metadata`);
+    if (!isFiniteBetween(country.areaKm2, 0.1, 20_000_000) || !isFiniteBetween(country.landNeighborCount, 0, 20)) critical.push(`${label}: implausible geography metadata`);
+    if (!country.highestPointName || !isFiniteBetween(country.highestPointM, 0, 9000)) critical.push(`${label}: implausible highest-point metadata`);
+    if (!isFiniteBetween(country.latitude, -90, 90) || !isFiniteBetween(country.longitude, -180, 180)) critical.push(`${label}: invalid coordinates`);
+    if (!country.metadata?.accuracyNote || !country.metadata?.location) critical.push(`${label}: missing source/location metadata`);
+    checkCardMetadata({ ...country, topic: "countries" }, label);
   }
 };
 
@@ -252,6 +276,7 @@ for (const item of featuredItems) {
   await checkImage(item);
 }
 assertDistinctImageGroups(featuredItems, "featuredItems");
+checkCountries();
 
 const cards = collectionCards();
 for (const pepper of data.peppers) {
@@ -265,6 +290,9 @@ for (const pepper of data.peppers) {
 }
 for (const card of cards.filter((item) => item.topic === "buildings")) {
   if (!card.metadata?.location) critical.push(`buildings/${card.id}: missing world location metadata`);
+}
+for (const card of cards) {
+  if (!card.details?.some((detail) => detail.label === "Data note")) critical.push(`${card.topic}/${card.id}: collection profile needs a data note`);
 }
 const lowConfidence = cards.filter((card) => card.qualityScore < 75);
 for (const card of lowConfidence) {
@@ -349,6 +377,8 @@ const assertPackPrimarySortStat = (deck) => {
 const checkPackMetadata = (pack) => {
   const playableCards = pack.cards ?? [];
   const easyCards = playableCards.filter((card) => card.metadata?.difficultyBand === "easy");
+  if (typeof pack.dataNote !== "string" || pack.dataNote.trim().length < 20) critical.push(`${pack.id}: playable pack needs a dataNote`);
+  if (!Array.isArray(pack.sources) || pack.sources.some((source) => !source.label || !/^https:\/\//.test(source.url))) critical.push(`${pack.id}: pack sources need labels and HTTPS URLs`);
   if (playableCards.length >= 16 && easyCards.length < 8) critical.push(`${pack.id}: playable packs need at least 8 easy metadata cards`);
 
   for (const card of playableCards) {
@@ -360,6 +390,28 @@ const checkPackMetadata = (pack) => {
     if (!card.metadata?.taxonomyGroup) critical.push(`${label}: missing metadata.taxonomyGroup`);
     if (["bridges-and-tunnels", "tallest-mountains"].includes(pack.id) && !card.metadata?.location) critical.push(`${label}: missing world location metadata`);
     if (card.tags?.includes("not-dinosaur") && !card.metadata?.accuracyNote) critical.push(`${label}: not-dinosaur cards need metadata.accuracyNote`);
+    if (!Array.isArray(card.stats) || card.stats.length < 1) critical.push(`${label}: missing stats`);
+    for (const stat of card.stats ?? []) {
+      if (!Number.isFinite(stat.value)) critical.push(`${label}/${stat.id}: stat must be finite`);
+      if (stat.unit === "/10" && (!Number.isInteger(stat.value) || !isFiniteBetween(stat.value, 1, 10))) critical.push(`${label}/${stat.id}: rating must be an integer from 1-10`);
+      if (stat.unit === "year" && !isFiniteBetween(stat.value, 0, new Date().getFullYear())) critical.push(`${label}/${stat.id}: implausible year`);
+    }
+
+    const statValue = (id) => card.stats?.find((stat) => stat.id === id)?.value;
+    const feetValue = statValue("height-ft") ?? statValue("elevation-ft");
+    const meterValue = statValue("height-m") ?? statValue("elevation-m");
+    if (feetValue !== undefined && meterValue !== undefined && Math.abs(feetValue - meterValue * 3.28084) > 3) critical.push(`${label}: feet/metres conversion differs by more than 3 ft`);
+    if (pack.id === "bridges-and-tunnels" && !isFiniteBetween(statValue("length-mi"), 0.01, 150)) critical.push(`${label}: implausible crossing length`);
+    if (pack.id === "dinosaurs") {
+      if (!isFiniteBetween(statValue("length"), 0.5, 150) || !isFiniteBetween(statValue("weight"), 0.001, 150) || !isFiniteBetween(statValue("power"), 1, 10)) critical.push(`${label}: implausible fossil/gameplay stat`);
+    }
+    if (pack.id === "tall-trees") {
+      if (!isFiniteBetween(feetValue, 3, 500) || Math.abs(statValue("dave-stacks") - feetValue / 6) > 1 || Math.abs(statValue("giraffe-stacks") - feetValue / 18) > 1) critical.push(`${label}: implausible height comparison`);
+    }
+    if (pack.id === "tallest-mountains") {
+      const prominence = statValue("prominence-m");
+      if (!isFiniteBetween(feetValue, 1000, 30000) || !isFiniteBetween(prominence, 0, meterValue)) critical.push(`${label}: implausible elevation/prominence`);
+    }
   }
 
   assertDistinctImageGroups(playableCards.map((card) => ({ ...card, topic: pack.id })), pack.id);
@@ -456,6 +508,9 @@ const checkPlayablePackRoundBuilders = async () => {
     const deck = packToPlayableDeck(pack);
     if (deck.cards.length < 4) critical.push(`${deck.id}: needs at least 4 playable cards`);
     assertPackPrimarySortStat(deck);
+    for (const card of deck.cards) {
+      if (!card.details?.some((detail) => detail.label === "Data note")) critical.push(`${deck.id}/${card.id}: collection profile needs a data note`);
+    }
 
     for (const difficulty of difficulties) {
       const seed = 20260511 + difficulty * 100 + deck.id.length;
@@ -546,6 +601,12 @@ const result = {
   featuredItems: featuredItems.length,
   collectionCards: cards.length,
   playablePacks: playablePacks.length,
+  metadataAudit: {
+    auditedCards: cards.length + playablePacks.reduce((total, pack) => total + pack.cards.length, 0),
+    countries: data.countries.length,
+    rangeAndConversionChecks: true,
+    collectionDataNotes: true,
+  },
   confidence,
   researchLibrary: {
     peppers: library.pepperLibrary.length,

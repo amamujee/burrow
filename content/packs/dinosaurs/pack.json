@@ -3,6 +3,7 @@
   "id": "dinosaurs",
   "title": "Dinosaur Lab",
   "summary": "Dinosaur icons, Ice Age mammals, and prehistoric favorites become reading, sorting, number, and Top Trumps challenges.",
+  "dataNote": "Fossil length, weight, and speed are rounded scientific estimates that can change with new research. Power is a Burrow gameplay rating.",
   "status": "playable",
   "audience": {
     "minAge": 5,

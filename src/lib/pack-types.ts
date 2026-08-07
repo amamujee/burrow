@@ -35,6 +35,7 @@ export type Pack = {
   id: string;
   title: string;
   summary: string;
+  dataNote?: string;
   status?: "draft" | "needs-review" | "playable";
   audience: {
     minAge: number;
