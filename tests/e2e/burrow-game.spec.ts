@@ -282,6 +282,21 @@ test("the derived card catalog is reused across round generation", () => {
   expect(collectionCards()).toBe(collectionCards());
 });
 
+test("every collection card has a structured fact profile", () => {
+  const cards = [
+    ...collectionCards(),
+    ...loadPlayablePacks().flatMap((pack) => packToPlayableDeck(pack).cards),
+  ];
+  for (const card of cards) {
+    expect(card.details?.length, `${card.topic}/${card.id} needs structured details`).toBeGreaterThanOrEqual(2);
+    expect(new Set(card.details?.map((detail) => detail.label)).size, `${card.topic}/${card.id} detail labels must be distinct`).toBe(card.details?.length);
+    for (const detail of card.details ?? []) {
+      expect(detail.label.trim(), `${card.topic}/${card.id} has an empty detail label`).toBeTruthy();
+      expect(detail.value.trim(), `${card.topic}/${card.id} has an empty detail value`).toBeTruthy();
+    }
+  }
+});
+
 test("every generated Quiz location question carries matching map choices", () => {
   for (const topic of ["peppers", "buildings"] as const) {
     for (const difficulty of [1, 2, 3] as const) {
@@ -928,12 +943,18 @@ test("Countries & Flags ships an exact 200-card passport catalog", () => {
   expect(countries).toHaveLength(200);
   expect(new Set(countries.map((country) => country.code)).size).toBe(200);
   expect(countries.every((country) => country.capital && country.population > 0 && country.areaKm2 > 0)).toBe(true);
+  expect(countries.every((country) => Number.isInteger(country.landNeighborCount) && country.landNeighborCount >= 0 && country.landNeighborCount <= 14)).toBe(true);
+  expect(countries.every((country) => country.highestPointName && country.highestPointM > 0 && country.highestPointM <= 8849)).toBe(true);
   expect(countries.every((country) => country.continents.length > 0 && country.metadata.location?.coordinates?.length === 2)).toBe(true);
   expect(countries.every((country) => country.image === `/burrow-assets/countries/${country.code.toLowerCase()}.svg`)).toBe(true);
 
   const countryCards = collectionCards().filter((card) => card.topic === "countries");
   expect(countryCards).toHaveLength(200);
-  expect(countryCards.every((card) => card.details?.map((detail) => detail.label).join("|") === "Capital|Population|Land area|Continent|Region|Country code")).toBe(true);
+  expect(countryCards.every((card) => card.details?.map((detail) => detail.label).join("|") === "Capital|Population|Land area|Land neighbors|Highest point|Continent|Region|Country code")).toBe(true);
+
+  expect(countries.find((country) => country.code === "CM")).toMatchObject({ landNeighborCount: 6, highestPointM: 4045 });
+  expect(countries.find((country) => country.code === "CN")).toMatchObject({ landNeighborCount: 14, highestPointName: "Mount Everest", highestPointM: 8849 });
+  expect(countries.find((country) => country.code === "MV")).toMatchObject({ landNeighborCount: 0, highestPointM: 5 });
 });
 
 test("country quiz rotation covers flags, capitals, continents, maps, and stat duels", () => {
@@ -976,8 +997,9 @@ test("country play works across every card-game mode", () => {
   expect(buildRevealRound("countries", 3, 937).topic).toBe("countries");
 
   const trumps = buildTopTrumpRound("countries", 3, 941);
-  expect(trumps.player.stats.map((stat) => stat.id)).toEqual(["population", "area", "capital-length"]);
-  expect(trumps.computer.stats.map((stat) => stat.id)).toEqual(["population", "area", "capital-length"]);
+  expect(trumps.player.stats.map((stat) => stat.id)).toEqual(["population", "area", "land-neighbors", "highest-point"]);
+  expect(trumps.computer.stats.map((stat) => stat.id)).toEqual(["population", "area", "land-neighbors", "highest-point"]);
+  expect(trumps.player.stats.map((stat) => stat.label)).toEqual(["Population", "Land area", "Land neighbors", "Highest point"]);
 });
 
 test("every topic offers sensible addition, subtraction, and multiplication rounds", () => {
@@ -1624,6 +1646,14 @@ test("collection only shows selected topics", async ({ page }) => {
     expect.objectContaining({ alt: "7 Pot Douglah", src: "/burrow-assets/peppers/seven-pot-douglah.jpg", fullyContained: true }),
     expect.objectContaining({ alt: "Chocolate Bhutlah", src: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
   ]);
+
+  const pepperGuide = collection.getByText("Open pepper field guide", { exact: true }).first();
+  await pepperGuide.click();
+  const pepperCard = pepperGuide.locator("xpath=ancestor::div[contains(@class, 'overflow-hidden')][1]");
+  await expect(pepperCard.getByText("Heat level", { exact: true })).toBeVisible();
+  await expect(pepperCard.getByText("Scoville range", { exact: true })).toBeVisible();
+  await expect(pepperCard.getByText("Color", { exact: true })).toBeVisible();
+  await expect(pepperCard.getByText("Type", { exact: true })).toBeVisible();
 });
 
 test("collection category picker shows one category album at a time", { tag: "@mobile" }, async ({ page }) => {
@@ -1764,6 +1794,17 @@ test("downloadable category answers persist adaptive performance stats", async (
     const active = profiles.profiles?.find((profile) => profile.id === profiles.activeProfileId);
     return active?.progress.topicStats?.dinosaurs?.answered === 1;
   });
+});
+
+test("country Top Trumps offers four meaningful geography stats", async ({ page }) => {
+  await chooseOnlyMode(page, "Top Trumps");
+  await chooseOnlyBuiltInTopic(page, "Countries & Flags");
+
+  const gamePanel = page.locator("main article").last();
+  for (const label of ["Population", "Land area", "Land neighbors", "Highest point"]) {
+    await expect(gamePanel.getByRole("button", { name: new RegExp(label) })).toBeVisible();
+  }
+  await expect(page.getByText("Capital name length", { exact: true })).toHaveCount(0);
 });
 
 test("top trumps lets player choose a category against the computer", async ({ page }) => {

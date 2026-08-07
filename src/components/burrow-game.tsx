@@ -3997,7 +3997,7 @@ function CollectionBook({
                     <details className="group mt-2 rounded-md border-2 border-[#d9c7a7] bg-[#fff9ec] open:border-[#092421] open:shadow-[2px_2px_0_#092421]">
                       <summary className="cursor-pointer list-none px-2 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#102f36] marker:hidden">
                         <span className="flex items-center justify-between gap-2">
-                          <span>{card.topic === "countries" ? "Open country passport" : "See all card details"}</span>
+                          <span>{collectionCardDetailLabel(card.topic)}</span>
                           <span aria-hidden="true" className="text-base leading-none group-open:rotate-45">+</span>
                         </span>
                       </summary>
@@ -4020,6 +4020,19 @@ function CollectionBook({
     </section>
   );
 }
+
+const collectionCardDetailLabel = (topic: RoundTopic) => ({
+  countries: "Open country passport",
+  peppers: "Open pepper field guide",
+  buildings: "Open building profile",
+  sharks: "Open shark profile",
+  space: "Open space file",
+  jets: "Open jet specifications",
+  dinosaurs: "Open dinosaur profile",
+  "tallest-mountains": "Open mountain profile",
+  "tall-trees": "Open tree profile",
+  "bridges-and-tunnels": "Open structure profile",
+}[topic] ?? "Open card profile");
 
 function ProgressDots({ questions, questionIndex }: { questions: Question[]; questionIndex: number }) {
   return (

@@ -1,0 +1,1002 @@
+{
+  "AD": {
+    "landNeighborCount": 2,
+    "highestPointName": "Pic de Coma Pedrosa",
+    "highestPointM": 2946
+  },
+  "AE": {
+    "landNeighborCount": 2,
+    "highestPointName": "Jabal Bil 'Ays",
+    "highestPointM": 1905
+  },
+  "AF": {
+    "landNeighborCount": 6,
+    "highestPointName": "Noshak",
+    "highestPointM": 7492
+  },
+  "AG": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mount Obama",
+    "highestPointM": 402
+  },
+  "AL": {
+    "landNeighborCount": 4,
+    "highestPointName": "Maja e Korabit",
+    "highestPointM": 2764
+  },
+  "AM": {
+    "landNeighborCount": 4,
+    "highestPointName": "Aragats Lerrnagagat'",
+    "highestPointM": 4090
+  },
+  "AO": {
+    "landNeighborCount": 4,
+    "highestPointName": "Moco",
+    "highestPointM": 2620
+  },
+  "AR": {
+    "landNeighborCount": 5,
+    "highestPointName": "Cerro Aconcagua",
+    "highestPointM": 6962
+  },
+  "AT": {
+    "landNeighborCount": 8,
+    "highestPointName": "Grossglockner",
+    "highestPointM": 3798
+  },
+  "AU": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mount Kosciuszko",
+    "highestPointM": 2228
+  },
+  "AZ": {
+    "landNeighborCount": 5,
+    "highestPointName": "Bazarduzu Dagi",
+    "highestPointM": 4466
+  },
+  "BA": {
+    "landNeighborCount": 3,
+    "highestPointName": "Maglic",
+    "highestPointM": 2386
+  },
+  "BB": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mount Hillaby",
+    "highestPointM": 336
+  },
+  "BD": {
+    "landNeighborCount": 2,
+    "highestPointName": "Mowdok Taung",
+    "highestPointM": 1060
+  },
+  "BE": {
+    "landNeighborCount": 4,
+    "highestPointName": "Botrange",
+    "highestPointM": 694
+  },
+  "BF": {
+    "landNeighborCount": 6,
+    "highestPointName": "Tena Kourou",
+    "highestPointM": 749
+  },
+  "BG": {
+    "landNeighborCount": 5,
+    "highestPointName": "Musala",
+    "highestPointM": 2925
+  },
+  "BH": {
+    "landNeighborCount": 0,
+    "highestPointName": "Jabal ad Dukhan",
+    "highestPointM": 135
+  },
+  "BI": {
+    "landNeighborCount": 3,
+    "highestPointName": "unnamed elevation on Mukike Range",
+    "highestPointM": 2685
+  },
+  "BJ": {
+    "landNeighborCount": 4,
+    "highestPointName": "unnamed elevation",
+    "highestPointM": 675
+  },
+  "BN": {
+    "landNeighborCount": 1,
+    "highestPointName": "Bukit Pagon",
+    "highestPointM": 1850
+  },
+  "BO": {
+    "landNeighborCount": 5,
+    "highestPointName": "Nevado Sajama",
+    "highestPointM": 6542
+  },
+  "BR": {
+    "landNeighborCount": 9,
+    "highestPointName": "Pico da Neblina",
+    "highestPointM": 2994
+  },
+  "BS": {
+    "landNeighborCount": 0,
+    "highestPointName": "1.3 km NE of Old Bight on Cat Island",
+    "highestPointM": 64
+  },
+  "BT": {
+    "landNeighborCount": 2,
+    "highestPointName": "Gangkar Puensum",
+    "highestPointM": 7570
+  },
+  "BW": {
+    "landNeighborCount": 4,
+    "highestPointName": "Manyelanong Hill",
+    "highestPointM": 1495
+  },
+  "BY": {
+    "landNeighborCount": 5,
+    "highestPointName": "Dzyarzhynskaya Hara",
+    "highestPointM": 346
+  },
+  "BZ": {
+    "landNeighborCount": 2,
+    "highestPointName": "Doyle's Delight",
+    "highestPointM": 1124
+  },
+  "CA": {
+    "landNeighborCount": 1,
+    "highestPointName": "Mount Logan",
+    "highestPointM": 5959
+  },
+  "CD": {
+    "landNeighborCount": 9,
+    "highestPointName": "Pic Marguerite on Mont Ngaliema",
+    "highestPointM": 5110
+  },
+  "CF": {
+    "landNeighborCount": 6,
+    "highestPointName": "Mont Ngaoui",
+    "highestPointM": 1410
+  },
+  "CG": {
+    "landNeighborCount": 5,
+    "highestPointName": "Mont Nabeba",
+    "highestPointM": 1020
+  },
+  "CH": {
+    "landNeighborCount": 5,
+    "highestPointName": "Dufourspitze on Monte Rosa",
+    "highestPointM": 4634
+  },
+  "CI": {
+    "landNeighborCount": 5,
+    "highestPointName": "Monts Nimba",
+    "highestPointM": 1752
+  },
+  "CK": {
+    "landNeighborCount": 0,
+    "highestPointName": "Te Manga",
+    "highestPointM": 652
+  },
+  "CL": {
+    "landNeighborCount": 3,
+    "highestPointName": "Nevado Ojos del Salado",
+    "highestPointM": 6893
+  },
+  "CM": {
+    "landNeighborCount": 6,
+    "highestPointName": "Fako on Mont Cameroun",
+    "highestPointM": 4045
+  },
+  "CN": {
+    "landNeighborCount": 14,
+    "highestPointName": "Mount Everest",
+    "highestPointM": 8849
+  },
+  "CO": {
+    "landNeighborCount": 5,
+    "highestPointName": "Pico Cristobal Colon",
+    "highestPointM": 5730
+  },
+  "CR": {
+    "landNeighborCount": 2,
+    "highestPointName": "Cerro Chirripo",
+    "highestPointM": 3819
+  },
+  "CU": {
+    "landNeighborCount": 0,
+    "highestPointName": "Pico Turquino",
+    "highestPointM": 1974
+  },
+  "CV": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mt. Fogo",
+    "highestPointM": 2829
+  },
+  "CY": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mount Olympus",
+    "highestPointM": 1951
+  },
+  "CZ": {
+    "landNeighborCount": 4,
+    "highestPointName": "Snezka",
+    "highestPointM": 1602
+  },
+  "DE": {
+    "landNeighborCount": 9,
+    "highestPointName": "Zugspitze",
+    "highestPointM": 2963
+  },
+  "DJ": {
+    "landNeighborCount": 3,
+    "highestPointName": "Moussa Ali",
+    "highestPointM": 2021
+  },
+  "DK": {
+    "landNeighborCount": 1,
+    "highestPointName": "Store Mollehoj",
+    "highestPointM": 171
+  },
+  "DM": {
+    "landNeighborCount": 0,
+    "highestPointName": "Morne Diablotins",
+    "highestPointM": 1447
+  },
+  "DO": {
+    "landNeighborCount": 1,
+    "highestPointName": "Pico Duarte",
+    "highestPointM": 3098
+  },
+  "DZ": {
+    "landNeighborCount": 7,
+    "highestPointName": "Tahat",
+    "highestPointM": 2908
+  },
+  "EC": {
+    "landNeighborCount": 2,
+    "highestPointName": "Chimborazo",
+    "highestPointM": 6267
+  },
+  "EE": {
+    "landNeighborCount": 2,
+    "highestPointName": "Suur Munamagi",
+    "highestPointM": 318
+  },
+  "EG": {
+    "landNeighborCount": 4,
+    "highestPointName": "Mount Catherine",
+    "highestPointM": 2629
+  },
+  "EH": {
+    "landNeighborCount": 3,
+    "highestPointName": "unnamed elevation",
+    "highestPointM": 805
+  },
+  "ER": {
+    "landNeighborCount": 3,
+    "highestPointName": "Soira",
+    "highestPointM": 3018
+  },
+  "ES": {
+    "landNeighborCount": 4,
+    "highestPointName": "Pico de Teide on Canary Islands",
+    "highestPointM": 3718
+  },
+  "ET": {
+    "landNeighborCount": 6,
+    "highestPointName": "Ras Dejen",
+    "highestPointM": 4550
+  },
+  "FI": {
+    "landNeighborCount": 3,
+    "highestPointName": "Halti",
+    "highestPointM": 1328
+  },
+  "FJ": {
+    "landNeighborCount": 0,
+    "highestPointName": "Tomanivi",
+    "highestPointM": 1324
+  },
+  "FM": {
+    "landNeighborCount": 0,
+    "highestPointName": "Nanlaud on Pohnpei",
+    "highestPointM": 782
+  },
+  "FR": {
+    "landNeighborCount": 8,
+    "highestPointName": "Mont Blanc",
+    "highestPointM": 4810
+  },
+  "GA": {
+    "landNeighborCount": 3,
+    "highestPointName": "Mont Bengoue",
+    "highestPointM": 1050
+  },
+  "GB": {
+    "landNeighborCount": 1,
+    "highestPointName": "Ben Nevis",
+    "highestPointM": 1345
+  },
+  "GD": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mount Saint Catherine",
+    "highestPointM": 840
+  },
+  "GE": {
+    "landNeighborCount": 4,
+    "highestPointName": "Mt'a Shkhara",
+    "highestPointM": 5193
+  },
+  "GH": {
+    "landNeighborCount": 3,
+    "highestPointName": "Mount Afadjato",
+    "highestPointM": 885
+  },
+  "GM": {
+    "landNeighborCount": 1,
+    "highestPointName": "unnamed elevation",
+    "highestPointM": 63
+  },
+  "GN": {
+    "landNeighborCount": 6,
+    "highestPointName": "Mont Nimba",
+    "highestPointM": 1752
+  },
+  "GQ": {
+    "landNeighborCount": 2,
+    "highestPointName": "Pico Basile",
+    "highestPointM": 3008
+  },
+  "GR": {
+    "landNeighborCount": 4,
+    "highestPointName": "Mount Olympus",
+    "highestPointM": 2917
+  },
+  "GT": {
+    "landNeighborCount": 4,
+    "highestPointName": "Volcan Tajumulco",
+    "highestPointM": 4220
+  },
+  "GW": {
+    "landNeighborCount": 2,
+    "highestPointName": "Dongol Ronde",
+    "highestPointM": 277
+  },
+  "GY": {
+    "landNeighborCount": 3,
+    "highestPointName": "Laberintos del Norte on Mount Roraima",
+    "highestPointM": 2775
+  },
+  "HN": {
+    "landNeighborCount": 3,
+    "highestPointName": "Cerro Las Minas",
+    "highestPointM": 2870
+  },
+  "HR": {
+    "landNeighborCount": 5,
+    "highestPointName": "Dinara",
+    "highestPointM": 1831
+  },
+  "HT": {
+    "landNeighborCount": 1,
+    "highestPointName": "Pic la Selle",
+    "highestPointM": 2674
+  },
+  "HU": {
+    "landNeighborCount": 7,
+    "highestPointName": "Kekes",
+    "highestPointM": 1014
+  },
+  "ID": {
+    "landNeighborCount": 3,
+    "highestPointName": "Puncak Jaya",
+    "highestPointM": 4884
+  },
+  "IE": {
+    "landNeighborCount": 1,
+    "highestPointName": "Carrauntoohil",
+    "highestPointM": 1041
+  },
+  "IL": {
+    "landNeighborCount": 5,
+    "highestPointName": "Unnamed dome west of Mitspe Shlagim",
+    "highestPointM": 2236
+  },
+  "IN": {
+    "landNeighborCount": 6,
+    "highestPointName": "Kanchenjunga",
+    "highestPointM": 8586
+  },
+  "IQ": {
+    "landNeighborCount": 6,
+    "highestPointName": "Cheekha Dar",
+    "highestPointM": 3611
+  },
+  "IR": {
+    "landNeighborCount": 7,
+    "highestPointName": "Kuh-e Damavand",
+    "highestPointM": 5625
+  },
+  "IS": {
+    "landNeighborCount": 0,
+    "highestPointName": "Hvannadalshnukur",
+    "highestPointM": 2110
+  },
+  "IT": {
+    "landNeighborCount": 6,
+    "highestPointName": "Mont Blanc de Courmayeur",
+    "highestPointM": 4748
+  },
+  "JM": {
+    "landNeighborCount": 0,
+    "highestPointName": "Blue Mountain Peak",
+    "highestPointM": 2256
+  },
+  "JO": {
+    "landNeighborCount": 5,
+    "highestPointName": "Jabal Umm ad Dami",
+    "highestPointM": 1854
+  },
+  "JP": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mount Fuji",
+    "highestPointM": 3776
+  },
+  "KE": {
+    "landNeighborCount": 5,
+    "highestPointName": "Mount Kenya",
+    "highestPointM": 5199
+  },
+  "KG": {
+    "landNeighborCount": 4,
+    "highestPointName": "Jengish Chokusu",
+    "highestPointM": 7439
+  },
+  "KH": {
+    "landNeighborCount": 3,
+    "highestPointName": "Phnum Aoral",
+    "highestPointM": 1810
+  },
+  "KI": {
+    "landNeighborCount": 0,
+    "highestPointName": "unnamed elevation on Banaba",
+    "highestPointM": 81
+  },
+  "KM": {
+    "landNeighborCount": 0,
+    "highestPointName": "Karthala",
+    "highestPointM": 2360
+  },
+  "KN": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mount Liamuiga",
+    "highestPointM": 1156
+  },
+  "KP": {
+    "landNeighborCount": 3,
+    "highestPointName": "Paektu-san",
+    "highestPointM": 2744
+  },
+  "KR": {
+    "landNeighborCount": 1,
+    "highestPointName": "Halla-san",
+    "highestPointM": 1950
+  },
+  "KW": {
+    "landNeighborCount": 2,
+    "highestPointName": "3.6 km W. of Al-Salmi Border Post",
+    "highestPointM": 300
+  },
+  "KZ": {
+    "landNeighborCount": 5,
+    "highestPointName": "Pik Khan-Tengri",
+    "highestPointM": 7010
+  },
+  "LA": {
+    "landNeighborCount": 5,
+    "highestPointName": "Phu Bia",
+    "highestPointM": 2817
+  },
+  "LB": {
+    "landNeighborCount": 2,
+    "highestPointName": "Qornet es Saouda",
+    "highestPointM": 3088
+  },
+  "LC": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mount Gimie",
+    "highestPointM": 948
+  },
+  "LI": {
+    "landNeighborCount": 2,
+    "highestPointName": "Vorder-Grauspitz",
+    "highestPointM": 2599
+  },
+  "LK": {
+    "landNeighborCount": 1,
+    "highestPointName": "Pidurutalagala",
+    "highestPointM": 2524
+  },
+  "LR": {
+    "landNeighborCount": 3,
+    "highestPointName": "Mount Wuteve",
+    "highestPointM": 1447
+  },
+  "LS": {
+    "landNeighborCount": 1,
+    "highestPointName": "Thabana Ntlenyana",
+    "highestPointM": 3482
+  },
+  "LT": {
+    "landNeighborCount": 4,
+    "highestPointName": "Aukstojas",
+    "highestPointM": 294
+  },
+  "LU": {
+    "landNeighborCount": 3,
+    "highestPointName": "Buurgplaatz",
+    "highestPointM": 559
+  },
+  "LV": {
+    "landNeighborCount": 4,
+    "highestPointName": "Gaizina Kalns",
+    "highestPointM": 312
+  },
+  "LY": {
+    "landNeighborCount": 6,
+    "highestPointName": "Bikku Bitti",
+    "highestPointM": 2267
+  },
+  "MA": {
+    "landNeighborCount": 3,
+    "highestPointName": "Jebel Toubkal",
+    "highestPointM": 4165
+  },
+  "MC": {
+    "landNeighborCount": 1,
+    "highestPointName": "Chemin des Revoires on Mont Agel",
+    "highestPointM": 162
+  },
+  "MD": {
+    "landNeighborCount": 2,
+    "highestPointName": "Dealul Balanesti",
+    "highestPointM": 430
+  },
+  "ME": {
+    "landNeighborCount": 5,
+    "highestPointName": "Zia Kolata",
+    "highestPointM": 2534
+  },
+  "MG": {
+    "landNeighborCount": 0,
+    "highestPointName": "Maromokotro",
+    "highestPointM": 2876
+  },
+  "MH": {
+    "landNeighborCount": 0,
+    "highestPointName": "East-central Airik Island, Maloelap Atoll",
+    "highestPointM": 14
+  },
+  "MK": {
+    "landNeighborCount": 5,
+    "highestPointName": "Golem Korab",
+    "highestPointM": 2764
+  },
+  "ML": {
+    "landNeighborCount": 7,
+    "highestPointName": "Hombori Tondo",
+    "highestPointM": 1155
+  },
+  "MM": {
+    "landNeighborCount": 5,
+    "highestPointName": "Gamlang Razi",
+    "highestPointM": 5870
+  },
+  "MN": {
+    "landNeighborCount": 2,
+    "highestPointName": "Nayramadlin Orgil",
+    "highestPointM": 4374
+  },
+  "MR": {
+    "landNeighborCount": 4,
+    "highestPointName": "Kediet Ijill",
+    "highestPointM": 915
+  },
+  "MT": {
+    "landNeighborCount": 0,
+    "highestPointName": "Ta'Dmejrek on Dingli Cliffs",
+    "highestPointM": 253
+  },
+  "MU": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mont Piton",
+    "highestPointM": 828
+  },
+  "MV": {
+    "landNeighborCount": 0,
+    "highestPointName": "8th tee, golf course, Villingi Island",
+    "highestPointM": 5
+  },
+  "MW": {
+    "landNeighborCount": 3,
+    "highestPointName": "Sapitwa",
+    "highestPointM": 3002
+  },
+  "MX": {
+    "landNeighborCount": 3,
+    "highestPointName": "Volcan Pico de Orizaba",
+    "highestPointM": 5636
+  },
+  "MY": {
+    "landNeighborCount": 3,
+    "highestPointName": "Gunung Kinabalu",
+    "highestPointM": 4095
+  },
+  "MZ": {
+    "landNeighborCount": 6,
+    "highestPointName": "Monte Binga",
+    "highestPointM": 2436
+  },
+  "NA": {
+    "landNeighborCount": 4,
+    "highestPointName": "Konigstein on Brandberg",
+    "highestPointM": 2573
+  },
+  "NE": {
+    "landNeighborCount": 7,
+    "highestPointName": "Idoukal-n-Taghes",
+    "highestPointM": 2022
+  },
+  "NG": {
+    "landNeighborCount": 4,
+    "highestPointName": "Chappal Waddi",
+    "highestPointM": 2419
+  },
+  "NI": {
+    "landNeighborCount": 2,
+    "highestPointName": "Mogoton",
+    "highestPointM": 2085
+  },
+  "NL": {
+    "landNeighborCount": 2,
+    "highestPointName": "Mount Scenery",
+    "highestPointM": 862
+  },
+  "NO": {
+    "landNeighborCount": 3,
+    "highestPointName": "Galdhopiggen",
+    "highestPointM": 2469
+  },
+  "NP": {
+    "landNeighborCount": 2,
+    "highestPointName": "Mount Everest",
+    "highestPointM": 8849
+  },
+  "NR": {
+    "landNeighborCount": 0,
+    "highestPointName": "Command Ridge",
+    "highestPointM": 70
+  },
+  "NU": {
+    "landNeighborCount": 0,
+    "highestPointName": "unnamed elevation 1.4 km east of Hikutavake",
+    "highestPointM": 80
+  },
+  "NZ": {
+    "landNeighborCount": 0,
+    "highestPointName": "Aoraki/Mount Cook",
+    "highestPointM": 3724
+  },
+  "OM": {
+    "landNeighborCount": 3,
+    "highestPointName": "Jabal Shams",
+    "highestPointM": 3004
+  },
+  "PA": {
+    "landNeighborCount": 2,
+    "highestPointName": "Volcan Baru",
+    "highestPointM": 3475
+  },
+  "PE": {
+    "landNeighborCount": 5,
+    "highestPointName": "Nevado Huascaran",
+    "highestPointM": 6746
+  },
+  "PG": {
+    "landNeighborCount": 1,
+    "highestPointName": "Mount Wilhelm",
+    "highestPointM": 4509
+  },
+  "PH": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mount Apo",
+    "highestPointM": 2954
+  },
+  "PK": {
+    "landNeighborCount": 4,
+    "highestPointName": "K2",
+    "highestPointM": 8611
+  },
+  "PL": {
+    "landNeighborCount": 7,
+    "highestPointName": "Rysy",
+    "highestPointM": 2499
+  },
+  "PS": {
+    "landNeighborCount": 3,
+    "highestPointName": "Khallat al Batrakh",
+    "highestPointM": 1020
+  },
+  "PT": {
+    "landNeighborCount": 1,
+    "highestPointName": "Ponta do Pico on Ilha do Pico in the Azores",
+    "highestPointM": 2351
+  },
+  "PW": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mount Ngerchelchuus",
+    "highestPointM": 242
+  },
+  "PY": {
+    "landNeighborCount": 3,
+    "highestPointName": "Cerro Pero",
+    "highestPointM": 842
+  },
+  "QA": {
+    "landNeighborCount": 1,
+    "highestPointName": "Tuwayyir al Hamir",
+    "highestPointM": 103
+  },
+  "RO": {
+    "landNeighborCount": 5,
+    "highestPointName": "Moldoveanu",
+    "highestPointM": 2544
+  },
+  "RS": {
+    "landNeighborCount": 8,
+    "highestPointName": "Midzor",
+    "highestPointM": 2169
+  },
+  "RU": {
+    "landNeighborCount": 14,
+    "highestPointName": "Gora El'brus",
+    "highestPointM": 5642
+  },
+  "RW": {
+    "landNeighborCount": 4,
+    "highestPointName": "Volcan Karisimbi",
+    "highestPointM": 4519
+  },
+  "SA": {
+    "landNeighborCount": 7,
+    "highestPointName": "As Sarawat range,",
+    "highestPointM": 3000
+  },
+  "SB": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mount Popomanaseu",
+    "highestPointM": 2335
+  },
+  "SC": {
+    "landNeighborCount": 0,
+    "highestPointName": "Morne Seychellois",
+    "highestPointM": 905
+  },
+  "SD": {
+    "landNeighborCount": 7,
+    "highestPointName": "Jabal Marrah",
+    "highestPointM": 3042
+  },
+  "SE": {
+    "landNeighborCount": 2,
+    "highestPointName": "Kebnekaise South",
+    "highestPointM": 2100
+  },
+  "SG": {
+    "landNeighborCount": 0,
+    "highestPointName": "Bukit Timah",
+    "highestPointM": 166
+  },
+  "SI": {
+    "landNeighborCount": 4,
+    "highestPointName": "Triglav",
+    "highestPointM": 2864
+  },
+  "SK": {
+    "landNeighborCount": 5,
+    "highestPointName": "Gerlachovsky Stit",
+    "highestPointM": 2655
+  },
+  "SL": {
+    "landNeighborCount": 2,
+    "highestPointName": "Loma Mansa",
+    "highestPointM": 1948
+  },
+  "SM": {
+    "landNeighborCount": 1,
+    "highestPointName": "Monte Titano",
+    "highestPointM": 739
+  },
+  "SN": {
+    "landNeighborCount": 5,
+    "highestPointName": "unnamed elevation 2.8 km southeast of Nepen Diaka",
+    "highestPointM": 648
+  },
+  "SO": {
+    "landNeighborCount": 3,
+    "highestPointName": "Mount Shimbiris",
+    "highestPointM": 2460
+  },
+  "SR": {
+    "landNeighborCount": 2,
+    "highestPointName": "Juliana Top",
+    "highestPointM": 1230
+  },
+  "SS": {
+    "landNeighborCount": 6,
+    "highestPointName": "Kinyeti",
+    "highestPointM": 3187
+  },
+  "ST": {
+    "landNeighborCount": 0,
+    "highestPointName": "Pico de Sao Tome",
+    "highestPointM": 2024
+  },
+  "SV": {
+    "landNeighborCount": 2,
+    "highestPointName": "Cerro El Pital",
+    "highestPointM": 2730
+  },
+  "SY": {
+    "landNeighborCount": 5,
+    "highestPointName": "Mount Hermon",
+    "highestPointM": 2814
+  },
+  "SZ": {
+    "landNeighborCount": 2,
+    "highestPointName": "Emlembe",
+    "highestPointM": 1862
+  },
+  "TD": {
+    "landNeighborCount": 6,
+    "highestPointName": "Emi Koussi",
+    "highestPointM": 3445
+  },
+  "TG": {
+    "landNeighborCount": 3,
+    "highestPointName": "Mont Agou",
+    "highestPointM": 986
+  },
+  "TH": {
+    "landNeighborCount": 4,
+    "highestPointName": "Doi Inthanon",
+    "highestPointM": 2565
+  },
+  "TJ": {
+    "landNeighborCount": 4,
+    "highestPointName": "Qullai Somoniyon",
+    "highestPointM": 7495
+  },
+  "TL": {
+    "landNeighborCount": 1,
+    "highestPointName": "Foho Tatamailau",
+    "highestPointM": 2963
+  },
+  "TM": {
+    "landNeighborCount": 4,
+    "highestPointName": "Gora Ayribaba",
+    "highestPointM": 3139
+  },
+  "TN": {
+    "landNeighborCount": 2,
+    "highestPointName": "Jebel ech Chambi",
+    "highestPointM": 1544
+  },
+  "TO": {
+    "landNeighborCount": 0,
+    "highestPointName": "Kao Volcano on Kao Island",
+    "highestPointM": 1046
+  },
+  "TR": {
+    "landNeighborCount": 8,
+    "highestPointName": "Mount Ararat",
+    "highestPointM": 5137
+  },
+  "TT": {
+    "landNeighborCount": 0,
+    "highestPointName": "El Cerro del Aripo",
+    "highestPointM": 940
+  },
+  "TV": {
+    "landNeighborCount": 0,
+    "highestPointName": "unnamed location",
+    "highestPointM": 5
+  },
+  "TW": {
+    "landNeighborCount": 0,
+    "highestPointName": "Yu Shan",
+    "highestPointM": 3952
+  },
+  "TZ": {
+    "landNeighborCount": 8,
+    "highestPointName": "Kilimanjaro",
+    "highestPointM": 5895
+  },
+  "UA": {
+    "landNeighborCount": 7,
+    "highestPointName": "Hora Hoverla",
+    "highestPointM": 2061
+  },
+  "UG": {
+    "landNeighborCount": 5,
+    "highestPointName": "Margherita Peak on Mount Stanley",
+    "highestPointM": 5110
+  },
+  "US": {
+    "landNeighborCount": 2,
+    "highestPointName": "Mount McKinley",
+    "highestPointM": 6190
+  },
+  "UY": {
+    "landNeighborCount": 2,
+    "highestPointName": "Cerro Catedral",
+    "highestPointM": 514
+  },
+  "UZ": {
+    "landNeighborCount": 5,
+    "highestPointName": "Xazrat Sulton Tog'",
+    "highestPointM": 4643
+  },
+  "VA": {
+    "landNeighborCount": 1,
+    "highestPointName": "Vatican Gardens",
+    "highestPointM": 78
+  },
+  "VC": {
+    "landNeighborCount": 0,
+    "highestPointName": "La Soufriere",
+    "highestPointM": 1234
+  },
+  "VE": {
+    "landNeighborCount": 3,
+    "highestPointName": "Pico Bolivar",
+    "highestPointM": 4978
+  },
+  "VN": {
+    "landNeighborCount": 3,
+    "highestPointName": "Fan Si Pan",
+    "highestPointM": 3144
+  },
+  "VU": {
+    "landNeighborCount": 0,
+    "highestPointName": "Tabwemasana",
+    "highestPointM": 1877
+  },
+  "WS": {
+    "landNeighborCount": 0,
+    "highestPointName": "Mount Silisili",
+    "highestPointM": 1857
+  },
+  "XK": {
+    "landNeighborCount": 4,
+    "highestPointName": "Gjeravica/Deravica",
+    "highestPointM": 2656
+  },
+  "YE": {
+    "landNeighborCount": 2,
+    "highestPointName": "Jabal an Nabi Shu'ayb",
+    "highestPointM": 3666
+  },
+  "ZA": {
+    "landNeighborCount": 6,
+    "highestPointName": "Ntheledi",
+    "highestPointM": 3450
+  },
+  "ZM": {
+    "landNeighborCount": 8,
+    "highestPointName": "Mafinga Central",
+    "highestPointM": 2330
+  },
+  "ZW": {
+    "landNeighborCount": 4,
+    "highestPointName": "Inyangani",
+    "highestPointM": 2592
+  }
+}

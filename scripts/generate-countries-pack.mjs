@@ -9,6 +9,7 @@ const flagLicenseUrl = "https://raw.githubusercontent.com/lipis/flag-icons/main/
 const repoRoot = process.cwd();
 const outputFile = path.join(repoRoot, "src/lib/countries-data.ts");
 const flagDirectory = path.join(repoRoot, "public/burrow-assets/countries");
+const physicalStatsFile = path.join(repoRoot, "scripts/data/country-physical-stats.json");
 
 const specialCountryCodes = new Set(["PS", "XK", "TW", "CK", "NU", "EH"]);
 const easyCodes = new Set([
@@ -83,9 +84,14 @@ const slug = (name) => name
 const tsString = (value) => JSON.stringify(value);
 
 const main = async () => {
-  const [countriesResponse, populationResponse] = await Promise.all([readUrl(countriesUrl), readUrl(populationUrl)]);
+  const [countriesResponse, populationResponse, physicalStatsJson] = await Promise.all([
+    readUrl(countriesUrl),
+    readUrl(populationUrl),
+    fs.readFile(physicalStatsFile, "utf8"),
+  ]);
   const [sourceCountries, populationCsv] = await Promise.all([countriesResponse.json(), populationResponse.text()]);
   const populations = populationRows(populationCsv);
+  const physicalStats = JSON.parse(physicalStatsJson);
   const selected = sourceCountries
     .filter((country) => country.unMember || specialCountryCodes.has(country.cca2))
     .sort((first, second) => (displayNameOverrides[first.cca2] ?? first.name.common).localeCompare(displayNameOverrides[second.cca2] ?? second.name.common));
@@ -109,6 +115,10 @@ const main = async () => {
     const capital = country.capital?.length ? country.capital.join(" / ") : "No official capital";
     const population = populations.get(populationCodeOverrides[code] ?? country.cca3) ?? populationSupplements[code];
     if (!population) throw new Error(`Missing population for ${name} (${country.cca3})`);
+    const physical = physicalStats[code];
+    if (!physical || !Number.isInteger(physical.landNeighborCount) || !Number.isFinite(physical.highestPointM) || !physical.highestPointName) {
+      throw new Error(`Missing physical stats for ${name} (${code})`);
+    }
     const continents = worldContinents(country);
     const difficultyBand = easyCodes.has(code) ? "easy" : hardCodes.has(code) ? "hard" : "medium";
     const recognition = difficultyBand === "easy" ? 5 : difficultyBand === "hard" ? 1 : 3;
@@ -126,6 +136,9 @@ const main = async () => {
       populationStatus: population.status,
       populationNote: population.note,
       areaKm2: country.area,
+      landNeighborCount: physical.landNeighborCount,
+      highestPointName: physical.highestPointName,
+      highestPointM: physical.highestPointM,
       continents,
       subregion: country.subregion || continents.join(" and "),
       latitude: country.latlng?.[0] ?? 0,
@@ -154,6 +167,9 @@ const main = async () => {
     "  populationStatus: CountryPopulationStatus;",
     "  populationNote: string;",
     "  areaKm2: number;",
+    "  landNeighborCount: number;",
+    "  highestPointName: string;",
+    "  highestPointM: number;",
     "  continents: WorldContinent[];",
     "  subregion: string;",
     "  latitude: number;",
@@ -166,10 +182,10 @@ const main = async () => {
     "  metadata: CardMetadata;",
     "};",
     "",
-    "// Generated from mledoze/countries and the World Bank population series.",
+    "// Generated from mledoze/countries, the World Bank population series, and the final public-domain CIA World Factbook snapshot.",
     "// The catalog intentionally contains the 193 UN members, Vatican City, Palestine, Kosovo, Taiwan, Cook Islands, Niue, and Western Sahara: 200 cards total.",
     "export const countries: Country[] = [",
-    ...records.map((country) => `  { id: ${tsString(country.id)}, code: ${tsString(country.code)}, code3: ${tsString(country.code3)}, name: ${tsString(country.name)}, officialName: ${tsString(country.officialName)}, capital: ${tsString(country.capital)}, population: ${country.population}, populationYear: ${country.populationYear}, populationStatus: ${tsString(country.populationStatus)}, populationNote: ${tsString(country.populationNote)}, areaKm2: ${country.areaKm2}, continents: ${JSON.stringify(country.continents)}, subregion: ${tsString(country.subregion)}, latitude: ${country.latitude}, longitude: ${country.longitude}, flagEmoji: ${tsString(country.flagEmoji)}, image: ${tsString(`/burrow-assets/countries/${country.code.toLowerCase()}.svg`)}, imageSourceUrl: ${tsString(`https://github.com/lipis/flag-icons/blob/main/flags/4x3/${country.code.toLowerCase()}.svg`)}, imageCredit: \"National flag · flag-icons (MIT)\", fact: ${tsString(country.fact)}, metadata: { difficultyBand: ${tsString(country.difficultyBand)}, recognition: ${country.recognition}, taxonomyGroup: ${tsString(country.subregion)}, accuracyNote: ${tsString(`Population: ${country.populationNote}. Area, capital, and map position use the mledoze countries snapshot.`)}, location: { label: ${tsString(country.name)}, countries: [${tsString(country.name)}], continents: ${JSON.stringify(country.continents)}, coordinates: [${country.latitude}, ${country.longitude}] } } },`),
+    ...records.map((country) => `  { id: ${tsString(country.id)}, code: ${tsString(country.code)}, code3: ${tsString(country.code3)}, name: ${tsString(country.name)}, officialName: ${tsString(country.officialName)}, capital: ${tsString(country.capital)}, population: ${country.population}, populationYear: ${country.populationYear}, populationStatus: ${tsString(country.populationStatus)}, populationNote: ${tsString(country.populationNote)}, areaKm2: ${country.areaKm2}, landNeighborCount: ${country.landNeighborCount}, highestPointName: ${tsString(country.highestPointName)}, highestPointM: ${country.highestPointM}, continents: ${JSON.stringify(country.continents)}, subregion: ${tsString(country.subregion)}, latitude: ${country.latitude}, longitude: ${country.longitude}, flagEmoji: ${tsString(country.flagEmoji)}, image: ${tsString(`/burrow-assets/countries/${country.code.toLowerCase()}.svg`)}, imageSourceUrl: ${tsString(`https://github.com/lipis/flag-icons/blob/main/flags/4x3/${country.code.toLowerCase()}.svg`)}, imageCredit: \"National flag · flag-icons (MIT)\", fact: ${tsString(country.fact)}, metadata: { difficultyBand: ${tsString(country.difficultyBand)}, recognition: ${country.recognition}, taxonomyGroup: ${tsString(country.subregion)}, accuracyNote: ${tsString(`Population: ${country.populationNote}. Area, capital, borders, and map position use the mledoze countries snapshot. Highest point uses the final public-domain CIA World Factbook snapshot.`)}, location: { label: ${tsString(country.name)}, countries: [${tsString(country.name)}], continents: ${JSON.stringify(country.continents)}, coordinates: [${country.latitude}, ${country.longitude}] } } },`),
     "];",
     "",
   ];

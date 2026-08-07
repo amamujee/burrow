@@ -310,6 +310,17 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   qualityScore: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).score,
   qualityFlags: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).flags,
   metadata: pepper.metadata,
+  details: [
+    { label: "Heat level", value: heatProfiles[pepper.heat].label },
+    { label: "Scoville range", value: hasScovilleMeasurement(pepper) ? `${pepperRange(pepper)} SHU` : pepperScovilleDisplay(pepper) },
+    { label: "Color", value: pepper.color },
+    { label: "Type", value: pepper.isCondiment ? "Pepper condiment" : "Chile pepper" },
+    ...(pepper.metadata?.location ? [
+      { label: "Origin", value: pepper.metadata.location.label },
+      { label: "Continent", value: pepper.metadata.location.continents.join(" / ") },
+    ] : []),
+    ...(pepper.metadata?.accuracyNote ? [{ label: "Data note", value: pepper.metadata.accuracyNote }] : []),
+  ],
 });
 
 const buildingHeightLabel = (building: Building) => building.heightLabel ?? (building.status === "finished" ? "Height" : "Planned height");
@@ -333,6 +344,14 @@ const buildingCard = (building: Building): KnowledgeCard => ({
   qualityScore: scoreFeaturedContent({ ...building, statValue: building.heightFt }).score,
   qualityFlags: scoreFeaturedContent({ ...building, statValue: building.heightFt }).flags,
   metadata: building.metadata,
+  details: [
+    { label: buildingHeightLabel(building), value: feet(building.heightFt) },
+    { label: "Floors", value: building.floors ? formatNumber(building.floors) : "Not listed" },
+    { label: "Status", value: building.status.replace(/^./, (letter) => letter.toUpperCase()) },
+    { label: "City", value: building.city },
+    { label: "Country", value: building.country },
+    { label: "Continent", value: building.metadata.location?.continents.join(" / ") ?? "Not listed" },
+  ],
 });
 
 const sharkCard = (shark: Shark, metric: "length" | "speed" | "power" = "length"): KnowledgeCard => ({
@@ -351,6 +370,14 @@ const sharkCard = (shark: Shark, metric: "length" | "speed" | "power" = "length"
   qualityFlags: scoreFeaturedContent({ ...shark, statValue: metric === "length" ? shark.lengthFt : metric === "speed" ? shark.speedMph : shark.power }).flags,
   tags: shark.tags,
   metadata: shark.metadata,
+  details: [
+    { label: "Length", value: feet(shark.lengthFt) },
+    { label: "Speed", value: `${formatNumber(shark.speedMph)} mph` },
+    { label: "Power", value: `${shark.power}/5` },
+    { label: "Family", value: shark.family },
+    { label: "Diet", value: shark.diet },
+    ...(shark.metadata?.location ? [{ label: "Range", value: shark.metadata.location.label }] : []),
+  ],
 });
 
 const spaceMetricValue = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons") => {
@@ -390,6 +417,18 @@ const spaceCard = (space: SpaceCard, metric: "distance" | "temperature" | "size"
     statValue: spaceMetricValue(space, metric),
     sourceCaution: space.statNote ? "estimated stat" : undefined,
   }).flags,
+  details: [
+    { label: "Object type", value: space.kind.replace(/^./, (letter) => letter.toUpperCase()) },
+    { label: "Group", value: space.group },
+    ...(space.distanceFromSunMillionMiles !== undefined ? [{ label: "Distance from Sun", value: `${formatNumber(space.distanceFromSunMillionMiles)}M mi` }] : []),
+    ...(space.distanceLightYears !== undefined ? [{ label: "Distance from Earth", value: `${formatNumber(space.distanceLightYears)} ly` }] : []),
+    ...(space.diameterMiles !== undefined ? [{ label: "Diameter", value: `${formatNumber(space.diameterMiles)} mi` }] : []),
+    ...(space.radiusSolar !== undefined ? [{ label: "Radius", value: `${formatNumber(space.radiusSolar)}x Sun` }] : []),
+    ...(space.meanSurfaceTempF !== undefined ? [{ label: "Temperature", value: `${formatNumber(space.meanSurfaceTempF)}°F` }] : []),
+    ...(space.surfaceTempK !== undefined ? [{ label: "Temperature", value: `${formatNumber(space.surfaceTempK)} K` }] : []),
+    ...(space.moons !== undefined ? [{ label: "Moons", value: formatNumber(space.moons) }] : []),
+    ...(space.statNote ? [{ label: "Data note", value: space.statNote }] : []),
+  ],
 });
 
 const jetCategoryLabels: Record<JetCategory, string> = {
@@ -446,11 +485,27 @@ const jetCard = (jet: Jet, metric: "speed" | "range" | "firepower" = "speed"): K
   metadata: { location: jetWorldLocation(jet) },
   qualityScore: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower }).score,
   qualityFlags: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower }).flags,
+  details: [
+    { label: "Top speed", value: `${formatNumber(jet.maxSpeedMph)} mph` },
+    { label: "Range", value: `${formatNumber(jet.rangeMiles)} mi` },
+    { label: "Firepower", value: `${jet.firepower}/5` },
+    { label: "Country", value: jet.country },
+    { label: "Aircraft type", value: jetCategoryLabels[jet.category].replace(/^./, (letter) => letter.toUpperCase()) },
+    { label: "Continent", value: jetWorldLocation(jet).continents.join(" / ") },
+  ],
 });
 
 type CountryMetric = "population" | "area";
 const countryPopulationDisplay = (country: Country) => `${formatNumber(country.population)} people`;
 const countryAreaDisplay = (country: Country) => `${formatNumber(country.areaKm2)} km²`;
+const countryNeighborDisplay = (country: Country) => `${country.landNeighborCount} ${country.landNeighborCount === 1 ? "country" : "countries"}`;
+const countryHighestPointDisplay = (country: Country) => `${formatNumber(country.highestPointM)} m`;
+const countryTrumpStats = (country: Country): TopTrumpStat[] => [
+  { id: "population", label: "Population", value: country.population, display: countryPopulationDisplay(country), direction: "higher" },
+  { id: "area", label: "Land area", value: country.areaKm2, display: countryAreaDisplay(country), direction: "higher" },
+  { id: "land-neighbors", label: "Land neighbors", value: country.landNeighborCount, display: countryNeighborDisplay(country), direction: "higher" },
+  { id: "highest-point", label: "Highest point", value: country.highestPointM, display: countryHighestPointDisplay(country), direction: "higher" },
+];
 const countryQuality = (country: Country, statValue: number) => scoreFeaturedContent({
   ...country,
   statValue,
@@ -479,6 +534,8 @@ const countryCard = (country: Country, metric: CountryMetric = "population"): Kn
       { label: "Capital", value: country.capital },
       { label: "Population", value: `${formatNumber(country.population)} (${country.populationYear})` },
       { label: "Land area", value: countryAreaDisplay(country) },
+      { label: "Land neighbors", value: countryNeighborDisplay(country) },
+      { label: "Highest point", value: `${country.highestPointName} · ${countryHighestPointDisplay(country)}` },
       { label: "Continent", value: country.continents.join(" / ") },
       { label: "Region", value: country.subregion },
       { label: "Country code", value: `${country.code} · ${country.code3}` },
@@ -493,10 +550,7 @@ const countryGenericCard = (country: Country): GenericKnowledgeCard => ({
     country.subregion,
     country.areaKm2 < 1000 ? "microstate" : country.areaKm2 < 50000 ? "small country" : "large country",
   ],
-  stats: [
-    { id: "population", label: "Population", value: country.population, display: countryPopulationDisplay(country), direction: "higher" },
-    { id: "area", label: "Land area", value: country.areaKm2, display: countryAreaDisplay(country), direction: "higher" },
-  ],
+  stats: countryTrumpStats(country),
 });
 
 const collectionCardCatalog: KnowledgeCard[] = [
@@ -1266,14 +1320,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
   if (topic === "countries") {
     const country = countries.find((item) => item.id === id);
     if (!country) return null;
-    return {
-      ...countryGenericCard(country),
-      stats: [
-        { id: "population", label: "Population", value: country.population, display: countryPopulationDisplay(country), direction: "higher" },
-        { id: "area", label: "Land area", value: country.areaKm2, display: countryAreaDisplay(country), direction: "higher" },
-        { id: "capital-length", label: "Capital name length", value: country.capital.replace(/[^A-Za-z]/g, "").length, display: `${country.capital.replace(/[^A-Za-z]/g, "").length} letters`, direction: "higher" },
-      ],
-    };
+    return countryGenericCard(country);
   }
 
   const jet = jets.find((item) => item.id === id);

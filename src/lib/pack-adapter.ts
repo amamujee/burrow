@@ -53,6 +53,22 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
         tags: card.tags,
         metadata: card.metadata,
         stats: card.stats.map(toTopTrumpStat),
+        details: [
+          ...card.stats.map((stat) => ({
+            label: card.stats.filter((candidate) => candidate.label === stat.label).length > 1 && stat.unit
+              ? `${stat.label} (${stat.unit})`
+              : stat.label,
+            value: statDisplay(stat),
+          })),
+          ...(card.categories.length ? [{ label: "Category", value: card.categories.join(" · ") }] : []),
+          ...(card.metadata?.location ? [
+            { label: "Location", value: card.metadata.location.label },
+            { label: "Continent", value: card.metadata.location.continents.join(" / ") },
+          ] : []),
+          ...(card.metadata?.taxonomyGroup ? [{ label: "Group", value: card.metadata.taxonomyGroup }] : []),
+          ...(card.tags?.length ? [{ label: "Traits", value: card.tags.join(" · ") }] : []),
+          ...(card.metadata?.accuracyNote ? [{ label: "Data note", value: card.metadata.accuracyNote }] : []),
+        ],
       } satisfies GenericKnowledgeCard;
     });
 
