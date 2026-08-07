@@ -1396,10 +1396,12 @@ test("HUD uses one compact row where space allows and wraps actions together wit
     ]);
     expect(actionBoxes.every(Boolean)).toBe(true);
     expect(new Set(actionBoxes.map((box) => Math.round(box!.y))).size).toBe(1);
+    expect(new Set(actionBoxes.map((box) => Math.round(box!.height))).size).toBe(1);
     if (viewport.width >= 1024) {
-      const difficultyBox = await page.getByRole("button", { name: "Easy", exact: true }).boundingBox();
+      const difficultyBox = await page.locator("[data-hud-difficulty]").boundingBox();
       expect(difficultyBox).not.toBeNull();
       expect(Math.abs(actionBoxes[0]!.y - difficultyBox!.y)).toBeLessThanOrEqual(4);
+      expect(Math.abs(actionBoxes[0]!.height - difficultyBox!.height)).toBeLessThanOrEqual(1);
     }
     if (viewport.width >= 1440) {
       const infoBox = await page.locator("[data-hud-info]").boundingBox();
@@ -1407,9 +1409,11 @@ test("HUD uses one compact row where space allows and wraps actions together wit
       expect(infoBox).not.toBeNull();
       expect(controlsBox).not.toBeNull();
       expect(controlsBox!.x - (infoBox!.x + infoBox!.width)).toBeLessThanOrEqual(12);
-      expect(controlsBox!.width).toBeGreaterThan(500);
+      expect(controlsBox!.width).toBeGreaterThanOrEqual(460);
+      expect(controlsBox!.width).toBeLessThanOrEqual(500);
       const primaryControlWidths = actionBoxes.slice(0, 3).map((box) => Math.round(box!.width));
       expect(Math.max(...primaryControlWidths) - Math.min(...primaryControlWidths)).toBeLessThanOrEqual(1);
+      expect(actionBoxes[3]!.width).toBeGreaterThanOrEqual(50);
     }
   }
 });
