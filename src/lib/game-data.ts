@@ -1,4 +1,3 @@
-import { contentLibraryStats } from "./content-library";
 import type { CardMetadata, WorldContinent, WorldLocation } from "./card-metadata";
 import { countries } from "./countries-data";
 export { countries, type Country } from "./countries-data";
@@ -3858,9 +3857,9 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
   peppers: {
     id: "peppers",
     label: "Spicy Peppers",
-    eyebrow: `${contentLibraryStats.peppers}+ peppers`,
+    eyebrow: `${peppers.length} peppers`,
     roundLabel: "Pepper round",
-    libraryCount: contentLibraryStats.peppers,
+    libraryCount: peppers.length,
     featuredCount: peppers.length,
     sources: [
       { label: "WikiPepper", url: "https://wikipepper.org/peppers" },
@@ -3881,9 +3880,9 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
   buildings: {
     id: "buildings",
     label: "Sky Scrapers",
-    eyebrow: `${contentLibraryStats.buildings}+ towers`,
+    eyebrow: `${buildings.length} towers`,
     roundLabel: "Tower round",
-    libraryCount: contentLibraryStats.buildings,
+    libraryCount: buildings.length,
     featuredCount: buildings.length,
     sources: [
       { label: "Wikidata skyscraper records", url: "https://query.wikidata.org/" },
@@ -3894,9 +3893,9 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
   sharks: {
     id: "sharks",
     label: "Shark Tank",
-    eyebrow: `${contentLibraryStats.sharks}+ sharks`,
+    eyebrow: `${sharks.length} sharks`,
     roundLabel: "Shark round",
-    libraryCount: contentLibraryStats.sharks,
+    libraryCount: sharks.length,
     featuredCount: sharks.length,
     sources: [
       { label: "Wikidata shark taxonomy", url: "https://query.wikidata.org/" },
@@ -3924,9 +3923,9 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
   jets: {
     id: "jets",
     label: "Jet Hangar",
-    eyebrow: `${contentLibraryStats.jets}+ aircraft`,
+    eyebrow: `${jets.length} aircraft`,
     roundLabel: "Jet round",
-    libraryCount: contentLibraryStats.jets,
+    libraryCount: jets.length,
     featuredCount: jets.length,
     sources: [
       { label: "Wikimedia aircraft media", url: "https://commons.wikimedia.org/wiki/Category:Military_aircraft" },

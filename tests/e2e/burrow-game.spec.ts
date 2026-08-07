@@ -9,7 +9,7 @@ import {
 } from "../../src/components/core-mini-challenge";
 import { weightTopicsForAccuracy } from "../../src/lib/adaptive-topics";
 import { cardDiscoveryIdentities, cardUnlockKey, isCardUnlocked } from "../../src/lib/card-discovery";
-import { buildings, countries, peppers, topicPacks } from "../../src/lib/game-data";
+import { buildings, countries, jets, peppers, sharks, spaceCards, topicPacks } from "../../src/lib/game-data";
 import { poolForDifficulty } from "../../src/lib/difficulty-pool";
 import {
   buildFactRound,
@@ -142,6 +142,25 @@ const playableChallengeCategories = [
 
 test.describe("logic and content coverage", { tag: "@logic" }, () => {
 test.describe.configure({ mode: "serial" });
+
+test("built-in topic totals match the playable card catalogs", () => {
+  const expected = {
+    peppers: { count: peppers.length, eyebrow: `${peppers.length} peppers` },
+    buildings: { count: buildings.length, eyebrow: `${buildings.length} towers` },
+    sharks: { count: sharks.length, eyebrow: `${sharks.length} sharks` },
+    space: { count: spaceCards.length, eyebrow: `${spaceCards.length} space cards` },
+    jets: { count: jets.length, eyebrow: `${jets.length} aircraft` },
+    countries: { count: countries.length, eyebrow: `${countries.length} flag cards` },
+  };
+
+  expect(peppers).toHaveLength(143);
+  for (const [topic, values] of Object.entries(expected)) {
+    const pack = topicPacks[topic as keyof typeof topicPacks];
+    expect(pack.libraryCount).toBe(values.count);
+    expect(pack.featuredCount).toBe(values.count);
+    expect(pack.eyebrow).toBe(values.eyebrow);
+  }
+});
 
 test("pack Odd One rounds never ask children to infer a hidden category", () => {
   const cards = mathFixtureCards.map((card, index) => ({
@@ -1172,6 +1191,21 @@ test("setup menu opens and core game controls keep working", async ({ page }) =>
   await setupSummary(page).click();
   await expect(page.getByText("Game Types")).toBeVisible();
   await expect(page.getByText("Topics", { exact: true })).toBeVisible();
+  for (const [label, count] of [
+    ["Spicy Peppers", "143 peppers"],
+    ["Sky Scrapers", "60 towers"],
+    ["Shark Tank", "50 sharks"],
+    ["Space Universe", "50 space cards"],
+    ["Jet Hangar", "50 aircraft"],
+    ["Countries & Flags", "200 flag cards"],
+  ]) {
+    const topicButton = buttonForLabel(page, label);
+    await topicButton.click();
+    await expect(topicButton).toHaveAttribute("aria-pressed", "false");
+    await expect(topicButton).toContainText(count);
+    await topicButton.click();
+    await expect(topicButton).toHaveAttribute("aria-pressed", "true");
+  }
 
   for (const label of modeLabels.filter((label) => label !== "True/False")) {
     await page.getByRole("button", { name: new RegExp(label.replace("/", "\\/")) }).click();
