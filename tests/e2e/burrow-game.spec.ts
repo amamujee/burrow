@@ -44,6 +44,7 @@ import {
   addLearningExposure,
   learningIdentity,
   learningVarietyScore,
+  summarizeLearningHistory,
 } from "../../src/lib/learning-variety";
 
 const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
@@ -283,6 +284,23 @@ test("learning variety blocks exact repeats while timing review of missed concep
   expect(learningVarietyScore(alternate, spacedMiss)).toBeGreaterThan(learningVarietyScore(alternate, recentMiss));
   expect(learningVarietyScore(alternate, spacedMiss)).toBeGreaterThan(learningVarietyScore(fresh, spacedMiss));
   expect(learningVarietyScore(original, spacedMiss)).toBeLessThan(learningVarietyScore(fresh, spacedMiss));
+});
+
+test("learning recap separates strong ideas from ideas ready to revisit", () => {
+  const strong = learningIdentity({ exactKey: "quiz:strong", conceptKey: "heat:jalapeno", topic: "peppers", subjects: ["Jalapeno"] });
+  const review = learningIdentity({ exactKey: "geo:review", conceptKey: "location:habanero", topic: "peppers", subjects: ["Habanero"] });
+  const practiced = learningIdentity({ exactKey: "quiz:practiced", conceptKey: "heat:bell-pepper", topic: "peppers", subjects: ["Bell Pepper"] });
+
+  let history = addLearningExposure([], strong, { mode: "quiz", topic: "peppers", outcome: "correct" });
+  history = addLearningExposure(history, strong, { mode: "versus", topic: "peppers", outcome: "correct" });
+  history = addLearningExposure(history, review, { mode: "geo", topic: "peppers", outcome: "skip" });
+  history = addLearningExposure(history, practiced, { mode: "quiz", topic: "peppers", outcome: "correct" });
+
+  expect(summarizeLearningHistory(history)).toEqual({
+    practicedConcepts: 3,
+    strongConcepts: 1,
+    reviewConcepts: 1,
+  });
 });
 
 test("card discovery scopes duplicate titles to their category while preserving legacy saves", () => {
@@ -1217,6 +1235,29 @@ test.beforeEach(async ({ page }) => {
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
 });
 
+test("mobile keeps the question and first answer in the opening viewport", { tag: "@mobile" }, async ({ page, isMobile }) => {
+  test.skip(!isMobile, "mobile viewport coverage");
+  await chooseOnlyMode(page, "Quiz Run");
+
+  const questionStage = page.getByRole("button", { name: /Flag an issue with this question image/ }).locator("xpath=ancestor::article[1]");
+  const prompt = page.locator("h2").first();
+  const firstChoice = page.getByLabel("Answer choices").getByRole("button").first();
+  const [stageBox, promptBox, choiceBox] = await Promise.all([
+    questionStage.boundingBox(),
+    prompt.boundingBox(),
+    firstChoice.boundingBox(),
+  ]);
+  const viewport = page.viewportSize();
+
+  expect(stageBox).not.toBeNull();
+  expect(promptBox).not.toBeNull();
+  expect(choiceBox).not.toBeNull();
+  expect(viewport).not.toBeNull();
+  expect(stageBox!.height).toBeLessThanOrEqual(342);
+  expect(promptBox!.y).toBeLessThan(viewport!.height);
+  expect(choiceBox!.y).toBeLessThan(viewport!.height);
+});
+
 test("flight mode caches the app shell for a real offline reload", { tag: "@mobile" }, async ({ page, context }) => {
   await page.evaluate(async () => {
     if (!("serviceWorker" in navigator)) throw new Error("Service workers are unavailable");
@@ -1243,6 +1284,7 @@ test("setup menu opens and core game controls keep working", async ({ page }) =>
   await setupSummary(page).click();
   await expect(page.getByText("Game Types")).toBeVisible();
   await expect(page.getByText("Topics", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("Learning recap")).toContainText("Ready for the first field note");
   for (const [label, count] of [
     ["Spicy Peppers", "143 peppers"],
     ["Sky Scrapers", "60 towers"],
@@ -1267,6 +1309,10 @@ test("setup menu opens and core game controls keep working", async ({ page }) =>
 
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
   await expect(page.getByLabel("Answer feedback")).toBeVisible();
+
+  await setupSummary(page).click();
+  await expect(page.getByLabel("Learning recap")).toContainText(/1\s*idea practiced/);
+  await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
 
   await page.getByRole("button", { name: /Next|Finish round/ }).click();
   await expect(page.getByText("True or false?")).toBeVisible();
@@ -1742,6 +1788,10 @@ test("collection only shows selected topics", async ({ page }) => {
     expect.objectContaining({ alt: "7 Pot Douglah", src: "/burrow-assets/peppers/seven-pot-douglah.jpg", fullyContained: true }),
     expect.objectContaining({ alt: "Chocolate Bhutlah", src: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
   ]);
+
+  await expect(collection.getByRole("button", { name: "Show all 143 cards" })).toBeVisible();
+  expect(await collection.getByText("Locked card", { exact: true }).count()).toBeLessThan(20);
+  await expect(collection.getByText("WikiPepper", { exact: true })).not.toBeVisible();
 
   const pepperGuide = collection.getByText("Open pepper field guide", { exact: true }).first();
   await pepperGuide.click();

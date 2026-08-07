@@ -14,7 +14,7 @@ import { OfflineReady } from "@/components/offline-ready";
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { weightTopicsForAccuracy } from "@/lib/adaptive-topics";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
-import { cardUnlockKeysForSubjects, isCardUnlocked } from "@/lib/card-discovery";
+import { cardDiscoveryIdentities, cardUnlockKeysForSubjects, isCardUnlocked } from "@/lib/card-discovery";
 import { autoDifficulty } from "@/lib/difficulty";
 import { migrateTopicSelection } from "@/lib/topic-selection";
 import {
@@ -63,6 +63,7 @@ import {
   chooseVariedCandidate,
   learningIdentity,
   scheduleVariedSequence,
+  summarizeLearningHistory,
   type LearningExposure,
   type LearningIdentity,
 } from "@/lib/learning-variety";
@@ -102,6 +103,15 @@ type ResultState = {
   correct: boolean;
   xpGain: number;
   leveledUp: boolean;
+};
+
+type LearningRecap = {
+  practicedConcepts: number;
+  strongConcepts: number;
+  reviewConcepts: number;
+  focusLabel: string;
+  focusAccuracy: number | null;
+  topics: { label: string; answered: number; accuracy: number }[];
 };
 
 type ChallengeMode = Exclude<GameMode, "mix">;
@@ -782,6 +792,24 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const currentTopicLabel = isQuestionMode && question ? topicLabel(question.topic) : typeof currentTopicScope === "string" && currentTopicScope !== "mixed" ? topicLabel(currentTopicScope) : "Mixed topics";
   const currentRoundContext = `${currentTopicLabel} · ${gameTypeLabel(activeChallengeMode)}`;
   const accuracy = progress.answered ? Math.round((progress.correct / progress.answered) * 100) : 0;
+  const learningSummary = useMemo(() => summarizeLearningHistory(progress.learningHistory), [progress.learningHistory]);
+  const learningTopicRows = activeInterests.map((id) => {
+    const stats = progress.topicStats[id] ?? { correct: 0, answered: 0 };
+    return {
+      label: topicMeta(id).label,
+      answered: stats.answered,
+      accuracy: stats.answered ? Math.round((stats.correct / stats.answered) * 100) : 0,
+    };
+  });
+  const focusTopic = [...learningTopicRows]
+    .filter((item) => item.answered > 0)
+    .sort((first, second) => first.accuracy - second.accuracy || second.answered - first.answered)[0];
+  const learningRecap: LearningRecap = {
+    ...learningSummary,
+    focusLabel: focusTopic?.label ?? topicMeta(activeInterests[0]).label,
+    focusAccuracy: focusTopic?.accuracy ?? null,
+    topics: learningTopicRows,
+  };
   const selectedOfflineImages = useMemo(() => selectedCards.map((card) => card.image), [selectedCards]);
   const warmOfflineImages = useMemo(() => [
     ...questions.slice(questionIndex, questionIndex + 8).map((item) => item.image),
@@ -2083,6 +2111,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           levelProgress={levelProgress}
           streak={progress.streak}
           accuracy={accuracy}
+          learningRecap={learningRecap}
           collectionValue={`${unlockedCount}/${selectedCards.length}`}
           showCollection={showCollection}
           onCollection={openCollection}
@@ -2291,6 +2320,7 @@ function GameHud({
   levelProgress,
   streak,
   accuracy,
+  learningRecap,
   collectionValue,
   showCollection,
   onCollection,
@@ -2320,6 +2350,7 @@ function GameHud({
   levelProgress: number;
   streak: number;
   accuracy: number;
+  learningRecap: LearningRecap;
   collectionValue: string;
   showCollection: boolean;
   onCollection: () => void;
@@ -2364,7 +2395,7 @@ function GameHud({
           <ProfilePicker profiles={profiles} activeProfileId={activeProfileId} onChange={onProfileChange} onCreate={onCreateProfile} onRename={onRenameProfile} />
         </div>
 
-        <HudProgress level={level} levelProgress={levelProgress} streak={streak} accuracy={accuracy} />
+        <HudProgress level={level} levelProgress={levelProgress} streak={streak} accuracy={accuracy} learningRecap={learningRecap} />
 
         <div className="grid min-w-0 grid-cols-[minmax(220px,1fr)_minmax(72px,.32fr)] gap-1.5">
           <DifficultySelector difficulty={difficulty} onChange={onDifficultyChange} />
@@ -2384,6 +2415,7 @@ function GameHud({
           setupSummary={setupSummary}
           issueFlash={issueFlash}
           issueCount={issueCount}
+          learningRecap={learningRecap}
           selectedOfflineImages={selectedOfflineImages}
           warmOfflineImages={warmOfflineImages}
           onReset={onReset}
@@ -2398,14 +2430,23 @@ function HudProgress({
   levelProgress,
   streak,
   accuracy,
+  learningRecap,
 }: {
   level: number;
   levelProgress: number;
   streak: number;
   accuracy: number;
+  learningRecap: LearningRecap;
 }) {
   const sparkSlots = 6;
   const filledSparks = Math.min(sparkSlots, Math.max(0, Math.ceil((levelProgress / 100) * sparkSlots)));
+  const memoryLine = learningRecap.reviewConcepts > 0
+    ? `Burrow remembers · ${learningRecap.reviewConcepts} ${learningRecap.reviewConcepts === 1 ? "idea is" : "ideas are"} coming back`
+    : learningRecap.strongConcepts > 0
+      ? `Burrow remembers · ${learningRecap.strongConcepts} ${learningRecap.strongConcepts === 1 ? "idea is" : "ideas are"} getting strong`
+      : learningRecap.practicedConcepts > 0
+        ? `Burrow remembers · ${learningRecap.practicedConcepts} ${learningRecap.practicedConcepts === 1 ? "idea" : "ideas"} explored`
+        : "Burrow is learning with you";
 
   return (
     <div className="min-w-0 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] px-2 py-1.5">
@@ -2438,6 +2479,9 @@ function HudProgress({
         <span className="h-1 w-1 rounded-full bg-[#d9c7a7]" />
         <span className="truncate">{accuracy}% right</span>
       </div>
+      <p className="mt-1 truncate text-[10px] font-black text-[#2f665d]" aria-label={`${learningRecap.strongConcepts} strong concepts and ${learningRecap.reviewConcepts} recent concepts ready to review`}>
+        {memoryLine}
+      </p>
     </div>
   );
 }
@@ -2455,6 +2499,7 @@ function SetupMenu({
   setupSummary,
   issueFlash,
   issueCount,
+  learningRecap,
   selectedOfflineImages,
   warmOfflineImages,
   onReset,
@@ -2471,6 +2516,7 @@ function SetupMenu({
   setupSummary: string;
   issueFlash: boolean;
   issueCount: number;
+  learningRecap: LearningRecap;
   selectedOfflineImages: string[];
   warmOfflineImages: string[];
   onReset: () => void;
@@ -2487,7 +2533,8 @@ function SetupMenu({
         <span className="mt-0.5 whitespace-nowrap text-[9px] font-black uppercase tracking-[0.1em] text-[#72543e]">{setupSummary}</span>
       </summary>
       <div className="absolute right-0 z-40 mt-2 max-h-[calc(100dvh-112px)] w-[min(720px,calc(100vw-24px))] overflow-auto rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-3 shadow-[4px_4px_0_#092421]">
-        <div className="grid gap-3 md:grid-cols-[1fr_1.05fr]">
+        <LearningRecapPanel recap={learningRecap} />
+        <div className="mt-3 grid gap-3 md:grid-cols-[1fr_1.05fr]">
           <div>
             <SectionHeader title="Game Types" onAll={onSelectAllMixModes} onClear={onClearMixModes} />
             <div className="mt-2 grid gap-1.5 sm:grid-cols-2">
@@ -2558,6 +2605,50 @@ function SetupMenu({
         </div>
       </div>
     </details>
+  );
+}
+
+function LearningRecapPanel({ recap }: { recap: LearningRecap }) {
+  const hasPractice = recap.practicedConcepts > 0;
+
+  return (
+    <section aria-label="Learning recap" className="rounded-lg border-2 border-[#092421] bg-[#dcefe8] p-3 shadow-[2px_2px_0_#092421]">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div>
+          <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#2f665d]">Learning recap</p>
+          <p className="mt-1 text-lg font-black leading-tight text-[#102f36]">
+            {hasPractice ? `${recap.strongConcepts} strong · ${recap.reviewConcepts} ready to revisit` : "Ready for the first field note"}
+          </p>
+          <p className="mt-1 text-xs font-bold leading-snug text-[#5f6b5d]">
+            {hasPractice
+              ? recap.reviewConcepts > 0
+                ? `Burrow will bring missed ideas back in a different way. Next focus: ${recap.focusLabel}${recap.focusAccuracy === null ? "" : ` at ${recap.focusAccuracy}%`}.`
+                : `Nothing is waiting for review. Keep exploring ${recap.focusLabel}.`
+              : "Correct answers and misses will shape what Burrow brings back next."}
+          </p>
+        </div>
+        {hasPractice && (
+          <div className="rounded-lg border-2 border-[#092421] bg-white px-3 py-2 text-center">
+            <p className="text-2xl font-black leading-none text-[#102f36]">{recap.practicedConcepts}</p>
+            <p className="mt-1 text-[8px] font-black uppercase tracking-[0.12em] text-[#72543e]">{recap.practicedConcepts === 1 ? "idea" : "ideas"} practiced</p>
+          </div>
+        )}
+      </div>
+
+      {recap.topics.some((item) => item.answered > 0) && (
+        <div className="mt-2 grid gap-1.5 sm:grid-cols-2">
+          {recap.topics.filter((item) => item.answered > 0).map((item) => (
+            <div key={item.label} className="flex items-center justify-between gap-3 rounded-md border border-[#89b6a6] bg-white/80 px-2 py-1.5">
+              <div className="min-w-0">
+                <p className="truncate text-xs font-black text-[#102f36]">{item.label}</p>
+                <p className="text-[9px] font-bold text-[#5f6b5d]">{item.answered} answered</p>
+              </div>
+              <p className="shrink-0 text-sm font-black text-[#2f665d]">{item.accuracy}%</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -2654,7 +2745,7 @@ function QuestionRun({
 
   return (
     <section className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:overflow-hidden min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="relative min-h-[34dvh] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
+      <article className="relative h-[34dvh] min-h-[240px] max-h-[340px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[900px]:h-auto min-[900px]:min-h-0 min-[900px]:max-h-none">
         {question.map ? (
           <QuestionLocationStage
             question={question as Question & { map: NonNullable<Question["map"]> }}
@@ -3918,10 +4009,28 @@ function CollectionBook({
   const unlockedCardSet = useMemo(() => new Set(unlockedCards), [unlockedCards]);
   const initialTopic = topic !== "mixed" && topicStats.some((item) => item.id === topic) ? topic : topicStats[0]?.id;
   const [selectedTopic, setSelectedTopic] = useState<RoundTopic | undefined>(initialTopic);
+  const [expandedTopic, setExpandedTopic] = useState<RoundTopic | undefined>();
   const activeTopic = topicStats.find((item) => item.id === selectedTopic) ?? topicStats[0];
   const categoryCards = activeTopic ? cards.filter((card) => card.topic === activeTopic.id) : [];
   const orderedCards = orderCollectionCardsForCategory(categoryCards);
   const unlocked = orderedCards.filter((card) => isCardUnlocked(unlockedCardSet, card));
+  const collectionExpanded = expandedTopic === activeTopic?.id;
+  const starterSlots = 12;
+  const visibleCards = collectionExpanded
+    ? orderedCards
+    : orderedCards.filter((card, index) => index < starterSlots || isCardUnlocked(unlockedCardSet, card));
+  const hiddenCardCount = orderedCards.length - visibleCards.length;
+  const collectionPercent = orderedCards.length ? Math.round((unlocked.length / orderedCards.length) * 100) : 0;
+  const nextMilestone = Math.min(orderedCards.length, Math.max(5, Math.ceil((unlocked.length + 1) / 5) * 5));
+  const cardsToMilestone = Math.max(0, nextMilestone - unlocked.length);
+  const unlockRank = new Map(unlockedCards.map((identity, index) => [identity, index]));
+  const recentFinds = [...unlocked]
+    .sort((first, second) => {
+      const firstRank = Math.min(...cardDiscoveryIdentities(first).map((identity) => unlockRank.get(identity) ?? Number.MAX_SAFE_INTEGER));
+      const secondRank = Math.min(...cardDiscoveryIdentities(second).map((identity) => unlockRank.get(identity) ?? Number.MAX_SAFE_INTEGER));
+      return firstRank - secondRank;
+    })
+    .slice(0, 3);
   const topicCounts = Object.fromEntries(topicStats.map((item) => [
     item.id,
     cards.filter((card) => card.topic === item.id && isCardUnlocked(unlockedCardSet, card)).length,
@@ -3958,19 +4067,45 @@ function CollectionBook({
           })}
         </nav>
 
-        <div className="mt-4 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
-          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#72543e]">{activeTopic.label} field notes</p>
-          <p className="mt-1 text-xl font-black leading-none text-[#102f36]">{Number(activeTopic.libraryValue || 0).toLocaleString("en-US")} records</p>
-          <p className="mt-2 text-xs font-bold text-[#5f6b5d]">{activeTopic.wins} correct answers</p>
-          {activeTopic.samples.length > 0 && <p className="mt-1 text-[11px] font-semibold leading-tight text-[#5f6b5d]">Look for: {activeTopic.samples.join(" · ")}</p>}
-          <div className="mt-2 grid gap-1.5">
-            {activeTopic.sources.map((source) => (
-              <a key={`${activeTopic.id}-${source.label}`} href={source.url} target="_blank" rel="noreferrer" className="rounded-md bg-white px-2 py-1.5 text-xs font-bold leading-tight text-[#5f6b5d] underline-offset-2 hover:underline">
-                {source.label}
-              </a>
-            ))}
+        <div className="mt-4 rounded-lg border-2 border-[#092421] bg-[#dcefe8] p-3 shadow-[2px_2px_0_#092421]">
+          <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#2f665d]">{activeTopic.label} progress</p>
+          <div className="mt-1 flex items-end justify-between gap-3">
+            <p className="text-2xl font-black leading-none text-[#102f36]">{unlocked.length}/{orderedCards.length}</p>
+            <p className="text-xs font-black text-[#2f665d]">{collectionPercent}% found</p>
           </div>
+          <div className="mt-2 h-3 overflow-hidden rounded-full border-2 border-[#092421] bg-white" aria-label={`${collectionPercent}% of ${activeTopic.label} collected`}>
+            <div className="h-full bg-[#70d392]" style={{ width: `${collectionPercent}%` }} />
+          </div>
+          <p className="mt-2 text-xs font-black leading-snug text-[#102f36]">
+            {cardsToMilestone > 0 ? `${cardsToMilestone} more ${cardsToMilestone === 1 ? "card" : "cards"} to reach ${nextMilestone}.` : "This album is complete."}
+          </p>
+          <p className="mt-1 text-[11px] font-bold leading-snug text-[#5f6b5d]">{activeTopic.wins} correct answers have grown this collection.</p>
+          {recentFinds.length > 0 && (
+            <p className="mt-2 rounded-md bg-white/80 px-2 py-1.5 text-[11px] font-bold leading-snug text-[#5f6b5d]">
+              Newest finds: {recentFinds.map((card) => card.title).join(" · ")}
+            </p>
+          )}
         </div>
+
+        <details className="group mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] open:border-[#092421]">
+          <summary className="cursor-pointer list-none px-3 py-2 text-sm font-black text-[#102f36] [&::-webkit-details-marker]:hidden">
+            <span className="flex items-center justify-between gap-2">
+              <span>Field notes & sources</span>
+              <span aria-hidden="true" className="text-lg leading-none group-open:rotate-45">+</span>
+            </span>
+          </summary>
+          <div className="border-t-2 border-[#d9c7a7] p-2">
+            <p className="text-xs font-black text-[#102f36]">{Number(activeTopic.libraryValue || 0).toLocaleString("en-US")} researched records</p>
+            {activeTopic.samples.length > 0 && <p className="mt-1 text-[11px] font-semibold leading-tight text-[#5f6b5d]">Look for: {activeTopic.samples.join(" · ")}</p>}
+            <div className="mt-2 grid gap-1.5">
+              {activeTopic.sources.map((source) => (
+                <a key={`${activeTopic.id}-${source.label}`} href={source.url} target="_blank" rel="noreferrer" className="rounded-md bg-white px-2 py-1.5 text-xs font-bold leading-tight text-[#5f6b5d] underline-offset-2 hover:underline">
+                  {source.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </details>
       </aside>
 
       <article aria-label={`${activeTopic.label} card collection`} className="min-h-0 overflow-auto rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
@@ -3978,17 +4113,18 @@ function CollectionBook({
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#9f3f2b]">{activeTopic.label} collection</p>
-              <h2 className="mt-1 text-2xl font-black leading-none text-[#102f36]">Collect them all</h2>
-              <p className="mt-2 text-sm font-bold text-[#5f6b5d]">{unlocked.length} of {orderedCards.length} cards collected</p>
+              <h2 className="mt-1 text-2xl font-black leading-none text-[#102f36]">Your field album</h2>
+              <p className="mt-2 text-sm font-bold text-[#5f6b5d]">Unlocked cards stay visible in their real collection order.</p>
             </div>
             <div className="rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] px-3 py-2 text-right">
-              <p className="text-[8px] font-black uppercase tracking-[0.14em] text-[#72543e]">Card order</p>
-              <p className="mt-1 text-xs font-black text-[#102f36]">{collectionOrderLabel(orderedCards)}</p>
+              <p className="text-[8px] font-black uppercase tracking-[0.14em] text-[#72543e]">Next field badge</p>
+              <p className="mt-1 text-xs font-black text-[#102f36]">{unlocked.length === orderedCards.length ? "Album complete" : `${nextMilestone} cards`}</p>
+              <p className="mt-1 text-[9px] font-bold text-[#5f6b5d]">{collectionOrderLabel(orderedCards)}</p>
             </div>
           </div>
         </header>
         <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
-          {orderedCards.map((card) => {
+          {visibleCards.map((card) => {
             const isUnlocked = isCardUnlocked(unlockedCardSet, card);
             return (
               <div key={`${card.topic}-${card.id}`} className="overflow-hidden rounded-lg border-2 border-[#092421] bg-white">
@@ -4024,6 +4160,17 @@ function CollectionBook({
             );
           })}
         </div>
+        {(hiddenCardCount > 0 || collectionExpanded) && (
+          <div className="sticky bottom-2 mt-3 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setExpandedTopic(collectionExpanded ? undefined : activeTopic.id)}
+              className="min-h-11 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-5 py-2 text-sm font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#ffd96a] active:translate-y-0.5"
+            >
+              {collectionExpanded ? "Show collection highlights" : `Show all ${orderedCards.length} cards`}
+            </button>
+          </div>
+        )}
       </article>
     </section>
   );

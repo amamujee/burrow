@@ -13,6 +13,12 @@ export type LearningExposure = LearningIdentity & {
   sequence: number;
 };
 
+export type LearningSummary = {
+  practicedConcepts: number;
+  strongConcepts: number;
+  reviewConcepts: number;
+};
+
 const compact = (value: string) =>
   value
     .toLowerCase()
@@ -124,4 +130,36 @@ export const addLearningExposure = (
 ): LearningExposure[] => {
   const sequence = (history[0]?.sequence ?? 0) + 1;
   return [{ ...identity, ...details, sequence }, ...history].slice(0, limit);
+};
+
+export const summarizeLearningHistory = (history: readonly LearningExposure[]): LearningSummary => {
+  const latestByConcept = new Map<string, LearningExposure>();
+  const latestGapByConcept = new Map<string, number>();
+  const correctCounts = new Map<string, number>();
+  let recentGap = 0;
+
+  for (const exposure of history) {
+    if (exposure.outcome === "scheduled") continue;
+    if (!latestByConcept.has(exposure.conceptKey)) {
+      latestByConcept.set(exposure.conceptKey, exposure);
+      latestGapByConcept.set(exposure.conceptKey, recentGap);
+    }
+    if (exposure.outcome === "correct") {
+      correctCounts.set(exposure.conceptKey, (correctCounts.get(exposure.conceptKey) ?? 0) + 1);
+    }
+    recentGap += 1;
+  }
+
+  let strongConcepts = 0;
+  let reviewConcepts = 0;
+  for (const [conceptKey, latest] of latestByConcept) {
+    if ((latest.outcome === "incorrect" || latest.outcome === "skip") && (latestGapByConcept.get(conceptKey) ?? Number.MAX_SAFE_INTEGER) < 12) reviewConcepts += 1;
+    else if (latest.outcome === "correct" && (correctCounts.get(conceptKey) ?? 0) >= 2) strongConcepts += 1;
+  }
+
+  return {
+    practicedConcepts: latestByConcept.size,
+    strongConcepts,
+    reviewConcepts,
+  };
 };
