@@ -2,12 +2,20 @@
 
 import { track } from "@vercel/analytics";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ChallengeMode, challengeCampaignForMilestone, challengeQuestionInterval } from "@/components/core-mini-challenge";
+import {
+  ChallengeMode,
+  buildChallengeCampaignCatalog,
+  challengeCampaignFromCatalog,
+  challengeQuestionInterval,
+} from "@/components/core-mini-challenge";
 import { EqualGroupsBoard } from "@/components/equal-groups-board";
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid } from "@/components/game-question-ui";
 import { OfflineReady } from "@/components/offline-ready";
 import { WorldMapSurface } from "@/components/world-map-surface";
+import { weightTopicsForAccuracy } from "@/lib/adaptive-topics";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
+import { cardUnlockKeysForSubjects, isCardUnlocked } from "@/lib/card-discovery";
+import { migrateTopicSelection } from "@/lib/topic-selection";
 import {
   buildFactRoundFromCards,
   buildFactRound,
@@ -72,7 +80,7 @@ type Progress = {
   learningHistory: LearningExposure[];
   unlockedCards: string[];
   topicWins: Record<KnowledgeTopic, number>;
-  topicStats: Record<KnowledgeTopic, { correct: number; answered: number }>;
+  topicStats: Record<string, { correct: number; answered: number }>;
   modeWins: Record<GameMode, number>;
 };
 
@@ -86,6 +94,7 @@ type LearnerProfile = {
 type ProfilesState = {
   activeProfileId: string;
   profiles: LearnerProfile[];
+  knownTopics: RoundTopic[];
 };
 
 type ResultState = {
@@ -172,7 +181,7 @@ type PlayTelemetryTarget = Omit<PlayTelemetryInput, "action">;
 
 const allKnowledgeTopics: KnowledgeTopic[] = [...topicIds];
 const emptyTopicCounts = () => Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, 0])) as Record<KnowledgeTopic, number>;
-const emptyTopicStats = () => Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, { correct: 0, answered: 0 }])) as Record<KnowledgeTopic, { correct: number; answered: number }>;
+const emptyTopicStats = () => Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, { correct: 0, answered: 0 }])) as Record<string, { correct: number; answered: number }>;
 const isKnowledgeTopic = (topic: string): topic is KnowledgeTopic => allKnowledgeTopics.includes(topic as KnowledgeTopic);
 
 const initialProgress: Progress = {
@@ -247,7 +256,7 @@ const normalizeProgress = (progress?: Partial<Progress>): Progress => ({
   ...progress,
   challengeMilestone: normalizedChallengeMilestone(progress),
   topicWins: { ...emptyTopicCounts(), ...progress?.topicWins },
-  topicStats: Object.fromEntries(allKnowledgeTopics.map((topic) => [topic, { correct: 0, answered: 0, ...progress?.topicStats?.[topic] }])) as Progress["topicStats"],
+  topicStats: { ...emptyTopicStats(), ...(progress?.topicStats ?? {}) },
   modeWins: { ...initialProgress.modeWins, ...progress?.modeWins },
   seenIds: progress?.seenIds ?? [],
   learningHistory: progress?.learningHistory ?? [],
@@ -267,6 +276,7 @@ const defaultProfiles = (legacyProgress?: Partial<Progress>, interests: RoundTop
     { id: "player-1", name: "Player 1", interests: [...interests], progress: normalizeProgress(legacyProgress) },
     { id: "player-2", name: "Player 2", interests: [...interests], progress: freshProgress() },
   ],
+  knownTopics: [...interests],
 });
 
 const loadProfiles = (availableTopics: readonly RoundTopic[] = allKnowledgeTopics): ProfilesState => {
@@ -277,16 +287,22 @@ const loadProfiles = (availableTopics: readonly RoundTopic[] = allKnowledgeTopic
   if (savedProfiles) {
     try {
       const parsed = JSON.parse(savedProfiles) as Partial<ProfilesState>;
+      const topicSelection = (interests?: readonly RoundTopic[]) => migrateTopicSelection({
+        interests,
+        knownTopics: parsed.knownTopics,
+        availableTopics,
+      });
       const profiles = (parsed.profiles ?? []).map((profile, index) => ({
         id: profile.id ?? `profile-${index}`,
         name: profile.name?.trim().slice(0, 18) || `Player ${index + 1}`,
-        interests: normalizeInterests(profile.interests, availableTopics),
+        interests: topicSelection(profile.interests).interests,
         progress: normalizeProgress(profile.progress),
       }));
       if (profiles.length) {
         return {
           activeProfileId: profiles.some((profile) => profile.id === parsed.activeProfileId) ? parsed.activeProfileId ?? profiles[0].id : profiles[0].id,
           profiles,
+          knownTopics: [...availableTopics],
         };
       }
     } catch {
@@ -466,14 +482,7 @@ const topicScopeFor = (topic: RoundTopic | "mixed", interests: RoundTopic[], ava
 const adaptiveTopicScopeFor = (topic: RoundTopic | "mixed", interests: RoundTopic[], progress: Progress, availableTopics: readonly RoundTopic[] = allKnowledgeTopics): PlayableTopicScope => {
   const baseScope = topicScopeFor(topic, interests, availableTopics);
   if (topic !== "mixed" || typeof baseScope === "string") return baseScope;
-
-  return baseScope.flatMap((item) => {
-    if (!isKnowledgeTopic(item)) return [item];
-    const stats = progress.topicStats[item];
-    const accuracy = stats.answered ? stats.correct / stats.answered : 0;
-    const weight = stats.answered < 3 ? 2 : accuracy < 0.62 ? 3 : accuracy < 0.78 ? 2 : 1;
-    return Array.from({ length: weight }, () => item);
-  });
+  return weightTopicsForAccuracy(baseScope, progress.topicStats);
 };
 
 const builtInScopeFor = (scope: PlayableTopicScope): TopicScope => {
@@ -591,6 +600,17 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const topics = scopeTopics(scope);
     return topics[Math.floor(Math.abs(Math.sin(seed * 999)) * 10000) % topics.length];
   }, [scopeTopics]);
+  const geoCapableTopicsByDifficulty = useMemo(() => new Map(
+    ([1, 2, 3] as const).map((difficulty) => [
+      difficulty,
+      new Set(playableTopics.filter((topicId) => {
+        const deck = packDeckById.get(topicId);
+        return deck
+          ? canBuildGeoRoundFromCards(deck.cards, difficulty)
+          : isKnowledgeTopic(topicId) && canBuildGeoRound(topicId, difficulty);
+      })),
+    ]),
+  ), [packDeckById, playableTopics]);
   const buildSortForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number, history: readonly LearningExposure[] = []) => {
     return buildVariedRound(seed, history, sortLearningIdentity, (candidateSeed) => {
       const topicId = pickTopic(scope, candidateSeed);
@@ -615,6 +635,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const buildGeoForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = [], history: readonly LearningExposure[] = []) => {
     const buildCandidate = (candidateSeed: number) => {
     const scopedTopics = scopeTopics(scope);
+    const geoCapableTopics = geoCapableTopicsByDifficulty.get(difficulty) ?? new Set<RoundTopic>();
     const orderedTopics = [...scopedTopics].sort((a, b) => {
       const scoreA = Math.sin((candidateSeed + a.length * 17) * 97);
       const scoreB = Math.sin((candidateSeed + b.length * 17) * 97);
@@ -622,10 +643,11 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     });
 
     for (const topicId of orderedTopics) {
+      if (!geoCapableTopics.has(topicId)) continue;
       const deck = packDeckById.get(topicId);
       if (deck) {
-        if (canBuildGeoRoundFromCards(deck.cards, difficulty)) return buildGeoRoundFromCards(deck.cards, topicId, difficulty, candidateSeed + topicId.length, unlockedTitles);
-      } else if (isKnowledgeTopic(topicId) && canBuildGeoRound(topicId, difficulty)) {
+        return buildGeoRoundFromCards(deck.cards, topicId, difficulty, candidateSeed + topicId.length, unlockedTitles);
+      } else if (isKnowledgeTopic(topicId)) {
         return buildGeoRound(topicId, difficulty, candidateSeed + topicId.length, unlockedTitles);
       }
     }
@@ -635,7 +657,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     return buildGeoRound("mixed", difficulty, candidateSeed + 997, unlockedTitles);
     };
     return buildVariedRound(seed, history, geoLearningIdentity, buildCandidate);
-  }, [packDeckById, scopeTopics]);
+  }, [geoCapableTopicsByDifficulty, packDeckById, scopeTopics]);
   const buildNumberForScope = useCallback((scope: PlayableTopicScope, difficulty: Difficulty, seed: number, history: readonly LearningExposure[] = []) => {
     return buildVariedRound(seed, history, numberLearningIdentity, (candidateSeed) => {
       const topicId = pickTopic(scope, candidateSeed);
@@ -703,22 +725,25 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const lastViewedPlayKeyRef = useRef("");
 
   const allCards = useMemo(() => [...collectionCards(), ...packDecks.flatMap((deck) => deck.cards)], [packDecks]);
-  const miniChallengeCampaign = useMemo(() => challengeCampaignForMilestone(
-    progress.answered,
-    activeInterestKey.split("|").filter(Boolean).map((id) => ({
+  const miniChallengeCategories = useMemo(() => activeInterestKey.split("|").filter(Boolean).map((id) => ({
       id: id as RoundTopic,
       label: topicMetaById.get(id as RoundTopic)?.label ?? "Mixed topics",
       cards: allCards.filter((card) => card.topic === id),
-    })),
-  ), [activeInterestKey, allCards, progress.answered, topicMetaById]);
-  const activeTopicSet = new Set(activeInterests);
-  const selectedCards = allCards.filter((card) => activeTopicSet.has(card.topic));
+    })), [activeInterestKey, allCards, topicMetaById]);
+  const miniChallengeCatalog = useMemo(
+    () => buildChallengeCampaignCatalog(miniChallengeCategories),
+    [miniChallengeCategories],
+  );
+  const miniChallengeCampaign = useMemo(
+    () => challengeCampaignFromCatalog(progress.answered, miniChallengeCatalog),
+    [miniChallengeCatalog, progress.answered],
+  );
+  const activeTopicSet = useMemo(() => new Set(activeInterestKey.split("|").filter(Boolean)), [activeInterestKey]);
+  const selectedCards = useMemo(() => allCards.filter((card) => activeTopicSet.has(card.topic)), [activeTopicSet, allCards]);
+  const unlockedCardSet = useMemo(() => new Set(progress.unlockedCards), [progress.unlockedCards]);
   const question = questions[questionIndex];
   const hasBuiltInInterests = activeInterests.some(isKnowledgeTopic);
-  const geoCapableTopics = useMemo(() => new Set(playableTopics.filter((topicId) => {
-    const deck = packDeckById.get(topicId);
-    return deck ? canBuildGeoRoundFromCards(deck.cards, progress.difficulty) : isKnowledgeTopic(topicId) && canBuildGeoRound(topicId, progress.difficulty);
-  })), [packDeckById, playableTopics, progress.difficulty]);
+  const geoCapableTopics = geoCapableTopicsByDifficulty.get(progress.difficulty) ?? new Set<RoundTopic>();
   const hasGeoInterests = activeInterests.some((interest) => geoCapableTopics.has(interest));
   const availableMixPattern = defaultMixPattern.filter((item) => {
     if (!hasBuiltInInterests && (item === "quiz" || item === "versus")) return false;
@@ -751,7 +776,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
                 ? oddSelected !== null
                 : answered;
   const sessionAnswered = questionIndex + (activeChallengeAnswered ? 1 : 0);
-  const unlockedCount = selectedCards.filter((card) => progress.unlockedCards.includes(card.title)).length;
+  const unlockedCount = selectedCards.filter((card) => isCardUnlocked(unlockedCardSet, card)).length;
   const currentTopicScope = adaptiveTopicScopeFor(topic, activeInterests, progress, playableTopics);
   const currentTopicLabel = isQuestionMode && question ? topicLabel(question.topic) : typeof currentTopicScope === "string" && currentTopicScope !== "mixed" ? topicLabel(currentTopicScope) : "Mixed topics";
   const currentRoundContext = `${currentTopicLabel} · ${gameTypeLabel(activeChallengeMode)}`;
@@ -1196,6 +1221,9 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const nextXp = progress.xp + xpGain;
     const nextLevel = levelFromXp(nextXp);
     const feedbackCorrect = correct || neutral;
+    const unlockKeys = topicName
+      ? cardUnlockKeysForSubjects(allCards, topicName, unlockTitles)
+      : [];
 
     setLastResult({ correct: feedbackCorrect, xpGain, leveledUp: nextLevel > progress.level });
     setProgress((current) => ({
@@ -1213,14 +1241,14 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         topic: topicName ?? "mixed",
         outcome: neutral ? "tie" : correct ? "correct" : "incorrect",
       }),
-      unlockedCards: feedbackCorrect ? addUnique(current.unlockedCards, unlockTitles) : current.unlockedCards,
+      unlockedCards: feedbackCorrect ? addUnique(current.unlockedCards, unlockKeys) : current.unlockedCards,
       topicWins: topicName && isKnowledgeTopic(topicName) ? { ...current.topicWins, [topicName]: current.topicWins[topicName] + (correct ? 1 : 0) } : current.topicWins,
-      topicStats: topicName && isKnowledgeTopic(topicName)
+      topicStats: topicName
         ? {
             ...current.topicStats,
             [topicName]: {
-              correct: current.topicStats[topicName].correct + (correct ? 1 : 0),
-              answered: current.topicStats[topicName].answered + 1,
+              correct: (current.topicStats[topicName]?.correct ?? 0) + (correct ? 1 : 0),
+              answered: (current.topicStats[topicName]?.answered ?? 0) + 1,
             },
           }
         : current.topicStats,
@@ -1351,6 +1379,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setProfilesState((current) => ({
       activeProfileId: newProfile.id,
       profiles: [...current.profiles, newProfile],
+      knownTopics: [...playableTopics],
     }));
     restartPlay("mixed", mode, newProfile, seed);
     setCelebration(`${newProfile.name} is ready.`);
@@ -1489,9 +1518,29 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     advance(nextHistory);
   };
 
+  const prepareMixRound = (nextMode: ChallengeMode, seed: number, history: readonly LearningExposure[]) => {
+    if (nextMode === "sort") {
+      setSortRound(buildSortForScope(currentTopicScope, progress.difficulty, seed + 29, history));
+    } else if (nextMode === "fact") {
+      setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed + 37, progress.unlockedCards, history));
+    } else if (nextMode === "peek") {
+      setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed + 43, progress.unlockedCards, history));
+    } else if (nextMode === "geo") {
+      setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed + 47, progress.unlockedCards, history));
+    } else if (nextMode === "number") {
+      setNumberRound(buildNumberForScope(currentTopicScope, progress.difficulty, seed + 53, history));
+    } else if (nextMode === "odd") {
+      setOddRound(buildOddForScope(currentTopicScope, progress.difficulty, seed + 59, history));
+    } else if (nextMode === "trumps") {
+      setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed + 67, progress.unlockedCards, history));
+    }
+  };
+
   const advanceMix = (history: readonly LearningExposure[] = progress.learningHistory) => {
     if (startPendingMiniChallenge()) return;
     const seed = freshSeed(101 + questionIndex);
+    const nextQuestionIndex = questionIndex === questions.length - 1 ? 0 : questionIndex + 1;
+    const nextMode = activeMixPattern[nextQuestionIndex % activeMixPattern.length];
     if (questionIndex === questions.length - 1) {
       setProgress((current) => ({ ...current, sessions: current.sessions + 1 }));
       setQuestionIndex(0);
@@ -1512,13 +1561,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setNumberSelected(null);
     setOddSelected(null);
     setTopTrumpSelected(null);
-    setSortRound(buildSortForScope(currentTopicScope, progress.difficulty, seed + 29, history));
-    setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed + 37, progress.unlockedCards, history));
-    setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed + 43, progress.unlockedCards, history));
-    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed + 47, progress.unlockedCards, history));
-    setNumberRound(buildNumberForScope(currentTopicScope, progress.difficulty, seed + 53, history));
-    setOddRound(buildOddForScope(currentTopicScope, progress.difficulty, seed + 59, history));
-    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed + 67, progress.unlockedCards, history));
+    prepareMixRound(nextMode, seed, history);
   };
 
   const advance = (history: readonly LearningExposure[] = progress.learningHistory) => {
@@ -3864,15 +3907,16 @@ function CollectionBook({
     wins: number;
   }[];
 }) {
+  const unlockedCardSet = useMemo(() => new Set(unlockedCards), [unlockedCards]);
   const initialTopic = topic !== "mixed" && topicStats.some((item) => item.id === topic) ? topic : topicStats[0]?.id;
   const [selectedTopic, setSelectedTopic] = useState<RoundTopic | undefined>(initialTopic);
   const activeTopic = topicStats.find((item) => item.id === selectedTopic) ?? topicStats[0];
   const categoryCards = activeTopic ? cards.filter((card) => card.topic === activeTopic.id) : [];
   const orderedCards = orderCollectionCardsForCategory(categoryCards);
-  const unlocked = orderedCards.filter((card) => unlockedCards.includes(card.title));
+  const unlocked = orderedCards.filter((card) => isCardUnlocked(unlockedCardSet, card));
   const topicCounts = Object.fromEntries(topicStats.map((item) => [
     item.id,
-    cards.filter((card) => card.topic === item.id && unlockedCards.includes(card.title)).length,
+    cards.filter((card) => card.topic === item.id && isCardUnlocked(unlockedCardSet, card)).length,
   ])) as Record<RoundTopic, number>;
 
   if (!activeTopic) return null;
@@ -3937,7 +3981,7 @@ function CollectionBook({
         </header>
         <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
           {orderedCards.map((card) => {
-            const isUnlocked = unlockedCards.includes(card.title);
+            const isUnlocked = isCardUnlocked(unlockedCardSet, card);
             return (
               <div key={`${card.topic}-${card.id}`} className="overflow-hidden rounded-lg border-2 border-[#092421] bg-white">
                 <div className={`relative flex h-36 overflow-hidden bg-[#e3efe4] ${isUnlocked ? "" : "grayscale"}`}>

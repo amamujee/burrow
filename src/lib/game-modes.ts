@@ -23,6 +23,7 @@ import {
 } from "./game-data";
 import { scoreFeaturedContent } from "./content-quality";
 import { worldLocationDisplay, type CardMetadata, type WorldContinent, type WorldLocation } from "./card-metadata";
+import { cardDiscoveryIdentities } from "./card-discovery";
 import { poolForDifficulty } from "./difficulty-pool";
 import { discoveryShuffle, sample, sampleSafe, seedRandom, shuffle } from "./random";
 
@@ -498,7 +499,7 @@ const countryGenericCard = (country: Country): GenericKnowledgeCard => ({
   ],
 });
 
-export const collectionCards = (): KnowledgeCard[] => [
+const collectionCardCatalog: KnowledgeCard[] = [
   ...peppers.map(pepperCard),
   ...buildings.map(buildingCard),
   ...sharks.map((shark) => sharkCard(shark)),
@@ -506,6 +507,8 @@ export const collectionCards = (): KnowledgeCard[] => [
   ...jets.map((jet) => jetCard(jet)),
   ...countries.map((country) => countryCard(country)),
 ];
+
+export const collectionCards = (): KnowledgeCard[] => collectionCardCatalog;
 
 export const orderCollectionCardsByScoville = (cards: readonly KnowledgeCard[]): KnowledgeCard[] => {
   const peppersByHeat = cards
@@ -1304,7 +1307,12 @@ export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, se
     currentTopic === "space" ? preferredPool(spaceTrumpPool(), difficulty) :
     currentTopic === "countries" ? preferredPool(countries, difficulty) :
     preferredPool(jets, difficulty);
-  const shuffled = discoveryShuffle(pool.map((item) => ({ id: item.id, title: item.name })), seed + difficulty, unlockedTitles, (item) => item.title);
+  const shuffled = discoveryShuffle(
+    pool.map((item) => ({ id: item.id, topic: currentTopic, title: item.name })),
+    seed + difficulty,
+    unlockedTitles,
+    cardDiscoveryIdentities,
+  );
   const first = shuffled[0].id;
   const second = shuffled.find((item) => item.id !== first)?.id ?? shuffled[1].id;
   const player = topTrumpCard(currentTopic, first);
@@ -1326,7 +1334,7 @@ export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed
   const count = difficulty === 1 ? 3 : 4;
   const allCards = collectionCards();
   const topicCards = preferredPool(allCards.filter((card) => card.topic === currentTopic), difficulty);
-  const card = discoveryShuffle(topicCards, seed + 1, unlockedTitles, (item) => item.title)[0];
+  const card = discoveryShuffle(topicCards, seed + 1, unlockedTitles, cardDiscoveryIdentities)[0];
   const distractors = shuffle(topicCards.filter((item) => item.id !== card.id).map((item) => item.title), seed + 2).slice(0, count - 1);
 
   return {
@@ -1903,17 +1911,70 @@ export const buildGeoChoicesForLocations = (
   return diverse ? shuffle(diverse, seed + 1) : null;
 };
 
-const geoCards = <T extends KnowledgeCard>(cards: readonly T[]) => cards.filter(hasLocationMetadata);
+type LocatedKnowledgeCard = KnowledgeCard & { metadata: CardMetadata & { location: WorldLocation } };
+
+const geoCards = <T extends KnowledgeCard>(cards: readonly T[]) =>
+  cards.filter(hasLocationMetadata) as (T & LocatedKnowledgeCard)[];
+
+const geoCapabilityCache = new WeakMap<readonly KnowledgeCard[], Map<Difficulty, boolean>>();
+
+const cachedGeoCapability = (cards: readonly KnowledgeCard[], difficulty: Difficulty, calculate: () => boolean) => {
+  const cachedByDifficulty = geoCapabilityCache.get(cards);
+  const cached = cachedByDifficulty?.get(difficulty);
+  if (cached !== undefined) return cached;
+  const result = calculate();
+  const nextCache = cachedByDifficulty ?? new Map<Difficulty, boolean>();
+  nextCache.set(difficulty, result);
+  if (!cachedByDifficulty) geoCapabilityCache.set(cards, nextCache);
+  return result;
+};
 
 export const canBuildGeoRoundFromCards = (cards: readonly KnowledgeCard[], difficulty: Difficulty = 1) => {
-  const count = geoChoiceCountForDifficulty(difficulty);
-  const candidates = geoChoiceCandidates(cards);
-  return candidates.some((answer, index) => diverseGeoChoices(answer, candidates, count, difficulty, index) !== null);
+  return cachedGeoCapability(cards, difficulty, () => {
+    const count = geoChoiceCountForDifficulty(difficulty);
+    const candidates = geoChoiceCandidates(cards);
+    return candidates.some((answer, index) => diverseGeoChoices(answer, candidates, count, difficulty, index) !== null);
+  });
+};
+
+const geoScopedCards = new Map<string, KnowledgeCard[]>();
+const geoFallbackCards = collectionCardCatalog.filter((card) => card.topic === "peppers" || card.topic === "buildings");
+
+const cardsForGeoScope = (topic: TopicScope) => {
+  const topics = [...new Set(topicsForScope(topic))].sort();
+  const key = topics.join("|");
+  const cached = geoScopedCards.get(key);
+  if (cached) return cached;
+  const topicSet = new Set(topics);
+  const cards = collectionCardCatalog.filter((card) => topicSet.has(card.topic as KnowledgeTopic));
+  geoScopedCards.set(key, cards);
+  return cards;
 };
 
 export const canBuildGeoRound = (topic: TopicScope, difficulty: Difficulty = 1) => {
-  const topics = new Set(topicsForScope(topic));
-  return canBuildGeoRoundFromCards(collectionCards().filter((card) => topics.has(card.topic as KnowledgeTopic)), difficulty);
+  return canBuildGeoRoundFromCards(cardsForGeoScope(topic), difficulty);
+};
+
+type GeoPoolPlan = {
+  pool: LocatedKnowledgeCard[];
+  choicesPool: GeoChoice[];
+};
+
+const geoPoolPlanCache = new WeakMap<readonly KnowledgeCard[], Map<Difficulty, GeoPoolPlan>>();
+
+const geoPoolPlanForCards = (cards: readonly KnowledgeCard[], difficulty: Difficulty): GeoPoolPlan => {
+  const cachedByDifficulty = geoPoolPlanCache.get(cards);
+  const cached = cachedByDifficulty?.get(difficulty);
+  if (cached) return cached;
+
+  const allLocatedCards = geoCards(cards);
+  const preferred = preferredPool(allLocatedCards, difficulty);
+  const pool = canBuildGeoRoundFromCards(preferred, difficulty) ? preferred : allLocatedCards;
+  const plan = { pool, choicesPool: geoChoiceCandidates(pool) };
+  const nextCache = cachedByDifficulty ?? new Map<Difficulty, GeoPoolPlan>();
+  nextCache.set(difficulty, plan);
+  if (!cachedByDifficulty) geoPoolPlanCache.set(cards, nextCache);
+  return plan;
 };
 
 export const buildGeoRoundFromCards = (
@@ -1924,11 +1985,8 @@ export const buildGeoRoundFromCards = (
   unlockedTitles: readonly string[] = [],
 ): GeoRound => {
   const count = geoChoiceCountForDifficulty(difficulty);
-  const allLocatedCards = geoCards(cards);
-  const preferred = preferredPool(allLocatedCards, difficulty);
-  const pool = canBuildGeoRoundFromCards(preferred, difficulty) ? preferred : allLocatedCards;
-  const choicesPool = geoChoiceCandidates(pool);
-  const orderedCards = discoveryShuffle(pool, seed + 1, unlockedTitles, (item) => item.title);
+  const { pool, choicesPool } = geoPoolPlanForCards(cards, difficulty);
+  const orderedCards = discoveryShuffle(pool, seed + 1, unlockedTitles, cardDiscoveryIdentities);
   const selected = orderedCards.map((card, index) => {
     const answer = geoChoiceForLocation(card.metadata.location);
     return { card, choices: diverseGeoChoices(answer, choicesPool, count, difficulty, seed + index) };
@@ -1958,11 +2016,9 @@ export const buildGeoRoundFromCards = (
 };
 
 export const buildGeoRound = (topic: TopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []): GeoRound => {
-  const topics = new Set(topicsForScope(topic));
-  const scopedCards = collectionCards().filter((card) => topics.has(card.topic as KnowledgeTopic));
+  const scopedCards = cardsForGeoScope(topic);
   if (canBuildGeoRoundFromCards(scopedCards, difficulty)) return buildGeoRoundFromCards(scopedCards, typeof topic === "string" ? topic : "mixed", difficulty, seed, unlockedTitles);
-  const fallbackCards = collectionCards().filter((card) => card.topic === "peppers" || card.topic === "buildings");
-  return buildGeoRoundFromCards(fallbackCards, "mixed", difficulty, seed + 97, unlockedTitles);
+  return buildGeoRoundFromCards(geoFallbackCards, "mixed", difficulty, seed + 97, unlockedTitles);
 };
 
 export const buildSortRoundFromCards = (
@@ -2013,7 +2069,7 @@ export const buildRevealRoundFromCards = (
   const askLocation = locationCandidates.length > 0 && seedRandom(seed + 4) > 0.42;
 
   if (askLocation) {
-    const candidate = discoveryShuffle(locationCandidates, seed + 1, unlockedTitles, (item) => item.card.title)[0];
+    const candidate = discoveryShuffle(locationCandidates, seed + 1, unlockedTitles, (item) => cardDiscoveryIdentities(item.card))[0];
     const { card, mapChoices } = candidate;
     const location = card.metadata.location;
 
@@ -2032,7 +2088,7 @@ export const buildRevealRoundFromCards = (
     };
   }
 
-  const card = discoveryShuffle(pool, seed + 1, unlockedTitles, (item) => item.title)[0];
+  const card = discoveryShuffle(pool, seed + 1, unlockedTitles, cardDiscoveryIdentities)[0];
   const distractors = shuffle(pool.filter((item) => item.id !== card.id).map((item) => item.title), seed + 2).slice(0, count - 1);
 
   return {
@@ -2064,7 +2120,7 @@ export const buildFactRoundFromCards = (
     && (difficulty === 1 || seedRandom(seed + 14) > 0.5);
 
   if (useLocation) {
-    const card = discoveryShuffle(eligibleLocationPool, seed + 12, unlockedTitles, (item) => item.title)[0];
+    const card = discoveryShuffle(eligibleLocationPool, seed + 12, unlockedTitles, cardDiscoveryIdentities)[0];
     const location = card.metadata.location;
     const fakeCard = truthful ? card : sample(separatedFactLocationPartners(card, locationPool), seed + 13);
     const statement = truthful
@@ -2090,7 +2146,7 @@ export const buildFactRoundFromCards = (
     };
   }
 
-  const card = discoveryShuffle(pool, seed + 12, unlockedTitles, (item) => item.title)[0];
+  const card = discoveryShuffle(pool, seed + 12, unlockedTitles, cardDiscoveryIdentities)[0];
   const fakeCard = sampleSafe(pool.filter((item) => item.id !== card.id && item.statValue !== card.statValue), pool.filter((item) => item.id !== card.id), seed + 13);
   const useStat = difficulty > 1 || seedRandom(seed + 14) > 0.45;
   const statement = truthful
@@ -2249,7 +2305,7 @@ export const buildTopTrumpRoundFromCards = (
 ): TopTrumpRound => {
   const pool = preferredPool(cards.filter((card) => card.stats.length >= 2), difficulty);
   if (pool.length < 2) throw new Error(`Need at least 2 multi-stat cards to build a Top Trumps round for ${topic}`);
-  const shuffled = discoveryShuffle(pool, seed + difficulty, unlockedTitles, (item) => item.title);
+  const shuffled = discoveryShuffle(pool, seed + difficulty, unlockedTitles, cardDiscoveryIdentities);
   const player = shuffled[0];
   const computer = shuffled.find((card) => card.id !== player.id && card.stats.some((stat) => player.stats.some((playerStat) => playerStat.id === stat.id))) ?? shuffled[1];
   const sharedStatIds = new Set(computer.stats.map((stat) => stat.id));
@@ -2956,7 +3012,11 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "countries") {
     const pool = preferredPool(countries, difficulty);
-    const country = discoveryShuffle(pool, seed + 12, unlockedTitles, (item) => item.name)[0];
+    const country = discoveryShuffle(pool, seed + 12, unlockedTitles, (item) => cardDiscoveryIdentities({
+      id: item.id,
+      topic: "countries",
+      title: item.name,
+    }))[0];
     const factType = sample(["capital", "continent"] as const, seed + 13);
     const alternate = sample(pool.filter((item) => item.id !== country.id), seed + 14);
     const claimedCapital = truthful ? country.capital : alternate.capital;
@@ -2981,7 +3041,11 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "peppers") {
     const pool = preferredPool(peppers, difficulty);
-    const pepper = discoveryShuffle(pool, seed + 12, unlockedTitles, (item) => item.name)[0];
+    const pepper = discoveryShuffle(pool, seed + 12, unlockedTitles, (item) => cardDiscoveryIdentities({
+      id: item.id,
+      topic: "peppers",
+      title: item.name,
+    }))[0];
     const locationPool = pool.filter(hasLocationMetadata);
     const falseLocationPool = locationPool.filter((card) => separatedFactLocationPartners(card, locationPool).length > 0);
     const eligibleLocationPool = truthful ? locationPool : falseLocationPool;
@@ -2989,7 +3053,11 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     if (useLocation) {
       const locatedPepper = hasLocationMetadata(pepper) && eligibleLocationPool.some((item) => item.id === pepper.id)
         ? pepper
-        : discoveryShuffle(eligibleLocationPool, seed + 16, unlockedTitles, (item) => item.name)[0];
+        : discoveryShuffle(eligibleLocationPool, seed + 16, unlockedTitles, (item) => cardDiscoveryIdentities({
+          id: item.id,
+          topic: "peppers",
+          title: item.name,
+        }))[0];
       const location = locatedPepper.metadata.location;
       const fakePepper = truthful ? locatedPepper : sample(separatedFactLocationPartners(locatedPepper, locationPool), seed + 17);
       const statement = truthful

@@ -5,7 +5,8 @@ import { useState } from "react";
 import { EqualGroupsBoard, type EqualGroupsVisual } from "@/components/equal-groups-board";
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid } from "@/components/game-question-ui";
 import { WorldMapSurface } from "@/components/world-map-surface";
-import { collectionCards, geoChoiceForLocation, type KnowledgeCard, type RoundTopic } from "@/lib/game-modes";
+import type { WorldLocation } from "@/lib/card-metadata";
+import { collectionCards, geoChoiceForLocation, geoPointMapDistance, type KnowledgeCard, type RoundTopic } from "@/lib/game-modes";
 
 export type ConceptVisual = "pepper-anatomy" | "flavor-and-heat" | "heat-signal" | "genes-and-growing";
 
@@ -24,7 +25,7 @@ type ChallengeStepBase = {
 
 export type ChallengeStep =
   | (ChallengeStepBase & { skill: "Reading"; evidence: string })
-  | (ChallengeStepBase & { skill: "Geography"; map?: { hint: string; choices: { label: string; x: number; y: number }[] } })
+  | (ChallengeStepBase & { skill: "Geography"; map?: { hint: string; choices: { label: string; mapLabel?: string; x: number; y: number }[] } })
   | (ChallengeStepBase & { skill: "Math"; math: { groups: number; each: number; visual: EqualGroupsVisual } })
   | (ChallengeStepBase & { skill: "Science"; conceptVisual?: ConceptVisual })
   | (ChallengeStepBase & { skill: "Words" });
@@ -149,12 +150,37 @@ const uniqueBy = <T,>(items: readonly T[], keyFor: (item: T) => string) => {
 
 const rotate = <T,>(items: readonly T[], offset: number) => items.length ? items[offset % items.length] : undefined;
 
-const threeChoices = (answer: string, candidates: readonly string[], seed: number) => {
-  const values = uniqueBy([answer, ...candidates], (item) => item).slice(0, 3);
-  const fillers = ["Not enough information", "A different field note", "None of these"];
-  for (const filler of fillers) if (values.length < 3 && !values.includes(filler)) values.push(filler);
+const fourChoices = (answer: string, candidates: readonly string[], seed: number) => {
+  const values = uniqueBy([answer, ...candidates], (item) => item).slice(0, 4);
+  const fillers = ["Not enough information", "A different field note", "None of these", "All of these"];
+  for (const filler of fillers) if (values.length < 4 && !values.includes(filler)) values.push(filler);
   const shift = seed % values.length;
   return [...values.slice(shift), ...values.slice(0, shift)];
+};
+
+const diverseMapLocations = (answer: WorldLocation, candidates: readonly WorldLocation[], seed: number) => {
+  const available = uniqueBy(candidates, (candidate) => candidate.label)
+    .filter((candidate) => candidate.label !== answer.label);
+  const shifted = [...available.slice(seed % Math.max(available.length, 1)), ...available.slice(0, seed % Math.max(available.length, 1))];
+  const selected = [answer];
+
+  while (selected.length < 4 && shifted.length > 0) {
+    const next = shifted
+      .map((candidate, index) => ({
+        candidate,
+        index,
+        separation: Math.min(...selected.map((selectedLocation) => geoPointMapDistance(
+          geoChoiceForLocation(candidate).point,
+          geoChoiceForLocation(selectedLocation).point,
+        ))),
+      }))
+      .sort((first, second) => second.separation - first.separation || first.index - second.index)[0];
+    selected.push(next.candidate);
+    shifted.splice(next.index, 1);
+  }
+
+  const rotation = seed % selected.length;
+  return [...selected.slice(rotation), ...selected.slice(0, rotation)];
 };
 
 const measurementMeaning = (label: string) => {
@@ -188,41 +214,42 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
     const stepCards = offsets.map((offset) => rotate(pool, campaignIndex + offset)!);
     const [readingCard, geographyCard, mathCard, scienceCard, wordsCard] = stepCards;
     const distractorTitles = (card: KnowledgeCard) => pool.filter((candidate) => candidate.id !== card.id).map((candidate) => candidate.title);
-    const readingChoices = threeChoices(readingCard.title, distractorTitles(readingCard), campaignIndex);
+    const readingChoices = fourChoices(readingCard.title, distractorTitles(readingCard), campaignIndex);
 
     const location = geographyCard.metadata?.location;
     const locatedCards = uniqueBy(pool.filter((card) => card.metadata?.location), (card) => card.metadata!.location!.label);
-    const geographyLocationChoices = location
-      ? threeChoices(location.label, locatedCards.filter((card) => card.id !== geographyCard.id).map((card) => card.metadata!.location!.label), campaignIndex + 1)
+    const geographyLocations = location
+      ? diverseMapLocations(location, locatedCards.map((card) => card.metadata!.location!), campaignIndex + 1)
       : [];
-    const geographyMap = location && locatedCards.length >= 3 && geographyLocationChoices.length === 3
+    const geographyMap = location && geographyLocations.length === 4
       ? {
           hint: `Find ${location.label} on the world map.`,
-          choices: geographyLocationChoices.map((label) => {
-            const choiceLocation = label === location.label
-              ? location
-              : locatedCards.find((card) => card.metadata?.location?.label === label)!.metadata!.location!;
+          choices: geographyLocations.map((choiceLocation, index) => {
             const point = geoChoiceForLocation(choiceLocation).point;
-            return { label, x: point.x, y: point.y };
+            return { label: `Pin ${String.fromCharCode(65 + index)}`, mapLabel: choiceLocation.label, x: point.x, y: point.y };
           }),
         }
       : undefined;
     const geographyChoices = geographyMap
-      ? geographyLocationChoices
-      : threeChoices(geographyCard.title, distractorTitles(geographyCard), campaignIndex + 1);
+      ? geographyMap.choices.map((choice) => choice.label)
+      : fourChoices(geographyCard.title, distractorTitles(geographyCard), campaignIndex + 1);
+    const geographyAnswer = geographyMap && location
+      ? geographyMap.choices[geographyLocations.findIndex((choiceLocation) => choiceLocation.label === location.label)].label
+      : geographyCard.title;
 
     const groups = 3 + campaignIndex;
     const each = 2 + ((campaignIndex * 3 + 4) % 11);
     const product = groups * each;
     const mathAnswer = `${product.toLocaleString("en-US")} ${language.plural}`;
-    const mathChoices = threeChoices(mathAnswer, [
+    const mathChoices = fourChoices(mathAnswer, [
       `${(product + groups).toLocaleString("en-US")} ${language.plural}`,
       `${Math.max(1, product - each).toLocaleString("en-US")} ${language.plural}`,
+      `${(product + each).toLocaleString("en-US")} ${language.plural}`,
     ], campaignIndex + 2);
 
-    const scienceChoices = threeChoices(scienceCard.title, distractorTitles(scienceCard), campaignIndex + 3);
+    const scienceChoices = fourChoices(scienceCard.title, distractorTitles(scienceCard), campaignIndex + 3);
     const wordAnswer = measurementMeaning(wordsCard.statLabel);
-    const wordChoices = threeChoices(wordAnswer, [
+    const wordChoices = fourChoices(wordAnswer, [
       "who took the photograph",
       "how many questions were answered",
       "which card was collected first",
@@ -249,13 +276,17 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
         icon: "🌎",
         title: location ? `Map ${geographyCard.title}` : `Place ${geographyCard.title}`,
         clue: location
-          ? `${geographyCard.title} is connected with ${location.label} in ${location.continents.join(" / ")}.`
+          ? geographyCard.title === location.label
+            ? `${geographyCard.title} is a country in ${location.continents.join(" / ")}. Use the map shape and continent labels to find its pin.`
+            : `${geographyCard.title} is connected with a place in ${location.continents.join(" / ")}. Use the map to find that place's pin.`
           : `${geographyCard.title}'s field-guide group is ${geographyCard.subStat}.`,
-        question: location ? `Where is ${geographyCard.title} found?` : "Which card matches this place or group?",
+        question: location ? `Which pin marks ${location.label}?` : "Which card matches this place or group?",
         choices: geographyChoices,
-        answer: location ? location.label : geographyCard.title,
+        answer: geographyAnswer,
         summary: location
-          ? `${geographyCard.title} belongs with ${location.label}, shown on the map in ${location.continents.join(" / ")}.`
+          ? geographyCard.title === location.label
+            ? `${location.label} is at ${geographyAnswer} on the map in ${location.continents.join(" / ")}.`
+            : `${geographyCard.title} is connected with ${location.label}, shown at ${geographyAnswer} in ${location.continents.join(" / ")}.`
           : `${geographyCard.title} is the match. Its field-guide group is ${geographyCard.subStat}.`,
         map: geographyMap,
         image: geographyCard.image,
@@ -335,10 +366,17 @@ export const pepperChallengeCampaigns = buildChallengeCampaignsForCategory({
   cards: collectionCards().filter((card) => card.topic === "peppers"),
 });
 
-export const challengeCampaignForMilestone = (milestone: number, categories: readonly ChallengeCategory[]) => {
-  const eligible = categories
+export type ChallengeCampaignCatalogEntry = {
+  category: ChallengeCategory;
+  campaigns: ChallengeCampaign[];
+};
+
+export const buildChallengeCampaignCatalog = (categories: readonly ChallengeCategory[]): ChallengeCampaignCatalogEntry[] =>
+  categories
     .map((category) => ({ category, campaigns: buildChallengeCampaignsForCategory(category) }))
     .filter((item) => item.campaigns.length >= challengeCampaignCountPerCategory);
+
+export const challengeCampaignFromCatalog = (milestone: number, eligible: readonly ChallengeCampaignCatalogEntry[]) => {
   if (!eligible.length) return pepperChallengeCampaigns[0];
 
   const challengeIndex = Math.max(0, Math.floor(milestone / challengeQuestionInterval) - 1);
@@ -346,6 +384,9 @@ export const challengeCampaignForMilestone = (milestone: number, categories: rea
   const campaignIndex = Math.floor(challengeIndex / eligible.length) % challengeCampaignCountPerCategory;
   return eligible[topicIndex].campaigns[campaignIndex];
 };
+
+export const challengeCampaignForMilestone = (milestone: number, categories: readonly ChallengeCategory[]) =>
+  challengeCampaignFromCatalog(milestone, buildChallengeCampaignCatalog(categories));
 
 export function pepperChallengeCampaignForMilestone(milestone: number) {
   const campaignIndex = Math.max(0, Math.floor(milestone / challengeQuestionInterval) - 1) % pepperChallengeCampaigns.length;
@@ -415,7 +456,8 @@ export function ChallengeMode({ campaign, milestone, onComplete }: { campaign: C
             const answerChoice = selected !== null && choice === step.answer;
             const chosenWrong = selected === choice && choice !== step.answer;
             const choiceIndex = step.choices.indexOf(choice);
-            return <GameChoiceButton key={choice} disabled={selected !== null} onClick={() => setSelected(choice)} chosen={chosenWrong} correct={answerChoice}>{step.skill === "Geography" && <span className="mr-2 inline-grid h-7 w-7 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs">{String.fromCharCode(65 + choiceIndex)}</span>}{choice}</GameChoiceButton>;
+            const isPinChoice = step.skill === "Geography" && /^Pin [A-Z]$/.test(choice);
+            return <GameChoiceButton key={choice} disabled={selected !== null} onClick={() => setSelected(choice)} chosen={chosenWrong} correct={answerChoice}>{step.skill === "Geography" && !isPinChoice && <span className="mr-2 inline-grid h-7 w-7 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs">{String.fromCharCode(65 + choiceIndex)}</span>}{choice}</GameChoiceButton>;
           })}
           </GameChoiceGrid>
           {selected && <GameAnswerFeedback isCorrect={correct} celebration="Correct!" correctAnswer={step.answer} explanation={step.summary} evidence={step.skill === "Reading" ? step.evidence : undefined} note="Good try." nextLabel={stepIndex === steps.length - 1 ? "View challenge summary" : "Next question"} onNext={next} />}
@@ -451,8 +493,8 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
     return (
       <aside aria-label="Challenge map story" className="min-h-[430px] rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
         <WorldMapSurface
-          markers={step.map.choices.map((choice) => ({ id: choice.label, label: choice.label, x: choice.x, y: choice.y, tone: selected ? choice.label === step.answer ? "correct" as const : choice.label === selected ? "wrong" as const : "quiet" as const : "default" as const }))}
-          footer={selected ? `Answer: ${step.answer}` : step.map.hint}
+          markers={step.map.choices.map((choice) => ({ id: choice.label, label: choice.mapLabel ?? choice.label, x: choice.x, y: choice.y, tone: selected ? choice.label === step.answer ? "correct" as const : choice.label === selected ? "wrong" as const : "quiet" as const : "default" as const }))}
+          footer={selected ? step.summary : step.map.hint}
           onSelect={onSelect}
           disabled={selected !== null}
           className="h-full min-h-[420px]"

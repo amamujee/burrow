@@ -7,6 +7,8 @@ import {
   pepperChallengeCampaignForMilestone,
   pepperChallengeCampaigns,
 } from "../../src/components/core-mini-challenge";
+import { weightTopicsForAccuracy } from "../../src/lib/adaptive-topics";
+import { cardDiscoveryIdentities, cardUnlockKey, isCardUnlocked } from "../../src/lib/card-discovery";
 import { buildings, countries, peppers, topicPacks } from "../../src/lib/game-data";
 import { poolForDifficulty } from "../../src/lib/difficulty-pool";
 import {
@@ -36,6 +38,7 @@ import { buildHeadToHeadSession, buildSession } from "../../src/lib/questions";
 import { packToPlayableDeck } from "../../src/lib/pack-adapter";
 import { loadPlayablePacks } from "../../src/lib/pack-loader";
 import { discoveryShuffle } from "../../src/lib/random";
+import { migrateTopicSelection } from "../../src/lib/topic-selection";
 import {
   addLearningExposure,
   learningIdentity,
@@ -217,6 +220,66 @@ test("learning variety blocks exact repeats while timing review of missed concep
   expect(learningVarietyScore(alternate, spacedMiss)).toBeGreaterThan(learningVarietyScore(alternate, recentMiss));
   expect(learningVarietyScore(alternate, spacedMiss)).toBeGreaterThan(learningVarietyScore(fresh, spacedMiss));
   expect(learningVarietyScore(original, spacedMiss)).toBeLessThan(learningVarietyScore(fresh, spacedMiss));
+});
+
+test("card discovery scopes duplicate titles to their category while preserving legacy saves", () => {
+  const sharkMegalodon = { id: "megalodon", topic: "sharks", title: "Megalodon" };
+  const dinosaurMegalodon = { id: "megalodon", topic: "dinosaurs", title: "Megalodon" };
+  const sharkUnlock = cardUnlockKey(sharkMegalodon.topic, sharkMegalodon.id);
+
+  expect(isCardUnlocked([sharkUnlock], sharkMegalodon)).toBe(true);
+  expect(isCardUnlocked([sharkUnlock], dinosaurMegalodon)).toBe(false);
+  expect(isCardUnlocked(["Megalodon"], dinosaurMegalodon)).toBe(true);
+
+  const shuffled = discoveryShuffle(
+    [sharkMegalodon, dinosaurMegalodon],
+    2,
+    [sharkUnlock],
+    cardDiscoveryIdentities,
+  );
+  expect(shuffled[0]).toEqual(dinosaurMegalodon);
+});
+
+test("adaptive topic weighting includes downloadable pack categories", () => {
+  const weighted = weightTopicsForAccuracy(
+    ["sharks", "dinosaurs", "bridges-and-tunnels"],
+    {
+      sharks: { correct: 10, answered: 10 },
+      dinosaurs: { correct: 1, answered: 5 },
+      "bridges-and-tunnels": { correct: 4, answered: 5 },
+    },
+  );
+
+  expect(weighted.filter((topic) => topic === "sharks")).toHaveLength(1);
+  expect(weighted.filter((topic) => topic === "dinosaurs")).toHaveLength(3);
+  expect(weighted.filter((topic) => topic === "bridges-and-tunnels")).toHaveLength(1);
+});
+
+test("saved profiles select newly added topics once without undoing later choices", () => {
+  const currentTopics = ["peppers", "buildings", "sharks", "space", "jets", "countries"];
+  const legacy = migrateTopicSelection({
+    interests: currentTopics.filter((topic) => topic !== "countries"),
+    availableTopics: currentTopics,
+  });
+  expect(legacy.interests).toEqual(currentTopics);
+
+  const withNewTopic = migrateTopicSelection({
+    interests: ["sharks"],
+    knownTopics: currentTopics,
+    availableTopics: [...currentTopics, "ocean-life"],
+  });
+  expect(withNewTopic.interests).toEqual(["sharks", "ocean-life"]);
+
+  const afterTurningNewTopicOff = migrateTopicSelection({
+    interests: ["sharks"],
+    knownTopics: withNewTopic.knownTopics,
+    availableTopics: [...currentTopics, "ocean-life"],
+  });
+  expect(afterTurningNewTopicOff.interests).toEqual(["sharks"]);
+});
+
+test("the derived card catalog is reused across round generation", () => {
+  expect(collectionCards()).toBe(collectionCards());
 });
 
 test("every generated Quiz location question carries matching map choices", () => {
@@ -992,15 +1055,23 @@ test("every generated Challenge step is answerable and has a useful teaching sta
       expect(step.clue.length, `${step.id} needs a useful clue`).toBeGreaterThan(20);
       expect(step.summary.length, `${step.id} needs teaching feedback`).toBeGreaterThan(35);
       expect(step.choices, `${step.id} must contain its answer`).toContain(step.answer);
-      expect(step.choices, `${step.id} needs three choices`).toHaveLength(3);
-      expect(new Set(step.choices).size, `${step.id} choices must be distinct`).toBe(3);
+      expect(step.choices, `${step.id} needs at least four choices`).toHaveLength(4);
+      expect(new Set(step.choices).size, `${step.id} choices must be distinct`).toBe(4);
       expect(step.image, `${step.id} needs its own subject image`).toBeTruthy();
 
       if (step.skill === "Reading") {
         expect(step.clue).toContain(step.evidence);
       } else if (step.skill === "Geography" && step.map) {
         expect(step.map.choices.map((choice) => choice.label)).toEqual(step.choices);
+        expect(step.answer).toMatch(/^Pin [A-D]$/);
+        expect(step.question).toMatch(/^Which pin marks .+\?$/);
+        expect(step.summary).toContain(step.answer);
+        if (campaign.topicId === "countries") {
+          expect(step.clue).toContain("is a country in");
+          expect(step.clue).not.toContain("is connected with");
+        }
         for (const choice of step.map.choices) {
+          expect(choice.mapLabel).toBeTruthy();
           expect(choice.x).toBeGreaterThanOrEqual(0);
           expect(choice.x).toBeLessThanOrEqual(100);
           expect(choice.y).toBeGreaterThanOrEqual(0);
@@ -1097,6 +1168,34 @@ test("setup menu opens and core game controls keep working", async ({ page }) =>
   await expect(page.getByRole("heading", { name: "Choose a category" })).toBeVisible();
 });
 
+test("fresh and existing profiles automatically select newly added topics", async ({ page }) => {
+  await setupSummary(page).click();
+  for (const label of topicLabels) {
+    await expect(buttonForLabel(page, label)).toHaveAttribute("aria-pressed", "true");
+  }
+
+  await page.evaluate(() => {
+    window.localStorage.setItem("burrow-profiles-v1", JSON.stringify({
+      activeProfileId: "player-1",
+      profiles: [{
+        id: "player-1",
+        name: "Player 1",
+        interests: ["peppers", "buildings", "sharks", "space", "jets", "dinosaurs", "tallest-mountains", "tall-trees", "bridges-and-tunnels"],
+        progress: {},
+      }],
+    }));
+  });
+  await page.reload();
+  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+  await expect(setupSummary(page)).toContainText("10 topics");
+  await setupSummary(page).click();
+  await expect(buttonForLabel(page, "Countries & Flags")).toHaveAttribute("aria-pressed", "true");
+  await expect.poll(async () => page.evaluate(() => {
+    const saved = JSON.parse(window.localStorage.getItem("burrow-profiles-v1") ?? "{}") as { knownTopics?: string[] };
+    return saved.knownTopics ?? [];
+  })).toContain("countries");
+});
+
 test("a mystery flag gives one clue retry and unlocks a country passport", async ({ page }) => {
   await chooseOnlyMode(page, "Quiz Run");
   await chooseOnlyBuiltInTopic(page, "Countries & Flags");
@@ -1189,8 +1288,9 @@ test("every twenty-fifth answer opens an automatic mini challenge and returns af
 
     if (step.skill === "Geography" && step.map) {
       const mapChoiceIndex = step.map.choices.findIndex((choice) => choice.label === step.answer);
+      const mapChoice = step.map.choices[mapChoiceIndex];
       await expect(page.getByLabel("Challenge map story")).toBeVisible();
-      await page.getByRole("button", { name: `Choose map pin ${String.fromCharCode(65 + mapChoiceIndex)}: ${step.answer}` }).click();
+      await page.getByRole("button", { name: `Choose map pin ${String.fromCharCode(65 + mapChoiceIndex)}: ${mapChoice.mapLabel ?? mapChoice.label}` }).click();
     } else {
       const story = step.skill === "Math" ? page.getByLabel("Challenge math story") : page.getByLabel("Challenge picture story");
       await expect(story.getByRole("img", { name: step.imageAlt })).toBeVisible();
@@ -1619,7 +1719,7 @@ test("a correct head to head answer unlocks both peppers, while skips do not", a
       ?.find((profile) => profile.id === profiles.activeProfileId)
       ?.progress.unlockedCards ?? [];
   });
-  expect(await unlockedCards()).not.toContain("Habanero");
+  expect(await unlockedCards()).not.toContain("peppers:habanero");
 
   await page.getByRole("button", { name: /Choose [AB]: Ghost Pepper/ }).click();
   await page.waitForFunction(() => {
@@ -1629,10 +1729,10 @@ test("a correct head to head answer unlocks both peppers, while skips do not", a
     };
     return profiles.profiles
       ?.find((profile) => profile.id === profiles.activeProfileId)
-      ?.progress.unlockedCards.includes("Habanero")
+      ?.progress.unlockedCards.includes("peppers:habanero")
       && profiles.profiles
         ?.find((profile) => profile.id === profiles.activeProfileId)
-        ?.progress.unlockedCards.includes("Ghost Pepper");
+        ?.progress.unlockedCards.includes("peppers:ghost-pepper");
   });
 
   await page.getByRole("button", { name: /Cards/ }).click();
@@ -1649,6 +1749,21 @@ test("playable dinosaur pack appears in setup topics", async ({ page }) => {
 
   await chooseOnlyBuiltInTopic(page, "Dinosaur Lab");
   await expect(page.getByText("Dinosaur Lab · Peek")).toBeVisible();
+});
+
+test("downloadable category answers persist adaptive performance stats", async ({ page }) => {
+  await chooseOnlyMode(page, "True/False");
+  await chooseOnlyBuiltInTopic(page, "Dinosaur Lab");
+  await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
+
+  await page.waitForFunction(() => {
+    const profiles = JSON.parse(window.localStorage.getItem("burrow-profiles-v1") ?? "{}") as {
+      activeProfileId?: string;
+      profiles?: { id: string; progress: { topicStats?: Record<string, { answered: number }> } }[];
+    };
+    const active = profiles.profiles?.find((profile) => profile.id === profiles.activeProfileId);
+    return active?.progress.topicStats?.dinosaurs?.answered === 1;
+  });
 });
 
 test("top trumps lets player choose a category against the computer", async ({ page }) => {

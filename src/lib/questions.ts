@@ -21,6 +21,7 @@ import {
   type SpaceCard,
   type TopicId,
 } from "./game-data";
+import { cardDiscoveryIdentities } from "./card-discovery";
 import { poolForDifficulty } from "./difficulty-pool";
 import { discoveryShuffle, sample, seedRandom, shuffle } from "./random";
 import { worldLocationDisplay, type WorldLocation } from "./card-metadata";
@@ -868,7 +869,11 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
 
 const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: readonly string[] = []): Question => {
   const pool = preferredPool(countries, difficulty);
-  const country = discoveryShuffle(pool, seed, unlockedTitles, (item) => item.name)[0];
+  const country = discoveryShuffle(pool, seed, unlockedTitles, (item) => cardDiscoveryIdentities({
+    id: item.id,
+    topic: "countries",
+    title: item.name,
+  }))[0];
   const kinds: QuestionKind[] = difficulty === 1
     ? ["country-flag", "country-capital", "country-continent", "country-location", "country-flag"]
     : ["country-flag", "country-capital", "country-continent", "country-location", "country-population", "country-area"];
@@ -967,7 +972,11 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
 
 const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: readonly string[] = []): Question => {
   const pool = preferredPool(peppers, difficulty);
-  const pepper = discoveryShuffle(pool, seed, unlockedTitles, (item) => item.name)[0];
+  const pepper = discoveryShuffle(pool, seed, unlockedTitles, (item) => cardDiscoveryIdentities({
+    id: item.id,
+    topic: "peppers",
+    title: item.name,
+  }))[0];
   const measuredPool = pool.filter(hasScovilleMeasurement).filter(isPepperFruit);
   const locationPool = pool.filter(hasLocationMetadata);
   const locationCandidates = locationPool.flatMap((item, index) => {
@@ -983,7 +992,11 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
   const kind = sample(kinds, seed + 3);
 
   if (kind === "pepper-location") {
-    const locationCandidate = discoveryShuffle(locationCandidates, seed + 4, unlockedTitles, (candidate) => candidate.item.name)[0];
+    const locationCandidate = discoveryShuffle(locationCandidates, seed + 4, unlockedTitles, (candidate) => cardDiscoveryIdentities({
+      id: candidate.item.id,
+      topic: "peppers",
+      title: candidate.item.name,
+    }))[0];
     const locatedPepper = locationCandidate.item;
     const mapChoices = locationCandidate.mapChoices;
     const choices = mapChoices.map((choice) => choice.label);

@@ -15,17 +15,21 @@ export const shuffle = <T,>(items: readonly T[], seed: number) => {
 export const discoveryShuffle = <T,>(
   items: readonly T[],
   seed: number,
-  unlockedTitles: readonly string[] = [],
-  titleFor: (item: T) => string,
+  unlockedCards: readonly string[] = [],
+  identitiesFor: (item: T) => string | readonly string[],
 ) => {
   const shuffled = shuffle(items, seed);
-  if (!unlockedTitles.length) return shuffled;
+  if (!unlockedCards.length) return shuffled;
 
-  const unlocked = new Set(unlockedTitles);
-  const unseen = shuffled.filter((item) => !unlocked.has(titleFor(item)));
+  const unlocked = new Set(unlockedCards);
+  const isUnlocked = (item: T) => {
+    const identities = identitiesFor(item);
+    return (typeof identities === "string" ? [identities] : identities).some((identity) => unlocked.has(identity));
+  };
+  const unseen = shuffled.filter((item) => !isUnlocked(item));
   if (!unseen.length || unseen.length === shuffled.length || seedRandom(seed + 7919) >= 0.7) return shuffled;
 
-  const seen = shuffled.filter((item) => unlocked.has(titleFor(item)));
+  const seen = shuffled.filter(isUnlocked);
   return [...unseen, ...seen];
 };
 
