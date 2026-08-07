@@ -24,6 +24,7 @@ import {
   geoPointMapDistance,
   orderCollectionCardsByScoville,
   slotSortCardIds,
+  topTrumpOutcome,
   type GenericKnowledgeCard,
 } from "../../src/lib/game-modes";
 import { buildSession } from "../../src/lib/questions";
@@ -556,6 +557,62 @@ test("Super Chilli, Moruga Red, and three chocolate varieties join normal pepper
   }
 });
 
+test("Tangerine Dream and Chocolate Rocoto X join pepper play with honest heat data", () => {
+  const expected = {
+    "tangerine-dream": { name: "Tangerine Dream", range: [0, 0], color: "orange-red", status: undefined },
+    "chocolate-rocoto-x": { name: "Chocolate Rocoto X", range: [6000, 6000], color: "chocolate-burgundy", status: "unofficial" },
+  } as const;
+
+  for (const [id, details] of Object.entries(expected)) {
+    const pepper = peppers.find((item) => item.id === id);
+    expect(pepper).toMatchObject({
+      name: details.name,
+      shuMin: details.range[0],
+      shuMax: details.range[1],
+      color: details.color,
+      image: `/burrow-assets/peppers/${id}.png`,
+      imageSourceUrl: "https://openai.com/",
+      imageCredit: "AI-generated for Burrow",
+    });
+    expect(pepper?.scovilleStatus).toBe(details.status);
+    expect(pepper?.metadata?.accuracyNote).toBeTruthy();
+  }
+
+  for (const difficulty of [1, 2, 3] as const) {
+    const expectedAtDifficulty = poolForDifficulty(peppers, difficulty).filter((pepper) => pepper.id in expected);
+    const seenImages = new Set(Array.from({ length: 160 }, (_, seed) => buildSession("peppers", difficulty, seed * 103, [])).flat().map((question) => question.image));
+    for (const pepper of expectedAtDifficulty) expect(seenImages).toContain(pepper.image);
+  }
+});
+
+test("reading questions rotate instructions and pepper comprehension patterns", () => {
+  const pepperReading = Array.from({ length: 120 }, (_, seed) => buildSession("peppers", 2, seed * 97, [])).flat().filter((question) => question.kind === "pepper-reading");
+  const pepperPatterns = new Set(pepperReading.map((question) => question.id.match(/pepper-reading-(color|fact-identity|heat-word)-/)?.[1]).filter(Boolean));
+  expect([...pepperPatterns].sort()).toEqual(["color", "fact-identity", "heat-word"]);
+
+  for (const [topic, minimum] of [["sharks", 3], ["jets", 3], ["space", 4]] as const) {
+    const prompts = new Set(Array.from({ length: 80 }, (_, seed) => buildSession(topic, 1, seed * 89, [])).flat().filter((question) => question.kind.endsWith("-reading")).map((question) => question.prompt));
+    expect(prompts.size, `${topic} should rotate reading instructions`).toBeGreaterThanOrEqual(minimum);
+  }
+});
+
+test("pepper Top Trumps uses named rarity tiers and allows exact ties", () => {
+  let tiedRound: ReturnType<typeof buildTopTrumpRound> | undefined;
+  for (let seed = 0; seed < 600; seed += 1) {
+    const round = buildTopTrumpRound("peppers", 3, seed * 41);
+    const playerRarity = round.player.stats.find((stat) => stat.id === "rarity");
+    const computerRarity = round.computer.stats.find((stat) => stat.id === "rarity");
+    expect(playerRarity?.display).toMatch(/^(Common|Uncommon|Rare|Epic|Legendary)$/);
+    expect(computerRarity?.display).toMatch(/^(Common|Uncommon|Rare|Epic|Legendary)$/);
+    expect(round.player.stats.map((stat) => stat.id)).toEqual(round.computer.stats.map((stat) => stat.id));
+    if (playerRarity && computerRarity && topTrumpOutcome(playerRarity, computerRarity) === "tie") {
+      tiedRound = round;
+      break;
+    }
+  }
+  expect(tiedRound, "at least one naturally dealt rarity matchup should tie").toBeTruthy();
+});
+
 test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate marked unofficial", () => {
   const newPeppers = Object.fromEntries(
     peppers
@@ -884,6 +941,25 @@ test.beforeEach(async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
   await page.waitForFunction(() => document.documentElement.dataset.burrowHydrated === "true");
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+});
+
+test("flight mode caches the app shell for a real offline reload", async ({ page, context }) => {
+  await page.evaluate(async () => {
+    if (!("serviceWorker" in navigator)) throw new Error("Service workers are unavailable");
+    await navigator.serviceWorker.ready;
+  });
+  await setupSummary(page).click();
+  await expect(page.getByText("Flight mode", { exact: true })).toBeVisible();
+  await setupDetails(page).evaluate((details) => details.removeAttribute("open"));
+
+  await context.setOffline(true);
+  try {
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
+    await page.waitForFunction(() => document.documentElement.dataset.burrowHydrated === "true");
+  } finally {
+    await context.setOffline(false);
+  }
 });
 
 test("setup menu opens and core game controls keep working", async ({ page }) => {
@@ -1377,7 +1453,7 @@ test("top trumps lets player choose a category against the computer", async ({ p
   await expect(page.getByText("Computer card", { exact: true })).toBeVisible();
 
   await page.locator("button").filter({ hasText: /higher wins|lower wins/ }).first().click();
-  await expect(page.getByText(/Player wins the matchup|Computer wins the matchup/)).toBeVisible();
+  await expect(page.getByText(/Player wins the matchup|Computer wins the matchup|round is a tie/)).toBeVisible();
   await expect(page.getByText("Computer card", { exact: true })).not.toBeVisible();
 });
 
@@ -1386,6 +1462,8 @@ test("pepper top trumps uses concrete plant stats", async ({ page }) => {
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
 
   await expect(page.getByText("Plant height").first()).toBeVisible();
+  await expect(page.getByText("Rarity").first()).toBeVisible();
+  await expect(page.getByText(/Common|Uncommon|Rare|Epic|Legendary/).first()).toBeVisible();
   await expect(page.getByText("Natural roots")).toHaveCount(0);
 });
 

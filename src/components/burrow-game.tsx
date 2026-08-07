@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ChallengeMode, challengeQuestionInterval, pepperChallengeCampaignForMilestone } from "@/components/core-mini-challenge";
 import { EqualGroupsBoard } from "@/components/equal-groups-board";
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid } from "@/components/game-question-ui";
+import { OfflineReady } from "@/components/offline-ready";
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
 import {
@@ -29,6 +30,7 @@ import {
   modeOptions,
   orderCollectionCardsByScoville,
   slotSortCardIds,
+  topTrumpOutcome,
   type FactRound,
   type GeoRound,
   type GameMode,
@@ -40,7 +42,6 @@ import {
   type RevealRound,
   type SortRound,
   type TopTrumpRound,
-  type TopTrumpStat,
   type TopicScope,
 } from "@/lib/game-modes";
 import { packToPlayableDeck, type PlayablePackDeck } from "@/lib/pack-adapter";
@@ -745,6 +746,18 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const currentTopicLabel = isQuestionMode && question ? topicLabel(question.topic) : typeof currentTopicScope === "string" && currentTopicScope !== "mixed" ? topicLabel(currentTopicScope) : "Mixed topics";
   const currentRoundContext = `${currentTopicLabel} · ${gameTypeLabel(activeChallengeMode)}`;
   const accuracy = progress.answered ? Math.round((progress.correct / progress.answered) * 100) : 0;
+  const selectedOfflineImages = useMemo(() => selectedCards.map((card) => card.image), [selectedCards]);
+  const warmOfflineImages = useMemo(() => [
+    ...questions.slice(questionIndex, questionIndex + 8).map((item) => item.image),
+    ...sortRound.cards.map((card) => card.image),
+    factRound.image,
+    revealRound.card.image,
+    geoRound.card.image,
+    ...numberRound.cards.map((card) => card.image),
+    ...oddRound.cards.map((card) => card.image),
+    topTrumpRound.player.image,
+    topTrumpRound.computer.image,
+  ].filter(Boolean), [factRound.image, geoRound.card.image, numberRound.cards, oddRound.cards, questionIndex, questions, revealRound.card.image, sortRound.cards, topTrumpRound.computer.image, topTrumpRound.player.image]);
 
   useEffect(() => {
     document.documentElement.dataset.burrowHydrated = "true";
@@ -1153,6 +1166,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
 
   const reward = ({
     correct,
+    neutral = false,
     xpGain,
     topicName,
     modeName,
@@ -1161,6 +1175,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     unlockTitles = [],
   }: {
     correct: boolean;
+    neutral?: boolean;
     xpGain: number;
     topicName?: RoundTopic;
     modeName?: GameMode;
@@ -1170,24 +1185,25 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   }) => {
     const nextXp = progress.xp + xpGain;
     const nextLevel = levelFromXp(nextXp);
+    const feedbackCorrect = correct || neutral;
 
-    setLastResult({ correct, xpGain, leveledUp: nextLevel > progress.level });
+    setLastResult({ correct: feedbackCorrect, xpGain, leveledUp: nextLevel > progress.level });
     setProgress((current) => ({
       ...current,
       xp: current.xp + xpGain,
       level: levelFromXp(current.xp + xpGain),
-      streak: correct ? current.streak + 1 : 0,
+      streak: neutral ? current.streak : correct ? current.streak + 1 : 0,
       bestStreak: Math.max(current.bestStreak, correct ? current.streak + 1 : 0),
       correct: current.correct + (correct ? 1 : 0),
       answered: current.answered + 1,
-      difficulty: autoDifficulty(current.difficulty, correct, correct ? current.streak + 1 : 0, current.answered + 1, current.correct + (correct ? 1 : 0)),
+      difficulty: neutral ? current.difficulty : autoDifficulty(current.difficulty, correct, correct ? current.streak + 1 : 0, current.answered + 1, current.correct + (correct ? 1 : 0)),
       seenIds: [seenId, ...current.seenIds].slice(0, 80),
       learningHistory: addLearningExposure(current.learningHistory, exposureIdentity, {
         mode: modeName ?? "quiz",
         topic: topicName ?? "mixed",
-        outcome: correct ? "correct" : "incorrect",
+        outcome: neutral ? "tie" : correct ? "correct" : "incorrect",
       }),
-      unlockedCards: correct ? addUnique(current.unlockedCards, unlockTitles) : current.unlockedCards,
+      unlockedCards: feedbackCorrect ? addUnique(current.unlockedCards, unlockTitles) : current.unlockedCards,
       topicWins: topicName && isKnowledgeTopic(topicName) ? { ...current.topicWins, [topicName]: current.topicWins[topicName] + (correct ? 1 : 0) } : current.topicWins,
       topicStats: topicName && isKnowledgeTopic(topicName)
         ? {
@@ -1210,7 +1226,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       setMiniChallengePending(true);
     }
 
-    return { correct, xpGain, leveledUp: nextLevel > progress.level };
+    return { correct: feedbackCorrect, xpGain, leveledUp: nextLevel > progress.level };
   };
 
   const rememberSkippedExposure = (identity: LearningIdentity, exposureMode: GameMode, exposureTopic: RoundTopic | "mixed") => {
@@ -1899,20 +1915,18 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     return playerStat && computerStat ? { playerStat, computerStat } : null;
   };
 
-  const playerWinsTopTrump = (playerStat: TopTrumpStat, computerStat: TopTrumpStat) => {
-    if (playerStat.value === computerStat.value) return true;
-    return playerStat.direction === "lower" ? playerStat.value < computerStat.value : playerStat.value > computerStat.value;
-  };
-
   const answerTopTrump = (statId: string) => {
     if (topTrumpSelected !== null) return;
     const stats = topTrumpStat(topTrumpRound, statId);
     if (!stats) return;
-    const correct = playerWinsTopTrump(stats.playerStat, stats.computerStat);
+    const outcome = topTrumpOutcome(stats.playerStat, stats.computerStat);
+    const correct = outcome === "win";
+    const neutral = outcome === "tie";
     const itemKey = stableRoundKey(topTrumpRound.id);
-    const xpGain = correct ? 30 + progress.difficulty * 6 : 8;
+    const xpGain = correct ? 30 + progress.difficulty * 6 : neutral ? 18 + progress.difficulty * 4 : 8;
     const result = reward({
       correct,
+      neutral,
       xpGain,
       topicName: topTrumpRound.topic,
       modeName: mode === "mix" ? "mix" : "trumps",
@@ -1930,14 +1944,14 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       title: topTrumpRound.player.title,
       choice: stats.playerStat.label,
       answer: `${stats.playerStat.display} vs ${stats.computerStat.display}`,
-      correct,
+      correct: outcome !== "loss",
       roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
     });
     setTopTrumpSelected(statId);
     setMiniRunAnswered((value) => value + 1);
     setMiniRunCorrect((value) => value + (correct ? 1 : 0));
     if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
-    setCelebration(correct ? "Your card takes it!" : "Computer steals this one.");
+    setCelebration(correct ? "Your card takes it!" : neutral ? "Exact tie — both cards hold their ground!" : "Computer steals this one.");
     setLastResult(result);
   };
 
@@ -2031,6 +2045,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           onClearMixModes={clearMixModes}
           issueFlash={issueFlash}
           issueCount={issueCount}
+          selectedOfflineImages={selectedOfflineImages}
+          warmOfflineImages={warmOfflineImages}
           onReset={resetProgress}
         />
 
@@ -2237,6 +2253,8 @@ function GameHud({
   onClearMixModes,
   issueFlash,
   issueCount,
+  selectedOfflineImages,
+  warmOfflineImages,
   onReset,
 }: {
   profiles: LearnerProfile[];
@@ -2264,6 +2282,8 @@ function GameHud({
   onClearMixModes: () => void;
   issueFlash: boolean;
   issueCount: number;
+  selectedOfflineImages: string[];
+  warmOfflineImages: string[];
   onReset: () => void;
 }) {
   const setupSummary = `${activeMixModes.length} games · ${activeInterests.length} topics`;
@@ -2310,6 +2330,8 @@ function GameHud({
           setupSummary={setupSummary}
           issueFlash={issueFlash}
           issueCount={issueCount}
+          selectedOfflineImages={selectedOfflineImages}
+          warmOfflineImages={warmOfflineImages}
           onReset={onReset}
         />
       </div>
@@ -2379,6 +2401,8 @@ function SetupMenu({
   setupSummary,
   issueFlash,
   issueCount,
+  selectedOfflineImages,
+  warmOfflineImages,
   onReset,
 }: {
   activeInterests: RoundTopic[];
@@ -2393,6 +2417,8 @@ function SetupMenu({
   setupSummary: string;
   issueFlash: boolean;
   issueCount: number;
+  selectedOfflineImages: string[];
+  warmOfflineImages: string[];
   onReset: () => void;
 }) {
   const activeModeSet = new Set(activeMixModes);
@@ -2456,6 +2482,7 @@ function SetupMenu({
         </div>
 
         <div className="mt-3 grid gap-2">
+          <OfflineReady selectedImageUrls={selectedOfflineImages} warmImageUrls={warmOfflineImages} />
           <div className="min-h-11 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] px-3 py-2">
             <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#72543e]">Image reports</p>
             <p className="text-sm font-black leading-tight text-[#102f36]">{issueFlash ? "Latest saved" : `${issueCount} logged`}</p>
@@ -3606,14 +3633,14 @@ function TopTrumpsMode({
   const answered = selected !== null;
   const selectedPlayerStat = selected ? round.player.stats.find((stat) => stat.id === selected) : null;
   const selectedComputerStat = selected ? round.computer.stats.find((stat) => stat.id === selected) : null;
-  const playerWins = selectedPlayerStat && selectedComputerStat
-    ? selectedPlayerStat.value === selectedComputerStat.value || (selectedPlayerStat.direction === "lower" ? selectedPlayerStat.value < selectedComputerStat.value : selectedPlayerStat.value > selectedComputerStat.value)
-    : false;
+  const outcome = selectedPlayerStat && selectedComputerStat ? topTrumpOutcome(selectedPlayerStat, selectedComputerStat) : null;
+  const playerWins = outcome === "win";
+  const isTie = outcome === "tie";
   const answerLabel = selectedPlayerStat
     ? `${selectedPlayerStat.label}: ${round.player.title} ${selectedPlayerStat.display} vs ${round.computer.title} ${selectedComputerStat?.display ?? "?"}`
     : "Pick a category";
   const explanation = selectedPlayerStat && selectedComputerStat
-    ? `${selectedPlayerStat.direction === "lower" ? "Lower wins here." : "Higher wins here."} ${answerLabel}. ${playerWins ? "Player wins the matchup." : "Computer wins the matchup."}`
+    ? `${selectedPlayerStat.direction === "lower" ? "Lower wins here." : "Higher wins here."} ${answerLabel}. ${isTie ? "The values match, so this round is a tie." : playerWins ? "Player wins the matchup." : "Computer wins the matchup."}`
     : round.player.fact;
 
   return (
@@ -3643,7 +3670,8 @@ function TopTrumpsMode({
           {round.player.stats.map((stat) => {
             const computerStat = round.computer.stats.find((item) => item.id === stat.id);
             const correctChoice = answered && selected === stat.id && playerWins;
-            const chosenWrong = answered && selected === stat.id && !playerWins;
+            const chosenTie = answered && selected === stat.id && isTie;
+            const chosenWrong = answered && selected === stat.id && outcome === "loss";
             return (
               <button
                 key={`${round.id}-${stat.id}`}
@@ -3651,6 +3679,8 @@ function TopTrumpsMode({
                 className={`min-h-16 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
                   correctChoice
                     ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
+                    : chosenTie
+                      ? "border-[#092421] bg-[#f3c647] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
                       ? "border-[#092421] bg-[#f59a7d] shadow-[3px_3px_0_#092421]"
                       : "border-[#d9c7a7] bg-[#fffdf6] hover:border-[#092421] hover:bg-[#fff1bf]"
@@ -3679,7 +3709,7 @@ function TopTrumpsMode({
             celebration={celebration}
             correctAnswer={answerLabel}
             explanation={explanation}
-            note="Computer takes it."
+            note={isTie ? "Matching values make a tie." : playerWins ? "Strong category choice." : "Computer takes it."}
             isLast={false}
             onNext={onNext}
           />

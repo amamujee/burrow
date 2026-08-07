@@ -208,6 +208,32 @@ const pepperSeeds: PepperSeed[] = [
     fact: "Bell peppers have 0 Scoville Heat Units. They are sweet, not spicy.",
   },
   {
+    id: "tangerine-dream",
+    name: "Tangerine Dream",
+    shuMin: 0,
+    shuMax: 0,
+    color: "orange-red",
+    ...generatedContentImage("peppers", "tangerine-dream"),
+    fact: "Tangerine Dream is a sweet USDA-developed pepper whose upright cone-shaped fruits grow in little clusters and ripen from green to orange-red.",
+    metadata: {
+      accuracyNote: "USDA Agricultural Research Service describes Tangerine Dream as a sweet, non-pungent Capsicum annuum cultivar with fruits averaging 7.6 cm long.",
+    },
+  },
+  {
+    id: "chocolate-rocoto-x",
+    name: "Chocolate Rocoto X",
+    heat: "warm",
+    shuMin: 6000,
+    shuMax: 6000,
+    scovilleStatus: "unofficial",
+    color: "chocolate-burgundy",
+    ...generatedContentImage("peppers", "chocolate-rocoto-x"),
+    fact: "Chocolate Rocoto X is a thick, juicy Capsicum pubescens cross with dark apple-shaped pods, black seeds, purple flowers, and relatively gentle heat.",
+    metadata: {
+      accuracyNote: "Isotope Chillies estimates this cultivar at 6,000 SHU; Burrow marks that single grower's estimate as unofficial.",
+    },
+  },
+  {
     id: "jimmy-nardello",
     name: "Jimmy Nardello",
     shuMin: 0,

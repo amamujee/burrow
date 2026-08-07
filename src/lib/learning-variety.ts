@@ -1,4 +1,4 @@
-export type LearningOutcome = "correct" | "incorrect" | "skip" | "scheduled";
+export type LearningOutcome = "correct" | "incorrect" | "skip" | "tie" | "scheduled";
 
 export type LearningIdentity = {
   exactKey: string;

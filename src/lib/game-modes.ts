@@ -204,6 +204,14 @@ export type TopTrumpStat = {
   direction: TopTrumpDirection;
 };
 
+export type TopTrumpOutcome = "win" | "tie" | "loss";
+
+export const topTrumpOutcome = (playerStat: TopTrumpStat, computerStat: TopTrumpStat): TopTrumpOutcome => {
+  if (playerStat.value === computerStat.value) return "tie";
+  const playerWins = playerStat.direction === "lower" ? playerStat.value < computerStat.value : playerStat.value > computerStat.value;
+  return playerWins ? "win" : "loss";
+};
+
 export type TopTrumpCard = {
   id: string;
   topic: RoundTopic;
@@ -463,6 +471,8 @@ export const orderCollectionCardsByScoville = (cards: readonly KnowledgeCard[]):
 
 const pepperSizeInches: Record<string, number> = {
   "bell-pepper": 4,
+  "tangerine-dream": 3,
+  "chocolate-rocoto-x": 3.5,
   "banana-pepper": 6,
   pepperoncini: 3,
   poblano: 5,
@@ -605,6 +615,8 @@ const pepperSizeInches: Record<string, number> = {
 
 const pepperPlantHeightInches: Record<string, number> = {
   "bell-pepper": 30,
+  "tangerine-dream": 12,
+  "chocolate-rocoto-x": 72,
   "jimmy-nardello": 30,
   "banana-pepper": 24,
   pepperoncini: 24,
@@ -749,6 +761,37 @@ const pepperPlantHeightInches: Record<string, number> = {
 const pepperPlantHeight = (pepper: Pepper) => {
   const heatReference = pepper.shuMax ?? pepper.shuMin ?? 0;
   return pepperPlantHeightInches[pepper.id] ?? (heatReference >= 500000 ? 48 : heatReference >= 50000 ? 42 : 30);
+};
+
+type RarityTier = 1 | 2 | 3 | 4 | 5;
+
+const rarityLabels: Record<RarityTier, "Common" | "Uncommon" | "Rare" | "Epic" | "Legendary"> = {
+  1: "Common",
+  2: "Uncommon",
+  3: "Rare",
+  4: "Epic",
+  5: "Legendary",
+};
+
+const rarityStat = (tier: RarityTier): TopTrumpStat => ({
+  id: "rarity",
+  label: "Rarity",
+  value: tier,
+  display: rarityLabels[tier],
+  direction: "higher",
+});
+
+const commonPepperIds = new Set(["bell-pepper", "banana-pepper", "poblano", "anaheim", "jalapeno", "serrano", "cayenne", "tabasco", "habanero", "shishito"]);
+const uncommonPepperIds = new Set(["pepperoncini", "fresno", "thai-chili", "scotch-bonnet", "ghost-pepper", "padron", "ancho", "guajillo", "rocoto", "cubanelle", "hatch-chile", "tangerine-dream"]);
+const epicPepperIds = new Set(["chocolate-bhutlah", "chocolate-rocoto-x", "chocolate-moruga-scorpion", "dragons-breath", "pepper-y", "the-noah", "armageddon", "orange-butch-t"]);
+const legendaryPepperIds = new Set(["pepper-x", "carolina-reaper", "trinidad-scorpion", "seven-pot-primo"]);
+
+const pepperRarity = (pepper: Pepper): RarityTier => {
+  if (legendaryPepperIds.has(pepper.id)) return 5;
+  if (epicPepperIds.has(pepper.id)) return 4;
+  if (commonPepperIds.has(pepper.id)) return 1;
+  if (uncommonPepperIds.has(pepper.id)) return 2;
+  return 3;
 };
 const plantHeight = (value: number) => (value >= 24 && value % 12 === 0 ? `${value / 12} ft` : `${value} in`);
 
@@ -1062,6 +1105,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       metadata: pepper.metadata,
       stats: [
         ...(hasScovilleMeasurement(pepper) ? [{ id: "scoville", label: "Scoville", value: pepper.shuMax, display: pepperScovilleDisplay(pepper), direction: "higher" as const }] : []),
+        rarityStat(pepperRarity(pepper)),
         { id: "size", label: "Fruit size", value: pepperSizeInches[pepper.id] ?? 2, display: inches(pepperSizeInches[pepper.id] ?? 2), direction: "higher" },
         { id: "plant-height", label: "Plant height", value: pepperPlantHeight(pepper), display: plantHeight(pepperPlantHeight(pepper)), direction: "higher" },
       ],
@@ -1107,7 +1151,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
         { id: "weight", label: "Weight", value: sharkWeightLb(shark), display: pounds(sharkWeightLb(shark)), direction: "higher" },
         { id: "length", label: "Length", value: shark.lengthFt, display: feet(shark.lengthFt), direction: "higher" },
         { id: "power", label: "Predator power", value: shark.power * 2, display: `${shark.power * 2}/10`, direction: "higher" },
-        { id: "rarity", label: "Rarity", value: sharkRarity(shark), display: `${sharkRarity(shark)}/10`, direction: "higher" },
+        rarityStat(Math.min(5, Math.max(1, Math.ceil(sharkRarity(shark) / 2))) as RarityTier),
       ],
     };
   }
@@ -1171,13 +1215,14 @@ export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, se
   const player = topTrumpCard(currentTopic, first);
   const computer = topTrumpCard(currentTopic, second);
   if (!player || !computer) throw new Error(`Could not build Top Trumps round for ${currentTopic}`);
+  const sharedStatIds = new Set(player.stats.map((stat) => stat.id).filter((id) => computer.stats.some((stat) => stat.id === id)));
 
   return {
     id: `${seed}-trumps-${currentTopic}-${player.id}-${computer.id}`,
     topic: currentTopic,
     prompt: "Choose your strongest category.",
-    player,
-    computer,
+    player: { ...player, stats: player.stats.filter((stat) => sharedStatIds.has(stat.id)) },
+    computer: { ...computer, stats: computer.stats.filter((stat) => sharedStatIds.has(stat.id)) },
   };
 };
 
