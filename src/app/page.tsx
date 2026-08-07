@@ -51,6 +51,7 @@ const topicCards = [
 ] as const;
 
 const playButtonClass = "inline-flex rounded-[10px] border-2 border-[#082329] bg-[#f3c647] px-5 py-3 text-base font-black text-[#102f36] shadow-[3px_3px_0_#082329] transition hover:-translate-y-0.5 hover:bg-[#ffd85f]";
+const requestPackUrl = "https://forms.gle/YfLaHPfPGWVx2Ggv9";
 
 export default function Home() {
   return (
@@ -182,6 +183,25 @@ export default function Home() {
                 </div>
               </article>
             ))}
+          </div>
+
+          <div className="mt-10 flex flex-col items-start justify-between gap-5 rounded-[10px] border-2 border-[#082329] bg-[#fffaf4] p-5 shadow-[4px_4px_0_#082329] sm:flex-row sm:items-center sm:p-6">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#9b5538]">What should we burrow into next?</p>
+              <h2 className="mt-2 text-2xl font-black leading-tight text-[#321e16]">Request a Pack</h2>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#4d4038] sm:text-base">
+                Tell us what your player is obsessed with. A short Google Form is all it takes.
+              </p>
+            </div>
+            <a
+              href={requestPackUrl}
+              target="_blank"
+              rel="noreferrer"
+              className={`${playButtonClass} shrink-0`}
+            >
+              Request a Pack
+              <span aria-hidden="true" className="ml-2">↗</span>
+            </a>
           </div>
         </div>
       </section>
