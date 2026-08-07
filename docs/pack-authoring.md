@@ -129,15 +129,16 @@ Warnings are suggestions. Errors should be fixed before a pack is considered rea
 
 ## Current App Integration
 
-This pack format is the authoring path for new contributors. The live app still has topic-specific TypeScript data in `src/lib/game-data.ts`, `src/lib/questions.ts`, and `src/lib/game-modes.ts`.
+Burrow loads valid JSON packs from `content/packs/` and adapts them into playable cards at server startup. The six core catalogs still have topic-specific TypeScript data wired through `src/lib/game-data.ts`, `src/lib/questions.ts`, and `src/lib/game-modes.ts`, with country records in `src/lib/countries-data.ts`; JSON packs use the generic gameplay builders.
 
-For now, a new pack is considered ready when:
+A new pack is ready when:
 
 1. `content/packs/<pack-id>/pack.json` validates.
 2. Its images are committed under `public/burrow-assets/<pack-id>/`.
-3. A maintainer can adapt it into the current TypeScript topic data or use it as input for the upcoming generic pack runtime.
+3. Its pack file has `"status": "playable"`.
+4. `npm run verify` passes with the pack enabled.
 
-The future v2 product should make this same flow available inside Burrow with accounts, private packs, parent review, and sharing. This repo format is deliberately close to that future data model.
+Use `recommendedModes` in the pack file when a category should offer a narrower set of suitable generic game types.
 
 ## Contributor Checklist
 

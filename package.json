@@ -1,7 +1,7 @@
 {
   "name": "burrow",
   "version": "0.1.0",
-  "description": "A local-first learning game for short, visual quiz sessions.",
+  "description": "A local-first learning game that turns kids' interests into visual reading, math, science, and geography practice.",
   "private": true,
   "homepage": "https://github.com/amamujee/burrow#readme",
   "repository": {

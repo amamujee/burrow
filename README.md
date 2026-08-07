@@ -1,35 +1,28 @@
 # Burrow
 
-Burrow is a local-first learning game for short, visual quiz sessions. Pick a kid's current obsession, then Burrow turns it into fast reading and math rounds with real images, structured facts, and lightweight progress tracking.
+Burrow is a local-first learning game that turns a kid's current obsession into short, visual reading, math, science, and geography sessions. Choose the topics, build a custom Mix of game types, and let Burrow keep the practice varied while progress and collections grow.
 
 [![CI](https://github.com/amamujee/burrow/actions/workflows/ci.yml/badge.svg)](https://github.com/amamujee/burrow/actions/workflows/ci.yml)
 
-![Burrow home screen](docs/screenshots/home.png)
+![Burrow landing page](docs/screenshots/home.png)
 
-## What It Does
+## What Burrow Does
 
-- Runs quick rounds across quiz, head-to-head, Top Trumps, sorting, true/false, peek, number, and odd-one-out modes.
-- Ships with curated topic packs for peppers, skyscrapers, sharks, space, and jets.
-- Keeps gameplay local: topic images are cached in `public/burrow-assets`, and player progress lives in `localStorage`.
-- Tracks image provenance on every card so visual content can be audited or refreshed.
-- Includes content QA scripts, local image checks, and Playwright coverage for the main play flow.
+- Makes **Mix** a first-class multi-select: include any combination of Quiz Run, Head to Head, Top Trumps, Sort, True/False, Peek, Numbers, Odd One, and Geo Finder.
+- Keeps single-mode play available when a child wants to focus on one game type.
+- Ships with ten topic packs: peppers, skyscrapers, sharks, space, jets, countries and flags, dinosaurs, mountains, tall trees, and bridges and tunnels.
+- Uses real facts, comparable stats, maps, and credited local images to teach in context.
+- Adapts future questions using recent answers and revisits concepts that need more practice.
+- Unlocks collection cards through correct answers while preserving separate progress for each player.
+- Stores player progress locally and caches the app shell and learning assets for offline use.
 
-![Burrow play screen](docs/screenshots/play.png)
+![Burrow custom Mix and game screen](docs/screenshots/play.png)
 
-## Links
+## How the Content Is Organized
 
-- Repository: [github.com/amamujee/burrow](https://github.com/amamujee/burrow)
-- Issues: [github.com/amamujee/burrow/issues](https://github.com/amamujee/burrow/issues)
-- Next.js app docs: [nextjs.org/docs/app](https://nextjs.org/docs/app)
-- Vercel deploy docs: [vercel.com/docs](https://vercel.com/docs)
+The six core catalogs—peppers, skyscrapers, sharks, space, jets, and countries—are wired through `src/lib/game-data.ts`, with country records in `src/lib/countries-data.ts`. Contributor-friendly playable packs live under `content/packs/` and are loaded by the app when their `pack.json` has `"status": "playable"`.
 
-## Tech Stack
-
-- [Next.js](https://nextjs.org/) 16 App Router
-- [React](https://react.dev/) 19
-- [Tailwind CSS](https://tailwindcss.com/) 4
-- [Playwright](https://playwright.dev/) for end-to-end tests
-- [Vercel Analytics](https://vercel.com/analytics)
+Every card includes structured facts, comparable stats, local imagery, and image provenance. Gameplay never needs to hotlink topic images from the internet.
 
 ## Getting Started
 
@@ -38,88 +31,73 @@ Requirements:
 - Node.js 20.9 or newer
 - npm
 
-Install dependencies and start the local app:
+Install dependencies and run the app:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000), or go straight to the game at [http://localhost:3000/play](http://localhost:3000/play).
+Open [http://localhost:3000](http://localhost:3000), or go directly to [http://localhost:3000/play](http://localhost:3000/play).
 
 ## Useful Scripts
 
 ```bash
-npm run dev          # Start the Next.js dev server
-npm run build        # Create a production build
-npm run start        # Run the production build
+npm run dev            # Start the Next.js development server
+npm run build          # Create a production build
+npm run start          # Run the production build
 npm run lint           # Run ESLint
 npm run validate:packs # Validate repo-authored pack JSON files
 npm run check:images   # Verify gameplay images are local and present
-npm run qa:content     # Run content quality checks
-npm run test:e2e       # Run Playwright tests
-npm run verify         # Run the full pre-publish check
+npm run qa:content     # Run content-quality checks
+npm run test:logic     # Run logic and content coverage
+npm run test:e2e       # Build and run browser coverage
+npm run verify         # Run the complete pre-publish check
 ```
 
 ## Make Your Own Pack
 
-Burrow has a repo-level pack authoring format for parents and contributors who want to turn a kid's current obsession into a future playable pack. This is the v1 path: make a JSON pack in the repo, validate it, and keep it in your fork or open a pull request.
-
-Start by copying the template:
+Copy the template to start a new topic:
 
 ```bash
 cp -R content/packs/_template content/packs/construction-trucks
 ```
 
-Then edit `content/packs/construction-trucks/pack.json`:
+Then:
 
-- Change `id` to match the folder name, such as `construction-trucks`.
-- Add a kid-friendly `title` and `summary`.
-- Add at least 16 cards for good replay variety.
-- Give each card a local image path like `/burrow-assets/construction-trucks/excavator.jpg`.
-- Put the matching image file in `public/burrow-assets/construction-trucks/`.
-- Reuse at least 2 stat IDs across most cards, such as `weight`, `speed`, `height`, or `length`.
-- Add categories so Burrow can later build odd-one-out and sorting rounds.
-- Include `imageCredit` and `imageSourceUrl` for every card.
-
-Validate the pack:
+1. Edit `content/packs/construction-trucks/pack.json` and keep the folder and pack IDs aligned.
+2. Add at least 16 cards, reusable numeric stats, useful categories, and short child-friendly facts.
+3. Put each credited image under `public/burrow-assets/construction-trucks/`.
+4. Set the pack status to `playable` when it is ready to appear in Burrow.
+5. Validate it:
 
 ```bash
 npm run validate:packs -- --pack construction-trucks
 ```
 
-For a deeper walkthrough, see [docs/pack-authoring.md](docs/pack-authoring.md). The live game still uses the curated TypeScript topic data below. New JSON packs are the contributor-friendly staging format for future generic pack support.
+See [Making a Burrow Pack](docs/pack-authoring.md) for the schema, image rules, examples, and contributor checklist.
 
-## Built-In Content Packs
+## Content Quality and Privacy
 
-Topic records currently live in `src/lib/game-data.ts`. Each playable card keeps structured stats plus image provenance:
+- `npm run check:images` rejects missing files and remote runtime image URLs.
+- `npm run qa:content` checks content completeness, quality signals, and playable pack data.
+- The in-game **Flag image** action stores a report locally and sends it to `POST /api/content-issues`; local development writes `.burrow/content-issues.jsonl`.
+- Anonymous play-quality events can be summarized with `npm run analyze:play-events`. Player names are not sent, and local identifiers are hashed before server logging.
+- `.burrow/`, environment files, Vercel project metadata, test output, and local QA screenshots are ignored by git.
 
-- `contentImage(topic, id, sourceFile)` points gameplay at `/public/burrow-assets/...`.
-- `imageCredit` credits the curated source.
-- `imageSourceFile` and `imageSourceUrl` preserve where the local asset came from.
+## Tech Stack
 
-The app should not load topic images from the internet during play. To add a topic or card:
+- [Next.js](https://nextjs.org/) 16 App Router
+- [React](https://react.dev/) 19
+- [Tailwind CSS](https://tailwindcss.com/) 4
+- [Playwright](https://playwright.dev/) for logic and browser coverage
+- [Vercel Analytics](https://vercel.com/analytics)
 
-1. Add the structured record and `contentImage(...)` source metadata.
-2. Run `npm run sync:assets` during development to cache images locally.
-3. Run `npm run check:images`; it fails on missing local assets or remote runtime image URLs.
+## Contributing
 
-Use `npm run sync:assets -- --only=sharks/great-white --force` to refresh one asset.
+- Run `npm run verify` before opening a pull request.
+- Keep `public/burrow-assets` committed so the game remains local-first and offline-friendly.
+- Preserve image credits and source URLs whenever content or imagery changes.
+- Use [GitHub Issues](https://github.com/amamujee/burrow/issues) for bugs and content problems.
 
-## Content Issue Reports
-
-The in-game "Flag image" control stores a local report in the browser and posts it to `POST /api/content-issues`. In local development, the API appends reports to `.burrow/content-issues.jsonl`, which is intentionally ignored by git.
-
-## Play Quality Signals
-
-Burrow records anonymous play events for views, answers, skips, flags, and setup changes. The browser keeps the latest events in `localStorage` under `burrow-play-events-v1`, queues unsent events under `burrow-play-events-pending-v1`, and posts batches to `POST /api/play-events`. In local development, the API appends JSONL to `.burrow/play-events.jsonl`; in hosted environments it also emits structured `burrow.play_event` server logs.
-
-Production still sends compact `Burrow Play` custom events to Vercel Analytics with mode, topic, stable question key/hash, difficulty, outcome, and answer time. Player names are not sent. Browser/profile identity uses a local anonymous install id plus profile id, then hashes that value before logging.
-
-Run `npm run analyze:play-events` to summarize `.burrow/play-events.jsonl` by repeated views, skip rate, accuracy, and flags. Pass a path to inspect an exported log: `npm run analyze:play-events -- path/to/play-events.jsonl`.
-
-## Publishing Notes
-
-- Keep `public/burrow-assets` committed so the game works offline and does not hotlink topic images.
-- Run `npm run verify` before opening a pull request or publishing a release.
-- The package stays marked as private to prevent accidental npm publishing; this repo is intended to be public source, not a published package.
+The package is intentionally marked private to prevent accidental npm publication; the repository itself is public source.
