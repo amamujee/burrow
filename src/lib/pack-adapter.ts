@@ -67,9 +67,6 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
           ] : []),
           ...(card.metadata?.taxonomyGroup ? [{ label: "Group", value: card.metadata.taxonomyGroup }] : []),
           ...(card.tags?.length ? [{ label: "Traits", value: card.tags.join(" · ") }] : []),
-          ...((card.metadata?.accuracyNote ?? pack.dataNote)
-            ? [{ label: "Data note", value: card.metadata?.accuracyNote ?? pack.dataNote! }]
-            : []),
         ],
       } satisfies GenericKnowledgeCard;
     });

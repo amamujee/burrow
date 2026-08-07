@@ -67,7 +67,9 @@ export type QuestionKind =
   | "country-continent"
   | "country-location"
   | "country-population"
-  | "country-area";
+  | "country-area"
+  | "country-neighbors"
+  | "country-highest-point";
 
 export type ComparisonCard = {
   label: "A" | "B";
@@ -876,7 +878,9 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
   }))[0];
   const kinds: QuestionKind[] = difficulty === 1
     ? ["country-flag", "country-capital", "country-continent", "country-location", "country-flag"]
-    : ["country-flag", "country-capital", "country-continent", "country-location", "country-population", "country-area"];
+    : difficulty === 2
+      ? ["country-flag", "country-capital", "country-location", "country-population", "country-area"]
+      : ["country-population", "country-area", "country-neighbors", "country-highest-point", "country-population", "country-area"];
   const kind = sample(kinds, seed + 17);
 
   if (kind === "country-location") {
@@ -946,6 +950,44 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
       seed + 22,
     );
     return countryComparisonQuestion(seed, country, challenger, stat);
+  }
+
+  if (kind === "country-neighbors") {
+    const answer = `${formatNumber(country.landNeighborCount)} land ${country.landNeighborCount === 1 ? "neighbor" : "neighbors"}`;
+    const otherCounts = pool
+      .filter((item) => item.id !== country.id)
+      .map((item) => `${formatNumber(item.landNeighborCount)} land ${item.landNeighborCount === 1 ? "neighbor" : "neighbors"}`);
+    return {
+      id: `${seed}-country-neighbors-${country.id}`,
+      topic: "countries",
+      kind,
+      prompt: `How many land neighbors does ${country.name} have?`,
+      image: country.image,
+      imageAlt: `Flag of ${country.name}`,
+      imageCredit: country.imageCredit,
+      choices: answerChoices(answer, otherCounts, seed + 22, choiceCountForDifficulty(difficulty)),
+      answer,
+      explanation: `${country.name} has ${answer}. Its region is ${country.subregion}.`,
+      collectionTitles: [country.name],
+      locations: itemLocations(country),
+    };
+  }
+
+  if (kind === "country-highest-point") {
+    return {
+      id: `${seed}-country-highest-point-${country.id}`,
+      topic: "countries",
+      kind,
+      prompt: `What is the highest point in ${country.name}?`,
+      image: country.image,
+      imageAlt: `Flag of ${country.name}`,
+      imageCredit: country.imageCredit,
+      choices: answerChoices(country.highestPointName, pool.filter((item) => item.id !== country.id).map((item) => item.highestPointName), seed + 22, choiceCountForDifficulty(difficulty)),
+      answer: country.highestPointName,
+      explanation: `${country.highestPointName} is ${country.name}'s highest point at about ${formatNumber(country.highestPointM)} metres.`,
+      collectionTitles: [country.name],
+      locations: itemLocations(country),
+    };
   }
 
   const sameContinent = pool.filter((item) => item.id !== country.id && item.continents.some((continent) => country.continents.includes(continent)));

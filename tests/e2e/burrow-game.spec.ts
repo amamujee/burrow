@@ -11,6 +11,7 @@ import { weightTopicsForAccuracy } from "../../src/lib/adaptive-topics";
 import { cardDiscoveryIdentities, cardUnlockKey, isCardUnlocked } from "../../src/lib/card-discovery";
 import { buildings, countries, jets, peppers, sharks, spaceCards, topicPacks } from "../../src/lib/game-data";
 import { poolForDifficulty } from "../../src/lib/difficulty-pool";
+import { autoDifficulty } from "../../src/lib/difficulty";
 import {
   buildFactRound,
   buildFactRoundFromCards,
@@ -162,6 +163,49 @@ test("built-in topic totals match the playable card catalogs", () => {
   }
 });
 
+test("difficulty progression gives Easy and Medium room before Hard", () => {
+  expect(autoDifficulty(1, true, 10, 10, 10)).toBe(1);
+  expect(autoDifficulty(1, true, 6, 16, 13)).toBe(2);
+  expect(autoDifficulty(2, true, 12, 30, 27)).toBe(2);
+  expect(autoDifficulty(2, true, 8, 45, 37)).toBe(3);
+  expect(autoDifficulty(3, false, 0, 20, 7)).toBe(2);
+});
+
+test("difficulty pools grow cumulatively from familiar to obscure countries", () => {
+  const easy = new Set(poolForDifficulty(countries, 1).map((country) => country.name));
+  const medium = new Set(poolForDifficulty(countries, 2).map((country) => country.name));
+  const hard = new Set(poolForDifficulty(countries, 3).map((country) => country.name));
+
+  expect(easy).toContain("United States");
+  expect(easy).not.toContain("Belgium");
+  expect(easy).not.toContain("Guinea");
+  expect(medium).toContain("United States");
+  expect(medium).toContain("Belgium");
+  expect(medium).not.toContain("Guinea");
+  expect(hard).toContain("United States");
+  expect(hard).toContain("Belgium");
+  expect(hard).toContain("Guinea");
+});
+
+test("Hard retains every Easy subject and adds the rest of every category", () => {
+  for (const category of playableChallengeCategories) {
+    const easy = poolForDifficulty(category.cards, 1);
+    const hard = poolForDifficulty(category.cards, 3);
+    const hardIds = new Set(hard.map((card) => card.id));
+
+    expect(easy.length, `${category.id} needs a broad Easy pool`).toBeGreaterThanOrEqual(10);
+    expect(hard.length, `${category.id} Hard should use the whole catalog`).toBe(category.cards.length);
+    expect(easy.every((card) => hardIds.has(card.id)), `${category.id} Hard should retain every Easy card`).toBe(true);
+  }
+});
+
+test("hard multiplication uses genuinely harder factors", () => {
+  const easyRounds = Array.from({ length: 30 }, (_, seed) => buildNumberRound("peppers", 1, seed * 3 + 2));
+  const hardRounds = Array.from({ length: 30 }, (_, seed) => buildNumberRound("peppers", 3, seed * 3 + 2));
+  expect(easyRounds.every((round) => round.operation === "multiplication" && round.termValues.every((value) => value <= 5))).toBe(true);
+  expect(hardRounds.every((round) => round.operation === "multiplication" && round.termValues.every((value) => value >= 6 && value <= 12))).toBe(true);
+});
+
 test("pack Odd One rounds never ask children to infer a hidden category", () => {
   const cards = mathFixtureCards.map((card, index) => ({
     ...card,
@@ -308,7 +352,7 @@ test("every collection card has a structured fact profile", () => {
   ];
   for (const card of cards) {
     expect(card.details?.length, `${card.topic}/${card.id} needs structured details`).toBeGreaterThanOrEqual(2);
-    expect(card.details?.some((detail) => detail.label === "Data note"), `${card.topic}/${card.id} needs a data note`).toBe(true);
+    expect(card.details?.some((detail) => detail.label === "Data note"), `${card.topic}/${card.id} should keep data notes out of the child-facing card`).toBe(false);
     expect(new Set(card.details?.map((detail) => detail.label)).size, `${card.topic}/${card.id} detail labels must be distinct`).toBe(card.details?.length);
     for (const detail of card.details ?? []) {
       expect(detail.label.trim(), `${card.topic}/${card.id} has an empty detail label`).toBeTruthy();
@@ -631,7 +675,7 @@ test("25 world peppers add credited source photos, honest heat data, geography, 
   const mediumIds = new Set(poolForDifficulty(peppers, 2).map((pepper) => pepper.id));
   const hardIds = new Set(poolForDifficulty(peppers, 3).map((pepper) => pepper.id));
   expect(newPepperIds.filter((id) => easyIds.has(id)).length).toBeGreaterThanOrEqual(8);
-  expect(newPepperIds.filter((id) => mediumIds.has(id)).length).toBe(15);
+  expect(newPepperIds.filter((id) => mediumIds.has(id)).length).toBeGreaterThanOrEqual(15);
   for (const id of newPepperIds) expect(hardIds).toContain(id);
 });
 
@@ -805,9 +849,8 @@ test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate ma
     expect(sortRound.cards.every((card) => card.id !== "the-noah" && Number.isFinite(card.statValue))).toBe(true);
   }
 
-  for (const difficulty of [1, 2, 3] as const) {
-    expect(new Set(poolForDifficulty(peppers, difficulty).map((pepper) => pepper.id))).toContain("the-noah");
-  }
+  expect(new Set(poolForDifficulty(peppers, 3).map((pepper) => pepper.id))).toContain("the-noah");
+  expect(new Set(poolForDifficulty(peppers, 1).map((pepper) => pepper.id))).not.toContain("the-noah");
 
   const candidates = peppers.map((pepper) => ({ id: pepper.id, title: pepper.name }));
   const unlockedOtherPeppers = peppers.filter((pepper) => pepper.id !== "the-noah").map((pepper) => pepper.name);
@@ -970,26 +1013,34 @@ test("Countries & Flags ships an exact 200-card passport catalog", () => {
 
   const countryCards = collectionCards().filter((card) => card.topic === "countries");
   expect(countryCards).toHaveLength(200);
-  expect(countryCards.every((card) => card.details?.map((detail) => detail.label).join("|") === "Capital|Population|Land area|Land neighbors|Highest point|Continent|Region|Country code|Data note")).toBe(true);
+  expect(countryCards.every((card) => card.details?.map((detail) => detail.label).join("|") === "Capital|Population|Land area|Land neighbors|Highest point|Continent|Region|Country code")).toBe(true);
 
   expect(countries.find((country) => country.code === "CM")).toMatchObject({ landNeighborCount: 6, highestPointM: 4045 });
   expect(countries.find((country) => country.code === "CN")).toMatchObject({ landNeighborCount: 14, highestPointName: "Mount Everest", highestPointM: 8849 });
   expect(countries.find((country) => country.code === "MV")).toMatchObject({ landNeighborCount: 0, highestPointM: 5 });
 });
 
-test("country quiz rotation covers flags, capitals, continents, maps, and stat duels", () => {
+test("country quiz rotation moves from recognition to deeper metadata", () => {
+  const mediumRounds = Array.from({ length: 90 }, (_, seed) => buildSession("countries", 2, seed * 101, [])).flat();
+  expect(new Set(mediumRounds.map((round) => round.kind))).toEqual(new Set(["country-flag", "country-capital", "country-location", "country-population", "country-area"]));
+
   const rounds = Array.from({ length: 90 }, (_, seed) => buildSession("countries", 3, seed * 101, [])).flat();
   const kinds = new Set(rounds.map((round) => round.kind));
-  expect(kinds).toEqual(new Set(["country-flag", "country-capital", "country-continent", "country-location", "country-population", "country-area"]));
+  expect(kinds).toEqual(new Set(["country-population", "country-area", "country-neighbors", "country-highest-point"]));
 
-  const flagRound = rounds.find((round) => round.kind === "country-flag");
+  const flagRound = mediumRounds.find((round) => round.kind === "country-flag");
   expect(flagRound?.secondChanceClue).toMatch(/capital is .+ in .+ people/);
   expect(flagRound?.imageAlt).toBe("Mystery country flag");
   expect(flagRound?.collectionTitles).toEqual([flagRound?.answer]);
 
-  const mapRound = rounds.find((round) => round.kind === "country-location");
+  const mapRound = mediumRounds.find((round) => round.kind === "country-location");
   expect(mapRound?.map?.choices.length).toBe(4);
   expect(mapRound?.map?.choices.some((choice) => choice.id === mapRound.map?.answerId)).toBe(true);
+
+  const hardFacts = Array.from({ length: 90 }, (_, seed) => buildFactRound("countries", 3, seed * 103, []));
+  expect(new Set(hardFacts.map((round) => round.id.match(/fact-country-(population|area|neighbors|highest-point)-/)?.[1]))).toEqual(
+    new Set(["population", "area", "neighbors", "highest-point"]),
+  );
 });
 
 test("country play works across every card-game mode", () => {

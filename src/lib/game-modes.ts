@@ -284,7 +284,6 @@ const pepperScovilleDisplay = (pepper: Pepper) => {
   if (!hasScovilleMeasurement(pepper)) return "SHU not published";
   return `${pepper.scovilleStatus === "unofficial" ? "~" : ""}${formatNumber(pepper.shuMax)} SHU${pepper.scovilleStatus === "unofficial" ? " (unofficial)" : ""}`;
 };
-const pepperDataNote = "Scoville values are rounded published ranges or clearly marked estimates; natural pods can vary in heat.";
 const pepperHeatExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
   ? `${pepper.name} can reach ${pepperScovilleDisplay(pepper)}, so it is ${pepper.heat} (${heatBandRangeLabel(pepper.heat)}). Its full range is ${pepperRange(pepper)} SHU.`
   : pepper.scovilleStatus === "not-applicable"
@@ -320,7 +319,6 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
       { label: "Origin", value: pepper.metadata.location.label },
       { label: "Continent", value: pepper.metadata.location.continents.join(" / ") },
     ] : []),
-    { label: "Data note", value: pepper.metadata?.accuracyNote ?? pepperDataNote },
   ],
 });
 
@@ -352,7 +350,6 @@ const buildingCard = (building: Building): KnowledgeCard => ({
     { label: "City", value: building.city },
     { label: "Country", value: building.country },
     { label: "Continent", value: building.metadata.location?.continents.join(" / ") ?? "Not listed" },
-    { label: "Data note", value: building.metadata.accuracyNote ?? "Published reference figures can vary by height definition and source." },
   ],
 });
 
@@ -379,7 +376,6 @@ const sharkCard = (shark: Shark, metric: "length" | "speed" | "power" = "length"
     { label: "Family", value: shark.family },
     { label: "Diet", value: shark.diet },
     ...(shark.metadata?.location ? [{ label: "Range", value: shark.metadata.location.label }] : []),
-    { label: "Data note", value: "Length is an approximate reported maximum and speed varies by study. Power is a Burrow 1-5 gameplay rating." },
   ],
 });
 
@@ -430,7 +426,6 @@ const spaceCard = (space: SpaceCard, metric: "distance" | "temperature" | "size"
     ...(space.meanSurfaceTempF !== undefined ? [{ label: "Temperature", value: `${formatNumber(space.meanSurfaceTempF)}°F` }] : []),
     ...(space.surfaceTempK !== undefined ? [{ label: "Temperature", value: `${formatNumber(space.surfaceTempK)} K` }] : []),
     ...(space.moons !== undefined ? [{ label: "Moons", value: formatNumber(space.moons) }] : []),
-    { label: "Data note", value: space.statNote ?? "Values are rounded representative measurements; temperatures, distances, and object sizes can be estimates." },
   ],
 });
 
@@ -495,7 +490,6 @@ const jetCard = (jet: Jet, metric: "speed" | "range" | "firepower" = "speed"): K
     { label: "Country", value: jet.country },
     { label: "Aircraft type", value: jetCategoryLabels[jet.category].replace(/^./, (letter) => letter.toUpperCase()) },
     { label: "Continent", value: jetWorldLocation(jet).continents.join(" / ") },
-    { label: "Data note", value: "Performance varies by variant, load, altitude, and mission. Firepower is a Burrow 1-5 gameplay rating." },
   ],
 });
 
@@ -543,7 +537,6 @@ const countryCard = (country: Country, metric: CountryMetric = "population"): Kn
       { label: "Continent", value: country.continents.join(" / ") },
       { label: "Region", value: country.subregion },
       { label: "Country code", value: `${country.code} · ${country.code3}` },
-      { label: "Data note", value: country.metadata.accuracyNote ?? country.populationNote },
     ],
   };
 };
@@ -1429,8 +1422,8 @@ const numberOperationForSeed = (seed: number): NumberOperation => {
 const factorRangeForDifficulty = (difficulty: Difficulty) => difficulty === 1
   ? { groups: [1, 5] as const, items: [1, 5] as const }
   : difficulty === 2
-    ? { groups: [2, 9] as const, items: [2, 9] as const }
-    : { groups: [2, 12] as const, items: [2, 12] as const };
+    ? { groups: [2, 10] as const, items: [2, 10] as const }
+    : { groups: [6, 12] as const, items: [6, 12] as const };
 
 const pickFactor = ([min, max]: readonly [number, number], factorSeed: number) => min + Math.floor(seedRandom(factorSeed) * (max - min + 1));
 
@@ -2373,7 +2366,7 @@ export const buildTopTrumpRoundFromCards = (
   };
 };
 
-const additionTermCount = (difficulty: Difficulty, seed: number) => difficulty === 1 ? 2 : seedRandom(seed + difficulty * 17) > 0.45 ? 3 : 2;
+const additionTermCount = (difficulty: Difficulty, seed: number) => difficulty === 1 ? 2 : difficulty === 3 ? 3 : seedRandom(seed + difficulty * 17) > 0.45 ? 3 : 2;
 const additionPromptStart = (count: number) => count === 2 ? "Add these together" : "Add all three together";
 const stackedTotalLabel = (count: number) => count === 2 ? "stacked total" : "three-part total";
 const sumValues = (values: number[]) => values.reduce((total, value) => total + value, 0);
@@ -3069,24 +3062,41 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       topic: "countries",
       title: item.name,
     }))[0];
-    const factType = sample(["capital", "continent"] as const, seed + 13);
+    const factType = difficulty === 1
+      ? sample(["capital", "continent"] as const, seed + 13)
+      : difficulty === 2
+        ? sample(["capital", "continent", "population", "area"] as const, seed + 13)
+        : sample(["population", "area", "neighbors", "highest-point"] as const, seed + 13);
     const alternate = sample(pool.filter((item) => item.id !== country.id), seed + 14);
     const claimedCapital = truthful ? country.capital : alternate.capital;
     const falseContinents = (["Africa", "Asia", "Europe", "North America", "Oceania", "South America"] as WorldContinent[])
       .filter((continent) => !country.continents.includes(continent));
     const claimedContinent = truthful ? country.continents[0] : sample(falseContinents, seed + 15);
+    const claimedPopulation = truthful ? country.population : alternate.population;
+    const claimedArea = truthful ? country.areaKm2 : alternate.areaKm2;
+    const claimedNeighbors = truthful ? country.landNeighborCount : alternate.landNeighborCount;
+    const claimedHighestPoint = truthful ? country.highestPointName : alternate.highestPointName;
+    const statement = factType === "capital"
+      ? `${claimedCapital} is the capital of ${country.name}.`
+      : factType === "continent"
+        ? `${country.name} is in ${claimedContinent}.`
+        : factType === "population"
+          ? `${country.name} has about ${formatNumber(claimedPopulation)} people.`
+          : factType === "area"
+            ? `${country.name} has about ${formatNumber(claimedArea)} square kilometres of land area.`
+            : factType === "neighbors"
+              ? `${country.name} has ${formatNumber(claimedNeighbors)} land ${claimedNeighbors === 1 ? "neighbor" : "neighbors"}.`
+              : `${claimedHighestPoint} is the highest point in ${country.name}.`;
     return {
       id: `${seed}-fact-country-${factType}-${country.id}`,
       topic: currentTopic,
       prompt: "True or false?",
-      statement: factType === "capital"
-        ? `${claimedCapital} is the capital of ${country.name}.`
-        : `${country.name} is in ${claimedContinent}.`,
+      statement,
       image: country.image,
       imageAlt: `Flag of ${country.name}`,
       imageCredit: country.imageCredit,
       answer: truthful ? "True" : "False",
-      explanation: `${country.name}'s capital is ${country.capital}, and it is in ${country.continents.join(" / ")}. ${country.fact}`,
+      explanation: `${country.name}'s capital is ${country.capital}. It has about ${formatNumber(country.population)} people, ${formatNumber(country.areaKm2)} square kilometres of land, and ${formatNumber(country.landNeighborCount)} land ${country.landNeighborCount === 1 ? "neighbor" : "neighbors"}. Its highest point is ${country.highestPointName} at about ${formatNumber(country.highestPointM)} metres.`,
       locations: country.metadata.location ? [country.metadata.location] : undefined,
     };
   }

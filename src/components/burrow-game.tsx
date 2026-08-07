@@ -15,6 +15,7 @@ import { WorldMapSurface } from "@/components/world-map-surface";
 import { weightTopicsForAccuracy } from "@/lib/adaptive-topics";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
 import { cardUnlockKeysForSubjects, isCardUnlocked } from "@/lib/card-discovery";
+import { autoDifficulty } from "@/lib/difficulty";
 import { migrateTopicSelection } from "@/lib/topic-selection";
 import {
   buildFactRoundFromCards,
@@ -4468,15 +4469,4 @@ function LockedCard({ topic }: { topic: RoundTopic }) {
       <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#092421] bg-[#f0c84b] text-4xl font-black">?</div>
     </div>
   );
-}
-
-function autoDifficulty(current: Difficulty, correct: boolean, streak: number, answered: number, correctCount: number): Difficulty {
-  const accuracy = correctCount / answered;
-  if ((streak >= 5 || (answered >= 10 && accuracy >= 0.82)) && current < 3) {
-    return (current + 1) as Difficulty;
-  }
-  if (!correct && answered >= 8 && accuracy < 0.45 && current > 1) {
-    return (current - 1) as Difficulty;
-  }
-  return current;
 }

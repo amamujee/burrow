@@ -66,6 +66,9 @@ const familiarIds = new Set([
 ]);
 
 const advancedIds = new Set([
+  "the-noah",
+  "pepper-y",
+  "armageddon",
   "aji-charapita",
   "bishop-crown",
   "trinidad-perfume",
@@ -138,5 +141,8 @@ export const sortByFamiliarity = <T extends { id: string; metadata?: CardMetadat
 export const poolForDifficulty = <T extends { id: string; metadata?: CardMetadata; tags?: string[] }>(items: readonly T[], difficulty: DifficultyLevel) => {
   if (difficulty === 3) return [...items];
   const sorted = sortByFamiliarity(items);
-  return sorted.slice(0, targetCount(sorted.length, difficulty));
+  const allowedBands = difficulty === 1 ? new Set(["easy"]) : new Set(["easy", "medium"]);
+  const cumulative = sorted.filter((item) => item.metadata?.difficultyBand && allowedBands.has(item.metadata.difficultyBand));
+  const minimum = Math.min(10, sorted.length);
+  return cumulative.length >= minimum ? cumulative : sorted.slice(0, targetCount(sorted.length, difficulty));
 };

@@ -291,9 +291,6 @@ for (const pepper of data.peppers) {
 for (const card of cards.filter((item) => item.topic === "buildings")) {
   if (!card.metadata?.location) critical.push(`buildings/${card.id}: missing world location metadata`);
 }
-for (const card of cards) {
-  if (!card.details?.some((detail) => detail.label === "Data note")) critical.push(`${card.topic}/${card.id}: collection profile needs a data note`);
-}
 const lowConfidence = cards.filter((card) => card.qualityScore < 75);
 for (const card of lowConfidence) {
   warnings.push(`${card.topic}/${card.id}: low confidence ${card.qualityScore} (${card.qualityFlags.join(", ")})`);
@@ -508,10 +505,6 @@ const checkPlayablePackRoundBuilders = async () => {
     const deck = packToPlayableDeck(pack);
     if (deck.cards.length < 4) critical.push(`${deck.id}: needs at least 4 playable cards`);
     assertPackPrimarySortStat(deck);
-    for (const card of deck.cards) {
-      if (!card.details?.some((detail) => detail.label === "Data note")) critical.push(`${deck.id}/${card.id}: collection profile needs a data note`);
-    }
-
     for (const difficulty of difficulties) {
       const seed = 20260511 + difficulty * 100 + deck.id.length;
 
@@ -605,7 +598,7 @@ const result = {
     auditedCards: cards.length + playablePacks.reduce((total, pack) => total + pack.cards.length, 0),
     countries: data.countries.length,
     rangeAndConversionChecks: true,
-    collectionDataNotes: true,
+    sourceAndUncertaintyNotes: true,
   },
   confidence,
   researchLibrary: {
