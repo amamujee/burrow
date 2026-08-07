@@ -2380,9 +2380,9 @@ function GameHud({
 
   return (
     <header className="relative z-30 shrink-0 rounded-xl border-2 border-[#092421] bg-[#0d332f] p-2 shadow-[3px_3px_0_#092421]">
-      <div className="relative z-10 flex min-w-0 flex-wrap items-stretch justify-between gap-2">
-        <div className="flex min-w-0 flex-wrap items-stretch gap-2">
-          <div className="flex shrink-0 items-center gap-2 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-2 py-1.5 shadow-[3px_3px_0_#092421]">
+      <div className="relative z-10 flex min-w-0 flex-wrap items-stretch gap-2">
+        <div data-hud-info className="flex min-w-0 flex-[1.7_1_610px] flex-wrap items-stretch gap-2">
+          <div data-hud-identity className="flex min-w-[230px] flex-[1.05_1_230px] items-center gap-2 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-2 py-1.5 shadow-[3px_3px_0_#092421]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/icons/burrow-icon-64.png"
@@ -2400,18 +2400,18 @@ function GameHud({
 
           <HudProgress level={level} levelProgress={levelProgress} xpToNextLevel={xpToNextLevel} streak={streak} accuracy={accuracy} learningRecap={learningRecap} />
 
-          <div className="w-[180px] shrink-0 rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-1.5 shadow-[3px_3px_0_#092421]">
+          <div data-hud-difficulty className="min-w-[180px] flex-[.75_1_180px] rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-1.5 shadow-[3px_3px_0_#092421]">
             <DifficultySelector difficulty={difficulty} onChange={onDifficultyChange} />
           </div>
         </div>
 
-        <div className="flex shrink-0 flex-wrap content-center items-center gap-2" aria-label="Play controls">
+        <div className="grid min-w-0 flex-[1_1_340px] grid-cols-[repeat(3,minmax(0,1fr))_auto] content-center items-center gap-2" aria-label="Play controls">
           <button
             type="button"
             aria-expanded={openTray === "mode"}
             aria-controls="hud-mode-tray"
             onClick={() => toggleTray("mode")}
-            className={`flex min-h-11 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border-2 border-[#092421] px-2.5 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "mode" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
+            className={`flex min-h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border-2 border-[#092421] px-2.5 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "mode" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
           >
             <span className="h-2.5 w-2.5 shrink-0 rounded-[3px] bg-[#9b5538]" />
             <span>Modes</span>
@@ -2422,7 +2422,7 @@ function GameHud({
             aria-expanded={openTray === "topics"}
             aria-controls="hud-topics-tray"
             onClick={() => toggleTray("topics")}
-            className={`flex min-h-11 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border-2 border-[#092421] px-2.5 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "topics" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
+            className={`flex min-h-11 min-w-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border-2 border-[#092421] px-2.5 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "topics" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
           >
             <span className="h-2.5 w-2.5 shrink-0 rounded-[3px] bg-[#9b5538]" />
             <span>Topics</span>
@@ -2431,7 +2431,7 @@ function GameHud({
           <button
             type="button"
             onClick={openCollection}
-            className={`min-h-11 rounded-lg border-2 border-[#092421] px-3 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${showCollection ? "bg-[#f0c84b]" : "bg-[#fffdf6]"}`}
+            className={`min-h-11 min-w-0 rounded-lg border-2 border-[#092421] px-2.5 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${showCollection ? "bg-[#f0c84b]" : "bg-[#fffdf6]"}`}
           >
             {showCollection ? "Back to game" : "Collection"}
             <span className="sr-only"> {collectionValue}</span>
@@ -2567,7 +2567,7 @@ function HudProgress({
         : "Burrow is learning with you";
 
   return (
-    <div className="flex min-w-[190px] shrink-0 items-center gap-2 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-2 py-1.5 shadow-[3px_3px_0_#092421]">
+    <div data-hud-progress className="flex min-w-[190px] flex-[1.15_1_190px] items-center gap-2 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-2 py-1.5 shadow-[3px_3px_0_#092421]">
         <div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border-2 border-[#092421] bg-[#f0c84b] text-center shadow-[2px_2px_0_#092421]">
           <span className="block text-[7px] font-black uppercase leading-none tracking-[0.1em] text-[#7d5a3f]">Lvl</span>
           <span className="block text-xl font-black leading-none text-[#102f36]">{level}</span>

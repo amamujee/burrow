@@ -1374,6 +1374,7 @@ test("HUD trays share one slot, stay open on selection, and protect the final to
 
 test("HUD uses one compact row where space allows and wraps actions together without overflow", async ({ page }) => {
   for (const viewport of [
+    { width: 2048, height: 900 },
     { width: 1194, height: 834 },
     { width: 1024, height: 768 },
     { width: 834, height: 1194 },
@@ -1399,6 +1400,16 @@ test("HUD uses one compact row where space allows and wraps actions together wit
       const difficultyBox = await page.getByRole("button", { name: "Easy", exact: true }).boundingBox();
       expect(difficultyBox).not.toBeNull();
       expect(Math.abs(actionBoxes[0]!.y - difficultyBox!.y)).toBeLessThanOrEqual(4);
+    }
+    if (viewport.width >= 1440) {
+      const infoBox = await page.locator("[data-hud-info]").boundingBox();
+      const controlsBox = await page.getByLabel("Play controls").boundingBox();
+      expect(infoBox).not.toBeNull();
+      expect(controlsBox).not.toBeNull();
+      expect(controlsBox!.x - (infoBox!.x + infoBox!.width)).toBeLessThanOrEqual(12);
+      expect(controlsBox!.width).toBeGreaterThan(500);
+      const primaryControlWidths = actionBoxes.slice(0, 3).map((box) => Math.round(box!.width));
+      expect(Math.max(...primaryControlWidths) - Math.min(...primaryControlWidths)).toBeLessThanOrEqual(1);
     }
   }
 });
