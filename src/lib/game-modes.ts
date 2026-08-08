@@ -390,7 +390,7 @@ const spaceMetricDisplay = (space: SpaceCard, metric: "distance" | "temperature"
   const value = spaceMetricValue(space, metric);
   if (metric === "distance") return space.kind === "star" ? `${formatNumber(value)} ly` : `${formatNumber(value)}M mi`;
   if (metric === "temperature") return space.kind === "star" ? `${formatNumber(value)} K` : `${formatNumber(value)}°F`;
-  if (metric === "size") return space.kind === "star" ? `${formatNumber(value)}x Sun` : feet(value);
+  if (metric === "size") return space.kind === "star" ? `${formatNumber(value)}x Sun` : `${formatNumber(value)} mi`;
   return `${formatNumber(value)} moons`;
 };
 

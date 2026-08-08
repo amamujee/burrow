@@ -134,7 +134,7 @@ const topicChallengeLanguage: Record<string, { singular: string; plural: string;
   countries: { singular: "country", plural: "countries", emoji: "🌍" },
   dinosaurs: { singular: "prehistoric animal", plural: "prehistoric animals", emoji: "🦕" },
   "tallest-mountains": { singular: "mountain", plural: "mountains", emoji: "🏔️" },
-  "tall-trees": { singular: "tree", plural: "trees", emoji: "🌳" },
+  "tall-trees": { singular: "height subject", plural: "height subjects", emoji: "📏" },
   "bridges-and-tunnels": { singular: "crossing", plural: "crossings", emoji: "🌉" },
 };
 
@@ -147,8 +147,6 @@ const uniqueBy = <T,>(items: readonly T[], keyFor: (item: T) => string) => {
     return true;
   });
 };
-
-const rotate = <T,>(items: readonly T[], offset: number) => items.length ? items[offset % items.length] : undefined;
 
 const fourChoices = (answer: string, candidates: readonly string[], seed: number) => {
   const values = uniqueBy([answer, ...candidates], (item) => item).slice(0, 4);
@@ -208,11 +206,14 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
   const pool = challengeCardPool(cards.filter((card) => card.topic === topicId));
   if (pool.length < challengeCampaignCountPerCategory) return [];
   const language = topicChallengeLanguage[topicId] ?? { singular: "card", plural: "cards", emoji: "🔎" };
-  const offsets = [0, 2, 4, 6, 8];
 
   return Array.from({ length: challengeCampaignCountPerCategory }, (_, campaignIndex) => {
-    const stepCards = offsets.map((offset) => rotate(pool, campaignIndex + offset)!);
-    const [readingCard, geographyCard, mathCard, scienceCard, wordsCard] = stepCards;
+    const anchor = pool[campaignIndex];
+    const readingCard = anchor;
+    const geographyCard = anchor;
+    const mathCard = anchor;
+    const scienceCard = anchor;
+    const wordsCard = anchor;
     const distractorTitles = (card: KnowledgeCard) => pool.filter((candidate) => candidate.id !== card.id).map((candidate) => candidate.title);
     const readingChoices = fourChoices(readingCard.title, distractorTitles(readingCard), campaignIndex);
 
@@ -240,11 +241,11 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
     const groups = 3 + campaignIndex;
     const each = 2 + ((campaignIndex * 3 + 4) % 11);
     const product = groups * each;
-    const mathAnswer = `${product.toLocaleString("en-US")} ${language.plural}`;
+    const mathAnswer = `${product.toLocaleString("en-US")} notes`;
     const mathChoices = fourChoices(mathAnswer, [
-      `${(product + groups).toLocaleString("en-US")} ${language.plural}`,
-      `${Math.max(1, product - each).toLocaleString("en-US")} ${language.plural}`,
-      `${(product + each).toLocaleString("en-US")} ${language.plural}`,
+      `${(product + groups).toLocaleString("en-US")} notes`,
+      `${Math.max(1, product - each).toLocaleString("en-US")} notes`,
+      `${(product + each).toLocaleString("en-US")} notes`,
     ], campaignIndex + 2);
 
     const scienceChoices = fourChoices(scienceCard.title, distractorTitles(scienceCard), campaignIndex + 3);
@@ -274,20 +275,20 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
         id: `${topicId}-${campaignIndex + 1}-geography-${geographyCard.id}`,
         skill: "Geography",
         icon: "🌎",
-        title: location ? `Map ${geographyCard.title}` : `Place ${geographyCard.title}`,
+        title: location ? `Map ${geographyCard.title}` : `Classify ${geographyCard.title}`,
         clue: location
           ? geographyCard.title === location.label
             ? `${geographyCard.title} is a country in ${location.continents.join(" / ")}. Use the map shape and continent labels to find its pin.`
-            : `${geographyCard.title} is connected with a place in ${location.continents.join(" / ")}. Use the map to find that place's pin.`
-          : `${geographyCard.title}'s field-guide group is ${geographyCard.subStat}.`,
-        question: location ? `Which pin marks ${location.label}?` : "Which card matches this place or group?",
+            : `${geographyCard.title} is connected with ${location.label} in ${location.continents.join(" / ")}. Use the map to find its pin.`
+          : `${geographyCard.title} belongs in the field-guide group “${geographyCard.subStat}.”`,
+        question: location ? `Which pin marks ${location.label}?` : `Which ${language.singular} belongs in this field-guide group?`,
         choices: geographyChoices,
         answer: geographyAnswer,
         summary: location
           ? geographyCard.title === location.label
             ? `${location.label} is at ${geographyAnswer} on the map in ${location.continents.join(" / ")}.`
             : `${geographyCard.title} is connected with ${location.label}, shown at ${geographyAnswer} in ${location.continents.join(" / ")}.`
-          : `${geographyCard.title} is the match. Its field-guide group is ${geographyCard.subStat}.`,
+          : `${geographyCard.title} belongs in the field-guide group “${geographyCard.subStat}.”`,
         map: geographyMap,
         image: geographyCard.image,
         imageAlt: geographyCard.imageAlt,
@@ -296,22 +297,22 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
         id: `${topicId}-${campaignIndex + 1}-math-${mathCard.id}`,
         skill: "Math",
         icon: "🧺",
-        title: `Count the ${topicLabel} research sets`,
-        clue: `${groups} field teams record ${each} ${language.plural} each.`,
+        title: `Count the ${mathCard.title} research notes`,
+        clue: `${groups} field teams record ${each} notes about ${mathCard.title} each.`,
         question: `${groups} × ${each} = ?`,
         choices: mathChoices,
         answer: mathAnswer,
-        summary: `${groups} equal groups of ${each} make ${product.toLocaleString("en-US")} ${language.plural} altogether.`,
+        summary: `${groups} equal teams with ${each} ${mathCard.title} notes each make ${product.toLocaleString("en-US")} notes altogether.`,
         math: {
           groups,
           each,
           visual: {
-            ariaLabel: `Math picture: ${groups} equal team groups of ${each} ${language.plural}`,
+            ariaLabel: `Math picture: ${groups} equal team groups of ${each} notes about ${mathCard.title}`,
             groupSingular: "team",
             groupPlural: "teams",
             groupEmoji: "🧭",
-            itemSingular: language.singular,
-            itemPlural: language.plural,
+            itemSingular: "note",
+            itemPlural: "notes",
             itemEmoji: language.emoji,
           },
         },
@@ -346,13 +347,12 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
       },
     ];
 
-    const anchor = readingCard;
     return {
       id: `${topicId}-challenge-${campaignIndex + 1}-${anchor.id}`,
       topicId,
       topicLabel,
-      name: `${anchor.title} discovery trail`,
-      completionTitle: `${topicLabel} field journal`,
+      name: anchor.title,
+      completionTitle: `${anchor.title} field journal`,
       image: anchor.image,
       imageAlt: anchor.imageAlt,
       steps,

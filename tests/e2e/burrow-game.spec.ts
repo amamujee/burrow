@@ -109,7 +109,7 @@ const openChallengeAt = async (page: Page, milestone: number, topicLabel: string
   await chooseOnlyMode(page, "True/False");
   await chooseOnlyBuiltInTopic(page, topicLabel);
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
-  await page.getByRole("button", { name: /Next|Finish round/ }).click();
+  await page.getByRole("button", { name: /^(Next|Finish round)/ }).click();
 };
 
 const mathFixtureCards: GenericKnowledgeCard[] = [12, 20, 35, 48].map((value, index) => ({
@@ -1135,7 +1135,7 @@ test("hard multiplication reaches the full twelve-by-twelve table", () => {
   expect(round.termValues).toEqual([12, 12]);
 });
 
-test("every playable category has ten distinct options in every Challenge skill", () => {
+test("every playable category has ten distinct single-subject Challenge deep dives", () => {
   expect(playableChallengeCategories).toHaveLength(10);
 
   for (const category of playableChallengeCategories) {
@@ -1152,7 +1152,11 @@ test("every playable category has ten distinct options in every Challenge skill"
 
     for (const campaign of campaigns) {
       expect(new Set(campaign.steps.map((step) => step.skill))).toEqual(new Set(["Reading", "Geography", "Math", "Science", "Words"]));
-      expect(new Set(campaign.steps.map((step) => step.image)).size, `${campaign.id} must not repeat its story image`).toBe(5);
+      expect(new Set(campaign.steps.map((step) => step.image)), `${campaign.id} must stay on one subject`).toEqual(new Set([campaign.image]));
+      expect(campaign.completionTitle).toBe(`${campaign.name} field journal`);
+      for (const step of campaign.steps) {
+        expect(`${step.title} ${step.clue} ${step.question} ${step.summary}`, `${step.id} must stay anchored to ${campaign.name}`).toContain(campaign.name);
+      }
     }
   }
 });
@@ -1189,6 +1193,11 @@ test("every generated Challenge step is answerable and has a useful teaching sta
           expect(choice.y).toBeGreaterThanOrEqual(0);
           expect(choice.y).toBeLessThanOrEqual(100);
         }
+      } else if (step.skill === "Geography") {
+        expect(step.title).toMatch(/^Classify /);
+        expect(step.clue).toContain("belongs in the field-guide group");
+        expect(step.question).toContain("belongs in this field-guide group");
+        expect(step.summary).toContain("belongs in the field-guide group");
       } else if (step.skill === "Math") {
         expect(step.question).toBe(`${step.math.groups} × ${step.math.each} = ?`);
         expect(Number.parseInt(step.answer.replaceAll(",", ""), 10)).toBe(step.math.groups * step.math.each);
@@ -1197,6 +1206,19 @@ test("every generated Challenge step is answerable and has a useful teaching sta
       }
     }
   }
+});
+
+test("Challenge copy keeps comparison subjects honest and space sizes in miles", () => {
+  const tallTrees = playableChallengeCategories.find((category) => category.id === "tall-trees")!;
+  const tallTreeCampaigns = buildChallengeCampaignsForCategory(tallTrees);
+  const dave = tallTreeCampaigns.find((campaign) => campaign.name === "Dave the Human")!;
+  expect(dave.steps.find((step) => step.skill === "Reading")?.question).toBe("Which height subject matches this field note?");
+  expect(dave.steps.find((step) => step.skill === "Geography")?.title).toBe("Classify Dave the Human");
+
+  const space = playableChallengeCategories.find((category) => category.id === "space")!;
+  const pluto = buildChallengeCampaignsForCategory(space).find((campaign) => campaign.name === "Pluto")!;
+  expect(pluto.steps.find((step) => step.skill === "Science")?.clue).toContain("1,477 mi");
+  expect(pluto.steps.find((step) => step.skill === "Words")?.clue).toContain("1,477 mi");
 });
 
 test("Challenge selection rotates categories before repeating a category campaign", () => {
@@ -1740,9 +1762,9 @@ test("every twenty-fifth answer opens an automatic mini challenge and returns af
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
 
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
-  await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /^(Next|Finish round)/ })).toBeVisible();
   await expect(page.getByLabel("Challenge Mode", { exact: true })).toHaveCount(0);
-  await page.getByRole("button", { name: /Next|Finish round/ }).click();
+  await page.getByRole("button", { name: /^(Next|Finish round)/ }).click();
   await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText(`Deep dive: ${campaign.name}`);
 
   for (const [stepIndex, step] of campaign.steps.entries()) {
@@ -1808,7 +1830,7 @@ test("mini challenges do not interrupt before the next milestone", async ({ page
   await expect(page.getByText("True or false?")).toBeVisible();
 });
 
-test("automatic Challenge Mode respects the selected category and changes subjects between stops", async ({ page }) => {
+test("automatic Challenge Mode respects the selected category and keeps one subject between stops", async ({ page }) => {
   const sharkCategory = playableChallengeCategories.find((category) => category.id === "sharks")!;
   const campaign = buildChallengeCampaignsForCategory(sharkCategory)[0];
   await openChallengeAt(page, challengeQuestionInterval, "Shark Tank");
@@ -1829,7 +1851,7 @@ test("automatic Challenge Mode respects the selected category and changes subjec
   } else {
     const geographyStory = page.getByLabel("Challenge picture story");
     await expect(geographyStory.getByRole("img", { name: geography.imageAlt })).toBeVisible();
-    await expect(geographyStory.getByRole("img")).not.toHaveAttribute("src", firstImage ?? "");
+    await expect(geographyStory.getByRole("img")).toHaveAttribute("src", firstImage ?? "");
   }
 });
 
