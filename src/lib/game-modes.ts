@@ -1485,6 +1485,9 @@ const factorRangeForDifficulty = (difficulty: Difficulty) => difficulty === 1
     : { groups: [6, 12] as const, items: [6, 12] as const };
 
 const pickFactor = ([min, max]: readonly [number, number], factorSeed: number) => min + Math.floor(seedRandom(factorSeed) * (max - min + 1));
+const countLabel = (count: number, singular: string, plural: string) => `${count} ${count === 1 ? singular : plural}`;
+const thereAre = (count: number, singular: string, plural: string) =>
+  `${count === 1 ? "There is" : "There are"} ${countLabel(count, singular, plural)}.`;
 
 const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenario => {
   switch (topic) {
@@ -1499,7 +1502,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "pepper",
         itemPlural: "peppers",
         itemEmoji: "🌶️",
-        prompt: (title, groups, items) => `${groups} plants of the ${title} variety grow ${items} peppers each. How many peppers are there altogether?`,
+        prompt: (title, groups, items) => `${thereAre(groups, `${title} plant`, `${title} plants`)} Each plant grows ${countLabel(items, "pepper", "peppers")}. How many peppers are there altogether?`,
       };
     case "buildings":
       return {
@@ -1512,7 +1515,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "window",
         itemPlural: "windows",
         itemEmoji: "🪟",
-        prompt: (title, groups, items) => `A design puzzle inspired by ${title} shows ${groups} floors with ${items} windows on each floor. How many windows are shown?`,
+        prompt: (title, groups, items) => `A model of ${title} has ${countLabel(groups, "floor", "floors")}. Each floor has ${countLabel(items, "window", "windows")}. How many windows are there altogether?`,
       };
     case "sharks":
       return {
@@ -1525,7 +1528,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "paper tooth",
         itemPlural: "paper teeth",
         itemEmoji: "🦷",
-        prompt: (title, groups, items) => `A class makes ${groups} models of ${title}, with ${items} paper teeth on each model. How many paper teeth do they use?`,
+        prompt: (title, groups, items) => `A class makes ${countLabel(groups, `${title} model`, `${title} models`)}. Each model has ${countLabel(items, "paper tooth", "paper teeth")}. How many paper teeth do they use altogether?`,
       };
     case "space":
       return {
@@ -1538,7 +1541,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "rock",
         itemPlural: "rocks",
         itemEmoji: "🪨",
-        prompt: (title, groups, items) => `On a mission studying ${title}, ${groups} sample boxes hold ${items} rocks each. How many rocks are packed?`,
+        prompt: (title, groups, items) => `A mission studying ${title} fills ${countLabel(groups, "sample box", "sample boxes")}. Each box holds ${countLabel(items, "rock", "rocks")}. How many rocks are packed altogether?`,
       };
     case "jets":
       return {
@@ -1551,7 +1554,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "jet",
         itemPlural: "jets",
         itemEmoji: "✈️",
-        prompt: (title, groups, items) => `An air-show plan has ${groups} teams flying ${items} ${title} jets each. How many jets fly altogether?`,
+        prompt: (title, groups, items) => `${thereAre(groups, "air-show team", "air-show teams")} Each team flies ${countLabel(items, `${title} jet`, `${title} jets`)}. How many jets fly altogether?`,
       };
     case "dinosaurs":
       return {
@@ -1564,7 +1567,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "egg",
         itemPlural: "eggs",
         itemEmoji: "🥚",
-        prompt: (title, groups, items) => `A nesting scene for ${title} has ${groups} nests with ${items} eggs in each nest. How many eggs are there?`,
+        prompt: (title, groups, items) => `${thereAre(groups, `${title} nest`, `${title} nests`)} Each nest has ${countLabel(items, "egg", "eggs")}. How many eggs are there altogether?`,
       };
     case "tallest-mountains":
       return {
@@ -1577,7 +1580,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "climber",
         itemPlural: "climbers",
         itemEmoji: "🧗",
-        prompt: (title, groups, items) => `On ${title}, ${groups} climbing teams have ${items} climbers each. How many climbers are there?`,
+        prompt: (title, groups, items) => `${groups === 1 ? "There is" : "There are"} ${countLabel(groups, "climbing team", "climbing teams")} on ${title}. Each team has ${countLabel(items, "climber", "climbers")}. How many climbers are there altogether?`,
       };
     case "tall-trees":
       return {
@@ -1590,7 +1593,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "bird",
         itemPlural: "birds",
         itemEmoji: "🐦",
-        prompt: (title, groups, items) => `An observation of ${title} shows ${groups} branches with ${items} birds on each branch. How many birds are shown?`,
+        prompt: (title, groups, items) => `${thereAre(groups, `branch on ${title}`, `branches on ${title}`)} Each branch has ${countLabel(items, "bird", "birds")}. How many birds are there altogether?`,
       };
     case "bridges-and-tunnels":
       return {
@@ -1603,7 +1606,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "light",
         itemPlural: "lights",
         itemEmoji: "💡",
-        prompt: (title, groups, items) => `A lighting plan for ${title} has ${groups} sections with ${items} lights in each section. How many lights are planned?`,
+        prompt: (title, groups, items) => `A model of ${title} has ${countLabel(groups, "section", "sections")}. Each section has ${countLabel(items, "light", "lights")}. How many lights are there altogether?`,
       };
     default:
       return {
@@ -1616,7 +1619,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "model",
         itemPlural: "models",
         itemEmoji: "🔹",
-        prompt: (title, groups, items) => `A museum display about ${title} has ${groups} rows with ${items} models in each row. How many models are shown?`,
+        prompt: (title, groups, items) => `A display about ${title} has ${countLabel(groups, "row", "rows")}. Each row has ${countLabel(items, "model", "models")}. How many models are there altogether?`,
       };
   }
 };

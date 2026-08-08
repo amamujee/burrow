@@ -316,6 +316,7 @@ const staleQuestionPhrases = [
   /\bfrom United States\b/i,
   /\blinked to Caribbean\b/i,
   /\b0 ft\b/i,
+  /\bnesting scene\b/i,
 ];
 const assertPolishedLanguage = (scope, item) => {
   for (const field of languageFields) {
