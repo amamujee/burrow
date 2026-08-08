@@ -4399,13 +4399,13 @@ function DifficultySelector({ difficulty, onChange }: { difficulty: Difficulty; 
         <button
           key={item.id}
           onClick={() => onChange(item.id)}
-          className={`min-h-8 min-w-0 rounded-md border-2 px-2 py-1 text-center transition active:translate-y-0.5 min-[600px]:max-[899px]:px-[5px] ${
+          className={`min-h-8 min-w-0 rounded-md border-2 px-0.5 py-1 text-center transition active:translate-y-0.5 ${
             difficulty === item.id
               ? "border-[#092421] bg-[#f0c84b] shadow-[2px_2px_0_#092421]"
               : "border-transparent bg-transparent hover:border-[#092421] hover:bg-white"
           }`}
         >
-          <span className="block truncate text-[13px] font-black leading-none text-[#102f36] max-[599px]:text-sm">{item.label}</span>
+          <span className="block whitespace-nowrap text-[13px] font-black leading-none text-[#102f36] max-[599px]:text-sm">{item.label}</span>
         </button>
       ))}
     </div>

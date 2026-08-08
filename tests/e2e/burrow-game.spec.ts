@@ -1562,8 +1562,12 @@ test("HUD stays on one line across iPad sizes without horizontal overflow", asyn
     expect(new Set(actionBoxes.map((box) => Math.round(box!.height))).size).toBe(1);
     const progressBox = await page.locator("[data-hud-progress]").boundingBox();
     const difficultyBox = await page.locator("[data-hud-difficulty]").boundingBox();
+    const difficultyLabelsFit = await page.locator("[data-hud-difficulty] button span").evaluateAll((labels) => (
+      labels.every((label) => label.scrollWidth <= label.clientWidth + 1)
+    ));
     expect(progressBox).not.toBeNull();
     expect(difficultyBox).not.toBeNull();
+    expect(difficultyLabelsFit, `${viewport.width}px difficulty labels should remain fully visible`).toBe(true);
     expect(Math.abs(actionBoxes[0]!.y - progressBox!.y), `${viewport.width}px progress and actions should share the iPad HUD row`).toBeLessThanOrEqual(4);
     expect(Math.abs(actionBoxes[0]!.y - difficultyBox!.y), `${viewport.width}px difficulty and actions should share the iPad HUD row`).toBeLessThanOrEqual(4);
     expect(Math.abs(actionBoxes[0]!.height - difficultyBox!.height)).toBeLessThanOrEqual(1);
