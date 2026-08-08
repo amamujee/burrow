@@ -1942,6 +1942,77 @@ test("automatic Challenge Mode respects the selected category and keeps one subj
   }
 });
 
+test("Challenge Mode shares the iPad round layout and never scrolls its story panel", async ({ page }) => {
+  await page.setViewportSize({ width: 834, height: 1194 });
+  await openChallengeAt(page, challengeQuestionInterval, "Shark Tank");
+
+  const challenge = page.locator("[data-challenge-layout]");
+  const round = page.locator("[data-challenge-round]");
+  const story = page.locator("[data-challenge-story]");
+  const questionCard = page.locator("[data-question-card]");
+  const campaign = buildChallengeCampaignsForCategory(playableChallengeCategories.find((category) => category.id === "sharks")!)[0];
+
+  const expectSharedDesktopLayout = async () => {
+    await expect(challenge).toBeVisible();
+    await expect(round).toBeVisible();
+    await expect(story).toBeVisible();
+    await expect(questionCard).toBeVisible();
+
+    const measurements = await page.evaluate(() => {
+      const challengeElement = document.querySelector<HTMLElement>("[data-challenge-layout]");
+      const roundElement = document.querySelector<HTMLElement>("[data-challenge-round]");
+      const storyElement = document.querySelector<HTMLElement>("[data-challenge-story]");
+      const questionElement = document.querySelector<HTMLElement>("[data-question-card]");
+      if (!challengeElement || !roundElement || !storyElement || !questionElement) throw new Error("Challenge layout was not rendered");
+      const storyRect = storyElement.getBoundingClientRect();
+      const questionRect = questionElement.getBoundingClientRect();
+      return {
+        challengeOverflow: getComputedStyle(challengeElement).overflowY,
+        challengeClientHeight: challengeElement.clientHeight,
+        challengeScrollHeight: challengeElement.scrollHeight,
+        roundColumns: getComputedStyle(roundElement).gridTemplateColumns.split(" ").length,
+        storyOverflow: getComputedStyle(storyElement).overflowY,
+        storyClientHeight: storyElement.clientHeight,
+        storyScrollHeight: storyElement.scrollHeight,
+        topDifference: Math.abs(storyRect.top - questionRect.top),
+        bottomDifference: Math.abs(storyRect.bottom - questionRect.bottom),
+      };
+    });
+
+    expect(measurements.challengeOverflow).toBe("hidden");
+    expect(measurements.challengeScrollHeight).toBeLessThanOrEqual(measurements.challengeClientHeight + 1);
+    expect(measurements.roundColumns).toBe(2);
+    expect(["auto", "scroll"]).not.toContain(measurements.storyOverflow);
+    expect(measurements.storyScrollHeight).toBeLessThanOrEqual(measurements.storyClientHeight + 1);
+    expect(measurements.topDifference).toBeLessThanOrEqual(1);
+    expect(measurements.bottomDifference).toBeLessThanOrEqual(1);
+  };
+
+  for (const [stepIndex, step] of campaign.steps.entries()) {
+    await expectSharedDesktopLayout();
+
+    if (step.skill === "Geography" && step.map) {
+      const answerIndex = step.map.choices.findIndex((choice) => choice.label === step.answer);
+      const answerChoice = step.map.choices[answerIndex];
+      await page.getByRole("button", { name: `Choose map pin ${String.fromCharCode(65 + answerIndex)}: ${answerChoice.mapLabel ?? answerChoice.label}` }).click();
+    } else {
+      await page.getByLabel("Answer choices").getByRole("button").filter({ hasText: step.answer }).click();
+    }
+
+    await expect(page.getByLabel("Answer feedback")).toBeVisible();
+    await expectSharedDesktopLayout();
+
+    if (stepIndex === 0) {
+      await page.setViewportSize({ width: 1024, height: 768 });
+      await expectSharedDesktopLayout();
+    }
+
+    if (stepIndex < campaign.steps.length - 1) {
+      await page.getByRole("button", { name: "Next question" }).click();
+    }
+  }
+});
+
 test("play removes the image-reporting control and uses XP-only feedback", async ({ page }) => {
   await expect(page.getByRole("button", { name: /Flag an issue/ })).toHaveCount(0);
   await chooseOnlyMode(page, "True/False");

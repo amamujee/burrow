@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { EqualGroupsBoard, type EqualGroupsVisual } from "@/components/equal-groups-board";
-import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid } from "@/components/game-question-ui";
+import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid, GameQuestionCard, GameRoundLayout } from "@/components/game-question-ui";
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { buildingImagePresentation } from "@/lib/building-image-presentation";
 import type { WorldLocation } from "@/lib/card-metadata";
@@ -448,12 +448,12 @@ export function ChallengeMode({ campaign, milestone, onComplete, onAnswer }: { c
   }
 
   return (
-    <section className="flex flex-1 flex-col gap-2 overflow-y-auto rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0 min-[900px]:overflow-hidden" aria-label={`Challenge Mode stop ${stepIndex + 1} of ${steps.length}`}>
+    <section data-challenge-layout className="flex flex-1 flex-col gap-2 overflow-y-auto rounded-lg border-2 border-[#092421] bg-[#fffdf6] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0 min-[760px]:overflow-hidden" aria-label={`Challenge Mode stop ${stepIndex + 1} of ${steps.length}`}>
       <ChallengeModeBanner campaign={campaign} milestone={milestone} stepIndex={stepIndex} />
-      <div className="grid flex-1 gap-2 min-[900px]:min-h-0 min-[900px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+      <GameRoundLayout as="div" data-challenge-round className="gap-2">
         <ChallengeStoryStage campaign={campaign} step={step} selected={selected} onSelect={answer} />
 
-        <article key={step.id} className="flex min-w-0 flex-col rounded-lg border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421] min-[900px]:min-h-0 min-[900px]:overflow-y-auto">
+        <GameQuestionCard key={step.id} className="min-w-0">
           <div className="flex items-center justify-between gap-3"><p className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1 text-xs font-black uppercase tracking-[0.12em]">{step.icon} {step.skill}</p><p className="text-xs font-black text-[#72543e]">Question {stepIndex + 1}/{steps.length}</p></div>
           <h2 className="mt-3 text-[clamp(1.55rem,2.8vw,2.65rem)] font-black leading-[1.02] text-[#102f36]">{step.title}</h2>
           <p className="mt-3 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-3 text-base font-black leading-snug text-[#4f5e57]">{step.clue}</p>
@@ -467,9 +467,9 @@ export function ChallengeMode({ campaign, milestone, onComplete, onAnswer }: { c
             return <GameChoiceButton key={choice} disabled={selected !== null} onClick={() => answer(choice)} chosen={chosenWrong} correct={answerChoice}>{step.skill === "Geography" && !isPinChoice && <span className="mr-2 inline-grid h-7 w-7 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-xs">{String.fromCharCode(65 + choiceIndex)}</span>}{choice}</GameChoiceButton>;
           })}
           </GameChoiceGrid>
-          {selected && <GameAnswerFeedback isCorrect={correct} celebration="Correct!" correctAnswer={step.answer} explanation={step.summary} evidence={step.skill === "Reading" ? step.evidence : undefined} note="Good try." nextLabel={stepIndex === steps.length - 1 ? "View challenge summary" : "Next question"} onNext={next} />}
-        </article>
-      </div>
+          {selected && <GameAnswerFeedback isCorrect={correct} celebration="Correct!" correctAnswer={step.answer} explanation={step.summary} evidence={step.skill === "Reading" ? step.evidence : undefined} note="Good try." nextLabel={stepIndex === steps.length - 1 ? "View challenge summary" : "Next question"} onNext={next} compactOnDesktop />}
+        </GameQuestionCard>
+      </GameRoundLayout>
     </section>
   );
 }
@@ -499,13 +499,13 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
 
   if (step.skill === "Geography" && step.map) {
     return (
-      <aside aria-label="Challenge map story" className="min-h-[430px] rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
+      <aside data-challenge-story aria-label="Challenge map story" className="min-h-[430px] rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0">
         <WorldMapSurface
           markers={step.map.choices.map((choice) => ({ id: choice.label, label: choice.mapLabel ?? choice.label, x: choice.x, y: choice.y, tone: selected ? choice.label === step.answer ? "correct" as const : choice.label === selected ? "wrong" as const : "quiet" as const : "default" as const }))}
           footer={selected ? step.summary : step.map.hint}
           onSelect={onSelect}
           disabled={selected !== null}
-          className="h-full min-h-[420px]"
+          className="h-full min-h-[420px] min-[760px]:min-h-0"
         />
       </aside>
     );
@@ -513,13 +513,13 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
 
   if (step.skill === "Math") {
     return (
-      <aside aria-label="Challenge math story" className="flex min-h-[520px] flex-col gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
+      <aside data-challenge-story aria-label="Challenge math story" className="flex min-h-[520px] flex-col gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0">
         <div className="relative min-h-[130px] max-h-[190px] flex-[.3] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
           <Image
             src={image}
             alt={imageAlt}
             fill
-            sizes="(max-width: 900px) 100vw, 58vw"
+            sizes="(max-width: 759px) 100vw, 50vw"
             style={{ objectFit: imagePresentation?.fit ?? "cover", objectPosition: imagePresentation?.position ?? "center" }}
             priority
           />
@@ -531,16 +531,16 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
   }
 
   if (step.skill === "Science" && step.conceptVisual) {
-    return <aside aria-label="Challenge science story" className="min-h-[480px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0"><MiniConceptDiagram kind={step.conceptVisual} /></aside>;
+    return <aside data-challenge-story aria-label="Challenge science story" className="min-h-[480px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0"><MiniConceptDiagram kind={step.conceptVisual} /></aside>;
   }
 
   return (
-    <aside aria-label="Challenge picture story" className="relative min-h-[380px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec] shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
+    <aside data-challenge-story aria-label="Challenge picture story" className="relative min-h-[380px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec] shadow-[4px_4px_0_#092421] min-[760px]:min-h-0">
       <Image
         src={image}
         alt={imageAlt}
         fill
-        sizes="(max-width: 900px) 100vw, 58vw"
+        sizes="(max-width: 759px) 100vw, 50vw"
         style={{ objectFit: imagePresentation?.fit ?? "cover", objectPosition: imagePresentation?.position ?? "center" }}
         priority
       />
@@ -552,7 +552,7 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
 
 function MiniConceptDiagram({ kind }: { kind: ConceptVisual }) {
   if (kind === "pepper-anatomy") return (
-    <div className="grid h-full min-h-[470px] grid-rows-[1fr_auto] rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-3" aria-label={challengeConceptVisualLabels[kind]}>
+    <div className="grid h-full min-h-[470px] grid-rows-[1fr_auto] rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-3 min-[760px]:min-h-0" aria-label={challengeConceptVisualLabels[kind]}>
       <svg viewBox="0 0 720 470" className="h-full w-full" role="img" aria-label="Cut-open pepper showing the outer wall, pale placenta, seeds, and capsaicin">
         <path d="M265 56 C195 80 145 170 160 285 C174 393 262 424 360 405 C453 387 521 316 508 215 C496 120 419 64 333 60 Z" fill="#d74631" stroke="#092421" strokeWidth="8" />
         <path d="M285 92 C231 120 205 188 218 270 C230 342 287 371 353 359 C421 347 463 292 452 222 C442 153 390 105 329 96 Z" fill="#fff1bf" stroke="#092421" strokeWidth="6" />
@@ -574,5 +574,5 @@ function MiniConceptDiagram({ kind }: { kind: ConceptVisual }) {
     "genes-and-growing": { title: "What shapes each pepper", items: [{ icon: "🧬", title: "Recipe", text: "genes set possibilities" }, { icon: "☀️💧", title: "Growing day", text: "sun, water, temperature" }, { icon: "🌶️", title: "Pepper", text: "ends up milder or hotter" }] },
   };
   const diagram = diagrams[kind];
-  return <div className="flex h-full min-h-[470px] flex-col justify-center rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-5" aria-label={challengeConceptVisualLabels[kind]}><p className="text-center text-3xl font-black text-[#102f36]">{diagram.title}</p><div className={`mt-6 grid items-stretch gap-3 ${diagram.items.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>{diagram.items.map((item, index) => <div key={item.title} className="relative rounded-xl border-2 border-[#092421] bg-white p-4 text-center shadow-[3px_3px_0_#092421]"><p className="text-5xl" aria-hidden="true">{item.icon}</p><p className="mt-3 text-lg font-black text-[#102f36]">{item.title}</p><p className="mt-1 text-sm font-bold text-[#5f6b5d]">{item.text}</p>{index < diagram.items.length - 1 && <span className="absolute -right-5 top-1/2 z-10 hidden -translate-y-1/2 text-3xl font-black text-[#9f3f2b] sm:block">→</span>}</div>)}</div></div>;
+  return <div className="flex h-full min-h-[470px] flex-col justify-center rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-5 min-[760px]:min-h-0" aria-label={challengeConceptVisualLabels[kind]}><p className="text-center text-3xl font-black text-[#102f36]">{diagram.title}</p><div className={`mt-6 grid items-stretch gap-3 ${diagram.items.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>{diagram.items.map((item, index) => <div key={item.title} className="relative rounded-xl border-2 border-[#092421] bg-white p-4 text-center shadow-[3px_3px_0_#092421]"><p className="text-5xl" aria-hidden="true">{item.icon}</p><p className="mt-3 text-lg font-black text-[#102f36]">{item.title}</p><p className="mt-1 text-sm font-bold text-[#5f6b5d]">{item.text}</p>{index < diagram.items.length - 1 && <span className="absolute -right-5 top-1/2 z-10 hidden -translate-y-1/2 text-3xl font-black text-[#9f3f2b] sm:block">→</span>}</div>)}</div></div>;
 }

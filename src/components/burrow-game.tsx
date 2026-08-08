@@ -9,7 +9,7 @@ import {
   challengeQuestionInterval,
 } from "@/components/core-mini-challenge";
 import { EqualGroupsBoard } from "@/components/equal-groups-board";
-import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid } from "@/components/game-question-ui";
+import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid, GameQuestionCard, GameRoundLayout } from "@/components/game-question-ui";
 import { OfflineReady } from "@/components/offline-ready";
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { weightTopicsForAccuracy } from "@/lib/adaptive-topics";
@@ -2884,7 +2884,7 @@ function QuestionRun({
   };
 
   return (
-    <section className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
+    <GameRoundLayout>
       <article data-question-photo className="relative h-[160px] min-h-[160px] overflow-hidden rounded-xl border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0">
         {question.map ? (
           <QuestionLocationStage
@@ -2913,7 +2913,7 @@ function QuestionRun({
         )}
       </article>
 
-      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
+      <GameQuestionCard>
         <div className="shrink-0">
           <div className="flex items-center justify-between gap-2">
             <div className="flex min-w-0 items-center gap-2">
@@ -2989,8 +2989,8 @@ function QuestionRun({
         )}
 
         {!answered && <SkipButton onClick={onSkip} />}
-      </article>
-    </section>
+      </GameQuestionCard>
+    </GameRoundLayout>
   );
 }
 
@@ -3084,7 +3084,7 @@ function SortMode({
       : "min-[760px]:grid-cols-4";
 
   return (
-    <section data-sort-layout className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
+    <GameRoundLayout data-sort-layout>
       <article data-sort-stage className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
         <div data-sort-card-grid className={`grid grid-cols-2 content-start gap-2 ${desktopGridColumns}`}>
           {round.cards.map((card) => {
@@ -3119,7 +3119,7 @@ function SortMode({
         </div>
       </article>
 
-      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-hidden min-[760px]:p-3">
+      <GameQuestionCard desktopOverflow="hidden" desktopPadding="compact">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -3218,8 +3218,8 @@ function SortMode({
         )}
 
         {!checked && <SkipButton onClick={onSkip} />}
-      </article>
-    </section>
+      </GameQuestionCard>
+    </GameRoundLayout>
   );
 }
 
@@ -3281,7 +3281,7 @@ function FactMode({
   const answered = selected !== null;
 
   return (
-    <section className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
+    <GameRoundLayout>
       <article className="relative h-[160px] min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0">
         {round.map ? (
           <FactLocationStage round={round as FactRound & { map: NonNullable<FactRound["map"]> }} answered={answered} />
@@ -3293,7 +3293,7 @@ function FactMode({
         </div>
       </article>
 
-      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
+      <GameQuestionCard>
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -3345,8 +3345,8 @@ function FactMode({
         )}
 
         {!answered && <SkipButton onClick={onSkip} />}
-      </article>
-    </section>
+      </GameQuestionCard>
+    </GameRoundLayout>
   );
 }
 
@@ -3401,7 +3401,7 @@ function RevealMode({
   }, [answered, intervalMs, revealed, round.map, totalTiles]);
 
   return (
-    <section className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
+    <GameRoundLayout>
       {round.map ? (
         <article aria-label="Location subject" className="relative h-[160px] min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0">
           <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
@@ -3434,7 +3434,7 @@ function RevealMode({
         </article>
       )}
 
-      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
+      <GameQuestionCard>
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={badgeDifficulty} />
@@ -3501,8 +3501,8 @@ function RevealMode({
         )}
 
         {!answered && <SkipButton onClick={onSkip} />}
-      </article>
-    </section>
+      </GameQuestionCard>
+    </GameRoundLayout>
   );
 }
 
@@ -3534,10 +3534,10 @@ function GeoMode({
   const answered = selected !== null;
 
   return (
-    <section data-geo-layout className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2 min-[760px]:items-stretch">
+    <GameRoundLayout data-geo-layout className="min-[760px]:items-stretch">
       <GeoLocatorStage round={round} selected={selected} answered={answered} onAnswer={onAnswer} />
 
-      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-hidden min-[760px]:p-2.5">
+      <GameQuestionCard desktopOverflow="hidden" desktopPadding="tight">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -3603,8 +3603,8 @@ function GeoMode({
         )}
 
         {!answered && <SkipButton onClick={onSkip} />}
-      </article>
-    </section>
+      </GameQuestionCard>
+    </GameRoundLayout>
   );
 }
 
@@ -3713,10 +3713,10 @@ function NumberMode({
       : `${round.biggerLabel} minus ${round.smallerLabel}`;
 
   return (
-    <section className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
+    <GameRoundLayout>
       <NumberStoryStage round={round} badge={stageBadge} footer={stageFooter} />
 
-      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
+      <GameQuestionCard>
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -3766,8 +3766,8 @@ function NumberMode({
         )}
 
         {!answered && <SkipButton onClick={onSkip} />}
-      </article>
-    </section>
+      </GameQuestionCard>
+    </GameRoundLayout>
   );
 }
 
@@ -3939,7 +3939,7 @@ function TopTrumpsMode({
     : round.player.fact;
 
   return (
-    <section className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
+    <GameRoundLayout>
       <article className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
         <div className="grid h-full min-h-[420px] grid-cols-2 gap-2 lg:min-h-0">
           <TrumpCardView card={round.player} badge="Player" revealStats />
@@ -3947,7 +3947,7 @@ function TopTrumpsMode({
         </div>
       </article>
 
-      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
+      <GameQuestionCard>
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -4011,8 +4011,8 @@ function TopTrumpsMode({
         )}
 
         {!answered && <SkipButton onClick={onSkip} />}
-      </article>
-    </section>
+      </GameQuestionCard>
+    </GameRoundLayout>
   );
 }
 
@@ -4045,7 +4045,7 @@ function OddOneMode({
   const answer = round.cards.find((card) => card.id === round.answerId);
 
   return (
-    <section className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
+    <GameRoundLayout>
       <KnowledgeCardsStage
         cards={round.cards}
         badge="Look closely"
@@ -4055,7 +4055,7 @@ function OddOneMode({
         onSelect={onAnswer}
       />
 
-      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
+      <GameQuestionCard>
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -4105,8 +4105,8 @@ function OddOneMode({
         )}
 
         {!answered && <SkipButton onClick={onSkip} />}
-      </article>
-    </section>
+      </GameQuestionCard>
+    </GameRoundLayout>
   );
 }
 

@@ -1,6 +1,40 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ComponentPropsWithoutRef, type ReactNode } from "react";
+
+type GameRoundLayoutProps = ComponentPropsWithoutRef<"section"> & {
+  as?: "section" | "div";
+};
+
+export function GameRoundLayout({ as = "section", className = "", ...props }: GameRoundLayoutProps) {
+  const Element = as;
+  return (
+    <Element
+      {...props}
+      className={`burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2 ${className}`}
+    />
+  );
+}
+
+export function GameQuestionCard({
+  className = "",
+  desktopOverflow = "auto",
+  desktopPadding = "default",
+  ...props
+}: ComponentPropsWithoutRef<"article"> & {
+  desktopOverflow?: "auto" | "hidden";
+  desktopPadding?: "default" | "compact" | "tight";
+}) {
+  const overflowClass = desktopOverflow === "hidden" ? "min-[760px]:overflow-hidden" : "min-[760px]:overflow-y-auto";
+  const paddingClass = desktopPadding === "compact" ? "min-[760px]:p-3" : desktopPadding === "tight" ? "min-[760px]:p-2.5" : "";
+  return (
+    <article
+      data-question-card
+      {...props}
+      className={`flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] ${overflowClass} ${paddingClass} ${className}`}
+    />
+  );
+}
 
 export function GameChoiceGrid({ children }: { children: ReactNode }) {
   return <div aria-label="Answer choices" className="mt-2 grid shrink-0 gap-2 xl:grid-cols-2">{children}</div>;
