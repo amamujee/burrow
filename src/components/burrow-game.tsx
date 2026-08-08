@@ -3527,10 +3527,10 @@ function GeoMode({
   const selectedChoice = round.choices.find((choice) => choice.id === selected);
 
   return (
-    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
+    <section data-geo-layout className="grid gap-3 min-[760px]:min-h-[460px] min-[760px]:grid-cols-2 min-[760px]:items-stretch">
       <GeoLocatorStage round={round} selected={selected} answered={answered} onAnswer={onAnswer} />
 
-      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
+      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421]">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -3614,7 +3614,7 @@ function GeoLocatorStage({
   onAnswer: (choiceId: string) => void;
 }) {
   return (
-    <article className="grid min-h-[540px] gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0 min-[760px]:grid-rows-[minmax(168px,.42fr)_minmax(292px,.58fr)]">
+    <article data-geo-stage className="grid min-h-[540px] gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0 min-[760px]:grid-rows-[minmax(168px,.42fr)_minmax(292px,.58fr)]">
       <div className="relative min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec] min-[760px]:min-h-[180px]">
         <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.card.topic} />
         <div className="absolute left-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">

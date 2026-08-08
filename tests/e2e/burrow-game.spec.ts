@@ -1549,6 +1549,25 @@ test("iPad play uses balanced content-sized photo and question panels", async ({
   expect(photo!.height).toBe(460);
 });
 
+test("iPad Geo Finder aligns both panels without a nested question scrollbar", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await chooseOnlyBuiltInTopic(page, "Jet Hangar");
+  await chooseOnlyMode(page, "Geo Finder");
+
+  const layout = page.locator("[data-geo-layout]");
+  const stage = page.locator("[data-geo-stage]");
+  const card = page.locator("[data-question-card]");
+  await expect(layout).toBeVisible();
+
+  const [stageBox, cardBox] = await Promise.all([stage.boundingBox(), card.boundingBox()]);
+  expect(stageBox).not.toBeNull();
+  expect(cardBox).not.toBeNull();
+  expect(Math.abs(stageBox!.y - cardBox!.y)).toBeLessThanOrEqual(1);
+  expect(Math.abs(stageBox!.height - cardBox!.height)).toBeLessThanOrEqual(1);
+  expect(await card.evaluate((element) => element.scrollHeight <= element.clientHeight + 1)).toBe(true);
+  expect(await card.evaluate((element) => getComputedStyle(element).overflowY)).not.toBe("auto");
+});
+
 test("phone HUD is exactly two lines with identity removed and full-size actions", { tag: "@mobile" }, async ({ page, isMobile }) => {
   test.skip(!isMobile, "mobile viewport coverage");
 
