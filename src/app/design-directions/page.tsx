@@ -166,7 +166,7 @@ function MockHud({ direction }: { direction: Direction }) {
           <span className="block text-2xl font-black leading-none">8</span>
         </div>
         <div>
-          <p className={`text-sm font-black leading-tight ${direction.text}`}>Glow</p>
+          <p className={`text-sm font-black leading-tight ${direction.text}`}>XP</p>
           <div className="mt-1 grid grid-cols-6 gap-1">
             {Array.from({ length: 6 }, (_, item) => (
               <span key={item} className={`h-3 rounded-sm border-2 border-[#082329] ${item < 3 ? direction.accent : "bg-white"}`} />
@@ -237,7 +237,7 @@ function MockQuestion({ direction }: { direction: Direction }) {
         <div className="flex flex-wrap items-center gap-2">
           <span className={`grid h-10 w-10 place-items-center rounded-lg border-2 text-xl font-black ${direction.badge}`}>+</span>
           <p className={`text-lg font-black leading-tight ${direction.text}`}>Nice catch</p>
-          <span className={`rounded-full border-2 px-2 py-0.5 text-sm font-black ${direction.badge}`}>+32 glow</span>
+          <span className={`rounded-full border-2 px-2 py-0.5 text-sm font-black ${direction.badge}`}>+32 XP</span>
         </div>
         <p className={`mt-2 text-sm font-bold leading-snug ${direction.muted}`}>{direction.note}</p>
         <div className={`mt-3 rounded-lg border-2 px-4 py-3 text-center text-base font-black ${direction.button}`}>Next</div>

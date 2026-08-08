@@ -1218,9 +1218,6 @@ test("Challenge selection rotates categories before repeating a category campaig
 
 test.describe("browser game flows", { tag: "@browser" }, () => {
 test.beforeEach(async ({ page }) => {
-  await page.route("**/api/content-issues", async (route) => {
-    await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
-  });
   await page.route("**/api/play-events", async (route) => {
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true, accepted: 1 }) });
   });
@@ -1240,7 +1237,7 @@ test("mobile keeps the question and first answer in the opening viewport", { tag
   test.skip(!isMobile, "mobile viewport coverage");
   await chooseOnlyMode(page, "Quiz Run");
 
-  const questionStage = page.getByRole("button", { name: /Flag an issue with this question image/ }).locator("xpath=ancestor::article[1]");
+  const questionStage = page.locator("[data-question-photo]");
   const prompt = page.locator("h2").first();
   const firstChoice = page.getByLabel("Answer choices").getByRole("button").first();
   const [stageBox, promptBox, choiceBox] = await Promise.all([
@@ -1254,18 +1251,21 @@ test("mobile keeps the question and first answer in the opening viewport", { tag
   expect(promptBox).not.toBeNull();
   expect(choiceBox).not.toBeNull();
   expect(viewport).not.toBeNull();
-  expect(stageBox!.height).toBeLessThanOrEqual(342);
+  expect(stageBox!.height).toBeGreaterThanOrEqual(160);
+  expect(stageBox!.height).toBeLessThanOrEqual(164);
   expect(promptBox!.y).toBeLessThan(viewport!.height);
   expect(choiceBox!.y).toBeLessThan(viewport!.height);
 });
 
-test("offline saving stays in More and the app shell supports an offline reload", { tag: "@mobile" }, async ({ page, context }) => {
+test("offline saving stays in Setup and the app shell supports an offline reload", { tag: "@mobile" }, async ({ page, context }) => {
   const moreButton = page.getByRole("button", { name: "More actions" });
   await moreButton.click();
   await expect(page.getByLabel("More controls")).toBeVisible();
+  await page.getByRole("button", { name: "Setup", exact: true }).click();
+  await expect(page.getByRole("dialog", { name: "Setup" })).toBeVisible();
   await expect(page.getByText("Offline", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Save offline" })).toBeVisible();
-  await moreButton.click();
+  await page.getByRole("button", { name: "Close setup" }).click();
 
   await page.evaluate(async () => {
     if (!("serviceWorker" in navigator)) throw new Error("Service workers are unavailable");
@@ -1284,8 +1284,8 @@ test("offline saving stays in More and the app shell supports an offline reload"
 
 test("game types use the Topics multi-select pattern and advanced controls stay in More", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
-  await expect(modeControl(page)).toHaveText(/Modes/);
-  await expect(topicsControl(page)).toHaveText(/Topics/);
+  await expect(modeControl(page)).toHaveText(/Modes\s*▾/);
+  await expect(topicsControl(page)).toHaveText(/Topics\s*▾/);
   await expect(page.getByRole("button", { name: /^Collection/ })).toBeVisible();
   const moreButton = page.getByRole("button", { name: "More actions" });
   await expect(moreButton).toBeVisible();
@@ -1323,10 +1323,15 @@ test("game types use the Topics multi-select pattern and advanced controls stay 
   await expect(topicsTray(page)).toBeHidden();
   const moreTray = page.getByLabel("More controls");
   await expect(moreTray).toBeVisible();
-  await expect(moreTray.getByText("Offline", { exact: true })).toBeVisible();
-  await expect(moreTray.getByRole("button", { name: "Save offline" })).toBeVisible();
-  await expect(moreTray.locator("summary").filter({ hasText: "Learning recap" })).toBeVisible();
-  await expect(moreTray.getByText("Image reports", { exact: true })).toBeVisible();
+  await expect(moreTray.getByRole("button", { name: "Setup", exact: true })).toBeVisible();
+  await expect(moreTray.getByRole("button", { name: "Reset", exact: true })).toBeVisible();
+  await moreTray.getByRole("button", { name: "Setup", exact: true }).click();
+  const setup = page.getByRole("dialog", { name: "Setup" });
+  await expect(setup).toBeVisible();
+  await expect(setup.getByRole("button", { name: /Turn sound effects/ })).toBeVisible();
+  await setup.getByRole("button", { name: "Close setup" }).click();
+  await moreButton.click();
+  await expect(moreTray).toBeVisible();
   await moreTray.getByRole("button", { name: "Reset", exact: true }).click();
   await expect(moreTray.getByText(/Reset all progress\? This can't be undone\./)).toBeVisible();
   await moreTray.getByRole("button", { name: "Cancel" }).click();
@@ -1433,10 +1438,12 @@ test("HUD trays share one slot, stay open on selection, and protect the final to
   await expect(page.getByLabel("More controls")).toBeVisible();
 });
 
-test("sound effects start off, toggle from the HUD, and remember the choice", async ({ page }) => {
+test("sound effects live in Setup and remember the choice", async ({ page }) => {
   const pageErrors: Error[] = [];
   page.on("pageerror", (error) => pageErrors.push(error));
 
+  await page.getByRole("button", { name: "More actions" }).click();
+  await page.getByRole("button", { name: "Setup", exact: true }).click();
   const soundOn = page.getByRole("button", { name: "Turn sound effects on" });
   await expect(soundOn).toBeVisible();
   await expect(soundOn).toHaveAttribute("aria-pressed", "false");
@@ -1448,6 +1455,7 @@ test("sound effects start off, toggle from the HUD, and remember the choice", as
   await expect(soundOff).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("main")).toHaveAttribute("data-sound-effects", "on");
   await expect.poll(() => page.evaluate(() => window.localStorage.getItem("burrow-sound-effects-v1"))).toBe("on");
+  await page.getByRole("button", { name: "Close setup" }).click();
 
   await chooseOnlyMode(page, "True/False");
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
@@ -1455,6 +1463,8 @@ test("sound effects start off, toggle from the HUD, and remember the choice", as
 
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+  await page.getByRole("button", { name: "More actions" }).click();
+  await page.getByRole("button", { name: "Setup", exact: true }).click();
   await expect(page.getByRole("button", { name: "Turn sound effects off" })).toHaveAttribute("aria-pressed", "true");
   expect(pageErrors).toEqual([]);
 });
@@ -1475,12 +1485,13 @@ test("HUD selector trays wrap onto new lines without horizontal scrolling", asyn
   expect(await modeButtons.evaluateAll((buttons) => new Set(buttons.map((button) => Math.round(button.getBoundingClientRect().y))).size)).toBeGreaterThan(1);
 });
 
-test("HUD uses one compact row where space allows and wraps actions together without overflow", async ({ page }) => {
+test("HUD stays on one line across iPad sizes without horizontal overflow", async ({ page }) => {
   for (const viewport of [
     { width: 2048, height: 900 },
     { width: 1194, height: 834 },
     { width: 1024, height: 768 },
     { width: 834, height: 1194 },
+    { width: 768, height: 1024 },
   ]) {
     await page.setViewportSize(viewport);
     await expect(page.getByLabel("Play controls")).toBeVisible();
@@ -1495,32 +1506,96 @@ test("HUD uses one compact row where space allows and wraps actions together wit
       modeControl(page).boundingBox(),
       topicsControl(page).boundingBox(),
       page.getByRole("button", { name: /^Collection/ }).boundingBox(),
-      page.getByRole("button", { name: /Turn sound effects/ }).boundingBox(),
       page.getByRole("button", { name: "More actions" }).boundingBox(),
     ]);
     expect(actionBoxes.every(Boolean)).toBe(true);
     expect(new Set(actionBoxes.map((box) => Math.round(box!.y))).size).toBe(1);
     expect(new Set(actionBoxes.map((box) => Math.round(box!.height))).size).toBe(1);
-    if (viewport.width >= 1024) {
-      const difficultyBox = await page.locator("[data-hud-difficulty]").boundingBox();
-      expect(difficultyBox).not.toBeNull();
-      expect(Math.abs(actionBoxes[0]!.y - difficultyBox!.y), `${viewport.width}px controls should share the HUD row`).toBeLessThanOrEqual(4);
-      expect(Math.abs(actionBoxes[0]!.height - difficultyBox!.height)).toBeLessThanOrEqual(1);
-    }
+    const progressBox = await page.locator("[data-hud-progress]").boundingBox();
+    const difficultyBox = await page.locator("[data-hud-difficulty]").boundingBox();
+    expect(progressBox).not.toBeNull();
+    expect(difficultyBox).not.toBeNull();
+    expect(Math.abs(actionBoxes[0]!.y - progressBox!.y), `${viewport.width}px progress and actions should share the iPad HUD row`).toBeLessThanOrEqual(4);
+    expect(Math.abs(actionBoxes[0]!.y - difficultyBox!.y), `${viewport.width}px difficulty and actions should share the iPad HUD row`).toBeLessThanOrEqual(4);
+    expect(Math.abs(actionBoxes[0]!.height - difficultyBox!.height)).toBeLessThanOrEqual(1);
+    if (viewport.width >= 1100) await expect(page.locator("[data-hud-identity]")).toBeVisible();
+    else await expect(page.locator("[data-hud-identity]")).toBeHidden();
     if (viewport.width >= 1440) {
       const infoBox = await page.locator("[data-hud-info]").boundingBox();
       const controlsBox = await page.getByLabel("Play controls").boundingBox();
+      const shellBox = await page.locator(".burrow-game-shell").boundingBox();
       expect(infoBox).not.toBeNull();
       expect(controlsBox).not.toBeNull();
-      expect(controlsBox!.x - (infoBox!.x + infoBox!.width)).toBeLessThanOrEqual(12);
-      expect(controlsBox!.width).toBeGreaterThanOrEqual(460);
-      expect(controlsBox!.width).toBeLessThanOrEqual(500);
-      const primaryControlWidths = actionBoxes.slice(0, 3).map((box) => Math.round(box!.width));
-      expect(Math.max(...primaryControlWidths) - Math.min(...primaryControlWidths)).toBeLessThanOrEqual(1);
-      expect(actionBoxes[3]!.width).toBeGreaterThanOrEqual(44);
-      expect(actionBoxes[4]!.width).toBeGreaterThanOrEqual(50);
+      expect(shellBox).not.toBeNull();
+      expect(controlsBox!.x).toBeGreaterThan(infoBox!.x + infoBox!.width);
+      expect(controlsBox!.x + controlsBox!.width).toBeGreaterThanOrEqual(shellBox!.x + shellBox!.width - 18);
+      expect(controlsBox!.width).toBeLessThanOrEqual(380);
+      expect(actionBoxes[3]!.width).toBeGreaterThanOrEqual(50);
     }
   }
+});
+
+test("iPad play uses balanced content-sized photo and question panels", async ({ page }) => {
+  await page.setViewportSize({ width: 1194, height: 834 });
+  await chooseOnlyMode(page, "Quiz Run");
+
+  const photo = await page.locator("[data-question-photo]").boundingBox();
+  const card = await page.locator("[data-question-card]").boundingBox();
+  expect(photo).not.toBeNull();
+  expect(card).not.toBeNull();
+  expect(Math.abs(photo!.x + photo!.width - card!.x)).toBeLessThanOrEqual(16);
+  expect(Math.abs(photo!.width - card!.width)).toBeLessThanOrEqual(2);
+  expect(Math.abs(photo!.height - card!.height)).toBeLessThanOrEqual(2);
+  expect(photo!.height).toBe(460);
+});
+
+test("phone HUD is exactly two lines with identity removed and full-size actions", { tag: "@mobile" }, async ({ page, isMobile }) => {
+  test.skip(!isMobile, "mobile viewport coverage");
+
+  await expect(page.locator("[data-hud-identity]")).toBeHidden();
+  const progress = await page.locator("[data-hud-progress]").boundingBox();
+  const difficulty = await page.locator("[data-hud-difficulty]").boundingBox();
+  const actions = await Promise.all([
+    modeControl(page).boundingBox(),
+    topicsControl(page).boundingBox(),
+    page.getByRole("button", { name: /^Collection/ }).boundingBox(),
+    page.getByRole("button", { name: "More actions" }).boundingBox(),
+  ]);
+
+  expect(progress).not.toBeNull();
+  expect(difficulty).not.toBeNull();
+  expect(actions.every(Boolean)).toBe(true);
+  expect(Math.abs(progress!.y - difficulty!.y)).toBeLessThanOrEqual(4);
+  expect(new Set(actions.map((box) => Math.round(box!.y))).size).toBe(1);
+  expect(actions[0]!.y).toBeGreaterThan(progress!.y + 20);
+  expect(Math.min(...actions.map((box) => box!.height))).toBeGreaterThanOrEqual(44);
+  await expect(page.getByLabel("Play controls").getByRole("button")).toHaveCount(4);
+});
+
+test("iPhone question scroll keeps Next card sticky and thumb-reachable", { tag: "@mobile" }, async ({ page, isMobile }) => {
+  test.skip(!isMobile, "mobile viewport coverage");
+  await chooseOnlyMode(page, "Quiz Run");
+
+  const choices = page.getByLabel("Answer choices").getByRole("button");
+  await choices.first().click();
+  const feedback = page.getByLabel("Answer feedback");
+  if (await feedback.count() === 0) await choices.last().click();
+  await expect(feedback).toBeVisible();
+
+  const sticky = page.locator("[data-sticky-next]");
+  const next = sticky.getByRole("button", { name: /Next card|Finish round/ });
+  await expect(next).toBeVisible();
+  expect(await sticky.evaluate((element) => getComputedStyle(element).position)).toMatch(/sticky|fixed/);
+  expect(Number.parseFloat(await sticky.evaluate((element) => getComputedStyle(element).bottom))).toBeGreaterThanOrEqual(0);
+
+  await page.evaluate(() => window.scrollTo(0, Math.max(0, document.documentElement.scrollHeight - window.innerHeight - 40)));
+  const box = await next.boundingBox();
+  const viewport = page.viewportSize();
+  expect(box).not.toBeNull();
+  expect(viewport).not.toBeNull();
+  expect(box!.y).toBeGreaterThanOrEqual(0);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(viewport!.height);
+  expect(box!.y + box!.height).toBeGreaterThanOrEqual(viewport!.height - 100);
 });
 
 test("landing page explains the learning model and all ten topic packs", async ({ page }) => {
@@ -1572,6 +1647,7 @@ test("a mystery flag gives one clue retry and unlocks a country passport", async
     await page.getByRole("button", { name: "Skip question" }).click();
   }
   await expect(mysteryFlag).toBeVisible();
+  await expect(page.getByText(/^Image:/)).toHaveCount(0);
 
   const flagPath = await mysteryFlag.getAttribute("src");
   const countryCode = flagPath?.match(/\/([a-z]{2})\.svg/)?.[1]?.toUpperCase();
@@ -1601,6 +1677,7 @@ test("a mystery flag gives one clue retry and unlocks a country passport", async
   await expect(passport.getByText("Population", { exact: true })).toBeVisible();
   await expect(passport.getByText("Land area", { exact: true })).toBeVisible();
   await expect(passport.getByText("Continent", { exact: true })).toBeVisible();
+  await expect(page.getByText(/^Image:/).first()).toBeVisible();
 });
 
 test("Next builds a different round without passing the click event as learning history", { tag: "@mobile" }, async ({ page }) => {
@@ -1617,7 +1694,7 @@ test("Next builds a different round without passing the click event as learning 
 
   await page.getByRole("button", { name: firstImageAlt ?? "", exact: true }).click();
   await expect(page.getByLabel("Answer feedback")).toBeVisible();
-  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await page.getByRole("button", { name: /Next card|Finish round/ }).click();
 
   await expect(page.getByLabel("Answer feedback")).toHaveCount(0);
   await expect(roundImage).not.toHaveAttribute("alt", firstImageAlt ?? "");
@@ -1737,17 +1814,39 @@ test("automatic Challenge Mode respects the selected category and changes subjec
   }
 });
 
-test("flag image gives local feedback without leaking server details", async ({ page }) => {
-  await page.getByRole("button", { name: /Flag an issue/ }).click();
+test("play removes the image-reporting control and uses XP-only feedback", async ({ page }) => {
+  await expect(page.getByRole("button", { name: /Flag an issue/ })).toHaveCount(0);
+  await chooseOnlyMode(page, "True/False");
+  await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
+  const feedback = page.getByLabel("Answer feedback");
+  await expect(feedback).toBeVisible();
+  await expect(feedback).toContainText(/\+\d+ XP/);
+  await expect(feedback).not.toContainText(/glow/i);
+  await expect(feedback.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
+});
 
-  await expect(page.getByRole("button", { name: /Flag an issue/ })).toHaveText("Flagged");
-  await expect.poll(() => page.evaluate(() => JSON.parse(window.localStorage.getItem("burrow-content-issues-v1") ?? "[]").length)).toBe(1);
+test("quiz removes duplicate topic, score, progress, and heat-meter clutter", async ({ page }) => {
+  await chooseOnlyMode(page, "Quiz Run");
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+
+  const card = page.locator("[data-question-card]");
+  const photo = page.locator("[data-question-photo]");
+  await expect(card.getByText("Round 1", { exact: true })).toBeVisible();
+  await expect(card.getByText("Spicy Peppers", { exact: true })).toHaveClass("sr-only");
+  await expect(card.getByText(/^\d+\/\d+$/)).toHaveCount(0);
+  await expect(photo.getByText(/\d+\/\d+ right/i)).toHaveCount(0);
+
+  const choices = page.getByLabel("Answer choices").getByRole("button");
+  await choices.first().click();
+  if (await page.getByLabel("Answer feedback").count() === 0) await choices.last().click();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  await expect(card.getByText("Pepper meter", { exact: true })).toHaveCount(0);
 });
 
 test("head to head comparison images can submit an answer", async ({ page }) => {
   await chooseOnlyMode(page, "Head to Head");
 
-  await expect(page.getByText(/Look at both cards|Use the numbers/)).toBeVisible();
+  await expect(page.getByRole("button", { name: /^Choose [AB]:/ })).toHaveCount(2);
   await page.getByRole("button", { name: /^Choose [AB]:/ }).first().click();
   await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
 });
@@ -1853,7 +1952,7 @@ test("pepper number rounds teach multiplication with equal plant groups", async 
   await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
 });
 
-test("building answers teach location without spoiling the question", async ({ page }) => {
+test("building answers keep location teaching in the round instead of repeating it in feedback", async ({ page }) => {
   await chooseOnlyMode(page, "True/False");
   await chooseOnlyBuiltInTopic(page, "Sky Scrapers");
 
@@ -1861,20 +1960,19 @@ test("building answers teach location without spoiling the question", async ({ p
   await expect(page.getByLabel("World map")).toBeVisible();
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
 
-  const geography = page.getByLabel("Where in the world");
-  await expect(geography).toBeVisible();
-  await expect(geography).toContainText(/North America|South America|Europe|Asia|Africa|Oceania/);
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  await expect(page.getByLabel("Where in the world")).toHaveCount(0);
   await expect(page.getByLabel("World map")).toHaveCount(1);
 });
 
-test("bridge pack answers surface their world location", async ({ page }) => {
+test("bridge pack feedback does not repeat a location recap", async ({ page }) => {
   await chooseOnlyMode(page, "True/False");
   await chooseOnlyBuiltInTopic(page, "Bridges & Tunnels");
 
   await expect(page.getByLabel("Where in the world")).toHaveCount(0);
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
-  await expect(page.getByLabel("Where in the world")).toBeVisible();
-  await expect(page.getByLabel("World map")).toHaveCount(1);
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  await expect(page.getByLabel("Where in the world")).toHaveCount(0);
 });
 
 test("peek rounds reset their reveal count after skip", async ({ page }) => {
@@ -1913,8 +2011,9 @@ test("Peek location rounds show the complete named subject before map feedback",
 
   const answerPanel = page.locator("main section > article").nth(1);
   await answerPanel.getByRole("button").filter({ hasNotText: "Skip question" }).first().click();
-  await expect(page.getByLabel("Where in the world")).toBeVisible();
-  await expect(page.getByLabel("World map")).toHaveCount(1);
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  await expect(page.getByLabel("Where in the world")).toHaveCount(0);
+  await expect(page.getByLabel("World map")).toHaveCount(0);
 });
 
 test("geo finder stays inside the selected topic", async ({ page }) => {
@@ -1923,14 +2022,14 @@ test("geo finder stays inside the selected topic", async ({ page }) => {
 
   const seenPrompts = new Set<string>();
   for (let round = 0; round < 6; round += 1) {
-    await expect(page.getByText("Spicy Peppers · Geo Finder", { exact: true })).toBeVisible();
+    await expect(page.getByText("Spicy Peppers", { exact: true })).toBeVisible();
     const heading = page.getByRole("heading", { name: /^Where on the map is/ });
     await expect(heading).toBeVisible();
     const prompt = await heading.textContent();
     expect(prompt).toBeTruthy();
     expect(seenPrompts.has(prompt ?? "")).toBe(false);
     seenPrompts.add(prompt ?? "");
-    await expect(page.getByText("Tallest Mountains · Geo Finder", { exact: true })).toHaveCount(0);
+    await expect(page.getByText("Tallest Mountains", { exact: true })).toHaveCount(0);
     const pinBoxes = await page.getByRole("button", { name: /^Choose map pin/ }).evaluateAll((pins) => pins.map((pin) => {
       const box = pin.getBoundingClientRect();
       return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
@@ -2133,7 +2232,7 @@ test("playable dinosaur pack appears in first-class topics", async ({ page }) =>
   await topicsControl(page).click();
 
   await chooseOnlyBuiltInTopic(page, "Dinosaur Lab");
-  await expect(page.getByText("Dinosaur Lab · Peek")).toBeVisible();
+  await expect(page.getByText("Dinosaur Lab", { exact: true })).toBeVisible();
 });
 
 test("downloadable category answers persist adaptive performance stats", async ({ page }) => {
@@ -2165,7 +2264,7 @@ test("country Top Trumps offers four meaningful geography stats", async ({ page 
 test("top trumps lets player choose a category against the computer", async ({ page }) => {
   await chooseOnlyMode(page, "Top Trumps");
 
-  await expect(page.getByRole("paragraph").filter({ hasText: "Top Trumps" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Choose your strongest category." })).toBeVisible();
   await expect(page.locator("div").filter({ hasText: /^Player$/ })).toBeVisible();
   await expect(page.getByText("Computer card", { exact: true })).toBeVisible();
 

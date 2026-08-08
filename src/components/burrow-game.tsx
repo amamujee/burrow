@@ -1,7 +1,7 @@
 "use client";
 
 import { track } from "@vercel/analytics";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   ChallengeMode,
   buildChallengeCampaignCatalog,
@@ -16,6 +16,7 @@ import { weightTopicsForAccuracy } from "@/lib/adaptive-topics";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
 import { cardDiscoveryIdentities, cardUnlockKeysForSubjects, isCardUnlocked } from "@/lib/card-discovery";
 import { autoDifficulty } from "@/lib/difficulty";
+import { poolForDifficulty } from "@/lib/difficulty-pool";
 import { migrateTopicSelection } from "@/lib/topic-selection";
 import { useSoundEffects } from "@/lib/sound-effects";
 import {
@@ -37,7 +38,6 @@ import {
   collectionCards,
   canBuildGeoRoundFromCards,
   canBuildGeoRound,
-  geoChoiceForLocation,
   modeOptions,
   orderCollectionCardsForCategory,
   slotSortCardIds,
@@ -127,23 +127,8 @@ type ProgressStats = {
 };
 
 type ChallengeMode = Exclude<GameMode, "mix">;
-type PlayTelemetryAction = "view" | "answer" | "skip" | "flag" | "configure";
+type PlayTelemetryAction = "view" | "answer" | "skip" | "configure";
 type PlayTelemetryChallengeMode = ChallengeMode | "collection" | "setup";
-
-type ContentIssueReport = {
-  id: string;
-  createdAt: string;
-  profileId: string;
-  mode: string;
-  topic: RoundTopic | "mixed";
-  itemId: string;
-  questionId?: string;
-  questionKey?: string;
-  questionKind?: Question["kind"];
-  title: string;
-  prompt: string;
-  image?: string;
-};
 
 type PlayTelemetryEvent = {
   schemaVersion: 2;
@@ -234,7 +219,6 @@ const initialProgress: Progress = {
 const profilesKey = "burrow-profiles-v1";
 const legacyProfilesKey = "rabbit-hole-profiles-v1";
 const legacyProgressKey = "rabbit-hole-progress-v1";
-const contentIssuesKey = "burrow-content-issues-v1";
 const anonymousInstallKey = "burrow-anonymous-install-v1";
 const playEventsKey = "burrow-play-events-v1";
 const pendingPlayEventsKey = "burrow-play-events-pending-v1";
@@ -280,7 +264,24 @@ const fallbackTopicAccents = ["#75d5c0", "#ef8fbd", "#9ebc63", "#7eb1e8", "#e0a8
 const topicAccentFor = (topicId: string) => topicAccent[topicId] ?? fallbackTopicAccents[Array.from(topicId).reduce((total, char) => total + char.charCodeAt(0), 0) % fallbackTopicAccents.length];
 const defaultSelectedTopics: RoundTopic[] = [...allKnowledgeTopics];
 const starterMixModes: ChallengeMode[] = ["quiz"];
-const gameTypeLabel = (modeId: ChallengeMode) => modeOptions.find((item) => item.id === modeId)?.label ?? "Game";
+const greatestDifficulty = (levels: readonly Difficulty[]) => Math.max(1, ...levels) as Difficulty;
+
+const questionKindDifficulty = (kind: Question["kind"]): Difficulty => {
+  if (kind.includes("difference") || ["country-neighbors", "country-highest-point", "jet-firepower", "shark-power"].includes(kind)) return 3;
+  if (
+    kind.includes("hotter")
+    || kind.includes("taller")
+    || kind.includes("bigger")
+    || kind.includes("faster")
+    || kind.includes("farther")
+    || kind.includes("range")
+    || kind.includes("population")
+    || kind.includes("area")
+    || kind.includes("moons")
+    || kind.includes("temperature")
+  ) return 2;
+  return 1;
+};
 
 const freshProgress = (): Progress => ({
   ...initialProgress,
@@ -376,16 +377,6 @@ const loadProfiles = (availableTopics: readonly RoundTopic[] = allKnowledgeTopic
     return defaultProfiles(JSON.parse(savedProgress) as Partial<Progress>, starterTopics);
   } catch {
     return defaultProfiles(undefined, starterTopics);
-  }
-};
-
-const loadContentIssues = (): ContentIssueReport[] => {
-  if (typeof window === "undefined") return [];
-  try {
-    const parsed = JSON.parse(window.localStorage.getItem(contentIssuesKey) ?? "[]") as ContentIssueReport[];
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
   }
 };
 
@@ -769,13 +760,10 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const [oddSelected, setOddSelected] = useState<string | null>(null);
   const [topTrumpRound, setTopTrumpRound] = useState<TopTrumpRound>(() => buildTopTrumpForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), progress.difficulty, 20260430, progress.unlockedCards, progress.learningHistory));
   const [topTrumpSelected, setTopTrumpSelected] = useState<string | null>(null);
-  const [sessionCorrect, setSessionCorrect] = useState(0);
   const [miniRunAnswered, setMiniRunAnswered] = useState(0);
   const [miniRunCorrect, setMiniRunCorrect] = useState(0);
   const [celebration, setCelebration] = useState("Pick a mode and jump in.");
   const [lastResult, setLastResult] = useState<ResultState | null>(null);
-  const [issueCount, setIssueCount] = useState(0);
-  const [issueFlash, setIssueFlash] = useState(false);
   const [miniChallengeActive, setMiniChallengeActive] = useState(false);
   const [miniChallengePending, setMiniChallengePending] = useState(false);
   const anonymousInstallIdRef = useRef<string | null>(null);
@@ -786,6 +774,18 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const lastViewedPlayKeyRef = useRef("");
 
   const allCards = useMemo(() => [...collectionCards(), ...packDecks.flatMap((deck) => deck.cards)], [packDecks]);
+  const cardPoolsByTopic = useMemo(() => new Map(
+    playableTopics.map((topicId) => [topicId, allCards.filter((card) => card.topic === topicId)]),
+  ), [allCards, playableTopics]);
+  const difficultyForCard = useCallback((card: Pick<KnowledgeCard, "id" | "topic">): Difficulty => {
+    const pool = cardPoolsByTopic.get(card.topic) ?? [];
+    if (poolForDifficulty(pool, 1).some((item) => item.id === card.id)) return 1;
+    if (poolForDifficulty(pool, 2).some((item) => item.id === card.id)) return 2;
+    return 3;
+  }, [cardPoolsByTopic]);
+  const difficultyForCards = useCallback((cards: readonly Pick<KnowledgeCard, "id" | "topic">[]): Difficulty => (
+    greatestDifficulty(cards.map(difficultyForCard))
+  ), [difficultyForCard]);
   const miniChallengeCategories = useMemo(() => activeInterestKey.split("|").filter(Boolean).map((id) => ({
       id: id as RoundTopic,
       label: topicMetaById.get(id as RoundTopic)?.label ?? "Mixed topics",
@@ -803,6 +803,26 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const selectedCards = useMemo(() => allCards.filter((card) => activeTopicSet.has(card.topic)), [activeTopicSet, allCards]);
   const unlockedCardSet = useMemo(() => new Set(progress.unlockedCards), [progress.unlockedCards]);
   const question = questions[questionIndex];
+  const questionDifficulty = useMemo(() => {
+    if (!question) return 1;
+    const subjectTitles = new Set([question.imageAlt, ...(question.collectionTitles ?? []), ...(question.comparison?.map((card) => card.title) ?? [])]);
+    const subjectCards = allCards.filter((card) => (
+      card.topic === question.topic
+      && (card.image === question.image || subjectTitles.has(card.title) || question.id.includes(`-${card.id}`))
+    ));
+    return greatestDifficulty([questionKindDifficulty(question.kind), difficultyForCards(subjectCards)]);
+  }, [allCards, difficultyForCards, question]);
+  const sortDifficulty = greatestDifficulty([sortRound.cards.length > 3 ? 2 : 1, difficultyForCards(sortRound.cards)]);
+  const factCard = allCards.find((card) => card.topic === factRound.topic && (card.image === factRound.image || card.title === factRound.imageAlt));
+  const factDifficulty = difficultyForCards(factCard ? [factCard] : []);
+  const revealDifficulty = greatestDifficulty([revealRound.map ? 2 : 1, difficultyForCards([revealRound.card])]);
+  const geoDifficulty = greatestDifficulty([2, difficultyForCards([geoRound.card])]);
+  const numberDifficulty = greatestDifficulty([
+    numberRound.operation === "multiplication" || numberRound.operation === "fit" ? 3 : 2,
+    difficultyForCards(numberRound.cards),
+  ]);
+  const oddDifficulty = greatestDifficulty([2, difficultyForCards(oddRound.cards)]);
+  const topTrumpDifficulty = greatestDifficulty([2, difficultyForCards([topTrumpRound.player, topTrumpRound.computer])]);
   const hasBuiltInInterests = activeInterests.some(isKnowledgeTopic);
   const geoCapableTopics = geoCapableTopicsByDifficulty.get(progress.difficulty) ?? new Set<RoundTopic>();
   const hasGeoInterests = activeInterests.some((interest) => geoCapableTopics.has(interest));
@@ -821,28 +841,11 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const isCorrect = isQuestionMode && question ? selected !== null && isQuestionAnswerCorrect(question, selected) : false;
   const levelProgress = Math.min(100, Math.round(((progress.xp % 120) / 120) * 100));
   const xpToNextLevel = 120 - (progress.xp % 120);
-  const activeChallengeAnswered =
-    activeChallengeMode === "sort"
-      ? sortChecked
-      : activeChallengeMode === "fact"
-        ? factSelected !== null
-        : activeChallengeMode === "peek"
-          ? revealSelected !== null
-          : activeChallengeMode === "geo"
-            ? geoSelected !== null
-          : activeChallengeMode === "number"
-              ? numberSelected !== null
-              : activeChallengeMode === "trumps"
-                ? topTrumpSelected !== null
-              : activeChallengeMode === "odd"
-                ? oddSelected !== null
-                : answered;
-  const sessionAnswered = questionIndex + (activeChallengeAnswered ? 1 : 0);
   const unlockedCount = selectedCards.filter((card) => isCardUnlocked(unlockedCardSet, card)).length;
   const totalUnlockedCount = allCards.filter((card) => isCardUnlocked(unlockedCardSet, card)).length;
   const currentTopicScope = adaptiveTopicScopeFor(topic, activeInterests, progress, playableTopics);
   const currentTopicLabel = isQuestionMode && question ? topicLabel(question.topic) : typeof currentTopicScope === "string" && currentTopicScope !== "mixed" ? topicLabel(currentTopicScope) : "Mixed topics";
-  const currentRoundContext = `${currentTopicLabel} · ${gameTypeLabel(activeChallengeMode)}`;
+  const currentRoundContext = currentTopicLabel;
   const accuracy = progress.answered ? Math.round((progress.correct / progress.answered) * 100) : 0;
   const learningSummary = useMemo(() => summarizeLearningHistory(progress.learningHistory), [progress.learningHistory]);
   const learningTopicRows = activeInterests.map((id) => {
@@ -939,7 +942,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       setNumberRound(buildNumberForScope(loadedScope, loadedProfile.progress.difficulty, 20260513, loadedProfile.progress.learningHistory));
       setOddRound(buildOddForScope(loadedScope, loadedProfile.progress.difficulty, 20260523, loadedProfile.progress.learningHistory));
       setTopTrumpRound(buildTopTrumpForScope(loadedScope, loadedProfile.progress.difficulty, 20260531, loadedProfile.progress.unlockedCards, loadedProfile.progress.learningHistory));
-      setIssueCount(loadContentIssues().length);
       setProfilesReady(true);
     }, 0);
 
@@ -983,7 +985,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     anonymousInstallIdRef.current = installId;
     if (!playSessionIdRef.current) playSessionIdRef.current = makeBrowserId("session");
     const profileHash = hashText(`${installId}:${activeProfile.id}`);
-    const actionNeedsElapsed = event.action === "answer" || event.action === "skip" || event.action === "flag";
+    const actionNeedsElapsed = event.action === "answer" || event.action === "skip";
     const playEvent: PlayTelemetryEvent = {
       ...event,
       schemaVersion: playEventSchemaVersion,
@@ -1205,79 +1207,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     recordPlayEvent({ ...currentPlayTarget, action: "view", itemKey });
   }, [currentPlayTarget, profilesReady, recordPlayEvent]);
 
-  const currentIssueTarget = (): Omit<ContentIssueReport, "id" | "createdAt" | "profileId"> => {
-    if (showCollection) {
-      return {
-        mode: "collection",
-        topic,
-        itemId: "collection",
-        questionKey: "collection",
-        title: "Collection",
-        prompt: "Collection card or source issue",
-      };
-    }
-
-    if (activeChallengeMode === "sort") return { mode: activeChallengeMode, topic: sortRound.topic, itemId: sortRound.id, questionKey: stableRoundKey(sortRound.id), title: "Sort round", prompt: sortRound.prompt, image: sortRound.cards[0]?.image };
-    if (activeChallengeMode === "fact") return { mode: activeChallengeMode, topic: factRound.topic, itemId: factRound.id, questionKey: stableRoundKey(factRound.id), title: factRound.imageAlt, prompt: factRound.statement, image: factRound.image };
-    if (activeChallengeMode === "peek") return { mode: activeChallengeMode, topic: revealRound.topic, itemId: revealRound.id, questionKey: stableRoundKey(revealRound.id), title: revealRound.card.title, prompt: revealRound.prompt, image: revealRound.card.image };
-    if (activeChallengeMode === "geo") return { mode: activeChallengeMode, topic: geoRound.topic, itemId: geoRound.id, questionKey: stableRoundKey(geoRound.id), title: geoRound.card.title, prompt: geoRound.prompt, image: geoRound.card.image };
-    if (activeChallengeMode === "number") return { mode: activeChallengeMode, topic: numberRound.topic, itemId: numberRound.id, questionKey: stableRoundKey(numberRound.id), title: numberRound.biggerLabel, prompt: numberRound.prompt, image: numberRound.cards[0]?.image };
-    if (activeChallengeMode === "odd") return { mode: activeChallengeMode, topic: oddRound.topic, itemId: oddRound.id, questionKey: stableRoundKey(oddRound.id), title: "Odd one round", prompt: oddRound.prompt, image: oddRound.cards[0]?.image };
-    if (activeChallengeMode === "trumps") return { mode: activeChallengeMode, topic: topTrumpRound.topic, itemId: topTrumpRound.id, questionKey: stableRoundKey(topTrumpRound.id), title: topTrumpRound.player.title, prompt: topTrumpRound.prompt, image: topTrumpRound.player.image };
-
-    return {
-      mode: activeChallengeMode,
-      topic: question?.topic ?? topic,
-      itemId: question?.id ?? "unknown",
-      questionId: question?.id,
-      questionKey: question ? questionMemoryKey(question) : undefined,
-      questionKind: question?.kind,
-      title: question?.imageAlt ?? "Question",
-      prompt: question?.prompt ?? "Question issue",
-      image: question?.image,
-    };
-  };
-
-  const flagCurrentIssue = async () => {
-    const report: ContentIssueReport = {
-      id: `issue-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      profileId: activeProfile.id,
-      ...currentIssueTarget(),
-    };
-    const nextReports = [report, ...loadContentIssues()].slice(0, 80);
-    window.localStorage.setItem(contentIssuesKey, JSON.stringify(nextReports));
-    setIssueCount(nextReports.length);
-    setIssueFlash(true);
-    window.setTimeout(() => setIssueFlash(false), 1800);
-    setCelebration("Flagged for content review. Saving the note locally...");
-    recordPlayEvent({
-      action: "flag",
-      mode: mode === "mix" ? "mix" : activeChallengeMode,
-      challengeMode: showCollection ? "collection" : activeChallengeMode,
-      topic: report.topic,
-      itemId: report.itemId,
-      itemKey: report.questionKey,
-      questionKind: report.questionKind,
-      prompt: report.prompt,
-      title: report.title,
-      roundIndex: showCollection ? undefined : questionIndex + 1,
-    });
-
-    try {
-      const response = await fetch("/api/content-issues", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(report),
-      });
-      if (!response.ok) throw new Error(`Issue log failed with ${response.status}`);
-      setCelebration("Flagged for content review and logged locally.");
-    } catch (error) {
-      console.warn("Content issue was kept in browser storage but could not be written to the local log.", error);
-      setCelebration("Flagged here. Local file logging was not available.");
-    }
-  };
-
   const setProgress = useCallback((update: Progress | ((current: Progress) => Progress)) => {
     const activeProfileId = activeProfile.id;
     setProfilesState((current) => ({
@@ -1408,7 +1337,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setOddSelected(null);
     setTopTrumpSelected(null);
     setLastResult(null);
-    setSessionCorrect(0);
     setMiniRunAnswered(0);
     setMiniRunCorrect(0);
     setCelebration("Fresh round.");
@@ -1595,7 +1523,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     });
 
     setSelected(choice);
-    setSessionCorrect((value) => value + (correct ? 1 : 0));
     setCelebration(correct ? praise[(questionIndex + progress.streak) % praise.length] : "Good try. The clue below helps.");
     setLastResult(result);
   };
@@ -1645,7 +1572,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     if (questionIndex === questions.length - 1) {
       setProgress((current) => ({ ...current, sessions: current.sessions + 1 }));
       setQuestionIndex(0);
-      setSessionCorrect(0);
       setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, progress.difficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards, history));
       setCelebration("New mixed run. Fresh shuffle.");
     } else {
@@ -1676,7 +1602,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       const seed = freshSeed(101);
       setProgress((current) => ({ ...current, sessions: current.sessions + 1 }));
       setQuestionIndex(0);
-      setSessionCorrect(0);
       setSelected(null);
       setLastResult(null);
       setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, progress.difficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards, history));
@@ -1721,7 +1646,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setSortChecked(true);
     setMiniRunAnswered((value) => value + 1);
     setMiniRunCorrect((value) => value + (correct ? 1 : 0));
-    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
     setCelebration(correct ? "Perfect order!" : "Good try. Read the number path.");
     setLastResult(result);
   };
@@ -1783,7 +1707,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setFactSelected(choice);
     setMiniRunAnswered((value) => value + 1);
     setMiniRunCorrect((value) => value + (correct ? 1 : 0));
-    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
     setCelebration(correct ? "You caught it!" : "Good try. Check the fact.");
     setLastResult(result);
   };
@@ -1846,7 +1769,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setRevealSelected(choice);
     setMiniRunAnswered((value) => value + 1);
     setMiniRunCorrect((value) => value + (correct ? 1 : 0));
-    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
     setCelebration(correct ? "Picture solved!" : "Good try. The full picture tells you.");
     setLastResult(result);
   };
@@ -1907,7 +1829,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setGeoSelected(choiceId);
     setMiniRunAnswered((value) => value + 1);
     setMiniRunCorrect((value) => value + (correct ? 1 : 0));
-    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
     setCelebration(correct ? "Map found!" : "Good try. Trace it on the map.");
     setLastResult(result);
   };
@@ -1968,7 +1889,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setNumberSelected(choice);
     setMiniRunAnswered((value) => value + 1);
     setMiniRunCorrect((value) => value + (correct ? 1 : 0));
-    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
     setCelebration(correct ? "Number detective!" : "Good try. Check the math picture.");
     setLastResult(result);
   };
@@ -2031,7 +1951,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setOddSelected(cardId);
     setMiniRunAnswered((value) => value + 1);
     setMiniRunCorrect((value) => value + (correct ? 1 : 0));
-    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
     setCelebration(correct ? "Rule spotted!" : "Good try. The rule is hiding in the cards.");
     setLastResult(result);
   };
@@ -2104,7 +2023,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setTopTrumpSelected(statId);
     setMiniRunAnswered((value) => value + 1);
     setMiniRunCorrect((value) => value + (correct ? 1 : 0));
-    if (mode === "mix") setSessionCorrect((value) => value + (correct ? 1 : 0));
     setCelebration(correct ? "Your card takes it!" : neutral ? "Exact tie — both cards hold their ground!" : "Computer steals this one.");
     setLastResult(result);
   };
@@ -2176,7 +2094,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       data-sound-effects={soundEffects.enabled ? "on" : "off"}
       onClickCapture={soundEffects.handleClickCapture}
     >
-      <section className="burrow-game-shell field-guide-shell flex min-h-dvh flex-col gap-1.5 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-1.5 md:p-2 min-[900px]:h-dvh min-[900px]:min-h-0 min-[900px]:overflow-hidden">
+      <section className="burrow-game-shell field-guide-shell mx-auto flex min-h-dvh w-full max-w-[1280px] flex-col gap-3 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-2 min-[600px]:my-3 min-[600px]:min-h-0 min-[600px]:rounded-2xl min-[600px]:border-2 min-[600px]:border-[#092421] min-[600px]:p-4 min-[600px]:shadow-[6px_6px_0_#092421]">
         <GameHud
           profiles={profilesState.profiles}
           activeProfileId={activeProfile.id}
@@ -2201,8 +2119,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           onToggleInterest={toggleInterest}
           activeMixModes={selectedMixModes}
           onToggleMixMode={toggleMixMode}
-          issueFlash={issueFlash}
-          issueCount={issueCount}
           selectedOfflineImages={selectedOfflineImages}
           warmOfflineImages={warmOfflineImages}
           onConfirmedReset={() => resetProgress(true)}
@@ -2250,18 +2166,14 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             selected={selected}
             answered={answered}
             isCorrect={isCorrect}
-            sessionCorrect={sessionCorrect}
-            sessionAnswered={sessionAnswered}
             lastResult={lastResult}
             celebration={celebration}
             note={tryAgainNotes[(questionIndex + progress.answered) % tryAgainNotes.length]}
-            difficulty={progress.difficulty}
+            difficulty={questionDifficulty}
             roundContext={currentRoundContext}
             onAnswer={answer}
             onNext={advance}
             onSkip={skipQuestion}
-            issueFlash={issueFlash}
-            onFlagIssue={flagCurrentIssue}
           />
         )}
 
@@ -2274,8 +2186,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             miniRunAnswered={miniRunAnswered}
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
-            difficulty={progress.difficulty}
-            roundContext={`${topicLabel(sortRound.topic)} · ${gameTypeLabel("sort")}`}
+            difficulty={sortDifficulty}
+            roundContext={topicLabel(sortRound.topic)}
             onPick={(id) => {
               if (sortChecked) return;
               setSortPicked((value) => value.includes(id) ? value.filter((pickedId) => pickedId !== id) : [...value, id]);
@@ -2297,8 +2209,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             miniRunAnswered={miniRunAnswered}
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
-            difficulty={progress.difficulty}
-            roundContext={`${topicLabel(factRound.topic)} · ${gameTypeLabel("fact")}`}
+            difficulty={factDifficulty}
+            roundContext={topicLabel(factRound.topic)}
             onAnswer={answerFact}
             onNext={mode === "mix" ? advanceMix : nextFactRound}
             onSkip={skipFactRound}
@@ -2315,7 +2227,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
             difficulty={progress.difficulty}
-            roundContext={`${topicLabel(revealRound.topic)} · ${gameTypeLabel("peek")}`}
+            badgeDifficulty={revealDifficulty}
+            roundContext={topicLabel(revealRound.topic)}
             onAnswer={answerReveal}
             onNext={mode === "mix" ? advanceMix : nextRevealRound}
             onSkip={skipRevealRound}
@@ -2330,8 +2243,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             miniRunAnswered={miniRunAnswered}
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
-            difficulty={progress.difficulty}
-            roundContext={`${topicLabel(geoRound.topic)} · ${gameTypeLabel("geo")}`}
+            difficulty={geoDifficulty}
+            roundContext={topicLabel(geoRound.topic)}
             onAnswer={answerGeo}
             onNext={mode === "mix" ? advanceMix : nextGeoRound}
             onSkip={skipGeoRound}
@@ -2346,8 +2259,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             miniRunAnswered={miniRunAnswered}
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
-            difficulty={progress.difficulty}
-            roundContext={`${topicLabel(numberRound.topic)} · ${gameTypeLabel("number")}`}
+            difficulty={numberDifficulty}
+            roundContext={topicLabel(numberRound.topic)}
             onAnswer={answerNumber}
             onNext={mode === "mix" ? advanceMix : nextNumberRound}
             onSkip={skipNumberRound}
@@ -2362,8 +2275,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             miniRunAnswered={miniRunAnswered}
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
-            difficulty={progress.difficulty}
-            roundContext={`${topicLabel(topTrumpRound.topic)} · ${gameTypeLabel("trumps")}`}
+            difficulty={topTrumpDifficulty}
+            roundContext={topicLabel(topTrumpRound.topic)}
             onAnswer={answerTopTrump}
             onNext={mode === "mix" ? advanceMix : nextTopTrumpRound}
             onSkip={skipTopTrumpRound}
@@ -2378,8 +2291,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             miniRunAnswered={miniRunAnswered}
             miniRunCorrect={miniRunCorrect}
             celebration={celebration}
-            difficulty={progress.difficulty}
-            roundContext={`${topicLabel(oddRound.topic)} · ${gameTypeLabel("odd")}`}
+            difficulty={oddDifficulty}
+            roundContext={topicLabel(oddRound.topic)}
             onAnswer={answerOdd}
             onNext={mode === "mix" ? advanceMix : nextOddRound}
             onSkip={skipOddRound}
@@ -2416,8 +2329,6 @@ function GameHud({
   onToggleInterest,
   activeMixModes,
   onToggleMixMode,
-  issueFlash,
-  issueCount,
   selectedOfflineImages,
   warmOfflineImages,
   onConfirmedReset,
@@ -2447,8 +2358,6 @@ function GameHud({
   onToggleInterest: (topic: RoundTopic) => void;
   activeMixModes: ChallengeMode[];
   onToggleMixMode: (mode: ChallengeMode) => void;
-  issueFlash: boolean;
-  issueCount: number;
   selectedOfflineImages: string[];
   warmOfflineImages: string[];
   onConfirmedReset: () => void;
@@ -2457,10 +2366,12 @@ function GameHud({
 }) {
   const [openTray, setOpenTray] = useState<"mode" | "topics" | "more" | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
+  const [showSetup, setShowSetup] = useState(false);
   const [showProgressStats, setShowProgressStats] = useState(false);
   const closeProgressStats = useCallback(() => setShowProgressStats(false), []);
   const toggleTray = (tray: "mode" | "topics" | "more") => {
     setConfirmReset(false);
+    setShowSetup(false);
     setOpenTray((current) => current === tray ? null : tray);
   };
   const openCollection = () => {
@@ -2470,10 +2381,11 @@ function GameHud({
   };
 
   return (
-    <header className="relative z-30 shrink-0 rounded-xl border-2 border-[#092421] bg-[#0d332f] p-2 shadow-[3px_3px_0_#092421]">
-      <div className="relative z-10 flex min-w-0 flex-wrap items-stretch gap-2.5">
-        <div data-hud-info className="flex min-w-0 flex-[1_1_620px] flex-wrap items-stretch gap-2.5">
-          <div data-hud-identity className="flex min-w-[230px] flex-[.9_1_230px] items-center gap-2.5 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-3.5 py-2 shadow-[3px_3px_0_#092421]">
+    <header className="relative z-30 shrink-0 bg-transparent">
+      <h1 className="sr-only">Burrow</h1>
+      <div className="relative z-10 flex min-w-0 flex-wrap items-stretch justify-between gap-x-0 gap-y-2.5">
+        <div data-hud-info className="flex min-w-0 flex-[0_1_auto] flex-wrap items-stretch gap-2.5 min-[600px]:max-[899px]:gap-1.5 max-[599px]:w-full max-[599px]:flex-[1_1_100%] max-[599px]:flex-nowrap max-[599px]:gap-1.5">
+          <div data-hud-identity className="flex w-[230px] flex-none items-center gap-2.5 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-3.5 py-2 shadow-[3px_3px_0_#092421] max-[1099px]:hidden">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/icons/burrow-icon-64.png"
@@ -2482,63 +2394,48 @@ function GameHud({
               className="h-10 w-10 shrink-0 rounded-lg border-2 border-[#092421] bg-[#eac57c] shadow-[2px_2px_0_#092421]"
             />
             <div className="min-w-0">
-              <h1 className="truncate text-base font-black leading-none text-[#321e16]">Burrow</h1>
+              <p aria-hidden="true" className="truncate text-base font-black leading-none text-[#321e16]">Burrow</p>
               <div className="mt-1">
-                <ProfilePicker profiles={profiles} activeProfileId={activeProfileId} onChange={onProfileChange} onCreate={onCreateProfile} onRename={onRenameProfile} />
+                <ProfilePicker compact profiles={profiles} activeProfileId={activeProfileId} onChange={onProfileChange} onCreate={onCreateProfile} onRename={onRenameProfile} />
               </div>
             </div>
           </div>
 
           <HudProgress level={level} levelProgress={levelProgress} xpToNextLevel={xpToNextLevel} streak={streak} accuracy={accuracy} learningRecap={learningRecap} onOpenStats={() => setShowProgressStats(true)} />
 
-          <div data-hud-difficulty className="min-w-[180px] flex-[1_1_180px] rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-2.5 py-2 shadow-[3px_3px_0_#092421]">
+          <div data-hud-difficulty className="w-[202px] flex-none rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-2.5 py-1.5 shadow-[3px_3px_0_#092421] min-[600px]:max-[899px]:w-[190px] max-[599px]:w-auto max-[599px]:min-w-0 max-[599px]:px-2">
             <DifficultySelector difficulty={difficulty} onChange={onDifficultyChange} />
           </div>
         </div>
 
-        <div className="grid min-w-0 flex-[1_1_356px] grid-cols-[repeat(3,minmax(0,1fr))_44px_52px] items-stretch gap-1.5 min-[900px]:flex-[.65_1_356px] min-[1400px]:max-w-[500px]" aria-label="Play controls">
+        <div className="ml-auto flex min-w-0 flex-[0_1_auto] flex-wrap items-stretch justify-end gap-1.5 min-[900px]:gap-2 max-[599px]:w-full max-[599px]:flex-nowrap max-[599px]:justify-start" aria-label="Play controls">
           <button
             type="button"
             aria-expanded={openTray === "mode"}
             aria-controls="hud-mode-tray"
             onClick={() => toggleTray("mode")}
-            className={`flex min-h-11 min-w-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg border-2 border-[#092421] px-1 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "mode" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
+            className={`flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-lg border-2 border-[#092421] px-3 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "mode" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
           >
-            <span className="h-2.5 w-2.5 shrink-0 rounded-[3px] bg-[#9b5538]" />
-            <span>Modes</span>
-            <span aria-hidden="true">{openTray === "mode" ? "▴" : "▾"}</span>
+            <span aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-[#a8573c]" />
+            <span>Modes ▾</span>
           </button>
           <button
             type="button"
             aria-expanded={openTray === "topics"}
             aria-controls="hud-topics-tray"
             onClick={() => toggleTray("topics")}
-            className={`flex min-h-11 min-w-0 items-center justify-center gap-1 whitespace-nowrap rounded-lg border-2 border-[#092421] px-1 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "topics" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
+            className={`flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-lg border-2 border-[#092421] px-3 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "topics" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
           >
-            <span className="h-2.5 w-2.5 shrink-0 rounded-[3px] bg-[#9b5538]" />
-            <span>Topics</span>
-            <span aria-hidden="true">{openTray === "topics" ? "▴" : "▾"}</span>
+            <span aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-[#a8573c]" />
+            <span>Topics ▾</span>
           </button>
           <button
             type="button"
             onClick={openCollection}
-            className={`flex min-h-11 min-w-0 items-center justify-center rounded-lg border-2 border-[#092421] px-1 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${showCollection ? "bg-[#f0c84b]" : "bg-[#fffdf6]"}`}
+            className={`flex min-h-11 items-center justify-center whitespace-nowrap rounded-lg border-2 border-[#092421] px-3 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${showCollection ? "bg-[#f0c84b]" : "bg-[#fffdf6]"}`}
           >
             {showCollection ? "Back to game" : "Collection"}
             <span className="sr-only"> {collectionValue}</span>
-          </button>
-          <button
-            type="button"
-            aria-label={`Turn sound effects ${soundEnabled ? "off" : "on"}`}
-            aria-pressed={soundEnabled}
-            title={`Sound effects ${soundEnabled ? "on" : "off"}`}
-            onClick={onSoundToggle}
-            className={`flex min-h-11 w-11 items-center justify-center rounded-lg border-2 border-[#092421] px-2 py-2 text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${soundEnabled ? "bg-[#70d392]" : "bg-[#fffdf6]"}`}
-          >
-            <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 10v4h3l4 3V7l-4 3H4Z" fill="currentColor" stroke="none" />
-              {soundEnabled ? <><path d="M15 9.2c1.2 1.6 1.2 4 0 5.6" /><path d="M18 6.8c2.6 2.9 2.6 7.5 0 10.4" /></> : <path d="m15.5 9.5 5 5m0-5-5 5" />}
-            </svg>
           </button>
           <button
             type="button"
@@ -2598,23 +2495,50 @@ function GameHud({
           </div>
         ) : (
           <>
-            <OfflineReady compact selectedImageUrls={selectedOfflineImages} warmImageUrls={warmOfflineImages} />
-            <details className="group shrink-0">
-              <summary className="min-h-11 list-none rounded-lg border-2 border-[#1c4941] bg-[#0d332f] px-3 py-2 text-sm font-black leading-6 text-[#dce9e4] transition hover:border-[#f0c84b] [&::-webkit-details-marker]:hidden">
-                Learning recap
-              </summary>
-              <div className="mt-2 w-[min(440px,calc(100vw-32px))]"><LearningRecapPanel recap={learningRecap} /></div>
-            </details>
-            <div className="flex min-h-11 shrink-0 items-center gap-2 rounded-lg border-2 border-[#1c4941] bg-[#0d332f] px-3 py-2 text-sm font-black text-[#dce9e4]">
-              <span>Image reports</span>
-              <span className="text-xs text-[#75d5c0]">{issueFlash ? "Latest saved" : `${issueCount} logged`}</span>
-            </div>
+            <button type="button" onClick={() => { setOpenTray(null); setShowSetup(true); }} className="min-h-11 shrink-0 rounded-lg border-2 border-[#092421] bg-[#fffdf6] px-4 py-2 text-sm font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5">
+              Setup
+            </button>
             <button type="button" onClick={() => setConfirmReset(true)} className="min-h-11 shrink-0 rounded-lg border-2 border-[#1c4941] bg-[#0d332f] px-3 py-2 text-sm font-black text-[#dce9e4] transition hover:border-[#f59a7d] hover:text-white active:translate-y-0.5">
               Reset
             </button>
           </>
         )}
       </div>
+
+      {showSetup && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-[#092421]/80 p-3 backdrop-blur-[2px]" onMouseDown={(event) => { if (event.target === event.currentTarget) setShowSetup(false); }}>
+          <section role="dialog" aria-modal="true" aria-label="Setup" className="max-h-[calc(100dvh-24px)] w-full max-w-xl overflow-y-auto rounded-2xl border-2 border-[#092421] bg-[#fffdf6] shadow-[7px_7px_0_#092421]">
+            <header className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b-2 border-[#092421] bg-[#f4e8c8] px-4 py-3">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7d5a3f]">Burrow settings</p>
+                <h2 className="text-2xl font-black text-[#102f36]">Setup</h2>
+              </div>
+              <button type="button" aria-label="Close setup" onClick={() => setShowSetup(false)} className="grid h-11 w-11 place-items-center rounded-lg border-2 border-[#092421] bg-white text-2xl font-black text-[#102f36] shadow-[2px_2px_0_#092421]">×</button>
+            </header>
+            <div className="grid gap-4 p-4">
+              <section className="rounded-xl border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
+                <h3 className="text-sm font-black uppercase tracking-[0.12em] text-[#72543e]">Player</h3>
+                <div className="mt-2"><ProfilePicker profiles={profiles} activeProfileId={activeProfileId} onChange={onProfileChange} onCreate={onCreateProfile} onRename={onRenameProfile} /></div>
+              </section>
+              <section className="rounded-xl border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
+                <h3 className="text-sm font-black uppercase tracking-[0.12em] text-[#72543e]">Difficulty</h3>
+                <div className="mt-2"><DifficultySelector difficulty={difficulty} onChange={onDifficultyChange} /></div>
+              </section>
+              <button
+                type="button"
+                aria-label={`Turn sound effects ${soundEnabled ? "off" : "on"}`}
+                aria-pressed={soundEnabled}
+                onClick={onSoundToggle}
+                className={`flex min-h-11 items-center justify-between rounded-lg border-2 border-[#092421] px-4 py-2 text-sm font-black text-[#102f36] shadow-[3px_3px_0_#092421] ${soundEnabled ? "bg-[#70d392]" : "bg-white"}`}
+              >
+                <span>Sound effects</span><span>{soundEnabled ? "On" : "Off"}</span>
+              </button>
+              <OfflineReady compact selectedImageUrls={selectedOfflineImages} warmImageUrls={warmOfflineImages} />
+              <LearningRecapPanel recap={learningRecap} />
+            </div>
+          </section>
+        </div>
+      )}
 
       {showProgressStats && <ProgressStatsModal stats={progressStats} onClose={closeProgressStats} />}
     </header>
@@ -2681,9 +2605,9 @@ function HudProgress({
       aria-label={`Level ${level}. View progress stats`}
       title="View progress stats"
       onClick={onOpenStats}
-      className="flex min-w-[190px] flex-[1.1_1_190px] items-center gap-3 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-3.5 py-2 text-left shadow-[3px_3px_0_#092421] transition hover:-translate-y-0.5 hover:bg-[#fff9df] hover:shadow-[4px_4px_0_#092421] active:translate-y-0 active:shadow-[2px_2px_0_#092421]"
+      className="flex w-[230px] flex-none items-center gap-3 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-3.5 py-2 text-left shadow-[3px_3px_0_#092421] transition hover:-translate-y-0.5 hover:bg-[#fff9df] hover:shadow-[4px_4px_0_#092421] active:translate-y-0 active:shadow-[2px_2px_0_#092421] min-[600px]:max-[899px]:w-[188px] max-[599px]:w-auto max-[599px]:min-w-0 max-[599px]:flex-1 max-[599px]:gap-2 max-[599px]:px-2.5"
     >
-        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border-2 border-[#092421] bg-[#f0c84b] text-center shadow-[2px_2px_0_#092421]">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border-2 border-[#092421] bg-[#f0c84b] text-center shadow-[2px_2px_0_#092421]">
           <span className="block text-[7px] font-black uppercase leading-none tracking-[0.1em] text-[#7d5a3f]">Lvl</span>
           <span className="block text-xl font-black leading-none text-[#102f36]">{level}</span>
         </span>
@@ -2904,11 +2828,11 @@ function LearningRecapPanel({ recap }: { recap: LearningRecap }) {
 }
 
 function RoundContextPill({ label }: { label: string }) {
-  return (
-    <p className="max-w-[180px] truncate rounded-lg border-2 border-[#092421] bg-[#fff1bf] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#102f36]">
-      {label}
-    </p>
-  );
+  return <span className="sr-only">{label}</span>;
+}
+
+function RoundProgressPill({ children }: { children: ReactNode }) {
+  return <p className="shrink-0 text-sm font-black text-[#72543e]">{children}</p>;
 }
 
 function QuestionRun({
@@ -2918,8 +2842,6 @@ function QuestionRun({
   selected,
   answered,
   isCorrect,
-  sessionCorrect,
-  sessionAnswered,
   lastResult,
   celebration,
   note,
@@ -2928,8 +2850,6 @@ function QuestionRun({
   onAnswer,
   onNext,
   onSkip,
-  issueFlash,
-  onFlagIssue,
 }: {
   question: Question;
   questions: Question[];
@@ -2937,8 +2857,6 @@ function QuestionRun({
   selected: string | null;
   answered: boolean;
   isCorrect: boolean;
-  sessionCorrect: number;
-  sessionAnswered: number;
   lastResult: ResultState | null;
   celebration: string;
   note: string;
@@ -2947,21 +2865,15 @@ function QuestionRun({
   onAnswer: (choice: string) => void;
   onNext: () => void;
   onSkip: () => void;
-  issueFlash: boolean;
-  onFlagIssue: () => void;
 }) {
   const [firstWrongChoice, setFirstWrongChoice] = useState<string | null>(null);
   const isDifferenceQuestion = question.kind === "building-difference" || question.kind === "shark-difference" || question.kind === "jet-difference";
   const showNumberLine = Boolean(question.numberLine) && (answered || (Boolean(question.comparison) && !isDifferenceQuestion));
   const showComparisonTable = Boolean(question.comparison) && (answered || !isDifferenceQuestion);
   const choices = question.comparison ? orderedComparisonChoices(question.choices) : question.choices;
-  const stageHint = question.map
-    ? "Tap a lettered pin or choose the matching place."
-    : question.comparison
-    ? isDifferenceQuestion
-      ? "Use the numbers in the question. Subtract smaller from bigger."
-      : "Look at both cards. Bigger number wins."
-    : `Image: ${question.imageCredit}`;
+  const photoStat = question.numberLine
+    ? `${question.numberLine.value.toLocaleString("en-US")} ${question.numberLine.unit}`
+    : null;
   const chooseAnswer = (choice: string) => {
     if (!answered && question.secondChanceClue && firstWrongChoice === null && choice !== question.answer) {
       setFirstWrongChoice(choice);
@@ -2971,8 +2883,8 @@ function QuestionRun({
   };
 
   return (
-    <section className="grid gap-2 min-[900px]:flex-1 min-[760px]:min-h-0 min-[760px]:overflow-hidden min-[760px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="relative h-[34dvh] min-h-[240px] max-h-[340px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0 min-[760px]:max-h-none">
+    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
+      <article data-question-photo className="relative h-[160px] min-h-[160px] overflow-hidden rounded-xl border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0">
         {question.map ? (
           <QuestionLocationStage
             question={question as Question & { map: NonNullable<Question["map"]> }}
@@ -2990,41 +2902,27 @@ function QuestionRun({
         ) : (
           <QuestionImage question={question} />
         )}
-        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#092421]">
+        <div className="absolute left-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
           {topicCatalog[question.topic].roundLabel}
         </div>
-        <button
-          type="button"
-          onClick={onFlagIssue}
-          className="absolute right-2 top-2 rounded-lg border-2 border-[#092421] bg-white/95 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5"
-          aria-label={`Flag an issue with this question image: ${question.imageAlt}`}
-        >
-          {issueFlash ? "Flagged" : "Flag image"}
-        </button>
-        <div className="absolute bottom-2 left-2 right-2 grid gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
-          <div className="rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">
-            {stageHint}
+        {photoStat && (
+          <div className="absolute right-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#fffdf6] px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
+            {photoStat}
           </div>
-          <div className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1.5 text-center text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421]">
-            {sessionCorrect}/{sessionAnswered} this run
-          </div>
-        </div>
+        )}
       </article>
 
-      <article className="flex min-h-0 flex-col rounded-lg min-[760px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
+      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
         <div className="shrink-0">
           <div className="flex items-center justify-between gap-2">
             <div className="flex min-w-0 items-center gap-2">
               <DifficultyPill difficulty={difficulty} />
               <RoundContextPill label={roundContext} />
-              <ProgressDots questions={questions} questionIndex={questionIndex} />
             </div>
-            <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">
-              {questionIndex + 1}/{questions.length}
-            </p>
+            <RoundProgressPill>Round {questionIndex + 1}</RoundProgressPill>
           </div>
 
-          <h2 className="mt-2 text-[clamp(1.25rem,3vw,2.35rem)] font-black leading-[1.04] text-[#102f36] lg:text-[clamp(1.3rem,2.45vw,2.55rem)]">
+          <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.25rem,3vw,2.35rem)] lg:text-[clamp(1.3rem,2.45vw,2.55rem)]">
             {question.prompt}
           </h2>
 
@@ -3037,7 +2935,6 @@ function QuestionRun({
           )}
 
           {question.numberLine && showNumberLine && <NumberLine line={question.numberLine} />}
-          {question.heatMeter && answered && <PepperHeatMeter meter={question.heatMeter} />}
           {question.comparison && showComparisonTable && <ComparisonTable cards={question.comparison} />}
         </div>
 
@@ -3181,7 +3078,7 @@ function SortMode({
   const slottedPicked = slotSortCardIds(round, picked);
 
   return (
-    <section className="grid gap-2 min-[900px]:flex-1 min-[760px]:min-h-0 min-[760px]:overflow-hidden min-[760px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
       <article className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
         <div className="grid h-full min-h-[390px] grid-cols-2 gap-2 md:grid-cols-4 lg:min-h-0">
           {round.cards.map((card) => {
@@ -3214,15 +3111,15 @@ function SortMode({
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col rounded-lg min-[760px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
+      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
             <RoundContextPill label={roundContext} />
           </div>
-          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
+          <RoundProgressPill><span className="sr-only">{miniRunCorrect} of {miniRunAnswered} solved. </span>Round {miniRunAnswered + 1}</RoundProgressPill>
         </div>
-        <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.45rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+        <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.35rem,3vw,2.45rem)]">{round.prompt}</h2>
         <p className="mt-1 text-sm font-bold text-[#5f6b5d]">Tap a card to add it. Tap it again to remove it.</p>
 
         <div aria-label="Your selected order" aria-live="polite" className="mt-3 rounded-lg border-2 border-[#092421] bg-[#fff1bf] p-2 shadow-[2px_2px_0_#092421]">
@@ -3266,7 +3163,7 @@ function SortMode({
                 key={`${round.id}-slot-${id}`}
                 aria-label={`Sort slot ${index + 1}: ${card?.title ?? "empty"}`}
                 className={`grid min-h-14 grid-cols-[44px_1fr] items-center gap-2 rounded-lg border-2 p-2 shadow-[3px_3px_0_#092421] ${
-                  good ? "border-[#2f7d4f] bg-[#e9ffe9]" : bad ? "border-[#9f3f2b] bg-[#fff0ea]" : "border-[#d9c7a7] bg-[#fff9ec]"
+                  good ? "border-[#092421] bg-[#70d392]" : bad ? "border-[#092421] bg-[#f59a7d]" : "border-[#092421] bg-[#fff9ec]"
                 }`}
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-[#092421] bg-white text-xl font-black">{index + 1}</div>
@@ -3376,31 +3273,28 @@ function FactMode({
   const answered = selected !== null;
 
   return (
-    <section className="grid gap-2 min-[900px]:flex-1 min-[760px]:min-h-0 min-[760px]:overflow-hidden min-[760px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
-      <article className="relative min-h-[320px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[760px]:min-h-0">
+    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
+      <article className="relative h-[160px] min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0">
         {round.map ? (
           <FactLocationStage round={round as FactRound & { map: NonNullable<FactRound["map"]> }} answered={answered} />
         ) : (
           <MediaImage image={round.image} imageAlt={round.imageAlt} topic={round.topic} />
         )}
-        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#092421]">
+        <div className="absolute left-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
           Fact card
-        </div>
-        <div className="absolute bottom-2 left-2 right-2 rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">
-          Image: {round.imageCredit}
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col rounded-lg min-[760px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
+      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
             <RoundContextPill label={roundContext} />
           </div>
-          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} caught</p>
+          <RoundProgressPill><span className="sr-only">{miniRunCorrect} of {miniRunAnswered} caught. </span>Round {miniRunAnswered + 1}</RoundProgressPill>
         </div>
 
-        <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+        <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.35rem,3vw,2.5rem)]">{round.prompt}</h2>
         <div className="mt-3 rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-3 shadow-[3px_3px_0_#092421]">
           <p className="text-[clamp(1.15rem,2.45vw,2rem)] font-black leading-tight text-[#102f36]">{round.statement}</p>
         </div>
@@ -3413,7 +3307,7 @@ function FactMode({
               <button
                 key={choice}
                 onClick={() => onAnswer(choice)}
-                className={`min-h-18 rounded-lg border-2 px-3 py-3 text-center text-2xl font-black transition active:translate-y-0.5 ${
+                className={`min-h-11 rounded-lg border-2 px-3 py-4 text-center text-2xl font-black transition active:translate-y-0.5 min-[760px]:min-h-18 min-[760px]:py-3 ${
                   correctChoice
                     ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
@@ -3456,6 +3350,7 @@ function RevealMode({
   miniRunCorrect,
   celebration,
   difficulty,
+  badgeDifficulty,
   roundContext,
   onAnswer,
   onNext,
@@ -3468,6 +3363,7 @@ function RevealMode({
   miniRunCorrect: number;
   celebration: string;
   difficulty: Difficulty;
+  badgeDifficulty: Difficulty;
   roundContext: string;
   onAnswer: (choice: string, revealedCount: number) => void;
   onNext: () => void;
@@ -3497,21 +3393,19 @@ function RevealMode({
   }, [answered, intervalMs, revealed, round.map, totalTiles]);
 
   return (
-    <section className="grid gap-2 min-[900px]:flex-1 min-[760px]:min-h-0 min-[760px]:overflow-hidden min-[760px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
       {round.map ? (
-        <article aria-label="Location subject" className="relative min-h-[42dvh] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] shadow-[4px_4px_0_#092421] min-[760px]:min-h-0">
+        <article aria-label="Location subject" className="relative h-[160px] min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0">
           <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
-          <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#092421]">
-            Location picture
+          <div className="absolute left-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-white px-2 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
+            Find this place
           </div>
-          <div className="absolute bottom-2 left-2 right-2 rounded-lg border-2 border-[#092421] bg-white/95 px-3 py-2 shadow-[3px_3px_0_#092421]">
-            <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#72543e]">Find this place</p>
-            <p className="mt-0.5 text-lg font-black leading-tight text-[#102f36] md:text-2xl">{round.card.title}</p>
-            <p className="mt-1 text-[10px] font-bold text-[#5f6b5d]">Image: {round.card.imageCredit}</p>
+          <div className="absolute right-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
+            {round.card.title}
           </div>
         </article>
       ) : (
-        <article className="relative min-h-[34dvh] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] shadow-[4px_4px_0_#092421] min-[760px]:min-h-0">
+        <article className="relative h-[160px] min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0">
           <div className="h-full transition-[filter] duration-500 ease-out" style={{ filter: `blur(${blurPx}px)` }}>
             <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
           </div>
@@ -3523,30 +3417,25 @@ function RevealMode({
               />
             ))}
           </div>
-          <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-[#102f36] shadow-[2px_2px_0_#092421]">
+          <div className="absolute left-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-white px-2 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
             Peek round
           </div>
-          <div className="absolute bottom-2 left-2 right-2 grid gap-2 sm:grid-cols-[1fr_auto] sm:items-end">
-            <div className="rounded-lg bg-black/70 px-2 py-1.5 text-[10px] font-semibold text-white">
-              {answered ? `Image: ${round.card.imageCredit}` : "The picture reveals itself. Guess early for style points."}
-            </div>
-            <div className="rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1.5 text-center text-sm font-black text-[#102f36] shadow-[2px_2px_0_#092421]">
-              {visibleCount}/{totalTiles} open
-            </div>
+          <div className="absolute right-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
+            {visibleCount}/{totalTiles} open
           </div>
         </article>
       )}
 
-      <article className="flex min-h-0 flex-col rounded-lg min-[760px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
+      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
-            <DifficultyPill difficulty={difficulty} />
+            <DifficultyPill difficulty={badgeDifficulty} />
             <RoundContextPill label={roundContext} />
           </div>
-          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
+          <RoundProgressPill><span className="sr-only">{miniRunCorrect} of {miniRunAnswered} solved. </span>Round {miniRunAnswered + 1}</RoundProgressPill>
         </div>
 
-        <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+        <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.35rem,3vw,2.5rem)]">{round.prompt}</h2>
         <div className="mt-2 rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-2 shadow-[3px_3px_0_#092421]">
           <div className="flex items-center justify-between gap-3 text-xs font-black md:text-sm">
             <span>{round.map ? "Picture clue" : "Picture reveal"}</span>
@@ -3569,7 +3458,7 @@ function RevealMode({
               <button
                 key={`${round.id}-${choice}`}
                 onClick={() => onAnswer(choice, visibleCount)}
-                className={`min-h-12 rounded-lg border-2 px-3 py-2 text-left text-base font-black leading-snug transition active:translate-y-0.5 md:min-h-14 md:text-lg ${
+                className={`min-h-11 rounded-lg border-2 px-3 py-4 text-left text-base font-black leading-snug transition active:translate-y-0.5 min-[760px]:min-h-14 min-[760px]:py-2 min-[760px]:text-lg ${
                   correctChoice
                     ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
@@ -3638,19 +3527,19 @@ function GeoMode({
   const selectedChoice = round.choices.find((choice) => choice.id === selected);
 
   return (
-    <section className="grid gap-2 min-[900px]:flex-1 min-[760px]:min-h-0 min-[760px]:overflow-hidden min-[760px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
       <GeoLocatorStage round={round} selected={selected} answered={answered} onAnswer={onAnswer} />
 
-      <article className="flex min-h-0 flex-col rounded-lg border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
+      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
             <RoundContextPill label={roundContext} />
           </div>
-          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} mapped</p>
+          <RoundProgressPill><span className="sr-only">{miniRunCorrect} of {miniRunAnswered} mapped. </span>Round {miniRunAnswered + 1}</RoundProgressPill>
         </div>
 
-        <h2 className="mt-2 text-[clamp(1.25rem,2.8vw,2.4rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+        <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.25rem,2.8vw,2.4rem)]">{round.prompt}</h2>
 
         <div className="mt-3 rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-3 shadow-[3px_3px_0_#092421]">
           <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Map clue</p>
@@ -3672,7 +3561,7 @@ function GeoMode({
                 key={`${round.id}-${choice.id}-choice`}
                 type="button"
                 onClick={() => onAnswer(choice.id)}
-                className={`min-h-14 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
+                className={`min-h-11 rounded-lg border-2 px-3 py-4 text-left transition active:translate-y-0.5 min-[760px]:min-h-14 min-[760px]:py-2 ${
                   correctChoice
                     ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
@@ -3726,14 +3615,13 @@ function GeoLocatorStage({
 }) {
   return (
     <article className="grid min-h-[540px] gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0 min-[760px]:grid-rows-[minmax(168px,.42fr)_minmax(292px,.58fr)]">
-      <div className="relative min-h-[180px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
+      <div className="relative min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec] min-[760px]:min-h-[180px]">
         <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.card.topic} />
-        <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421]">
+        <div className="absolute left-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
           Find this place
         </div>
-        <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-2 shadow-[2px_2px_0_#092421]">
-          <p className="text-lg font-black leading-tight text-[#102f36]">{round.card.title}</p>
-          <p className="mt-0.5 text-xs font-bold leading-tight text-[#5f6b5d]">Image: {round.card.imageCredit}</p>
+        <div className="absolute right-2 top-2 max-w-[60%] truncate whitespace-nowrap rounded-lg border-2 border-[#092421] bg-white/95 px-2 py-1 text-[9px] font-black uppercase tracking-[0.1em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
+          {round.card.title}
         </div>
       </div>
 
@@ -3818,19 +3706,19 @@ function NumberMode({
       : `${round.biggerLabel} minus ${round.smallerLabel}`;
 
   return (
-    <section className="grid gap-2 min-[900px]:flex-1 min-[760px]:min-h-0 min-[760px]:overflow-hidden min-[760px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
       <NumberStoryStage round={round} badge={stageBadge} footer={stageFooter} />
 
-      <article className="flex min-h-0 flex-col rounded-lg min-[760px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
+      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
             <RoundContextPill label={roundContext} />
           </div>
-          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} solved</p>
+          <RoundProgressPill><span className="sr-only">{miniRunCorrect} of {miniRunAnswered} solved. </span>Round {miniRunAnswered + 1}</RoundProgressPill>
         </div>
 
-        <h2 className="mt-2 text-[clamp(1.2rem,2.6vw,2.25rem)] font-black leading-[1.06] text-[#102f36]">{round.prompt}</h2>
+        <h2 className="mt-2 text-2xl font-black leading-[1.06] text-[#102f36] min-[760px]:text-[clamp(1.2rem,2.6vw,2.25rem)]">{round.prompt}</h2>
         <p aria-label="Number equation" className="mt-3 whitespace-nowrap text-[clamp(2.25rem,3.5vw,3.25rem)] font-black leading-none tracking-[-0.04em] text-[#9f3f2b]">{equationLabel}</p>
 
         <div className="mt-3 grid shrink-0 gap-2 xl:grid-cols-2">
@@ -3842,7 +3730,7 @@ function NumberMode({
                 key={`${round.id}-${choice}`}
                 data-number-choice
                 onClick={() => onAnswer(choice)}
-                className={`min-h-14 rounded-lg border-2 px-3 py-2 text-left text-xl font-black leading-snug transition active:translate-y-0.5 ${
+                className={`min-h-11 rounded-lg border-2 px-3 py-4 text-left text-base font-black leading-snug transition active:translate-y-0.5 min-[760px]:min-h-14 min-[760px]:py-2 min-[760px]:text-xl ${
                   correctChoice
                     ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
@@ -4044,7 +3932,7 @@ function TopTrumpsMode({
     : round.player.fact;
 
   return (
-    <section className="grid gap-2 min-[900px]:flex-1 min-[760px]:min-h-0 min-[760px]:overflow-hidden min-[760px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
       <article className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
         <div className="grid h-full min-h-[420px] grid-cols-2 gap-2 lg:min-h-0">
           <TrumpCardView card={round.player} badge="Player" revealStats />
@@ -4052,16 +3940,16 @@ function TopTrumpsMode({
         </div>
       </article>
 
-      <article className="flex min-h-0 flex-col rounded-lg border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
+      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
             <RoundContextPill label={roundContext} />
           </div>
-          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} won</p>
+          <RoundProgressPill><span className="sr-only">{miniRunCorrect} of {miniRunAnswered} won. </span>Round {miniRunAnswered + 1}</RoundProgressPill>
         </div>
 
-        <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+        <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.35rem,3vw,2.5rem)]">{round.prompt}</h2>
         <p className="mt-2 rounded-lg border-2 border-[#092421] bg-[#fff9ec] px-3 py-2 text-sm font-bold leading-snug text-[#5f6b5d] shadow-[3px_3px_0_#092421]">
           Your card is face up. Pick the category you think beats the computer card.
         </p>
@@ -4076,7 +3964,7 @@ function TopTrumpsMode({
               <button
                 key={`${round.id}-${stat.id}`}
                 onClick={() => onAnswer(stat.id)}
-                className={`min-h-16 rounded-lg border-2 px-3 py-2 text-left transition active:translate-y-0.5 ${
+                className={`min-h-11 rounded-lg border-2 px-3 py-4 text-left transition active:translate-y-0.5 min-[760px]:min-h-16 min-[760px]:py-2 ${
                   correctChoice
                     ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenTie
@@ -4150,7 +4038,7 @@ function OddOneMode({
   const answer = round.cards.find((card) => card.id === round.answerId);
 
   return (
-    <section className="grid gap-2 min-[900px]:flex-1 min-[760px]:min-h-0 min-[760px]:overflow-hidden min-[760px]:grid-cols-[minmax(0,1.34fr)_minmax(340px,.66fr)]">
+    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
       <KnowledgeCardsStage
         cards={round.cards}
         badge="Look closely"
@@ -4160,16 +4048,16 @@ function OddOneMode({
         onSelect={onAnswer}
       />
 
-      <article className="flex min-h-0 flex-col rounded-lg min-[760px]:overflow-y-auto border-2 border-[#092421] bg-white p-3 shadow-[3px_3px_0_#092421]">
+      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
             <RoundContextPill label={roundContext} />
           </div>
-          <p className="rounded-lg bg-[#ece5d5] px-2.5 py-1 text-xs font-black">{miniRunCorrect}/{miniRunAnswered} found</p>
+          <RoundProgressPill><span className="sr-only">{miniRunCorrect} of {miniRunAnswered} found. </span>Round {miniRunAnswered + 1}</RoundProgressPill>
         </div>
 
-        <h2 className="mt-2 text-[clamp(1.35rem,3vw,2.5rem)] font-black leading-[1.04] text-[#102f36]">{round.prompt}</h2>
+        <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.35rem,3vw,2.5rem)]">{round.prompt}</h2>
 
         <div className="mt-3 grid shrink-0 gap-2 xl:grid-cols-2">
           {round.cards.map((card, index) => {
@@ -4179,7 +4067,7 @@ function OddOneMode({
               <button
                 key={`${round.id}-${card.id}`}
                 onClick={() => onAnswer(card.id)}
-                className={`min-h-14 rounded-lg border-2 px-3 py-2 text-left text-lg font-black leading-snug transition active:translate-y-0.5 ${
+                className={`min-h-11 rounded-lg border-2 px-3 py-4 text-left text-base font-black leading-snug transition active:translate-y-0.5 min-[760px]:min-h-14 min-[760px]:py-2 min-[760px]:text-lg ${
                   correctChoice
                     ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
@@ -4364,6 +4252,7 @@ function CollectionBook({
                   <p className={`${isUnlocked ? "mt-0.5" : "mt-1"} text-sm font-black text-[#9f3f2b]`}>{isUnlocked ? card.statDisplay : "Win a round"}</p>
                   {isUnlocked && <p className="mt-1 text-[10px] font-black uppercase tracking-[0.08em] text-[#72543e]">{card.subStat}</p>}
                   <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#5f6b5d]">{isUnlocked ? card.fact : "Answer correctly to add it here."}</p>
+                  {isUnlocked && <p className="mt-2 text-[9px] font-semibold leading-tight text-[#6b7468]">Image: {card.imageCredit}</p>}
                   {isUnlocked && card.details?.length ? (
                     <details className="group mt-2 rounded-md border-2 border-[#d9c7a7] bg-[#fff9ec] open:border-[#092421] open:shadow-[2px_2px_0_#092421]">
                       <summary className="cursor-pointer list-none px-2 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#102f36] marker:hidden">
@@ -4416,34 +4305,41 @@ const collectionCardDetailLabel = (topic: RoundTopic) => ({
   "bridges-and-tunnels": "Open structure profile",
 }[topic] ?? "Open card profile");
 
-function ProgressDots({ questions, questionIndex }: { questions: Question[]; questionIndex: number }) {
-  return (
-    <div className="flex flex-wrap gap-0.5">
-      {questions.map((item, index) => (
-        <span
-          key={item.id}
-          className={`h-2.5 w-2.5 rounded-sm border-2 border-[#092421] ${
-            index < questionIndex ? "bg-[#4fa775]" : index === questionIndex ? "bg-[#f0c84b]" : "bg-[#e6d7bc]"
-          }`}
-        />
-      ))}
-    </div>
-  );
-}
-
 function ProfilePicker({
   profiles,
   activeProfileId,
   onChange,
   onCreate,
   onRename,
+  compact = false,
 }: {
   profiles: LearnerProfile[];
   activeProfileId: string;
   onChange: (profileId: string) => void;
   onCreate: () => void;
   onRename: () => void;
+  compact?: boolean;
 }) {
+  if (compact) {
+    const activeName = profiles.find((profile) => profile.id === activeProfileId)?.name ?? "Player";
+    return (
+      <label className="relative block min-w-0 cursor-pointer truncate pr-1 text-[11px] font-black leading-none text-[#72543e]">
+        <span>{activeName} ▾ · switch player</span>
+        <select
+          id="profile-picker-compact"
+          aria-label="Switch player"
+          value={activeProfileId}
+          onChange={(event) => onChange(event.target.value)}
+          className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+        >
+          {profiles.map((profile) => (
+            <option key={profile.id} value={profile.id}>{profile.name}</option>
+          ))}
+        </select>
+      </label>
+    );
+  }
+
   return (
     <div className="flex min-w-0 shrink-0 items-center gap-1.5">
       <label className="sr-only" htmlFor="profile-picker">Player</label>
@@ -4481,18 +4377,18 @@ function ProfilePicker({
 
 function DifficultySelector({ difficulty, onChange }: { difficulty: Difficulty; onChange: (difficulty: Difficulty) => void }) {
   return (
-    <div className="grid min-w-0 grid-cols-3 gap-1 rounded-lg border-2 border-[#d9c7a7] bg-[#fffdf6] p-1">
+    <div className="grid min-w-0 grid-cols-3 gap-1 rounded-lg border-2 border-[#092421] bg-[#f4e8c8] p-1 max-[599px]:py-0.5">
       {difficultyOptions.map((item) => (
         <button
           key={item.id}
           onClick={() => onChange(item.id)}
-          className={`min-h-11 min-w-0 rounded-md border-2 px-1 py-1 text-center transition active:translate-y-0.5 ${
+          className={`min-h-8 min-w-0 rounded-md border-2 px-2 py-1 text-center transition active:translate-y-0.5 min-[600px]:max-[899px]:px-[5px] ${
             difficulty === item.id
               ? "border-[#092421] bg-[#f0c84b] shadow-[2px_2px_0_#092421]"
-              : "border-transparent bg-transparent hover:border-[#d9c7a7] hover:bg-white"
+              : "border-transparent bg-transparent hover:border-[#092421] hover:bg-white"
           }`}
         >
-          <span className="block truncate text-sm font-black leading-none text-[#102f36]">{item.label}</span>
+          <span className="block truncate text-[13px] font-black leading-none text-[#102f36] max-[599px]:text-sm">{item.label}</span>
         </button>
       ))}
     </div>
@@ -4501,7 +4397,7 @@ function DifficultySelector({ difficulty, onChange }: { difficulty: Difficulty; 
 
 function ReadingClue({ text }: { text: string }) {
   return (
-    <div className="mt-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
+    <div className="mt-2 rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-2 shadow-[3px_3px_0_#092421]">
       <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#72543e]">Read this</p>
       <p className="mt-1 text-base font-black leading-snug text-[#102f36] md:text-lg">“{text}”</p>
     </div>
@@ -4510,10 +4406,10 @@ function ReadingClue({ text }: { text: string }) {
 
 function SkipButton({ onClick }: { onClick: () => void }) {
   return (
-    <div className="sticky bottom-0 z-20 mt-auto bg-[#fffdf6]/95 pt-2 backdrop-blur">
+    <div className="sticky bottom-0 z-20 mt-auto bg-[#fffdf6]/95 pt-2 backdrop-blur min-[760px]:static">
       <button
         onClick={onClick}
-        className="w-full rounded-lg border-2 border-[#d9c7a7] bg-white px-4 py-2 text-sm font-black text-[#5f6b5d] transition hover:border-[#092421] hover:bg-[#fff9ec] active:translate-y-0.5"
+        className="min-h-11 w-full rounded-lg border-2 border-[#092421] bg-white px-4 py-2 text-sm font-black text-[#5f6b5d] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff9ec] active:translate-y-0.5"
       >
         Skip question
       </button>
@@ -4706,23 +4602,6 @@ function ComparisonTable({ cards }: { cards: ComparisonCard[] }) {
   );
 }
 
-function PepperHeatMeter({ meter }: { meter: NonNullable<Question["heatMeter"]> }) {
-  return (
-    <div className="mt-2 rounded-lg border-2 border-[#092421] bg-[#fff1bf] p-2 shadow-[3px_3px_0_#092421]">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Pepper meter</p>
-          <p className="text-lg font-black leading-none text-[#102f36]">{meter.label}</p>
-        </div>
-        <div className="text-2xl leading-none" aria-label={`${meter.icons} pepper heat`}>
-          {meter.emoji}
-        </div>
-      </div>
-      <p className="mt-1 text-xs font-bold text-[#5f6b5d]">{meter.line}</p>
-    </div>
-  );
-}
-
 function HeatChoiceEmoji({ heat }: { heat: HeatBand }) {
   const profile = heatProfiles[heat];
   if (profile.icons === 0) return null;
@@ -4736,7 +4615,7 @@ function HeatChoiceEmoji({ heat }: { heat: HeatBand }) {
 
 function NumberLine({ line }: { line: NonNullable<Question["numberLine"]> }) {
   return (
-    <div className="mt-2 rounded-lg border-2 border-[#d9c7a7] bg-[#fff9ec] p-2">
+    <div className="mt-2 rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-2 shadow-[3px_3px_0_#092421]">
       <div className="flex justify-between gap-3 text-xs font-black md:text-sm">
         <span>{line.label}</span>
         <span>{line.value.toLocaleString("en-US")} {line.unit}</span>
@@ -4755,8 +4634,6 @@ function FeedbackPanel({
   celebration,
   correctAnswer,
   explanation,
-  locations,
-  showLocationMap = false,
   note,
   isLast,
   onNext,
@@ -4780,56 +4657,10 @@ function FeedbackPanel({
       correctAnswer={correctAnswer}
       explanation={explanation}
       note={note}
-      nextLabel={isLast ? "Finish round" : "Next"}
+      nextLabel={isLast ? "Finish round →" : "Next card →"}
       onNext={onNext}
       reward={{ xpGain, leveledUp }}
-    >
-      {locations && locations.length > 0 && <WorldLocationPanel locations={locations} showMap={showLocationMap} />}
-    </GameAnswerFeedback>
-  );
-}
-
-function WorldLocationPanel({ locations, showMap }: { locations: readonly WorldLocation[]; showMap: boolean }) {
-  const uniqueLocations = locations.filter(
-    (location, index) => locations.findIndex((candidate) => candidate.label === location.label) === index,
-  );
-  const mapMarkers = uniqueLocations.map((location) => {
-    const choice = geoChoiceForLocation(location);
-    return {
-      id: choice.id,
-      label: choice.label,
-      x: choice.point.x,
-      y: choice.point.y,
-      tone: "correct" as const,
-    };
-  });
-
-  return (
-    <aside aria-label="Where in the world" className="mt-2 rounded-lg border-2 border-[#092421] bg-[#dcefe8] p-2 shadow-[2px_2px_0_#092421]">
-      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#2f665d]">Where in the world?</p>
-      {showMap && (
-        <WorldMapSurface
-          markers={mapMarkers}
-          footer={uniqueLocations.map((location) => location.label).join(" · ")}
-          onSelect={() => undefined}
-          disabled
-          className="mt-1.5 min-h-[180px]"
-        />
-      )}
-      <div className="mt-1.5 grid gap-1.5">
-        {uniqueLocations.map((location) => (
-          <div key={location.label} className="flex flex-wrap items-center gap-1.5">
-            <span aria-hidden="true" className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-[#092421] bg-[#f0c84b] text-xs font-black">◎</span>
-            <span className="text-sm font-black leading-tight text-[#102f36]">{location.label}</span>
-            {location.continents.map((continent) => (
-              <span key={continent} className="rounded-full border border-[#2f665d] bg-white px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.08em] text-[#2f665d]">
-                {continent}
-              </span>
-            ))}
-          </div>
-        ))}
-      </div>
-    </aside>
+    />
   );
 }
 
@@ -4860,7 +4691,12 @@ function MediaImage({ image, imageAlt, topic, compact = false }: { image: string
   return (
     <div className={`field-guide-media flex ${frameSize} w-full items-center justify-center overflow-hidden ${imageSurface}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={image} alt={imageAlt} onError={() => setFailedImage(image)} className="h-full w-full object-contain p-3" />
+      <img
+        src={image}
+        alt={imageAlt}
+        onError={() => setFailedImage(image)}
+        className={`h-full w-full ${compact ? "object-contain p-2" : "object-cover"}`}
+      />
     </div>
   );
 }

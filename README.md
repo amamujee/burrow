@@ -81,7 +81,6 @@ See [Making a Burrow Pack](docs/pack-authoring.md) for the schema, image rules, 
 
 - `npm run check:images` rejects missing files and remote runtime image URLs.
 - `npm run qa:content` checks content completeness, quality signals, and playable pack data.
-- The in-game **Flag image** action stores a report locally and sends it to `POST /api/content-issues`; local development writes `.burrow/content-issues.jsonl`.
 - Anonymous play-quality events can be summarized with `npm run analyze:play-events`. Player names are not sent, and local identifiers are hashed before server logging.
 - `.burrow/`, environment files, Vercel project metadata, test output, and local QA screenshots are ignored by git.
 
