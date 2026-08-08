@@ -1637,17 +1637,18 @@ const multiplicationRound = (
   const itemsPerGroup = pickFactor(ranges.items, seed + 42);
   const answer = groups * itemsPerGroup;
   const repeatedAddition = Array.from({ length: groups }, () => itemsPerGroup).join(" + ");
+  const answerLabel = countLabel(answer, scenario.itemSingular, scenario.itemPlural);
   const countingCard: KnowledgeCard = {
     ...card,
     statLabel: scenario.statLabel,
     statValue: itemsPerGroup,
-    statDisplay: `${itemsPerGroup} ${scenario.itemPlural} per ${scenario.groupSingular}`,
+    statDisplay: `${countLabel(itemsPerGroup, scenario.itemSingular, scenario.itemPlural)} per ${scenario.groupSingular}`,
   };
   const companionCard: KnowledgeCard = {
     ...companion,
     statLabel: scenario.statLabel,
     statValue: itemsPerGroup,
-    statDisplay: `${itemsPerGroup} ${scenario.itemPlural} per ${scenario.groupSingular}`,
+    statDisplay: `${countLabel(itemsPerGroup, scenario.itemSingular, scenario.itemPlural)} per ${scenario.groupSingular}`,
   };
 
   return {
@@ -1661,13 +1662,15 @@ const multiplicationRound = (
     operator: "x",
     termValues: [groups, itemsPerGroup],
     resultLabel: `total ${scenario.itemPlural}`,
-    biggerLabel: `${groups} ${scenario.groupPlural}`,
+    biggerLabel: countLabel(groups, scenario.groupSingular, scenario.groupPlural),
     smallerLabel: card.title,
     biggerValue: groups,
     smallerValue: itemsPerGroup,
     answer,
     choices: numberChoices(answer, 1, seed + 43),
-    explanation: `There are ${groups} equal groups of ${itemsPerGroup}. The repeated addition is ${repeatedAddition} = ${answer}, so ${groups} × ${itemsPerGroup} = ${answer} ${scenario.itemPlural}.`,
+    explanation: groups === 1
+      ? `There is 1 group of ${itemsPerGroup}, so 1 × ${itemsPerGroup} = ${answerLabel}.`
+      : `There are ${groups} equal groups of ${itemsPerGroup}. The repeated addition is ${repeatedAddition} = ${answer}, so ${groups} × ${itemsPerGroup} = ${answerLabel}.`,
     visual: {
       kind: "equal-groups",
       badge: scenario.badge,
