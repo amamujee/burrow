@@ -3548,14 +3548,14 @@ function GeoMode({
 
         <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.1rem,2.2vw,1.75rem)]">{round.prompt}</h2>
 
-        {!answered && <div className="mt-2 rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-1.5 shadow-[3px_3px_0_#092421]">
+        <div className="mt-2 rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-1.5 shadow-[3px_3px_0_#092421]">
           <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Map clue</p>
-          <p className="mt-1 text-sm font-black leading-snug text-[#102f36]">
+          <p className={`mt-1 text-sm font-black leading-snug text-[#102f36] ${answered ? "min-[760px]:text-xs min-[760px]:leading-tight" : ""}`}>
             {round.mapHint}
           </p>
-        </div>}
+        </div>
 
-        {!answered && <div className="mt-2 grid shrink-0 gap-1.5">
+        <div className={`mt-2 grid shrink-0 gap-1.5 ${answered ? "min-[760px]:grid-cols-2 min-[760px]:gap-1" : ""}`}>
           {round.choices.map((choice, index) => {
             const letter = String.fromCharCode(65 + index);
             const correctChoice = answered && choice.id === round.answerId;
@@ -3565,8 +3565,9 @@ function GeoMode({
                 key={`${round.id}-${choice.id}-choice`}
                 data-geo-choice
                 type="button"
+                disabled={answered}
                 onClick={() => onAnswer(choice.id)}
-                className={`min-h-11 rounded-lg border-2 px-3 py-4 text-left transition active:translate-y-0.5 min-[760px]:py-1 ${
+                className={`min-h-11 rounded-lg border-2 px-3 py-4 text-left transition active:translate-y-0.5 min-[760px]:py-1 disabled:cursor-default ${
                   correctChoice
                     ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
@@ -3577,14 +3578,14 @@ function GeoMode({
                 <span className="grid grid-cols-[2rem_1fr] items-center gap-2">
                   <span className="grid h-8 w-8 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-sm font-black text-[#102f36]">{letter}</span>
                   <span className="min-w-0">
-                    <span className="block text-base font-black leading-tight text-[#102f36]">{choice.label}</span>
-                    <span className="block text-[10px] font-black uppercase tracking-[0.1em] text-[#72543e]">{choice.mapNote}</span>
+                    <span className={`block text-base font-black leading-tight text-[#102f36] ${answered ? "min-[760px]:text-sm" : ""}`}>{choice.label}</span>
+                    <span className={`block text-[10px] font-black uppercase tracking-[0.1em] text-[#72543e] ${answered ? "min-[760px]:text-[9px] min-[760px]:leading-tight" : ""}`}>{choice.mapNote}</span>
                   </span>
                 </span>
               </button>
             );
           })}
-        </div>}
+        </div>
 
         {answered && result && (
           <FeedbackPanel

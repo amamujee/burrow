@@ -1630,8 +1630,16 @@ test("iPad Geo Finder aligns both panels without a nested question scrollbar", a
   expect(await card.evaluate((element) => element.scrollHeight <= element.clientHeight + 1)).toBe(true);
   expect(await card.evaluate((element) => getComputedStyle(element).overflowY)).not.toBe("auto");
 
-  await card.locator("[data-geo-choice]").first().click();
+  const geoChoices = card.locator("[data-geo-choice]");
+  const choiceTextBeforeAnswer = await geoChoices.allTextContents();
+  await geoChoices.first().click();
   await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  await expect(geoChoices).toHaveCount(choiceTextBeforeAnswer.length);
+  expect(await geoChoices.allTextContents()).toEqual(choiceTextBeforeAnswer);
+  for (const choice of await geoChoices.all()) {
+    await expect(choice).toBeVisible();
+    await expect(choice).toBeDisabled();
+  }
   expect(await card.evaluate((element) => element.scrollHeight <= element.clientHeight + 1)).toBe(true);
   const geoPage = await page.evaluate(() => ({ pageHeight: document.documentElement.scrollHeight, viewportHeight: window.innerHeight, scrollY: window.scrollY }));
   expect(geoPage.pageHeight).toBeLessThanOrEqual(geoPage.viewportHeight + 1);
