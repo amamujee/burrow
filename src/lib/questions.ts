@@ -171,6 +171,20 @@ const answerChoices = <T,>(correct: T, distractors: T[], seed: number, count: nu
   return shuffle([correct, ...shuffle(uniqueDistractors, seed).slice(0, count - 1)], seed + 1);
 };
 const promptVariant = (seed: number, variants: readonly string[]) => variants[Math.abs(seed) % variants.length];
+const naturalList = (value: string) => {
+  const items = value.split(",").map((item) => item.trim()).filter(Boolean);
+  if (items.length < 2) return value;
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(", ")}, and ${items.at(-1)}`;
+};
+const dietParts = (diet: string) => diet
+  .toLowerCase()
+  .split(/,|\band\b/)
+  .map((part) => part.trim())
+  .filter(Boolean);
+const dietKeywords = (diet: string) => (diet.toLowerCase().match(/[a-z]+/g) ?? [])
+  .filter((word) => !["and", "big", "deep", "fast", "from", "large", "other", "round", "sea", "small", "tiny"].includes(word));
+const dietsOverlap = (first: string, second: string) => dietKeywords(first).some((word) => dietKeywords(second).includes(word));
 const clueWithoutLeadingName = (fact: string, name: string) => {
   if (fact.toLowerCase().startsWith(`${name.toLowerCase()}s `)) return `This pepper ${fact.slice(name.length + 2)}`;
   if (fact.toLowerCase().startsWith(`${name.toLowerCase()} `)) return `This pepper ${fact.slice(name.length + 1)}`;
@@ -1349,17 +1363,28 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
     };
   }
 
+  const choiceCount = choiceCountForDifficulty(difficulty);
+  const otherSharks = sharks.filter((item) => item.id !== shark.id);
+  const distinctMenus = otherSharks.filter((item) => !dietsOverlap(shark.diet, item.diet));
+  const distractorPool = distinctMenus.length >= choiceCount - 1 ? distinctMenus : otherSharks;
+  const distractorSharks = shuffle(distractorPool, seed + 51).slice(0, choiceCount - 1);
+  const menuSharks = shuffle([shark, ...distractorSharks], seed + 52);
+  const targetFood = sample(dietParts(shark.diet), seed + 53);
   return {
     id: `${seed}-shark-reading-${shark.id}`,
     topic: "sharks",
     kind: "shark-reading",
-    prompt: promptVariant(seed + 51, ["What is true?", "Read the diet clue. Which statement matches?", "Which answer proves you read the field note?"]),
-    readingClue: `${shark.name} eats ${shark.diet}.`,
+    prompt: promptVariant(seed + 51, [
+      `Which shark's menu includes ${targetFood}?`,
+      `Use the field notes: which shark would choose ${targetFood}?`,
+      `Find ${targetFood} in the menus. Which shark does it belong to?`,
+    ]),
+    readingClue: `Compare the field notes: ${menuSharks.map((item) => `${item.name} — ${naturalList(item.diet)}`).join(". ")}.`,
     image: shark.image,
     imageAlt: shark.name,
     imageCredit: shark.imageCredit,
-    choices: answerChoices(`It eats ${shark.diet}`, ["It is a pepper", "It is a skyscraper", "It has wheels"], seed + 51, choiceCountForDifficulty(difficulty)),
-    answer: `It eats ${shark.diet}`,
+    choices: answerChoices(shark.name, distractorSharks.map((item) => item.name), seed + 51, choiceCount),
+    answer: shark.name,
     explanation: `${shark.name} eats ${shark.diet}. ${shark.fact}`,
   };
 };

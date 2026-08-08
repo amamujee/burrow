@@ -822,6 +822,30 @@ test("reading questions rotate instructions and pepper comprehension patterns", 
   }
 });
 
+test("easy shark reading uses real, distinct ocean menus instead of nonsense answers", () => {
+  const readingQuestions = Array.from({ length: 120 }, (_, seed) => buildSession("sharks", 1, seed * 89, []))
+    .flat()
+    .filter((question) => question.kind === "shark-reading");
+  const blueShark = readingQuestions.find((question) => question.imageAlt === "Blue Shark")!;
+
+  expect(readingQuestions.length).toBeGreaterThan(20);
+  expect(blueShark).toBeDefined();
+  expect(blueShark.prompt).not.toBe("What is true?");
+  expect(blueShark.prompt).toMatch(/fish|squid/i);
+  expect(blueShark.readingClue).toContain("Compare the field notes:");
+  expect(blueShark.readingClue).toContain("Blue Shark — fish and squid");
+  expect(blueShark.answer).toBe("Blue Shark");
+  expect(blueShark.choices).toContain("Blue Shark");
+
+  for (const question of readingQuestions) {
+    expect(question.choices).toHaveLength(3);
+    expect(new Set(question.choices).size).toBe(3);
+    expect(question.answer).toBe(question.imageAlt);
+    for (const choice of question.choices) expect(question.readingClue).toContain(`${choice} —`);
+    expect(question.choices).not.toEqual(expect.arrayContaining(["It is a pepper", "It is a skyscraper", "It has wheels"]));
+  }
+});
+
 test("building comparisons use a direct child-friendly prompt", () => {
   const comparisons = Array.from({ length: 16 }, (_, seed) => buildSession("buildings", 3, seed * 83, []))
     .flat()
