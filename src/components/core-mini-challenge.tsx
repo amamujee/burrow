@@ -5,6 +5,7 @@ import { useState } from "react";
 import { EqualGroupsBoard, type EqualGroupsVisual } from "@/components/equal-groups-board";
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid } from "@/components/game-question-ui";
 import { WorldMapSurface } from "@/components/world-map-surface";
+import { buildingImagePresentation } from "@/lib/building-image-presentation";
 import type { WorldLocation } from "@/lib/card-metadata";
 import { collectionCards, geoChoiceForLocation, geoPointMapDistance, type KnowledgeCard, type RoundTopic } from "@/lib/game-modes";
 
@@ -494,6 +495,7 @@ function ChallengeModeBanner({ campaign, milestone, stepIndex }: { campaign: Cha
 function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign: ChallengeCampaign; step: ChallengeStep; selected: string | null; onSelect: (choice: string) => void }) {
   const image = step.image ?? campaign.image;
   const imageAlt = step.imageAlt ?? campaign.imageAlt;
+  const imagePresentation = buildingImagePresentation(image);
 
   if (step.skill === "Geography" && step.map) {
     return (
@@ -513,7 +515,14 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
     return (
       <aside aria-label="Challenge math story" className="flex min-h-[520px] flex-col gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
         <div className="relative min-h-[130px] max-h-[190px] flex-[.3] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
-          <Image src={image} alt={imageAlt} fill sizes="(max-width: 900px) 100vw, 58vw" className="object-cover" priority />
+          <Image
+            src={image}
+            alt={imageAlt}
+            fill
+            sizes="(max-width: 900px) 100vw, 58vw"
+            style={{ objectFit: imagePresentation?.fit ?? "cover", objectPosition: imagePresentation?.position ?? "center" }}
+            priority
+          />
           <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-2 text-[#102f36] shadow-[2px_2px_0_#092421]"><p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#9f3f2b]">Picture the harvest</p><p className="text-base font-black">{step.clue}</p></div>
         </div>
         <div className="min-h-[300px] flex-1"><EqualGroupsBoard id={step.id} groups={step.math.groups} each={step.math.each} visual={step.math.visual} /></div>
@@ -527,7 +536,14 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
 
   return (
     <aside aria-label="Challenge picture story" className="relative min-h-[380px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec] shadow-[4px_4px_0_#092421] min-[900px]:min-h-0">
-      <Image src={image} alt={imageAlt} fill sizes="(max-width: 900px) 100vw, 58vw" className="object-cover" priority />
+      <Image
+        src={image}
+        alt={imageAlt}
+        fill
+        sizes="(max-width: 900px) 100vw, 58vw"
+        style={{ objectFit: imagePresentation?.fit ?? "cover", objectPosition: imagePresentation?.position ?? "center" }}
+        priority
+      />
       <div className="absolute left-2 top-2 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-3 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421]">{step.icon} {step.skill} story</div>
       <div className="absolute inset-x-2 bottom-2 rounded-lg border-2 border-[#092421] bg-white/95 p-3 text-[#102f36] shadow-[2px_2px_0_#092421]"><p className="text-xl font-black">{campaign.name}</p><p className="mt-1 text-sm font-bold text-[#5f6b5d]">{step.title}</p></div>
     </aside>
