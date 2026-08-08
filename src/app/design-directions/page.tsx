@@ -42,7 +42,7 @@ const directions: Direction[] = [
     image: "/burrow-assets/peppers/carolina-reaper.jpg",
     imageAlt: "Carolina Reaper peppers",
     topic: "Pepper Round",
-    prompt: "What heat zone is Carolina Reaper?",
+    prompt: "How spicy is Carolina Reaper?",
     choices: ["hot", "very hot", "insane"],
     stat: "1,641,183 SHU",
     note: "Greenhouse texture, sturdy paper panels, and a little museum-label polish.",

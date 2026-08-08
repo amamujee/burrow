@@ -255,8 +255,10 @@ test("pack Odd One rounds never ask children to infer a hidden category", () => 
   }));
   const round = buildOddRoundFromCards(cards, "mountains", 3, 137);
 
-  expect(round.prompt).toBe("Which card has the highest Length?");
+  expect(round.prompt).toBe("Which mountain is the longest?");
   expect(round.answerId).toBe("math-card-3");
+  expect(round.prompt).not.toMatch(/card/i);
+  expect(round.explanation).not.toMatch(/each card/i);
   expect(`${round.prompt} ${round.reason} ${round.explanation}`).not.toMatch(/category|karakoram|andes/i);
   expect(new Set(round.cards.map((card) => card.statValue)).size).toBe(4);
 });
@@ -2184,7 +2186,7 @@ test("pepper number rounds teach multiplication with equal plant groups", async 
   }
 
   await expect(page.getByText("Grow case", { exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /\d+ plants.*grow \d+ peppers each.*How many peppers/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /There (?:is|are) \d+ .* plants?\. Each plant grows \d+ peppers?\. How many peppers/ })).toBeVisible();
   await expect(page.getByLabel("Number equation")).toContainText(/\d+ x \d+ = \?/);
 
   const garden = page.getByLabel("Numbers story stage").getByLabel("Math picture: equal pepper plant groups");

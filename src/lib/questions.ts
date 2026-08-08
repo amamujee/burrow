@@ -171,12 +171,56 @@ const range = (pepper: MeasuredPepper) => pepper.shuMin === pepper.shuMax ? form
 const feet = (value: number) => `${formatNumber(value)} ft`;
 const heatMeter = (heat: HeatBand) => ({ label: heat, icons: heatProfiles[heat].icons, emoji: heatProfiles[heat].emoji, line: heatProfiles[heat].kidLine });
 const heatBandExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
-  ? `${pepper.name} is ${pepper.heat} because its top Scoville score is ${pepper.scovilleStatus === "unofficial" ? "unofficially " : ""}${formatShu(pepper.shuMax)}, which fits the ${heatBandRangeLabel(pepper.heat)} band.`
+  ? `${pepper.name} is ${pepper.heat} because its top Scoville score is ${pepper.scovilleStatus === "unofficial" ? "unofficially " : ""}${formatShu(pepper.shuMax)}, which falls within the ${heatBandRangeLabel(pepper.heat)} range.`
   : pepper.scovilleStatus === "not-applicable"
     ? `${pepper.name} is not a chile, so the Scoville scale does not apply. Sanshool gives it a tingly, numbing feeling instead of capsaicin heat.`
   : pepper.shuMin !== null
-    ? `${pepper.name} is placed above ${formatShu(pepper.shuMin)} as an unofficial estimate, which puts it in the ${pepper.heat} band; no lab score has been published.`
-    : `${pepper.name}'s ${pepper.heat} label is descriptive because no Scoville measurement has been published.`;
+    ? `${pepper.name} is placed above ${formatShu(pepper.shuMin)} as an unofficial estimate, which classifies its heat as ${pepper.heat}; no lab score has been published.`
+    : `${pepper.name}'s heat is described as ${pepper.heat} because no Scoville measurement has been published.`;
+const heatReadingClues: Record<HeatBand, { prompt: string; clue: string; answer: string; distractors: string[]; explanation: string }> = {
+  "not spicy": {
+    prompt: "What does this note tell you about the pepper?",
+    clue: "This pepper has no capsaicin heat, so it does not cause a burning feeling.",
+    answer: "It will not feel spicy",
+    distractors: ["It has gentle warmth", "It has strong heat", "It is extremely hot"],
+    explanation: "The note says that the pepper has no capsaicin heat, so it will not feel spicy.",
+  },
+  mild: {
+    prompt: "How strong is this pepper's heat?",
+    clue: "This pepper has only a small amount of heat.",
+    answer: "Very gentle",
+    distractors: ["Not present at all", "Strong and obvious", "Extremely intense"],
+    explanation: "A small amount of heat feels gentle rather than strong.",
+  },
+  warm: {
+    prompt: "How strong is this pepper's heat?",
+    clue: "This pepper's heat is easy to notice, but it is not strong enough to be called hot.",
+    answer: "Noticeable but not strong",
+    distractors: ["Not present at all", "Strong and obvious", "Extremely intense"],
+    explanation: "The heat is noticeable, but the note says that it is not strong enough to be called hot.",
+  },
+  hot: {
+    prompt: "How strong is this pepper's heat?",
+    clue: "This pepper has a strong kick that is easy to notice.",
+    answer: "Strong and obvious",
+    distractors: ["Not present at all", "Very gentle", "Almost impossible to notice"],
+    explanation: "A strong kick means that the pepper's heat is easy to notice.",
+  },
+  "very hot": {
+    prompt: "How should this pepper be tasted?",
+    clue: "This pepper's heat is intense, so it should be tasted in very small bites.",
+    answer: "In very small bites",
+    distractors: ["In large bites", "As if it had no heat", "Without paying attention to the heat"],
+    explanation: "The note says that the pepper's intense heat calls for very small bites.",
+  },
+  insane: {
+    prompt: "What does this note tell you about the pepper's heat?",
+    clue: "This pepper belongs to the highest, super-hot range.",
+    answer: "It is extremely hot",
+    distractors: ["It has no heat", "It is only mildly warm", "Its heat is difficult to notice"],
+    explanation: "The highest, super-hot range contains peppers with extreme heat.",
+  },
+};
 const choiceSet = <T,>(correct: T, options: T[], seed: number, count: number) => {
   const distractors = shuffle(options.filter((option) => option !== correct), seed).slice(0, count - 1);
   return shuffle([correct, ...distractors], seed + 1);
@@ -1114,8 +1158,8 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
       topic: "peppers",
       kind,
       prompt: pepper.isCondiment
-        ? promptVariant(seed + 6, [`Which heat zone does the condiment ${pepper.name} belong to?`, `Which heat band fits the condiment ${pepper.name}?`, `Read the heat choices. Where does ${pepper.name} belong?`])
-        : promptVariant(seed + 6, [`Which heat zone does ${pepper.name} belong to?`, `Which heat band fits ${pepper.name}?`, `Read the heat choices. Where does ${pepper.name} belong?`]),
+        ? promptVariant(seed + 6, [`How spicy is the condiment ${pepper.name}?`, `Which heat level describes the condiment ${pepper.name}?`, `Choose the heat level for ${pepper.name}.`])
+        : promptVariant(seed + 6, [`How spicy is ${pepper.name}?`, `Which heat level describes ${pepper.name}?`, `Choose the heat level for ${pepper.name}.`]),
       image: pepper.image,
       imageAlt: pepper.name,
       imageCredit: pepper.imageCredit,
@@ -1137,28 +1181,21 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
   }
 
   if (kind === "pepper-reading") {
-    const words: Record<HeatBand, string> = {
-      "not spicy": "A pepper in the not-spicy band produces no capsaicin burn.",
-      mild: "A mild pepper gives only a faint spark of heat.",
-      warm: "A warm pepper has noticeable heat without reaching the hot band.",
-      hot: "A hot pepper delivers a strong, unmistakable kick.",
-      "very hot": "A very hot pepper contains intense heat and calls for great care.",
-      insane: "The insane band is reserved for legendary super-hot peppers.",
-    };
+    const heatReading = heatReadingClues[pepper.heat];
     const count = choiceCountForDifficulty(difficulty);
     const templates = [
       {
         id: "heat-word",
-        prompt: promptVariant(seed + 12, ["Read the clue. Which heat label fits?", "Which heat zone matches the field note?", "Use the words, rather than the picture, to identify the heat zone."]),
-        clue: words[pepper.heat],
-        answer: pepper.heat,
-        distractors: heatBands.filter((heat) => heat !== pepper.heat),
-        explanation: heatBandExplanation(pepper),
+        prompt: heatReading.prompt,
+        clue: heatReading.clue,
+        answer: heatReading.answer,
+        distractors: heatReading.distractors,
+        explanation: `${heatReading.explanation} ${heatBandExplanation(pepper)}`,
       },
       {
         id: "color",
         prompt: promptVariant(seed + 13, [`Which color is listed for ${pepper.name}?`, "Read carefully. Which color does the field note name?", "Which color appears in the field note?"]),
-        clue: `${pepper.name} is catalogued as ${pepper.color} and sits in the ${pepper.heat} heat zone.`,
+        clue: `${pepper.name} is catalogued as ${pepper.color}; its heat level is ${pepper.heat}.`,
         answer: pepper.color,
         distractors: pool.filter((item) => item.id !== pepper.id).map((item) => item.color),
         explanation: `${pepper.name} is ${pepper.color}. ${heatBandExplanation(pepper)}`,
@@ -1203,7 +1240,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
     imageCredit: measuredPepper.imageCredit,
     choices: answerChoices(correct, otherRanges, seed + 17, choiceCountForDifficulty(difficulty)),
     answer: correct,
-    explanation: `${measuredPepper.name} has a reported range of ${correct}${measuredPepper.scovilleStatus === "unofficial" ? " in unofficial listings" : ""}. Its highest reported score places it in the ${measuredPepper.heat} band (${heatBandRangeLabel(measuredPepper.heat)}).`,
+    explanation: `${measuredPepper.name} has a reported range of ${correct}${measuredPepper.scovilleStatus === "unofficial" ? " in unofficial listings" : ""}. Its highest reported score classifies its heat as ${measuredPepper.heat} (${heatBandRangeLabel(measuredPepper.heat)}).`,
     locations: itemLocations(measuredPepper),
     heatMeter: heatMeter(measuredPepper.heat),
     numberLine: { label: "Heat", value: measuredPepper.shuMax, max: maxShu, unit: "SHU" },

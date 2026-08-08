@@ -317,6 +317,10 @@ const staleQuestionPhrases = [
   /\blinked to Caribbean\b/i,
   /\b0 ft\b/i,
   /\bnesting scene\b/i,
+  /\bheat zone\b/i,
+  /\bWhich heat label fits\?/i,
+  /\bWhich card\b/i,
+  /\bshown on each card\b/i,
 ];
 const assertPolishedLanguage = (scope, item) => {
   for (const field of languageFields) {

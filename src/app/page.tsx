@@ -136,7 +136,7 @@ export default function Home() {
                 </div>
                 <div className="mt-2.5 rounded-[10px] border-2 border-[#082329] bg-[#f3c647] p-3">
                   <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#81533b]">Sample question</p>
-                  <p className="mt-1 text-lg font-black leading-tight text-[#102f36]">What heat zone is Carolina Reaper?</p>
+                  <p className="mt-1 text-lg font-black leading-tight text-[#102f36]">How spicy is Carolina Reaper?</p>
                 </div>
               </div>
             </div>

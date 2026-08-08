@@ -2,7 +2,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { expect, test } from "@playwright/test";
 import sharp from "sharp";
-import { buildingImagePresentation } from "../../src/lib/building-image-presentation";
+import {
+  buildingImagePresentation,
+  resolvedImagePresentation,
+} from "../../src/lib/building-image-presentation";
 import { buildings } from "../../src/lib/game-data";
 
 const correctedBuildingIds = [
@@ -39,8 +42,11 @@ test("corrected building cards use attributed photographs", { tag: "@logic" }, a
 test("building image presentation metadata reaches the shared renderer lookup", { tag: "@logic" }, () => {
   const merdeka = buildings.find((building) => building.id === "merdeka-118");
   const princess = buildings.find((building) => building.id === "princess-tower");
+  const makkah = buildings.find((building) => building.id === "makkah-clock");
 
   expect(buildingImagePresentation(merdeka!.image)).toEqual({ fit: "contain", position: "center" });
   expect(buildingImagePresentation(princess!.image)).toEqual({ fit: "cover", position: "44% center" });
+  expect(resolvedImagePresentation(makkah!.image, true)).toEqual({ fit: "cover", position: "left center" });
   expect(buildingImagePresentation("/not-a-building.jpg")).toBeUndefined();
+  expect(resolvedImagePresentation("/not-a-building.jpg", true)).toEqual({ fit: "contain", position: "center" });
 });

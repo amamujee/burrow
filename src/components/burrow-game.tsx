@@ -13,7 +13,7 @@ import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid, GameQuestionCard,
 import { OfflineReady } from "@/components/offline-ready";
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { weightTopicsForAccuracy } from "@/lib/adaptive-topics";
-import { buildingImagePresentation } from "@/lib/building-image-presentation";
+import { resolvedImagePresentation } from "@/lib/building-image-presentation";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
 import { cardDiscoveryIdentities, cardUnlockKeysForSubjects, isCardUnlocked } from "@/lib/card-discovery";
 import { autoDifficulty } from "@/lib/difficulty";
@@ -4694,8 +4694,8 @@ function MediaImage({ image, imageAlt, topic, compact = false }: { image: string
   const failed = failedImage === image;
   const imageSurface = topic === "peppers" ? "bg-[#f3d7c8]" : topic === "sharks" ? "bg-[#d6ece8]" : topic === "space" ? "bg-[#dfe4ef]" : topic === "countries" ? "bg-[#dbeaf3]" : "bg-[#f7f0df]";
   const frameSize = compact ? "min-h-0 flex-1" : "h-full min-h-[260px]";
-  const presentation = buildingImagePresentation(image);
-  const imageFit = compact ? "contain" : presentation?.fit ?? "cover";
+  const presentation = resolvedImagePresentation(image, compact);
+  const imageFit = presentation.fit;
 
   if (failed) {
     return (
@@ -4718,8 +4718,8 @@ function MediaImage({ image, imageAlt, topic, compact = false }: { image: string
         src={image}
         alt={imageAlt}
         onError={() => setFailedImage(image)}
-        style={{ objectFit: imageFit, objectPosition: presentation?.position ?? "center" }}
-        className={`h-full w-full ${compact || imageFit === "contain" ? "p-2" : ""}`}
+        style={{ objectFit: imageFit, objectPosition: presentation.position }}
+        className={`h-full w-full ${imageFit === "contain" ? "p-2" : ""}`}
       />
     </div>
   );

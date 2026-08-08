@@ -17,3 +17,12 @@ const buildingImagePresentations = new Map(
 
 export const buildingImagePresentation = (image: string): BuildingImagePresentation | undefined =>
   buildingImagePresentations.get(image);
+
+export const resolvedImagePresentation = (
+  image: string,
+  compact = false,
+): BuildingImagePresentation =>
+  buildingImagePresentation(image) ?? {
+    fit: compact ? "contain" : "cover",
+    position: "center",
+  };

@@ -1861,6 +1861,7 @@ const buildingSeeds: Omit<Building, "metadata">[] = [
     status: "finished",
     ...contentImage("buildings", "makkah-clock", "Abraj-al-Bait largest clock tower ever.jpg"),
     imageCredit: "Wikimedia Commons",
+    imagePosition: "left center",
     fact: "This tower has a huge clock near the top.",
   },
   {

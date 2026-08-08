@@ -194,7 +194,7 @@ const measurementMeaning = (label: string) => {
   if (/temperature/.test(normalized)) return "how hot or cold it is";
   if (/year|age/.test(normalized)) return "when it was made or how old it is";
   if (/floor/.test(normalized)) return "how many building levels it has";
-  return "the main measurement recorded on the card";
+  return "the main measurement recorded for this subject";
 };
 
 const challengeCardPool = (cards: readonly KnowledgeCard[]) => {
@@ -206,13 +206,17 @@ const challengeCardPool = (cards: readonly KnowledgeCard[]) => {
 export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLabel, cards }: ChallengeCategory): ChallengeCampaign[] => {
   const pool = challengeCardPool(cards.filter((card) => card.topic === topicId));
   if (pool.length < challengeCampaignCountPerCategory) return [];
-  const language = topicChallengeLanguage[topicId] ?? { singular: "card", plural: "cards", emoji: "🔎" };
+  const language = topicChallengeLanguage[topicId] ?? { singular: "subject", plural: "subjects", emoji: "🔎" };
 
   return Array.from({ length: challengeCampaignCountPerCategory }, (_, campaignIndex) => {
     const anchor = pool[campaignIndex];
     const campaignLanguage = topicId === "tall-trees" && (anchor.tags?.includes("reference") || anchor.metadata?.taxonomyGroup === "reference")
       ? { ...language, singular: "height subject", plural: "height subjects" }
-      : language;
+      : topicId === "bridges-and-tunnels" && anchor.tags?.includes("bridge")
+        ? { ...language, singular: "bridge", plural: "bridges" }
+        : topicId === "bridges-and-tunnels" && anchor.tags?.includes("tunnel")
+          ? { ...language, singular: "tunnel", plural: "tunnels" }
+          : language;
     const readingCard = anchor;
     const geographyCard = anchor;
     const mathCard = anchor;
@@ -257,7 +261,7 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
     const wordChoices = fourChoices(wordAnswer, [
       "who took the photograph",
       "how many questions were answered",
-      "which card was collected first",
+      "which subject was studied first",
     ], campaignIndex + 4);
 
     const steps: ChallengeStep[] = [
@@ -329,7 +333,7 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
         icon: "🧪",
         title: `Match the evidence for ${scienceCard.statLabel.toLowerCase()}`,
         clue: `The recorded ${scienceCard.statLabel.toLowerCase()} for ${scienceCard.title} is ${scienceCard.statDisplay}.`,
-        question: "Which card matches this measurement?",
+        question: `Which ${campaignLanguage.singular} matches this measurement?`,
         choices: scienceChoices,
         answer: scienceCard.title,
         summary: `${scienceCard.title} matches the evidence because its recorded ${scienceCard.statLabel.toLowerCase()} is ${scienceCard.statDisplay}.`,
@@ -341,11 +345,11 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
         skill: "Words",
         icon: "📖",
         title: `Unlock the word “${wordsCard.statLabel}”`,
-        clue: `The card for ${wordsCard.title} lists its ${wordsCard.statLabel.toLowerCase()} as ${wordsCard.statDisplay}.`,
+        clue: `${wordsCard.title}'s recorded ${wordsCard.statLabel.toLowerCase()} is ${wordsCard.statDisplay}.`,
         question: `What does ${wordsCard.statLabel.toLowerCase()} tell us here?`,
         choices: wordChoices,
         answer: wordAnswer,
-        summary: `${wordsCard.statLabel} tells us ${wordAnswer}. On this card, the recorded value is ${wordsCard.statDisplay}.`,
+        summary: `${wordsCard.statLabel} tells us ${wordAnswer}. For ${wordsCard.title}, the recorded value is ${wordsCard.statDisplay}.`,
         image: wordsCard.image,
         imageAlt: wordsCard.imageAlt,
       },

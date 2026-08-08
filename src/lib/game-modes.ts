@@ -2385,6 +2385,33 @@ export const buildNumberRoundFromCards = (
   };
 };
 
+const subjectNounForCards = (topic: RoundTopic, cards: readonly GenericKnowledgeCard[]) => {
+  const normalizedCategories = cards.map((card) => card.categories.map((category) => category.toLowerCase()));
+  const everyCardHas = (category: string) => normalizedCategories.every((categories) => categories.includes(category));
+
+  if (topic === "bridges-and-tunnels") {
+    if (everyCardHas("bridge")) return "bridge";
+    if (everyCardHas("tunnel")) return "tunnel";
+    return "bridge or tunnel";
+  }
+  if (topic === "dinosaurs") return "prehistoric animal";
+  if (topic === "tallest-mountains" || topic === "mountains") return "mountain";
+  if (topic === "tall-trees") return normalizedCategories.every((categories) => !categories.includes("reference")) ? "tree" : "subject";
+  return "subject";
+};
+
+const superlativeForStat = (statLabel: string) => {
+  const normalized = statLabel.toLowerCase();
+  if (/length|distance|range|span/.test(normalized)) return "longest";
+  if (/height/.test(normalized)) return "tallest";
+  if (/elevation|prominence/.test(normalized)) return "highest";
+  if (/speed/.test(normalized)) return "fastest";
+  if (/weight|mass/.test(normalized)) return "heaviest";
+  if (/age/.test(normalized)) return "oldest";
+  if (/temperature|heat/.test(normalized)) return "hottest";
+  return null;
+};
+
 export const buildOddRoundFromCards = (
   cards: readonly GenericKnowledgeCard[],
   topic: RoundTopic,
@@ -2398,14 +2425,20 @@ export const buildOddRoundFromCards = (
     : distinctStatCards(cardsWithStats(cards), seed + 2, 4);
   if (pool.length < 4) throw new Error(`Need at least 4 cards to build an odd-one round for ${topic}`);
   const odd = [...pool].sort((a, b) => b.statValue - a.statValue)[0];
+  const subjectNoun = subjectNounForCards(topic, pool);
+  const superlative = superlativeForStat(odd.statLabel);
   return {
     id: `${seed}-odd-${topic}-stat-${odd.id}`,
     topic,
-    prompt: `Which card has the highest ${odd.statLabel}?`,
+    prompt: superlative
+      ? `Which ${subjectNoun} is the ${superlative}?`
+      : `Which ${subjectNoun} has the highest ${odd.statLabel.toLowerCase()}?`,
     cards: shuffle(pool, seed + 3),
     answerId: odd.id,
     reason: `${odd.title} has ${odd.statDisplay}.`,
-    explanation: `Compare the ${odd.statLabel.toLowerCase()} shown on each card. ${odd.title} has the highest value.`,
+    explanation: superlative
+      ? `Compare the ${odd.statLabel.toLowerCase()} shown for each ${subjectNoun}. ${odd.title} is the ${superlative}.`
+      : `Compare the ${odd.statLabel.toLowerCase()} shown for each ${subjectNoun}. ${odd.title} has the highest value.`,
   };
 };
 
@@ -2854,7 +2887,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
       cards,
       answerId: odd.id,
       reason: `${odd.name} is ${odd.heat}; the others are ${heat}.`,
-      explanation: `The rule is heat zone. ${odd.name} is the odd one out because it is ${odd.heat}.`,
+      explanation: `The rule is heat level. ${odd.name} is the odd one out because its heat level is ${odd.heat}.`,
     };
   }
 
@@ -3225,10 +3258,10 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     const statement = truthful
       ? useMath
         ? `${pepper.name} can reach about ${formatNumber(pepper.shuMax)} Scoville heat units.`
-        : `${pepper.name} belongs in the ${pepper.heat} heat zone.`
+        : `${pepper.name}'s heat level is ${pepper.heat}.`
       : useMath
         ? `${pepper.name} can reach about ${formatNumber(fakeShu.shuMax)} Scoville heat units.`
-        : `${pepper.name} belongs in the ${fakeHeat.heat} heat zone.`;
+        : `${pepper.name}'s heat level is ${fakeHeat.heat}.`;
     return {
       id: `${seed}-fact-pepper-${pepper.id}`,
       topic: currentTopic,
