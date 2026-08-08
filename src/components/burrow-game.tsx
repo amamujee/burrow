@@ -2094,7 +2094,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       data-sound-effects={soundEffects.enabled ? "on" : "off"}
       onClickCapture={soundEffects.handleClickCapture}
     >
-      <section className="burrow-game-shell field-guide-shell mx-auto flex min-h-dvh w-full max-w-[1280px] flex-col gap-3 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-2 min-[600px]:my-3 min-[600px]:min-h-0 min-[600px]:rounded-2xl min-[600px]:border-2 min-[600px]:border-[#092421] min-[600px]:p-4 min-[600px]:shadow-[6px_6px_0_#092421]">
+      <section className="burrow-game-shell field-guide-shell mx-auto flex min-h-dvh w-full max-w-[1280px] flex-col gap-3 bg-[linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px] p-2 min-[600px]:my-3 min-[600px]:min-h-0 min-[600px]:rounded-2xl min-[600px]:border-2 min-[600px]:border-[#092421] min-[600px]:p-4 min-[600px]:shadow-[6px_6px_0_#092421] min-[760px]:h-[calc(100dvh-24px)]">
         <GameHud
           profiles={profilesState.profiles}
           activeProfileId={activeProfile.id}
@@ -2403,7 +2403,7 @@ function GameHud({
 
           <HudProgress level={level} levelProgress={levelProgress} xpToNextLevel={xpToNextLevel} streak={streak} accuracy={accuracy} learningRecap={learningRecap} onOpenStats={() => setShowProgressStats(true)} />
 
-          <div data-hud-difficulty className="w-[202px] flex-none rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-2.5 py-1.5 shadow-[3px_3px_0_#092421] min-[600px]:max-[899px]:w-[190px] max-[599px]:w-auto max-[599px]:min-w-0 max-[599px]:px-2">
+          <div data-hud-difficulty className="w-[202px] flex-none rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-2.5 py-1.5 shadow-[3px_3px_0_#092421] min-[600px]:max-[899px]:w-[174px] max-[599px]:w-auto max-[599px]:min-w-0 max-[599px]:px-2">
             <DifficultySelector difficulty={difficulty} onChange={onDifficultyChange} />
           </div>
         </div>
@@ -2414,7 +2414,7 @@ function GameHud({
             aria-expanded={openTray === "mode"}
             aria-controls="hud-mode-tray"
             onClick={() => toggleTray("mode")}
-            className={`flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-lg border-2 border-[#092421] px-3 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "mode" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
+            className={`flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-lg border-2 border-[#092421] px-3 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 min-[600px]:max-[899px]:px-2 ${openTray === "mode" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
           >
             <span aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-[#a8573c]" />
             <span>Modes ▾</span>
@@ -2424,7 +2424,7 @@ function GameHud({
             aria-expanded={openTray === "topics"}
             aria-controls="hud-topics-tray"
             onClick={() => toggleTray("topics")}
-            className={`flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-lg border-2 border-[#092421] px-3 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${openTray === "topics" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
+            className={`flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-lg border-2 border-[#092421] px-3 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 min-[600px]:max-[899px]:px-2 ${openTray === "topics" ? "bg-[#fff1bf]" : "bg-[#fffdf6]"}`}
           >
             <span aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-[#a8573c]" />
             <span>Topics ▾</span>
@@ -2432,7 +2432,7 @@ function GameHud({
           <button
             type="button"
             onClick={openCollection}
-            className={`flex min-h-11 items-center justify-center whitespace-nowrap rounded-lg border-2 border-[#092421] px-3 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 ${showCollection ? "bg-[#f0c84b]" : "bg-[#fffdf6]"}`}
+            className={`flex min-h-11 items-center justify-center whitespace-nowrap rounded-lg border-2 border-[#092421] px-3 py-2 text-xs font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#fff1bf] active:translate-y-0.5 min-[600px]:max-[899px]:px-2 ${showCollection ? "bg-[#f0c84b]" : "bg-[#fffdf6]"}`}
           >
             {showCollection ? "Back to game" : "Collection"}
             <span className="sr-only"> {collectionValue}</span>
@@ -2605,7 +2605,7 @@ function HudProgress({
       aria-label={`Level ${level}. View progress stats`}
       title="View progress stats"
       onClick={onOpenStats}
-      className="flex w-[230px] flex-none items-center gap-3 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-3.5 py-2 text-left shadow-[3px_3px_0_#092421] transition hover:-translate-y-0.5 hover:bg-[#fff9df] hover:shadow-[4px_4px_0_#092421] active:translate-y-0 active:shadow-[2px_2px_0_#092421] min-[600px]:max-[899px]:w-[188px] max-[599px]:w-auto max-[599px]:min-w-0 max-[599px]:flex-1 max-[599px]:gap-2 max-[599px]:px-2.5"
+      className="flex w-[230px] flex-none items-center gap-3 rounded-xl border-2 border-[#092421] bg-[#fffdf6] px-3.5 py-2 text-left shadow-[3px_3px_0_#092421] transition hover:-translate-y-0.5 hover:bg-[#fff9df] hover:shadow-[4px_4px_0_#092421] active:translate-y-0 active:shadow-[2px_2px_0_#092421] min-[600px]:max-[899px]:w-[174px] min-[600px]:max-[899px]:gap-2 min-[600px]:max-[899px]:px-2.5 max-[599px]:w-auto max-[599px]:min-w-0 max-[599px]:flex-1 max-[599px]:gap-2 max-[599px]:px-2.5"
     >
         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border-2 border-[#092421] bg-[#f0c84b] text-center shadow-[2px_2px_0_#092421]">
           <span className="block text-[7px] font-black uppercase leading-none tracking-[0.1em] text-[#7d5a3f]">Lvl</span>
@@ -2883,7 +2883,7 @@ function QuestionRun({
   };
 
   return (
-    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
+    <section className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
       <article data-question-photo className="relative h-[160px] min-h-[160px] overflow-hidden rounded-xl border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0">
         {question.map ? (
           <QuestionLocationStage
@@ -3083,7 +3083,7 @@ function SortMode({
       : "min-[760px]:grid-cols-4";
 
   return (
-    <section data-sort-layout className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
+    <section data-sort-layout className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
       <article data-sort-stage className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
         <div data-sort-card-grid className={`grid grid-cols-2 content-start gap-2 ${desktopGridColumns}`}>
           {round.cards.map((card) => {
@@ -3280,7 +3280,7 @@ function FactMode({
   const answered = selected !== null;
 
   return (
-    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
+    <section className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
       <article className="relative h-[160px] min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0">
         {round.map ? (
           <FactLocationStage round={round as FactRound & { map: NonNullable<FactRound["map"]> }} answered={answered} />
@@ -3400,7 +3400,7 @@ function RevealMode({
   }, [answered, intervalMs, revealed, round.map, totalTiles]);
 
   return (
-    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
+    <section className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
       {round.map ? (
         <article aria-label="Location subject" className="relative h-[160px] min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0">
           <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.topic} />
@@ -3533,10 +3533,10 @@ function GeoMode({
   const answered = selected !== null;
 
   return (
-    <section data-geo-layout className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2 min-[760px]:items-stretch">
+    <section data-geo-layout className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2 min-[760px]:items-stretch">
       <GeoLocatorStage round={round} selected={selected} answered={answered} onAnswer={onAnswer} />
 
-      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-hidden min-[760px]:p-3">
+      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-hidden min-[760px]:p-2.5">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -3545,16 +3545,16 @@ function GeoMode({
           <RoundProgressPill><span className="sr-only">{miniRunCorrect} of {miniRunAnswered} mapped. </span>Round {miniRunAnswered + 1}</RoundProgressPill>
         </div>
 
-        <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.2rem,2.5vw,2rem)]">{round.prompt}</h2>
+        <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.1rem,2.2vw,1.75rem)]">{round.prompt}</h2>
 
-        {!answered && <div className="mt-2 rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-2 shadow-[3px_3px_0_#092421]">
+        {!answered && <div className="mt-2 rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-1.5 shadow-[3px_3px_0_#092421]">
           <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Map clue</p>
-          <p className="mt-1 text-sm font-black leading-snug text-[#102f36] md:text-base">
+          <p className="mt-1 text-sm font-black leading-snug text-[#102f36]">
             {round.mapHint}
           </p>
         </div>}
 
-        {!answered && <div className="mt-2 grid shrink-0 gap-2">
+        {!answered && <div className="mt-2 grid shrink-0 gap-1.5">
           {round.choices.map((choice, index) => {
             const letter = String.fromCharCode(65 + index);
             const correctChoice = answered && choice.id === round.answerId;
@@ -3565,7 +3565,7 @@ function GeoMode({
                 data-geo-choice
                 type="button"
                 onClick={() => onAnswer(choice.id)}
-                className={`min-h-11 rounded-lg border-2 px-3 py-4 text-left transition active:translate-y-0.5 min-[760px]:min-h-12 min-[760px]:py-1.5 ${
+                className={`min-h-11 rounded-lg border-2 px-3 py-4 text-left transition active:translate-y-0.5 min-[760px]:py-1 ${
                   correctChoice
                     ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
@@ -3712,7 +3712,7 @@ function NumberMode({
       : `${round.biggerLabel} minus ${round.smallerLabel}`;
 
   return (
-    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
+    <section className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
       <NumberStoryStage round={round} badge={stageBadge} footer={stageFooter} />
 
       <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
@@ -3938,7 +3938,7 @@ function TopTrumpsMode({
     : round.player.fact;
 
   return (
-    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
+    <section className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
       <article className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
         <div className="grid h-full min-h-[420px] grid-cols-2 gap-2 lg:min-h-0">
           <TrumpCardView card={round.player} badge="Player" revealStats />
@@ -4044,7 +4044,7 @@ function OddOneMode({
   const answer = round.cards.find((card) => card.id === round.answerId);
 
   return (
-    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
+    <section className="burrow-round-layout grid gap-3 min-[760px]:min-h-[460px] min-[760px]:flex-1 min-[760px]:grid-cols-2">
       <KnowledgeCardsStage
         cards={round.cards}
         badge="Look closely"

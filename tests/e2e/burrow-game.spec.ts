@@ -1581,18 +1581,26 @@ test("HUD stays on one line across iPad sizes without horizontal overflow", asyn
   }
 });
 
-test("iPad play uses balanced content-sized photo and question panels", async ({ page }) => {
+test("tablet and desktop play fill the available viewport with balanced photo and question panels", async ({ page }) => {
   await page.setViewportSize({ width: 1194, height: 834 });
   await chooseOnlyMode(page, "Quiz Run");
 
-  const photo = await page.locator("[data-question-photo]").boundingBox();
-  const card = await page.locator("[data-question-card]").boundingBox();
-  expect(photo).not.toBeNull();
-  expect(card).not.toBeNull();
-  expect(Math.abs(photo!.x + photo!.width - card!.x)).toBeLessThanOrEqual(16);
-  expect(Math.abs(photo!.width - card!.width)).toBeLessThanOrEqual(2);
-  expect(Math.abs(photo!.height - card!.height)).toBeLessThanOrEqual(2);
-  expect(photo!.height).toBe(460);
+  for (const viewport of [
+    { width: 1194, height: 834 },
+    { width: 1024, height: 1366 },
+    { width: 1440, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    const photo = await page.locator("[data-question-photo]").boundingBox();
+    const card = await page.locator("[data-question-card]").boundingBox();
+    expect(photo).not.toBeNull();
+    expect(card).not.toBeNull();
+    expect(Math.abs(photo!.x + photo!.width - card!.x)).toBeLessThanOrEqual(16);
+    expect(Math.abs(photo!.width - card!.width)).toBeLessThanOrEqual(2);
+    expect(Math.abs(photo!.height - card!.height)).toBeLessThanOrEqual(2);
+    expect(photo!.height).toBeGreaterThan(460);
+    expect(viewport.height - photo!.y - photo!.height).toBeLessThanOrEqual(32);
+  }
 });
 
 test("iPad Geo Finder aligns both panels without a nested question scrollbar", async ({ page }) => {
@@ -1610,7 +1618,8 @@ test("iPad Geo Finder aligns both panels without a nested question scrollbar", a
   expect(cardBox).not.toBeNull();
   expect(Math.abs(stageBox!.y - cardBox!.y)).toBeLessThanOrEqual(1);
   expect(Math.abs(stageBox!.height - cardBox!.height)).toBeLessThanOrEqual(1);
-  expect(stageBox!.height).toBe(460);
+  expect(stageBox!.height).toBeGreaterThan(460);
+  expect(768 - stageBox!.y - stageBox!.height).toBeLessThanOrEqual(32);
   expect(await card.evaluate((element) => element.scrollHeight <= element.clientHeight + 1)).toBe(true);
   expect(await card.evaluate((element) => getComputedStyle(element).overflowY)).not.toBe("auto");
 
@@ -1642,7 +1651,8 @@ test("iPad Sort uses a matched single-screen layout without duplicate order UI",
   ]);
   expect(stageBox).not.toBeNull();
   expect(cardBox).not.toBeNull();
-  expect(stageBox!.height).toBe(460);
+  expect(stageBox!.height).toBeGreaterThan(460);
+  expect(768 - stageBox!.y - stageBox!.height).toBeLessThanOrEqual(32);
   expect(Math.abs(stageBox!.height - cardBox!.height)).toBeLessThanOrEqual(1);
   expect(columnCount).toBe(cardCount);
   await expect(page.locator("[data-sort-order-summary]")).toBeVisible();
