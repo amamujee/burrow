@@ -3076,11 +3076,16 @@ function SortMode({
     .map((group) => group.titles.join(" / "))
     .join(" -> ");
   const slottedPicked = slotSortCardIds(round, picked);
+  const desktopGridColumns = round.cards.length <= 2
+    ? "min-[760px]:grid-cols-2"
+    : round.cards.length === 3
+      ? "min-[760px]:grid-cols-3"
+      : "min-[760px]:grid-cols-4";
 
   return (
-    <section className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
-      <article className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
-        <div className="grid h-full min-h-[390px] grid-cols-2 gap-2 md:grid-cols-4 lg:min-h-0">
+    <section data-sort-layout className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2">
+      <article data-sort-stage className="overflow-hidden rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421]">
+        <div data-sort-card-grid className={`grid grid-cols-2 content-start gap-2 ${desktopGridColumns}`}>
           {round.cards.map((card) => {
             const pickedPosition = picked.indexOf(card.id);
             const isPicked = pickedPosition >= 0;
@@ -3090,7 +3095,7 @@ function SortMode({
                 onClick={() => onPick(card.id)}
                 aria-pressed={isPicked}
                 aria-label={`${card.title}${isPicked ? `, selected ${pickedPosition + 1}` : ""}`}
-                className={`relative flex min-h-[185px] flex-col overflow-hidden rounded-lg border-2 text-left shadow-[3px_3px_0_#092421] transition active:translate-y-0.5 ${
+                className={`relative flex min-h-[185px] flex-col overflow-hidden rounded-lg border-2 text-left shadow-[3px_3px_0_#092421] transition active:translate-y-0.5 min-[760px]:min-h-0 ${
                   isPicked ? "border-[#f0c84b] bg-[#f0c84b] opacity-70" : "border-[#092421] bg-white hover:border-[#f0c84b]"
                 }`}
               >
@@ -3099,7 +3104,9 @@ function SortMode({
                     {pickedPosition + 1}
                   </span>
                 )}
-                <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} compact />
+                <div className="flex aspect-[4/3] shrink-0 overflow-hidden">
+                  <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} compact />
+                </div>
                 <div className="m-2 mt-0 rounded-lg border-2 border-[#092421] bg-white/95 p-2 shadow-[2px_2px_0_#092421]">
                   <p className="text-base font-black leading-tight text-[#102f36]">{card.title}</p>
                   <p className="mt-1 text-lg font-black leading-none text-[#9f3f2b]">{card.statDisplay}</p>
@@ -3111,7 +3118,7 @@ function SortMode({
         </div>
       </article>
 
-      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-y-auto">
+      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-hidden min-[760px]:p-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -3120,14 +3127,14 @@ function SortMode({
           <RoundProgressPill><span className="sr-only">{miniRunCorrect} of {miniRunAnswered} solved. </span>Round {miniRunAnswered + 1}</RoundProgressPill>
         </div>
         <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.35rem,3vw,2.45rem)]">{round.prompt}</h2>
-        <p className="mt-1 text-sm font-bold text-[#5f6b5d]">Tap a card to add it. Tap it again to remove it.</p>
+        {!checked && <p className="mt-1 text-sm font-bold text-[#5f6b5d]">Tap a card to add it. Tap it again to remove it.</p>}
 
-        <div aria-label="Your selected order" aria-live="polite" className="mt-3 rounded-lg border-2 border-[#092421] bg-[#fff1bf] p-2 shadow-[2px_2px_0_#092421]">
+        {!checked && <div data-sort-order-summary aria-label="Your selected order" aria-live="polite" className="mt-3 rounded-lg border-2 border-[#092421] bg-[#fff1bf] p-2 shadow-[2px_2px_0_#092421]">
           <div className="flex items-center justify-between gap-2">
             <p className="text-xs font-black uppercase tracking-[0.14em] text-[#102f36]">Your order</p>
             <p className="text-xs font-black text-[#72543e]">{picked.length}/{round.answerIds.length} picked</p>
           </div>
-          <ol className="mt-2 grid grid-cols-2 gap-1.5 md:grid-cols-4">
+          <ol className={`mt-2 grid grid-cols-2 gap-1.5 ${desktopGridColumns}`}>
             {round.answerIds.map((_, index) => {
               const card = sortCardById(round, picked[index]);
               return (
@@ -3142,10 +3149,9 @@ function SortMode({
               );
             })}
           </ol>
-          <p className="mt-2 text-[11px] font-bold text-[#72543e]">Cards also snap into their numbered score spots below.</p>
-        </div>
+        </div>}
 
-        <div className="mt-3 grid gap-2">
+        {checked && <div data-sort-graded-order className="mt-3 grid gap-2">
           {round.answerIds.map((id, index) => {
             const pickedId = slottedPicked[index];
             const card = sortCardById(round, pickedId);
@@ -3162,11 +3168,11 @@ function SortMode({
               <div
                 key={`${round.id}-slot-${id}`}
                 aria-label={`Sort slot ${index + 1}: ${card?.title ?? "empty"}`}
-                className={`grid min-h-14 grid-cols-[44px_1fr] items-center gap-2 rounded-lg border-2 p-2 shadow-[3px_3px_0_#092421] ${
+                className={`grid min-h-12 grid-cols-[40px_1fr] items-center gap-2 rounded-lg border-2 p-1.5 shadow-[3px_3px_0_#092421] ${
                   good ? "border-[#092421] bg-[#70d392]" : bad ? "border-[#092421] bg-[#f59a7d]" : "border-[#092421] bg-[#fff9ec]"
                 }`}
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-[#092421] bg-white text-xl font-black">{index + 1}</div>
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-[#092421] bg-white text-lg font-black">{index + 1}</div>
                 <div>
                   <p className="text-base font-black leading-tight text-[#102f36]">{card ? card.title : "Tap a card"}</p>
                   <p className="text-xs font-bold text-[#5f6b5d]">
@@ -3180,9 +3186,9 @@ function SortMode({
               </div>
             );
           })}
-        </div>
+        </div>}
 
-        <div className="mt-3 grid grid-cols-2 gap-2">
+        {!checked && <div className="mt-3 grid grid-cols-2 gap-2">
           <button onClick={onUndo} disabled={picked.length === 0 || checked} className="rounded-lg border-2 border-[#092421] bg-white px-3 py-3 text-base font-black shadow-[3px_3px_0_#092421] hover:bg-[#fff1bf] disabled:opacity-45">
             Undo last
           </button>
@@ -3193,7 +3199,7 @@ function SortMode({
           >
             Check order
           </button>
-        </div>
+        </div>}
 
         {checked && result && (
           <FeedbackPanel
@@ -3206,6 +3212,7 @@ function SortMode({
             note="Good try."
             isLast={false}
             onNext={onNext}
+            compactOnDesktop
           />
         )}
 
@@ -3524,13 +3531,12 @@ function GeoMode({
   onSkip: () => void;
 }) {
   const answered = selected !== null;
-  const selectedChoice = round.choices.find((choice) => choice.id === selected);
 
   return (
-    <section data-geo-layout className="grid gap-3 min-[760px]:min-h-[460px] min-[760px]:grid-cols-2 min-[760px]:items-stretch">
+    <section data-geo-layout className="grid gap-3 min-[760px]:h-[460px] min-[760px]:grid-cols-2 min-[760px]:items-stretch">
       <GeoLocatorStage round={round} selected={selected} answered={answered} onAnswer={onAnswer} />
 
-      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421]">
+      <article data-question-card className="flex min-h-0 flex-col rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-4 shadow-[3px_3px_0_#092421] min-[760px]:overflow-hidden min-[760px]:p-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex min-w-0 items-center gap-2">
             <DifficultyPill difficulty={difficulty} />
@@ -3539,19 +3545,16 @@ function GeoMode({
           <RoundProgressPill><span className="sr-only">{miniRunCorrect} of {miniRunAnswered} mapped. </span>Round {miniRunAnswered + 1}</RoundProgressPill>
         </div>
 
-        <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.25rem,2.8vw,2.4rem)]">{round.prompt}</h2>
+        <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.2rem,2.5vw,2rem)]">{round.prompt}</h2>
 
-        <div className="mt-3 rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-3 shadow-[3px_3px_0_#092421]">
+        {!answered && <div className="mt-2 rounded-lg border-2 border-[#092421] bg-[#fff9ec] p-2 shadow-[3px_3px_0_#092421]">
           <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#72543e]">Map clue</p>
           <p className="mt-1 text-sm font-black leading-snug text-[#102f36] md:text-base">
-            {answered ? `${round.answerLabel} is the place to remember.` : round.mapHint}
+            {round.mapHint}
           </p>
-          {selectedChoice && selectedChoice.id !== round.answerId && (
-            <p className="mt-1 text-xs font-bold leading-tight text-[#9f3f2b]">Your pin: {selectedChoice.label}</p>
-          )}
-        </div>
+        </div>}
 
-        <div className="mt-3 grid shrink-0 gap-2">
+        {!answered && <div className="mt-2 grid shrink-0 gap-2">
           {round.choices.map((choice, index) => {
             const letter = String.fromCharCode(65 + index);
             const correctChoice = answered && choice.id === round.answerId;
@@ -3559,9 +3562,10 @@ function GeoMode({
             return (
               <button
                 key={`${round.id}-${choice.id}-choice`}
+                data-geo-choice
                 type="button"
                 onClick={() => onAnswer(choice.id)}
-                className={`min-h-11 rounded-lg border-2 px-3 py-4 text-left transition active:translate-y-0.5 min-[760px]:min-h-14 min-[760px]:py-2 ${
+                className={`min-h-11 rounded-lg border-2 px-3 py-4 text-left transition active:translate-y-0.5 min-[760px]:min-h-12 min-[760px]:py-1.5 ${
                   correctChoice
                     ? "border-[#092421] bg-[#70d392] shadow-[3px_3px_0_#092421]"
                     : chosenWrong
@@ -3572,14 +3576,14 @@ function GeoMode({
                 <span className="grid grid-cols-[2rem_1fr] items-center gap-2">
                   <span className="grid h-8 w-8 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-sm font-black text-[#102f36]">{letter}</span>
                   <span className="min-w-0">
-                    <span className="block text-base font-black leading-tight text-[#102f36] md:text-lg">{choice.label}</span>
+                    <span className="block text-base font-black leading-tight text-[#102f36]">{choice.label}</span>
                     <span className="block text-[10px] font-black uppercase tracking-[0.1em] text-[#72543e]">{choice.mapNote}</span>
                   </span>
                 </span>
               </button>
             );
           })}
-        </div>
+        </div>}
 
         {answered && result && (
           <FeedbackPanel
@@ -3593,6 +3597,7 @@ function GeoMode({
             note="Good try."
             isLast={false}
             onNext={onNext}
+            compactOnDesktop
           />
         )}
 
@@ -3614,8 +3619,8 @@ function GeoLocatorStage({
   onAnswer: (choiceId: string) => void;
 }) {
   return (
-    <article data-geo-stage className="grid min-h-[540px] gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0 min-[760px]:grid-rows-[minmax(168px,.42fr)_minmax(292px,.58fr)]">
-      <div className="relative min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec] min-[760px]:min-h-[180px]">
+    <article data-geo-stage className="grid min-h-[540px] gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0 min-[760px]:grid-rows-[minmax(150px,.42fr)_minmax(0,.58fr)]">
+      <div className="relative min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec] min-[760px]:min-h-[150px]">
         <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.card.topic} />
         <div className="absolute left-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
           Find this place
@@ -3659,6 +3664,7 @@ function GeoMap({
       footer={answered ? `Answer: ${round.answerLabel}` : "Tap a lettered pin, then match it to the place list."}
       onSelect={onAnswer}
       disabled={answered}
+      className="min-h-[320px] min-[760px]:min-h-0"
     />
   );
 }
@@ -4637,6 +4643,7 @@ function FeedbackPanel({
   note,
   isLast,
   onNext,
+  compactOnDesktop = false,
 }: {
   isCorrect: boolean;
   xpGain: number;
@@ -4649,6 +4656,7 @@ function FeedbackPanel({
   note: string;
   isLast: boolean;
   onNext: () => void;
+  compactOnDesktop?: boolean;
 }) {
   return (
     <GameAnswerFeedback
@@ -4660,6 +4668,7 @@ function FeedbackPanel({
       nextLabel={isLast ? "Finish round →" : "Next card →"}
       onNext={onNext}
       reward={{ xpGain, leveledUp }}
+      compactOnDesktop={compactOnDesktop}
     />
   );
 }

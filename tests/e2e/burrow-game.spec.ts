@@ -1610,8 +1610,54 @@ test("iPad Geo Finder aligns both panels without a nested question scrollbar", a
   expect(cardBox).not.toBeNull();
   expect(Math.abs(stageBox!.y - cardBox!.y)).toBeLessThanOrEqual(1);
   expect(Math.abs(stageBox!.height - cardBox!.height)).toBeLessThanOrEqual(1);
+  expect(stageBox!.height).toBe(460);
   expect(await card.evaluate((element) => element.scrollHeight <= element.clientHeight + 1)).toBe(true);
   expect(await card.evaluate((element) => getComputedStyle(element).overflowY)).not.toBe("auto");
+
+  await card.locator("[data-geo-choice]").first().click();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  expect(await card.evaluate((element) => element.scrollHeight <= element.clientHeight + 1)).toBe(true);
+  const geoPage = await page.evaluate(() => ({ pageHeight: document.documentElement.scrollHeight, viewportHeight: window.innerHeight, scrollY: window.scrollY }));
+  expect(geoPage.pageHeight).toBeLessThanOrEqual(geoPage.viewportHeight + 1);
+  expect(geoPage.scrollY).toBe(0);
+});
+
+test("iPad Sort uses a matched single-screen layout without duplicate order UI", async ({ page }) => {
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await chooseOnlyBuiltInTopic(page, "Space Universe");
+  await chooseOnlyMode(page, "Sort");
+
+  const layout = page.locator("[data-sort-layout]");
+  const stage = page.locator("[data-sort-stage]");
+  const card = page.locator("[data-question-card]");
+  const cardGrid = page.locator("[data-sort-card-grid]");
+  const cardButtons = cardGrid.getByRole("button");
+  await expect(layout).toBeVisible();
+
+  const [stageBox, cardBox, cardCount, columnCount] = await Promise.all([
+    stage.boundingBox(),
+    card.boundingBox(),
+    cardButtons.count(),
+    cardGrid.evaluate((element) => getComputedStyle(element).gridTemplateColumns.split(" ").filter(Boolean).length),
+  ]);
+  expect(stageBox).not.toBeNull();
+  expect(cardBox).not.toBeNull();
+  expect(stageBox!.height).toBe(460);
+  expect(Math.abs(stageBox!.height - cardBox!.height)).toBeLessThanOrEqual(1);
+  expect(columnCount).toBe(cardCount);
+  await expect(page.locator("[data-sort-order-summary]")).toBeVisible();
+  await expect(page.locator("[data-sort-graded-order]")).toHaveCount(0);
+
+  for (let index = 0; index < cardCount; index += 1) await cardButtons.nth(index).click();
+  await page.getByRole("button", { name: "Check order" }).click();
+
+  await expect(page.locator("[data-sort-order-summary]")).toHaveCount(0);
+  await expect(page.locator("[data-sort-graded-order]")).toBeVisible();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  expect(await card.evaluate((element) => element.scrollHeight <= element.clientHeight + 1)).toBe(true);
+  const sortPage = await page.evaluate(() => ({ pageHeight: document.documentElement.scrollHeight, viewportHeight: window.innerHeight, scrollY: window.scrollY }));
+  expect(sortPage.pageHeight).toBeLessThanOrEqual(sortPage.viewportHeight + 1);
+  expect(sortPage.scrollY).toBe(0);
 });
 
 test("phone HUD is exactly two lines with identity removed and full-size actions", { tag: "@mobile" }, async ({ page, isMobile }) => {
@@ -2222,12 +2268,10 @@ test("sort cards snap into their ranked slots instead of the next empty slot", {
 
   const hottest = [...cards].sort((a, b) => b.score - a.score)[0];
   await cardButtons.nth(hottest.index).click();
-  await expect(page.getByLabel(`Sort slot ${cards.length}: ${hottest.title}`)).toBeVisible();
   await expect(page.getByLabel(`Selected position 1: ${hottest.title}`)).toBeVisible();
   await expect(cardButtons.nth(hottest.index)).toHaveAttribute("aria-pressed", "true");
 
   await cardButtons.nth(hottest.index).click();
-  await expect(page.getByLabel(`Sort slot ${cards.length}: empty`)).toBeVisible();
   await expect(page.getByLabel("Selected position 1: empty")).toBeVisible();
   await expect(cardButtons.nth(hottest.index)).toHaveAttribute("aria-pressed", "false");
 
@@ -2238,6 +2282,7 @@ test("sort cards snap into their ranked slots instead of the next empty slot", {
     await cardButtons.nth(card.index).click();
   }
   await page.getByRole("button", { name: "Check order" }).click();
+  await expect(page.getByLabel(`Sort slot ${cards.length}: ${hottest.title}`)).toBeVisible();
   await expect(page.getByText("Perfect order!")).toBeVisible();
 });
 
