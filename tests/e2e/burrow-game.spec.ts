@@ -156,7 +156,7 @@ test("built-in topic totals match the playable card catalogs", () => {
     countries: { count: countries.length, eyebrow: `${countries.length} flag cards` },
   };
 
-  expect(peppers).toHaveLength(143);
+  expect(peppers).toHaveLength(153);
   for (const [topic, values] of Object.entries(expected)) {
     const pack = topicPacks[topic as keyof typeof topicPacks];
     expect(pack.libraryCount).toBe(values.count);
@@ -740,6 +740,67 @@ test("25 world peppers add credited source photos, honest heat data, geography, 
   for (const id of newPepperIds) expect(hardIds).toContain(id);
 });
 
+test("10 rare baccatum ajis use real credited photos and honest cultivar metadata", () => {
+  const expected = {
+    "aji-angelo": [10000, 10000],
+    "aji-benito": [1000, 30000],
+    "aji-norteno": [30000, 50000],
+    "aji-omnicolor": [30000, 50000],
+    "brazilian-starfish": [5000, 30000],
+    "criolla-sella": [15000, 30000],
+    "aji-delight": [0, 0],
+    "sugar-rush-cream": [1000, 10000],
+    "aji-ayuyo": [20000, 25000],
+    "aji-flor-morado": [10000, 30000],
+  } as const;
+  const newPepperIds = Object.keys(expected);
+  const newPeppers = peppers.filter((pepper) => newPepperIds.includes(pepper.id));
+
+  expect(newPeppers).toHaveLength(10);
+  expect(new Set(newPeppers.map((pepper) => pepper.image)).size).toBe(10);
+  expect(newPeppers.filter((pepper) => pepper.metadata?.location)).toHaveLength(9);
+
+  for (const pepper of newPeppers) {
+    expect([pepper.shuMin, pepper.shuMax]).toEqual(expected[pepper.id as keyof typeof expected]);
+    expect(pepper.species).toBe("Capsicum baccatum (ají)");
+    expect(pepper.image).toBe(`/burrow-assets/peppers/${pepper.id}.jpg`);
+    expect(pepper.imageSourceFile).not.toMatch(/AI-generated/i);
+    expect(pepper.imageCredit).toMatch(/\(used with permission\)$/);
+    expect(pepper.imageFit).toBe("contain");
+    expect(pepper.fact.length).toBeGreaterThanOrEqual(80);
+    expect(pepper.metadata?.accuracyNote).toBeTruthy();
+  }
+
+  expect(newPeppers.find((pepper) => pepper.id === "brazilian-starfish")).toMatchObject({
+    imageSourceFile: "BrazilianStarfish-INV_-_Edler-4-2.jpg",
+    imageSourceUrl: "https://pepperjoe.com/products/brazilian-starfish-pepper-seeds",
+    imageCredit: "Pepper Joe's (used with permission)",
+    metadata: { location: { label: "Brazil", countries: ["Brazil"], continents: ["South America"] } },
+  });
+  expect(newPeppers.find((pepper) => pepper.id === "sugar-rush-cream")).toMatchObject({
+    imageSourceFile: "IMG_3104_1024x1024@2x.JPG",
+    imageSourceUrl: "https://towns-endchiliandspice.com/products/sugar-rush-cream-pepper-seeds",
+    metadata: { location: { label: "Wales, United Kingdom", countries: ["United Kingdom"], continents: ["Europe"] } },
+  });
+  expect(newPeppers.find((pepper) => pepper.id === "aji-ayuyo")).toMatchObject({
+    imageSourceFile: "aji-ayuyo_001_DSH_4785.jpg",
+    imageCredit: "Claudio Dal Zovo / Pepperfriends (used with permission)",
+  });
+
+  const pepperCards = collectionCards().filter((card) => card.topic === "peppers");
+  for (const pepper of newPeppers) {
+    expect(pepperCards.find((card) => card.id === pepper.id)).toMatchObject({
+      image: pepper.image,
+      imageCredit: pepper.imageCredit,
+      metadata: pepper.metadata,
+      details: expect.arrayContaining([{ label: "Species", value: "Capsicum baccatum (ají)" }]),
+    });
+  }
+
+  const hardIds = new Set(poolForDifficulty(peppers, 3).map((pepper) => pepper.id));
+  for (const id of newPepperIds) expect(hardIds).toContain(id);
+});
+
 test("Super Chilli, Moruga Red, and three chocolate varieties join normal pepper play", () => {
   const expected = {
     "super-chilli": {
@@ -1069,7 +1130,7 @@ test("pepper collection cards use their displayed Scoville score from least to h
     return pepper?.shuMin !== null && pepper?.shuMax === null;
   });
 
-  expect(ordered[0].title).toBe("Bell Pepper");
+  expect(ordered.slice(0, 2).map((card) => card.title)).toEqual(["Aji Delight", "Bell Pepper"]);
   expect(ordered.map((card) => card.id)).toEqual(expectedOrder.map((card) => card.id));
   expect(ordered.findIndex((card) => card.id === "orange-seven-pot")).toBeLessThan(ordered.findIndex((card) => card.id === "armageddon"));
   expect(lowerBoundOnly.every((card) => !Number.isFinite(card.statValue))).toBe(true);
@@ -2361,7 +2422,7 @@ test("collection only shows selected topics", async ({ page }) => {
     expect.objectContaining({ alt: "Chocolate Bhutlah", src: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
   ]);
 
-  await expect(collection.getByRole("button", { name: "Show all 143 cards" })).toBeVisible();
+  await expect(collection.getByRole("button", { name: "Show all 153 cards" })).toBeVisible();
   expect(await collection.getByText("Locked card", { exact: true }).count()).toBeLessThan(20);
   await expect(collection.getByText("WikiPepper", { exact: true })).not.toBeVisible();
 

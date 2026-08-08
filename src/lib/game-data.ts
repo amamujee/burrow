@@ -21,6 +21,7 @@ export type ImageFields = {
 export type Pepper = {
   id: string;
   name: string;
+  species?: string;
   isCondiment?: boolean;
   heat: HeatBand;
   shuMin: number | null;
@@ -1676,6 +1677,145 @@ const pepperSeeds: PepperSeed[] = [
     imageFit: "contain",
     fact: "Cheiro Roxa is a Brazilian chinense pepper with dark foliage and jewel-like purple pods that soften to peach, pink, and lilac as they ripen.",
   },
+  {
+    id: "aji-angelo",
+    name: "Aji Angelo",
+    species: "Capsicum baccatum (ají)",
+    shuMin: 10000,
+    shuMax: 10000,
+    scovilleStatus: "unofficial",
+    color: "bright red",
+    ...permittedPepperImage("aji-angelo", "aji_angelo.jpg", "https://fataliiseeds.net/product/aji-angelo/", "Fatalii Seeds"),
+    fact: "Aji Angelo is a fruity Capsicum baccatum with smooth, pendant red pods and enough warmth to sit near the milder end of the ají family.",
+    metadata: {
+      accuracyNote: "Cultivar guides commonly place Aji Angelo around 10,000 SHU, but Burrow did not find a cultivar-specific laboratory Scoville result, so the value is marked unofficial.",
+    },
+  },
+  {
+    id: "aji-benito",
+    name: "Aji Benito",
+    species: "Capsicum baccatum (ají)",
+    shuMin: 1000,
+    shuMax: 30000,
+    scovilleStatus: "unofficial",
+    color: "green through orange to red",
+    ...permittedPepperImage("aji-benito", "aji_benito8501059.jpg", "https://fataliiseeds.net/product/aji-benito/", "Fatalii Seeds"),
+    fact: "Aji Benito is a compact Bolivian baccatum that produces many crisp, conical pods with the sweet, fruity flavor typical of ají peppers.",
+    metadata: {
+      accuracyNote: "Current grower references disagree sharply, publishing estimates from 1,000-5,000 SHU to 15,000-30,000 SHU; Burrow preserves the full 1,000-30,000 span and marks it unofficial.",
+    },
+  },
+  {
+    id: "aji-norteno",
+    name: "Aji Norteño",
+    species: "Capsicum baccatum (ají)",
+    shuMin: 30000,
+    shuMax: 50000,
+    scovilleStatus: "unofficial",
+    color: "deep red",
+    ...permittedPepperImage("aji-norteno", "8502414.jpg", "https://fataliiseeds.net/product/aji-norteno/", "Fatalii Seeds"),
+    fact: "Aji Norteño comes from Peru's northern coastal valleys, where its thick, fruity pods are often served fresh alongside seafood.",
+    metadata: {
+      accuracyNote: "Specialty grower directories commonly estimate Aji Norteño at 30,000-50,000 SHU, but Burrow did not find a cited laboratory result for the cultivar.",
+    },
+  },
+  {
+    id: "aji-omnicolor",
+    name: "Aji Omnicolor",
+    species: "Capsicum baccatum (ají)",
+    shuMin: 30000,
+    shuMax: 50000,
+    scovilleStatus: "unofficial",
+    color: "cream, purple, orange, and red",
+    ...permittedPepperImage("aji-omnicolor", "omnipods-800x800.jpg", "https://fataliiseeds.net/product/omnicolor/", "Fatalii Seeds"),
+    fact: "Aji Omnicolor is an edible Peruvian baccatum whose pods pass through cream, purple, orange, and red, so one plant can display several colors at once.",
+    metadata: {
+      accuracyNote: "Most cultivar guides publish 30,000-50,000 SHU, while a few directories differ substantially; Burrow uses the prevailing range and marks it unofficial.",
+    },
+  },
+  {
+    id: "brazilian-starfish",
+    name: "Brazilian Starfish",
+    species: "Capsicum baccatum (ají)",
+    shuMin: 5000,
+    shuMax: 30000,
+    scovilleStatus: "unofficial",
+    color: "bright red",
+    ...permittedPepperImage("brazilian-starfish", "BrazilianStarfish-INV_-_Edler-4-2.jpg", "https://pepperjoe.com/products/brazilian-starfish-pepper-seeds", "Pepper Joe's"),
+    fact: "Brazilian Starfish grows on tall, vine-like plants and makes flat, winged red pods whose lobes spread outward like tiny sea stars.",
+    metadata: {
+      accuracyNote: "Horticultural sources place Brazilian Starfish between 5,000 and 30,000 SHU without a cultivar-specific laboratory citation, so Burrow marks the range unofficial.",
+    },
+  },
+  {
+    id: "criolla-sella",
+    name: "Criolla Sella",
+    species: "Capsicum baccatum (ají)",
+    shuMin: 15000,
+    shuMax: 30000,
+    scovilleStatus: "unofficial",
+    color: "golden orange",
+    ...permittedPepperImage("criolla-sella", "criolla_sella34676.jpg", "https://fataliiseeds.net/product/criolla-sella/", "Fatalii Seeds"),
+    fact: "Criolla Sella is a productive Bolivian ají with slender golden-orange pods, citrusy flavor, and an ability to fruit in comparatively cool summers.",
+    metadata: {
+      accuracyNote: "Cultivar references range from about 15,000 SHU to a 30,000-SHU estimate; Burrow shows that guide span and marks it unofficial.",
+    },
+  },
+  {
+    id: "aji-delight",
+    name: "Aji Delight",
+    species: "Capsicum baccatum (ají)",
+    shuMin: 0,
+    shuMax: 0,
+    color: "green to red",
+    ...permittedPepperImage("aji-delight", "aji_delight992255.jpg", "https://fataliiseeds.net/product/aji-delight/", "Fatalii Seeds"),
+    fact: "Aji Delight keeps the sweet, fruity aroma of Capsicum baccatum but was selected without measurable pungency, making it a heatless ají.",
+    metadata: {
+      accuracyNote: "The Royal Horticultural Society describes Aji Delight as a no-heat Peruvian chile, and research on non-pungent baccatum accessions reports no measurable pungency.",
+    },
+  },
+  {
+    id: "sugar-rush-cream",
+    name: "Sugar Rush Cream",
+    species: "Capsicum baccatum (ají)",
+    shuMin: 1000,
+    shuMax: 10000,
+    scovilleStatus: "unofficial",
+    color: "ivory to cream",
+    ...permittedPepperImage("sugar-rush-cream", "IMG_3104_1024x1024@2x.JPG", "https://towns-endchiliandspice.com/products/sugar-rush-cream-pepper-seeds", "Towns-End Chili & Spice"),
+    fact: "Sugar Rush Cream was selected in Wales by breeder Chris Fowler and produces juicy ivory baccatum pods with intense sweetness and gentle heat.",
+    metadata: {
+      accuracyNote: "Grower estimates range from roughly 1,000 SHU to 15,000 SHU; Burrow uses a conservative 1,000-10,000 gameplay range and marks it unofficial.",
+    },
+  },
+  {
+    id: "aji-ayuyo",
+    name: "Aji Ayuyo",
+    species: "Capsicum baccatum (ají)",
+    shuMin: 20000,
+    shuMax: 25000,
+    scovilleStatus: "unofficial",
+    color: "cream and purple to red",
+    ...permittedPepperImage("aji-ayuyo", "aji-ayuyo_001_DSH_4785.jpg", "https://www.pepperfriends.org/dbpf/aji-ayuyo_001.asp", "Claudio Dal Zovo / Pepperfriends"),
+    fact: "Aji Ayuyo is a Peruvian heirloom whose small upright pods change from cream and purple to sparkling red on sprawling, vine-like branches.",
+    metadata: {
+      accuracyNote: "Pepperfriends lists 20,000 SHU, while a recent capsaicinoid study measured 24,877 SHU in its growing conditions; Burrow rounds that evidence to a 20,000-25,000 range.",
+    },
+  },
+  {
+    id: "aji-flor-morado",
+    name: "Aji Flor Morado",
+    species: "Capsicum baccatum (ají)",
+    shuMin: 10000,
+    shuMax: 30000,
+    scovilleStatus: "unofficial",
+    color: "orange to red",
+    ...permittedPepperImage("aji-flor-morado", "aji_flor_morado997722.jpg", "https://fataliiseeds.net/product/aji-flor-morado/", "Fatalii Seeds"),
+    fact: "Aji Flor Morado is a rare Brazilian baccatum named for unusually purple-edged flowers that grow into sweet, aromatic orange-red pods.",
+    metadata: {
+      accuracyNote: "The 10,000-30,000-SHU range comes from specialist grower descriptions rather than a published cultivar-specific laboratory test, so Burrow marks it unofficial.",
+    },
+  },
 ];
 
 const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
@@ -1782,6 +1922,15 @@ const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
   "aji-panca": { label: "Coastal Peru", countries: ["Peru"], continents: ["South America"] },
   "alma-paprika": { label: "Hungary", countries: ["Hungary"], continents: ["Europe"] },
   "cheiro-roxa": { label: "Brazil", countries: ["Brazil"], continents: ["South America"] },
+  "aji-benito": { label: "Bolivia", countries: ["Bolivia"], continents: ["South America"] },
+  "aji-norteno": { label: "Northern coastal Peru", countries: ["Peru"], continents: ["South America"] },
+  "aji-omnicolor": { label: "Peru", countries: ["Peru"], continents: ["South America"] },
+  "brazilian-starfish": { label: "Brazil", countries: ["Brazil"], continents: ["South America"] },
+  "criolla-sella": { label: "Bolivia", countries: ["Bolivia"], continents: ["South America"] },
+  "aji-delight": { label: "Peru", countries: ["Peru"], continents: ["South America"] },
+  "sugar-rush-cream": { label: "Wales, United Kingdom", countries: ["United Kingdom"], continents: ["Europe"] },
+  "aji-ayuyo": { label: "Peru", countries: ["Peru"], continents: ["South America"] },
+  "aji-flor-morado": { label: "Brazil", countries: ["Brazil"], continents: ["South America"] },
 };
 
 const pepperMetadataFor = (id: string): CardMetadata | undefined => {
@@ -3882,6 +4031,9 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
       { label: "Chili Peps cultivar list", url: "https://chilipeps.fandom.com/wiki/List_of_Capsicum_cultivars" },
       { label: "Spices Inc chile guide", url: "https://spicesinc.com/blogs/how-well-do-you-know-your-chiles" },
       { label: "Chili Pepper Madness cultivar directory", url: "https://www.chilipeppermadness.com/chili-pepper-types/" },
+      { label: "Fatalii Seeds baccatum cultivar directory", url: "https://fataliiseeds.net/product-category/seeds/chili-seeds/capsicum/baccatum/" },
+      { label: "Pepperfriends cultivar database", url: "https://www.pepperfriends.org/dbpf/" },
+      { label: "Capsicum baccatum diversity research", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3496591/" },
     ],
     samples: ["Pepper Y", "The Noah", "Armageddon", "Pepper X"],
   },

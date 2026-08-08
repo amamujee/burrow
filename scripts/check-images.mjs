@@ -21,6 +21,18 @@ const generatedAssets = [...source.matchAll(/generatedContentImage\("([^"]+)", "
   sourceFile: "AI-generated local asset",
   target: path.join("public", "burrow-assets", match[1], `${match[2]}.${match[3] ?? "png"}`),
 }));
+const tylerFarmsPepperAssets = [...source.matchAll(/tylerFarmsPepperImage\("([^"]+)", "([^"]+)",/g)].map((match) => ({
+  topic: "peppers",
+  id: match[1],
+  sourceFile: match[2],
+  target: path.join("public", "burrow-assets", "peppers", `${match[1]}.jpg`),
+}));
+const permittedPepperAssets = [...source.matchAll(/permittedPepperImage\("([^"]+)", "([^"]+)",/g)].map((match) => ({
+  topic: "peppers",
+  id: match[1],
+  sourceFile: match[2],
+  target: path.join("public", "burrow-assets", "peppers", `${match[1]}.jpg`),
+}));
 const countryAssets = [...countriesSource.matchAll(/id: "([^"]+)"[^\n]+image: "\/burrow-assets\/countries\/([^"]+\.svg)"/g)].map((match) => ({
   topic: "countries",
   id: match[1],
@@ -50,7 +62,14 @@ const packAssets = () => {
     });
 };
 
-const assets = [...coreAssets, ...generatedAssets, ...countryAssets, ...packAssets()];
+const assets = [
+  ...coreAssets,
+  ...generatedAssets,
+  ...tylerFarmsPepperAssets,
+  ...permittedPepperAssets,
+  ...countryAssets,
+  ...packAssets(),
+];
 
 const isImageFile = (target) => {
   const buffer = fs.readFileSync(target);

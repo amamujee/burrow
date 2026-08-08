@@ -361,6 +361,7 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
     { label: "Heat level", value: heatProfiles[pepper.heat].label },
     { label: "Scoville range", value: hasScovilleMeasurement(pepper) ? `${pepperRange(pepper)} SHU` : pepperScovilleDisplay(pepper) },
     { label: "Color", value: pepper.color },
+    ...(pepper.species ? [{ label: "Species", value: pepper.species }] : []),
     { label: "Type", value: pepper.isCondiment ? "Pepper condiment" : "Chile pepper" },
     ...(pepper.metadata?.location ? [
       { label: "Origin", value: pepper.metadata.location.label },
@@ -806,6 +807,16 @@ const pepperSizeInches: Record<string, number> = {
   "aji-panca": 5,
   "alma-paprika": 2.5,
   "cheiro-roxa": 1.2,
+  "aji-angelo": 3,
+  "aji-benito": 2,
+  "aji-norteno": 3.5,
+  "aji-omnicolor": 2.5,
+  "brazilian-starfish": 2,
+  "criolla-sella": 2.5,
+  "aji-delight": 3,
+  "sugar-rush-cream": 3,
+  "aji-ayuyo": 1,
+  "aji-flor-morado": 2.5,
 };
 
 const pepperPlantHeightInches: Record<string, number> = {
@@ -951,6 +962,16 @@ const pepperPlantHeightInches: Record<string, number> = {
   "aji-panca": 48,
   "alma-paprika": 30,
   "cheiro-roxa": 28,
+  "aji-angelo": 48,
+  "aji-benito": 42,
+  "aji-norteno": 48,
+  "aji-omnicolor": 24,
+  "brazilian-starfish": 60,
+  "criolla-sella": 36,
+  "aji-delight": 36,
+  "sugar-rush-cream": 48,
+  "aji-ayuyo": 36,
+  "aji-flor-morado": 48,
 };
 
 const pepperPlantHeight = (pepper: Pepper) => {
