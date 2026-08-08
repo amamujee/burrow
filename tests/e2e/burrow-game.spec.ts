@@ -1818,7 +1818,7 @@ test("fresh and existing profiles automatically select newly added topics", asyn
   })).toContain("countries");
 });
 
-test("a mystery flag gives one clue retry and unlocks a country passport", async ({ page }) => {
+test("a mystery flag gives one clue retry and unlocks a country passport", { tag: "@mobile" }, async ({ page }) => {
   await chooseOnlyMode(page, "Quiz Run");
   await chooseOnlyBuiltInTopic(page, "Countries & Flags");
 
@@ -1858,6 +1858,10 @@ test("a mystery flag gives one clue retry and unlocks a country passport", async
   await expect(passport.getByText("Land area", { exact: true })).toBeVisible();
   await expect(passport.getByText("Continent", { exact: true })).toBeVisible();
   await expect(page.getByText(/^Image:/).first()).toBeVisible();
+
+  await page.getByRole("button", { name: "Back to game" }).click();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  await expect(page.getByRole("button", { name: /Next card|Finish round/ })).toBeVisible();
 });
 
 test("Next builds a different round without passing the click event as learning history", { tag: "@mobile" }, async ({ page }) => {
@@ -2053,6 +2057,15 @@ test("Challenge Mode shares the iPad round layout and never scrolls its story pa
 
     await expect(page.getByLabel("Answer feedback")).toBeVisible();
     await expectSharedDesktopLayout();
+
+    const nextAction = page.getByRole("button", { name: stepIndex === campaign.steps.length - 1 ? "View challenge summary" : "Next question" });
+    const nextBox = await nextAction.boundingBox();
+    const viewport = page.viewportSize();
+    expect(nextBox).not.toBeNull();
+    expect(viewport).not.toBeNull();
+    expect(await page.locator("[data-sticky-next]").evaluate((element) => getComputedStyle(element).position)).toBe("fixed");
+    expect(nextBox!.y).toBeGreaterThanOrEqual(0);
+    expect(nextBox!.y + nextBox!.height).toBeLessThanOrEqual(viewport!.height);
 
     if (stepIndex === 0) {
       await page.setViewportSize({ width: 1024, height: 768 });

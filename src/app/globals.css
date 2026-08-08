@@ -79,3 +79,11 @@ button:focus-visible {
 .field-guide-media {
   filter: saturate(1.08) contrast(1.03);
 }
+
+@media (min-width: 760px) {
+  .burrow-next-dock {
+    bottom: calc(env(safe-area-inset-bottom) + 1.75rem);
+    left: calc(50% + 0.375rem);
+    right: max(1.125rem, calc((100vw - 1280px) / 2 + 1.125rem));
+  }
+}

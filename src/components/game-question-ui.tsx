@@ -110,7 +110,7 @@ export function GameAnswerFeedback({
     <div
       ref={panelRef}
       aria-label="Answer feedback"
-      className={`mt-auto pb-20 pt-3 min-[760px]:pb-0 ${compactOnDesktop ? "min-[760px]:pt-2" : ""}`}
+      className={`mt-auto pb-20 pt-3 ${compactOnDesktop ? "min-[760px]:pt-2" : ""}`}
     >
       <div className={`rounded-xl border-2 p-3 shadow-[3px_3px_0_#092421] ${compactOnDesktop ? "min-[760px]:p-2" : ""} ${isCorrect ? "border-[#2f8158] bg-[#e9ffe9]" : "border-[#9f3f2b] bg-[#fff0ea]"}`}>
         <div className="flex flex-wrap items-center gap-2">
@@ -130,7 +130,7 @@ export function GameAnswerFeedback({
       </div>
       <div
         data-sticky-next
-        className={`fixed bottom-[calc(env(safe-area-inset-bottom)+8px)] left-6 right-6 z-30 bg-[#fffdf6]/95 px-1 pt-3 backdrop-blur min-[760px]:static min-[760px]:bg-transparent min-[760px]:px-0 min-[760px]:backdrop-blur-none ${compactOnDesktop ? "min-[760px]:pt-2" : ""}`}
+        className={`burrow-next-dock fixed bottom-[calc(env(safe-area-inset-bottom)+8px)] left-6 right-6 z-30 bg-[#fffdf6]/95 px-1 pt-3 backdrop-blur ${compactOnDesktop ? "min-[760px]:pt-2" : ""}`}
       >
         <button type="button" onClick={() => onNext()} className={`min-h-12 w-full rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2.5 text-base font-black text-white shadow-[3px_3px_0_#092421] hover:bg-[#23564f] ${compactOnDesktop ? "min-[760px]:min-h-11 min-[760px]:py-2 min-[760px]:text-sm" : ""}`}>
           {nextLabel}

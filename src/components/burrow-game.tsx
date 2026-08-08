@@ -1391,8 +1391,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
 
   const openCollection = () => {
     setShowCollection((value) => !value);
-    setLastResult(null);
-    setCelebration(showCollection ? "Back to the game." : "Collection opened.");
   };
 
   const switchProfile = (profileId: string) => {
