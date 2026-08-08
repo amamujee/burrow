@@ -1891,7 +1891,7 @@ export const geoChoiceForLocation = (location: WorldLocation): GeoChoice => {
     label: location.label,
     location,
     point,
-    mapNote: `${location.continents.join(" / ")} · ${hemisphereLabel(point)}`,
+    mapNote: location.continents.join(" / "),
   };
 };
 

@@ -1097,6 +1097,9 @@ test("country play works across every card-game mode", () => {
   const geo = buildGeoRound("countries", 3, 907);
   expect(geo.topic).toBe("countries");
   expect(geo.choices.some((choice) => choice.id === geo.answerId)).toBe(true);
+  expect(geo.choices.map((choice) => choice.mapNote)).toEqual(
+    geo.choices.map((choice) => choice.location.continents.join(" / ")),
+  );
   expect(Number.isFinite(geo.point.x) && Number.isFinite(geo.point.y)).toBe(true);
 
   const sort = buildSortRound("countries", 3, 911);
@@ -2222,13 +2225,18 @@ test("collection only shows selected topics", async ({ page }) => {
   expect(await collection.getByText("Locked card", { exact: true }).count()).toBeLessThan(20);
   await expect(collection.getByText("WikiPepper", { exact: true })).not.toBeVisible();
 
-  const pepperGuide = collection.getByText("Open pepper field guide", { exact: true }).first();
-  await pepperGuide.click();
-  const pepperCard = pepperGuide.locator("xpath=ancestor::div[contains(@class, 'overflow-hidden')][1]");
+  const pepperGuides = collection.getByText("Open pepper field guide", { exact: true });
+  expect(await pepperGuides.count()).toBeGreaterThan(1);
+  await pepperGuides.first().click();
+  expect(await pepperGuides.evaluateAll((guides) => guides.every((guide) => guide.closest("details")?.open))).toBe(true);
+  const pepperCard = pepperGuides.first().locator("xpath=ancestor::div[contains(@class, 'overflow-hidden')][1]");
   await expect(pepperCard.getByText("Heat level", { exact: true })).toBeVisible();
   await expect(pepperCard.getByText("Scoville range", { exact: true })).toBeVisible();
   await expect(pepperCard.getByText("Color", { exact: true })).toBeVisible();
   await expect(pepperCard.getByText("Type", { exact: true })).toBeVisible();
+
+  await pepperGuides.nth(1).click();
+  expect(await pepperGuides.evaluateAll((guides) => guides.every((guide) => !guide.closest("details")?.open))).toBe(true);
 });
 
 test("collection category picker shows one category album at a time", { tag: "@mobile" }, async ({ page }) => {

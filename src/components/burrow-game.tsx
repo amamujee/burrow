@@ -4131,6 +4131,7 @@ function CollectionBook({
   const initialTopic = topic !== "mixed" && topicStats.some((item) => item.id === topic) ? topic : topicStats[0]?.id;
   const [selectedTopic, setSelectedTopic] = useState<RoundTopic | undefined>(initialTopic);
   const [expandedTopic, setExpandedTopic] = useState<RoundTopic | undefined>();
+  const [cardDetailsExpanded, setCardDetailsExpanded] = useState(false);
   const activeTopic = topicStats.find((item) => item.id === selectedTopic) ?? topicStats[0];
   const categoryCards = activeTopic ? cards.filter((card) => card.topic === activeTopic.id) : [];
   const orderedCards = orderCollectionCardsForCategory(categoryCards);
@@ -4260,8 +4261,17 @@ function CollectionBook({
                   <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#5f6b5d]">{isUnlocked ? card.fact : "Answer correctly to add it here."}</p>
                   {isUnlocked && <p className="mt-2 text-[9px] font-semibold leading-tight text-[#6b7468]">Image: {card.imageCredit}</p>}
                   {isUnlocked && card.details?.length ? (
-                    <details className="group mt-2 rounded-md border-2 border-[#d9c7a7] bg-[#fff9ec] open:border-[#092421] open:shadow-[2px_2px_0_#092421]">
-                      <summary className="cursor-pointer list-none px-2 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#102f36] marker:hidden">
+                    <details
+                      open={cardDetailsExpanded}
+                      className="group mt-2 rounded-md border-2 border-[#d9c7a7] bg-[#fff9ec] open:border-[#092421] open:shadow-[2px_2px_0_#092421]"
+                    >
+                      <summary
+                        onClick={(event) => {
+                          event.preventDefault();
+                          setCardDetailsExpanded((expanded) => !expanded);
+                        }}
+                        className="cursor-pointer list-none px-2 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#102f36] marker:hidden"
+                      >
                         <span className="flex items-center justify-between gap-2">
                           <span>{collectionCardDetailLabel(card.topic)}</span>
                           <span aria-hidden="true" className="text-base leading-none group-open:rotate-45">+</span>
