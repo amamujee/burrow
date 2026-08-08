@@ -163,12 +163,12 @@ const generatedContentImage = (topic: KnowledgeTopic, id: string, extension = "p
 export const heatBands: HeatBand[] = ["not spicy", "mild", "warm", "hot", "very hot", "insane"];
 
 export const heatProfiles: Record<HeatBand, { label: string; icons: number; emoji: string; kidLine: string }> = {
-  "not spicy": { label: "not spicy", icons: 0, emoji: "no spice", kidLine: "No burn. Easy mode." },
-  mild: { label: "mild", icons: 1, emoji: "🌶️", kidLine: "A tiny spicy spark." },
-  warm: { label: "warm", icons: 2, emoji: "🌶️🌶️", kidLine: "A friendly spicy kick." },
-  hot: { label: "hot", icons: 3, emoji: "🌶️🌶️🌶️", kidLine: "A real spicy kick." },
-  "very hot": { label: "very hot", icons: 4, emoji: "🌶️🌶️🌶️🌶️", kidLine: "Tiny bites only." },
-  insane: { label: "insane", icons: 5, emoji: "🌶️🌶️🌶️🌶️🌶️🔥", kidLine: "Super-hot legend zone." },
+  "not spicy": { label: "not spicy", icons: 0, emoji: "no spice", kidLine: "This pepper produces no capsaicin burn." },
+  mild: { label: "mild", icons: 1, emoji: "🌶️", kidLine: "It gives only a faint spark of heat." },
+  warm: { label: "warm", icons: 2, emoji: "🌶️🌶️", kidLine: "It has a noticeable but approachable kick." },
+  hot: { label: "hot", icons: 3, emoji: "🌶️🌶️🌶️", kidLine: "It delivers a strong, unmistakable kick." },
+  "very hot": { label: "very hot", icons: 4, emoji: "🌶️🌶️🌶️🌶️", kidLine: "Its intense heat calls for tiny bites and great care." },
+  insane: { label: "insane", icons: 5, emoji: "🌶️🌶️🌶️🌶️🌶️🔥", kidLine: "It belongs to the legendary super-hot range." },
 };
 
 export const heatBandForScoville = (shu: number): HeatBand => {
@@ -1689,9 +1689,9 @@ const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
   "thai-chili": { label: "Thailand", countries: ["Thailand"], continents: ["Asia"] },
   "scotch-bonnet": { label: "Jamaica and Trinidad and Tobago", countries: ["Jamaica", "Trinidad and Tobago"], continents: ["North America"] },
   habanero: { label: "Yucatan, Mexico and the Caribbean", countries: ["Mexico", "Cuba"], continents: ["North America"] },
-  "ghost-pepper": { label: "Northeast India, India", countries: ["India"], continents: ["Asia"] },
-  "naga-jolokia": { label: "Northeast India, India", countries: ["India"], continents: ["Asia"] },
-  "yellow-bhut-assam": { label: "Northeast India, India", countries: ["India"], continents: ["Asia"] },
+  "ghost-pepper": { label: "Northeast India", countries: ["India"], continents: ["Asia"] },
+  "naga-jolokia": { label: "Northeast India", countries: ["India"], continents: ["Asia"] },
+  "yellow-bhut-assam": { label: "Northeast India", countries: ["India"], continents: ["Asia"] },
   "seven-pot-primo": { label: "Louisiana, United States", countries: ["United States"], continents: ["North America"] },
   "moruga-red": { label: "Trinidad and Tobago", countries: ["Trinidad and Tobago"], continents: ["North America"] },
   "chocolate-moruga-scorpion": { label: "Moruga, Trinidad and Tobago", countries: ["Trinidad and Tobago"], continents: ["North America"] },
@@ -3617,7 +3617,7 @@ export const spaceCards: SpaceCard[] = [
     distanceLightYears: 3900,
     ...contentImage("space", "vy-canis-majoris", "Sun and VY Canis Majoris.svg"),
     imageCredit: "Wikimedia Commons scale illustration",
-    statNote: "Estimated radius; huge stars are difficult to measure exactly.",
+    statNote: "The radius is estimated because huge stars are difficult to measure exactly.",
     fact: "VY Canis Majoris is a red hypergiant. It is far larger than the Sun, but its exact size is hard to measure.",
   },
   {
@@ -3630,7 +3630,7 @@ export const spaceCards: SpaceCard[] = [
     distanceLightYears: 19000,
     ...contentImage("space", "stephenson-2-18", "Artist’s impression of the red supergiant star Antares.jpg"),
     imageCredit: "ESO/M. Kornmesser, Wikimedia Commons",
-    statNote: "Estimated radius; scientists revise giant-star measurements.",
+    statNote: "The radius is estimated, and scientists continue to revise measurements of giant stars.",
     fact: "Stephenson 2-18 is a red supergiant and one of the largest star candidates by estimated radius.",
   },
   {
@@ -3767,7 +3767,7 @@ export const spaceCards: SpaceCard[] = [
     ...contentImage("space", "oort-cloud", "Oort cloud Sedna orbit.svg"),
     imageCredit: "NASA/Wikimedia Commons",
     imageFit: "contain",
-    statNote: "Distance is a broad inner-edge estimate; the Oort Cloud is enormous.",
+    statNote: "The distance is a broad estimate of the inner edge because the Oort Cloud is enormous.",
     fact: "The Oort Cloud is a faraway shell of icy objects that may send comets inward.",
   },
   {

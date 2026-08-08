@@ -248,6 +248,51 @@ const feet = (value: number) => `${formatNumber(value)} ft`;
 const numberWithUnit = (value: number, unit: string) => `${formatNumber(value)} ${unit}`;
 const pounds = (value: number) => `${formatNumber(value)} lb`;
 const inches = (value: number) => `${value.toFixed(value >= 10 ? 0 : 1)} in`;
+const naturalList = (items: readonly string[]) => {
+  if (items.length < 2) return items[0] ?? "";
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(", ")}, and ${items.at(-1)}`;
+};
+
+export const worldContinentLabel = (continents: readonly WorldContinent[]) => naturalList(continents);
+const countryNamesWithLeadingArticle = new Set([
+  "Bahamas",
+  "Central African Republic",
+  "Comoros",
+  "Cook Islands",
+  "Czech Republic",
+  "Democratic Republic of the Congo",
+  "Dominican Republic",
+  "Federated States of Micronesia",
+  "Gambia",
+  "Maldives",
+  "Marshall Islands",
+  "Netherlands",
+  "Philippines",
+  "Republic of the Congo",
+  "Seychelles",
+  "Solomon Islands",
+  "United Arab Emirates",
+  "United Kingdom",
+  "United States",
+]);
+export const countryNameInProse = (country: Pick<Country, "name"> | string) => {
+  const name = typeof country === "string" ? country : country.name;
+  return countryNamesWithLeadingArticle.has(name) ? `the ${name}` : name;
+};
+export const worldLocationLabelInProse = (label: string) => {
+  if (label === "Caribbean" || label.startsWith("Andes,")) return `the ${label}`;
+  if (label.includes("/")) return naturalList(label.split("/").map((name) => countryNameInProse(name)));
+  return countryNameInProse(label);
+};
+export const sentenceStart = (value: string) => value.replace(/^./, (letter) => letter.toUpperCase());
+export const countryCapitalLabel = (country: Pick<Country, "capital">) =>
+  naturalList(country.capital.split(/\s*\/\s*/).filter(Boolean));
+export const countryFactSentence = (country: Pick<Country, "name" | "capital" | "areaKm2" | "continents">) => {
+  const capital = countryCapitalLabel(country);
+  const capitalClause = capital === "No official capital" ? "It has no official capital" : `Its capital is ${capital}`;
+  return `${sentenceStart(countryNameInProse(country))} is in ${worldContinentLabel(country.continents)}. ${capitalClause}, and it covers ${formatNumber(country.areaKm2)} square kilometers of land.`;
+};
 
 const roundTo = (value: number, step: number) => Math.round(value / step) * step;
 const roundedSubtractionPair = (bigger: number, smaller: number, step: number) => {
@@ -260,6 +305,8 @@ const roundedStatCard = (card: KnowledgeCard, value: number, unit: string): Know
   statValue: value,
   statDisplay: `${formatNumber(value)} ${unit}`,
 });
+const sortOrderExplanation = (cards: readonly KnowledgeCard[]) =>
+  `The correct order is ${cards.map((card) => `${card.title} (${card.statDisplay})`).join("; ")}.`;
 
 const allTopics: KnowledgeTopic[] = [...topicIds];
 const preferredPool = <T extends { id: string }>(items: readonly T[], difficulty: Difficulty) => poolForDifficulty(items, difficulty);
@@ -317,7 +364,7 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
     { label: "Type", value: pepper.isCondiment ? "Pepper condiment" : "Chile pepper" },
     ...(pepper.metadata?.location ? [
       { label: "Origin", value: pepper.metadata.location.label },
-      { label: "Continent", value: pepper.metadata.location.continents.join(" / ") },
+      { label: "Continent", value: worldContinentLabel(pepper.metadata.location.continents) },
     ] : []),
   ],
 });
@@ -349,7 +396,7 @@ const buildingCard = (building: Building): KnowledgeCard => ({
     { label: "Status", value: building.status.replace(/^./, (letter) => letter.toUpperCase()) },
     { label: "City", value: building.city },
     { label: "Country", value: building.country },
-    { label: "Continent", value: building.metadata.location?.continents.join(" / ") ?? "Not listed" },
+    { label: "Continent", value: building.metadata.location ? worldContinentLabel(building.metadata.location.continents) : "Not listed" },
   ],
 });
 
@@ -391,6 +438,13 @@ const spaceMetricDisplay = (space: SpaceCard, metric: "distance" | "temperature"
   if (metric === "distance") return space.kind === "star" ? `${formatNumber(value)} ly` : `${formatNumber(value)}M mi`;
   if (metric === "temperature") return space.kind === "star" ? `${formatNumber(value)} K` : `${formatNumber(value)}°F`;
   if (metric === "size") return space.kind === "star" ? `${formatNumber(value)}x Sun` : `${formatNumber(value)} mi`;
+  return `${formatNumber(value)} moons`;
+};
+const spaceMetricProse = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons") => {
+  const value = spaceMetricValue(space, metric);
+  if (metric === "distance") return space.kind === "star" ? `${formatNumber(value)} light-years` : `${formatNumber(value)} million miles`;
+  if (metric === "temperature") return space.kind === "star" ? `${formatNumber(value)} kelvins` : `${formatNumber(value)} degrees Fahrenheit`;
+  if (metric === "size") return space.kind === "star" ? `${formatNumber(value)} times the Sun's radius` : `${formatNumber(value)} miles wide`;
   return `${formatNumber(value)} moons`;
 };
 
@@ -439,6 +493,11 @@ const jetCategoryLabels: Record<JetCategory, string> = {
   interceptor: "interceptor",
   trainer: "trainer",
 };
+const jetCategoryDescription = (category: JetCategory) => `${jetCategoryLabels[category]} aircraft`;
+export const jetCategoryWithArticle = (category: JetCategory) =>
+  `${/^[aeiou]/i.test(jetCategoryLabels[category]) ? "an" : "a"} ${jetCategoryDescription(category)}`;
+export const jetCountryInProse = (country: string) => naturalList(country.split("/").map((name) =>
+  ["Soviet Union", "United Kingdom", "United States"].includes(name) ? `the ${name}` : name));
 
 const jetCountryContinents: Record<string, WorldContinent[]> = {
   China: ["Asia"],
@@ -489,7 +548,7 @@ const jetCard = (jet: Jet, metric: "speed" | "range" | "firepower" = "speed"): K
     { label: "Firepower", value: `${jet.firepower}/5` },
     { label: "Country", value: jet.country },
     { label: "Aircraft type", value: jetCategoryLabels[jet.category].replace(/^./, (letter) => letter.toUpperCase()) },
-    { label: "Continent", value: jetWorldLocation(jet).continents.join(" / ") },
+    { label: "Continent", value: worldContinentLabel(jetWorldLocation(jet).continents) },
   ],
 });
 
@@ -523,18 +582,18 @@ const countryCard = (country: Country, metric: CountryMetric = "population"): Kn
     statLabel: metric === "population" ? "Population" : "Land area",
     statValue,
     statDisplay: metric === "population" ? countryPopulationDisplay(country) : countryAreaDisplay(country),
-    subStat: `${country.flagEmoji} ${country.capital} · ${country.continents.join(" / ")}`,
-    fact: country.fact,
+    subStat: `${country.flagEmoji} ${countryCapitalLabel(country)} · ${worldContinentLabel(country.continents)}`,
+    fact: countryFactSentence(country),
     qualityScore: quality.score,
     qualityFlags: quality.flags,
     metadata: country.metadata,
     details: [
-      { label: "Capital", value: country.capital },
+      { label: "Capital", value: countryCapitalLabel(country) },
       { label: "Population", value: `${formatNumber(country.population)} (${country.populationYear})` },
       { label: "Land area", value: countryAreaDisplay(country) },
       { label: "Land neighbors", value: countryNeighborDisplay(country) },
       { label: "Highest point", value: `${country.highestPointName} · ${countryHighestPointDisplay(country)}` },
-      { label: "Continent", value: country.continents.join(" / ") },
+      { label: "Continent", value: worldContinentLabel(country.continents) },
       { label: "Region", value: country.subregion },
       { label: "Country code", value: `${country.code} · ${country.code3}` },
     ],
@@ -1368,7 +1427,7 @@ export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, se
   return {
     id: `${seed}-trumps-${currentTopic}-${player.id}-${computer.id}`,
     topic: currentTopic,
-    prompt: "Choose your strongest category.",
+    prompt: "Choose the category that gives your card its strongest advantage.",
     player: { ...player, stats: player.stats.filter((stat) => sharedStatIds.has(stat.id)) },
     computer: { ...computer, stats: computer.stats.filter((stat) => sharedStatIds.has(stat.id)) },
   };
@@ -1376,7 +1435,7 @@ export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, se
 
 export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []): RevealRound => {
   const currentTopic = topicOrder(topic, seed);
-  const count = difficulty === 1 ? 3 : 4;
+  const count = 4;
   const allCards = collectionCards();
   const topicCards = preferredPool(allCards.filter((card) => card.topic === currentTopic), difficulty);
   const card = discoveryShuffle(topicCards, seed + 1, unlockedTitles, cardDiscoveryIdentities)[0];
@@ -1385,11 +1444,11 @@ export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed
   return {
     id: `${seed}-peek-${currentTopic}-${card.id}`,
     topic: currentTopic,
-    prompt: "What is hiding in the picture?",
+    prompt: "Which subject is shown in the picture?",
     card,
     choices: shuffle([card.title, ...distractors], seed + 3),
     answer: card.title,
-    explanation: `${card.title}: ${card.fact}`,
+    explanation: `${card.title} is the answer. ${card.fact}`,
   };
 };
 
@@ -1440,7 +1499,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "pepper",
         itemPlural: "peppers",
         itemEmoji: "🌶️",
-        prompt: (title, groups, items) => `${groups} ${title} plants grow ${items} peppers each. How many peppers are there altogether?`,
+        prompt: (title, groups, items) => `${groups} plants of the ${title} variety grow ${items} peppers each. How many peppers are there altogether?`,
       };
     case "buildings":
       return {
@@ -1453,7 +1512,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "window",
         itemPlural: "windows",
         itemEmoji: "🪟",
-        prompt: (title, groups, items) => `A ${title} design puzzle shows ${groups} floors with ${items} windows on each floor. How many windows are shown?`,
+        prompt: (title, groups, items) => `A design puzzle inspired by ${title} shows ${groups} floors with ${items} windows on each floor. How many windows are shown?`,
       };
     case "sharks":
       return {
@@ -1466,7 +1525,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "paper tooth",
         itemPlural: "paper teeth",
         itemEmoji: "🦷",
-        prompt: (title, groups, items) => `A class makes ${groups} ${title} models with ${items} paper teeth on each model. How many paper teeth do they use?`,
+        prompt: (title, groups, items) => `A class makes ${groups} models of ${title}, with ${items} paper teeth on each model. How many paper teeth do they use?`,
       };
     case "space":
       return {
@@ -1479,7 +1538,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "rock",
         itemPlural: "rocks",
         itemEmoji: "🪨",
-        prompt: (title, groups, items) => `On a ${title} mission, ${groups} sample boxes hold ${items} rocks each. How many rocks are packed?`,
+        prompt: (title, groups, items) => `On a mission studying ${title}, ${groups} sample boxes hold ${items} rocks each. How many rocks are packed?`,
       };
     case "jets":
       return {
@@ -1505,7 +1564,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "egg",
         itemPlural: "eggs",
         itemEmoji: "🥚",
-        prompt: (title, groups, items) => `A ${title} nesting scene has ${groups} nests with ${items} eggs in each nest. How many eggs are there?`,
+        prompt: (title, groups, items) => `A nesting scene for ${title} has ${groups} nests with ${items} eggs in each nest. How many eggs are there?`,
       };
     case "tallest-mountains":
       return {
@@ -1531,7 +1590,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "bird",
         itemPlural: "birds",
         itemEmoji: "🐦",
-        prompt: (title, groups, items) => `A ${title} observation scene shows ${groups} branches with ${items} birds on each branch. How many birds are shown?`,
+        prompt: (title, groups, items) => `An observation of ${title} shows ${groups} branches with ${items} birds on each branch. How many birds are shown?`,
       };
     case "bridges-and-tunnels":
       return {
@@ -1544,7 +1603,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "light",
         itemPlural: "lights",
         itemEmoji: "💡",
-        prompt: (title, groups, items) => `A ${title} lighting plan has ${groups} sections with ${items} lights in each section. How many lights are planned?`,
+        prompt: (title, groups, items) => `A lighting plan for ${title} has ${groups} sections with ${items} lights in each section. How many lights are planned?`,
       };
     default:
       return {
@@ -1557,7 +1616,7 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemSingular: "model",
         itemPlural: "models",
         itemEmoji: "🔹",
-        prompt: (title, groups, items) => `A ${title} museum display has ${groups} rows with ${items} models in each row. How many models are shown?`,
+        prompt: (title, groups, items) => `A museum display about ${title} has ${groups} rows with ${items} models in each row. How many models are shown?`,
       };
   }
 };
@@ -1605,7 +1664,7 @@ const multiplicationRound = (
     smallerValue: itemsPerGroup,
     answer,
     choices: numberChoices(answer, 1, seed + 43),
-    explanation: `${groups} equal groups of ${itemsPerGroup}: ${repeatedAddition} = ${answer}. So ${groups} x ${itemsPerGroup} = ${answer} ${scenario.itemPlural}.`,
+    explanation: `There are ${groups} equal groups of ${itemsPerGroup}. The repeated addition is ${repeatedAddition} = ${answer}, so ${groups} × ${itemsPerGroup} = ${answer} ${scenario.itemPlural}.`,
     visual: {
       kind: "equal-groups",
       badge: scenario.badge,
@@ -1665,7 +1724,10 @@ const uniqueLocationLabels = <T extends { metadata?: CardMetadata }>(cards: read
 
 type LatLon = readonly [number, number];
 
-const geoChoiceCountForDifficulty = (difficulty: Difficulty) => (difficulty === 1 ? 3 : 4);
+const geoChoiceCountForDifficulty = (difficulty: Difficulty) => {
+  void difficulty;
+  return 4;
+};
 export const geoChoiceSeparationForDifficulty = (difficulty: Difficulty) => difficulty === 1
   ? { kilometers: 2500, mapPercent: 18 }
   : difficulty === 2
@@ -1891,7 +1953,7 @@ export const geoChoiceForLocation = (location: WorldLocation): GeoChoice => {
     label: location.label,
     location,
     point,
-    mapNote: location.continents.join(" / "),
+    mapNote: worldContinentLabel(location.continents),
   };
 };
 
@@ -2048,15 +2110,15 @@ export const buildGeoRoundFromCards = (
   return {
     id: `${seed}-geo-${card.topic}-${card.id}`,
     topic: card.topic || topic,
-    prompt: `Where on the map is ${card.title} found?`,
+    prompt: `Where on the world map does ${card.title} belong?`,
     card,
     choices,
     answerId: answer.id,
     answerLabel: answer.label,
     location,
     point,
-    mapHint: `${card.title} belongs in ${continentHint}. Look for the pin in the ${hemisphereLabel(point).toLowerCase()}.`,
-    explanation: `${card.title} is found in ${location.label}. That puts it in ${continentHint}. ${card.fact}`,
+    mapHint: `${card.title} belongs in ${continentHint}. Look for a pin in the ${hemisphereLabel(point).toLowerCase()}.`,
+    explanation: `${card.title} is connected with ${worldLocationLabelInProse(location.label)}, which is in ${continentHint}. ${card.fact}`,
   };
 };
 
@@ -2083,10 +2145,10 @@ export const buildSortRoundFromCards = (
   return {
     id: `${seed}-sort-${topic}-${selected.map((card) => card.id).join("-")}`,
     topic,
-    prompt: `Tap from lowest to highest ${selected[0].statLabel}.`,
+    prompt: `Tap the cards in order from the lowest ${selected[0].statLabel.toLowerCase()} to the highest.`,
     cards: shuffle(selected, seed + 2),
     answerIds: sorted.map((card) => card.id),
-    explanation: sorted.map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
+    explanation: sortOrderExplanation(sorted),
     statLabel: selected[0].statLabel,
   };
 };
@@ -2101,7 +2163,7 @@ export const buildRevealRoundFromCards = (
   if (cards.length < 3) throw new Error(`Need at least 3 cards to build a peek round for ${topic}`);
   const pool = preferredPool(cards, difficulty);
   const locationPool = preferredPool(cards.filter(hasLocationMetadata), difficulty);
-  const count = Math.min(pool.length, difficulty === 1 ? 3 : 4);
+  const count = Math.min(pool.length, 4);
   const locationCandidates = locationPool.flatMap((card, index) => {
     const mapChoices = buildGeoChoicesForLocations(
       locationPool.map((item) => item.metadata.location),
@@ -2125,7 +2187,7 @@ export const buildRevealRoundFromCards = (
       card,
       choices: mapChoices.map((choice) => choice.label),
       answer: location.label,
-      explanation: `${card.title} is found in ${location.label}. ${card.fact}`,
+      explanation: `${card.title} is connected with ${worldLocationLabelInProse(location.label)}. ${card.fact}`,
       map: {
         choices: mapChoices,
         answerId: location.label,
@@ -2139,11 +2201,11 @@ export const buildRevealRoundFromCards = (
   return {
     id: `${seed}-peek-${topic}-${card.id}`,
     topic,
-    prompt: "What is hiding in the picture?",
+    prompt: "Which subject is shown in the picture?",
     card,
     choices: shuffle([card.title, ...distractors], seed + 3),
     answer: card.title,
-    explanation: `${card.title}: ${card.fact}`,
+    explanation: `${card.title} is the answer. ${card.fact}`,
   };
 };
 
@@ -2182,7 +2244,7 @@ export const buildFactRoundFromCards = (
       imageAlt: card.imageAlt,
       imageCredit: card.imageCredit,
       answer: truthful ? "True" : "False",
-      explanation: `The real location is ${location.label}. ${card.fact}`,
+      explanation: `${card.title} is actually connected with ${worldLocationLabelInProse(location.label)}. ${card.fact}`,
       locations: [location],
       map: {
         claimed: geoChoiceForLocation(claimedLocation),
@@ -2209,7 +2271,7 @@ export const buildFactRoundFromCards = (
     imageAlt: card.imageAlt,
     imageCredit: card.imageCredit,
     answer: truthful ? "True" : "False",
-    explanation: `${card.title} has ${card.statDisplay}. ${card.fact}`,
+    explanation: `${card.title}'s recorded ${card.statLabel.toLowerCase()} is ${card.statDisplay}. ${card.fact}`,
     locations: card.metadata?.location ? [card.metadata.location] : undefined,
   };
 };
@@ -2259,7 +2321,7 @@ export const buildNumberRoundFromCards = (
         smallerValue,
         answer,
         choices: numberChoices(answer, 1, seed + 12),
-        explanation: `${formatNumber(smallerValue)} x ${formatNumber(answer)} = ${formatNumber(smallerValue * answer)}${unit ? ` ${unit}` : ""}, close to ${formatNumber(biggerValue)}${unit ? ` ${unit}` : ""}.`,
+        explanation: `${formatNumber(smallerValue)} × ${formatNumber(answer)} = ${formatNumber(smallerValue * answer)}${unit ? ` ${unit}` : ""}, which is close to ${formatNumber(biggerValue)}${unit ? ` ${unit}` : ""}.`,
       };
     }
   }
@@ -2287,7 +2349,7 @@ export const buildNumberRoundFromCards = (
       smallerValue: termValues[1] ?? 0,
       answer,
       choices: numberChoices(answer, Math.max(gap, answer > 1000 ? 100 : gap), seed + 3),
-      explanation: `${termValues.map(formatNumber).join(" + ")} = ${formatNumber(answer)}${unit ? ` ${unit}` : ""}.`,
+      explanation: `Adding the values gives ${termValues.map(formatNumber).join(" + ")} = ${formatNumber(answer)}${unit ? ` ${unit}` : ""}.`,
     };
   }
 
@@ -2313,7 +2375,7 @@ export const buildNumberRoundFromCards = (
     smallerValue,
     answer,
     choices: numberChoices(answer, gap, seed + 12),
-    explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)}${unit ? ` ${unit}` : ""}.`,
+    explanation: `Subtracting the smaller value from the larger gives ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)}${unit ? ` ${unit}` : ""}.`,
   };
 };
 
@@ -2337,7 +2399,7 @@ export const buildOddRoundFromCards = (
     cards: shuffle(pool, seed + 3),
     answerId: odd.id,
     reason: `${odd.title} has ${odd.statDisplay}.`,
-    explanation: `Compare the ${odd.statLabel.toLowerCase()} shown on each card. ${odd.title} is the highest.`,
+    explanation: `Compare the ${odd.statLabel.toLowerCase()} shown on each card. ${odd.title} has the highest value.`,
   };
 };
 
@@ -2360,7 +2422,7 @@ export const buildTopTrumpRoundFromCards = (
   return {
     id: `${seed}-trumps-${topic}-${player.id}-${computer.id}`,
     topic,
-    prompt: "Choose your strongest category.",
+    prompt: "Choose the category that gives your card its strongest advantage.",
     player: { ...player, stats: playerStats },
     computer: { ...computer, stats: computerStats },
   };
@@ -2399,7 +2461,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         id: `${seed}-number-countries-add-${first.id}-${second.id}`,
         topic: currentTopic,
         operation: "addition",
-        prompt: `${first.name} has about ${formatNumber(firstMillions)} million people and ${second.name} has about ${formatNumber(secondMillions)} million. About how many million people is that altogether?`,
+        prompt: `${sentenceStart(countryNameInProse(first))} has about ${formatNumber(firstMillions)} million people, and ${countryNameInProse(second)} has about ${formatNumber(secondMillions)} million. About how many million people is that altogether?`,
         cards: [roundedStatCard(countryCard(first), firstMillions, "million people"), roundedStatCard(countryCard(second), secondMillions, "million people")],
         statLabel: "Rounded population",
         unit: "million people",
@@ -2412,7 +2474,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         smallerValue: secondMillions,
         answer,
         choices: numberChoices(answer, populationStep, seed + 3),
-        explanation: `${formatNumber(firstMillions)} + ${formatNumber(secondMillions)} = ${formatNumber(answer)} million people. The numbers are rounded for mental maths.`,
+        explanation: `Adding the rounded populations gives ${formatNumber(firstMillions)} + ${formatNumber(secondMillions)} = ${formatNumber(answer)} million people. The figures are rounded to make the mental math manageable.`,
       };
     }
 
@@ -2425,7 +2487,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       id: `${seed}-number-countries-difference-${bigger.id}-${smaller.id}`,
       topic: currentTopic,
       operation: "subtraction",
-      prompt: `${bigger.name} has about ${formatNumber(biggerValue)} million people. ${smaller.name} has about ${formatNumber(smallerValue)} million. About how many million more people live in ${bigger.name}?`,
+      prompt: `${sentenceStart(countryNameInProse(bigger))} has about ${formatNumber(biggerValue)} million people. ${sentenceStart(countryNameInProse(smaller))} has about ${formatNumber(smallerValue)} million. About how many million more people live in ${countryNameInProse(bigger)}?`,
       cards: [roundedStatCard(countryCard(bigger), biggerValue, "million people"), roundedStatCard(countryCard(smaller), smallerValue, "million people")],
       statLabel: "Rounded population",
       unit: "million people",
@@ -2438,7 +2500,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       smallerValue,
       answer,
       choices: numberChoices(answer, populationStep, seed + 4),
-      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} million people. The numbers are rounded for mental maths.`,
+      explanation: `Subtracting the rounded populations gives ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} million people. The figures are rounded to make the mental math manageable.`,
     };
   }
 
@@ -2473,7 +2535,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         smallerValue: secondCount,
         answer,
         choices: numberChoices(answer, 1, seed + 4),
-        explanation: `${firstCount} + ${secondCount} = ${answer} peppers.`,
+        explanation: `Adding the two harvests gives ${firstCount} + ${secondCount} = ${answer} peppers.`,
       };
     }
 
@@ -2498,7 +2560,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       smallerValue: smallerCount,
       answer,
       choices: numberChoices(answer, 1, seed + 4),
-      explanation: `${biggerCount} - ${smallerCount} = ${answer} more peppers.`,
+      explanation: `The difference is ${biggerCount} − ${smallerCount} = ${answer} peppers.`,
     };
   }
 
@@ -2531,7 +2593,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         smallerValue: values[1] ?? 0,
         answer,
         choices: numberChoices(answer, difficulty === 1 ? 400 : 200, seed + 6),
-        explanation: `${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} feet.`,
+        explanation: `Adding the heights gives ${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} feet.`,
       };
     }
 
@@ -2555,7 +2617,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       smallerValue,
       answer,
       choices: numberChoices(answer, difficulty === 1 ? 200 : 100, seed + 6),
-      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} feet.`,
+      explanation: `The height difference is ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} feet.`,
     };
   }
 
@@ -2588,12 +2650,13 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         smallerValue: values[1] ?? 0,
         answer,
         choices: numberChoices(answer, difficulty === 1 ? 1000 : 500, seed + 9),
-        explanation: `${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} miles.`,
+        explanation: `Adding the diameters gives ${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} miles.`,
       };
     }
 
-    const moreMoons = sampleSafe(pool.filter((space) => (space.moons ?? 0) >= 10), pool.filter((space) => space.moons !== undefined), seed + 7);
-    const fewerMoons = sampleSafe(pool.filter((space) => space.id !== moreMoons.id && (space.moons ?? 0) < (moreMoons.moons ?? 0)), pool.filter((space) => space.id !== moreMoons.id && space.moons !== undefined), seed + 8);
+    const planetsWithMoonCounts = pool.filter((space) => space.kind === "planet" && space.moons !== undefined);
+    const moreMoons = sampleSafe(planetsWithMoonCounts.filter((space) => (space.moons ?? 0) >= 10), planetsWithMoonCounts, seed + 7);
+    const fewerMoons = sampleSafe(planetsWithMoonCounts.filter((space) => space.id !== moreMoons.id && (space.moons ?? 0) < (moreMoons.moons ?? 0)), planetsWithMoonCounts.filter((space) => space.id !== moreMoons.id), seed + 8);
     const step = difficulty === 1 ? 10 : 5;
     const { biggerValue, smallerValue, answer } = roundedSubtractionPair(moreMoons.moons ?? 0, fewerMoons.moons ?? 0, step);
     return {
@@ -2613,7 +2676,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       smallerValue,
       answer,
       choices: numberChoices(answer, difficulty === 1 ? 10 : 5, seed + 9),
-      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} moons.`,
+      explanation: `The difference is ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} moons.`,
     };
   }
 
@@ -2647,7 +2710,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         smallerValue: values[1] ?? 0,
         answer,
         choices: numberChoices(answer, 1, seed + 12),
-        explanation: `${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} model jets.`,
+        explanation: `Adding the display groups gives ${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} model jets.`,
       };
     }
 
@@ -2671,7 +2734,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       smallerValue,
       answer,
       choices: numberChoices(answer, difficulty === 1 ? 400 : 200, seed + 12),
-      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} mph.`,
+      explanation: `The speed difference is ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} mph.`,
     };
   }
 
@@ -2703,13 +2766,16 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       smallerValue: values[1] ?? 0,
       answer,
       choices: numberChoices(answer, difficulty === 1 ? 10 : 4, seed + 12),
-      explanation: `${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} feet.`,
+      explanation: `Adding the lengths gives ${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} feet.`,
     };
   }
 
   const bigger = sampleSafe(sharkPool.filter((shark) => shark.lengthFt >= 15), sharkPool, seed + 10);
   const smaller = sampleSafe(sharkPool.filter((shark) => shark.id !== bigger.id && shark.lengthFt <= bigger.lengthFt - 5), sharkPool.filter((shark) => shark.id !== bigger.id), seed + 11);
-  const { biggerValue, smallerValue, answer } = roundedSubtractionPair(bigger.lengthFt, smaller.lengthFt, step);
+  const roundedLengths = roundedSubtractionPair(bigger.lengthFt, smaller.lengthFt, step);
+  const biggerValue = roundedLengths.biggerValue;
+  const smallerValue = Math.max(1, roundedLengths.smallerValue);
+  const answer = biggerValue - smallerValue;
   return {
     id: `${seed}-number-sharks-${bigger.id}-${smaller.id}`,
     topic: currentTopic,
@@ -2727,7 +2793,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     smallerValue,
     answer,
     choices: numberChoices(answer, difficulty === 1 ? 5 : 4, seed + 12),
-    explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(answer)} feet.`,
+    explanation: `The length difference is ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} feet.`,
   };
 };
 
@@ -2745,11 +2811,11 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
     return {
       id: `${seed}-odd-countries-${continent}-${odd.id}`,
       topic: currentTopic,
-      prompt: "Which flag belongs to a country on a different continent?",
+      prompt: "Which flag belongs to the country on a different continent from the other three?",
       cards: shuffle([...same.map((country) => countryCard(country)), countryCard(odd)], seed + 4),
       answerId: odd.id,
-      reason: `${odd.name} is in ${odd.continents.join(" / ")}; the others are in ${continent}.`,
-      explanation: `The rule is continent. ${odd.name} is the odd one out.`,
+      reason: `${sentenceStart(countryNameInProse(odd))} is in ${worldContinentLabel(odd.continents)}, while the others are in ${continent}.`,
+      explanation: `The rule is continent. ${sentenceStart(countryNameInProse(odd))} is the odd one out.`,
     };
   }
 
@@ -2778,7 +2844,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
     return {
       id: `${seed}-odd-peppers-${heat}-${odd.id}`,
       topic: currentTopic,
-      prompt: "Which pepper has the different heat level?",
+      prompt: "Which pepper belongs to a different heat level from the other three?",
       cards,
       answerId: odd.id,
       reason: `${odd.name} is ${odd.heat}; the others are ${heat}.`,
@@ -2922,11 +2988,11 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
     return {
       id: `${seed}-odd-jets-${category}-${odd.id}`,
       topic: currentTopic,
-      prompt: "Which jet has the different mission category?",
+      prompt: "Which jet belongs to a different mission category from the other three?",
       cards,
       answerId: odd.id,
-      reason: `${odd.name} is ${jetCategoryLabels[odd.category]}; the others are ${jetCategoryLabels[category]}.`,
-      explanation: `The rule is aircraft mission category. ${odd.name} is the odd one out because it is ${jetCategoryLabels[odd.category]}.`,
+      reason: `${odd.name} is classified as ${jetCategoryWithArticle(odd.category)}, while the others are classified as ${jetCategoryWithArticle(category)}.`,
+      explanation: `The rule is aircraft mission category. ${odd.name} is the odd one out because it is classified as ${jetCategoryWithArticle(odd.category)}.`,
     };
   }
 
@@ -2945,8 +3011,8 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
     prompt: "Which shark does not fit the family rule?",
     cards,
     answerId: odd.id,
-    reason: `${odd.name} is a ${odd.family}; the others are ${family}s.`,
-    explanation: `The rule is shark family. ${odd.name} is the odd one out because it is a ${odd.family}.`,
+    reason: `${odd.name} belongs to the ${odd.family} family, while the others belong to the ${family} family.`,
+    explanation: `The rule is shark family. ${odd.name} is the odd one out because it belongs to the ${odd.family} family.`,
   };
 };
 
@@ -2965,10 +3031,10 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     return {
       id: `${seed}-sort-countries-${metric}`,
       topic: currentTopic,
-      prompt: metric === "population" ? "Tap the countries from fewest people to most people." : "Tap the countries from smallest land area to biggest.",
+      prompt: metric === "population" ? "Tap the countries in order from the smallest population to the largest." : "Tap the countries in order from the smallest land area to the largest.",
       cards: shuffle(cards, seed + 4),
       answerIds: sorted.map((card) => card.id),
-      explanation: sorted.map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
+      explanation: sortOrderExplanation(sorted),
       statLabel: metric === "population" ? "Population" : "Land area",
     };
   }
@@ -2979,10 +3045,10 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     return {
       id: `${seed}-sort-peppers`,
       topic: currentTopic,
-      prompt: "Tap the peppers from least to most spicy.",
+      prompt: "Tap the peppers in order from the mildest to the hottest.",
       cards: shuffle(cards, seed + 3),
       answerIds,
-      explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
+      explanation: sortOrderExplanation([...cards].sort((a, b) => a.statValue - b.statValue)),
       statLabel: "Scoville heat",
     };
   }
@@ -2993,10 +3059,10 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     return {
       id: `${seed}-sort-buildings`,
       topic: currentTopic,
-      prompt: "Tap the buildings from shortest to tallest.",
+      prompt: "Tap the buildings in order from the shortest to the tallest.",
       cards: shuffle(cards, seed + 5),
       answerIds,
-      explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
+      explanation: sortOrderExplanation([...cards].sort((a, b) => a.statValue - b.statValue)),
       statLabel: "Height",
     };
   }
@@ -3007,17 +3073,17 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       if (metric === "distance") return item.distanceFromSunMillionMiles !== undefined || item.distanceLightYears !== undefined;
       if (metric === "temperature") return item.surfaceTempK !== undefined || item.meanSurfaceTempF !== undefined;
       if (metric === "size") return item.radiusSolar !== undefined || item.diameterMiles !== undefined;
-      return item.moons !== undefined;
+      return item.kind === "planet" && item.moons !== undefined;
     });
     const cards = distinctStatCards(shuffle(preferredPool(pool, difficulty), seed + 6).map((space) => spaceCard(space, metric)), seed + 7, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-space-${metric}`,
       topic: currentTopic,
-      prompt: metric === "distance" ? "Tap the space cards from nearest to farthest." : metric === "temperature" ? "Tap from coolest to hottest." : metric === "size" ? "Tap from smallest to biggest." : "Tap from fewest moons to most moons.",
+      prompt: metric === "distance" ? "Tap the space cards in order from the nearest to the farthest." : metric === "temperature" ? "Tap the space cards in order from the coolest to the hottest." : metric === "size" ? "Tap the space cards in order from the smallest to the largest." : "Tap the space cards in order from the fewest moons to the most.",
       cards: shuffle(cards, seed + 8),
       answerIds,
-      explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
+      explanation: sortOrderExplanation([...cards].sort((a, b) => a.statValue - b.statValue)),
       statLabel: metric === "distance" ? "Distance" : metric === "temperature" ? "Temperature" : metric === "size" ? "Size" : "Moons",
     };
   }
@@ -3029,10 +3095,10 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     return {
       id: `${seed}-sort-jets-${metric}`,
       topic: currentTopic,
-      prompt: metric === "speed" ? "Tap the jets from slowest to fastest." : metric === "range" ? "Tap the jets from shortest range to longest range." : "Tap the jets from lowest firepower to highest firepower.",
+      prompt: metric === "speed" ? "Tap the jets in order from the slowest to the fastest." : metric === "range" ? "Tap the jets in order from the shortest range to the longest." : "Tap the jets in order from the lowest firepower rating to the highest.",
       cards: shuffle(cards, seed + 8),
       answerIds,
-      explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
+      explanation: sortOrderExplanation([...cards].sort((a, b) => a.statValue - b.statValue)),
       statLabel: metric === "speed" ? "Speed" : metric === "range" ? "Range" : "Firepower",
     };
   }
@@ -3043,10 +3109,10 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   return {
     id: `${seed}-sort-sharks-${metric}`,
     topic: currentTopic,
-    prompt: metric === "length" ? "Tap the sharks from smallest to biggest." : metric === "speed" ? "Tap the sharks from slowest to fastest." : "Tap the sharks from lowest power to highest power.",
+    prompt: metric === "length" ? "Tap the sharks in order from the shortest to the longest." : metric === "speed" ? "Tap the sharks in order from the slowest to the fastest." : "Tap the sharks in order from the lowest power rating to the highest.",
     cards: shuffle(cards, seed + 8),
     answerIds,
-    explanation: [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => `${card.title}: ${card.statDisplay}`).join("  |  "),
+    explanation: sortOrderExplanation([...cards].sort((a, b) => a.statValue - b.statValue)),
     statLabel: metric === "length" ? "Size" : metric === "speed" ? "Speed" : "Power",
   };
 };
@@ -3077,16 +3143,16 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     const claimedNeighbors = truthful ? country.landNeighborCount : alternate.landNeighborCount;
     const claimedHighestPoint = truthful ? country.highestPointName : alternate.highestPointName;
     const statement = factType === "capital"
-      ? `${claimedCapital} is the capital of ${country.name}.`
+      ? `${claimedCapital} is the capital of ${countryNameInProse(country)}.`
       : factType === "continent"
-        ? `${country.name} is in ${claimedContinent}.`
+        ? `${sentenceStart(countryNameInProse(country))} is in ${claimedContinent}.`
         : factType === "population"
-          ? `${country.name} has about ${formatNumber(claimedPopulation)} people.`
+          ? `${sentenceStart(countryNameInProse(country))} has about ${formatNumber(claimedPopulation)} people.`
           : factType === "area"
-            ? `${country.name} has about ${formatNumber(claimedArea)} square kilometres of land area.`
+            ? `${sentenceStart(countryNameInProse(country))} has about ${formatNumber(claimedArea)} square kilometers of land area.`
             : factType === "neighbors"
-              ? `${country.name} has ${formatNumber(claimedNeighbors)} land ${claimedNeighbors === 1 ? "neighbor" : "neighbors"}.`
-              : `${claimedHighestPoint} is the highest point in ${country.name}.`;
+              ? `${sentenceStart(countryNameInProse(country))} has ${formatNumber(claimedNeighbors)} land ${claimedNeighbors === 1 ? "neighbor" : "neighbors"}.`
+              : `${claimedHighestPoint} is the highest point in ${countryNameInProse(country)}.`;
     return {
       id: `${seed}-fact-country-${factType}-${country.id}`,
       topic: currentTopic,
@@ -3096,7 +3162,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       imageAlt: `Flag of ${country.name}`,
       imageCredit: country.imageCredit,
       answer: truthful ? "True" : "False",
-      explanation: `${country.name}'s capital is ${country.capital}. It has about ${formatNumber(country.population)} people, ${formatNumber(country.areaKm2)} square kilometres of land, and ${formatNumber(country.landNeighborCount)} land ${country.landNeighborCount === 1 ? "neighbor" : "neighbors"}. Its highest point is ${country.highestPointName} at about ${formatNumber(country.highestPointM)} metres.`,
+      explanation: `${countryFactSentence(country)} It has about ${formatNumber(country.population)} people and ${formatNumber(country.landNeighborCount)} land ${country.landNeighborCount === 1 ? "neighbor" : "neighbors"}. Its highest point is ${country.highestPointName}, at about ${formatNumber(country.highestPointM)} meters above sea level.`,
       locations: country.metadata.location ? [country.metadata.location] : undefined,
     };
   }
@@ -3259,19 +3325,19 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     const fakeDistance = fakeDistanceCard.distanceFromSunMillionMiles ?? fakeDistanceCard.distanceLightYears;
     const statement = truthful
       ? factType === "temperature" && realTemperature !== undefined
-        ? `${space.name} has a listed temperature of about ${spaceMetricDisplay(space, "temperature")}.`
+        ? `${space.name} has a listed temperature of about ${spaceMetricProse(space, "temperature")}.`
         : factType === "distance" && realDistance !== undefined
-          ? `${space.name} has a listed distance of about ${spaceMetricDisplay(space, "distance")}.`
+          ? `${space.name} has a listed distance of about ${spaceMetricProse(space, "distance")}.`
           : factType === "fact"
             ? space.fact
-            : `${space.name} belongs in ${space.group}.`
+            : `${space.name} belongs to the ${space.group} group.`
       : factType === "temperature" && fakeTemperature !== undefined
-        ? `${space.name} has a listed temperature of about ${spaceMetricDisplay(fakeTemperatureCard, "temperature")}.`
+        ? `${space.name} has a listed temperature of about ${spaceMetricProse(fakeTemperatureCard, "temperature")}.`
         : factType === "distance" && fakeDistance !== undefined
-          ? `${space.name} has a listed distance of about ${spaceMetricDisplay(fakeDistanceCard, "distance")}.`
+          ? `${space.name} has a listed distance of about ${spaceMetricProse(fakeDistanceCard, "distance")}.`
           : factType === "fact"
             ? fakeFact.fact
-            : `${space.name} belongs in ${fakeGroup.group}.`;
+            : `${space.name} belongs to the ${fakeGroup.group} group.`;
     return {
       id: `${seed}-fact-space-${space.id}`,
       topic: currentTopic,
@@ -3281,7 +3347,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       imageAlt: space.name,
       imageCredit: space.imageCredit,
       answer: truthful ? "True" : "False",
-      explanation: `${space.name}: ${space.fact}`,
+      explanation: `${space.name} is the subject of the statement. ${space.fact}`,
     };
   }
 
@@ -3309,15 +3375,15 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
         : factType === "range"
           ? `${jet.name} has a range of about ${formatNumber(jet.rangeMiles)} miles.`
           : factType === "country"
-            ? `${jet.name} is from ${jet.country}.`
-            : `${jet.name} is a ${jetCategoryLabels[jet.category]} aircraft.`
+            ? `${jet.name} is from ${jetCountryInProse(jet.country)}.`
+            : `${jet.name} is ${jetCategoryWithArticle(jet.category)}.`
       : factType === "speed"
         ? `${jet.name} can reach about ${formatNumber(fakeSpeed.maxSpeedMph)} mph.`
         : factType === "range"
           ? `${jet.name} has a range of about ${formatNumber(fakeRange.rangeMiles)} miles.`
           : factType === "country"
-            ? `${jet.name} is from ${fakeCountry.country}.`
-            : `${jet.name} is a ${jetCategoryLabels[fakeCategory.category]} aircraft.`;
+            ? `${jet.name} is from ${jetCountryInProse(fakeCountry.country)}.`
+            : `${jet.name} is ${jetCategoryWithArticle(fakeCategory.category)}.`;
     return {
       id: `${seed}-fact-jet-${jet.id}`,
       topic: currentTopic,
@@ -3327,7 +3393,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       imageAlt: jet.name,
       imageCredit: jet.imageCredit,
       answer: truthful ? "True" : "False",
-      explanation: `${jet.name} is from ${jet.country}, is a ${jetCategoryLabels[jet.category]} aircraft, reaches about ${formatNumber(jet.maxSpeedMph)} mph, and has about ${formatNumber(jet.rangeMiles)} miles of range.`,
+      explanation: `${jet.name} is ${jetCategoryWithArticle(jet.category)} from ${jetCountryInProse(jet.country)}. It reaches about ${formatNumber(jet.maxSpeedMph)} mph and has a range of about ${formatNumber(jet.rangeMiles)} miles.`,
       locations: factType === "country" ? [actualLocation] : undefined,
       map: factType === "country"
         ? {
@@ -3352,14 +3418,14 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
         ? `${shark.name} can grow to about ${feet(shark.lengthFt)}.`
         : factType === "diet"
           ? `${shark.name} eats ${shark.diet}.`
-          : `${shark.name} is a ${shark.family}.`
+          : `${shark.name} belongs to the ${shark.family} family.`
     : factType === "speed"
       ? `${shark.name} can swim about ${formatNumber(fakeSpeed.speedMph)} mph.`
       : factType === "size"
         ? `${shark.name} can grow to about ${feet(fakeSize.lengthFt)}.`
         : factType === "diet"
           ? `${shark.name} eats ${fakeDiet.diet}.`
-          : `${shark.name} is a ${fakeFamily.family}.`;
+          : `${shark.name} belongs to the ${fakeFamily.family} family.`;
   return {
     id: `${seed}-fact-shark-${shark.id}`,
     topic: currentTopic,
@@ -3369,6 +3435,6 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     imageAlt: shark.name,
     imageCredit: shark.imageCredit,
     answer: truthful ? "True" : "False",
-    explanation: `${shark.name} is a ${shark.family}, can grow to about ${feet(shark.lengthFt)}, and eats ${shark.diet}.`,
+    explanation: `${shark.name} belongs to the ${shark.family} family, can grow to about ${feet(shark.lengthFt)}, and eats ${shark.diet}.`,
   };
 };

@@ -303,8 +303,37 @@ const assertTopicIsolation = (roundName, expectedTopic, round) => {
   }
 };
 
+const languageFields = ["prompt", "explanation", "statement", "readingClue", "secondChanceClue", "mapHint", "reason"];
+const staleQuestionPhrases = [
+  /\bWhat is true\?/i,
+  /\bWhat is hiding in the picture\?/i,
+  /\bmental maths\b/i,
+  /\bTap from\b/i,
+  /\bsquare kilometres\b/i,
+  /\bmetres\b/i,
+  /\bwins (?:with|this)\b/i,
+  /\ba interceptor\b/i,
+  /\bfrom United States\b/i,
+  /\blinked to Caribbean\b/i,
+  /\b0 ft\b/i,
+];
+const assertPolishedLanguage = (scope, item) => {
+  for (const field of languageFields) {
+    const value = item[field];
+    if (value === undefined) continue;
+    if (typeof value !== "string" || !value.trim()) {
+      critical.push(`${scope}: ${field} must contain readable text`);
+      continue;
+    }
+    if (value !== value.trim() || / {2,}/.test(value)) critical.push(`${scope}: ${field} contains stray spacing`);
+    if (!/[.!?][\])”’"']?$/.test(value)) critical.push(`${scope}: ${field} needs closing punctuation`);
+    if (staleQuestionPhrases.some((pattern) => pattern.test(value))) critical.push(`${scope}: ${field} uses clipped or inconsistent language: "${value}"`);
+  }
+};
+
 const assertRoundCardImages = async (roundName, round, expectedTopic) => {
   assertTopicIsolation(roundName, expectedTopic, round);
+  assertPolishedLanguage(`${roundName}/${round.id}`, round);
   const cardsToCheck = [];
   if (round.card) cardsToCheck.push(round.card);
   if (round.cards) cardsToCheck.push(...round.cards);
@@ -416,6 +445,7 @@ const checkPackMetadata = (pack) => {
 
 const assertQuestion = async (roundName, question, expectedTopic) => {
   assertTopicIsolation(roundName, expectedTopic, question);
+  assertPolishedLanguage(`${roundName}/${question.id}`, question);
   if (!question.id || !question.prompt || !question.answer) critical.push(`${roundName}/${question.id ?? "missing"}: incomplete question`);
   if (!question.choices?.includes(question.answer)) critical.push(`${roundName}/${question.id}: answer missing from choices`);
   await checkImage({ id: question.id, topic: question.topic, image: question.image });
@@ -599,6 +629,7 @@ const result = {
     countries: data.countries.length,
     rangeAndConversionChecks: true,
     sourceAndUncertaintyNotes: true,
+    languageAndPunctuationChecks: true,
   },
   confidence,
   researchLibrary: {

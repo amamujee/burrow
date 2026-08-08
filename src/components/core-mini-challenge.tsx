@@ -7,7 +7,7 @@ import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid, GameQuestionCard,
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { buildingImagePresentation } from "@/lib/building-image-presentation";
 import type { WorldLocation } from "@/lib/card-metadata";
-import { collectionCards, geoChoiceForLocation, geoPointMapDistance, type KnowledgeCard, type RoundTopic } from "@/lib/game-modes";
+import { collectionCards, geoChoiceForLocation, geoPointMapDistance, sentenceStart, worldContinentLabel, worldLocationLabelInProse, type KnowledgeCard, type RoundTopic } from "@/lib/game-modes";
 
 export type ConceptVisual = "pepper-anatomy" | "flavor-and-heat" | "heat-signal" | "genes-and-growing";
 
@@ -112,7 +112,7 @@ export const legacyPepperChallengeCampaigns: ChallengeCampaign[] = [
       { id: "pepper-x-reading", skill: "Reading", icon: "🏷️", title: "Read the record card", clue: "Pepper X averages 2,693,000 Scoville Heat Units. Individual peppers can measure above or below that number.", question: "Which statement is supported by the record card?", choices: ["Different fruits can measure above or below 2,693,000 SHU", "Every fruit measures exactly 2,693,000 SHU", "Only one Pepper X fruit was measured"], answer: "Different fruits can measure above or below 2,693,000 SHU", summary: "The average summarizes multiple measurements, while individual peppers can be higher or lower.", evidence: "Individual peppers can measure above or below that number" },
       { id: "pepper-x-geography", skill: "Geography", icon: "🌎", title: "Locate the pepper lab", clue: "Pepper X was developed in Fort Mill, South Carolina, in the southeastern United States.", question: "Which pin marks South Carolina?", choices: ["South Carolina", "California", "Alaska"], answer: "South Carolina", summary: "South Carolina is in the southeastern United States near the Atlantic coast.", map: { hint: "Look on the eastern side of the United States.", choices: [{ label: "South Carolina", x: 28, y: 31 }, { label: "California", x: 17, y: 29 }, { label: "Alaska", x: 8, y: 14 }] } },
       { id: "pepper-x-math", skill: "Math", icon: "🧺", title: "Fill the seed grid", clue: "12 trays hold 12 seeds each.", question: "12 × 12 = ?", choices: ["132 seeds", "140 seeds", "144 seeds"], answer: "144 seeds", summary: "Twelve equal groups of 12 make 144 seeds.", math: { groups: 12, each: 12, visual: { ariaLabel: "Math picture: 12 equal tray groups of 12 seeds", groupSingular: "tray", groupPlural: "trays", groupEmoji: "🧺", itemSingular: "seed", itemPlural: "seeds", itemEmoji: "•" } } },
-      { id: "pepper-x-science", skill: "Science", icon: "🧪", title: "Mix the recipe and the weather", clue: "Genes give a pepper its recipe. Sun, water, and temperature can change how the fruit grows.", question: "Why can two Pepper X fruits have different heat?", choices: ["They grew in different conditions", "Measuring changes their species", "Scoville units only measure color"], answer: "They grew in different conditions", summary: "The fruits share a genetic recipe, but different growing conditions can change their final heat.", conceptVisual: "genes-and-growing" },
+      { id: "pepper-x-science", skill: "Science", icon: "🧪", title: "Mix the recipe and the weather", clue: "Genes give a pepper its recipe. Sun, water, and temperature can change how the fruit grows.", question: "Why can two Pepper X fruits have different heat levels?", choices: ["They grew in different conditions", "Measuring changes their species", "Scoville units only measure color"], answer: "They grew in different conditions", summary: "The fruits share a genetic recipe, but different growing conditions can change their final heat levels.", conceptVisual: "genes-and-growing" },
       { id: "pepper-x-words", skill: "Words", icon: "📖", title: "Unlock a plant word", clue: "Pepper X is a cultivar selected for particular traits.", question: "What is a cultivar?", choices: ["A cultivated plant variety", "A map of a continent", "A tool for measuring rain"], answer: "A cultivated plant variety", summary: "A cultivar is a plant variety people maintain for chosen traits." },
     ],
   },
@@ -130,12 +130,12 @@ const topicChallengeLanguage: Record<string, { singular: string; plural: string;
   peppers: { singular: "pepper", plural: "peppers", emoji: "🌶️" },
   buildings: { singular: "building", plural: "buildings", emoji: "🏙️" },
   sharks: { singular: "shark", plural: "sharks", emoji: "🦈" },
-  space: { singular: "space subject", plural: "space subjects", emoji: "🪐" },
+  space: { singular: "space object", plural: "space objects", emoji: "🪐" },
   jets: { singular: "jet", plural: "jets", emoji: "✈️" },
   countries: { singular: "country", plural: "countries", emoji: "🌍" },
   dinosaurs: { singular: "prehistoric animal", plural: "prehistoric animals", emoji: "🦕" },
   "tallest-mountains": { singular: "mountain", plural: "mountains", emoji: "🏔️" },
-  "tall-trees": { singular: "height subject", plural: "height subjects", emoji: "📏" },
+  "tall-trees": { singular: "tree", plural: "trees", emoji: "🌲" },
   "bridges-and-tunnels": { singular: "crossing", plural: "crossings", emoji: "🌉" },
 };
 
@@ -210,6 +210,9 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
 
   return Array.from({ length: challengeCampaignCountPerCategory }, (_, campaignIndex) => {
     const anchor = pool[campaignIndex];
+    const campaignLanguage = topicId === "tall-trees" && (anchor.tags?.includes("reference") || anchor.metadata?.taxonomyGroup === "reference")
+      ? { ...language, singular: "height subject", plural: "height subjects" }
+      : language;
     const readingCard = anchor;
     const geographyCard = anchor;
     const mathCard = anchor;
@@ -262,9 +265,9 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
         id: `${topicId}-${campaignIndex + 1}-reading-${readingCard.id}`,
         skill: "Reading",
         icon: "🏷️",
-        title: `Read the ${language.singular} field note`,
+        title: `Read the ${campaignLanguage.singular} field note`,
         clue: readingCard.fact,
-        question: `Which ${language.singular} matches this field note?`,
+        question: `Which ${campaignLanguage.singular} matches this field note?`,
         choices: readingChoices,
         answer: readingCard.title,
         summary: `${readingCard.title} is the match. ${readingCard.fact}`,
@@ -279,16 +282,16 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
         title: location ? `Map ${geographyCard.title}` : `Classify ${geographyCard.title}`,
         clue: location
           ? geographyCard.title === location.label
-            ? `${geographyCard.title} is a country in ${location.continents.join(" / ")}. Use the map shape and continent labels to find its pin.`
-            : `${geographyCard.title} is connected with ${location.label} in ${location.continents.join(" / ")}. Use the map to find its pin.`
+            ? `${sentenceStart(worldLocationLabelInProse(location.label))} is a country in ${worldContinentLabel(location.continents)}. Use the map's shape and continent labels to find its pin.`
+            : `${geographyCard.title} is connected with ${worldLocationLabelInProse(location.label)} in ${worldContinentLabel(location.continents)}. Use the map to find its pin.`
           : `${geographyCard.title} belongs in the field-guide group “${geographyCard.subStat}.”`,
-        question: location ? `Which pin marks ${location.label}?` : `Which ${language.singular} belongs in this field-guide group?`,
+        question: location ? `Which pin marks ${worldLocationLabelInProse(location.label)}?` : `Which ${campaignLanguage.singular} belongs in this field-guide group?`,
         choices: geographyChoices,
         answer: geographyAnswer,
         summary: location
           ? geographyCard.title === location.label
-            ? `${location.label} is at ${geographyAnswer} on the map in ${location.continents.join(" / ")}.`
-            : `${geographyCard.title} is connected with ${location.label}, shown at ${geographyAnswer} in ${location.continents.join(" / ")}.`
+            ? `${sentenceStart(worldLocationLabelInProse(location.label))} appears at ${geographyAnswer} on the map, in ${worldContinentLabel(location.continents)}.`
+            : `${geographyCard.title} is connected with ${worldLocationLabelInProse(location.label)}, which appears at ${geographyAnswer} in ${worldContinentLabel(location.continents)}.`
           : `${geographyCard.title} belongs in the field-guide group “${geographyCard.subStat}.”`,
         map: geographyMap,
         image: geographyCard.image,
@@ -299,11 +302,11 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
         skill: "Math",
         icon: "🧺",
         title: `Count the ${mathCard.title} research notes`,
-        clue: `${groups} field teams record ${each} notes about ${mathCard.title} each.`,
+        clue: `Each of ${groups} field teams records ${each} notes about ${mathCard.title}.`,
         question: `${groups} × ${each} = ?`,
         choices: mathChoices,
         answer: mathAnswer,
-        summary: `${groups} equal teams with ${each} ${mathCard.title} notes each make ${product.toLocaleString("en-US")} notes altogether.`,
+        summary: `${groups} equal teams, each with ${each} notes about ${mathCard.title}, produce ${product.toLocaleString("en-US")} notes altogether.`,
         math: {
           groups,
           each,
@@ -314,7 +317,7 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
             groupEmoji: "🧭",
             itemSingular: "note",
             itemPlural: "notes",
-            itemEmoji: language.emoji,
+            itemEmoji: campaignLanguage.emoji,
           },
         },
         image: mathCard.image,
@@ -324,12 +327,12 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
         id: `${topicId}-${campaignIndex + 1}-science-${scienceCard.id}`,
         skill: "Science",
         icon: "🧪",
-        title: `Match the ${scienceCard.statLabel.toLowerCase()} evidence`,
-        clue: `${scienceCard.title} has a recorded ${scienceCard.statLabel.toLowerCase()} of ${scienceCard.statDisplay}.`,
+        title: `Match the evidence for ${scienceCard.statLabel.toLowerCase()}`,
+        clue: `The recorded ${scienceCard.statLabel.toLowerCase()} for ${scienceCard.title} is ${scienceCard.statDisplay}.`,
         question: "Which card matches this measurement?",
         choices: scienceChoices,
         answer: scienceCard.title,
-        summary: `${scienceCard.title} is the evidence match: its ${scienceCard.statLabel.toLowerCase()} is ${scienceCard.statDisplay}.`,
+        summary: `${scienceCard.title} matches the evidence because its recorded ${scienceCard.statLabel.toLowerCase()} is ${scienceCard.statDisplay}.`,
         image: scienceCard.image,
         imageAlt: scienceCard.imageAlt,
       },
@@ -338,11 +341,11 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
         skill: "Words",
         icon: "📖",
         title: `Unlock the word “${wordsCard.statLabel}”`,
-        clue: `${wordsCard.title}'s card lists ${wordsCard.statLabel.toLowerCase()}: ${wordsCard.statDisplay}.`,
+        clue: `The card for ${wordsCard.title} lists its ${wordsCard.statLabel.toLowerCase()} as ${wordsCard.statDisplay}.`,
         question: `What does ${wordsCard.statLabel.toLowerCase()} tell us here?`,
         choices: wordChoices,
         answer: wordAnswer,
-        summary: `${wordsCard.statLabel} tells us ${wordAnswer}; on this card the recorded value is ${wordsCard.statDisplay}.`,
+        summary: `${wordsCard.statLabel} tells us ${wordAnswer}. On this card, the recorded value is ${wordsCard.statDisplay}.`,
         image: wordsCard.image,
         imageAlt: wordsCard.imageAlt,
       },

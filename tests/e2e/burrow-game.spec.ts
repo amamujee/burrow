@@ -173,6 +173,46 @@ test("difficulty progression gives Easy and Medium room before Hard", () => {
   expect(autoDifficulty(3, false, 0, 20, 7)).toBe(2);
 });
 
+test("standard Quiz questions offer four distinct choices at every difficulty", () => {
+  let fourChoiceQuestions = 0;
+  let binaryComparisons = 0;
+  for (const topic of Object.keys(topicPacks) as (keyof typeof topicPacks)[]) {
+    for (const difficulty of [1, 2, 3] as const) {
+      for (let seed = 0; seed < 24; seed += 1) {
+        for (const question of buildSession(topic, difficulty, seed * 97, [])) {
+          if (question.choices.length === 2) {
+            expect(question.comparison, `${question.id} should only be binary for a direct comparison`).toBeDefined();
+            binaryComparisons += 1;
+            continue;
+          }
+          expect(question.choices, `${question.id} should have four choices`).toHaveLength(4);
+          expect(new Set(question.choices).size, `${question.id} should not repeat a choice`).toBe(4);
+          fourChoiceQuestions += 1;
+        }
+      }
+    }
+  }
+  expect(fourChoiceQuestions).toBeGreaterThan(binaryComparisons);
+});
+
+test("Peek, Numbers, and Geo Finder also target four choices", () => {
+  for (const topic of Object.keys(topicPacks) as (keyof typeof topicPacks)[]) {
+    for (const difficulty of [1, 2, 3] as const) {
+      for (let seed = 0; seed < 12; seed += 1) {
+        const rounds = [
+          buildRevealRound(topic, difficulty, seed * 53),
+          buildNumberRound(topic, difficulty, seed * 59),
+          buildGeoRound(topic, difficulty, seed * 61),
+        ];
+        for (const round of rounds) {
+          expect(round.choices, `${round.id} should have four choices`).toHaveLength(4);
+          expect(new Set(round.choices.map((choice) => typeof choice === "object" ? choice.id : choice)).size, `${round.id} should not repeat a choice`).toBe(4);
+        }
+      }
+    }
+  }
+});
+
 test("difficulty pools grow cumulatively from familiar to obscure countries", () => {
   const easy = new Set(poolForDifficulty(countries, 1).map((country) => country.name));
   const medium = new Set(poolForDifficulty(countries, 2).map((country) => country.name));
@@ -838,20 +878,22 @@ test("easy shark reading uses real, distinct ocean menus instead of nonsense ans
   expect(blueShark.choices).toContain("Blue Shark");
 
   for (const question of readingQuestions) {
-    expect(question.choices).toHaveLength(3);
-    expect(new Set(question.choices).size).toBe(3);
+    expect(question.choices).toHaveLength(4);
+    expect(new Set(question.choices).size).toBe(4);
     expect(question.answer).toBe(question.imageAlt);
     for (const choice of question.choices) expect(question.readingClue).toContain(`${choice} —`);
     expect(question.choices).not.toEqual(expect.arrayContaining(["It is a pepper", "It is a skyscraper", "It has wheels"]));
   }
 });
 
-test("building comparisons use a direct child-friendly prompt", () => {
+test("building comparisons name both choices in a direct child-friendly prompt", () => {
   const comparisons = Array.from({ length: 16 }, (_, seed) => buildSession("buildings", 3, seed * 83, []))
     .flat()
     .filter((question) => question.kind === "building-taller");
   expect(comparisons.length).toBeGreaterThan(0);
-  expect(new Set(comparisons.map((question) => question.prompt))).toEqual(new Set(["Which one is taller?"]));
+  for (const comparison of comparisons) {
+    expect(comparison.prompt).toMatch(/^Which building is taller, .+ or .+\?$/);
+  }
 });
 
 test("pepper Top Trumps uses named rarity tiers and allows exact ties", () => {
@@ -991,7 +1033,7 @@ test("Yellow Bhut Assam joins normal pepper play with its permitted source image
     imageCredit: "KnowThePepper.com (used with permission)",
     metadata: {
       location: {
-        label: "Northeast India, India",
+        label: "Northeast India",
         countries: ["India"],
         continents: ["Asia"],
       },
@@ -2142,7 +2184,7 @@ test("pepper number rounds teach multiplication with equal plant groups", async 
   }
 
   await expect(page.getByText("Grow case", { exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /\d+ .* plants grow \d+ peppers each.*How many peppers/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /\d+ plants.*grow \d+ peppers each.*How many peppers/ })).toBeVisible();
   await expect(page.getByLabel("Number equation")).toContainText(/\d+ x \d+ = \?/);
 
   const garden = page.getByLabel("Numbers story stage").getByLabel("Math picture: equal pepper plant groups");
@@ -2230,7 +2272,7 @@ test("geo finder stays inside the selected topic", async ({ page }) => {
   const seenPrompts = new Set<string>();
   for (let round = 0; round < 6; round += 1) {
     await expect(page.getByText("Spicy Peppers", { exact: true })).toBeVisible();
-    const heading = page.getByRole("heading", { name: /^Where on the map is/ });
+    const heading = page.getByRole("heading", { name: /^Where on the world map does/ });
     await expect(heading).toBeVisible();
     const prompt = await heading.textContent();
     expect(prompt).toBeTruthy();
@@ -2241,7 +2283,7 @@ test("geo finder stays inside the selected topic", async ({ page }) => {
       const box = pin.getBoundingClientRect();
       return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
     }));
-    expect(pinBoxes).toHaveLength(3);
+    expect(pinBoxes).toHaveLength(4);
     for (let first = 0; first < pinBoxes.length; first += 1) {
       for (let second = first + 1; second < pinBoxes.length; second += 1) {
         expect(Math.hypot(pinBoxes[second].x - pinBoxes[first].x, pinBoxes[second].y - pinBoxes[first].y)).toBeGreaterThanOrEqual(48);
@@ -2475,7 +2517,7 @@ test("country Top Trumps offers four meaningful geography stats", async ({ page 
 test("top trumps lets player choose a category against the computer", async ({ page }) => {
   await chooseOnlyMode(page, "Top Trumps");
 
-  await expect(page.getByRole("heading", { name: "Choose your strongest category." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Choose the category that gives your card its strongest advantage." })).toBeVisible();
   await expect(page.locator("div").filter({ hasText: /^Player$/ })).toBeVisible();
   await expect(page.getByText("Computer card", { exact: true })).toBeVisible();
 

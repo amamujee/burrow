@@ -81,6 +81,12 @@ const slug = (name) => name
   .replace(/[^a-z0-9]+/g, "-")
   .replace(/^-+|-+$/g, "");
 
+const naturalList = (items) => {
+  if (items.length < 2) return items[0] ?? "";
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(", ")}, and ${items.at(-1)}`;
+};
+
 const tsString = (value) => JSON.stringify(value);
 
 const main = async () => {
@@ -112,7 +118,7 @@ const main = async () => {
     }
 
     const name = displayNameOverrides[code] ?? country.name.common;
-    const capital = country.capital?.length ? country.capital.join(" / ") : "No official capital";
+    const capital = country.capital?.length ? naturalList(country.capital) : "No official capital";
     const population = populations.get(populationCodeOverrides[code] ?? country.cca3) ?? populationSupplements[code];
     if (!population) throw new Error(`Missing population for ${name} (${country.cca3})`);
     const physical = physicalStats[code];
@@ -122,7 +128,8 @@ const main = async () => {
     const continents = worldContinents(country);
     const difficultyBand = easyCodes.has(code) ? "easy" : hardCodes.has(code) ? "hard" : "medium";
     const recognition = difficultyBand === "easy" ? 5 : difficultyBand === "hard" ? 1 : 3;
-    const fact = `${name} is in ${country.subregion || continents.join(" and ")}. Its capital is ${capital}, and its land area is ${country.area.toLocaleString("en-US", { maximumFractionDigits: 2 })} square kilometres.`;
+    const capitalClause = capital === "No official capital" ? "It has no official capital" : `Its capital is ${capital}`;
+    const fact = `${name} is in ${naturalList(continents)}. ${capitalClause}, and it covers ${country.area.toLocaleString("en-US", { maximumFractionDigits: 2 })} square kilometers of land.`;
 
     records.push({
       id: `country-${slug(name)}`,

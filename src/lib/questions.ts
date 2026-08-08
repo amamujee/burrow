@@ -25,7 +25,19 @@ import { cardDiscoveryIdentities } from "./card-discovery";
 import { poolForDifficulty } from "./difficulty-pool";
 import { discoveryShuffle, sample, seedRandom, shuffle } from "./random";
 import { worldLocationDisplay, type WorldLocation } from "./card-metadata";
-import { buildGeoChoicesForLocations, jetWorldLocation, type GeoChoice } from "./game-modes";
+import {
+  buildGeoChoicesForLocations,
+  countryCapitalLabel,
+  countryFactSentence,
+  countryNameInProse,
+  jetCategoryWithArticle,
+  jetCountryInProse,
+  jetWorldLocation,
+  sentenceStart,
+  worldContinentLabel,
+  worldLocationLabelInProse,
+  type GeoChoice,
+} from "./game-modes";
 
 export type TopicScope = TopicId | readonly KnowledgeTopic[];
 
@@ -136,7 +148,10 @@ const maxCountryArea = Math.max(...countries.map((country) => country.areaKm2));
 const allTopics: KnowledgeTopic[] = [...topicIds];
 const preferredPool = <T extends { id: string }>(items: readonly T[], difficulty: Difficulty) => poolForDifficulty(items, difficulty);
 
-const choiceCountForDifficulty = (difficulty: Difficulty) => (difficulty === 1 ? 3 : 4);
+const choiceCountForDifficulty = (difficulty: Difficulty) => {
+  void difficulty;
+  return 4;
+};
 
 const topicsForScope = (topic: TopicScope): KnowledgeTopic[] => {
   if (typeof topic !== "string") return topic.length ? [...topic] : allTopics;
@@ -177,6 +192,15 @@ const naturalList = (value: string) => {
   if (items.length === 2) return `${items[0]} and ${items[1]}`;
   return `${items.slice(0, -1).join(", ")}, and ${items.at(-1)}`;
 };
+const countryRegionDetail = (country: Country) => {
+  const continent = worldContinentLabel(country.continents);
+  return country.subregion === continent ? "" : ` Geographers place it in the ${country.subregion} subregion.`;
+};
+const countryPopulationSourceSentence = (country: Country) => country.populationStatus === "world-bank"
+  ? `The population figure uses World Bank data from ${country.populationYear}.`
+  : country.populationStatus === "census"
+    ? `The population figure comes from the ${country.populationYear} census.`
+    : `The population figure is based on a ${country.populationNote.toLowerCase()}.`;
 const dietParts = (diet: string) => diet
   .toLowerCase()
   .split(/,|\band\b/)
@@ -366,7 +390,7 @@ const buildingReadingQuestion = (seed: number, building: Building, difficulty: D
   const templates = [
     {
       id: "city",
-      prompt: "Which detail matches the clue?",
+      prompt: "Which detail is supported by the clue?",
       clue: `${building.name} rises in ${building.city}, ${building.country}.`,
       answer: `It is in ${building.city}.`,
       distractors: shuffle(otherCities, seed + 34).map((city) => `It is in ${city}.`),
@@ -382,7 +406,7 @@ const buildingReadingQuestion = (seed: number, building: Building, difficulty: D
     },
     {
       id: "floors",
-      prompt: "Which floor count matches?",
+      prompt: "Which floor count matches the field note?",
       clue: `${building.name} has ${building.floors ?? "many"} floors and ${buildingHeightClause(building)}.`,
       answer: building.floors ? `It has ${building.floors} floors.` : buildingHeightAnswer(building),
       distractors: building.floors
@@ -395,7 +419,7 @@ const buildingReadingQuestion = (seed: number, building: Building, difficulty: D
       : [
           {
             id: "status",
-            prompt: "Which sentence fits the clue?",
+            prompt: "Which statement is supported by the clue?",
             clue: `${building.name} is ${buildingStatusLabel(building)} in ${building.city}.`,
             answer: `It is ${buildingStatusLabel(building)}.`,
             distractors: [
@@ -413,7 +437,7 @@ const buildingReadingQuestion = (seed: number, building: Building, difficulty: D
       ? [
           {
             id: "borough",
-            prompt: "Which detail matches the clue?",
+            prompt: "Which detail is supported by the clue?",
             clue: `${building.name} rises in Brooklyn, New York City.`,
             answer: "It is in Brooklyn.",
             distractors: ["It is in Chicago.", "It is in Dubai.", "It is in Hong Kong.", "It is in Shanghai."],
@@ -427,7 +451,7 @@ const buildingReadingQuestion = (seed: number, building: Building, difficulty: D
       clue: building.fact,
       answer: building.name,
       distractors: shuffle(buildings.filter((item) => item.id !== building.id), seed + 36).map((item) => item.name),
-      explanation: `${building.name}: ${building.fact}`,
+      explanation: `${building.name} is the answer. ${building.fact}`,
     },
   ].filter((template) => template.distractors.length >= count - 1);
 
@@ -559,6 +583,12 @@ const spaceStatDisplay = (value: number, stat: "temp" | "radius" | "distance" | 
   if (stat === "distance") return item.kind === "star" ? `${formatNumber(value)} ly` : `${formatNumber(value)}M mi`;
   return `${formatNumber(value)} moons`;
 };
+const spaceStatProse = (value: number, stat: "temp" | "radius" | "distance" | "moons", item: SpaceCard) => {
+  if (stat === "temp") return item.kind === "star" ? `${formatNumber(value)} kelvins` : `${formatNumber(value)} degrees Fahrenheit`;
+  if (stat === "radius") return item.kind === "star" ? `${formatNumber(value)} times the Sun's radius` : `${formatNumber(value)} miles wide`;
+  if (stat === "distance") return item.kind === "star" ? `${formatNumber(value)} light-years` : `${formatNumber(value)} million miles`;
+  return `${formatNumber(value)} moons`;
+};
 
 const spaceMeterMax = (stat: "temp" | "radius" | "distance" | "moons", item: SpaceCard) => {
   if (stat === "temp") return item.kind === "star" ? maxStarTemp : maxPlanetTemp;
@@ -593,7 +623,7 @@ const countryComparisonCard = (country: Country, label: "A" | "B", stat: "popula
   imageCredit: country.imageCredit,
   statLabel: stat === "population" ? "Population" : "Land area",
   statValue: stat === "population" ? `${formatNumber(country.population)} people` : `${formatNumber(country.areaKm2)} km²`,
-  subStat: `${country.capital} · ${country.continents.join(" / ")}`,
+  subStat: `${countryCapitalLabel(country)} · ${worldContinentLabel(country.continents)}`,
   meterValue: stat === "population" ? country.population : country.areaKm2,
   meterMax: stat === "population" ? maxCountryPopulation : maxCountryArea,
 });
@@ -608,10 +638,10 @@ const pepperHotterQuestion = (seed: number, first: MeasuredPepper, second: Measu
     topic: "peppers",
     kind: "pepper-hotter",
     prompt: promptVariant(seed + 11, [
-      `Which pepper is spicier: ${first.name} or ${second.name}?`,
-      `Read the Scoville cards. Which is hotter, ${first.name} or ${second.name}?`,
-      `Higher Scoville wins this round. Pick ${first.name} or ${second.name}.`,
-      `Which one brings more heat: ${first.name} or ${second.name}?`,
+      `Which pepper is hotter, ${first.name} or ${second.name}?`,
+      `Compare the Scoville cards. Which pepper has the higher score, ${first.name} or ${second.name}?`,
+      `A higher Scoville score means more heat. Which pepper has the higher score, ${first.name} or ${second.name}?`,
+      `Which of these peppers is spicier, ${first.name} or ${second.name}?`,
     ]),
     image: hotter.image,
     imageAlt: hotter.name,
@@ -619,7 +649,7 @@ const pepperHotterQuestion = (seed: number, first: MeasuredPepper, second: Measu
     comparison: cards,
     choices: cards.map((card) => `${card.label}: ${card.title}`),
     answer: comparisonAnswer(cards, hotter.name),
-    explanation: `${hotter.name} can reach ${formatShu(hotter.shuMax)}. Bigger Scoville numbers mean more heat.`,
+    explanation: `${hotter.name} can reach ${formatShu(hotter.shuMax)}, the higher score in this comparison. A higher Scoville score indicates more heat.`,
     locations: itemLocations(first, second),
     heatMeter: heatMeter(hotter.heat),
   };
@@ -637,15 +667,15 @@ const countryComparisonQuestion = (seed: number, first: Country, second: Country
     topic: "countries",
     kind: stat === "population" ? "country-population" : "country-area",
     prompt: stat === "population"
-      ? `Which country has more people: ${first.name} or ${second.name}?`
-      : `Which country has the bigger land area: ${first.name} or ${second.name}?`,
+      ? `Which country has more people, ${countryNameInProse(first)} or ${countryNameInProse(second)}?`
+      : `Which country has the larger land area, ${countryNameInProse(first)} or ${countryNameInProse(second)}?`,
     image: winner.image,
     imageAlt: `Flag of ${winner.name}`,
     imageCredit: winner.imageCredit,
     comparison: cards,
     choices: cards.map((card) => `${card.label}: ${card.title}`),
     answer: comparisonAnswer(cards, winner.name),
-    explanation: `${winner.name} wins with ${formatNumber(winningValue)} ${unit}. ${stat === "population" ? `This is a ${winner.populationYear} population figure.` : "Land area compares the size of the country itself."}`,
+    explanation: `${sentenceStart(countryNameInProse(winner))} has the higher value: ${formatNumber(winningValue)} ${unit}. ${stat === "population" ? `This population figure is from ${winner.populationYear}.` : "Land area measures the size of the country's land surface."}`,
     locations: itemLocations(first, second),
     numberLine: { label: stat === "population" ? "Population" : "Land area", value: winningValue, max: stat === "population" ? maxCountryPopulation : maxCountryArea, unit },
   };
@@ -658,14 +688,14 @@ const buildingTallerQuestion = (seed: number, first: Building, second: Building)
     id: `${seed}-building-taller-${first.id}-${second.id}`,
     topic: "buildings",
     kind: "building-taller",
-    prompt: "Which one is taller?",
+    prompt: `Which building is taller, ${first.name} or ${second.name}?`,
     image: taller.image,
     imageAlt: taller.name,
     imageCredit: taller.imageCredit,
     comparison: cards,
     choices: cards.map((card) => `${card.label}: ${card.title}`),
     answer: comparisonAnswer(cards, taller.name),
-    explanation: `${buildingHeightSentence(taller)}. Taller means the bigger number wins.`,
+    explanation: `${buildingHeightSentence(taller)}, making it the taller of the two buildings.`,
     locations: buildingLocations(first, second),
     numberLine: { label: taller.name, value: taller.heightFt, max: maxHeight, unit: "ft" },
   };
@@ -679,10 +709,10 @@ const sharkComparisonQuestion = (seed: number, first: Shark, second: Shark, stat
   const cards = shuffle([sharkCard(first, "A", stat), sharkCard(second, "B", stat)], seed + 47);
   const kind: QuestionKind = stat === "length" ? "shark-bigger" : stat === "speed" ? "shark-faster" : "shark-power";
   const prompt = stat === "length"
-    ? promptVariant(seed + 46, [`Which shark is bigger: ${first.name} or ${second.name}?`, `Compare the lengths. Which is bigger, ${first.name} or ${second.name}?`, `Longest shark wins: ${first.name} or ${second.name}?`])
+    ? promptVariant(seed + 46, [`Which shark can grow longer, ${first.name} or ${second.name}?`, `Compare the recorded lengths. Which shark is longer, ${first.name} or ${second.name}?`, `Which shark has the greater maximum length, ${first.name} or ${second.name}?`])
     : stat === "speed"
-      ? promptVariant(seed + 46, [`Which shark is faster: ${first.name} or ${second.name}?`, `Race the speed cards. Does ${first.name} or ${second.name} win?`, `Which shark has the higher top speed: ${first.name} or ${second.name}?`])
-      : promptVariant(seed + 46, [`Which shark has more predator power: ${first.name} or ${second.name}?`, `Compare predator power. Pick ${first.name} or ${second.name}.`, `Which power score is stronger: ${first.name} or ${second.name}?`]);
+      ? promptVariant(seed + 46, [`Which shark is faster, ${first.name} or ${second.name}?`, `Compare the speed cards. Which shark has the higher top speed, ${first.name} or ${second.name}?`, `Which shark can swim faster, ${first.name} or ${second.name}?`])
+      : promptVariant(seed + 46, [`Which shark has the higher predator-power rating, ${first.name} or ${second.name}?`, `Compare the predator-power ratings. Which shark scores higher, ${first.name} or ${second.name}?`, `Which shark has the stronger predator-power score, ${first.name} or ${second.name}?`]);
   const unit = stat === "length" ? "feet long" : stat === "speed" ? "mph" : "power points";
   return {
     id: `${seed}-${kind}-${first.id}-${second.id}`,
@@ -695,7 +725,7 @@ const sharkComparisonQuestion = (seed: number, first: Shark, second: Shark, stat
     comparison: cards,
     choices: cards.map((card) => `${card.label}: ${card.title}`),
     answer: comparisonAnswer(cards, winner.name),
-    explanation: `${winner.name} wins this matchup with ${formatNumber(winnerValue)} ${unit}.`,
+    explanation: `${winner.name} has the higher value in this comparison: ${formatNumber(winnerValue)} ${unit}.`,
     numberLine: { label: stat === "length" ? "Size" : stat === "speed" ? "Speed" : "Power", value: winnerValue, max: stat === "length" ? maxSharkLength : stat === "speed" ? maxSharkSpeed : maxSharkPower, unit: stat === "length" ? "ft" : stat === "speed" ? "mph" : "/5" },
   };
 };
@@ -708,10 +738,10 @@ const jetComparisonQuestion = (seed: number, first: Jet, second: Jet, stat: "spe
   const cards = shuffle([jetCard(first, "A", stat), jetCard(second, "B", stat)], seed + 57);
   const kind: QuestionKind = stat === "speed" ? "jet-faster" : stat === "range" ? "jet-range" : "jet-firepower";
   const prompt = stat === "speed"
-    ? promptVariant(seed + 56, [`Which jet is faster: ${first.name} or ${second.name}?`, `Compare top speeds. Pick ${first.name} or ${second.name}.`, `Which aircraft wins the speed race: ${first.name} or ${second.name}?`])
+    ? promptVariant(seed + 56, [`Which jet is faster, ${first.name} or ${second.name}?`, `Compare the top speeds. Which jet is faster, ${first.name} or ${second.name}?`, `Which aircraft has the higher top speed, ${first.name} or ${second.name}?`])
     : stat === "range"
-      ? promptVariant(seed + 56, [`Which jet can fly farther: ${first.name} or ${second.name}?`, `Read the range numbers. Does ${first.name} or ${second.name} go farther?`, `Which aircraft wins on range: ${first.name} or ${second.name}?`])
-      : promptVariant(seed + 56, [`Which jet has more firepower: ${first.name} or ${second.name}?`, `Compare firepower. Pick ${first.name} or ${second.name}.`, `Which aircraft has the stronger firepower score: ${first.name} or ${second.name}?`]);
+      ? promptVariant(seed + 56, [`Which jet can fly farther, ${first.name} or ${second.name}?`, `Compare the range figures. Which jet can travel farther, ${first.name} or ${second.name}?`, `Which aircraft has the longer range, ${first.name} or ${second.name}?`])
+      : promptVariant(seed + 56, [`Which jet has more firepower, ${first.name} or ${second.name}?`, `Compare the firepower ratings. Which jet scores higher, ${first.name} or ${second.name}?`, `Which aircraft has the stronger firepower rating, ${first.name} or ${second.name}?`]);
   return {
     id: `${seed}-${kind}-${first.id}-${second.id}`,
     topic: "jets",
@@ -723,7 +753,7 @@ const jetComparisonQuestion = (seed: number, first: Jet, second: Jet, stat: "spe
     comparison: cards,
     choices: cards.map((card) => `${card.label}: ${card.title}`),
     answer: comparisonAnswer(cards, winner.name),
-    explanation: `${winner.name} wins with ${stat === "speed" ? `${formatNumber(winnerValue)} mph` : stat === "range" ? `${formatNumber(winnerValue)} miles of range` : `${winnerValue}/5 firepower`}.`,
+    explanation: `${winner.name} has the higher value: ${stat === "speed" ? `${formatNumber(winnerValue)} mph` : stat === "range" ? `${formatNumber(winnerValue)} miles of range` : `a firepower rating of ${winnerValue}/5`}.`,
     numberLine: { label: stat === "speed" ? "Speed" : stat === "range" ? "Range" : "Firepower", value: winnerValue, max: stat === "speed" ? maxJetSpeed : stat === "range" ? maxJetRange : maxJetFirepower, unit: stat === "speed" ? "mph" : stat === "range" ? "mi" : "/5" },
   };
 };
@@ -734,12 +764,12 @@ const spaceComparisonQuestion = (seed: number, first: SpaceCard, second: SpaceCa
   const kind: QuestionKind = stat === "temp" ? "space-hotter" : stat === "radius" ? "space-bigger" : stat === "distance" ? "space-farther" : "space-moons";
   const noun = first.kind === "star" ? "star" : "planet";
   const prompt = stat === "temp"
-    ? promptVariant(seed + 66, [`Which ${noun} is hotter: ${first.name} or ${second.name}?`, `Compare temperatures. Pick ${first.name} or ${second.name}.`, `Which ${noun} has the higher temperature: ${first.name} or ${second.name}?`])
+    ? promptVariant(seed + 66, [`Which ${noun} is hotter, ${first.name} or ${second.name}?`, `Compare the temperatures. Which ${noun} is hotter, ${first.name} or ${second.name}?`, `Which ${noun} has the higher temperature, ${first.name} or ${second.name}?`])
     : stat === "radius"
-      ? promptVariant(seed + 66, [`Which ${noun} is bigger: ${first.name} or ${second.name}?`, `Read the size cards. Pick ${first.name} or ${second.name}.`, `Which ${noun} wins on size: ${first.name} or ${second.name}?`])
+      ? promptVariant(seed + 66, [`Which ${noun} is larger, ${first.name} or ${second.name}?`, `Compare the size cards. Which ${noun} is larger, ${first.name} or ${second.name}?`, `Which ${noun} has the greater size, ${first.name} or ${second.name}?`])
       : stat === "distance"
-        ? promptVariant(seed + 66, [`Which ${noun} is farther away: ${first.name} or ${second.name}?`, `Compare distances. Pick ${first.name} or ${second.name}.`, `Which ${noun} has the larger distance number: ${first.name} or ${second.name}?`])
-        : promptVariant(seed + 66, [`Which planet has more moons: ${first.name} or ${second.name}?`, `Count the moons. Does ${first.name} or ${second.name} have more?`, `Which planet wins on moon count: ${first.name} or ${second.name}?`]);
+        ? promptVariant(seed + 66, [`Which ${noun} is farther away, ${first.name} or ${second.name}?`, `Compare the distances. Which ${noun} is farther away, ${first.name} or ${second.name}?`, `Which ${noun} has the greater distance, ${first.name} or ${second.name}?`])
+        : promptVariant(seed + 66, [`Which planet has more moons, ${first.name} or ${second.name}?`, `Compare the moon counts. Which planet has more, ${first.name} or ${second.name}?`, `Which planet has the larger number of moons, ${first.name} or ${second.name}?`]);
   return {
     id: `${seed}-${kind}-${first.id}-${second.id}`,
     topic: "space",
@@ -751,7 +781,7 @@ const spaceComparisonQuestion = (seed: number, first: SpaceCard, second: SpaceCa
     comparison: cards,
     choices: cards.map((card) => `${card.label}: ${card.title}`),
     answer: comparisonAnswer(cards, winner.name),
-    explanation: `${winner.name} wins with ${spaceStatDisplay(spaceValue(winner, stat), stat, winner)}. ${winner.statNote ?? winner.fact}`,
+    explanation: `${winner.name} has the higher value: ${spaceStatProse(spaceValue(winner, stat), stat, winner)}. ${winner.statNote ?? winner.fact}`,
     numberLine: { label: stat === "temp" ? "Temperature" : stat === "radius" ? "Size" : stat === "distance" ? "Distance" : "Moons", value: spaceValue(winner, stat), max: spaceMeterMax(stat, winner), unit: winner.kind === "star" && stat === "radius" ? "x Sun" : stat === "temp" ? (winner.kind === "star" ? "K" : "°F") : stat === "distance" ? (winner.kind === "star" ? "ly" : "million mi") : stat === "moons" ? "moons" : "mi" },
   };
 };
@@ -907,13 +937,13 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
       id: `${seed}-country-location-${locatedCountry.id}`,
       topic: "countries",
       kind,
-      prompt: `Where on the world map is ${locatedCountry.name}?`,
+      prompt: `Where on the world map is ${countryNameInProse(locatedCountry)}?`,
       image: locatedCountry.image,
       imageAlt: `Flag of ${locatedCountry.name}`,
       imageCredit: locatedCountry.imageCredit,
       choices,
       answer: locatedCountry.name,
-      explanation: `${locatedCountry.name} is in ${locatedCountry.continents.join(" / ")}, in the ${locatedCountry.subregion} region. Its capital is ${locatedCountry.capital}.`,
+      explanation: `${countryFactSentence(locatedCountry)}${countryRegionDetail(locatedCountry)}`,
       collectionTitles: [locatedCountry.name],
       locations: itemLocations(locatedCountry),
       map: { choices: mapChoices, answerId: locatedCountry.name },
@@ -921,36 +951,37 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
   }
 
   if (kind === "country-capital") {
+    const capital = countryCapitalLabel(country);
     return {
       id: `${seed}-country-capital-${country.id}`,
       topic: "countries",
       kind,
-      prompt: `What is the capital of ${country.name}?`,
+      prompt: `What is the capital of ${countryNameInProse(country)}?`,
       image: country.image,
       imageAlt: `Flag of ${country.name}`,
       imageCredit: country.imageCredit,
-      choices: answerChoices(country.capital, pool.filter((item) => item.id !== country.id).map((item) => item.capital), seed + 19, choiceCountForDifficulty(difficulty)),
-      answer: country.capital,
-      explanation: `${country.capital} is the capital of ${country.name}. ${country.fact}`,
+      choices: answerChoices(capital, pool.filter((item) => item.id !== country.id).map(countryCapitalLabel), seed + 19, choiceCountForDifficulty(difficulty)),
+      answer: capital,
+      explanation: countryFactSentence(country),
       collectionTitles: [country.name],
       locations: itemLocations(country),
     };
   }
 
   if (kind === "country-continent") {
-    const answer = country.continents.join(" / ");
-    const continentOptions = Array.from(new Set(countries.map((item) => item.continents.join(" / "))));
+    const answer = worldContinentLabel(country.continents);
+    const continentOptions = Array.from(new Set(countries.map((item) => worldContinentLabel(item.continents))));
     return {
       id: `${seed}-country-continent-${country.id}`,
       topic: "countries",
       kind,
-      prompt: `Which continent is ${country.name} in?`,
+      prompt: `On which continent is ${countryNameInProse(country)} located?`,
       image: country.image,
       imageAlt: `Flag of ${country.name}`,
       imageCredit: country.imageCredit,
       choices: answerChoices(answer, continentOptions, seed + 20, choiceCountForDifficulty(difficulty)),
       answer,
-      explanation: `${country.name} is in ${answer}. Its region is ${country.subregion}.`,
+      explanation: `${sentenceStart(countryNameInProse(country))} is in ${answer}.${countryRegionDetail(country)}`,
       collectionTitles: [country.name],
       locations: itemLocations(country),
     };
@@ -975,13 +1006,13 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
       id: `${seed}-country-neighbors-${country.id}`,
       topic: "countries",
       kind,
-      prompt: `How many land neighbors does ${country.name} have?`,
+      prompt: `How many land neighbors does ${countryNameInProse(country)} have?`,
       image: country.image,
       imageAlt: `Flag of ${country.name}`,
       imageCredit: country.imageCredit,
       choices: answerChoices(answer, otherCounts, seed + 22, choiceCountForDifficulty(difficulty)),
       answer,
-      explanation: `${country.name} has ${answer}. Its region is ${country.subregion}.`,
+      explanation: `${sentenceStart(countryNameInProse(country))} has ${answer}.`,
       collectionTitles: [country.name],
       locations: itemLocations(country),
     };
@@ -992,13 +1023,13 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
       id: `${seed}-country-highest-point-${country.id}`,
       topic: "countries",
       kind,
-      prompt: `What is the highest point in ${country.name}?`,
+      prompt: `What is the highest point in ${countryNameInProse(country)}?`,
       image: country.image,
       imageAlt: `Flag of ${country.name}`,
       imageCredit: country.imageCredit,
       choices: answerChoices(country.highestPointName, pool.filter((item) => item.id !== country.id).map((item) => item.highestPointName), seed + 22, choiceCountForDifficulty(difficulty)),
       answer: country.highestPointName,
-      explanation: `${country.highestPointName} is ${country.name}'s highest point at about ${formatNumber(country.highestPointM)} metres.`,
+      explanation: `${country.highestPointName} is the highest point in ${countryNameInProse(country)}, at about ${formatNumber(country.highestPointM)} meters above sea level.`,
       collectionTitles: [country.name],
       locations: itemLocations(country),
     };
@@ -1018,8 +1049,8 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
     imageCredit: country.imageCredit,
     choices: answerChoices(country.name, distractors.map((item) => item.name), seed + 23, choiceCountForDifficulty(difficulty)),
     answer: country.name,
-    secondChanceClue: `Second-chance clue: its capital is ${country.capital}. It is in ${country.continents.join(" / ")} and has about ${compactPeople(country.population)} people.`,
-    explanation: `That is the flag of ${country.name}. ${country.fact} Population: ${country.populationNote}.`,
+    secondChanceClue: `Second-chance clue: its capital is ${countryCapitalLabel(country)}. It is in ${worldContinentLabel(country.continents)} and has about ${compactPeople(country.population)} people.`,
+    explanation: `That is the flag of ${countryNameInProse(country)}. ${countryFactSentence(country)} ${countryPopulationSourceSentence(country)}`,
     collectionTitles: [country.name],
     locations: itemLocations(country),
     numberLine: { label: "Population", value: country.population, max: maxCountryPopulation, unit: "people" },
@@ -1060,13 +1091,13 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
       id: `${seed}-pepper-location-${locatedPepper.id}`,
       topic: "peppers",
       kind,
-      prompt: promptVariant(seed + 5, [`Which place is ${locatedPepper.name} linked to?`, `Read the map labels. Where is ${locatedPepper.name} connected to?`, `${locatedPepper.name} has a strong link to which place?`]),
+      prompt: promptVariant(seed + 5, [`Which place is ${locatedPepper.name} linked to?`, `Read the map labels. Which place is connected with ${locatedPepper.name}?`, `Which place has a strong connection with ${locatedPepper.name}?`]),
       image: locatedPepper.image,
       imageAlt: locatedPepper.name,
       imageCredit: locatedPepper.imageCredit,
       choices,
       answer: locatedPepper.metadata.location.label,
-      explanation: `${locatedPepper.name} is linked to ${locatedPepper.metadata.location.label}. Pepper locations can mean origin, namesake, or a strong regional food connection.`,
+      explanation: `${locatedPepper.name} is linked to ${worldLocationLabelInProse(locatedPepper.metadata.location.label)}. A pepper's location may describe its origin, namesake, or a strong regional food connection.`,
       locations: itemLocations(locatedPepper),
       map: {
         choices: mapChoices,
@@ -1083,8 +1114,8 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
       topic: "peppers",
       kind,
       prompt: pepper.isCondiment
-        ? promptVariant(seed + 6, [`Look at this spicy condiment. What heat zone is ${pepper.name}?`, `Which heat band fits the condiment ${pepper.name}?`, `Read the heat choices. Where does ${pepper.name} belong?`])
-        : promptVariant(seed + 6, [`Look at this ${pepper.color} pepper. What heat zone is ${pepper.name}?`, `Which heat band fits ${pepper.name}?`, `Read the heat choices. Where does ${pepper.name} belong?`]),
+        ? promptVariant(seed + 6, [`Which heat zone does the condiment ${pepper.name} belong to?`, `Which heat band fits the condiment ${pepper.name}?`, `Read the heat choices. Where does ${pepper.name} belong?`])
+        : promptVariant(seed + 6, [`Which heat zone does ${pepper.name} belong to?`, `Which heat band fits ${pepper.name}?`, `Read the heat choices. Where does ${pepper.name} belong?`]),
       image: pepper.image,
       imageAlt: pepper.name,
       imageCredit: pepper.imageCredit,
@@ -1107,18 +1138,18 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
 
   if (kind === "pepper-reading") {
     const words: Record<HeatBand, string> = {
-      "not spicy": "Not spicy means no pepper burn.",
-      mild: "Mild means a tiny spicy spark.",
-      warm: "Warm means two-pepper heat.",
-      hot: "Hot means a real spicy kick.",
-      "very hot": "Very hot means tiny bites only.",
-      insane: "Insane means super-hot legend zone.",
+      "not spicy": "A pepper in the not-spicy band produces no capsaicin burn.",
+      mild: "A mild pepper gives only a faint spark of heat.",
+      warm: "A warm pepper has noticeable heat without reaching the hot band.",
+      hot: "A hot pepper delivers a strong, unmistakable kick.",
+      "very hot": "A very hot pepper contains intense heat and calls for great care.",
+      insane: "The insane band is reserved for legendary super-hot peppers.",
     };
     const count = choiceCountForDifficulty(difficulty);
     const templates = [
       {
         id: "heat-word",
-        prompt: promptVariant(seed + 12, ["Read the clue. Which heat word fits?", "Which heat zone matches the field note?", "Do not guess from the picture — what does the clue say?"]),
+        prompt: promptVariant(seed + 12, ["Read the clue. Which heat label fits?", "Which heat zone matches the field note?", "Use the words, rather than the picture, to identify the heat zone."]),
         clue: words[pepper.heat],
         answer: pepper.heat,
         distractors: heatBands.filter((heat) => heat !== pepper.heat),
@@ -1126,7 +1157,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
       },
       {
         id: "color",
-        prompt: promptVariant(seed + 13, [`Which color belongs to ${pepper.name}?`, "Read carefully. Which color was named?", "Choose the color in the field note."]),
+        prompt: promptVariant(seed + 13, [`Which color is listed for ${pepper.name}?`, "Read carefully. Which color does the field note name?", "Which color appears in the field note?"]),
         clue: `${pepper.name} is catalogued as ${pepper.color} and sits in the ${pepper.heat} heat zone.`,
         answer: pepper.color,
         distractors: pool.filter((item) => item.id !== pepper.id).map((item) => item.color),
@@ -1134,11 +1165,11 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
       },
       {
         id: "fact-identity",
-        prompt: promptVariant(seed + 14, ["Which pepper does this field note describe?", "Read the fact, then name the pepper.", "The picture is only a clue. Which name matches the words?"]),
+        prompt: promptVariant(seed + 14, ["Which pepper does this field note describe?", "Read the fact, then identify the pepper.", "The picture is only one clue. Which name matches the written description?"]),
         clue: clueWithoutLeadingName(pepper.fact, pepper.name),
         answer: pepper.name,
         distractors: pool.filter((item) => item.id !== pepper.id).map((item) => item.name),
-        explanation: `${pepper.name}: ${pepper.fact}`,
+        explanation: `${pepper.name} is the answer. ${pepper.fact}`,
       },
     ];
     const template = sample(templates, seed + 15);
@@ -1172,7 +1203,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
     imageCredit: measuredPepper.imageCredit,
     choices: answerChoices(correct, otherRanges, seed + 17, choiceCountForDifficulty(difficulty)),
     answer: correct,
-    explanation: `${measuredPepper.name} is about ${correct}${measuredPepper.scovilleStatus === "unofficial" ? " in unofficial listings" : ""}. Its top score puts it in the ${measuredPepper.heat} band (${heatBandRangeLabel(measuredPepper.heat)}).`,
+    explanation: `${measuredPepper.name} has a reported range of ${correct}${measuredPepper.scovilleStatus === "unofficial" ? " in unofficial listings" : ""}. Its highest reported score places it in the ${measuredPepper.heat} band (${heatBandRangeLabel(measuredPepper.heat)}).`,
     locations: itemLocations(measuredPepper),
     heatMeter: heatMeter(measuredPepper.heat),
     numberLine: { label: "Heat", value: measuredPepper.shuMax, max: maxShu, unit: "SHU" },
@@ -1204,13 +1235,13 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
       id: `${seed}-building-location-${locatedBuilding.id}`,
       topic: "buildings",
       kind,
-      prompt: promptVariant(seed + 24, [`Which city and country is ${locatedBuilding.name} in?`, `Find the place linked to ${locatedBuilding.name}.`, `Read the location choices. Where is ${locatedBuilding.name}?`]),
+      prompt: promptVariant(seed + 24, [`In which city and country is ${locatedBuilding.name}?`, `Find the place linked to ${locatedBuilding.name}.`, `Read the location choices. Where is ${locatedBuilding.name}?`]),
       image: locatedBuilding.image,
       imageAlt: locatedBuilding.name,
       imageCredit: locatedBuilding.imageCredit,
       choices,
       answer: locatedBuilding.metadata.location.label,
-      explanation: `${locatedBuilding.name} is in ${locatedBuilding.metadata.location.label}.`,
+      explanation: `${locatedBuilding.name} is in ${worldLocationLabelInProse(locatedBuilding.metadata.location.label)}.`,
       locations: itemLocations(locatedBuilding),
       map: {
         choices: mapChoices,
@@ -1226,13 +1257,13 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
       id: `${seed}-building-name-${building.id}`,
       topic: "buildings",
       kind,
-      prompt: promptVariant(seed + 24, ["Which building is this?", "Study the picture. What is this building called?", "Which name matches this skyline clue?"]),
+      prompt: promptVariant(seed + 24, ["Which building is shown here?", "Study the picture. What is this building called?", "Which building name matches this skyline?"]),
       image: building.image,
       imageAlt: building.name,
       imageCredit: building.imageCredit,
       choices: shuffle([building.name, ...options], seed + 25),
       answer: building.name,
-      explanation: `That is ${building.name} in ${building.city}. ${building.fact}`,
+      explanation: `The building is ${building.name}, in ${building.city}. ${building.fact}`,
       locations: buildingLocations(building),
       numberLine: { label: "Height", value: building.heightFt, max: maxHeight, unit: "ft" },
     };
@@ -1262,7 +1293,7 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
       comparison: cards,
       choices,
       answer: correct,
-      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(diff)}. So ${taller.name} is about ${formatNumber(diff)} feet taller.`,
+      explanation: `Subtracting the heights gives ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(diff)}. Therefore, ${taller.name} is about ${formatNumber(diff)} feet taller.`,
       locations: buildingLocations(taller, shorter),
       numberLine: { label: "Difference", value: diff, max: 1000, unit: "ft" },
     };
@@ -1305,13 +1336,13 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
       id: `${seed}-shark-name-${shark.id}`,
       topic: "sharks",
       kind,
-      prompt: promptVariant(seed + 42, ["Which shark is this?", "Study the picture. Which shark name fits?", "What shark is hiding in this field photo?"]),
+      prompt: promptVariant(seed + 42, ["Which shark is shown here?", "Study the picture. Which shark name fits?", "Which shark does this field photograph show?"]),
       image: shark.image,
       imageAlt: shark.name,
       imageCredit: shark.imageCredit,
       choices: shuffle([shark.name, ...options], seed + 43),
       answer: shark.name,
-      explanation: `That is the ${shark.name}. ${shark.fact}`,
+      explanation: `The photograph shows the ${shark.name}. ${shark.fact}`,
       numberLine: { label: "Size", value: shark.lengthFt, max: maxSharkLength, unit: "ft" },
     };
   }
@@ -1343,7 +1374,10 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
     const challenger = sample(pool.filter((item) => item.id !== shark.id && item.lengthFt !== shark.lengthFt), seed + 48);
     const bigger = shark.lengthFt > challenger.lengthFt ? shark : challenger;
     const smaller = shark.lengthFt > challenger.lengthFt ? challenger : shark;
-    const { biggerValue, smallerValue, diff } = roundedSubtractionPair(bigger.lengthFt, smaller.lengthFt, 5);
+    const roundedLengths = roundedSubtractionPair(bigger.lengthFt, smaller.lengthFt, 5);
+    const biggerValue = roundedLengths.biggerValue;
+    const smallerValue = Math.max(1, roundedLengths.smallerValue);
+    const diff = biggerValue - smallerValue;
     const correct = `${formatNumber(diff)} ft`;
     const choices = differenceChoices(diff, "ft", 5, difficulty, seed + 49);
     const cards = shuffle([roundedComparisonCard(sharkCard(bigger, "A", "length"), biggerValue, "ft"), roundedComparisonCard(sharkCard(smaller, "B", "length"), smallerValue, "ft")], seed + 50);
@@ -1358,7 +1392,7 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
       comparison: cards,
       choices: choices.includes(correct) ? choices : [correct, ...choices.slice(1)],
       answer: correct,
-      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(diff)}. So ${bigger.name} is about ${formatNumber(diff)} feet longer.`,
+      explanation: `Subtracting the lengths gives ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(diff)}. Therefore, ${bigger.name} is about ${formatNumber(diff)} feet longer.`,
       numberLine: { label: "Difference", value: diff, max: maxSharkLength, unit: "ft" },
     };
   }
@@ -1385,7 +1419,7 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
     imageCredit: shark.imageCredit,
     choices: answerChoices(shark.name, distractorSharks.map((item) => item.name), seed + 51, choiceCount),
     answer: shark.name,
-    explanation: `${shark.name} eats ${shark.diet}. ${shark.fact}`,
+    explanation: `${shark.name} eats ${naturalList(shark.diet)}. ${shark.fact}`,
   };
 };
 
@@ -1398,21 +1432,20 @@ const jetNameDistractors = (jet: Jet, difficulty: Difficulty, seed: number) => {
 };
 
 const jetReadingOptions = (jet: Jet, seed: number, count: number) => {
-  const category = jetCategoryLabels[jet.category];
   const wrongCategory = sample(jets.filter((item) => item.category !== jet.category), seed + 1);
   const wrongCountry = sample(jets.filter((item) => item.country !== jet.country), seed + 2);
   const wrongSpeed = sample(jets.filter((item) => Math.abs(item.maxSpeedMph - jet.maxSpeedMph) >= 250), seed + 3);
   const wrongRange = sample(jets.filter((item) => Math.abs(item.rangeMiles - jet.rangeMiles) >= 800), seed + 4);
   const correctOptions = [
-    `${jet.name} is a ${category} aircraft`,
-    `${jet.name} is from ${jet.country}`,
+    `${jet.name} is ${jetCategoryWithArticle(jet.category)}`,
+    `${jet.name} is from ${jetCountryInProse(jet.country)}`,
     `${jet.name} reaches about ${formatNumber(jet.maxSpeedMph)} mph`,
     `${jet.name} has about ${formatNumber(jet.rangeMiles)} miles of range`,
   ];
   const correct = sample(correctOptions, seed + 5);
   const distractors = [
-    `${jet.name} is a ${jetCategoryLabels[wrongCategory.category]} aircraft`,
-    `${jet.name} is from ${wrongCountry.country}`,
+    `${jet.name} is ${jetCategoryWithArticle(wrongCategory.category)}`,
+    `${jet.name} is from ${jetCountryInProse(wrongCountry.country)}`,
     `${jet.name} reaches about ${formatNumber(wrongSpeed.maxSpeedMph)} mph`,
     `${jet.name} has about ${formatNumber(wrongRange.rangeMiles)} miles of range`,
   ].filter((option) => option !== correct);
@@ -1439,13 +1472,13 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
       id: `${seed}-jet-name-${jet.id}`,
       topic: "jets",
       kind,
-      prompt: "Which jet is this?",
+      prompt: "Which jet is shown here?",
       image: jet.image,
       imageAlt: jet.name,
       imageCredit: jet.imageCredit,
       choices: shuffle([jet.name, ...options], seed + 55),
       answer: jet.name,
-      explanation: `That is the ${jet.name}. ${jet.fact}`,
+      explanation: `The photograph shows the ${jet.name}. ${jet.fact}`,
       numberLine: { label: "Speed", value: jet.maxSpeedMph, max: maxJetSpeed, unit: "mph" },
     };
   }
@@ -1458,13 +1491,13 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
       id: `${seed}-jet-category-${jet.id}`,
       topic: "jets",
       kind,
-      prompt: promptVariant(seed + 56, [`What mission category fits ${jet.name}?`, `Read the category choices. What kind of aircraft is ${jet.name}?`, `Which mission label belongs to ${jet.name}?`]),
+      prompt: promptVariant(seed + 56, [`Which mission category describes ${jet.name}?`, `Read the category choices. What kind of aircraft is ${jet.name}?`, `Which mission label belongs to ${jet.name}?`]),
       image: jet.image,
       imageAlt: jet.name,
       imageCredit: jet.imageCredit,
       choices: shuffle([correct, ...options], seed + 57),
       answer: correct,
-      explanation: `${jet.name} is a ${correct} aircraft from ${jet.country}. ${jet.fact}`,
+      explanation: `${jet.name} is ${jetCategoryWithArticle(jet.category)} from ${jetCountryInProse(jet.country)}. ${jet.fact}`,
       locations: [jetWorldLocation(jet)],
     };
   }
@@ -1494,7 +1527,7 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
       comparison: cards,
       choices: choices.includes(correct) ? choices : [correct, ...choices.slice(1)],
       answer: correct,
-      explanation: `${formatNumber(biggerValue)} - ${formatNumber(smallerValue)} = ${formatNumber(diff)}. So ${faster.name} is about ${formatNumber(diff)} mph faster.`,
+      explanation: `Subtracting the speeds gives ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(diff)}. Therefore, ${faster.name} is about ${formatNumber(diff)} mph faster.`,
       numberLine: { label: "Difference", value: diff, max: maxJetSpeed, unit: "mph" },
     };
   }
@@ -1504,14 +1537,14 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
     id: `${seed}-jet-reading-${jet.id}`,
     topic: "jets",
     kind: "jet-reading",
-    prompt: promptVariant(seed + 63, ["What is true?", "Read the aircraft card. Which statement matches?", "Which answer is supported by the field note?"]),
-    readingClue: `${jet.name}: ${jetCategoryLabels[jet.category]} aircraft, ${jet.country}, ${formatNumber(jet.maxSpeedMph)} mph, ${formatNumber(jet.rangeMiles)} mi range.`,
+    prompt: promptVariant(seed + 63, ["Which statement is true?", "Read the aircraft card. Which statement matches?", "Which statement is supported by the field note?"]),
+    readingClue: `${jet.name} is ${jetCategoryWithArticle(jet.category)} from ${jetCountryInProse(jet.country)}. It can reach about ${formatNumber(jet.maxSpeedMph)} mph and has a range of about ${formatNumber(jet.rangeMiles)} miles.`,
     image: jet.image,
     imageAlt: jet.name,
     imageCredit: jet.imageCredit,
     choices: reading.choices,
     answer: reading.answer,
-    explanation: `${jet.name}: ${jet.fact}`,
+    explanation: `${jet.name} is the answer. ${jet.fact}`,
     locations: [jetWorldLocation(jet)],
   };
 };
@@ -1532,13 +1565,13 @@ const spaceQuestion = (seed: number, difficulty: Difficulty): Question => {
       id: `${seed}-space-name-${item.id}`,
       topic: "space",
       kind,
-      prompt: `Which space object or idea is this?`,
+      prompt: "Which space object or concept is shown here?",
       image: item.image,
       imageAlt: item.name,
       imageCredit: item.imageCredit,
       choices: shuffle([item.name, ...options], seed + 63),
       answer: item.name,
-      explanation: `${item.name}: ${item.fact}`,
+      explanation: `${item.name} is the answer. ${item.fact}`,
       numberLine: item.kind === "planet" && item.distanceFromSunMillionMiles ? { label: "Distance from Sun", value: item.distanceFromSunMillionMiles, max: maxPlanetDistance, unit: "million mi" } : undefined,
     };
   }
@@ -1574,7 +1607,13 @@ const spaceQuestion = (seed: number, difficulty: Difficulty): Question => {
   if (kind === "space-concept") {
     const conceptPool = preferredPool(spaceConcepts, difficulty);
     const concept = sample(conceptPool, seed + 78);
-    const options = shuffle(conceptPool.filter((card) => card.id !== concept.id).map((card) => card.conceptAnswer ?? card.fact), seed + 79).slice(0, choiceCountForDifficulty(difficulty) - 1);
+    const answer = concept.conceptAnswer ?? concept.fact;
+    const options = [
+      ...conceptPool.filter((card) => card.id !== concept.id).map((card) => card.conceptAnswer ?? card.fact),
+      "A small rocky world that travels around the Sun.",
+      "A natural satellite that travels around a planet.",
+      "A band of icy objects beyond Neptune.",
+    ];
     return {
       id: `${seed}-space-concept-${concept.id}`,
       topic: "space",
@@ -1583,33 +1622,33 @@ const spaceQuestion = (seed: number, difficulty: Difficulty): Question => {
       image: concept.image,
       imageAlt: concept.name,
       imageCredit: concept.imageCredit,
-      choices: shuffle([concept.conceptAnswer ?? concept.fact, ...options], seed + 80),
-      answer: concept.conceptAnswer ?? concept.fact,
+      choices: answerChoices(answer, options, seed + 80, choiceCountForDifficulty(difficulty)),
+      answer,
       explanation: concept.fact,
     };
   }
 
   const readable = item.kind === "star"
-    ? `${item.name} is in the ${item.group} set. Some star measurements are estimates.`
+    ? `${item.name} belongs to the ${item.group} group. Some measurements of giant stars are estimates.`
     : item.kind === "planet"
-      ? `${item.name} is about ${spaceStatDisplay(spaceValue(item, "distance"), "distance", item)} from the Sun.`
+      ? `${item.name} is about ${spaceStatProse(spaceValue(item, "distance"), "distance", item)} from the Sun.`
       : item.fact;
   return {
     id: `${seed}-space-reading-${item.id}`,
     topic: "space",
     kind: "space-reading",
-    prompt: promptVariant(seed + 81, ["What is true?", "Read the space note. Which statement matches?", "Which answer is supported by the clue?", "Choose only the statement the field note proves."]),
+    prompt: promptVariant(seed + 81, ["Which statement is true?", "Read the space note. Which statement matches?", "Which statement is supported by the clue?", "Choose the statement that the field note supports."]),
     readingClue: readable,
     image: item.image,
     imageAlt: item.name,
     imageCredit: item.imageCredit,
     choices: answerChoices(
-      item.kind === "star" ? "Giant star sizes can be estimates" : item.kind === "planet" ? `${item.name} is in the solar system` : item.conceptAnswer ?? item.fact,
+      item.kind === "star" ? "Measurements of giant stars can be estimates" : item.kind === "planet" ? `${item.name} is in the solar system` : item.conceptAnswer ?? item.fact,
       ["It is a pepper", "It is a shark family", "It is a skyscraper"],
       seed + 81,
       choiceCountForDifficulty(difficulty),
     ),
-    answer: item.kind === "star" ? "Giant star sizes can be estimates" : item.kind === "planet" ? `${item.name} is in the solar system` : item.conceptAnswer ?? item.fact,
+    answer: item.kind === "star" ? "Measurements of giant stars can be estimates" : item.kind === "planet" ? `${item.name} is in the solar system` : item.conceptAnswer ?? item.fact,
     explanation: readable,
   };
 };
