@@ -27,6 +27,7 @@ type ChallengeStepBase = {
 export type ChallengeStep =
   | (ChallengeStepBase & { skill: "Reading"; evidence: string })
   | (ChallengeStepBase & { skill: "Geography"; map?: { hint: string; choices: { label: string; mapLabel?: string; x: number; y: number }[] } })
+  | (ChallengeStepBase & { skill: "Classification" })
   | (ChallengeStepBase & { skill: "Math"; math: { groups: number; each: number; visual: EqualGroupsVisual } })
   | (ChallengeStepBase & { skill: "Science"; conceptVisual?: ConceptVisual })
   | (ChallengeStepBase & { skill: "Words" });
@@ -137,6 +138,7 @@ const topicChallengeLanguage: Record<string, { singular: string; plural: string;
   "tallest-mountains": { singular: "mountain", plural: "mountains", emoji: "🏔️" },
   "tall-trees": { singular: "tree", plural: "trees", emoji: "🌲" },
   "bridges-and-tunnels": { singular: "crossing", plural: "crossings", emoji: "🌉" },
+  "hot-sauces": { singular: "sauce", plural: "sauces", emoji: "🌶️" },
 };
 
 const uniqueBy = <T,>(items: readonly T[], keyFor: (item: T) => string) => {
@@ -156,6 +158,54 @@ const fourChoices = (answer: string, candidates: readonly string[], seed: number
   const shift = seed % values.length;
   return [...values.slice(shift), ...values.slice(0, shift)];
 };
+
+const rotateChoices = (values: readonly string[], seed: number) => {
+  const shift = seed % values.length;
+  return [...values.slice(shift), ...values.slice(0, shift)];
+};
+
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const genericTitleWords = new Set(["and", "bridge", "building", "hot", "mountain", "pepper", "sauce", "shark", "the", "tree"]);
+
+const anonymousFieldNote = (card: KnowledgeCard, subject: string) => {
+  const replacement = `This ${subject}`;
+  let note = card.fact.replace(new RegExp(escapeRegExp(card.title), "giu"), replacement);
+
+  if (note === card.fact) {
+    const titleWords = card.title.match(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)?/gu) ?? [];
+    const phrases = [
+      titleWords.slice(0, 3),
+      titleWords.slice(0, 2),
+      ...titleWords
+        .filter((word) => word.length >= 4 && !genericTitleWords.has(word.toLocaleLowerCase("en-US")))
+        .map((word) => [word]),
+      titleWords.slice(-3),
+      titleWords.slice(-2),
+    ];
+    for (const phrase of phrases) {
+      if (phrase.length === 0) continue;
+      const phrasePattern = phrase.map(escapeRegExp).join("[\\s\\-–—:/'’]+");
+      const replaced = note.replace(new RegExp(phrasePattern, "iu"), replacement);
+      if (replaced !== note) {
+        note = replaced;
+        break;
+      }
+    }
+  }
+
+  const repeatedSubject = new RegExp(`${escapeRegExp(replacement)}(?:\\s+${escapeRegExp(subject)}s?)+`, "giu");
+  return sentenceStart(note.replace(repeatedSubject, replacement));
+};
+
+const measurementLabelInProse = (label: string) => label.toLocaleLowerCase("en-US") === "scoville"
+  ? "Scoville rating"
+  : label.toLocaleLowerCase("en-US");
+
+const measurementUnitKey = (display: string) => display
+  .replace(/[~≈\d,.+\-]/g, "")
+  .replace(/\s+/g, " ")
+  .trim()
+  .toLocaleLowerCase("en-US");
 
 const diverseMapLocations = (answer: WorldLocation, candidates: readonly WorldLocation[], seed: number) => {
   const available = uniqueBy(candidates, (candidate) => candidate.label)
@@ -222,8 +272,12 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
     const mathCard = anchor;
     const scienceCard = anchor;
     const wordsCard = anchor;
-    const distractorTitles = (card: KnowledgeCard) => pool.filter((candidate) => candidate.id !== card.id).map((candidate) => candidate.title);
-    const readingChoices = fourChoices(readingCard.title, distractorTitles(readingCard), campaignIndex);
+    const readingAnswer = anonymousFieldNote(readingCard, campaignLanguage.singular);
+    const readingChoices = fourChoices(
+      readingAnswer,
+      pool.filter((candidate) => candidate.id !== readingCard.id).map((candidate) => anonymousFieldNote(candidate, campaignLanguage.singular)),
+      campaignIndex,
+    );
 
     const location = geographyCard.metadata?.location;
     const locatedCards = uniqueBy(pool.filter((card) => card.metadata?.location), (card) => card.metadata!.location!.label);
@@ -239,24 +293,56 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
           }),
         }
       : undefined;
-    const geographyChoices = geographyMap
-      ? geographyMap.choices.map((choice) => choice.label)
-      : fourChoices(geographyCard.title, distractorTitles(geographyCard), campaignIndex + 1);
+    const classificationChoices = rotateChoices(
+      uniqueBy([geographyCard.subStat, ...pool.filter((card) => card.id !== geographyCard.id).map((card) => card.subStat)], (group) => group).slice(0, 4),
+      campaignIndex + 1,
+    );
+    const geographyChoices = geographyMap ? geographyMap.choices.map((choice) => choice.label) : classificationChoices;
     const geographyAnswer = geographyMap && location
       ? geographyMap.choices[geographyLocations.findIndex((choiceLocation) => choiceLocation.label === location.label)].label
-      : geographyCard.title;
+      : geographyCard.subStat;
 
     const groups = 3 + campaignIndex;
     const each = 2 + ((campaignIndex * 3 + 4) % 11);
     const product = groups * each;
     const mathAnswer = `${product.toLocaleString("en-US")} notes`;
-    const mathChoices = fourChoices(mathAnswer, [
-      `${(product + groups).toLocaleString("en-US")} notes`,
-      `${Math.max(1, product - each).toLocaleString("en-US")} notes`,
-      `${(product + each).toLocaleString("en-US")} notes`,
-    ], campaignIndex + 2);
+    const mathChoiceValues = uniqueBy([
+      product,
+      product + groups,
+      Math.max(1, product - each),
+      product + each,
+      product + groups + each,
+      product + 1,
+    ], (value) => String(value)).slice(0, 4);
+    const mathChoices = rotateChoices(mathChoiceValues.map((value) => `${value.toLocaleString("en-US")} notes`), campaignIndex + 2);
 
-    const scienceChoices = fourChoices(scienceCard.title, distractorTitles(scienceCard), campaignIndex + 3);
+    const scienceMeasurement = measurementLabelInProse(scienceCard.statLabel);
+    const scienceComparisonCandidates = pool.filter((candidate) => (
+      candidate.id !== scienceCard.id
+      && candidate.statLabel === scienceCard.statLabel
+      && Number.isFinite(candidate.statValue)
+      && Number.isFinite(scienceCard.statValue)
+      && candidate.statValue !== scienceCard.statValue
+      && measurementUnitKey(candidate.statDisplay) === measurementUnitKey(scienceCard.statDisplay)
+    ));
+    const scienceComparison = scienceComparisonCandidates.length > 0
+      ? scienceComparisonCandidates[campaignIndex % scienceComparisonCandidates.length]
+      : undefined;
+    const scienceHigher = scienceComparison && scienceCard.statValue > scienceComparison.statValue ? scienceCard : scienceComparison;
+    const scienceLower = scienceComparison && scienceCard.statValue > scienceComparison.statValue ? scienceComparison : scienceCard;
+    const scienceAnswer = scienceComparison && scienceHigher
+      ? `${scienceHigher.title} has the higher ${scienceMeasurement}.`
+      : measurementMeaning(scienceCard.statLabel);
+    const scienceChoices = scienceComparison && scienceHigher && scienceLower
+      ? rotateChoices([
+          `${scienceCard.title} has the higher ${scienceMeasurement}.`,
+          `${scienceComparison.title} has the higher ${scienceMeasurement}.`,
+        ], campaignIndex + 3)
+      : fourChoices(scienceAnswer, [
+          "who took the photograph",
+          "how many questions were answered",
+          "which subject was studied first",
+        ], campaignIndex + 3);
     const wordAnswer = measurementMeaning(wordsCard.statLabel);
     const wordChoices = fourChoices(wordAnswer, [
       "who took the photograph",
@@ -264,43 +350,55 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
       "which subject was studied first",
     ], campaignIndex + 4);
 
+    const geographyStep: ChallengeStep = geographyMap && location
+      ? {
+          id: `${topicId}-${campaignIndex + 1}-geography-${geographyCard.id}`,
+          skill: "Geography",
+          icon: "🌎",
+          title: `Map ${geographyCard.title}`,
+          clue: geographyCard.title === location.label
+            ? `${sentenceStart(worldLocationLabelInProse(location.label))} is a country in ${worldContinentLabel(location.continents)}. Use the map's shape and continent labels to find its pin.`
+            : `${geographyCard.title} is connected with ${worldLocationLabelInProse(location.label)} in ${worldContinentLabel(location.continents)}. Use the map to find its pin.`,
+          question: `Which pin marks ${worldLocationLabelInProse(location.label)}?`,
+          choices: geographyChoices,
+          answer: geographyAnswer,
+          summary: geographyCard.title === location.label
+            ? `${sentenceStart(worldLocationLabelInProse(location.label))} appears at ${geographyAnswer} on the map, in ${worldContinentLabel(location.continents)}.`
+            : `${geographyCard.title} is connected with ${worldLocationLabelInProse(location.label)}, which appears at ${geographyAnswer} in ${worldContinentLabel(location.continents)}.`,
+          map: geographyMap,
+          image: geographyCard.image,
+          imageAlt: geographyCard.imageAlt,
+        }
+      : {
+          id: `${topicId}-${campaignIndex + 1}-classification-${geographyCard.id}`,
+          skill: "Classification",
+          icon: "🗂️",
+          title: `Classify ${geographyCard.title}`,
+          clue: `Study this field note: ${anonymousFieldNote(geographyCard, campaignLanguage.singular)}`,
+          question: `Which field-guide group best fits this ${campaignLanguage.singular}?`,
+          choices: geographyChoices,
+          answer: geographyAnswer,
+          summary: `${geographyCard.title} belongs in the field-guide group “${geographyCard.subStat}.”`,
+          image: geographyCard.image,
+          imageAlt: geographyCard.imageAlt,
+        };
+
     const steps: ChallengeStep[] = [
       {
         id: `${topicId}-${campaignIndex + 1}-reading-${readingCard.id}`,
         skill: "Reading",
         icon: "🏷️",
-        title: `Read the ${campaignLanguage.singular} field note`,
-        clue: readingCard.fact,
-        question: `Which ${campaignLanguage.singular} matches this field note?`,
+        title: `Choose the field note for ${readingCard.title}`,
+        clue: `The picture shows ${readingCard.title}. Read all four field notes and choose the one that accurately describes this ${campaignLanguage.singular}.`,
+        question: `Which field note belongs with this ${campaignLanguage.singular}?`,
         choices: readingChoices,
-        answer: readingCard.title,
-        summary: `${readingCard.title} is the match. ${readingCard.fact}`,
-        evidence: readingCard.fact,
+        answer: readingAnswer,
+        summary: `${readingCard.title}'s matching field note says: ${readingAnswer}`,
+        evidence: readingAnswer,
         image: readingCard.image,
         imageAlt: readingCard.imageAlt,
       },
-      {
-        id: `${topicId}-${campaignIndex + 1}-geography-${geographyCard.id}`,
-        skill: "Geography",
-        icon: "🌎",
-        title: location ? `Map ${geographyCard.title}` : `Classify ${geographyCard.title}`,
-        clue: location
-          ? geographyCard.title === location.label
-            ? `${sentenceStart(worldLocationLabelInProse(location.label))} is a country in ${worldContinentLabel(location.continents)}. Use the map's shape and continent labels to find its pin.`
-            : `${geographyCard.title} is connected with ${worldLocationLabelInProse(location.label)} in ${worldContinentLabel(location.continents)}. Use the map to find its pin.`
-          : `${geographyCard.title} belongs in the field-guide group “${geographyCard.subStat}.”`,
-        question: location ? `Which pin marks ${worldLocationLabelInProse(location.label)}?` : `Which ${campaignLanguage.singular} belongs in this field-guide group?`,
-        choices: geographyChoices,
-        answer: geographyAnswer,
-        summary: location
-          ? geographyCard.title === location.label
-            ? `${sentenceStart(worldLocationLabelInProse(location.label))} appears at ${geographyAnswer} on the map, in ${worldContinentLabel(location.continents)}.`
-            : `${geographyCard.title} is connected with ${worldLocationLabelInProse(location.label)}, which appears at ${geographyAnswer} in ${worldContinentLabel(location.continents)}.`
-          : `${geographyCard.title} belongs in the field-guide group “${geographyCard.subStat}.”`,
-        map: geographyMap,
-        image: geographyCard.image,
-        imageAlt: geographyCard.imageAlt,
-      },
+      geographyStep,
       {
         id: `${topicId}-${campaignIndex + 1}-math-${mathCard.id}`,
         skill: "Math",
@@ -331,12 +429,18 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
         id: `${topicId}-${campaignIndex + 1}-science-${scienceCard.id}`,
         skill: "Science",
         icon: "🧪",
-        title: `Match the evidence for ${scienceCard.statLabel.toLowerCase()}`,
-        clue: `The recorded ${scienceCard.statLabel.toLowerCase()} for ${scienceCard.title} is ${scienceCard.statDisplay}.`,
-        question: `Which ${campaignLanguage.singular} matches this measurement?`,
+        title: scienceComparison ? `Compare the ${scienceMeasurement}` : `Interpret the ${scienceMeasurement}`,
+        clue: scienceComparison
+          ? `${scienceCard.title}: ${scienceCard.statDisplay}. ${scienceComparison.title}: ${scienceComparison.statDisplay}.`
+          : `${scienceCard.title}'s field card records ${scienceCard.statDisplay} for ${scienceMeasurement}.`,
+        question: scienceComparison
+          ? "Which statement is supported by the recorded values?"
+          : `What does ${scienceMeasurement} measure here?`,
         choices: scienceChoices,
-        answer: scienceCard.title,
-        summary: `${scienceCard.title} matches the evidence because its recorded ${scienceCard.statLabel.toLowerCase()} is ${scienceCard.statDisplay}.`,
+        answer: scienceAnswer,
+        summary: scienceComparison && scienceHigher && scienceLower
+          ? `${scienceHigher.title}'s ${scienceMeasurement} is higher: ${scienceHigher.statDisplay} compared with ${scienceLower.statDisplay} for ${scienceLower.title}.`
+          : `${sentenceStart(scienceMeasurement)} tells us ${scienceAnswer}. ${scienceCard.title}'s recorded value is ${scienceCard.statDisplay}.`,
         image: scienceCard.image,
         imageAlt: scienceCard.imageAlt,
       },
