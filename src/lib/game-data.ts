@@ -1,4 +1,4 @@
-import type { CardMetadata, WorldContinent, WorldLocation } from "./card-metadata";
+import type { CardMetadata, CardRarity, WorldContinent, WorldLocation } from "./card-metadata";
 import { countries } from "./countries-data";
 export { countries, type Country } from "./countries-data";
 
@@ -102,6 +102,7 @@ export type SpaceCard = {
   fact: string;
   conceptQuestion?: string;
   conceptAnswer?: string;
+  metadata?: CardMetadata;
 };
 
 export type JetCategory = "stealth" | "dogfighter" | "multirole" | "bomber" | "recon" | "attack" | "interceptor" | "trainer";
@@ -121,6 +122,7 @@ export type Jet = {
   imageFit?: VisualFit;
   imagePosition?: string;
   fact: string;
+  metadata?: CardMetadata;
 };
 
 export type TopicPack = {
@@ -1938,12 +1940,25 @@ const pepperMetadataFor = (id: string): CardMetadata | undefined => {
   return location ? { location } : undefined;
 };
 
+const commonPepperIds = new Set(["bell-pepper", "banana-pepper", "poblano", "anaheim", "jalapeno", "serrano", "cayenne", "tabasco", "habanero", "shishito"]);
+const uncommonPepperIds = new Set(["pepperoncini", "fresno", "thai-chili", "scotch-bonnet", "ghost-pepper", "padron", "ancho", "guajillo", "rocoto", "cubanelle", "hatch-chile", "tangerine-dream"]);
+const epicPepperIds = new Set(["chocolate-bhutlah", "chocolate-rocoto-x", "chocolate-moruga-scorpion", "dragons-breath", "pepper-y", "the-noah", "armageddon", "orange-butch-t", "pepper-x", "carolina-reaper", "trinidad-scorpion", "seven-pot-primo"]);
+
+const pepperRarityFor = (id: string): CardRarity => {
+  if (commonPepperIds.has(id)) return "common";
+  if (uncommonPepperIds.has(id)) return "uncommon";
+  if (epicPepperIds.has(id)) return "epic";
+  return "rare";
+};
+
 export const peppers = pepperSeeds.map((pepper) => ({
   ...pepper,
   heat: pepper.heat ?? heatBandForScoville(pepper.shuMax ?? pepper.shuMin ?? 500001),
-  metadata: pepper.metadata || pepperMetadataFor(pepper.id)
-    ? { ...pepperMetadataFor(pepper.id), ...pepper.metadata }
-    : undefined,
+  metadata: {
+    ...pepperMetadataFor(pepper.id),
+    ...pepper.metadata,
+    rarity: pepper.metadata?.rarity ?? pepperRarityFor(pepper.id),
+  },
 }));
 
 const buildingContinentsByCountry: Record<string, WorldContinent[]> = {
@@ -2734,7 +2749,7 @@ export const buildings: Building[] = buildingSeeds.map((building) => ({
   },
 }));
 
-export const sharks: Shark[] = [
+const sharkSeeds: Shark[] = [
   {
     id: "great-white",
     name: "Great White Shark",
@@ -3346,7 +3361,23 @@ export const sharks: Shark[] = [
   },
 ];
 
-export const spaceCards: SpaceCard[] = [
+const commonSharkIds = new Set(["great-white", "whale-shark", "tiger-shark", "great-hammerhead", "shortfin-mako", "nurse-shark", "zebra-shark", "blue-shark", "bull-shark", "lemon-shark", "blacktip-reef", "sand-tiger"]);
+const uncommonSharkIds = new Set(["basking-shark", "common-thresher", "greenland-shark", "sawshark", "epaulette-shark", "cookiecutter", "oceanic-whitetip", "scalloped-hammerhead", "silky-shark", "spinner-shark", "sandbar-shark", "whitetip-reef", "grey-reef-shark", "bonnethead", "horn-shark", "bamboo-shark", "caribbean-reef"]);
+const epicSharkIds = new Set(["goblin-shark", "frilled-shark", "megamouth", "stethacanthus", "megalodon", "dunkleosteus"]);
+
+const sharkRarityFor = (id: string): CardRarity => {
+  if (commonSharkIds.has(id)) return "common";
+  if (uncommonSharkIds.has(id)) return "uncommon";
+  if (epicSharkIds.has(id)) return "epic";
+  return "rare";
+};
+
+export const sharks: Shark[] = sharkSeeds.map((shark) => ({
+  ...shark,
+  metadata: { ...shark.metadata, rarity: shark.metadata?.rarity ?? sharkRarityFor(shark.id) },
+}));
+
+const spaceCardSeeds: SpaceCard[] = [
   {
     id: "venus",
     name: "Venus",
@@ -3955,7 +3986,9 @@ export const spaceCards: SpaceCard[] = [
   },
 ];
 
-export const jets: Jet[] = [
+export const spaceCards: SpaceCard[] = spaceCardSeeds;
+
+const jetSeeds: Jet[] = [
   { id: "f-35-lightning-ii", name: "F-35 Lightning II", country: "United States", category: "stealth", maxSpeedMph: 1200, rangeMiles: 1380, firepower: 5, ...contentImage("jets", "f-35-lightning-ii", "F-35A flight (cropped).jpg"), imageCredit: "U.S. Air Force/Wikimedia Commons", fact: "The F-35 is a stealth multirole fighter with sensors that help it spot threats before they spot it." },
   { id: "f-22-raptor", name: "F-22 Raptor", country: "United States", category: "stealth", maxSpeedMph: 1500, rangeMiles: 1840, firepower: 5, ...contentImage("jets", "f-22-raptor", "F-22 Raptor edit1 (cropped).jpg"), imageCredit: "U.S. Air Force/Wikimedia Commons", fact: "The F-22 was built for air superiority: stealth, supercruise speed, and extreme agility." },
   { id: "su-57", name: "Sukhoi Su-57", country: "Russia", category: "stealth", maxSpeedMph: 1320, rangeMiles: 2200, firepower: 5, ...contentImage("jets", "su-57", "Sukhoi Design Bureau, 054, Sukhoi T-50 (Su-57 prototype) (49581303977).jpg"), imageCredit: "Dmitry Terekhov/Wikimedia Commons", fact: "The Su-57 is Russia's stealth fighter design, mixing internal weapons bays with high maneuverability." },
@@ -4007,6 +4040,22 @@ export const jets: Jet[] = [
   { id: "english-electric-lightning", name: "English Electric Lightning", country: "United Kingdom", category: "interceptor", maxSpeedMph: 1500, rangeMiles: 850, firepower: 4, ...contentImage("jets", "english-electric-lightning", "English Electric Lightning F6, UK - Air Force AN2260192.jpg"), imageCredit: "Alan Wilson/Wikimedia Commons", fact: "The Lightning was a British interceptor famous for its incredible climb rate." },
   { id: "mig-21", name: "MiG-21", country: "Soviet Union", category: "interceptor", maxSpeedMph: 1350, rangeMiles: 750, firepower: 3, ...contentImage("jets", "mig-21", "Croatian MiG-21 (cropped).jpg"), imageCredit: "Christian Volpati/Wikimedia Commons", fact: "The MiG-21 is one of the most-produced supersonic jet fighters in history." },
 ];
+
+const commonJetIds = new Set(["f-15-eagle", "f-a-18-hornet", "f-16-fighting-falcon", "f-14-tomcat", "a-10-thunderbolt-ii", "mig-29", "su-27", "b-52-stratofortress", "f-4-phantom-ii", "mig-21"]);
+const uncommonJetIds = new Set(["f-35-lightning-ii", "f-a-18-super-hornet", "rafale", "eurofighter-typhoon", "jas-39-gripen", "su-35", "b-1-lancer", "mirage-2000", "panavia-tornado", "av-8b-harrier-ii", "hawker-harrier", "l-39-albatros", "j-10", "hal-tejas", "f-15j"]);
+const epicJetIds = new Set(["f-22-raptor", "su-57", "j-20", "b-2-spirit", "b-21-raider", "f-117-nighthawk", "sr-71-blackbird", "fc-31"]);
+
+const jetRarityFor = (id: string): CardRarity => {
+  if (commonJetIds.has(id)) return "common";
+  if (uncommonJetIds.has(id)) return "uncommon";
+  if (epicJetIds.has(id)) return "epic";
+  return "rare";
+};
+
+export const jets: Jet[] = jetSeeds.map((jet) => ({
+  ...jet,
+  metadata: { ...jet.metadata, rarity: jet.metadata?.rarity ?? jetRarityFor(jet.id) },
+}));
 
 export const topicIds = ["peppers", "buildings", "sharks", "space", "jets", "countries"] as const satisfies readonly KnowledgeTopic[];
 

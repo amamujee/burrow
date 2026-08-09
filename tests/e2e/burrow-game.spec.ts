@@ -8,6 +8,7 @@ import {
   pepperChallengeCampaigns,
 } from "../../src/components/core-mini-challenge";
 import { weightTopicsForAccuracy } from "../../src/lib/adaptive-topics";
+import { cardRarities } from "../../src/lib/card-metadata";
 import { cardDiscoveryIdentities, cardUnlockKey, isCardUnlocked } from "../../src/lib/card-discovery";
 import { buildings, countries, jets, peppers, sharks, spaceCards, topicPacks } from "../../src/lib/game-data";
 import { poolForDifficulty } from "../../src/lib/difficulty-pool";
@@ -48,7 +49,10 @@ import {
 } from "../../src/lib/learning-variety";
 
 const modeLabels = ["Quiz Run", "Head to Head", "Top Trumps", "Sort", "True/False", "Peek", "Numbers", "Odd One", "Geo Finder"];
-const topicLabels = ["Spicy Peppers", "Sky Scrapers", "Shark Tank", "Space Universe", "Jet Hangar", "Countries & Flags", "Dinosaur Lab", "Tallest Mountains", "Tall Trees", "Bridges & Tunnels"];
+const topicLabels = [
+  ...Object.values(topicPacks).map((pack) => pack.label),
+  ...loadPlayablePacks().map(packToPlayableDeck).map((deck) => deck.title),
+];
 
 const modeControl = (page: Page) => page.getByRole("button", { name: /^Modes/ });
 const topicsControl = (page: Page) => page.getByRole("button", { name: /^Topics/ });
@@ -163,6 +167,31 @@ test("built-in topic totals match the playable card catalogs", () => {
     expect(pack.featuredCount).toBe(values.count);
     expect(pack.eyebrow).toBe(values.eyebrow);
   }
+});
+
+test("Hot Sauces ships 50 sourced cards with complete comparison metadata", () => {
+  const pack = loadPlayablePacks().find((candidate) => candidate.id === "hot-sauces");
+  expect(pack).toBeTruthy();
+  expect(pack?.cards).toHaveLength(50);
+  expect(pack?.recommendedModes).toContain("versus");
+  expect(new Set(pack?.cards.map((card) => card.metadata?.flavorGrade))).toEqual(new Set(["A", "B", "C", "D"]));
+  expect(new Set(pack?.cards.map((card) => card.metadata?.rarity))).toEqual(new Set(cardRarities));
+
+  for (const card of pack?.cards ?? []) {
+    expect(card.image).toBe(`/burrow-assets/hot-sauces/${card.id}.jpg`);
+    expect(card.imageAlt).toMatch(/^Front label/);
+    expect(card.metadata?.location?.countries.length).toBeGreaterThan(0);
+    expect(card.metadata?.pepperTypes?.length).toBeGreaterThan(0);
+    expect(card.metadata?.flavorGrade).toMatch(/^[A-D]$/);
+    const pepperStat = card.stats.find((stat) => stat.id === "pepper-varieties");
+    expect(pepperStat?.value).toBe(card.metadata?.pepperTypes?.length);
+    expect(card.stats.find((stat) => stat.id === "rarity")?.display).toMatch(/^(Common|Uncommon|Rare|Epic)$/);
+  }
+
+  const deck = packToPlayableDeck(pack!);
+  const tripleX = deck.cards.find((card) => card.id === "last-dab-triple-x");
+  expect(tripleX?.details).toContainEqual({ label: "Peppers", value: "Pepper X · Chocolate Pepper X · Peach Pepper X" });
+  expect(tripleX?.stats.find((stat) => stat.id === "pepper-varieties")?.display).toBe("3 types");
 });
 
 test("difficulty progression gives Easy and Medium room before Hard", () => {
@@ -959,14 +988,37 @@ test("building comparisons name both choices in a direct child-friendly prompt",
   }
 });
 
-test("pepper Top Trumps uses named rarity tiers and allows exact ties", () => {
+test("main collectible categories use the standard four rarity tiers", () => {
+  const rarityCollections = { peppers, sharks, jets };
+  for (const [topic, cards] of Object.entries(rarityCollections)) {
+    const rarities = cards.map((card) => card.metadata?.rarity);
+    expect(rarities, `${topic} cards should all have rarity metadata`).not.toContain(undefined);
+    expect(new Set(rarities), `${topic} should use the complete four-tier standard`).toEqual(new Set(cardRarities));
+  }
+  for (const [topic, cards] of Object.entries({ buildings, countries, space: spaceCards })) {
+    expect(cards.every((card) => card.metadata?.rarity === undefined), `${topic} should not receive artificial rarity labels`).toBe(true);
+  }
+});
+
+test("Top Trumps uses four named rarity tiers and allows exact ties", () => {
+  for (const topic of ["peppers", "sharks", "jets"] as const) {
+    const round = buildTopTrumpRound(topic, 3, 9041);
+    expect(round.player.stats.find((stat) => stat.id === "rarity")?.display).toMatch(/^(Common|Uncommon|Rare|Epic)$/);
+    expect(round.computer.stats.find((stat) => stat.id === "rarity")?.display).toMatch(/^(Common|Uncommon|Rare|Epic)$/);
+  }
+  for (const topic of ["buildings", "countries", "space"] as const) {
+    const round = buildTopTrumpRound(topic, 3, 9041);
+    expect(round.player.stats.some((stat) => stat.id === "rarity"), `${topic} should omit the rarity stat`).toBe(false);
+    expect(round.computer.stats.some((stat) => stat.id === "rarity"), `${topic} should omit the rarity stat`).toBe(false);
+  }
+
   let tiedRound: ReturnType<typeof buildTopTrumpRound> | undefined;
   for (let seed = 0; seed < 600; seed += 1) {
     const round = buildTopTrumpRound("peppers", 3, seed * 41);
     const playerRarity = round.player.stats.find((stat) => stat.id === "rarity");
     const computerRarity = round.computer.stats.find((stat) => stat.id === "rarity");
-    expect(playerRarity?.display).toMatch(/^(Common|Uncommon|Rare|Epic|Legendary)$/);
-    expect(computerRarity?.display).toMatch(/^(Common|Uncommon|Rare|Epic|Legendary)$/);
+    expect(playerRarity?.display).toMatch(/^(Common|Uncommon|Rare|Epic)$/);
+    expect(computerRarity?.display).toMatch(/^(Common|Uncommon|Rare|Epic)$/);
     expect(round.player.stats.map((stat) => stat.id)).toEqual(round.computer.stats.map((stat) => stat.id));
     if (playerRarity && computerRarity && topTrumpOutcome(playerRarity, computerRarity) === "tie") {
       tiedRound = round;
@@ -1268,7 +1320,7 @@ test("hard multiplication reaches the full twelve-by-twelve table", () => {
 });
 
 test("every playable category has ten distinct single-subject Challenge deep dives", () => {
-  expect(playableChallengeCategories).toHaveLength(10);
+  expect(new Set(playableChallengeCategories.map((category) => category.id)).size).toBe(playableChallengeCategories.length);
 
   for (const category of playableChallengeCategories) {
     const campaigns = buildChallengeCampaignsForCategory(category);
@@ -1839,13 +1891,13 @@ test("iPhone question scroll keeps Next card sticky and thumb-reachable", { tag:
   expect(box!.y + box!.height).toBeGreaterThanOrEqual(viewport!.height - 100);
 });
 
-test("landing page explains the learning model and all ten topic packs", async ({ page }) => {
+test("landing page explains the learning model and all eleven topic packs", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Burrow", exact: true })).toBeVisible();
   await expect(page.getByText("whatever's stuck in their head", { exact: false })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Every mode teaches new skills." })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /Ten content packs from peppers to mountains/ })).toBeVisible();
-  for (const topic of ["Peppers", "Sharks", "Space", "Jets", "Towers", "World", "Dinosaurs", "Tall Trees", "Tallest Mountains", "Bridges & Tunnels"]) {
+  await expect(page.getByRole("heading", { name: /Eleven content packs from peppers to hot sauces/ })).toBeVisible();
+  for (const topic of ["Peppers", "Sharks", "Space", "Jets", "Towers", "World", "Dinosaurs", "Tall Trees", "Tallest Mountains", "Bridges & Tunnels", "Hot Sauces"]) {
     await expect(page.getByRole("heading", { name: topic, exact: true })).toBeVisible();
   }
   await expect(page.getByRole("link", { name: "Play Burrow" }).first()).toHaveAttribute("href", "/play");
@@ -2459,18 +2511,36 @@ test("collection category picker shows one category album at a time", { tag: "@m
   const collections = page.getByLabel("Card collections");
   const pepperCategory = collections.getByRole("button", { name: /Spicy Peppers: .* cards collected/ });
   const sharkCategory = collections.getByRole("button", { name: /Shark Tank: .* cards collected/ });
+  const buildingCategory = collections.getByRole("button", { name: /Sky Scrapers: .* cards collected/ });
   await expect(pepperCategory).toBeVisible();
   await expect(sharkCategory).toBeVisible();
+  await expect(buildingCategory).toBeVisible();
 
   await pepperCategory.click();
   await expect(pepperCategory).toHaveAttribute("aria-pressed", "true");
-  await expect(page.getByLabel("Spicy Peppers card collection").getByRole("img", { name: "Bell Pepper" })).toBeVisible();
+  const pepperCollection = page.getByLabel("Spicy Peppers card collection");
+  const rarityFilter = pepperCollection.getByLabel("Filter cards by rarity");
+  await expect(pepperCollection.getByRole("img", { name: "Bell Pepper" })).toBeVisible();
+  await expect(rarityFilter).toBeVisible();
+  await expect(rarityFilter.getByRole("button", { name: /Show Common rarity/ })).toBeVisible();
+  await expect(rarityFilter.getByRole("button", { name: /Show Uncommon rarity/ })).toBeVisible();
+  await expect(rarityFilter.getByRole("button", { name: /Show Rare rarity/ })).toBeVisible();
+  await expect(rarityFilter.getByRole("button", { name: /Show Epic rarity/ })).toBeVisible();
+  await rarityFilter.getByRole("button", { name: /Show Epic rarity/ }).click();
+  await expect(pepperCollection.getByRole("img", { name: "Bell Pepper" })).toHaveCount(0);
+  await rarityFilter.getByRole("button", { name: /Show all rarities/ }).click();
+  await expect(pepperCollection.getByRole("img", { name: "Bell Pepper" })).toBeVisible();
   await expect(page.getByLabel("Shark Tank card collection")).toHaveCount(0);
 
   await sharkCategory.click();
   await expect(sharkCategory).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByLabel("Shark Tank card collection").getByRole("img", { name: "Great White Shark" })).toBeVisible();
+  await expect(page.getByLabel("Shark Tank card collection").getByLabel("Filter cards by rarity")).toBeVisible();
   await expect(page.getByLabel("Spicy Peppers card collection")).toHaveCount(0);
+
+  await buildingCategory.click();
+  await expect(buildingCategory).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByLabel("Sky Scrapers card collection").getByLabel("Filter cards by rarity")).toHaveCount(0);
 });
 
 test("sort cards snap into their ranked slots instead of the next empty slot", { tag: "@mobile" }, async ({ page }) => {
@@ -2564,6 +2634,15 @@ test("playable dinosaur pack appears in first-class topics", async ({ page }) =>
   await expect(page.getByText("Dinosaur Lab", { exact: true })).toBeVisible();
 });
 
+test("Hot Sauces Head to Head compares the number of pepper varieties", async ({ page }) => {
+  await chooseOnlyMode(page, "Head to Head");
+  await chooseOnlyBuiltInTopic(page, "Hot Sauces");
+
+  await expect(page.getByRole("heading", { name: "Which one uses more pepper varieties?" })).toBeVisible();
+  await expect(page.getByText("Pepper varieties", { exact: true })).toHaveCount(2);
+  await expect(page.getByLabel("Answer choices").getByRole("button")).toHaveCount(2);
+});
+
 test("downloadable category answers persist adaptive performance stats", async ({ page }) => {
   await chooseOnlyMode(page, "True/False");
   await chooseOnlyBuiltInTopic(page, "Dinosaur Lab");
@@ -2608,7 +2687,7 @@ test("pepper top trumps uses concrete plant stats", async ({ page }) => {
 
   await expect(page.getByText("Plant height").first()).toBeVisible();
   await expect(page.getByText("Rarity").first()).toBeVisible();
-  await expect(page.getByText(/Common|Uncommon|Rare|Epic|Legendary/).first()).toBeVisible();
+  await expect(page.getByText(/Common|Uncommon|Rare|Epic/).first()).toBeVisible();
   await expect(page.getByText("Natural roots")).toHaveCount(0);
 });
 

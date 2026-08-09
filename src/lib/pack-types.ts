@@ -6,6 +6,7 @@ export type PackStat = {
   label: string;
   value: number;
   unit: string;
+  display?: string;
   direction?: "higher" | "lower";
   note?: string;
 };

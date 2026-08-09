@@ -73,7 +73,8 @@ const validateStats = (packId, card, cardLabel) => {
     if (!hasText(stat.id) || !slugPattern.test(stat.id)) addError(packId, `${label} needs a slug id`);
     if (!hasText(stat.label, 2)) addError(packId, `${label} needs a label`);
     if (typeof stat.value !== "number" || !Number.isFinite(stat.value) || stat.value < 0) addError(packId, `${label} needs a finite numeric value >= 0`);
-    if (typeof stat.value === "number" && stat.value > 0 && !hasText(stat.unit)) addWarning(packId, `${label} has a value but no unit`);
+    if (stat.display !== undefined && !hasText(stat.display)) addError(packId, `${label} display needs text`);
+    if (typeof stat.value === "number" && stat.value > 0 && !hasText(stat.unit) && !hasText(stat.display)) addWarning(packId, `${label} has a value but no unit or display`);
     if (stat.direction && !["higher", "lower"].includes(stat.direction)) addError(packId, `${label} direction must be higher or lower`);
     return isObject(stat) && hasText(stat.id) && typeof stat.value === "number" && Number.isFinite(stat.value);
   });
@@ -96,12 +97,15 @@ const validateCardMetadata = (packId, card, cardLabel) => {
       addError(packId, `${cardLabel}: metadata must be an object`);
       return;
     }
-    const allowedKeys = new Set(["difficultyBand", "recognition", "taxonomyGroup", "accuracyNote", "imageDistinctGroup", "location"]);
+    const allowedKeys = new Set(["difficultyBand", "recognition", "rarity", "flavorGrade", "pepperTypes", "taxonomyGroup", "accuracyNote", "imageDistinctGroup", "location"]);
     for (const key of Object.keys(card.metadata)) {
       if (!allowedKeys.has(key)) addError(packId, `${cardLabel}: metadata.${key} is not supported`);
     }
     if (card.metadata.difficultyBand !== undefined && !["easy", "medium", "hard"].includes(card.metadata.difficultyBand)) addError(packId, `${cardLabel}: metadata.difficultyBand must be easy, medium, or hard`);
     if (card.metadata.recognition !== undefined && (!Number.isInteger(card.metadata.recognition) || card.metadata.recognition < 1 || card.metadata.recognition > 5)) addError(packId, `${cardLabel}: metadata.recognition must be an integer from 1 to 5`);
+    if (card.metadata.rarity !== undefined && !["common", "uncommon", "rare", "epic"].includes(card.metadata.rarity)) addError(packId, `${cardLabel}: metadata.rarity must be common, uncommon, rare, or epic`);
+    if (card.metadata.flavorGrade !== undefined && !["A", "B", "C", "D"].includes(card.metadata.flavorGrade)) addError(packId, `${cardLabel}: metadata.flavorGrade must be A, B, C, or D`);
+    if (card.metadata.pepperTypes !== undefined && (!Array.isArray(card.metadata.pepperTypes) || card.metadata.pepperTypes.length < 1 || card.metadata.pepperTypes.some((pepper) => !hasText(pepper, 2)))) addError(packId, `${cardLabel}: metadata.pepperTypes needs at least one named pepper`);
     if (card.metadata.taxonomyGroup !== undefined && !hasText(card.metadata.taxonomyGroup, 2)) addError(packId, `${cardLabel}: metadata.taxonomyGroup needs text`);
     if (card.metadata.accuracyNote !== undefined && !hasText(card.metadata.accuracyNote, 8)) addError(packId, `${cardLabel}: metadata.accuracyNote needs text`);
     if (card.metadata.imageDistinctGroup !== undefined && (!hasText(card.metadata.imageDistinctGroup) || !slugPattern.test(card.metadata.imageDistinctGroup))) addError(packId, `${cardLabel}: metadata.imageDistinctGroup must be a lowercase slug`);

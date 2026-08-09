@@ -22,7 +22,7 @@ import {
   type TopicId,
 } from "./game-data";
 import { scoreFeaturedContent } from "./content-quality";
-import { worldLocationDisplay, type CardMetadata, type WorldContinent, type WorldLocation } from "./card-metadata";
+import { cardRarityLabels, cardRarityTier, worldLocationDisplay, type CardMetadata, type CardRarity, type WorldContinent, type WorldLocation } from "./card-metadata";
 import { cardDiscoveryIdentities } from "./card-discovery";
 import { poolForDifficulty } from "./difficulty-pool";
 import { discoveryShuffle, sample, sampleSafe, seedRandom, shuffle } from "./random";
@@ -339,6 +339,10 @@ const pepperHeatExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
     ? `${pepper.name} is placed at ${pepperScovilleDisplay(pepper)}, so it is ${pepper.heat}; that lower bound is unofficial because no lab score has been published.`
     : `${pepper.name}'s ${pepper.heat} label is descriptive because no Scoville measurement has been published.`;
 const heatRank = Object.fromEntries(heatBands.map((heat, index) => [heat, index])) as Record<HeatBand, number>;
+const rarityDetails = (metadata?: CardMetadata) => metadata?.rarity
+  ? [{ label: "Card rarity", value: cardRarityLabels[metadata.rarity] }]
+  : [];
+
 const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   id: pepper.id,
   topic: "peppers",
@@ -358,6 +362,7 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   qualityFlags: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).flags,
   metadata: pepper.metadata,
   details: [
+    ...rarityDetails(pepper.metadata),
     { label: "Heat level", value: heatProfiles[pepper.heat].label },
     { label: "Scoville range", value: hasScovilleMeasurement(pepper) ? `${pepperRange(pepper)} SHU` : pepperScovilleDisplay(pepper) },
     { label: "Color", value: pepper.color },
@@ -392,6 +397,7 @@ const buildingCard = (building: Building): KnowledgeCard => ({
   qualityFlags: scoreFeaturedContent({ ...building, statValue: building.heightFt }).flags,
   metadata: building.metadata,
   details: [
+    ...rarityDetails(building.metadata),
     { label: buildingHeightLabel(building), value: feet(building.heightFt) },
     { label: "Floors", value: building.floors ? formatNumber(building.floors) : "Not listed" },
     { label: "Status", value: building.status.replace(/^./, (letter) => letter.toUpperCase()) },
@@ -418,6 +424,7 @@ const sharkCard = (shark: Shark, metric: "length" | "speed" | "power" = "length"
   tags: shark.tags,
   metadata: shark.metadata,
   details: [
+    ...rarityDetails(shark.metadata),
     { label: "Length", value: feet(shark.lengthFt) },
     { label: "Speed", value: `${formatNumber(shark.speedMph)} mph` },
     { label: "Power", value: `${shark.power}/5` },
@@ -471,7 +478,9 @@ const spaceCard = (space: SpaceCard, metric: "distance" | "temperature" | "size"
     statValue: spaceMetricValue(space, metric),
     sourceCaution: space.statNote ? "estimated stat" : undefined,
   }).flags,
+  metadata: space.metadata,
   details: [
+    ...rarityDetails(space.metadata),
     { label: "Object type", value: space.kind.replace(/^./, (letter) => letter.toUpperCase()) },
     { label: "Group", value: space.group },
     ...(space.distanceFromSunMillionMiles !== undefined ? [{ label: "Distance from Sun", value: `${formatNumber(space.distanceFromSunMillionMiles)}M mi` }] : []),
@@ -540,10 +549,11 @@ const jetCard = (jet: Jet, metric: "speed" | "range" | "firepower" = "speed"): K
   statDisplay: metric === "speed" ? `${formatNumber(jet.maxSpeedMph)} mph` : metric === "range" ? `${formatNumber(jet.rangeMiles)} mi` : `${jet.firepower}/5`,
   subStat: `${jet.country} · ${jetCategoryLabels[jet.category]}`,
   fact: jet.fact,
-  metadata: { location: jetWorldLocation(jet) },
+  metadata: { ...jet.metadata, location: jetWorldLocation(jet) },
   qualityScore: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower }).score,
   qualityFlags: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower }).flags,
   details: [
+    ...rarityDetails(jet.metadata),
     { label: "Top speed", value: `${formatNumber(jet.maxSpeedMph)} mph` },
     { label: "Range", value: `${formatNumber(jet.rangeMiles)} mi` },
     { label: "Firepower", value: `${jet.firepower}/5` },
@@ -979,93 +989,17 @@ const pepperPlantHeight = (pepper: Pepper) => {
   return pepperPlantHeightInches[pepper.id] ?? (heatReference >= 500000 ? 48 : heatReference >= 50000 ? 42 : 30);
 };
 
-type RarityTier = 1 | 2 | 3 | 4 | 5;
-
-const rarityLabels: Record<RarityTier, "Common" | "Uncommon" | "Rare" | "Epic" | "Legendary"> = {
-  1: "Common",
-  2: "Uncommon",
-  3: "Rare",
-  4: "Epic",
-  5: "Legendary",
-};
-
-const rarityStat = (tier: RarityTier): TopTrumpStat => ({
+const rarityStat = (rarity: CardRarity): TopTrumpStat => ({
   id: "rarity",
   label: "Rarity",
-  value: tier,
-  display: rarityLabels[tier],
+  value: cardRarityTier(rarity),
+  display: cardRarityLabels[rarity],
   direction: "higher",
 });
-
-const commonPepperIds = new Set(["bell-pepper", "banana-pepper", "poblano", "anaheim", "jalapeno", "serrano", "cayenne", "tabasco", "habanero", "shishito"]);
-const uncommonPepperIds = new Set(["pepperoncini", "fresno", "thai-chili", "scotch-bonnet", "ghost-pepper", "padron", "ancho", "guajillo", "rocoto", "cubanelle", "hatch-chile", "tangerine-dream"]);
-const epicPepperIds = new Set(["chocolate-bhutlah", "chocolate-rocoto-x", "chocolate-moruga-scorpion", "dragons-breath", "pepper-y", "the-noah", "armageddon", "orange-butch-t"]);
-const legendaryPepperIds = new Set(["pepper-x", "carolina-reaper", "trinidad-scorpion", "seven-pot-primo"]);
-
-const pepperRarity = (pepper: Pepper): RarityTier => {
-  if (legendaryPepperIds.has(pepper.id)) return 5;
-  if (epicPepperIds.has(pepper.id)) return 4;
-  if (commonPepperIds.has(pepper.id)) return 1;
-  if (uncommonPepperIds.has(pepper.id)) return 2;
-  return 3;
-};
+const rarityStats = (metadata?: CardMetadata): TopTrumpStat[] => metadata?.rarity ? [rarityStat(metadata.rarity)] : [];
 const plantHeight = (value: number) => (value >= 24 && value % 12 === 0 ? `${value / 12} ft` : `${value} in`);
 
 const sharkWeightLb = (shark: Shark) => Math.round(Math.max(10, shark.lengthFt ** 2.85 * (shark.power >= 4 ? 0.85 : 0.55)));
-const sharkRarity = (shark: Shark) => {
-  const rarity: Record<string, number> = {
-    dunkleosteus: 10,
-    megalodon: 10,
-    "goblin-shark": 9,
-    megamouth: 9,
-    "frilled-shark": 9,
-    "greenland-shark": 8,
-    cookiecutter: 8,
-    sawshark: 7,
-    "great-hammerhead": 7,
-    "scalloped-hammerhead": 7,
-    "oceanic-whitetip": 7,
-    "basking-shark": 6,
-    "common-thresher": 6,
-    "shortfin-mako": 6,
-    "bull-shark": 5,
-    "tiger-shark": 5,
-    "great-white": 5,
-    "blue-shark": 4,
-    "lemon-shark": 4,
-    "zebra-shark": 4,
-    "nurse-shark": 3,
-    "blacktip-reef": 3,
-    "sand-tiger": 3,
-    "whale-shark": 6,
-    "epaulette-shark": 5,
-    "longfin-mako": 8,
-    "bigeye-thresher": 7,
-    "pelagic-thresher": 7,
-    "silky-shark": 5,
-    "spinner-shark": 5,
-    "dusky-shark": 6,
-    "sandbar-shark": 4,
-    "galapagos-shark": 6,
-    "whitetip-reef": 4,
-    "grey-reef-shark": 4,
-    porbeagle: 6,
-    "salmon-shark": 6,
-    bonnethead: 3,
-    "smooth-hammerhead": 6,
-    "horn-shark": 4,
-    "port-jackson-shark": 4,
-    "spotted-wobbegong": 5,
-    angelshark: 8,
-    "pyjama-shark": 5,
-    "bamboo-shark": 3,
-    "caribbean-reef": 4,
-    "silvertip-shark": 6,
-    "swell-shark": 4,
-    "zambezi-shark": 5,
-  };
-  return rarity[shark.id] ?? 5;
-};
 const buildingCompletedYear = (building: Building) => {
   const years: Record<string, number> = {
     "willis-tower": 1974,
@@ -1321,7 +1255,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       metadata: pepper.metadata,
       stats: [
         ...(hasScovilleMeasurement(pepper) ? [{ id: "scoville", label: "Scoville", value: pepper.shuMax, display: pepperScovilleDisplay(pepper), direction: "higher" as const }] : []),
-        rarityStat(pepperRarity(pepper)),
+        ...rarityStats(pepper.metadata),
         { id: "size", label: "Fruit size", value: pepperSizeInches[pepper.id] ?? 2, display: inches(pepperSizeInches[pepper.id] ?? 2), direction: "higher" },
         { id: "plant-height", label: "Plant height", value: pepperPlantHeight(pepper), display: plantHeight(pepperPlantHeight(pepper)), direction: "higher" },
       ],
@@ -1342,6 +1276,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       fact: building.fact,
       metadata: building.metadata,
       stats: [
+        ...rarityStats(building.metadata),
         { id: "height", label: buildingHeightLabel(building), value: building.heightFt, display: feet(building.heightFt), direction: "higher" },
         { id: "floors", label: "Floors", value: building.floors ?? 0, display: `${building.floors ?? "?"}`, direction: "higher" },
         { id: "year", label: "Year built", value: buildingCompletedYear(building), display: buildingYearDisplay(building), direction: "lower" },
@@ -1362,12 +1297,13 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       imageCredit: shark.imageCredit,
       subStat: `${shark.family} · eats ${shark.diet}`,
       fact: shark.fact,
+      metadata: shark.metadata,
       stats: [
+        ...rarityStats(shark.metadata),
         { id: "speed", label: "Speed", value: shark.speedMph, display: `${formatNumber(shark.speedMph)} mph`, direction: "higher" },
         { id: "weight", label: "Weight", value: sharkWeightLb(shark), display: pounds(sharkWeightLb(shark)), direction: "higher" },
         { id: "length", label: "Length", value: shark.lengthFt, display: feet(shark.lengthFt), direction: "higher" },
         { id: "power", label: "Predator power", value: shark.power * 2, display: `${shark.power * 2}/10`, direction: "higher" },
-        rarityStat(Math.min(5, Math.max(1, Math.ceil(sharkRarity(shark) / 2))) as RarityTier),
       ],
     };
   }
@@ -1386,7 +1322,9 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       imageCredit: space.imageCredit,
       subStat: `${space.group} · ${space.kind}`,
       fact: space.fact,
+      metadata: space.metadata,
       stats: ([
+        ...rarityStats(space.metadata),
         { id: "size", label: "Size", value: sizeValue, display: space.radiusSolar ? `${formatNumber(sizeValue)}x Sun` : `${formatNumber(sizeValue)} mi`, direction: "higher" },
         { id: "temperature", label: "Temperature", value: tempValue, display: space.surfaceTempK ? `${formatNumber(tempValue)} K` : `${formatNumber(tempValue)}°F`, direction: "higher" },
         { id: "distance", label: "Distance from Sun", value: space.distanceFromSunMillionMiles ?? 0, display: `${formatNumber(space.distanceFromSunMillionMiles ?? 0)}M mi`, direction: "higher" },
@@ -1412,7 +1350,9 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
     imageCredit: jet.imageCredit,
     subStat: `${jet.country} · ${jetCategoryLabels[jet.category]}`,
     fact: jet.fact,
+    metadata: { ...jet.metadata, location: jetWorldLocation(jet) },
     stats: [
+      ...rarityStats(jet.metadata),
       { id: "speed", label: "Speed", value: jet.maxSpeedMph, display: `${formatNumber(jet.maxSpeedMph)} mph`, direction: "higher" },
       { id: "range", label: "Range", value: jet.rangeMiles, display: `${formatNumber(jet.rangeMiles)} mi`, direction: "higher" },
       { id: "weight", label: "Weight", value: jetWeightLb(jet), display: pounds(jetWeightLb(jet)), direction: "higher" },
@@ -1778,6 +1718,7 @@ const countryCoordinates: Record<string, LatLon> = {
   Bolivia: [-17, -65],
   Brazil: [-10, -52],
   Canada: [57, -106],
+  Belize: [17.2, -88.7],
   China: [35, 104],
   Cuba: [21.5, -79.5],
   "Czech Republic": [49.8, 15.5],
@@ -1805,6 +1746,7 @@ const countryCoordinates: Record<string, LatLon> = {
   Rwanda: [-1.9, 29.9],
   "Saudi Arabia": [24, 45],
   "South Korea": [36, 128],
+  "South Africa": [-30.6, 22.9],
   Spain: [40, -4],
   Suriname: [4, -56],
   Sweden: [62, 15],
@@ -2066,7 +2008,7 @@ const cachedGeoCapability = (cards: readonly KnowledgeCard[], difficulty: Diffic
 export const canBuildGeoRoundFromCards = (cards: readonly KnowledgeCard[], difficulty: Difficulty = 1) => {
   return cachedGeoCapability(cards, difficulty, () => {
     const count = geoChoiceCountForDifficulty(difficulty);
-    const candidates = geoChoiceCandidates(cards);
+    const candidates = geoChoiceCandidates(preferredPool(geoCards(cards), difficulty));
     return candidates.some((answer, index) => diverseGeoChoices(answer, candidates, count, difficulty, index) !== null);
   });
 };
@@ -2418,6 +2360,7 @@ const subjectNounForCards = (topic: RoundTopic, cards: readonly GenericKnowledge
   if (topic === "dinosaurs") return "prehistoric animal";
   if (topic === "tallest-mountains" || topic === "mountains") return "mountain";
   if (topic === "tall-trees") return normalizedCategories.every((categories) => !categories.includes("reference")) ? "tree" : "subject";
+  if (topic === "hot-sauces") return "sauce or pepper oil";
   return "subject";
 };
 

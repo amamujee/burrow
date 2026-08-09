@@ -16,7 +16,7 @@ export type PlayablePackDeck = {
 
 const formatNumber = (value: number) => value.toLocaleString("en-US");
 
-const statDisplay = (stat: PackStat) => `${formatNumber(stat.value)}${stat.unit ? ` ${stat.unit}` : ""}`;
+const statDisplay = (stat: PackStat) => stat.display ?? `${formatNumber(stat.value)}${stat.unit ? ` ${stat.unit}` : ""}`;
 
 const toTopTrumpStat = (stat: PackStat): TopTrumpStat => ({
   id: stat.id,
@@ -65,6 +65,10 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
             { label: "Location", value: card.metadata.location.label },
             { label: "Continent", value: card.metadata.location.continents.join(" / ") },
           ] : []),
+          ...(card.metadata?.pepperTypes?.length ? [{ label: "Peppers", value: card.metadata.pepperTypes.join(" · ") }] : []),
+          ...(card.metadata?.flavorGrade && !card.stats.some((stat) => stat.id === "flavor-grade")
+            ? [{ label: "Flavor grade", value: card.metadata.flavorGrade }]
+            : []),
           ...(card.metadata?.taxonomyGroup ? [{ label: "Group", value: card.metadata.taxonomyGroup }] : []),
           ...(card.tags?.length ? [{ label: "Traits", value: card.tags.join(" · ") }] : []),
         ],

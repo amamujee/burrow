@@ -48,6 +48,7 @@ const topicCards = [
   { title: "Tall Trees", detail: "the tallest living things", image: "/burrow-assets/tall-trees/general-sherman.jpg" },
   { title: "Tallest Mountains", detail: "elevation, ranked", image: "/burrow-assets/tallest-mountains/k2.jpg" },
   { title: "Bridges & Tunnels", detail: "spans & records", image: "/burrow-assets/bridges-and-tunnels/golden-gate-bridge.jpg" },
+  { title: "Hot Sauces", detail: "heat, peppers & flavor", image: "/burrow-assets/hot-sauces/tabasco-original.jpg" },
 ] as const;
 
 const playButtonClass = "inline-flex rounded-[10px] border-2 border-[#082329] bg-[#f3c647] px-5 py-3 text-base font-black text-[#102f36] shadow-[3px_3px_0_#082329] transition hover:-translate-y-0.5 hover:bg-[#ffd85f]";
@@ -164,7 +165,7 @@ export default function Home() {
       <section className="border-t-2 border-[#e3c899] bg-[#fdecc8] px-5 py-16">
         <div className="mx-auto max-w-6xl">
           <p className="text-xs font-black uppercase tracking-[0.16em] text-[#9b5538]">What&apos;s inside</p>
-          <h2 className="mt-2.5 max-w-2xl text-[clamp(1.75rem,3.2vw,2.5rem)] font-black leading-tight text-[#321e16]">Ten content packs from peppers to mountains — more to come.</h2>
+          <h2 className="mt-2.5 max-w-2xl text-[clamp(1.75rem,3.2vw,2.5rem)] font-black leading-tight text-[#321e16]">Eleven content packs from peppers to hot sauces — more to come.</h2>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#4d4038]">Every pack is real, credited photos saved right on the device — so it keeps working on a plane, in a car, anywhere the wifi doesn&apos;t.</p>
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
             {topicCards.map((topic) => (

@@ -37,6 +37,7 @@ import {
   worldContinentLabel,
   worldLocationLabelInProse,
   type GeoChoice,
+  type RoundTopic,
 } from "./game-modes";
 
 export type TopicScope = TopicId | readonly KnowledgeTopic[];
@@ -81,11 +82,12 @@ export type QuestionKind =
   | "country-population"
   | "country-area"
   | "country-neighbors"
-  | "country-highest-point";
+  | "country-highest-point"
+  | "pack-comparison";
 
 export type ComparisonCard = {
   label: "A" | "B";
-  topic: KnowledgeTopic;
+  topic: RoundTopic;
   title: string;
   image: string;
   imageAlt: string;
@@ -99,7 +101,7 @@ export type ComparisonCard = {
 
 export type Question = {
   id: string;
-  topic: KnowledgeTopic;
+  topic: RoundTopic;
   kind: QuestionKind;
   prompt: string;
   readingClue?: string;

@@ -23,6 +23,6 @@ export const resolvedImagePresentation = (
   compact = false,
 ): BuildingImagePresentation =>
   buildingImagePresentation(image) ?? {
-    fit: compact ? "contain" : "cover",
+    fit: compact || image.startsWith("/burrow-assets/hot-sauces/") ? "contain" : "cover",
     position: "center",
   };

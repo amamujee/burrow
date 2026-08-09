@@ -1,0 +1,1193 @@
+{
+  "$schema": "../pack.schema.json",
+  "id": "hot-sauces",
+  "title": "Hot Sauces",
+  "summary": "Explore 50 famous, unusual, and fiercely hot sauces, including pepper oils and chili crisps from around the world.",
+  "dataNote": "Scoville scores are published sauce measurements where available. Values marked on a card as pepper-based or estimated use a featured pepper's rating or a documented range because finished-sauce heat varies by recipe and batch. Flavor grades are Burrow editorial assessments of balance, complexity, and versatility, not laboratory results.",
+  "status": "playable",
+  "audience": {
+    "minAge": 6,
+    "maxAge": 12,
+    "readingLevel": "Independent reader"
+  },
+  "recommendedModes": ["versus", "trumps", "sort", "fact", "peek", "odd", "geo"],
+  "sources": [
+    {
+      "label": "HEATONIST hot sauce catalog",
+      "url": "https://heatonist.com/pages/hot-sauce-company",
+      "note": "Product descriptions, ingredients, flavor profiles, and label photography."
+    },
+    {
+      "label": "Hot Ones Season 25 lineup",
+      "url": "https://heatonist.com/collections/hot-ones-sauces-season-25",
+      "note": "Published sauce Scoville scores and ingredient lists."
+    },
+    {
+      "label": "Hot Ones Season 24 lineup",
+      "url": "https://heatonist.com/pages/hot-ones-season-24-lineup-revealed",
+      "note": "Published sauce Scoville scores and ingredient lists."
+    },
+    {
+      "label": "Hot Ones Season 27 lineup",
+      "url": "https://heatonist.com/collections/hot-ones-hot-sauces-season-27",
+      "note": "Published sauce Scoville scores and ingredient lists."
+    },
+    {
+      "label": "PuckerButt Pepper Company",
+      "url": "https://puckerbuttpeppercompany.com/",
+      "note": "Pepper X, Carolina Reaper, and superhot sauce product information."
+    }
+  ],
+  "cards": [
+    {
+      "id": "secret-aardvark-habanero",
+      "name": "Secret Aardvark Habanero",
+      "image": "/burrow-assets/hot-sauces/secret-aardvark-habanero.jpg",
+      "imageAlt": "Front label of a Secret Aardvark Habanero Sauce bottle",
+      "imageCredit": "Secret Aardvark product photography (used with permission)",
+      "imageSourceUrl": "https://secretaardvark.com/shop/sauce/aardvark-habanero-hot-sauce/",
+      "fact": "Secret Aardvark mixes habanero heat with roasted tomato and mustard for a Caribbean-inspired sauce.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 5000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Habanero sauce"],
+      "tags": ["tomato-rich", "mustardy"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "A",
+        "pepperTypes": ["Habanero"], "taxonomyGroup": "Caribbean-inspired sauce",
+        "accuracyNote": "The Scoville score is an approximate finished-sauce value; pepper crops and batches vary.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "marie-sharps-belizean-heat",
+      "name": "Marie Sharp's Belizean Heat",
+      "image": "/burrow-assets/hot-sauces/marie-sharps-belizean-heat.jpg",
+      "imageAlt": "Front label of a Marie Sharp's Belizean Heat bottle",
+      "imageCredit": "Marie Sharp's product photography (used with permission)",
+      "imageSourceUrl": "https://mariesharpsusa.com/products/belizean-heat",
+      "fact": "Marie Sharp's builds this Belizean sauce around habaneros, carrots, onions, garlic, and lime juice.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 350000, "unit": "SHU", "display": "~350,000 SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Habanero sauce"],
+      "tags": ["carrot-based", "citrusy"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "A",
+        "pepperTypes": ["Habanero"], "taxonomyGroup": "Belizean pepper sauce",
+        "accuracyNote": "Published values vary widely and may reflect pepper heat; this card uses an approximate comparison score.",
+        "location": { "label": "Belize", "countries": ["Belize"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "nandos-hot-peri-peri",
+      "name": "Nando's Hot PERi-PERi",
+      "image": "/burrow-assets/hot-sauces/nandos-hot-peri-peri.jpg",
+      "imageAlt": "Front label of a Nando's Hot PERi-PERi Sauce bottle",
+      "imageCredit": "Nando's product photography (used with permission)",
+      "imageSourceUrl": "https://www.nandos.com/sauces/hot-peri-peri/",
+      "fact": "Nando's sauce centers African bird's eye chillies, a pepper also called peri-peri or piri-piri.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 30000, "unit": "SHU", "display": "~30,000 SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Peri-peri sauce"],
+      "tags": ["citrusy", "garlicky"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 4, "rarity": "common", "flavorGrade": "A",
+        "pepperTypes": ["African bird's eye chilli"], "taxonomyGroup": "South African peri-peri sauce",
+        "accuracyNote": "Nando's describes heat by tier rather than a lab SHU; this is an editorial comparison estimate.",
+        "location": { "label": "South Africa", "countries": ["South Africa"], "continents": ["Africa"] }
+      }
+    },
+    {
+      "id": "hot-ones-the-classic",
+      "name": "Hot Ones The Classic",
+      "image": "/burrow-assets/hot-sauces/hot-ones-the-classic.jpg",
+      "imageAlt": "Front label of a Hot Ones The Classic sauce bottle",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/hot-ones-the-classic-hot-sauce",
+      "fact": "The first sauce in many Hot Ones lineups uses chile de árbol for a mild, tangy opening round.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 1800, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Árbol sauce"],
+      "tags": ["tangy", "mild"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "A",
+        "pepperTypes": ["Árbol chile"], "taxonomyGroup": "Hot Ones sauce",
+        "accuracyNote": "HEATONIST publishes 1,800 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "ghost-pepper-pear",
+      "name": "Ghost Pepper Pear",
+      "image": "/burrow-assets/hot-sauces/ghost-pepper-pear.jpg",
+      "imageAlt": "Front label of a Little Dick's Ghost Pepper Pear sauce bottle",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/ghost-pepper-pear-little-dicks",
+      "fact": "Sweet pear lets a sauce contain both ghost pepper and Carolina Reaper while remaining early-lineup mild.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 6900, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Fruit hot sauce"],
+      "tags": ["pear", "sweet-heat"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "pepperTypes": ["Ghost pepper", "Carolina Reaper"], "taxonomyGroup": "Fruit-forward sauce",
+        "accuracyNote": "HEATONIST publishes 6,900 SHU for this finished sauce despite its superhot pepper ingredients.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "smoked-onion",
+      "name": "Neil's Real Deal Smoked Onion",
+      "image": "/burrow-assets/hot-sauces/smoked-onion.jpg",
+      "imageAlt": "Front label of Neil's Real Deal Smoked Onion sauce",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/smoked-onion-neils-real-deal",
+      "fact": "Slow-smoked onions, molasses, tamarind, habanero, and ghost pepper powder create barbecue-like depth.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 17000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Smoky hot sauce"],
+      "tags": ["smoky", "sweet-savory"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 2, "rarity": "uncommon", "flavorGrade": "A",
+        "pepperTypes": ["Habanero", "Ghost pepper"], "taxonomyGroup": "Barbecue-style sauce",
+        "accuracyNote": "HEATONIST publishes 17,000 SHU for this finished sauce.",
+        "location": { "label": "Canada", "countries": ["Canada"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "los-calientes-verde",
+      "name": "Hot Ones Los Calientes Verde",
+      "image": "/burrow-assets/hot-sauces/los-calientes-verde.jpg",
+      "imageAlt": "Front label of a Hot Ones Los Calientes Verde bottle",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/hot-ones-los-calientes",
+      "fact": "Tomatillo, pineapple, serrano, and habanero make Los Calientes Verde both fruity and sharply green.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 36000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Green hot sauce"],
+      "tags": ["tomatillo", "pineapple"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 4, "rarity": "uncommon", "flavorGrade": "A",
+        "pepperTypes": ["Serrano", "Green habanero"], "taxonomyGroup": "Hot Ones sauce",
+        "accuracyNote": "HEATONIST publishes 36,000 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "apple-caraway",
+      "name": "Dawson's Apple Caraway",
+      "image": "/burrow-assets/hot-sauces/apple-caraway.jpg",
+      "imageAlt": "Front label of a Dawson's Apple Caraway sauce bottle",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/apple-caraway-dawsons-hot-sauce",
+      "fact": "Apple juice, dates, lemon, and caraway surround habanero heat with unusual sweet and herbal flavors.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 52000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Fruit hot sauce"],
+      "tags": ["apple", "caraway"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "pepperTypes": ["Red pepper blend", "Habanero"], "taxonomyGroup": "Fruit-forward sauce",
+        "accuracyNote": "HEATONIST publishes 52,000 SHU; one ingredient is listed only as peppers, not a named variety.",
+        "location": { "label": "Canada", "countries": ["Canada"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "jerk-scotch-bonnet",
+      "name": "Pepper North Jerk & Scotch Bonnet",
+      "image": "/burrow-assets/hot-sauces/jerk-scotch-bonnet.jpg",
+      "imageAlt": "Front label of Pepper North Jerk and Scotch Bonnet sauce",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/jerk-scotch-bonnet-pepper-north",
+      "fact": "Scotch bonnet and cayenne meet pineapple, orange, lime, allspice, ginger, thyme, and warm jerk spices.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 71000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Jerk hot sauce"],
+      "tags": ["tropical", "allspice"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "pepperTypes": ["Scotch bonnet", "Cayenne pepper"], "taxonomyGroup": "Caribbean-inspired sauce",
+        "accuracyNote": "HEATONIST publishes 71,000 SHU for this finished sauce.",
+        "location": { "label": "Canada", "countries": ["Canada"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "ninja-napalm",
+      "name": "The Pepper Ninja Ninja Napalm",
+      "image": "/burrow-assets/hot-sauces/ninja-napalm.jpg",
+      "imageAlt": "Front label of The Pepper Ninja Ninja Napalm sauce",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/ninja-napalm-the-pepper-ninja",
+      "fact": "Trinidad Scorpion peppers lead a short recipe sharpened by lime juice, garlic, and curry powder.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 133000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Scorpion pepper sauce"],
+      "tags": ["lime", "curry"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "pepperTypes": ["Trinidad Scorpion"], "taxonomyGroup": "Superhot sauce",
+        "accuracyNote": "HEATONIST publishes 133,000 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "tabasco-original",
+      "name": "Tabasco Original Red",
+      "image": "/burrow-assets/hot-sauces/tabasco-original.jpg",
+      "imageAlt": "Front label of a Tabasco Original Red Sauce bottle",
+      "imageCredit": "Tabasco product photography (used with permission)",
+      "imageSourceUrl": "https://www.tabasco.com/hot-sauces/original-red-sauce/",
+      "fact": "Tabasco ages mashed tabasco peppers in oak barrels before blending them with vinegar and salt.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 2500, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Louisiana-style sauce"],
+      "tags": ["vinegar-forward", "barrel-aged"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 5, "rarity": "common", "flavorGrade": "B",
+        "pepperTypes": ["Tabasco pepper"], "taxonomyGroup": "Thin pepper sauce",
+        "accuracyNote": "Tabasco publishes a 2,500-5,000 SHU range; the comparison value uses its lower bound.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "cholula-original",
+      "name": "Cholula Original",
+      "image": "/burrow-assets/hot-sauces/cholula-original.jpg",
+      "imageAlt": "Front label of a Cholula Original Hot Sauce bottle",
+      "imageCredit": "Cholula product photography (used with permission)",
+      "imageSourceUrl": "https://www.cholula.com/en-us/products/hot-sauce/original",
+      "fact": "Cholula combines árbol and piquín peppers with spices in a recipe associated with Jalisco, Mexico.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 3600, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Mexican-style sauce"],
+      "tags": ["tangy", "spiced"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 5, "rarity": "common", "flavorGrade": "A",
+        "pepperTypes": ["Árbol chile", "Piquín pepper"], "taxonomyGroup": "Spiced pepper sauce",
+        "accuracyNote": "The Scoville score is a widely published estimate for the finished sauce; batches can vary.",
+        "location": { "label": "Mexico", "countries": ["Mexico"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "franks-redhot-original",
+      "name": "Frank's RedHot Original",
+      "image": "/burrow-assets/hot-sauces/franks-redhot-original.jpg",
+      "imageAlt": "Front label of a Frank's RedHot Original bottle",
+      "imageCredit": "Frank's RedHot product photography (used with permission)",
+      "imageSourceUrl": "https://www.franksredhot.com/en-us/products/franks-redhot-original-cayenne-pepper-sauce",
+      "fact": "Frank's is a cayenne-and-vinegar sauce closely linked with the invention of Buffalo wings in 1964.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 450, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Cayenne sauce"],
+      "tags": ["vinegar-forward", "buffalo-wing"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 5, "rarity": "common", "flavorGrade": "B",
+        "pepperTypes": ["Cayenne pepper"], "taxonomyGroup": "Buffalo-style sauce",
+        "accuracyNote": "The comparison value is a commonly published estimate for the finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "huy-fong-sriracha",
+      "name": "Huy Fong Sriracha",
+      "image": "/burrow-assets/hot-sauces/huy-fong-sriracha.jpg",
+      "imageAlt": "Front label of a Huy Fong Sriracha bottle",
+      "imageCredit": "Huy Fong Foods product photography (used with permission)",
+      "imageSourceUrl": "https://www.huyfong.com/",
+      "fact": "This famous rooster bottle turns red jalapeños, garlic, sugar, salt, and vinegar into a thick sriracha.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 2200, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Sriracha"],
+      "tags": ["garlicky", "sweet"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 5, "rarity": "common", "flavorGrade": "A",
+        "pepperTypes": ["Red jalapeño"], "taxonomyGroup": "Fermented-style chili sauce",
+        "accuracyNote": "Published estimates usually place the finished sauce near 2,200 SHU; chile crops vary.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "texas-pete-original",
+      "name": "Texas Pete Original",
+      "image": "/burrow-assets/hot-sauces/texas-pete-original.jpg",
+      "imageAlt": "Front label of a Texas Pete Original Hot Sauce bottle",
+      "imageCredit": "Texas Pete product photography (used with permission)",
+      "imageSourceUrl": "https://texaspete.com/products/original-hot-sauce/",
+      "fact": "Despite its name, Texas Pete was created in Winston-Salem, North Carolina, as a cayenne sauce.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 750, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Cayenne sauce"],
+      "tags": ["vinegar-forward", "mild"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 4, "rarity": "common", "flavorGrade": "B",
+        "pepperTypes": ["Cayenne pepper"], "taxonomyGroup": "Southern pepper sauce",
+        "accuracyNote": "The comparison value is a commonly published estimate for the finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "tapatio-original",
+      "name": "Tapatío Original",
+      "image": "/burrow-assets/hot-sauces/tapatio-original.jpg",
+      "imageAlt": "Front label of a Tapatío Original Hot Sauce bottle",
+      "imageCredit": "Tapatío product photography (used with permission)",
+      "imageSourceUrl": "https://www.tapatiohotsauce.com/",
+      "fact": "Tapatío was founded in California in 1971 and takes its name from a person from Guadalajara.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 3000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Mexican-American sauce"],
+      "tags": ["savory", "medium-thin"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 5, "rarity": "common", "flavorGrade": "B",
+        "pepperTypes": ["Red chile blend"], "taxonomyGroup": "Spiced pepper sauce",
+        "accuracyNote": "The precise chile blend is proprietary; 3,000 SHU is a commonly published estimate.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "valentina-original",
+      "name": "Valentina Original",
+      "image": "/burrow-assets/hot-sauces/valentina-original.jpg",
+      "imageAlt": "Front label of a Valentina Salsa Picante bottle",
+      "imageCredit": "Valentina product photography (used with permission)",
+      "imageSourceUrl": "https://salsavalentina.com/",
+      "fact": "Valentina is a thick Mexican table sauce known for gentle heat and a tangy, chile-forward flavor.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 900, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Mexican table sauce"],
+      "tags": ["tangy", "thick"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 5, "rarity": "common", "flavorGrade": "A",
+        "pepperTypes": ["Puya chile"], "taxonomyGroup": "Salsa picante",
+        "accuracyNote": "The finished-sauce heat is commonly estimated near 900 SHU; recipes and peppers vary.",
+        "location": { "label": "Mexico", "countries": ["Mexico"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "crystal-original",
+      "name": "Crystal Original",
+      "image": "/burrow-assets/hot-sauces/crystal-original.jpg",
+      "imageAlt": "Front label of a Crystal Hot Sauce bottle",
+      "imageCredit": "Crystal product photography (used with permission)",
+      "imageSourceUrl": "https://crystalhotsauce.com/product/crystal-hot-sauce/",
+      "fact": "Crystal is a Louisiana-style blend of aged red cayenne peppers, distilled vinegar, and salt.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 4000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Louisiana-style sauce"],
+      "tags": ["vinegar-forward", "aged-pepper"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 4, "rarity": "common", "flavorGrade": "B",
+        "pepperTypes": ["Cayenne pepper"], "taxonomyGroup": "Thin pepper sauce",
+        "accuracyNote": "Published estimates vary; the comparison value uses a commonly cited 4,000 SHU figure.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "louisiana-original",
+      "name": "Louisiana Original",
+      "image": "/burrow-assets/hot-sauces/louisiana-original.jpg",
+      "imageAlt": "Front label of a Louisiana Brand Original Hot Sauce bottle",
+      "imageCredit": "Louisiana Brand product photography (used with permission)",
+      "imageSourceUrl": "https://louisianahotsauce.com/hot-sauces/original-hot-sauce/",
+      "fact": "Louisiana Brand helped give an entire style its name: aged peppers, vinegar, and salt in a pourable sauce.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 450, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Louisiana-style sauce"],
+      "tags": ["vinegar-forward", "aged-pepper"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 4, "rarity": "common", "flavorGrade": "B",
+        "pepperTypes": ["Cayenne pepper"], "taxonomyGroup": "Thin pepper sauce",
+        "accuracyNote": "The comparison value is a commonly published estimate for the finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "el-yucateco-green-habanero",
+      "name": "El Yucateco Green Habanero",
+      "image": "/burrow-assets/hot-sauces/el-yucateco-green-habanero.jpg",
+      "imageAlt": "Front label of an El Yucateco Green Habanero bottle",
+      "imageCredit": "El Yucateco product photography (used with permission)",
+      "imageSourceUrl": "https://www.shopelyucateco.com/products/green-habanero-hot-sauce",
+      "fact": "This bright green sauce pairs habanero heat with a sharp, fresh flavor popular across the Yucatán.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 8910, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Habanero sauce"],
+      "tags": ["bright", "tangy"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 4, "rarity": "common", "flavorGrade": "A",
+        "pepperTypes": ["Green habanero"], "taxonomyGroup": "Yucatán-style sauce",
+        "accuracyNote": "The brand has published a laboratory value around 8,910 SHU for this finished sauce.",
+        "location": { "label": "Mexico", "countries": ["Mexico"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "da-bomb-evolution",
+      "name": "Da Bomb Evolution",
+      "image": "/burrow-assets/hot-sauces/da-bomb-evolution.jpg",
+      "imageAlt": "Front label of a Da Bomb Evolution Hot Sauce bottle",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/da-bomb-hot-sauce",
+      "fact": "Evolution keeps Da Bomb's famous challenge position but uses peppers rather than added capsaicin extract.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 135600, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 2, "unit": "", "display": "C" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Challenge sauce"],
+      "tags": ["heat-forward", "extract-free"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 3, "rarity": "rare", "flavorGrade": "C",
+        "pepperTypes": ["Red hot chile blend"], "taxonomyGroup": "Hot Ones challenge sauce",
+        "accuracyNote": "HEATONIST publishes 135,600 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "arbol-scorpion",
+      "name": "Fresco Sauce Arbol Scorpion",
+      "image": "/burrow-assets/hot-sauces/arbol-scorpion.jpg",
+      "imageAlt": "Front label of a Fresco Sauce Arbol Scorpion bottle",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/arbol-scorpion-fresco-sauce",
+      "fact": "Scorpion and árbol peppers meet pomegranate, black garlic, red wine vinegar, oregano, and annatto.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 820000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Scorpion pepper sauce"],
+      "tags": ["pomegranate", "black-garlic"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "pepperTypes": ["Trinidad Scorpion", "Árbol chile"], "taxonomyGroup": "Superhot sauce",
+        "accuracyNote": "HEATONIST publishes 820,000 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "last-dab-xperience",
+      "name": "Hot Ones The Last Dab: Xperience",
+      "image": "/burrow-assets/hot-sauces/last-dab-xperience.jpg",
+      "imageAlt": "Front label of a Hot Ones The Last Dab Xperience bottle",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/hot-ones-the-last-dab-xperience",
+      "fact": "This minimalist sauce layers fresh Pepper X, Pepper X powder, and Pepper X distillate with vinegar.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 2693000, "unit": "SHU", "display": "2,693,000 SHU (pepper-based)" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 2, "unit": "", "display": "C" },
+        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+      ],
+      "categories": ["Pepper X sauce"],
+      "tags": ["heat-forward", "pepper-x"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 3, "rarity": "epic", "flavorGrade": "C",
+        "pepperTypes": ["Pepper X"], "taxonomyGroup": "Extreme superhot sauce",
+        "accuracyNote": "2,693,000 SHU is Pepper X's published record average, not an independent finished-sauce lab test.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "classic-garlic-fresno",
+      "name": "Hot Ones The Classic Garlic Fresno",
+      "image": "/burrow-assets/hot-sauces/classic-garlic-fresno.jpg",
+      "imageAlt": "Front label of a Hot Ones The Classic Garlic Fresno bottle",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/hot-ones-the-classic-garlic-fresno-edition",
+      "fact": "Fresno chile and multiple forms of garlic make this mild first-wing sauce savory and aromatic.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 1700, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Fresno sauce"],
+      "tags": ["garlicky", "mild"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "A",
+        "pepperTypes": ["Fresno chile"], "taxonomyGroup": "Hot Ones sauce",
+        "accuracyNote": "HEATONIST publishes 1,700 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "seeing-double",
+      "name": "Double Comfort Foods Seeing Double",
+      "image": "/burrow-assets/hot-sauces/seeing-double.jpg",
+      "imageAlt": "Front label of Double Comfort Foods Seeing Double sauce",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/double-comfort-foods-seeing-double-hot-sauce",
+      "fact": "Banana peppers and jalapeños give Seeing Double a bright, approachable two-pepper flavor.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 6200, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Green hot sauce"],
+      "tags": ["banana-pepper", "bright"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "pepperTypes": ["Banana pepper", "Jalapeño"], "taxonomyGroup": "Small-batch pepper sauce",
+        "accuracyNote": "HEATONIST publishes 6,200 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "fermented-kimchi",
+      "name": "Mark's Fermented Kimchi",
+      "image": "/burrow-assets/hot-sauces/fermented-kimchi.jpg",
+      "imageAlt": "Front label of Mark's Fermented Kimchi Hot Sauce",
+      "imageCredit": "Mark's Hot Sauce product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/marks-hot-sauce-fermented-kimchi",
+      "fact": "Vegan kimchi, gochugaru, aged Thai chiles, garlic, ginger, and soy sauce create fermented depth.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 18000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Fermented hot sauce"],
+      "tags": ["kimchi", "umami"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 2, "rarity": "uncommon", "flavorGrade": "A",
+        "pepperTypes": ["Gochugaru chile", "Thai chile"], "taxonomyGroup": "Kimchi-based sauce",
+        "accuracyNote": "The comparison value is a published finished-sauce score from its Hot Ones lineup.",
+        "location": { "label": "Canada", "countries": ["Canada"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "los-calientes-barbacoa",
+      "name": "Hot Ones Los Calientes Barbacoa",
+      "image": "/burrow-assets/hot-sauces/los-calientes-barbacoa.jpg",
+      "imageAlt": "Front label of a Hot Ones Los Calientes Barbacoa bottle",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/hot-ones-los-calientes-barbacoa",
+      "fact": "Smoked chipotle, apple cider, pineapple, tomatillo, molasses, and cumin produce a barbecue-like sauce.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 33000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Smoky hot sauce"],
+      "tags": ["chipotle", "pineapple"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "A",
+        "pepperTypes": ["Chipotle pepper"], "taxonomyGroup": "Hot Ones sauce",
+        "accuracyNote": "HEATONIST publishes 33,000 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "chairman-meows-revenge",
+      "name": "Fat Cat Chairman Meow's Revenge",
+      "image": "/burrow-assets/hot-sauces/chairman-meows-revenge.jpg",
+      "imageAlt": "Front label of Fat Cat Chairman Meow's Revenge sauce",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/fat-cat-gourmet-chairman-meows-revenge-hot-sauce",
+      "fact": "Habanero and scorpion mash hide among roasted red pepper, mustard, lime, garlic, and cilantro.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 54000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Roasted pepper sauce"],
+      "tags": ["mustardy", "cilantro"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "pepperTypes": ["Habanero", "Trinidad Scorpion"], "taxonomyGroup": "Small-batch pepper sauce",
+        "accuracyNote": "HEATONIST publishes 54,000 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "il-mig-plus",
+      "name": "Onima IL MIG +",
+      "image": "/burrow-assets/hot-sauces/il-mig-plus.jpg",
+      "imageAlt": "Front label of an Onima IL MIG Plus sauce bottle",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/onima-il-ming-hot-sauce",
+      "fact": "Barcelona-made IL MIG + combines habanero, sherry vinegar, olive oil, paprika, coriander, and rice koji.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 71000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Fermented hot sauce"],
+      "tags": ["sherry-vinegar", "koji"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "pepperTypes": ["Habanero"], "taxonomyGroup": "Catalan hot sauce",
+        "accuracyNote": "HEATONIST publishes 71,000 SHU for this finished sauce.",
+        "location": { "label": "Spain", "countries": ["Spain"], "continents": ["Europe"] }
+      }
+    },
+    {
+      "id": "red-flag",
+      "name": "Black Eyed Susan Red Flag",
+      "image": "/burrow-assets/hot-sauces/red-flag.jpg",
+      "imageAlt": "Front label of Black Eyed Susan Red Flag sauce",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/black-eyed-susan-red-flag-hot-sauce",
+      "fact": "Muscadine grape, raspberry, cranberry, hibiscus, and allspice balance Trinidad Scorpion pepper.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 126000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Fruit hot sauce"],
+      "tags": ["berry", "hibiscus"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "pepperTypes": ["Trinidad Scorpion"], "taxonomyGroup": "Fruit-forward sauce",
+        "accuracyNote": "HEATONIST publishes 126,000 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "peppers-up",
+      "name": "High River Sauces Peppers Up!",
+      "image": "/burrow-assets/hot-sauces/peppers-up.jpg",
+      "imageAlt": "Front label of High River Sauces Peppers Up hot sauce",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/high-river-sauces-peppers-up-hot-sauce",
+      "fact": "Apollo pepper mash and powder bring extreme heat, while blackberry, blueberry, yuzu, and brown sugar add fruit.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 700000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Apollo pepper sauce"],
+      "tags": ["berry", "yuzu"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "pepperTypes": ["Apollo pepper"], "taxonomyGroup": "Extreme superhot sauce",
+        "accuracyNote": "The comparison value is HEATONIST's published score for the finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "puckerbutt-the-reaper",
+      "name": "PuckerButt The Reaper Sauce",
+      "image": "/burrow-assets/hot-sauces/puckerbutt-the-reaper.jpg",
+      "imageAlt": "Front label of a PuckerButt The Reaper Sauce bottle",
+      "imageCredit": "PuckerButt Pepper Company product photography (used with permission)",
+      "imageSourceUrl": "https://puckerbuttpeppercompany.com/products/the-reaper-sauce",
+      "fact": "Smokin' Ed Currie created both this sauce company and the Carolina Reaper pepper featured in the bottle.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 1500000, "unit": "SHU", "display": "~1,500,000 SHU (pepper-based)" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 2, "unit": "", "display": "C" },
+        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+      ],
+      "categories": ["Carolina Reaper sauce"],
+      "tags": ["heat-forward", "carolina-reaper"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 3, "rarity": "epic", "flavorGrade": "C",
+        "pepperTypes": ["Carolina Reaper"], "taxonomyGroup": "Extreme superhot sauce",
+        "accuracyNote": "The brand does not publish a finished-sauce lab score; this is a pepper-based comparison estimate.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "reaper-squeezins",
+      "name": "PuckerButt Reaper Squeezins",
+      "image": "/burrow-assets/hot-sauces/reaper-squeezins.jpg",
+      "imageAlt": "Front label of a PuckerButt Reaper Squeezins bottle",
+      "imageCredit": "PuckerButt Pepper Company product photography (used with permission)",
+      "imageSourceUrl": "https://puckerbuttpeppercompany.com/products/reaper-squeezins",
+      "fact": "Reaper Squeezins is famously pepper-heavy, using Carolina Reaper mash with very little to soften the burn.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 2200000, "unit": "SHU", "display": "2,200,000 SHU (pepper-based)" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 1, "unit": "", "display": "D" },
+        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+      ],
+      "categories": ["Carolina Reaper sauce"],
+      "tags": ["pepper-mash", "heat-forward"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 3, "rarity": "epic", "flavorGrade": "D",
+        "pepperTypes": ["Carolina Reaper"], "taxonomyGroup": "Extreme superhot sauce",
+        "accuracyNote": "2,200,000 SHU represents an upper Carolina Reaper pepper rating, not a finished-sauce lab result.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "gator-sauce",
+      "name": "PuckerButt Gator Sauce",
+      "image": "/burrow-assets/hot-sauces/gator-sauce.jpg",
+      "imageAlt": "Front label of a PuckerButt Gator Sauce bottle",
+      "imageCredit": "PuckerButt Pepper Company product photography (used with permission)",
+      "imageSourceUrl": "https://puckerbuttpeppercompany.com/products/gator-squeezins",
+      "fact": "Gator Sauce combines record-setting Pepper X with a yellow superhot mash in a recipe made of 92% pepper.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 2693000, "unit": "SHU", "display": "2,693,000 SHU (pepper-based)" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 2, "unit": "", "display": "C" },
+        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+      ],
+      "categories": ["Pepper X sauce"],
+      "tags": ["pepper-x", "heat-forward"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "epic", "flavorGrade": "C",
+        "pepperTypes": ["Pepper X", "Yellow superhot pepper"], "taxonomyGroup": "Extreme superhot sauce",
+        "accuracyNote": "2,693,000 SHU is Pepper X's published record average, not a finished-sauce lab result.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "bravado-black-garlic-reaper",
+      "name": "Bravado Black Garlic Carolina Reaper",
+      "image": "/burrow-assets/hot-sauces/bravado-black-garlic-reaper.jpg",
+      "imageAlt": "Front label of Bravado Black Garlic Carolina Reaper sauce",
+      "imageCredit": "Bravado Spice product photography (used with permission)",
+      "imageSourceUrl": "https://bravadospice.com/products/black-garlic-carolina-reaper-hot-sauce",
+      "fact": "Aged red serrano, black garlic, maple, and Carolina Reaper make a dark, savory superhot sauce.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 71000, "unit": "SHU", "display": "~71,000 SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Carolina Reaper sauce"],
+      "tags": ["black-garlic", "maple"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "A",
+        "pepperTypes": ["Red serrano", "Carolina Reaper"], "taxonomyGroup": "Savory superhot sauce",
+        "accuracyNote": "The finished-sauce Scoville value is an approximate published estimate.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "hellfire-fear-this",
+      "name": "Hellfire Fear This!",
+      "image": "/burrow-assets/hot-sauces/hellfire-fear-this.jpg",
+      "imageAlt": "Front label of a Hellfire Fear This hot sauce bottle",
+      "imageCredit": "Hellfire Hot Sauce product photography (used with permission)",
+      "imageSourceUrl": "https://hellfirehotsauce.com/products/fear-this",
+      "fact": "Fear This! uses a very high proportion of Carolina Reaper mash alongside garlic and sun-dried tomato.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 679000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 2, "unit": "", "display": "C" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Carolina Reaper sauce"],
+      "tags": ["tomato", "heat-forward"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "C",
+        "pepperTypes": ["Carolina Reaper"], "taxonomyGroup": "Extreme superhot sauce",
+        "accuracyNote": "The maker publishes 679,000 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "queen-majesty-sicilian-scorpion",
+      "name": "Queen Majesty Sicilian Scorpion",
+      "image": "/burrow-assets/hot-sauces/queen-majesty-sicilian-scorpion.jpg",
+      "imageAlt": "Front label of Queen Majesty Sicilian Scorpion sauce",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/queen-majesty-sicilian-scorpion",
+      "fact": "Scorpion pepper joins tomato, lemon, olive oil, garlic, peppercorn, oregano, and basil in an Italian-inspired sauce.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 816000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Scorpion pepper sauce"],
+      "tags": ["italian-inspired", "herbal"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 3, "rarity": "rare", "flavorGrade": "A",
+        "pepperTypes": ["Trinidad Scorpion"], "taxonomyGroup": "Savory superhot sauce",
+        "accuracyNote": "HEATONIST publishes 816,000 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "aprichot",
+      "name": "PuckerButt Aprichot",
+      "image": "/burrow-assets/hot-sauces/aprichot.jpg",
+      "imageAlt": "Front label of a PuckerButt Aprichot hot sauce bottle",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/puckerbutt-pepper-co-aprichot",
+      "fact": "Apricot, lemon peel, lavender, vanilla, spices, and a proprietary chile blend create a floral sauce.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 104000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Fruit hot sauce"],
+      "tags": ["apricot", "lavender"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "pepperTypes": ["Proprietary chile blend"], "taxonomyGroup": "Floral fruit sauce",
+        "accuracyNote": "HEATONIST publishes 104,000 SHU, but the maker lists the peppers only as chili peppers.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "zuzus-7-pot",
+      "name": "Dawson's Zuzu's 7-Pot",
+      "image": "/burrow-assets/hot-sauces/zuzus-7-pot.jpg",
+      "imageAlt": "Front label of Dawson's Zuzu's 7-Pot Sauce",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/dawsons-hot-sauce-zuzus-7-pot-sauce",
+      "fact": "Seven-pot and ghost peppers meet red bell pepper, maple, fennel, garlic, olive oil, and a splash of sambuca.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 620000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 3, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Seven-pot sauce"],
+      "tags": ["fennel", "maple"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "pepperTypes": ["Red bell pepper", "Seven-pot pepper", "Ghost pepper"], "taxonomyGroup": "Savory superhot sauce",
+        "accuracyNote": "The comparison value is the published finished-sauce score from its Hot Ones lineup.",
+        "location": { "label": "Canada", "countries": ["Canada"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "last-dab-reaper-edition",
+      "name": "Hot Ones The Last Dab Reaper Edition",
+      "image": "/burrow-assets/hot-sauces/last-dab-reaper-edition.jpg",
+      "imageAlt": "Front label of The Last Dab Reaper Edition sauce",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/hot-ones-hot-sauce-the-last-dab-reaper-edition",
+      "fact": "This Last Dab swaps in Carolina Reaper and seasons it with ginger, turmeric, coriander, cumin, and mustard.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 2200000, "unit": "SHU", "display": "2,200,000 SHU (pepper-based)" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+      ],
+      "categories": ["Carolina Reaper sauce"],
+      "tags": ["caribbean-spices", "heat-forward"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 3, "rarity": "epic", "flavorGrade": "B",
+        "pepperTypes": ["Carolina Reaper"], "taxonomyGroup": "Extreme superhot sauce",
+        "accuracyNote": "2,200,000 SHU represents an upper Carolina Reaper pepper rating, not a finished-sauce lab result.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "last-dab-triple-x",
+      "name": "Hot Ones The Last Dab Triple X",
+      "image": "/burrow-assets/hot-sauces/last-dab-triple-x.jpg",
+      "imageAlt": "Front label of The Last Dab Triple X sauce",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/hot-ones-hot-sauce-the-last-dab",
+      "fact": "Triple X combines original, chocolate, and peach variants of Pepper X with warm Caribbean spices.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 2693000, "unit": "SHU", "display": "2,693,000 SHU (pepper-based)" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 3, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+      ],
+      "categories": ["Pepper X sauce"],
+      "tags": ["pepper-x", "caribbean-spices"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 3, "rarity": "epic", "flavorGrade": "B",
+        "pepperTypes": ["Pepper X", "Chocolate Pepper X", "Peach Pepper X"], "taxonomyGroup": "Extreme superhot sauce",
+        "accuracyNote": "2,693,000 SHU is Pepper X's published record average, not a finished-sauce lab result.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "classic-chili-maple",
+      "name": "Hot Ones The Classic Chili Maple",
+      "image": "/burrow-assets/hot-sauces/classic-chili-maple.jpg",
+      "imageAlt": "Front label of The Classic Chili Maple hot sauce",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/hot-ones-hot-sauce-the-classic-chili-maple",
+      "fact": "Real maple syrup softens Fresno chile, cider vinegar, garlic, turmeric, and black pepper in this mild sauce.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 1600, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Sweet hot sauce"],
+      "tags": ["maple", "garlicky"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "A",
+        "pepperTypes": ["Fresno chile"], "taxonomyGroup": "Hot Ones sauce",
+        "accuracyNote": "HEATONIST publishes 1,600 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "suckerpunch",
+      "name": "Torchbearer Suckerpunch",
+      "image": "/burrow-assets/hot-sauces/suckerpunch.jpg",
+      "imageAlt": "Front label of a Torchbearer Suckerpunch hot sauce bottle",
+      "imageCredit": "HEATONIST product photography (used with permission)",
+      "imageSourceUrl": "https://heatonist.com/products/torchbearer-sauces-suckerpunch-hot-sauce",
+      "fact": "Carolina Reaper, ghost pepper, and Dragon's Breath powder form a three-pepper punch brightened by lime.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 690000, "unit": "SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 3, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 2, "unit": "", "display": "C" },
+        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+      ],
+      "categories": ["Multi-superhot sauce"],
+      "tags": ["lime", "heat-forward"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 3, "rarity": "epic", "flavorGrade": "C",
+        "pepperTypes": ["Carolina Reaper", "Ghost pepper", "Dragon's Breath"], "taxonomyGroup": "Extreme superhot sauce",
+        "accuracyNote": "HEATONIST publishes 690,000 SHU for this finished sauce.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "akabanga-chili-oil",
+      "name": "Akabanga Chili Oil",
+      "image": "/burrow-assets/hot-sauces/akabanga-chili-oil.jpg",
+      "imageAlt": "Front label of a small Akabanga Chili Oil bottle",
+      "imageCredit": "Akabanga product photography (used with permission)",
+      "imageSourceUrl": "https://akabanga.de/",
+      "fact": "This tiny Rwandan dropper bottle contains concentrated oil made from African bird's eye chilli seeds.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 100000, "unit": "SHU", "display": "~100,000 SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Pepper oil"],
+      "tags": ["concentrated", "dropper-bottle"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "pepperTypes": ["African bird's eye chilli"], "taxonomyGroup": "Rwandan pepper oil",
+        "accuracyNote": "No standard finished-oil lab score is published; this uses the upper end of common estimates.",
+        "location": { "label": "Rwanda", "countries": ["Rwanda"], "continents": ["Africa"] }
+      }
+    },
+    {
+      "id": "lao-gan-ma-spicy-chili-crisp",
+      "name": "Lao Gan Ma Spicy Chili Crisp",
+      "image": "/burrow-assets/hot-sauces/lao-gan-ma-spicy-chili-crisp.jpg",
+      "imageAlt": "Front label of a Lao Gan Ma Spicy Chili Crisp jar",
+      "imageCredit": "Lao Gan Ma product photography (used with permission)",
+      "imageSourceUrl": "https://www.laoganmausa.com/products/spicy-chili-crisp",
+      "fact": "Tao Huabi began commercial Lao Gan Ma production in Guizhou in 1997, helping popularize chili crisp worldwide.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 1000, "unit": "SHU", "display": "~1,000 SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Chili crisp"],
+      "tags": ["crunchy", "fermented-soybean"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 5, "rarity": "common", "flavorGrade": "A",
+        "pepperTypes": ["Chinese dried chile blend"], "taxonomyGroup": "Guizhou-style chili crisp",
+        "accuracyNote": "The maker does not publish SHU; this mild value is an editorial comparison estimate.",
+        "location": { "label": "China", "countries": ["China"], "continents": ["Asia"] }
+      }
+    },
+    {
+      "id": "fly-by-jing-sichuan-chili-crisp",
+      "name": "Fly By Jing Sichuan Chili Crisp",
+      "image": "/burrow-assets/hot-sauces/fly-by-jing-sichuan-chili-crisp.jpg",
+      "imageAlt": "Front label of a Fly By Jing Sichuan Chili Crisp jar",
+      "imageCredit": "Fly By Jing product photography (used with permission)",
+      "imageSourceUrl": "https://flybyjing.com/shop/sichuan-chili-crisp",
+      "fact": "This Chengdu-made crisp uses heritage Erjingtiao chiles and numbing Sichuan tribute pepper with savory aromatics.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 2500, "unit": "SHU", "display": "~2,500 SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Chili crisp"],
+      "tags": ["tingly", "umami"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 4, "rarity": "uncommon", "flavorGrade": "A",
+        "pepperTypes": ["Erjingtiao chile"], "taxonomyGroup": "Sichuan chili crisp",
+        "accuracyNote": "The maker does not publish SHU; this mild value is an editorial comparison estimate. Sichuan pepper is a spice, not a chile variety.",
+        "location": { "label": "China", "countries": ["China"], "continents": ["Asia"] }
+      }
+    },
+    {
+      "id": "lee-kum-kee-chiu-chow-oil",
+      "name": "Lee Kum Kee Chiu Chow Chili Oil",
+      "image": "/burrow-assets/hot-sauces/lee-kum-kee-chiu-chow-oil.jpg",
+      "imageAlt": "Front label of a Lee Kum Kee Chiu Chow Chili Oil jar",
+      "imageCredit": "Lee Kum Kee product photography (used with permission)",
+      "imageSourceUrl": "https://usa.lkk.com/en/products/chiu-chow-chili-oil",
+      "fact": "Chiu Chow chili oil suspends dried chile and garlic pieces in oil for both heat and spoonable texture.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 1500, "unit": "SHU", "display": "~1,500 SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+      ],
+      "categories": ["Pepper oil"],
+      "tags": ["garlicky", "textured"],
+      "metadata": {
+        "difficultyBand": "easy", "recognition": 4, "rarity": "common", "flavorGrade": "B",
+        "pepperTypes": ["Chinese dried chile blend"], "taxonomyGroup": "Chiu Chow chili oil",
+        "accuracyNote": "The maker does not publish SHU; this mild value is an editorial comparison estimate.",
+        "location": { "label": "Hong Kong, China", "countries": ["China"], "continents": ["Asia"] }
+      }
+    },
+    {
+      "id": "s-b-la-yu-chili-oil",
+      "name": "S&B La-Yu Chili Oil",
+      "image": "/burrow-assets/hot-sauces/s-b-la-yu-chili-oil.jpg",
+      "imageAlt": "Front label of an S and B La-Yu Chili Oil bottle",
+      "imageCredit": "S&B Foods product photography (used with permission)",
+      "imageSourceUrl": "https://www.sbfoods-worldwide.com/products/search/036.html",
+      "fact": "Japanese rāyu is a clear red chile-infused oil often dripped onto dumplings, noodles, and soups.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 500, "unit": "SHU", "display": "~500 SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Pepper oil"],
+      "tags": ["clear-oil", "sesame"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "B",
+        "pepperTypes": ["Red chile pepper"], "taxonomyGroup": "Japanese rāyu",
+        "accuracyNote": "The maker does not publish SHU; this gentle value is an editorial comparison estimate.",
+        "location": { "label": "Japan", "countries": ["Japan"], "continents": ["Asia"] }
+      }
+    },
+    {
+      "id": "mr-naga-hot-pepper-pickle",
+      "name": "Mr Naga Hot Pepper Pickle",
+      "image": "/burrow-assets/hot-sauces/mr-naga-hot-pepper-pickle.jpg",
+      "imageAlt": "Front label of a Mr Naga Hot Pepper Pickle jar",
+      "imageCredit": "Mr Naga product photography (used with permission)",
+      "imageSourceUrl": "https://www.mrnaga.com/products/mr-naga-hot-pepper-pickle",
+      "fact": "Mr Naga preserves aromatic Naga Morich pepper in oil and spices as a very hot Bangladeshi-style pickle.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 900000, "unit": "SHU", "display": "~900,000 SHU (pepper-based)" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Pepper pickle"],
+      "tags": ["naga", "oil-preserved"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "pepperTypes": ["Naga Morich"], "taxonomyGroup": "Bangladeshi-style chilli pickle",
+        "accuracyNote": "The maker does not publish a finished-product lab score; this is a pepper-based estimate.",
+        "location": { "label": "United Kingdom", "countries": ["United Kingdom"], "continents": ["Europe"] }
+      }
+    },
+    {
+      "id": "chile-crunch-original",
+      "name": "Chile Crunch Original",
+      "image": "/burrow-assets/hot-sauces/chile-crunch-original.jpg",
+      "imageAlt": "Front label of a Chile Crunch Original jar",
+      "imageCredit": "Chile Crunch product photography (used with permission)",
+      "imageSourceUrl": "https://chilecrunch.com/products/chile-crunch-1",
+      "fact": "Inspired by a Mexico City salsa, Chile Crunch uses dried chiles, garlic, onion, spices, and oil for texture.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 2500, "unit": "SHU", "display": "~2,500 SHU" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+      ],
+      "categories": ["Chili crisp"],
+      "tags": ["mexican-inspired", "garlicky"],
+      "metadata": {
+        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "A",
+        "pepperTypes": ["Mexican dried chile blend"], "taxonomyGroup": "Mexican-inspired chile crunch",
+        "accuracyNote": "The maker does not publish SHU; this mild value is an editorial comparison estimate.",
+        "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    }
+  ]
+}

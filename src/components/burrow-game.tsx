@@ -14,6 +14,7 @@ import { OfflineReady } from "@/components/offline-ready";
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { weightTopicsForAccuracy } from "@/lib/adaptive-topics";
 import { resolvedImagePresentation } from "@/lib/building-image-presentation";
+import { cardRarities, cardRarityLabels, type CardRarity } from "@/lib/card-metadata";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
 import { cardDiscoveryIdentities, cardUnlockKeysForSubjects, isCardUnlocked } from "@/lib/card-discovery";
 import { autoDifficulty } from "@/lib/difficulty";
@@ -260,6 +261,7 @@ const topicAccent: Record<string, string> = {
   "tall-trees": "#4fa66b",
   "tallest-mountains": "#8796e8",
   "bridges-and-tunnels": "#f0a56a",
+  "hot-sauces": "#e66a45",
 };
 const fallbackTopicAccents = ["#75d5c0", "#ef8fbd", "#9ebc63", "#7eb1e8", "#e0a86b"];
 const topicAccentFor = (topicId: string) => topicAccent[topicId] ?? fallbackTopicAccents[Array.from(topicId).reduce((total, char) => total + char.charCodeAt(0), 0) % fallbackTopicAccents.length];
@@ -268,6 +270,7 @@ const starterMixModes: ChallengeMode[] = ["quiz"];
 const greatestDifficulty = (levels: readonly Difficulty[]) => Math.max(1, ...levels) as Difficulty;
 
 const questionKindDifficulty = (kind: Question["kind"]): Difficulty => {
+  if (kind === "pack-comparison") return 2;
   if (kind.includes("difference") || ["country-neighbors", "country-highest-point", "jet-firepower", "shark-power"].includes(kind)) return 3;
   if (
     kind.includes("hotter")
@@ -590,6 +593,102 @@ const buildQuestionRun = (
   return scheduleVariedSequence(candidateRuns, questionLearningIdentity, history);
 };
 
+const buildPackHeadToHeadSession = (
+  deck: PlayablePackDeck,
+  difficulty: Difficulty,
+  sessionSeed: number,
+  seenIds: readonly string[],
+): Question[] => {
+  type Candidate = {
+    first: PlayablePackDeck["cards"][number];
+    second: PlayablePackDeck["cards"][number];
+    statId: string;
+  };
+  const preferred = poolForDifficulty(deck.cards, difficulty);
+  const candidateCards = preferred.length >= 2 ? preferred : deck.cards;
+  const preferredStatIds = deck.id === "hot-sauces" ? ["pepper-varieties"] : [];
+  const candidatesFor = (cards: readonly PlayablePackDeck["cards"][number][]) => {
+    const candidates: Candidate[] = [];
+    for (let firstIndex = 0; firstIndex < cards.length; firstIndex += 1) {
+      for (let secondIndex = firstIndex + 1; secondIndex < cards.length; secondIndex += 1) {
+        const first = cards[firstIndex];
+        const second = cards[secondIndex];
+        const secondStats = new Map(second.stats.map((stat) => [stat.id, stat]));
+        const shared = first.stats.filter((stat) => {
+          const counterpart = secondStats.get(stat.id);
+          return counterpart && counterpart.value !== stat.value;
+        });
+        const requested = preferredStatIds.flatMap((statId) => shared.filter((stat) => stat.id === statId));
+        const selected = requested.length ? requested : deck.id === "hot-sauces" ? [] : shared.slice(0, 2);
+        for (const stat of selected) candidates.push({ first, second, statId: stat.id });
+      }
+    }
+    return candidates;
+  };
+  const preferredCandidates = candidatesFor(candidateCards);
+  const candidates = preferredCandidates.length >= 8 ? preferredCandidates : candidatesFor(deck.cards);
+  if (!candidates.length) throw new Error(`Need two cards with different shared stats for ${deck.id} Head to Head`);
+
+  const seen = new Set(seenIds);
+  const ordered = [...candidates].sort((left, right) => {
+    const leftScore = Math.sin((sessionSeed + left.first.id.length * 17 + left.second.id.length * 29) * 97);
+    const rightScore = Math.sin((sessionSeed + right.first.id.length * 17 + right.second.id.length * 29) * 97);
+    return leftScore - rightScore;
+  });
+  const fresh = ordered.filter((candidate) => !seen.has(`pack-comparison:${deck.id}:${candidate.statId}:${[candidate.first.title, candidate.second.title].sort().join("|")}`));
+  const source = fresh.length >= 8 ? fresh : ordered;
+  const maxByStat = new Map<string, number>();
+  for (const card of deck.cards) {
+    for (const stat of card.stats) maxByStat.set(stat.id, Math.max(maxByStat.get(stat.id) ?? 0, stat.value));
+  }
+
+  return Array.from({ length: 16 }, (_, index) => {
+    const candidate = source[index % source.length];
+    const swap = Math.sin((sessionSeed + index * 37) * 13) < 0;
+    const first = swap ? candidate.second : candidate.first;
+    const second = swap ? candidate.first : candidate.second;
+    const firstStat = first.stats.find((stat) => stat.id === candidate.statId)!;
+    const secondStat = second.stats.find((stat) => stat.id === candidate.statId)!;
+    const direction = firstStat.direction ?? "higher";
+    const firstWins = direction === "lower" ? firstStat.value < secondStat.value : firstStat.value > secondStat.value;
+    const winner = firstWins ? first : second;
+    const loser = firstWins ? second : first;
+    const winningStat = firstWins ? firstStat : secondStat;
+    const losingStat = firstWins ? secondStat : firstStat;
+    const firstCard: ComparisonCard = {
+      label: "A", topic: deck.id, title: first.title, image: first.image, imageAlt: first.imageAlt,
+      imageCredit: first.imageCredit, statLabel: firstStat.label, statValue: firstStat.display,
+      subStat: first.subStat, meterValue: firstStat.value, meterMax: maxByStat.get(firstStat.id) ?? firstStat.value,
+    };
+    const secondCard: ComparisonCard = {
+      label: "B", topic: deck.id, title: second.title, image: second.image, imageAlt: second.imageAlt,
+      imageCredit: second.imageCredit, statLabel: secondStat.label, statValue: secondStat.display,
+      subStat: second.subStat, meterValue: secondStat.value, meterMax: maxByStat.get(secondStat.id) ?? secondStat.value,
+    };
+    const winnerLabel = winner.id === first.id ? "A" : "B";
+    const prompt = candidate.statId === "pepper-varieties"
+      ? "Which one uses more pepper varieties?"
+      : `Which one has the ${direction === "lower" ? "lower" : "higher"} ${firstStat.label.toLowerCase()}?`;
+    return {
+      id: `${sessionSeed + index}-pack-comparison-${deck.id}-${candidate.statId}-${first.id}-${second.id}`,
+      topic: deck.id,
+      kind: "pack-comparison",
+      prompt,
+      image: winner.image,
+      imageAlt: winner.title,
+      imageCredit: winner.imageCredit,
+      comparison: [firstCard, secondCard],
+      choices: [`A: ${first.title}`, `B: ${second.title}`],
+      answer: `${winnerLabel}: ${winner.title}`,
+      explanation: candidate.statId === "pepper-varieties"
+        ? `${winner.title} uses ${winningStat.display}, compared with ${loser.title} at ${losingStat.display}. More named pepper varieties wins this Head to Head.`
+        : `${winner.title} has ${winningStat.display}, compared with ${loser.title} at ${losingStat.display}.`,
+      collectionTitles: [first.title, second.title],
+      secondChanceClue: `Compare the ${firstStat.label.toLowerCase()} printed on both cards.`,
+    } satisfies Question;
+  });
+};
+
 const buildVariedRound = <T,>(
   seed: number,
   history: readonly LearningExposure[],
@@ -653,6 +752,27 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const topics = scopeTopics(scope);
     return topics[Math.floor(Math.abs(Math.sin(seed * 999)) * 10000) % topics.length];
   }, [scopeTopics]);
+  const buildQuestionsForScope = useCallback((
+    scope: PlayableTopicScope,
+    nextMode: GameMode,
+    difficulty: Difficulty,
+    sessionSeed: number,
+    seenIds: string[],
+    nextMixModes = defaultMixPattern,
+    unlockedTitles: readonly string[] = [],
+    history: readonly LearningExposure[] = [],
+  ) => {
+    const scopedTopics = scopeTopics(scope);
+    const builtInTopics = scopedTopics.filter(isKnowledgeTopic);
+    const packTopics = scopedTopics.filter((topicId) => packDeckById.has(topicId));
+    const shouldUsePackComparison = nextMode === "versus" || (nextMode === "mix" && !builtInTopics.length);
+    if (shouldUsePackComparison && packTopics.length) {
+      const selectedPackTopic = pickTopic(packTopics, sessionSeed);
+      const deck = packDeckById.get(selectedPackTopic);
+      if (deck) return buildPackHeadToHeadSession(deck, difficulty, sessionSeed, seenIds);
+    }
+    return buildQuestionRun(builtInScopeFor(scope), nextMode, difficulty, sessionSeed, seenIds, nextMixModes, unlockedTitles, history);
+  }, [packDeckById, pickTopic, scopeTopics]);
   const geoCapableTopicsByDifficulty = useMemo(() => new Map(
     ([1, 2, 3] as const).map((difficulty) => [
       difficulty,
@@ -742,7 +862,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const [mode, setMode] = useState<GameMode>("mix");
   const [mixModes, setMixModes] = useState<ChallengeMode[]>(() => [...defaultMixPattern]);
   const [showCollection, setShowCollection] = useState(false);
-  const [questions, setQuestions] = useState(() => buildQuestionRun(builtInScopeFor(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics)), "mix", progress.difficulty, 20260430, progress.seenIds, defaultMixPattern, progress.unlockedCards, progress.learningHistory));
+  const [questions, setQuestions] = useState(() => buildQuestionsForScope(adaptiveTopicScopeFor("mixed", activeInterests, progress, playableTopics), "mix", progress.difficulty, 20260430, progress.seenIds, defaultMixPattern, progress.unlockedCards, progress.learningHistory));
   const [seedCounter, setSeedCounter] = useState(20260430);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
@@ -825,15 +945,18 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const oddDifficulty = greatestDifficulty([2, difficultyForCards(oddRound.cards)]);
   const topTrumpDifficulty = greatestDifficulty([2, difficultyForCards([topTrumpRound.player, topTrumpRound.computer])]);
   const hasBuiltInInterests = activeInterests.some(isKnowledgeTopic);
+  const hasPackInterests = activeInterests.some((interest) => packDeckById.has(interest));
   const geoCapableTopics = geoCapableTopicsByDifficulty.get(progress.difficulty) ?? new Set<RoundTopic>();
   const hasGeoInterests = activeInterests.some((interest) => geoCapableTopics.has(interest));
   const availableMixPattern = defaultMixPattern.filter((item) => {
-    if (!hasBuiltInInterests && (item === "quiz" || item === "versus")) return false;
+    if (!hasBuiltInInterests && item === "quiz") return false;
+    if (!hasBuiltInInterests && !hasPackInterests && item === "versus") return false;
     if (!hasGeoInterests && item === "geo") return false;
     return true;
   });
   const selectedMixModes = (mixModes.length ? mixModes : availableMixPattern)
-    .filter((item) => hasBuiltInInterests || (item !== "quiz" && item !== "versus"))
+    .filter((item) => hasBuiltInInterests || item !== "quiz")
+    .filter((item) => hasBuiltInInterests || hasPackInterests || item !== "versus")
     .filter((item) => hasGeoInterests || item !== "geo");
   const activeMixPattern: ChallengeMode[] = selectedMixModes.length ? selectedMixModes : ["peek"];
   const activeChallengeMode: ChallengeMode = mode === "mix" ? activeMixPattern[questionIndex % activeMixPattern.length] : mode;
@@ -935,7 +1058,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       const loadedInterests = normalizeInterests(loadedProfile.interests, playableTopics);
       const loadedScope = adaptiveTopicScopeFor("mixed", loadedInterests, loadedProfile.progress, playableTopics);
       setProfilesState(loadedProfiles);
-      setQuestions(buildQuestionRun(builtInScopeFor(loadedScope), "mix", loadedProfile.progress.difficulty, 20260430, loadedProfile.progress.seenIds, defaultMixPattern, loadedProfile.progress.unlockedCards, loadedProfile.progress.learningHistory));
+      setQuestions(buildQuestionsForScope(loadedScope, "mix", loadedProfile.progress.difficulty, 20260430, loadedProfile.progress.seenIds, defaultMixPattern, loadedProfile.progress.unlockedCards, loadedProfile.progress.learningHistory));
       setSortRound(buildSortForScope(loadedScope, loadedProfile.progress.difficulty, 20260461, loadedProfile.progress.learningHistory));
       setFactRound(buildFactForScope(loadedScope, loadedProfile.progress.difficulty, 20260477, loadedProfile.progress.unlockedCards, loadedProfile.progress.learningHistory));
       setRevealRound(buildRevealForScope(loadedScope, loadedProfile.progress.difficulty, 20260493, loadedProfile.progress.unlockedCards, loadedProfile.progress.learningHistory));
@@ -947,7 +1070,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     }, 0);
 
     return () => window.clearTimeout(loadSavedProfiles);
-  }, [buildFactForScope, buildGeoForScope, buildNumberForScope, buildOddForScope, buildRevealForScope, buildSortForScope, buildTopTrumpForScope, playableTopics]);
+  }, [buildFactForScope, buildGeoForScope, buildNumberForScope, buildOddForScope, buildQuestionsForScope, buildRevealForScope, buildSortForScope, buildTopTrumpForScope, playableTopics]);
 
   useEffect(() => {
     if (!profilesReady) return;
@@ -1362,7 +1485,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const scope = adaptiveTopicScopeFor(safeTopic, nextInterests, nextProfile.progress, playableTopics);
     setTopic(safeTopic);
     resetRunState();
-    setQuestions(buildQuestionRun(builtInScopeFor(scope), nextMode, nextProfile.progress.difficulty, seed, nextProfile.progress.seenIds, selectedMixModes, nextProfile.progress.unlockedCards, nextProfile.progress.learningHistory));
+    setQuestions(buildQuestionsForScope(scope, nextMode, nextProfile.progress.difficulty, seed, nextProfile.progress.seenIds, selectedMixModes, nextProfile.progress.unlockedCards, nextProfile.progress.learningHistory));
     setSortRound(buildSortForScope(scope, nextProfile.progress.difficulty, seed + 31, nextProfile.progress.learningHistory));
     setFactRound(buildFactForScope(scope, nextProfile.progress.difficulty, seed + 47, nextProfile.progress.unlockedCards, nextProfile.progress.learningHistory));
     setRevealRound(buildRevealForScope(scope, nextProfile.progress.difficulty, seed + 61, nextProfile.progress.unlockedCards, nextProfile.progress.learningHistory));
@@ -1378,7 +1501,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     recordSetupEvent("difficulty", difficultyLabel(nextDifficulty), nextDifficulty);
     setProgress((current) => ({ ...current, difficulty: nextDifficulty }));
     resetRunState();
-    setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, nextDifficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards, progress.learningHistory));
+    setQuestions(buildQuestionsForScope(currentTopicScope, mode, nextDifficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards, progress.learningHistory));
     setSortRound(buildSortForScope(currentTopicScope, nextDifficulty, seed + 41, progress.learningHistory));
     setFactRound(buildFactForScope(currentTopicScope, nextDifficulty, seed + 47, progress.unlockedCards, progress.learningHistory));
     setRevealRound(buildRevealForScope(currentTopicScope, nextDifficulty, seed + 53, progress.unlockedCards, progress.learningHistory));
@@ -1440,7 +1563,8 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const nextHasBuiltInInterests = safeInterests.some(isKnowledgeTopic);
     const nextGeoCapableTopics = geoCapableTopicsByDifficulty.get(progress.difficulty) ?? new Set<RoundTopic>();
     const nextHasGeoInterests = safeInterests.some((item) => nextGeoCapableTopics.has(item));
-    const nextMode = ((mode === "quiz" || mode === "versus") && !nextHasBuiltInInterests) || (mode === "geo" && !nextHasGeoInterests)
+    const nextHasPackInterests = nextInterests.some((interest) => packDeckById.has(interest));
+    const nextMode = (mode === "quiz" && !nextHasBuiltInInterests) || (mode === "versus" && !nextHasBuiltInInterests && !nextHasPackInterests) || (mode === "geo" && !nextHasGeoInterests)
       ? "mix"
       : mode;
     const seed = freshSeed(seedBasis.length + safeInterests.length * 41);
@@ -1472,7 +1596,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setShowCollection(false);
     setMixModes(safeModes);
     resetRunState();
-    setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), "mix", progress.difficulty, seed, progress.seenIds, safeModes, progress.unlockedCards, progress.learningHistory));
+    setQuestions(buildQuestionsForScope(currentTopicScope, "mix", progress.difficulty, seed, progress.seenIds, safeModes, progress.unlockedCards, progress.learningHistory));
     setSortRound(buildSortForScope(currentTopicScope, progress.difficulty, seed + 29, progress.learningHistory));
     setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed + 37, progress.unlockedCards, progress.learningHistory));
     setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed + 43, progress.unlockedCards, progress.learningHistory));
@@ -1571,7 +1695,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     if (questionIndex === questions.length - 1) {
       setProgress((current) => ({ ...current, sessions: current.sessions + 1 }));
       setQuestionIndex(0);
-      setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, progress.difficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards, history));
+      setQuestions(buildQuestionsForScope(currentTopicScope, mode, progress.difficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards, history));
       setCelebration("New mixed run. Fresh shuffle.");
     } else {
       setQuestionIndex((value) => value + 1);
@@ -1603,7 +1727,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       setQuestionIndex(0);
       setSelected(null);
       setLastResult(null);
-      setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, progress.difficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards, history));
+      setQuestions(buildQuestionsForScope(currentTopicScope, mode, progress.difficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards, history));
       setCelebration("New mini-session. Fresh challenges.");
       return;
     }
@@ -2075,7 +2199,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     recordSetupEvent("reset-progress", "confirmed", reset.difficulty);
     setProgress(reset);
     setShowCollection(false);
-    setQuestions(buildQuestionRun(builtInScopeFor(currentTopicScope), mode, reset.difficulty, seed, reset.seenIds, selectedMixModes, reset.unlockedCards, reset.learningHistory));
+    setQuestions(buildQuestionsForScope(currentTopicScope, mode, reset.difficulty, seed, reset.seenIds, selectedMixModes, reset.unlockedCards, reset.learningHistory));
     setSortRound(buildSortForScope(currentTopicScope, reset.difficulty, seed + 29, reset.learningHistory));
     setFactRound(buildFactForScope(currentTopicScope, reset.difficulty, seed + 37, reset.unlockedCards, reset.learningHistory));
     setRevealRound(buildRevealForScope(currentTopicScope, reset.difficulty, seed + 43, reset.unlockedCards, reset.learningHistory));
@@ -2170,6 +2294,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             note={tryAgainNotes[(questionIndex + progress.answered) % tryAgainNotes.length]}
             difficulty={questionDifficulty}
             roundContext={currentRoundContext}
+            roundLabel={topicMeta(question.topic).roundLabel}
             onAnswer={answer}
             onNext={advance}
             onSkip={skipQuestion}
@@ -2846,6 +2971,7 @@ function QuestionRun({
   note,
   difficulty,
   roundContext,
+  roundLabel,
   onAnswer,
   onNext,
   onSkip,
@@ -2861,6 +2987,7 @@ function QuestionRun({
   note: string;
   difficulty: Difficulty;
   roundContext: string;
+  roundLabel: string;
   onAnswer: (choice: string) => void;
   onNext: () => void;
   onSkip: () => void;
@@ -2902,7 +3029,7 @@ function QuestionRun({
           <QuestionImage question={question} />
         )}
         <div className="absolute left-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
-          {topicCatalog[question.topic].roundLabel}
+          {roundLabel}
         </div>
         {photoStat && (
           <div className="absolute right-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#fffdf6] px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
@@ -3986,7 +4113,9 @@ function TopTrumpsMode({
                     <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#72543e]">{stat.direction === "lower" ? "lower wins" : "higher wins"}</span>
                   </span>
                   <span className="text-right text-xl font-black leading-none text-[#9f3f2b]">
-                    {stat.display}
+                    {stat.id === "rarity" && round.player.metadata?.rarity
+                      ? <RarityBadge rarity={round.player.metadata.rarity} compact />
+                      : stat.display}
                     {answered && computerStat && selected === stat.id && <span className="block text-xs text-[#5f6b5d]">CPU {computerStat.display}</span>}
                   </span>
                 </span>
@@ -4132,16 +4261,21 @@ function CollectionBook({
   const [selectedTopic, setSelectedTopic] = useState<RoundTopic | undefined>(initialTopic);
   const [expandedTopic, setExpandedTopic] = useState<RoundTopic | undefined>();
   const [cardDetailsExpanded, setCardDetailsExpanded] = useState(false);
+  const [rarityFilter, setRarityFilter] = useState<"all" | CardRarity>("all");
   const activeTopic = topicStats.find((item) => item.id === selectedTopic) ?? topicStats[0];
   const categoryCards = activeTopic ? cards.filter((card) => card.topic === activeTopic.id) : [];
   const orderedCards = orderCollectionCardsForCategory(categoryCards);
+  const availableRarities = cardRarities.filter((rarity) => orderedCards.some((card) => card.metadata?.rarity === rarity));
+  const filteredCards = rarityFilter === "all"
+    ? orderedCards
+    : orderedCards.filter((card) => card.metadata?.rarity === rarityFilter);
   const unlocked = orderedCards.filter((card) => isCardUnlocked(unlockedCardSet, card));
   const collectionExpanded = expandedTopic === activeTopic?.id;
   const starterSlots = 12;
   const visibleCards = collectionExpanded
-    ? orderedCards
-    : orderedCards.filter((card, index) => index < starterSlots || isCardUnlocked(unlockedCardSet, card));
-  const hiddenCardCount = orderedCards.length - visibleCards.length;
+    ? filteredCards
+    : filteredCards.filter((card, index) => index < starterSlots || isCardUnlocked(unlockedCardSet, card));
+  const hiddenCardCount = filteredCards.length - visibleCards.length;
   const collectionPercent = orderedCards.length ? Math.round((unlocked.length / orderedCards.length) * 100) : 0;
   const nextMilestone = Math.min(orderedCards.length, Math.max(5, Math.ceil((unlocked.length + 1) / 5) * 5));
   const cardsToMilestone = Math.max(0, nextMilestone - unlocked.length);
@@ -4177,7 +4311,11 @@ function CollectionBook({
                 type="button"
                 aria-pressed={isActive}
                 aria-label={`${item.label}: ${topicCounts[item.id]} of ${total} cards collected`}
-                onClick={() => setSelectedTopic(item.id)}
+                onClick={() => {
+                  setSelectedTopic(item.id);
+                  setRarityFilter("all");
+                  setExpandedTopic(undefined);
+                }}
                 className={`rounded-lg border-2 p-2 text-left transition active:translate-y-0.5 ${isActive ? "border-[#092421] bg-[#f0c84b] shadow-[3px_3px_0_#092421]" : "border-[#d9c7a7] bg-[#fff9ec] hover:border-[#092421]"}`}
               >
                 <span className="flex items-center justify-between gap-2">
@@ -4244,6 +4382,36 @@ function CollectionBook({
               <p className="mt-1 text-[9px] font-bold text-[#5f6b5d]">{collectionOrderLabel(orderedCards)}</p>
             </div>
           </div>
+          {availableRarities.length > 0 && (
+            <div aria-label="Filter cards by rarity" className="mt-3 flex flex-wrap items-center gap-2 border-t-2 border-[#e4d8c2] pt-3">
+              <span className="mr-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#72543e]">Rarity</span>
+              <button
+                type="button"
+                aria-pressed={rarityFilter === "all"}
+                aria-label={`Show all rarities (${orderedCards.length} cards)`}
+                onClick={() => setRarityFilter("all")}
+                className={`inline-flex min-h-8 items-center gap-1.5 rounded-md border-2 border-[#092421] px-2 py-1 text-[10px] font-black uppercase tracking-[0.08em] transition active:translate-y-0.5 ${rarityFilter === "all" ? "bg-[#f0c84b] shadow-[2px_2px_0_#092421]" : "bg-white hover:bg-[#fff9ec]"}`}
+              >
+                All <span className="rounded bg-[#102f36] px-1.5 py-0.5 text-white">{orderedCards.length}</span>
+              </button>
+              {availableRarities.map((rarity) => {
+                const rarityCount = orderedCards.filter((card) => card.metadata?.rarity === rarity).length;
+                return (
+                  <button
+                    key={rarity}
+                    type="button"
+                    aria-pressed={rarityFilter === rarity}
+                    aria-label={`Show ${cardRarityLabels[rarity]} rarity (${rarityCount} cards)`}
+                    onClick={() => setRarityFilter(rarity)}
+                    className={`inline-flex min-h-8 items-center gap-1.5 rounded-md border-2 border-[#092421] bg-white px-1.5 py-1 transition active:translate-y-0.5 ${rarityFilter === rarity ? "shadow-[2px_2px_0_#f0c84b] ring-2 ring-[#f0c84b] ring-offset-1" : "hover:bg-[#fff9ec]"}`}
+                  >
+                    <RarityBadge rarity={rarity} compact />
+                    <span className="min-w-5 rounded bg-[#102f36] px-1.5 py-0.5 text-[10px] font-black text-white">{rarityCount}</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </header>
         <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
           {visibleCards.map((card) => {
@@ -4252,6 +4420,11 @@ function CollectionBook({
               <div key={`${card.topic}-${card.id}`} className="overflow-hidden rounded-lg border-2 border-[#092421] bg-white">
                 <div className={`relative flex h-36 overflow-hidden bg-[#e3efe4] ${isUnlocked ? "" : "grayscale"}`}>
                   {isUnlocked ? <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} compact /> : <LockedCard topic={card.topic} />}
+                  {isUnlocked && card.metadata?.rarity ? (
+                    <div className="absolute right-2 top-2 z-10">
+                      <RarityBadge rarity={card.metadata.rarity} compact />
+                    </div>
+                  ) : null}
                 </div>
                 <div className="p-2">
                   <p className="text-base font-black leading-tight text-[#102f36]">{isUnlocked ? card.title : "Locked card"}</p>
@@ -4299,7 +4472,7 @@ function CollectionBook({
               onClick={() => setExpandedTopic(collectionExpanded ? undefined : activeTopic.id)}
               className="min-h-11 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-5 py-2 text-sm font-black text-[#102f36] shadow-[3px_3px_0_#092421] transition hover:bg-[#ffd96a] active:translate-y-0.5"
             >
-              {collectionExpanded ? "Show collection highlights" : `Show all ${orderedCards.length} cards`}
+              {collectionExpanded ? "Show collection highlights" : `Show all ${filteredCards.length} cards`}
             </button>
           </div>
         )}
@@ -4442,6 +4615,21 @@ function DifficultyPill({ difficulty }: { difficulty: Difficulty }) {
   );
 }
 
+const rarityBadgeStyles: Record<CardRarity, string> = {
+  common: "bg-[#d6d8dc] text-[#29313d]",
+  uncommon: "bg-[#73c96b] text-[#102f24]",
+  rare: "bg-[#56a8f5] text-[#0b2845]",
+  epic: "bg-[#b276e8] text-[#24113a]",
+};
+
+function RarityBadge({ rarity, compact = false }: { rarity: CardRarity; compact?: boolean }) {
+  return (
+    <span className={`inline-flex shrink-0 items-center rounded-md border-2 border-[#092421] font-black uppercase tracking-[0.1em] shadow-[2px_2px_0_#092421] ${compact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px]"} ${rarityBadgeStyles[rarity]}`}>
+      {cardRarityLabels[rarity]}
+    </span>
+  );
+}
+
 function KnowledgeCardsStage({
   cards,
   badge,
@@ -4535,7 +4723,9 @@ function TrumpCardView({ card, badge, revealStats }: { card: TopTrumpRound["play
             {card.stats.map((stat) => (
               <div key={`${card.id}-${stat.id}`} className="grid grid-cols-[1fr_auto] gap-2 rounded-md border-2 border-[#092421] bg-[#fff9ec] px-2 py-1 shadow-[2px_2px_0_#092421]">
                 <span className="truncate text-[11px] font-black uppercase tracking-[0.08em] text-[#72543e]">{stat.label}</span>
-                <span className="text-sm font-black text-[#9f3f2b]">{stat.display}</span>
+                {stat.id === "rarity" && card.metadata?.rarity
+                  ? <RarityBadge rarity={card.metadata.rarity} compact />
+                  : <span className="text-sm font-black text-[#9f3f2b]">{stat.display}</span>}
               </div>
             ))}
           </div>

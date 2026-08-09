@@ -1,5 +1,17 @@
 export type CardDifficultyBand = "easy" | "medium" | "hard";
 
+export const cardRarities = ["common", "uncommon", "rare", "epic"] as const;
+export type CardRarity = (typeof cardRarities)[number];
+
+export const cardRarityLabels: Record<CardRarity, "Common" | "Uncommon" | "Rare" | "Epic"> = {
+  common: "Common",
+  uncommon: "Uncommon",
+  rare: "Rare",
+  epic: "Epic",
+};
+
+export const cardRarityTier = (rarity: CardRarity) => cardRarities.indexOf(rarity) + 1;
+
 export type WorldContinent = "Africa" | "Antarctica" | "Asia" | "Europe" | "North America" | "South America" | "Oceania";
 
 export type WorldLocation = {
@@ -12,6 +24,9 @@ export type WorldLocation = {
 export type CardMetadata = {
   difficultyBand?: CardDifficultyBand;
   recognition?: 1 | 2 | 3 | 4 | 5;
+  rarity?: CardRarity;
+  flavorGrade?: "A" | "B" | "C" | "D";
+  pepperTypes?: string[];
   taxonomyGroup?: string;
   accuracyNote?: string;
   imageDistinctGroup?: string;

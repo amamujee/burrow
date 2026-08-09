@@ -249,6 +249,9 @@ const checkCardMetadata = (item, label) => {
   if (!item.metadata) return;
   if (item.metadata.difficultyBand !== undefined && !validDifficultyBands.has(item.metadata.difficultyBand)) critical.push(`${label}: invalid difficultyBand "${item.metadata.difficultyBand}"`);
   if (item.metadata.recognition !== undefined && (!Number.isInteger(item.metadata.recognition) || item.metadata.recognition < 1 || item.metadata.recognition > 5)) critical.push(`${label}: recognition must be 1-5`);
+  if (item.metadata.rarity !== undefined && !["common", "uncommon", "rare", "epic"].includes(item.metadata.rarity)) critical.push(`${label}: invalid rarity "${item.metadata.rarity}"`);
+  if (item.metadata.flavorGrade !== undefined && !["A", "B", "C", "D"].includes(item.metadata.flavorGrade)) critical.push(`${label}: invalid flavor grade "${item.metadata.flavorGrade}"`);
+  if (item.metadata.pepperTypes !== undefined && (!Array.isArray(item.metadata.pepperTypes) || item.metadata.pepperTypes.length < 1)) critical.push(`${label}: pepperTypes needs at least one pepper`);
   if (item.metadata.difficultyBand === "easy" && item.metadata.recognition !== undefined && item.metadata.recognition < 4) critical.push(`${label}: easy cards need recognition >= 4`);
   if (item.metadata.difficultyBand === "hard" && item.metadata.recognition !== undefined && item.metadata.recognition > 3) critical.push(`${label}: hard cards should not have recognition > 3`);
   if (item.metadata.location !== undefined) {
