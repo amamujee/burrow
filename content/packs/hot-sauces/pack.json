@@ -2,7 +2,7 @@
   "$schema": "../pack.schema.json",
   "id": "hot-sauces",
   "title": "Hot Sauces",
-  "summary": "Explore 50 famous, unusual, and fiercely hot sauces, including pepper oils and chili crisps from around the world.",
+  "summary": "Explore 51 famous, unusual, and fiercely hot sauces, including pepper oils and chili crisps from around the world.",
   "dataNote": "Scoville scores are published sauce measurements where available. Values marked on a card as pepper-based or estimated use a featured pepper's rating or a documented range because finished-sauce heat varies by recipe and batch. Flavor grades are Burrow editorial assessments of balance, complexity, and versatility, not laboratory results.",
   "status": "playable",
   "audience": {
@@ -36,6 +36,11 @@
       "label": "PuckerButt Pepper Company",
       "url": "https://puckerbuttpeppercompany.com/",
       "note": "Pepper X, Carolina Reaper, and superhot sauce product information."
+    },
+    {
+      "label": "Habamix Sorrento",
+      "url": "https://www.habamix.com/en/product/habamix-spicy-chili-flavored-extra-virgin-olive-oil-with-dropper/",
+      "note": "Official ingredients, production method, product photography, and featured-pepper heat information."
     }
   ],
   "cards": [
@@ -1187,6 +1192,30 @@
         "pepperTypes": ["Mexican dried chile blend"], "taxonomyGroup": "Mexican-inspired chile crunch",
         "accuracyNote": "The maker does not publish SHU; this mild value is an editorial comparison estimate.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
+      }
+    },
+    {
+      "id": "habamix-sorrento",
+      "name": "Habamix Sorrento Chili Oil",
+      "image": "/burrow-assets/hot-sauces/habamix-sorrento.jpg",
+      "imageAlt": "Front label of a Habamix Sorrento Chili Oil dropper bottle",
+      "imageCredit": "Habamix Sorrento product photography (used with permission)",
+      "imageSourceUrl": "https://www.habamix.com/en/product/habamix-spicy-chili-flavored-extra-virgin-olive-oil-with-dropper/",
+      "fact": "Habamix cold-infuses seven named superhot peppers in Italian extra virgin olive oil for 72 hours before filtering it.",
+      "stats": [
+        { "id": "scoville", "label": "Scoville", "value": 2200000, "unit": "SHU", "display": "~2,200,000 SHU (pepper-based)" },
+        { "id": "pepper-varieties", "label": "Pepper varieties", "value": 7, "unit": "types" },
+        { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+      ],
+      "categories": ["Pepper oil"],
+      "tags": ["seven-pepper-blend", "cold-infused"],
+      "metadata": {
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "pepperTypes": ["Habanero Chocolate", "Habanero Red", "Habanero Orange", "Bhut Jolokia", "Naga Morich", "Moruga Scorpion Red", "Carolina Reaper"],
+        "taxonomyGroup": "Italian superhot pepper oil",
+        "accuracyNote": "The 2,200,000 SHU figure is Habamix's published rating for the featured Carolina Reaper, not a laboratory test of the finished infused oil.",
+        "location": { "label": "Italy", "countries": ["Italy"], "continents": ["Europe"] }
       }
     }
   ]

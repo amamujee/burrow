@@ -169,10 +169,10 @@ test("built-in topic totals match the playable card catalogs", () => {
   }
 });
 
-test("Hot Sauces ships 50 sourced cards with complete comparison metadata", () => {
+test("Hot Sauces ships 51 sourced cards with complete comparison metadata", () => {
   const pack = loadPlayablePacks().find((candidate) => candidate.id === "hot-sauces");
   expect(pack).toBeTruthy();
-  expect(pack?.cards).toHaveLength(50);
+  expect(pack?.cards).toHaveLength(51);
   expect(pack?.recommendedModes).toContain("versus");
   expect(new Set(pack?.cards.map((card) => card.metadata?.flavorGrade))).toEqual(new Set(["A", "B", "C", "D"]));
   expect(new Set(pack?.cards.map((card) => card.metadata?.rarity))).toEqual(new Set(cardRarities));
@@ -192,6 +192,16 @@ test("Hot Sauces ships 50 sourced cards with complete comparison metadata", () =
   const tripleX = deck.cards.find((card) => card.id === "last-dab-triple-x");
   expect(tripleX?.details).toContainEqual({ label: "Peppers", value: "Pepper X · Chocolate Pepper X · Peach Pepper X" });
   expect(tripleX?.stats.find((stat) => stat.id === "pepper-varieties")?.display).toBe("3 types");
+
+  const akabanga = pack?.cards.find((card) => card.id === "akabanga-chili-oil");
+  expect(akabanga?.categories).toContain("Pepper oil");
+  expect(akabanga?.metadata?.location?.countries).toEqual(["Rwanda"]);
+  expect(akabanga?.metadata?.pepperTypes).toEqual(["African bird's eye chilli"]);
+
+  const habamix = pack?.cards.find((card) => card.id === "habamix-sorrento");
+  expect(habamix?.categories).toContain("Pepper oil");
+  expect(habamix?.metadata?.pepperTypes).toHaveLength(7);
+  expect(habamix?.stats.find((stat) => stat.id === "scoville")?.display).toBe("~2,200,000 SHU (pepper-based)");
 });
 
 test("difficulty progression gives Easy and Medium room before Hard", () => {
