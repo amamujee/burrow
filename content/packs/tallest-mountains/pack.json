@@ -19,6 +19,12 @@
     "odd",
     "geo"
   ],
+  "landing": {
+    "detail": "elevation, ranked",
+    "image": "/burrow-assets/tallest-mountains/k2.jpg",
+    "imageFit": "cover",
+    "order": 90
+  },
   "sources": [
     {
       "label": "Wikipedia list of highest mountains on Earth",

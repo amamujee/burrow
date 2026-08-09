@@ -18,6 +18,13 @@
     "number",
     "odd"
   ],
+  "landing": {
+    "title": "Dinosaurs",
+    "detail": "size, era, diet",
+    "image": "/burrow-assets/dinosaurs/brachiosaurus.jpg",
+    "imageFit": "cover",
+    "order": 70
+  },
   "sources": [
     {
       "label": "Natural History Museum dinosaur guides",

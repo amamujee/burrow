@@ -10,6 +10,12 @@
     "readingLevel": "short facts, parent-approved vocabulary"
   },
   "recommendedModes": ["quiz", "versus", "trumps", "sort", "fact", "peek", "number", "odd", "geo"],
+  "landing": {
+    "detail": "what players compare and discover",
+    "image": "/burrow-assets/new-pack-id/example-card.jpg",
+    "imageFit": "cover",
+    "order": 100
+  },
   "sources": [
     {
       "label": "Source name",

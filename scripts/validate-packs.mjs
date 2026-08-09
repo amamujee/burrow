@@ -4,6 +4,7 @@ import path from "node:path";
 const packsRoot = "content/packs";
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const worldContinents = new Set(["Africa", "Antarctica", "Asia", "Europe", "North America", "South America", "Oceania"]);
+const gameModes = new Set(["quiz", "versus", "trumps", "sort", "fact", "peek", "number", "odd", "geo"]);
 const args = process.argv.slice(2);
 const packArg = args.includes("--pack") ? args[args.indexOf("--pack") + 1] : undefined;
 const includeTemplate = args.includes("--include-template");
@@ -130,7 +131,34 @@ const validateCardMetadata = (packId, card, cardLabel) => {
   }
 };
 
-const validateImage = (packId, card) => {
+const validateLanding = (packId, pack) => {
+  if (pack.landing === undefined) {
+    if (pack.status === "playable") addError(packId, "playable packs need landing metadata so the category appears on the homepage");
+    return;
+  }
+  if (!isObject(pack.landing)) {
+    addError(packId, "landing must be an object");
+    return;
+  }
+
+  if (pack.landing.title !== undefined && (!hasText(pack.landing.title, 2) || pack.landing.title.trim().length > 32)) {
+    addError(packId, "landing.title must be 2-32 characters");
+  }
+  if (!hasText(pack.landing.detail, 2) || pack.landing.detail.trim().length > 48) {
+    addError(packId, "landing.detail must be 2-48 characters so it fits the responsive category card");
+  }
+  if (!hasText(pack.landing.image) || !pack.landing.image.startsWith(`/burrow-assets/${packId}/`)) {
+    addError(packId, `landing.image must be a local image under /burrow-assets/${packId}/`);
+  }
+  if (pack.landing.imageFit !== undefined && !["cover", "contain"].includes(pack.landing.imageFit)) {
+    addError(packId, "landing.imageFit must be cover or contain");
+  }
+  if (!Number.isInteger(pack.landing.order) || pack.landing.order < 1 || pack.landing.order > 999) {
+    addError(packId, "landing.order must be an integer from 1 to 999");
+  }
+};
+
+const validateImage = (packId, card, allowMissing = false) => {
   if (!hasText(card.image)) {
     addError(packId, `${card.id}: missing image`);
     return;
@@ -149,6 +177,7 @@ const validateImage = (packId, card) => {
 
   const target = path.join("public", card.image.replace(/^\//, ""));
   if (!fs.existsSync(target)) {
+    if (allowMissing) return;
     addError(packId, `${card.id}: missing local image ${target}`);
     return;
   }
@@ -165,12 +194,14 @@ const validatePack = (packFile) => {
 
   const dirId = path.basename(path.dirname(packFile));
   const packId = hasText(pack.id) ? pack.id : dirId;
+  const isTemplate = dirId.startsWith("_");
 
   if (!isObject(pack)) addError(packId, "pack must be an object");
   if (!hasText(pack.id) || !slugPattern.test(pack.id)) addError(packId, "id must be a lowercase slug");
   if (pack.id !== dirId && !dirId.startsWith("_")) addError(packId, `id must match folder name "${dirId}"`);
   if (!hasText(pack.title, 2)) addError(packId, "title is required");
   if (!hasText(pack.summary, 20)) addError(packId, "summary should explain the pack in at least 20 characters");
+  if (pack.status !== undefined && !["draft", "needs-review", "playable"].includes(pack.status)) addError(packId, "status must be draft, needs-review, or playable");
 
   if (!isObject(pack.audience)) {
     addError(packId, "audience is required");
@@ -178,6 +209,19 @@ const validatePack = (packFile) => {
     if (!Number.isInteger(pack.audience.minAge) || pack.audience.minAge < 2) addError(packId, "audience.minAge must be an integer >= 2");
     if (!Number.isInteger(pack.audience.maxAge) || pack.audience.maxAge < pack.audience.minAge) addError(packId, "audience.maxAge must be >= minAge");
   }
+
+  if (pack.recommendedModes === undefined) {
+    if (pack.status === "playable") addError(packId, "playable packs need recommendedModes");
+  } else if (!Array.isArray(pack.recommendedModes) || pack.recommendedModes.length < 1) {
+    addError(packId, "recommendedModes must contain at least one game mode");
+  } else {
+    uniqueCheck(packId, pack.recommendedModes, "recommended mode");
+    for (const mode of pack.recommendedModes) {
+      if (!gameModes.has(mode)) addError(packId, `recommendedModes contains unsupported mode "${mode}"`);
+    }
+  }
+
+  validateLanding(packId, pack);
 
   if (!Array.isArray(pack.sources) || pack.sources.length < 1) {
     addError(packId, "at least one source is required");
@@ -189,11 +233,12 @@ const validatePack = (packFile) => {
     });
   }
 
-  if (!Array.isArray(pack.cards) || pack.cards.length < 8) {
+  const minimumCards = isTemplate ? 1 : 8;
+  if (!Array.isArray(pack.cards) || pack.cards.length < minimumCards) {
     addError(packId, "at least 8 cards are required; 16+ is better for repeated play");
     return;
   }
-  if (pack.cards.length < 16) addWarning(packId, "16+ cards is recommended so sessions do not feel repetitive");
+  if (!isTemplate && pack.cards.length < 16) addWarning(packId, "16+ cards is recommended so sessions do not feel repetitive");
 
   uniqueCheck(packId, pack.cards.map((card) => card?.id).filter(Boolean), "card id");
 
@@ -212,7 +257,7 @@ const validatePack = (packFile) => {
     if (!hasText(card.imageCredit, 2)) addError(packId, `${cardLabel}: imageCredit is required`);
     if (!isUrl(card.imageSourceUrl)) addError(packId, `${cardLabel}: imageSourceUrl needs an http(s) URL`);
     if (!hasText(card.fact, 32)) addError(packId, `${cardLabel}: fact should be at least 32 characters`);
-    validateImage(packId, card);
+    validateImage(packId, card, isTemplate);
 
     const stats = validateStats(packId, card, cardLabel);
     validateCardMetadata(packId, card, cardLabel);
@@ -230,9 +275,17 @@ const validatePack = (packFile) => {
     }
   });
 
+  if (hasText(pack.landing?.image) && !pack.cards.some((card) => card?.image === pack.landing.image)) {
+    addError(packId, "landing.image must reuse a credited card image from this pack");
+  }
+  const landingCount = hasText(pack.landing?.detail) ? pack.landing.detail.trim().match(/^(\d+)\b/) : null;
+  if (landingCount && Number(landingCount[1]) !== pack.cards.length) {
+    addError(packId, `landing.detail says ${landingCount[1]} cards but the pack contains ${pack.cards.length}`);
+  }
+
   const reusableStats = [...commonStatIds.entries()].filter(([, count]) => count >= Math.min(pack.cards.length, 8));
-  if (reusableStats.length < 2) addWarning(packId, "add at least 2 stat ids reused across most cards for number, sort, and Top Trumps modes");
-  if (categoryCounts.size < 3) addWarning(packId, "3+ categories helps Odd One questions work well");
+  if (!isTemplate && reusableStats.length < 2) addWarning(packId, "add at least 2 stat ids reused across most cards for number, sort, and Top Trumps modes");
+  if (!isTemplate && categoryCounts.size < 3) addWarning(packId, "3+ categories helps Odd One questions work well");
 };
 
 const packFiles = () => {

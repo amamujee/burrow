@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { buildLandingTopicCards } from "@/lib/landing-topics";
+import { loadPlayablePacks } from "@/lib/pack-loader";
 
 const previewModes = [
   { label: "Mix", detail: "a bit of everything", color: "#f0c84b", active: true },
@@ -37,24 +39,13 @@ const practiceAreas = [
   },
 ] as const;
 
-const topicCards = [
-  { title: "Peppers", detail: "Scoville heat, ranked", image: "/burrow-assets/peppers/carolina-reaper.jpg" },
-  { title: "Sharks", detail: "species & size", image: "/burrow-assets/sharks/great-white.jpg" },
-  { title: "Space", detail: "planets & moons", image: "/burrow-assets/space/saturn.jpg" },
-  { title: "Jets", detail: "speed & stealth", image: "/burrow-assets/jets/f-22-raptor.jpg" },
-  { title: "Towers", detail: "height, floor by floor", image: "/burrow-assets/buildings/burj-khalifa.jpg" },
-  { title: "World", detail: "flags & borders", image: "/world-map-land.svg" },
-  { title: "Dinosaurs", detail: "size, era, diet", image: "/burrow-assets/dinosaurs/brachiosaurus.jpg" },
-  { title: "Tall Trees", detail: "the tallest living things", image: "/burrow-assets/tall-trees/general-sherman.jpg" },
-  { title: "Tallest Mountains", detail: "elevation, ranked", image: "/burrow-assets/tallest-mountains/k2.jpg" },
-  { title: "Bridges & Tunnels", detail: "spans & records", image: "/burrow-assets/bridges-and-tunnels/golden-gate-bridge.jpg" },
-  { title: "Hot Sauces", detail: "51 sauces, pepper oils & flavor", image: "/burrow-assets/hot-sauces/tabasco-original.jpg" },
-] as const;
-
 const playButtonClass = "inline-flex rounded-[10px] border-2 border-[#082329] bg-[#f3c647] px-5 py-3 text-base font-black text-[#102f36] shadow-[3px_3px_0_#082329] transition hover:-translate-y-0.5 hover:bg-[#ffd85f]";
 const requestPackUrl = "https://forms.gle/YfLaHPfPGWVx2Ggv9";
 
 export default function Home() {
+  const topicCards = buildLandingTopicCards(loadPlayablePacks());
+  const finalTopicTitle = topicCards.at(-1)?.title.toLowerCase() ?? "new discoveries";
+
   return (
     <main className="min-h-dvh bg-[#fff4df] text-[#102f36]">
       <header className="sticky top-0 z-50 flex items-center justify-between gap-4 bg-[#fff4df]/90 px-5 py-3.5 backdrop-blur-md">
@@ -165,7 +156,7 @@ export default function Home() {
       <section className="border-t-2 border-[#e3c899] bg-[#fdecc8] px-5 py-16">
         <div className="mx-auto max-w-6xl">
           <p className="text-xs font-black uppercase tracking-[0.16em] text-[#9b5538]">What&apos;s inside</p>
-          <h2 className="mt-2.5 max-w-2xl text-[clamp(1.75rem,3.2vw,2.5rem)] font-black leading-tight text-[#321e16]">Eleven content packs from peppers to hot sauces — more to come.</h2>
+          <h2 className="mt-2.5 max-w-2xl text-[clamp(1.75rem,3.2vw,2.5rem)] font-black leading-tight text-[#321e16]">{topicCards.length} content packs from peppers to {finalTopicTitle} — more to come.</h2>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-[#4d4038]">Every pack is real, credited photos saved right on the device — so it keeps working on a plane, in a car, anywhere the wifi doesn&apos;t.</p>
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
             {topicCards.map((topic) => (
@@ -175,7 +166,11 @@ export default function Home() {
                   alt={topic.title}
                   fill
                   sizes="(min-width: 1024px) 220px, (min-width: 640px) 33vw, 50vw"
-                  className={topic.title === "World" ? "object-contain p-[10%] opacity-85 brightness-150 invert" : "object-cover"}
+                  className={topic.imageFit === "contain"
+                    ? topic.id === "countries"
+                      ? "object-contain p-[10%] opacity-85 brightness-150 invert"
+                      : "bg-white object-contain p-[8%]"
+                    : "object-cover"}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#092421]/90 via-transparent to-transparent" />
                 <div className="absolute inset-x-2.5 bottom-2.5 text-white">

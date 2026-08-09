@@ -39,6 +39,7 @@ import {
 import { buildHeadToHeadSession, buildSession } from "../../src/lib/questions";
 import { packToPlayableDeck } from "../../src/lib/pack-adapter";
 import { loadPlayablePacks } from "../../src/lib/pack-loader";
+import { buildLandingTopicCards } from "../../src/lib/landing-topics";
 import { discoveryShuffle } from "../../src/lib/random";
 import { migrateTopicSelection } from "../../src/lib/topic-selection";
 import {
@@ -166,6 +167,27 @@ test("built-in topic totals match the playable card catalogs", () => {
     expect(pack.libraryCount).toBe(values.count);
     expect(pack.featuredCount).toBe(values.count);
     expect(pack.eyebrow).toBe(values.eyebrow);
+  }
+});
+
+test("the landing page automatically covers every playable category", () => {
+  const packs = loadPlayablePacks();
+  const landingCards = buildLandingTopicCards(packs);
+  const expectedIds = [...Object.keys(topicPacks), ...packs.map((pack) => pack.id)];
+
+  expect(new Set(landingCards.map((card) => card.id))).toEqual(new Set(expectedIds));
+  expect(new Set(landingCards.map((card) => card.id)).size).toBe(landingCards.length);
+  expect(new Set(landingCards.map((card) => card.title)).size).toBe(landingCards.length);
+  expect(new Set(landingCards.map((card) => card.order)).size).toBe(landingCards.length);
+
+  for (const pack of packs) {
+    expect(pack.landing, `${pack.id} needs landing metadata`).toBeTruthy();
+    expect(landingCards.find((card) => card.id === pack.id)).toMatchObject({
+      title: pack.landing?.title ?? pack.title,
+      detail: pack.landing?.detail,
+      image: pack.landing?.image,
+    });
+    expect(pack.cards.some((card) => card.image === pack.landing?.image), `${pack.id} landing art should reuse a credited card image`).toBe(true);
   }
 });
 
@@ -1901,16 +1923,17 @@ test("iPhone question scroll keeps Next card sticky and thumb-reachable", { tag:
   expect(box!.y + box!.height).toBeGreaterThanOrEqual(viewport!.height - 100);
 });
 
-test("landing page explains the learning model and all eleven topic packs", async ({ page }) => {
+test("landing page explains the learning model and every playable topic pack", async ({ page }) => {
+  const landingCards = buildLandingTopicCards(loadPlayablePacks());
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Burrow", exact: true })).toBeVisible();
   await expect(page.getByText("whatever's stuck in their head", { exact: false })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Every mode teaches new skills." })).toBeVisible();
-  await expect(page.getByRole("heading", { name: /Eleven content packs from peppers to hot sauces/ })).toBeVisible();
-  for (const topic of ["Peppers", "Sharks", "Space", "Jets", "Towers", "World", "Dinosaurs", "Tall Trees", "Tallest Mountains", "Bridges & Tunnels", "Hot Sauces"]) {
-    await expect(page.getByRole("heading", { name: topic, exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: new RegExp(`${landingCards.length} content packs from peppers to`) })).toBeVisible();
+  for (const topic of landingCards) {
+    await expect(page.getByRole("heading", { name: topic.title, exact: true })).toBeVisible();
+    await expect(page.getByText(topic.detail, { exact: true })).toBeVisible();
   }
-  await expect(page.getByText("51 sauces, pepper oils & flavor", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Play Burrow" }).first()).toHaveAttribute("href", "/play");
 });
 

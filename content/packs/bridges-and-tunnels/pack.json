@@ -19,6 +19,12 @@
     "odd",
     "geo"
   ],
+  "landing": {
+    "detail": "spans & records",
+    "image": "/burrow-assets/bridges-and-tunnels/golden-gate-bridge.jpg",
+    "imageFit": "cover",
+    "order": 100
+  },
   "sources": [
     {
       "label": "Wikipedia list of bridges",

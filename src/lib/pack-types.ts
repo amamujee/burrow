@@ -32,6 +32,14 @@ export type PackSource = {
   note?: string;
 };
 
+export type PackLanding = {
+  title?: string;
+  detail: string;
+  image: string;
+  imageFit?: "cover" | "contain";
+  order: number;
+};
+
 export type Pack = {
   id: string;
   title: string;
@@ -44,6 +52,7 @@ export type Pack = {
     readingLevel?: string;
   };
   recommendedModes?: Exclude<GameMode, "mix">[];
+  landing?: PackLanding;
   sources: PackSource[];
   cards: PackCard[];
 };

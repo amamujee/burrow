@@ -19,6 +19,12 @@
     "odd",
     "geo"
   ],
+  "landing": {
+    "detail": "the tallest living things",
+    "image": "/burrow-assets/tall-trees/general-sherman.jpg",
+    "imageFit": "cover",
+    "order": 80
+  },
   "sources": [
     {
       "label": "Wikipedia list of tallest trees",

@@ -11,6 +11,12 @@
     "readingLevel": "Independent reader"
   },
   "recommendedModes": ["versus", "trumps", "sort", "fact", "peek", "odd", "geo"],
+  "landing": {
+    "detail": "51 sauces, pepper oils & flavor",
+    "image": "/burrow-assets/hot-sauces/tabasco-original.jpg",
+    "imageFit": "contain",
+    "order": 110
+  },
   "sources": [
     {
       "label": "HEATONIST hot sauce catalog",

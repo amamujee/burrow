@@ -20,6 +20,7 @@
     "start": "next start",
     "lint": "eslint",
     "check:images": "node scripts/check-images.mjs",
+    "check:category": "node scripts/check-category.mjs",
     "validate:packs": "node scripts/validate-packs.mjs",
     "test:logic": "playwright test --config=playwright.logic.config.ts",
     "test:e2e:run": "playwright test --project=desktop --project=mobile",

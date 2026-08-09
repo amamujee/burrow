@@ -10,7 +10,7 @@ Burrow is a local-first learning game that turns a kid's current obsession into 
 
 - Makes game selection a first-class multi-select: include any combination of Quiz Run, Head to Head, Top Trumps, Sort, True/False, Peek, Numbers, Odd One, and Geo Finder.
 - Keeps single-mode play available when a child wants to focus on one game type.
-- Ships with ten topic packs: peppers, skyscrapers, sharks, space, jets, countries and flags, dinosaurs, tallest mountains, tall trees, and bridges and tunnels.
+- Ships with core catalogs plus repo-authored packs such as dinosaurs, mountains, bridges and tunnels, and hot sauces with pepper oils.
 - Uses real facts, comparable stats, maps, and credited local images to teach in context.
 - Adapts future questions using recent answers and revisits concepts that need more practice.
 - Unlocks collection cards through correct answers while preserving separate progress for each player.
@@ -20,7 +20,7 @@ Burrow is a local-first learning game that turns a kid's current obsession into 
 
 ## How the Content Is Organized
 
-Five core catalogs—peppers, skyscrapers, sharks, space, and jets—live in `src/lib/game-data.ts`; the 200-country catalog lives in `src/lib/countries-data.ts`. Four contributor-friendly playable packs—dinosaurs, tallest mountains, tall trees, and bridges and tunnels—live under `content/packs/` and are loaded by the app when their `pack.json` has `"status": "playable"`.
+The core catalogs live in `src/lib/game-data.ts`, with the 200-country catalog in `src/lib/countries-data.ts`. Contributor-friendly categories live under `content/packs/` and are loaded by the app when their `pack.json` has `"status": "playable"`.
 
 Every card includes structured facts, comparable stats, local imagery, and image provenance. Gameplay never needs to hotlink topic images from the internet.
 
@@ -47,6 +47,7 @@ npm run dev            # Start the Next.js development server
 npm run build          # Create a production build
 npm run start          # Run the production build
 npm run lint           # Run ESLint
+npm run check:category # Run the repeatable preflight for one category
 npm run validate:packs # Validate repo-authored pack JSON files
 npm run check:images   # Verify local image files and report duplicates
 npm run qa:content     # Run content-quality checks
@@ -68,14 +69,15 @@ Then:
 1. Edit `content/packs/construction-trucks/pack.json` and keep the folder and pack IDs aligned.
 2. Add at least 16 cards, reusable numeric stats, useful categories, and short child-friendly facts.
 3. Put each credited image under `public/burrow-assets/construction-trucks/`.
-4. Set the pack status to `playable` when it is ready to appear in Burrow.
-5. Validate it:
+4. Add the landing-card metadata; playable JSON packs register themselves on the homepage.
+5. Set the pack status to `playable` only after content and image review.
+6. Run the category preflight:
 
 ```bash
-npm run validate:packs -- --pack construction-trucks
+npm run check:category -- --pack construction-trucks
 ```
 
-See [Making a Burrow Pack](docs/pack-authoring.md) for the schema, image rules, examples, and contributor checklist.
+See the [Burrow Category Playbook](docs/pack-authoring.md) for scope, research, metadata, image normalization, gameplay, landing-page integration, QA, and release steps.
 
 ## Content Quality and Privacy
 
