@@ -48,7 +48,7 @@ const topicCards = [
   { title: "Tall Trees", detail: "the tallest living things", image: "/burrow-assets/tall-trees/general-sherman.jpg" },
   { title: "Tallest Mountains", detail: "elevation, ranked", image: "/burrow-assets/tallest-mountains/k2.jpg" },
   { title: "Bridges & Tunnels", detail: "spans & records", image: "/burrow-assets/bridges-and-tunnels/golden-gate-bridge.jpg" },
-  { title: "Hot Sauces", detail: "heat, peppers & flavor", image: "/burrow-assets/hot-sauces/tabasco-original.jpg" },
+  { title: "Hot Sauces", detail: "51 sauces, pepper oils & flavor", image: "/burrow-assets/hot-sauces/tabasco-original.jpg" },
 ] as const;
 
 const playButtonClass = "inline-flex rounded-[10px] border-2 border-[#082329] bg-[#f3c647] px-5 py-3 text-base font-black text-[#102f36] shadow-[3px_3px_0_#082329] transition hover:-translate-y-0.5 hover:bg-[#ffd85f]";

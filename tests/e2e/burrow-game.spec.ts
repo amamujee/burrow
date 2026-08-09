@@ -1910,6 +1910,7 @@ test("landing page explains the learning model and all eleven topic packs", asyn
   for (const topic of ["Peppers", "Sharks", "Space", "Jets", "Towers", "World", "Dinosaurs", "Tall Trees", "Tallest Mountains", "Bridges & Tunnels", "Hot Sauces"]) {
     await expect(page.getByRole("heading", { name: topic, exact: true })).toBeVisible();
   }
+  await expect(page.getByText("51 sauces, pepper oils & flavor", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Play Burrow" }).first()).toHaveAttribute("href", "/play");
 });
 
