@@ -1226,6 +1226,17 @@ test("category collections keep every card in its meaningful order", () => {
   expect(orderedPeppers).toEqual(orderCollectionCardsByScoville(pepperCards));
   expect(collectionOrderLabel(orderedPeppers)).toBe("Scoville · mildest to hottest");
 
+  const hotSaucePack = loadPlayablePacks().find((pack) => pack.id === "hot-sauces");
+  expect(hotSaucePack).toBeTruthy();
+  const hotSauceCards = packToPlayableDeck(hotSaucePack!).cards;
+  const orderedHotSauces = orderCollectionCardsForCategory(hotSauceCards);
+  expect(orderedHotSauces.map((card) => card.statValue)).toEqual(
+    [...orderedHotSauces.map((card) => card.statValue)].sort((a, b) => a - b),
+  );
+  expect(orderedHotSauces.at(0)?.title).toBe("Frank's RedHot Original");
+  expect(orderedHotSauces.at(-1)?.title).toBe("PuckerButt Gator Sauce");
+  expect(collectionOrderLabel(orderedHotSauces)).toBe("Scoville · mildest to hottest");
+
   const buildingCards = collectionCards().filter((card) => card.topic === "buildings");
   const orderedBuildings = orderCollectionCardsForCategory(buildingCards);
   expect(orderedBuildings.map((card) => card.statValue)).toEqual(

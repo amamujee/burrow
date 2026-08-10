@@ -632,18 +632,20 @@ const collectionCardCatalog: KnowledgeCard[] = [
 
 export const collectionCards = (): KnowledgeCard[] => collectionCardCatalog;
 
+const scovilleCollectionSortValue = (card: KnowledgeCard): number => {
+  if (typeof card.collectionSortValue === "number" && Number.isFinite(card.collectionSortValue)) {
+    return card.collectionSortValue;
+  }
+  return card.statLabel === "Scoville" && Number.isFinite(card.statValue)
+    ? card.statValue
+    : Number.POSITIVE_INFINITY;
+};
+
+const orderCardsByScoville = (cards: readonly KnowledgeCard[]): KnowledgeCard[] => [...cards].sort((a, b) =>
+  scovilleCollectionSortValue(a) - scovilleCollectionSortValue(b) || a.title.localeCompare(b.title));
+
 export const orderCollectionCardsByScoville = (cards: readonly KnowledgeCard[]): KnowledgeCard[] => {
-  const peppersByHeat = cards
-    .filter((card) => card.topic === "peppers")
-    .sort((a, b) => {
-      const aScoville = typeof a.collectionSortValue === "number" && Number.isFinite(a.collectionSortValue)
-        ? a.collectionSortValue
-        : Number.POSITIVE_INFINITY;
-      const bScoville = typeof b.collectionSortValue === "number" && Number.isFinite(b.collectionSortValue)
-        ? b.collectionSortValue
-        : Number.POSITIVE_INFINITY;
-      return aScoville - bScoville || a.title.localeCompare(b.title);
-    });
+  const peppersByHeat = orderCardsByScoville(cards.filter((card) => card.topic === "peppers"));
   let pepperIndex = 0;
 
   return cards.map((card) => card.topic === "peppers" ? peppersByHeat[pepperIndex++] : card);
@@ -659,6 +661,7 @@ const comparableCollectionStatLabel = (cards: readonly KnowledgeCard[]): string 
 export const orderCollectionCardsForCategory = (cards: readonly KnowledgeCard[]): KnowledgeCard[] => {
   if (cards.length === 0) return [];
   if (cards.every((card) => card.topic === "peppers")) return orderCollectionCardsByScoville(cards);
+  if (cards.every((card) => card.topic === "hot-sauces")) return orderCardsByScoville(cards);
 
   const hasComparablePrimaryStat = comparableCollectionStatLabel(cards) !== null;
   return [...cards].sort((a, b) => hasComparablePrimaryStat
@@ -668,7 +671,7 @@ export const orderCollectionCardsForCategory = (cards: readonly KnowledgeCard[])
 
 export const collectionOrderLabel = (cards: readonly KnowledgeCard[]): string => {
   if (cards.length === 0) return "No cards";
-  if (cards.every((card) => card.topic === "peppers")) return "Scoville · mildest to hottest";
+  if (cards.every((card) => card.topic === "peppers" || card.topic === "hot-sauces")) return "Scoville · mildest to hottest";
   const statLabel = comparableCollectionStatLabel(cards);
   return statLabel
     ? `${statLabel} · highest to lowest`
