@@ -191,10 +191,10 @@ test("the landing page automatically covers every playable category", () => {
   }
 });
 
-test("Hot Sauces ships 51 sourced cards with complete comparison metadata", () => {
+test("Hot Sauces ships 75 sourced cards with complete comparison metadata", () => {
   const pack = loadPlayablePacks().find((candidate) => candidate.id === "hot-sauces");
   expect(pack).toBeTruthy();
-  expect(pack?.cards).toHaveLength(51);
+  expect(pack?.cards).toHaveLength(75);
   expect(pack?.recommendedModes).toContain("versus");
   expect(new Set(pack?.cards.map((card) => card.metadata?.flavorGrade))).toEqual(new Set(["A", "B", "C", "D"]));
   expect(new Set(pack?.cards.map((card) => card.metadata?.rarity))).toEqual(new Set(cardRarities));
@@ -224,6 +224,17 @@ test("Hot Sauces ships 51 sourced cards with complete comparison metadata", () =
   expect(habamix?.categories).toContain("Pepper oil");
   expect(habamix?.metadata?.pepperTypes).toHaveLength(7);
   expect(habamix?.stats.find((stat) => stat.id === "scoville")?.display).toBe("~2,200,000 SHU (pepper-based)");
+
+  const recentSauceIds = ["thats-what-shishito-said", "pickled-garlic-sriracha", "last-dab-thermageddon", "funken-yellow"];
+  expect(recentSauceIds.every((id) => pack?.cards.some((card) => card.id === id))).toBe(true);
+
+  const extremeOilIds = ["creaper-choil", "bang-bang-oil", "salt-gang-ghost-crisp", "balacco-reaper-oil"];
+  for (const id of extremeOilIds) {
+    const oil = pack?.cards.find((card) => card.id === id);
+    expect(oil?.categories.some((category) => category === "Pepper oil" || category === "Chili crisp")).toBe(true);
+    expect(oil?.stats.find((stat) => stat.id === "scoville")?.display).toContain("pepper-based");
+    expect(oil?.metadata?.difficultyBand).toBe("hard");
+  }
 });
 
 test("difficulty progression gives Easy and Medium room before Hard", () => {
