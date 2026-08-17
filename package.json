@@ -15,11 +15,15 @@
     "node": ">=20.9"
   },
   "scripts": {
+    "predev": "npm run generate:offline-manifest",
     "dev": "next dev",
+    "prebuild": "npm run generate:offline-manifest",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "check:images": "node scripts/check-images.mjs",
+    "generate:offline-manifest": "node scripts/generate-offline-asset-manifest.mjs",
+    "check:offline-manifest": "node scripts/generate-offline-asset-manifest.mjs --check",
     "check:category": "node scripts/check-category.mjs",
     "validate:packs": "node scripts/validate-packs.mjs",
     "test:logic": "playwright test --config=playwright.logic.config.ts",
@@ -28,7 +32,7 @@
     "qa:content": "node scripts/qa-content.mjs",
     "analyze:play-events": "node scripts/analyze-play-events.mjs",
     "sync:assets": "node scripts/sync-content-assets.mjs",
-    "qa:fast": "npm run lint && npm run validate:packs && npm run check:images && npm run qa:content && npm run test:logic",
+    "qa:fast": "npm run lint && npm run validate:packs && npm run check:images && npm run check:offline-manifest && npm run qa:content && npm run test:logic",
     "qa:deep": "npm run qa:fast && npm run build && playwright test --project=desktop --project=mobile-full",
     "verify": "npm run qa:fast && npm run build && npm run test:e2e:run"
   },

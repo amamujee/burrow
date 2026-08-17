@@ -1,0 +1,3576 @@
+{
+  "schemaVersion": 1,
+  "version": "36f6a7082028c2a509ec",
+  "assetCount": 892,
+  "totalBytes": 202383920,
+  "assets": {
+    "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.jpg": {
+      "bytes": 91997,
+      "revision": "aeadccc1a96e39821358"
+    },
+    "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.svg": {
+      "bytes": 1139,
+      "revision": "2cefdf96fb6214182b94"
+    },
+    "/burrow-assets/bridges-and-tunnels/bayonne-bridge.jpg": {
+      "bytes": 121292,
+      "revision": "38df42e1036c2a39634c"
+    },
+    "/burrow-assets/bridges-and-tunnels/bayonne-bridge.svg": {
+      "bytes": 1036,
+      "revision": "876939afa30211838194"
+    },
+    "/burrow-assets/bridges-and-tunnels/bixby-creek-bridge.jpg": {
+      "bytes": 184692,
+      "revision": "8b8d24ba2b4592d25612"
+    },
+    "/burrow-assets/bridges-and-tunnels/bixby-creek-bridge.svg": {
+      "bytes": 1035,
+      "revision": "3a37ff7b268b0678c3cf"
+    },
+    "/burrow-assets/bridges-and-tunnels/bosphorus-bridge.jpg": {
+      "bytes": 164062,
+      "revision": "76d40ff032c5d0918f35"
+    },
+    "/burrow-assets/bridges-and-tunnels/bosphorus-bridge.svg": {
+      "bytes": 1142,
+      "revision": "0b71a265cf228677110e"
+    },
+    "/burrow-assets/bridges-and-tunnels/bronx-whitestone-bridge.jpg": {
+      "bytes": 169100,
+      "revision": "6568a3add8d541260289"
+    },
+    "/burrow-assets/bridges-and-tunnels/bronx-whitestone-bridge.svg": {
+      "bytes": 1156,
+      "revision": "49ec303ac448e1bc600f"
+    },
+    "/burrow-assets/bridges-and-tunnels/brooklyn-bridge.jpg": {
+      "bytes": 104445,
+      "revision": "95696a946654cf008e31"
+    },
+    "/burrow-assets/bridges-and-tunnels/brooklyn-bridge.svg": {
+      "bytes": 1140,
+      "revision": "325557dca4279ab8cc2f"
+    },
+    "/burrow-assets/bridges-and-tunnels/channel-tunnel.jpg": {
+      "bytes": 187883,
+      "revision": "1c72aacc25862212260c"
+    },
+    "/burrow-assets/bridges-and-tunnels/channel-tunnel.svg": {
+      "bytes": 885,
+      "revision": "e0f41a869f4b49faa93e"
+    },
+    "/burrow-assets/bridges-and-tunnels/charles-bridge.jpg": {
+      "bytes": 292405,
+      "revision": "1ef0bccbc0ce26cb8fc7"
+    },
+    "/burrow-assets/bridges-and-tunnels/charles-bridge.svg": {
+      "bytes": 1024,
+      "revision": "a47a1234b83b36166502"
+    },
+    "/burrow-assets/bridges-and-tunnels/chesapeake-bay-bridge-tunnel.jpg": {
+      "bytes": 106902,
+      "revision": "16c835ddd1e6105ede0b"
+    },
+    "/burrow-assets/bridges-and-tunnels/chesapeake-bay-bridge-tunnel.svg": {
+      "bytes": 924,
+      "revision": "e53ce5de111dd574bd32"
+    },
+    "/burrow-assets/bridges-and-tunnels/danyang-kunshan-grand-bridge.jpg": {
+      "bytes": 61298,
+      "revision": "bd5185e9fb32dd187e4e"
+    },
+    "/burrow-assets/bridges-and-tunnels/danyang-kunshan-grand-bridge.svg": {
+      "bytes": 896,
+      "revision": "016ebc2528c5c5b35c12"
+    },
+    "/burrow-assets/bridges-and-tunnels/forth-bridge.jpg": {
+      "bytes": 154603,
+      "revision": "718dba17d1b0051d256b"
+    },
+    "/burrow-assets/bridges-and-tunnels/forth-bridge.svg": {
+      "bytes": 900,
+      "revision": "5eea5f1b83d91bd1a502"
+    },
+    "/burrow-assets/bridges-and-tunnels/george-washington-bridge.jpg": {
+      "bytes": 331790,
+      "revision": "f746665634683060364b"
+    },
+    "/burrow-assets/bridges-and-tunnels/george-washington-bridge.svg": {
+      "bytes": 1164,
+      "revision": "1c50983a3673bb50253b"
+    },
+    "/burrow-assets/bridges-and-tunnels/goethals-bridge.jpg": {
+      "bytes": 140963,
+      "revision": "1a5a0bdc2a6d955adb75"
+    },
+    "/burrow-assets/bridges-and-tunnels/goethals-bridge.svg": {
+      "bytes": 1082,
+      "revision": "b6169fcd4de6c71ccdaf"
+    },
+    "/burrow-assets/bridges-and-tunnels/golden-gate-bridge.jpg": {
+      "bytes": 150401,
+      "revision": "14999d2625c4161e9105"
+    },
+    "/burrow-assets/bridges-and-tunnels/golden-gate-bridge.svg": {
+      "bytes": 1146,
+      "revision": "0a09b70503ee8577e5cb"
+    },
+    "/burrow-assets/bridges-and-tunnels/gotthard-base-tunnel.jpg": {
+      "bytes": 174896,
+      "revision": "16eea922d973c3be990e"
+    },
+    "/burrow-assets/bridges-and-tunnels/gotthard-base-tunnel.svg": {
+      "bytes": 899,
+      "revision": "4e67608b23b20118ebf2"
+    },
+    "/burrow-assets/bridges-and-tunnels/gotthard-road-tunnel.jpg": {
+      "bytes": 131305,
+      "revision": "3bd219611be744084f68"
+    },
+    "/burrow-assets/bridges-and-tunnels/gotthard-road-tunnel.svg": {
+      "bytes": 899,
+      "revision": "389bab867f2968e3664c"
+    },
+    "/burrow-assets/bridges-and-tunnels/governor-mario-cuomo-bridge.jpg": {
+      "bytes": 148663,
+      "revision": "1cb48c8ce11d2498ca1a"
+    },
+    "/burrow-assets/bridges-and-tunnels/governor-mario-cuomo-bridge.svg": {
+      "bytes": 1101,
+      "revision": "0be1982ca0a92c0a5a8e"
+    },
+    "/burrow-assets/bridges-and-tunnels/guadarrama-tunnel.jpg": {
+      "bytes": 321201,
+      "revision": "5a5988356905e930e7aa"
+    },
+    "/burrow-assets/bridges-and-tunnels/guadarrama-tunnel.svg": {
+      "bytes": 875,
+      "revision": "97c4d3274ea472484d9f"
+    },
+    "/burrow-assets/bridges-and-tunnels/henry-hudson-bridge.jpg": {
+      "bytes": 161626,
+      "revision": "3ef860b37c61c45d1d74"
+    },
+    "/burrow-assets/bridges-and-tunnels/henry-hudson-bridge.svg": {
+      "bytes": 1040,
+      "revision": "d8fc7653537cc11c3181"
+    },
+    "/burrow-assets/bridges-and-tunnels/hong-kong-zhuhai-macau-bridge.jpg": {
+      "bytes": 109155,
+      "revision": "6b8fde88fcd23d022668"
+    },
+    "/burrow-assets/bridges-and-tunnels/hong-kong-zhuhai-macau-bridge.svg": {
+      "bytes": 991,
+      "revision": "1bcf2f7c5dad9c70fa82"
+    },
+    "/burrow-assets/bridges-and-tunnels/laerdal-tunnel.jpg": {
+      "bytes": 167855,
+      "revision": "c93e1ff0001c9be24cee"
+    },
+    "/burrow-assets/bridges-and-tunnels/laerdal-tunnel.svg": {
+      "bytes": 870,
+      "revision": "1595997ac2015fa76ec8"
+    },
+    "/burrow-assets/bridges-and-tunnels/loetschberg-base-tunnel.jpg": {
+      "bytes": 219745,
+      "revision": "4df4fe17b13cab0afc94"
+    },
+    "/burrow-assets/bridges-and-tunnels/loetschberg-base-tunnel.svg": {
+      "bytes": 905,
+      "revision": "0729d39a75cf57798466"
+    },
+    "/burrow-assets/bridges-and-tunnels/london-bridge.jpg": {
+      "bytes": 140695,
+      "revision": "86e088418d4ff9d09622"
+    },
+    "/burrow-assets/bridges-and-tunnels/london-bridge.svg": {
+      "bytes": 1130,
+      "revision": "bdf20fd7dfe4c1c0d792"
+    },
+    "/burrow-assets/bridges-and-tunnels/mackinac-bridge.jpg": {
+      "bytes": 86002,
+      "revision": "614ac331a8b02c284b3e"
+    },
+    "/burrow-assets/bridges-and-tunnels/mackinac-bridge.svg": {
+      "bytes": 1135,
+      "revision": "71cd393ba96170e5404a"
+    },
+    "/burrow-assets/bridges-and-tunnels/manhattan-bridge.jpg": {
+      "bytes": 154904,
+      "revision": "e6e7cd68b03746e9f532"
+    },
+    "/burrow-assets/bridges-and-tunnels/manhattan-bridge.svg": {
+      "bytes": 1142,
+      "revision": "cc03480d3ebb36d9ccec"
+    },
+    "/burrow-assets/bridges-and-tunnels/millau-viaduct.jpg": {
+      "bytes": 213002,
+      "revision": "d3fb4c80a28735adb4c8"
+    },
+    "/burrow-assets/bridges-and-tunnels/millau-viaduct.svg": {
+      "bytes": 1060,
+      "revision": "7e3a93b9e3ec917bfb07"
+    },
+    "/burrow-assets/bridges-and-tunnels/oresund-bridge.jpg": {
+      "bytes": 102259,
+      "revision": "7dc6b9fa07febaecd6dc"
+    },
+    "/burrow-assets/bridges-and-tunnels/oresund-bridge.svg": {
+      "bytes": 1060,
+      "revision": "7dcfdc63a04243212ef1"
+    },
+    "/burrow-assets/bridges-and-tunnels/ponte-vecchio.jpg": {
+      "bytes": 151668,
+      "revision": "309928c74b7fdcbfbca3"
+    },
+    "/burrow-assets/bridges-and-tunnels/ponte-vecchio.svg": {
+      "bytes": 1015,
+      "revision": "9682cddf30f3f35ce1f9"
+    },
+    "/burrow-assets/bridges-and-tunnels/queensboro-bridge.jpg": {
+      "bytes": 257387,
+      "revision": "0bb2d00db09bf6bcf274"
+    },
+    "/burrow-assets/bridges-and-tunnels/queensboro-bridge.svg": {
+      "bytes": 914,
+      "revision": "7f0db22b8661ee246f41"
+    },
+    "/burrow-assets/bridges-and-tunnels/rfk-triborough-bridge.jpg": {
+      "bytes": 232182,
+      "revision": "b01b5fd2abf7011442a5"
+    },
+    "/burrow-assets/bridges-and-tunnels/rfk-triborough-bridge.svg": {
+      "bytes": 970,
+      "revision": "9f8fb0faf1cb9b27335b"
+    },
+    "/burrow-assets/bridges-and-tunnels/rialto-bridge.jpg": {
+      "bytes": 209327,
+      "revision": "42ffb0b08c40def91580"
+    },
+    "/burrow-assets/bridges-and-tunnels/rialto-bridge.svg": {
+      "bytes": 1013,
+      "revision": "562d8afa764255d2dbf8"
+    },
+    "/burrow-assets/bridges-and-tunnels/ryfylke-tunnel.jpg": {
+      "bytes": 286524,
+      "revision": "92fe4f2b0d3429791bf6"
+    },
+    "/burrow-assets/bridges-and-tunnels/ryfylke-tunnel.svg": {
+      "bytes": 870,
+      "revision": "79c8e064704c5162d38b"
+    },
+    "/burrow-assets/bridges-and-tunnels/seikan-tunnel.jpg": {
+      "bytes": 92951,
+      "revision": "26dc7ebd606cd568f478"
+    },
+    "/burrow-assets/bridges-and-tunnels/seikan-tunnel.svg": {
+      "bytes": 883,
+      "revision": "ee17ecc76c5c52d68628"
+    },
+    "/burrow-assets/bridges-and-tunnels/sunshine-skyway-bridge.jpg": {
+      "bytes": 114356,
+      "revision": "ac0732a06928fb3e0507"
+    },
+    "/burrow-assets/bridges-and-tunnels/sunshine-skyway-bridge.svg": {
+      "bytes": 1084,
+      "revision": "3669a9ee07dafda57c46"
+    },
+    "/burrow-assets/bridges-and-tunnels/sydney-harbour-bridge.jpg": {
+      "bytes": 132250,
+      "revision": "1c231d7afc8785a975ec"
+    },
+    "/burrow-assets/bridges-and-tunnels/sydney-harbour-bridge.svg": {
+      "bytes": 1033,
+      "revision": "88d981c677657695bc5a"
+    },
+    "/burrow-assets/bridges-and-tunnels/throgs-neck-bridge.jpg": {
+      "bytes": 170433,
+      "revision": "5c83e7db3222ae97f81f"
+    },
+    "/burrow-assets/bridges-and-tunnels/throgs-neck-bridge.svg": {
+      "bytes": 1146,
+      "revision": "2971861ab4bae121c3db"
+    },
+    "/burrow-assets/bridges-and-tunnels/tokyo-bay-aqua-line.jpg": {
+      "bytes": 240542,
+      "revision": "31738de7922547baad48"
+    },
+    "/burrow-assets/bridges-and-tunnels/tokyo-bay-aqua-line.svg": {
+      "bytes": 899,
+      "revision": "04191bf0e0a921885cc3"
+    },
+    "/burrow-assets/bridges-and-tunnels/tower-bridge.jpg": {
+      "bytes": 126888,
+      "revision": "7872e029020345829448"
+    },
+    "/burrow-assets/bridges-and-tunnels/tower-bridge.svg": {
+      "bytes": 961,
+      "revision": "917d66cfbcd5f16f4e3a"
+    },
+    "/burrow-assets/bridges-and-tunnels/verrazzano-narrows-bridge.jpg": {
+      "bytes": 208803,
+      "revision": "c4e854ed7d983634f268"
+    },
+    "/burrow-assets/bridges-and-tunnels/verrazzano-narrows-bridge.svg": {
+      "bytes": 1160,
+      "revision": "e7277609fcc9df999707"
+    },
+    "/burrow-assets/bridges-and-tunnels/williamsburg-bridge.jpg": {
+      "bytes": 203055,
+      "revision": "543d37889e9363a8fa01"
+    },
+    "/burrow-assets/bridges-and-tunnels/williamsburg-bridge.svg": {
+      "bytes": 1148,
+      "revision": "12fa8cf231a56a8637ad"
+    },
+    "/burrow-assets/bridges-and-tunnels/yamate-tunnel.jpg": {
+      "bytes": 77696,
+      "revision": "354bc420c3d9c16e3133"
+    },
+    "/burrow-assets/bridges-and-tunnels/yamate-tunnel.svg": {
+      "bytes": 874,
+      "revision": "7a5e567ff357ccc4f3a6"
+    },
+    "/burrow-assets/bridges-and-tunnels/zhongnanshan-tunnel.jpg": {
+      "bytes": 167698,
+      "revision": "5c1b7b7a888bf4557c3f"
+    },
+    "/burrow-assets/bridges-and-tunnels/zhongnanshan-tunnel.svg": {
+      "bytes": 888,
+      "revision": "4076889b0bf48685d5a6"
+    },
+    "/burrow-assets/buildings/11-hoyt.jpg": {
+      "bytes": 286857,
+      "revision": "b902a5813220e6ba36c6"
+    },
+    "/burrow-assets/buildings/111-west-57th.jpg": {
+      "bytes": 130716,
+      "revision": "1af913dd0ae3f652b806"
+    },
+    "/burrow-assets/buildings/150-west-main-street.jpg": {
+      "bytes": 1129542,
+      "revision": "64b6d43965b6e3957299"
+    },
+    "/burrow-assets/buildings/1555-blanford-circle.jpg": {
+      "bytes": 268855,
+      "revision": "5ab6d9c22eccfd8871d4"
+    },
+    "/burrow-assets/buildings/270-park-avenue.jpg": {
+      "bytes": 590803,
+      "revision": "2e266b985f23b26a62ff"
+    },
+    "/burrow-assets/buildings/28-liberty.jpg": {
+      "bytes": 654364,
+      "revision": "3278838591f5de58056a"
+    },
+    "/burrow-assets/buildings/28-liberty.svg": {
+      "bytes": 794,
+      "revision": "fe70f6d2282c56b74153"
+    },
+    "/burrow-assets/buildings/3-world-trade-center.jpg": {
+      "bytes": 541817,
+      "revision": "a78cba370bc6474fb79a"
+    },
+    "/burrow-assets/buildings/30-hudson-yards.jpg": {
+      "bytes": 425733,
+      "revision": "9ef589f905c80af9b85b"
+    },
+    "/burrow-assets/buildings/35-hudson-yards.jpg": {
+      "bytes": 319837,
+      "revision": "d08ced49375a4dde5f44"
+    },
+    "/burrow-assets/buildings/35-hudson-yards.svg": {
+      "bytes": 732,
+      "revision": "dfbfc2b3dcf9dc46e759"
+    },
+    "/burrow-assets/buildings/385-atlantic-avenue.svg": {
+      "bytes": 1216,
+      "revision": "9fa22af072d86ff8a1d6"
+    },
+    "/burrow-assets/buildings/4-world-trade-center.jpg": {
+      "bytes": 401579,
+      "revision": "b8732cd1f3e2a6bc60b3"
+    },
+    "/burrow-assets/buildings/432-park.jpg": {
+      "bytes": 133756,
+      "revision": "a53e3c725bb018cc1433"
+    },
+    "/burrow-assets/buildings/50-hudson-yards.jpg": {
+      "bytes": 433682,
+      "revision": "16cd10e4b90c3bfe5032"
+    },
+    "/burrow-assets/buildings/50-hudson-yards.svg": {
+      "bytes": 720,
+      "revision": "eb787f921631f440ec47"
+    },
+    "/burrow-assets/buildings/520-fifth-avenue.jpg": {
+      "bytes": 417832,
+      "revision": "fc3c11341703f5e6b509"
+    },
+    "/burrow-assets/buildings/520-fifth-avenue.svg": {
+      "bytes": 698,
+      "revision": "5a86b0fe290e0e2a9b6d"
+    },
+    "/burrow-assets/buildings/53w53.jpg": {
+      "bytes": 89782,
+      "revision": "e4bf175182d8af0fa543"
+    },
+    "/burrow-assets/buildings/ava-dobro.jpg": {
+      "bytes": 143664,
+      "revision": "ecaedd487df4d6e3a2ed"
+    },
+    "/burrow-assets/buildings/bank-of-america-tower-nyc.jpg": {
+      "bytes": 446720,
+      "revision": "26a6c662a0a7e9ac4664"
+    },
+    "/burrow-assets/buildings/bank-of-china.jpg": {
+      "bytes": 319448,
+      "revision": "cde79beacea67a81aebf"
+    },
+    "/burrow-assets/buildings/big-ben.jpg": {
+      "bytes": 665675,
+      "revision": "13ab2c0ae4577c515a13"
+    },
+    "/burrow-assets/buildings/big-ben.svg": {
+      "bytes": 1009,
+      "revision": "dc7e8a63fbcdc2c015b6"
+    },
+    "/burrow-assets/buildings/brooklyn-point.jpg": {
+      "bytes": 296313,
+      "revision": "9d78cea8b80f888427ff"
+    },
+    "/burrow-assets/buildings/brooklyn-tower.jpg": {
+      "bytes": 164072,
+      "revision": "dc9988d03cb26e6916db"
+    },
+    "/burrow-assets/buildings/burj-khalifa.jpg": {
+      "bytes": 107178,
+      "revision": "588f27665397ad8f1d5a"
+    },
+    "/burrow-assets/buildings/cayan-tower.jpg": {
+      "bytes": 364521,
+      "revision": "69380ce345f2bc41461d"
+    },
+    "/burrow-assets/buildings/cayan-tower.svg": {
+      "bytes": 922,
+      "revision": "54881bd28c248737ca84"
+    },
+    "/burrow-assets/buildings/central-park-tower.jpg": {
+      "bytes": 368976,
+      "revision": "83012462b7865e6c1e10"
+    },
+    "/burrow-assets/buildings/china-zun.jpg": {
+      "bytes": 1217153,
+      "revision": "4cbb96ba9b6516f9f57c"
+    },
+    "/burrow-assets/buildings/chrysler-building.jpg": {
+      "bytes": 573713,
+      "revision": "53ce4c8e4fd6fa4378b1"
+    },
+    "/burrow-assets/buildings/dominion-tower.jpg": {
+      "bytes": 1176862,
+      "revision": "0f8ddfea5535a30b3c81"
+    },
+    "/burrow-assets/buildings/dubai-creek-tower.svg": {
+      "bytes": 908,
+      "revision": "1b67329415ee7841cca2"
+    },
+    "/burrow-assets/buildings/eiffel-tower.jpg": {
+      "bytes": 620422,
+      "revision": "36cd0a583931b849e335"
+    },
+    "/burrow-assets/buildings/eiffel-tower.svg": {
+      "bytes": 696,
+      "revision": "62c0b5131671a7268d35"
+    },
+    "/burrow-assets/buildings/empire-state.jpg": {
+      "bytes": 644682,
+      "revision": "a716a3050f17f8cd89d7"
+    },
+    "/burrow-assets/buildings/guangzhou-ctf.jpg": {
+      "bytes": 376470,
+      "revision": "cfc0ed5fa9f8373b9bcc"
+    },
+    "/burrow-assets/buildings/icc.jpg": {
+      "bytes": 1043553,
+      "revision": "922cf31939e31e45dba3"
+    },
+    "/burrow-assets/buildings/icon-norfolk.jpg": {
+      "bytes": 606461,
+      "revision": "ac252594b0473d65c63e"
+    },
+    "/burrow-assets/buildings/jeddah-tower.jpg": {
+      "bytes": 220595,
+      "revision": "b9af519bfdcf99c75b65"
+    },
+    "/burrow-assets/buildings/jin-mao.jpg": {
+      "bytes": 327792,
+      "revision": "6612dd938ada71f864ed"
+    },
+    "/burrow-assets/buildings/lakhta-center.jpg": {
+      "bytes": 201986,
+      "revision": "d186a2e0b37aaa4c368f"
+    },
+    "/burrow-assets/buildings/landmark-81.jpg": {
+      "bytes": 244207,
+      "revision": "06190ac1a3ea8ebd64ae"
+    },
+    "/burrow-assets/buildings/leaning-tower-of-pisa.jpg": {
+      "bytes": 407240,
+      "revision": "78735d4bed0c70a20324"
+    },
+    "/burrow-assets/buildings/leaning-tower-of-pisa.svg": {
+      "bytes": 886,
+      "revision": "643f18e15f0c006fcd37"
+    },
+    "/burrow-assets/buildings/lotte-world-tower.jpg": {
+      "bytes": 83846,
+      "revision": "77a32f94459a014867fb"
+    },
+    "/burrow-assets/buildings/makkah-clock.jpg": {
+      "bytes": 91975,
+      "revision": "22acafaf1252bb60395d"
+    },
+    "/burrow-assets/buildings/merdeka-118.jpg": {
+      "bytes": 309714,
+      "revision": "9b262576e37bdef71d64"
+    },
+    "/burrow-assets/buildings/new-york-times-building.jpg": {
+      "bytes": 459280,
+      "revision": "e8e48558c26a043266af"
+    },
+    "/burrow-assets/buildings/norfolk-waterside-marriott.jpg": {
+      "bytes": 726481,
+      "revision": "edb7f461dd23bc094601"
+    },
+    "/burrow-assets/buildings/one-manhattan-west.jpg": {
+      "bytes": 158866,
+      "revision": "93e3eacc400e15eb82a5"
+    },
+    "/burrow-assets/buildings/one-manhattan-west.svg": {
+      "bytes": 700,
+      "revision": "fd89f33c2fb6aed14cf1"
+    },
+    "/burrow-assets/buildings/one-vanderbilt.jpg": {
+      "bytes": 599683,
+      "revision": "44d6db292dd62d09f568"
+    },
+    "/burrow-assets/buildings/one-wtc.jpg": {
+      "bytes": 291175,
+      "revision": "c00807eeeb00e4a7e48c"
+    },
+    "/burrow-assets/buildings/one57.jpg": {
+      "bytes": 2096418,
+      "revision": "13167a7f1e0611c16221"
+    },
+    "/burrow-assets/buildings/petronas-towers.jpg": {
+      "bytes": 743539,
+      "revision": "cbbb0c070f2e38285a57"
+    },
+    "/burrow-assets/buildings/ping-an.jpg": {
+      "bytes": 364659,
+      "revision": "3aa85527afb1559cdab8"
+    },
+    "/burrow-assets/buildings/princess-tower.jpg": {
+      "bytes": 671451,
+      "revision": "be65957f42631ccaad5d"
+    },
+    "/burrow-assets/buildings/rise-tower.svg": {
+      "bytes": 923,
+      "revision": "d5f4c5d662c989bace43"
+    },
+    "/burrow-assets/buildings/shanghai-tower.jpg": {
+      "bytes": 92935,
+      "revision": "5151e8bc4f53b9132bf2"
+    },
+    "/burrow-assets/buildings/shanghai-wfc.jpg": {
+      "bytes": 435334,
+      "revision": "da55f8680a8f08c46847"
+    },
+    "/burrow-assets/buildings/taipei-101.jpg": {
+      "bytes": 343876,
+      "revision": "3ee1d793b8d7dcbe3f6d"
+    },
+    "/burrow-assets/buildings/the-everly.jpg": {
+      "bytes": 332155,
+      "revision": "8fb779ffdec43f11abff"
+    },
+    "/burrow-assets/buildings/the-spiral.jpg": {
+      "bytes": 433801,
+      "revision": "684c77e3421d2045046b"
+    },
+    "/burrow-assets/buildings/tianjin-ctf.jpg": {
+      "bytes": 211076,
+      "revision": "8b49ea760beda1d450d9"
+    },
+    "/burrow-assets/buildings/wells-fargo-center-norfolk.jpg": {
+      "bytes": 177668,
+      "revision": "7529b91c1cd37cf93f8b"
+    },
+    "/burrow-assets/buildings/willis-tower.jpg": {
+      "bytes": 278670,
+      "revision": "f558a1665518fb75f633"
+    },
+    "/burrow-assets/buildings/wuhan-greenland-center.jpg": {
+      "bytes": 340998,
+      "revision": "80609c7b44a42c6ce58f"
+    },
+    "/burrow-assets/countries/ad.svg": {
+      "bytes": 30510,
+      "revision": "1914f0d751b810056fdd"
+    },
+    "/burrow-assets/countries/ae.svg": {
+      "bytes": 266,
+      "revision": "3bc52a4aac7c6c68cd7c"
+    },
+    "/burrow-assets/countries/af.svg": {
+      "bytes": 19192,
+      "revision": "313a7dd89f3d4bdceae6"
+    },
+    "/burrow-assets/countries/ag.svg": {
+      "bytes": 743,
+      "revision": "131282135f0f5cfca72e"
+    },
+    "/burrow-assets/countries/al.svg": {
+      "bytes": 3126,
+      "revision": "4ae4d2950f6a08528639"
+    },
+    "/burrow-assets/countries/am.svg": {
+      "bytes": 228,
+      "revision": "efb6cdaad5658ae5024c"
+    },
+    "/burrow-assets/countries/ao.svg": {
+      "bytes": 1602,
+      "revision": "3a4b1f9b0c95729b128e"
+    },
+    "/burrow-assets/countries/ar.svg": {
+      "bytes": 3461,
+      "revision": "da39bfbe83fd35fae781"
+    },
+    "/burrow-assets/countries/at.svg": {
+      "bytes": 195,
+      "revision": "c0e5cb3c1d59fd002afd"
+    },
+    "/burrow-assets/countries/au.svg": {
+      "bytes": 1296,
+      "revision": "cbb2206c5e59a25d7922"
+    },
+    "/burrow-assets/countries/az.svg": {
+      "bytes": 501,
+      "revision": "33ad245b2125c36fbf0f"
+    },
+    "/burrow-assets/countries/ba.svg": {
+      "bytes": 1240,
+      "revision": "b321fe9b47c1cd741c61"
+    },
+    "/burrow-assets/countries/bb.svg": {
+      "bytes": 628,
+      "revision": "46cfd88ab5ea96e75627"
+    },
+    "/burrow-assets/countries/bd.svg": {
+      "bytes": 187,
+      "revision": "1aabb4a772651fb9a673"
+    },
+    "/burrow-assets/countries/be.svg": {
+      "bytes": 302,
+      "revision": "d6aff6fa4c913404eafd"
+    },
+    "/burrow-assets/countries/bf.svg": {
+      "bytes": 353,
+      "revision": "606b17add6a8aeb9610b"
+    },
+    "/burrow-assets/countries/bg.svg": {
+      "bytes": 225,
+      "revision": "b6d979fc96dc6b46c169"
+    },
+    "/burrow-assets/countries/bh.svg": {
+      "bytes": 252,
+      "revision": "7a519f58c9007731d70a"
+    },
+    "/burrow-assets/countries/bi.svg": {
+      "bytes": 1078,
+      "revision": "5ef1a56b4ebe90326d6d"
+    },
+    "/burrow-assets/countries/bj.svg": {
+      "bytes": 499,
+      "revision": "0a46cbae6018acdbc4a4"
+    },
+    "/burrow-assets/countries/bn.svg": {
+      "bytes": 13340,
+      "revision": "4fc01eb8e4b3d4776d17"
+    },
+    "/burrow-assets/countries/bo.svg": {
+      "bytes": 102880,
+      "revision": "ee1075ebb655dd8252ec"
+    },
+    "/burrow-assets/countries/br.svg": {
+      "bytes": 7140,
+      "revision": "b0a912826c3ffd728743"
+    },
+    "/burrow-assets/countries/bs.svg": {
+      "bytes": 557,
+      "revision": "1f179c39f296e5e3e062"
+    },
+    "/burrow-assets/countries/bt.svg": {
+      "bytes": 24784,
+      "revision": "05ff0d4d725835782318"
+    },
+    "/burrow-assets/countries/bw.svg": {
+      "bytes": 264,
+      "revision": "180bfa4e76b78fa7b52b"
+    },
+    "/burrow-assets/countries/by.svg": {
+      "bytes": 2078,
+      "revision": "a1efa44ad1167d6d77ab"
+    },
+    "/burrow-assets/countries/bz.svg": {
+      "bytes": 42505,
+      "revision": "9aef8f4ef9d86bf989fb"
+    },
+    "/burrow-assets/countries/ca.svg": {
+      "bytes": 625,
+      "revision": "345ec9dac057e203f133"
+    },
+    "/burrow-assets/countries/cd.svg": {
+      "bytes": 334,
+      "revision": "ad93c1afd68e6a7364d1"
+    },
+    "/burrow-assets/countries/cf.svg": {
+      "bytes": 687,
+      "revision": "1b58dc2035ff0039c82e"
+    },
+    "/burrow-assets/countries/cg.svg": {
+      "bytes": 470,
+      "revision": "628dcfc7f00ab09cc907"
+    },
+    "/burrow-assets/countries/ch.svg": {
+      "bytes": 290,
+      "revision": "ac676cd39d7032988598"
+    },
+    "/burrow-assets/countries/ci.svg": {
+      "bytes": 277,
+      "revision": "4ecfea70e4e0860fdb49"
+    },
+    "/burrow-assets/countries/ck.svg": {
+      "bytes": 1898,
+      "revision": "b17c039f7195b292265d"
+    },
+    "/burrow-assets/countries/cl.svg": {
+      "bytes": 552,
+      "revision": "bcf0ccdf0999a1cd8206"
+    },
+    "/burrow-assets/countries/cm.svg": {
+      "bytes": 840,
+      "revision": "c9a327dc0e355739a9f2"
+    },
+    "/burrow-assets/countries/cn.svg": {
+      "bytes": 813,
+      "revision": "981da9bdf82d48e31691"
+    },
+    "/burrow-assets/countries/co.svg": {
+      "bytes": 286,
+      "revision": "6bab3c96c1657510c6e4"
+    },
+    "/burrow-assets/countries/cr.svg": {
+      "bytes": 290,
+      "revision": "4775ef01d28b8a887cde"
+    },
+    "/burrow-assets/countries/cu.svg": {
+      "bytes": 610,
+      "revision": "15013e0bb414c074af96"
+    },
+    "/burrow-assets/countries/cv.svg": {
+      "bytes": 1411,
+      "revision": "2fa67e0a2477306f0427"
+    },
+    "/burrow-assets/countries/cy.svg": {
+      "bytes": 5466,
+      "revision": "d2ddf86c24e9d4dc4e2f"
+    },
+    "/burrow-assets/countries/cz.svg": {
+      "bytes": 225,
+      "revision": "d601fcc2e5b1fd48b79d"
+    },
+    "/burrow-assets/countries/de.svg": {
+      "bytes": 221,
+      "revision": "efd480af5a154a7651f2"
+    },
+    "/burrow-assets/countries/dj.svg": {
+      "bytes": 585,
+      "revision": "2a22d382f85cef20ba39"
+    },
+    "/burrow-assets/countries/dk.svg": {
+      "bytes": 236,
+      "revision": "d2847c0bd7a1fb97977e"
+    },
+    "/burrow-assets/countries/dm.svg": {
+      "bytes": 15787,
+      "revision": "0a4bf1a27390308c6267"
+    },
+    "/burrow-assets/countries/do.svg": {
+      "bytes": 40346,
+      "revision": "02e5f5efbc60a73716f7"
+    },
+    "/burrow-assets/countries/dz.svg": {
+      "bytes": 294,
+      "revision": "9ea0cf93222ab7b5e7b7"
+    },
+    "/burrow-assets/countries/ec.svg": {
+      "bytes": 28777,
+      "revision": "4472b0618e2f5e31d31d"
+    },
+    "/burrow-assets/countries/ee.svg": {
+      "bytes": 225,
+      "revision": "25642310e287fbdc02e1"
+    },
+    "/burrow-assets/countries/eg.svg": {
+      "bytes": 8726,
+      "revision": "3f85d1d2bdb03692ad68"
+    },
+    "/burrow-assets/countries/eh.svg": {
+      "bytes": 804,
+      "revision": "a957f2aedbb4178a7971"
+    },
+    "/burrow-assets/countries/er.svg": {
+      "bytes": 3158,
+      "revision": "64c98a80601fc019f9ca"
+    },
+    "/burrow-assets/countries/es.svg": {
+      "bytes": 80958,
+      "revision": "f9cfaff858e95f830733"
+    },
+    "/burrow-assets/countries/et.svg": {
+      "bytes": 1145,
+      "revision": "43d5922fff81ae1accda"
+    },
+    "/burrow-assets/countries/fi.svg": {
+      "bytes": 234,
+      "revision": "012edd984cf1879463c2"
+    },
+    "/burrow-assets/countries/fj.svg": {
+      "bytes": 24100,
+      "revision": "b23cbee897c889ce2d05"
+    },
+    "/burrow-assets/countries/fm.svg": {
+      "bytes": 771,
+      "revision": "23db3e9fe582cc8dd5d3"
+    },
+    "/burrow-assets/countries/fr.svg": {
+      "bytes": 241,
+      "revision": "a526851c372e3372b159"
+    },
+    "/burrow-assets/countries/ga.svg": {
+      "bytes": 271,
+      "revision": "f7b775c474b0331222ed"
+    },
+    "/burrow-assets/countries/gb.svg": {
+      "bytes": 504,
+      "revision": "c8be1e7208798a4ae692"
+    },
+    "/burrow-assets/countries/gd.svg": {
+      "bytes": 1712,
+      "revision": "eecc1f130ed02b2166c6"
+    },
+    "/burrow-assets/countries/ge.svg": {
+      "bytes": 1313,
+      "revision": "0280a1279c3d1d772f1e"
+    },
+    "/burrow-assets/countries/gh.svg": {
+      "bytes": 293,
+      "revision": "53c55ca455293bceecfe"
+    },
+    "/burrow-assets/countries/gm.svg": {
+      "bytes": 543,
+      "revision": "2aa3fad4e8820fb42386"
+    },
+    "/burrow-assets/countries/gn.svg": {
+      "bytes": 292,
+      "revision": "ee01e7dd4abb0a995980"
+    },
+    "/burrow-assets/countries/gq.svg": {
+      "bytes": 4941,
+      "revision": "61ddf0a98d1d4bf93c6e"
+    },
+    "/burrow-assets/countries/gr.svg": {
+      "bytes": 868,
+      "revision": "a184070f7678b06777be"
+    },
+    "/burrow-assets/countries/gt.svg": {
+      "bytes": 31352,
+      "revision": "a20814d011af90ab2e80"
+    },
+    "/burrow-assets/countries/gw.svg": {
+      "bytes": 846,
+      "revision": "6b81a234b51ceacb4b67"
+    },
+    "/burrow-assets/countries/gy.svg": {
+      "bytes": 493,
+      "revision": "5bd7a7b326efd9c28c3e"
+    },
+    "/burrow-assets/countries/hn.svg": {
+      "bytes": 1144,
+      "revision": "67130fa043e9d30dda76"
+    },
+    "/burrow-assets/countries/hr.svg": {
+      "bytes": 30732,
+      "revision": "3c98eae5ee93f0d75e10"
+    },
+    "/burrow-assets/countries/ht.svg": {
+      "bytes": 13301,
+      "revision": "d45f0285b56379b6816a"
+    },
+    "/burrow-assets/countries/hu.svg": {
+      "bytes": 264,
+      "revision": "4891ce591bf29b5b6860"
+    },
+    "/burrow-assets/countries/id.svg": {
+      "bytes": 178,
+      "revision": "5cd3acc4939dd7eae631"
+    },
+    "/burrow-assets/countries/ie.svg": {
+      "bytes": 289,
+      "revision": "f82568d70bd1624ff7ce"
+    },
+    "/burrow-assets/countries/il.svg": {
+      "bytes": 834,
+      "revision": "04a099ac4370b5e856f5"
+    },
+    "/burrow-assets/countries/in.svg": {
+      "bytes": 1090,
+      "revision": "91185efa1a9b52cdc0e4"
+    },
+    "/burrow-assets/countries/iq.svg": {
+      "bytes": 1420,
+      "revision": "073b07113d582dfea58f"
+    },
+    "/burrow-assets/countries/ir.svg": {
+      "bytes": 15397,
+      "revision": "cb363e09bafbff6de7c2"
+    },
+    "/burrow-assets/countries/is.svg": {
+      "bytes": 509,
+      "revision": "4ef2de6fb25ff5a16789"
+    },
+    "/burrow-assets/countries/it.svg": {
+      "bytes": 289,
+      "revision": "9fa88118818d9b64838f"
+    },
+    "/burrow-assets/countries/jm.svg": {
+      "bytes": 401,
+      "revision": "f837df1ac21a4c64be2c"
+    },
+    "/burrow-assets/countries/jo.svg": {
+      "bytes": 727,
+      "revision": "e3a570d5c50c15f4aca7"
+    },
+    "/burrow-assets/countries/jp.svg": {
+      "bytes": 470,
+      "revision": "bfea80baf9989383dc4b"
+    },
+    "/burrow-assets/countries/ke.svg": {
+      "bytes": 1421,
+      "revision": "699163d87382eb969d8a"
+    },
+    "/burrow-assets/countries/kg.svg": {
+      "bytes": 4743,
+      "revision": "b0cf3e6806af23d8712a"
+    },
+    "/burrow-assets/countries/kh.svg": {
+      "bytes": 7122,
+      "revision": "21a9681682a2158cab29"
+    },
+    "/burrow-assets/countries/ki.svg": {
+      "bytes": 5627,
+      "revision": "01206661587925daf1e5"
+    },
+    "/burrow-assets/countries/km.svg": {
+      "bytes": 1053,
+      "revision": "81e1befbbdeab3b2a4ec"
+    },
+    "/burrow-assets/countries/kn.svg": {
+      "bytes": 796,
+      "revision": "0832acb7396986c7ba99"
+    },
+    "/burrow-assets/countries/kp.svg": {
+      "bytes": 783,
+      "revision": "f79bc8b6502445b51fd6"
+    },
+    "/burrow-assets/countries/kr.svg": {
+      "bytes": 1061,
+      "revision": "7a6cd5b51d0e2841ed8b"
+    },
+    "/burrow-assets/countries/kw.svg": {
+      "bytes": 517,
+      "revision": "172a4281fdaf4b168471"
+    },
+    "/burrow-assets/countries/kz.svg": {
+      "bytes": 7094,
+      "revision": "381b22e4c287b13e191c"
+    },
+    "/burrow-assets/countries/la.svg": {
+      "bytes": 456,
+      "revision": "da591b989d90a90d03c7"
+    },
+    "/burrow-assets/countries/lb.svg": {
+      "bytes": 2770,
+      "revision": "94b12b3f1dc43809f935"
+    },
+    "/burrow-assets/countries/lc.svg": {
+      "bytes": 352,
+      "revision": "99645e005699eba454a0"
+    },
+    "/burrow-assets/countries/li.svg": {
+      "bytes": 7318,
+      "revision": "77a33513c5288a0f2044"
+    },
+    "/burrow-assets/countries/lk.svg": {
+      "bytes": 10724,
+      "revision": "ed3eee24d19872d6adce"
+    },
+    "/burrow-assets/countries/lr.svg": {
+      "bytes": 713,
+      "revision": "69f2ce4b9490ab3c94ca"
+    },
+    "/burrow-assets/countries/ls.svg": {
+      "bytes": 1133,
+      "revision": "83d2e4152ef06ed39f57"
+    },
+    "/burrow-assets/countries/lt.svg": {
+      "bytes": 439,
+      "revision": "dc0401993f6e14b3a58f"
+    },
+    "/burrow-assets/countries/lu.svg": {
+      "bytes": 225,
+      "revision": "a0a530e396ac2e2490d3"
+    },
+    "/burrow-assets/countries/lv.svg": {
+      "bytes": 263,
+      "revision": "d0d1ac1c0e301f808be3"
+    },
+    "/burrow-assets/countries/ly.svg": {
+      "bytes": 549,
+      "revision": "47d96b6e011cd540bdeb"
+    },
+    "/burrow-assets/countries/ma.svg": {
+      "bytes": 247,
+      "revision": "28cfcdecf9675b0a14fb"
+    },
+    "/burrow-assets/countries/mc.svg": {
+      "bytes": 234,
+      "revision": "690c23fe64b6ac717706"
+    },
+    "/burrow-assets/countries/md.svg": {
+      "bytes": 11126,
+      "revision": "987ca12a752ec2b3594c"
+    },
+    "/burrow-assets/countries/me.svg": {
+      "bytes": 56372,
+      "revision": "d284332e23ef88ae4f1b"
+    },
+    "/burrow-assets/countries/mg.svg": {
+      "bytes": 299,
+      "revision": "59246c21300e2456c0c5"
+    },
+    "/burrow-assets/countries/mh.svg": {
+      "bytes": 729,
+      "revision": "96d7c0b917a5c064636d"
+    },
+    "/burrow-assets/countries/mk.svg": {
+      "bytes": 379,
+      "revision": "22488dc890fe1e5f7a8b"
+    },
+    "/burrow-assets/countries/ml.svg": {
+      "bytes": 273,
+      "revision": "49e84081981f2b8ec245"
+    },
+    "/burrow-assets/countries/mm.svg": {
+      "bytes": 710,
+      "revision": "c0b2e23a7e202ff2ad69"
+    },
+    "/burrow-assets/countries/mn.svg": {
+      "bytes": 1397,
+      "revision": "92d5422514f63fc10800"
+    },
+    "/burrow-assets/countries/mr.svg": {
+      "bytes": 437,
+      "revision": "ea338a9f7744fb25c366"
+    },
+    "/burrow-assets/countries/mt.svg": {
+      "bytes": 13925,
+      "revision": "a2ad157eeb5f1bb92dc9"
+    },
+    "/burrow-assets/countries/mu.svg": {
+      "bytes": 316,
+      "revision": "51f86810118855ca9a0b"
+    },
+    "/burrow-assets/countries/mv.svg": {
+      "bytes": 286,
+      "revision": "5546d527d669b3935bbf"
+    },
+    "/burrow-assets/countries/mw.svg": {
+      "bytes": 3563,
+      "revision": "29a3e7057ec47f18bd8d"
+    },
+    "/burrow-assets/countries/mx.svg": {
+      "bytes": 84753,
+      "revision": "9dbc8ad8b35e52ce7cb6"
+    },
+    "/burrow-assets/countries/my.svg": {
+      "bytes": 1378,
+      "revision": "bb30e84a099d2d9dc286"
+    },
+    "/burrow-assets/countries/mz.svg": {
+      "bytes": 2563,
+      "revision": "ad91c2f8e6d6f80f19dc"
+    },
+    "/burrow-assets/countries/na.svg": {
+      "bytes": 993,
+      "revision": "caa43fcdebb595ebf980"
+    },
+    "/burrow-assets/countries/ne.svg": {
+      "bytes": 273,
+      "revision": "4b91653d53f76ddaf492"
+    },
+    "/burrow-assets/countries/ng.svg": {
+      "bytes": 257,
+      "revision": "b7a2a45a6499095efce4"
+    },
+    "/burrow-assets/countries/ni.svg": {
+      "bytes": 17249,
+      "revision": "b9dfe1fc2aded19b2796"
+    },
+    "/burrow-assets/countries/nl.svg": {
+      "bytes": 225,
+      "revision": "8f691f17fe70894537af"
+    },
+    "/burrow-assets/countries/no.svg": {
+      "bytes": 318,
+      "revision": "ceea17af051dceefd575"
+    },
+    "/burrow-assets/countries/np.svg": {
+      "bytes": 1005,
+      "revision": "b84c02e2fa659d0be6fc"
+    },
+    "/burrow-assets/countries/nr.svg": {
+      "bytes": 646,
+      "revision": "f1de4b06479d454bb0a2"
+    },
+    "/burrow-assets/countries/nu.svg": {
+      "bytes": 864,
+      "revision": "835c94f3f7aa08d717e2"
+    },
+    "/burrow-assets/countries/nz.svg": {
+      "bytes": 2172,
+      "revision": "794a2c8c09796090ab74"
+    },
+    "/burrow-assets/countries/om.svg": {
+      "bytes": 22223,
+      "revision": "3204f5aa802cf3b2b782"
+    },
+    "/burrow-assets/countries/pa.svg": {
+      "bytes": 521,
+      "revision": "5e034a8ad127c43b19f5"
+    },
+    "/burrow-assets/countries/pe.svg": {
+      "bytes": 186,
+      "revision": "e9dd299d453d9c173203"
+    },
+    "/burrow-assets/countries/pg.svg": {
+      "bytes": 1608,
+      "revision": "43e492331c192a947d9b"
+    },
+    "/burrow-assets/countries/ph.svg": {
+      "bytes": 1382,
+      "revision": "c3bd5e08ddc5f6dbdfa8"
+    },
+    "/burrow-assets/countries/pk.svg": {
+      "bytes": 725,
+      "revision": "89e851c0d541d8166b29"
+    },
+    "/burrow-assets/countries/pl.svg": {
+      "bytes": 215,
+      "revision": "06687a4b90fc00195d07"
+    },
+    "/burrow-assets/countries/ps.svg": {
+      "bytes": 276,
+      "revision": "5d95ca7526bf8edd90a9"
+    },
+    "/burrow-assets/countries/pt.svg": {
+      "bytes": 8001,
+      "revision": "a7a2cf0b44aaaaf4f3bd"
+    },
+    "/burrow-assets/countries/pw.svg": {
+      "bytes": 466,
+      "revision": "a61ab9d94f2968304eaf"
+    },
+    "/burrow-assets/countries/py.svg": {
+      "bytes": 16184,
+      "revision": "fe0968470b7910543b23"
+    },
+    "/burrow-assets/countries/qa.svg": {
+      "bytes": 354,
+      "revision": "fb955ef352ff3ba1ea98"
+    },
+    "/burrow-assets/countries/ro.svg": {
+      "bytes": 302,
+      "revision": "17a3a747fc5e63302aaa"
+    },
+    "/burrow-assets/countries/rs.svg": {
+      "bytes": 181634,
+      "revision": "b6e08e2eca1ec4c287e5"
+    },
+    "/burrow-assets/countries/ru.svg": {
+      "bytes": 225,
+      "revision": "7100aaae51ff3b6a2bf0"
+    },
+    "/burrow-assets/countries/rw.svg": {
+      "bytes": 755,
+      "revision": "9512100aa3e8079ed378"
+    },
+    "/burrow-assets/countries/sa.svg": {
+      "bytes": 9968,
+      "revision": "5738c8cfca5fea63587c"
+    },
+    "/burrow-assets/countries/sb.svg": {
+      "bytes": 940,
+      "revision": "b34eabf373af639cec1d"
+    },
+    "/burrow-assets/countries/sc.svg": {
+      "bytes": 317,
+      "revision": "30cdbe42a1aed2dab0b2"
+    },
+    "/burrow-assets/countries/sd.svg": {
+      "bytes": 505,
+      "revision": "25b3fa24693ccbb80991"
+    },
+    "/burrow-assets/countries/se.svg": {
+      "bytes": 209,
+      "revision": "b3b5071e6c1d4a0e3db8"
+    },
+    "/burrow-assets/countries/sg.svg": {
+      "bytes": 889,
+      "revision": "25de9044c2e2775f7ccf"
+    },
+    "/burrow-assets/countries/si.svg": {
+      "bytes": 1993,
+      "revision": "3a5e0cac44baaea6b6d8"
+    },
+    "/burrow-assets/countries/sk.svg": {
+      "bytes": 1182,
+      "revision": "578d0693bc9521433424"
+    },
+    "/burrow-assets/countries/sl.svg": {
+      "bytes": 272,
+      "revision": "d0c384b03a037f4eeb6c"
+    },
+    "/burrow-assets/countries/sm.svg": {
+      "bytes": 15683,
+      "revision": "fc3388637c187533a086"
+    },
+    "/burrow-assets/countries/sn.svg": {
+      "bytes": 421,
+      "revision": "6437db13c13fa5cc1b12"
+    },
+    "/burrow-assets/countries/so.svg": {
+      "bytes": 483,
+      "revision": "249e1acb87efcd0ef0f6"
+    },
+    "/burrow-assets/countries/sr.svg": {
+      "bytes": 312,
+      "revision": "5194a6af4e0d8a350ba7"
+    },
+    "/burrow-assets/countries/ss.svg": {
+      "bytes": 398,
+      "revision": "f7ac7017201841eee0b2"
+    },
+    "/burrow-assets/countries/st.svg": {
+      "bytes": 954,
+      "revision": "880c17f94cb564b1818f"
+    },
+    "/burrow-assets/countries/sv.svg": {
+      "bytes": 77273,
+      "revision": "4c2b4e2b8bbb85d6cb97"
+    },
+    "/burrow-assets/countries/sy.svg": {
+      "bytes": 366,
+      "revision": "04c5e853ade8f2e5585a"
+    },
+    "/burrow-assets/countries/sz.svg": {
+      "bytes": 4663,
+      "revision": "5d6399c149d143306981"
+    },
+    "/burrow-assets/countries/td.svg": {
+      "bytes": 271,
+      "revision": "19a278fbd88e7fa245b4"
+    },
+    "/burrow-assets/countries/tg.svg": {
+      "bytes": 708,
+      "revision": "f52b955fb48669d14999"
+    },
+    "/burrow-assets/countries/th.svg": {
+      "bytes": 284,
+      "revision": "329cc0d520536d6eb4b9"
+    },
+    "/burrow-assets/countries/tj.svg": {
+      "bytes": 1843,
+      "revision": "cd1afa9808833e498398"
+    },
+    "/burrow-assets/countries/tl.svg": {
+      "bytes": 611,
+      "revision": "09c763aa3e5a48e20923"
+    },
+    "/burrow-assets/countries/tm.svg": {
+      "bytes": 38349,
+      "revision": "378178e3d5c91c62dafd"
+    },
+    "/burrow-assets/countries/tn.svg": {
+      "bytes": 343,
+      "revision": "8e0274e5762a4d5f783e"
+    },
+    "/burrow-assets/countries/to.svg": {
+      "bytes": 352,
+      "revision": "b351703fccc1e08a13d2"
+    },
+    "/burrow-assets/countries/tr.svg": {
+      "bytes": 549,
+      "revision": "256a1d6afbedb9f73156"
+    },
+    "/burrow-assets/countries/tt.svg": {
+      "bytes": 304,
+      "revision": "04c13dcd0b3690f91e75"
+    },
+    "/burrow-assets/countries/tv.svg": {
+      "bytes": 1427,
+      "revision": "d94fa5f107cbacdba297"
+    },
+    "/burrow-assets/countries/tw.svg": {
+      "bytes": 2499,
+      "revision": "931757f06b9ee751fd1a"
+    },
+    "/burrow-assets/countries/tz.svg": {
+      "bytes": 548,
+      "revision": "fd317abae009fa3629c5"
+    },
+    "/burrow-assets/countries/ua.svg": {
+      "bytes": 234,
+      "revision": "b7892e2bee1b25eb5407"
+    },
+    "/burrow-assets/countries/ug.svg": {
+      "bytes": 3929,
+      "revision": "ab6aa03e1324d54ffbed"
+    },
+    "/burrow-assets/countries/us.svg": {
+      "bytes": 648,
+      "revision": "e7be4240cf5798792667"
+    },
+    "/burrow-assets/countries/uy.svg": {
+      "bytes": 1724,
+      "revision": "47656c0bf4961a1f7233"
+    },
+    "/burrow-assets/countries/uz.svg": {
+      "bytes": 1498,
+      "revision": "62ce6f1073416e8d3d59"
+    },
+    "/burrow-assets/countries/va.svg": {
+      "bytes": 28720,
+      "revision": "e0c5f2ab3c7cc99a89c8"
+    },
+    "/burrow-assets/countries/vc.svg": {
+      "bytes": 429,
+      "revision": "4e0a86447af4924dc11f"
+    },
+    "/burrow-assets/countries/ve.svg": {
+      "bytes": 1206,
+      "revision": "5712f1c63ba0bfa25a85"
+    },
+    "/burrow-assets/countries/vn.svg": {
+      "bytes": 490,
+      "revision": "2355037201315d74581a"
+    },
+    "/burrow-assets/countries/vu.svg": {
+      "bytes": 2006,
+      "revision": "57d3b67abf0e57ef73b7"
+    },
+    "/burrow-assets/countries/ws.svg": {
+      "bytes": 687,
+      "revision": "6b1a7ebcce97d75020af"
+    },
+    "/burrow-assets/countries/xk.svg": {
+      "bytes": 8267,
+      "revision": "290d7f74bc73f362f967"
+    },
+    "/burrow-assets/countries/ye.svg": {
+      "bytes": 287,
+      "revision": "4ad43705cb40095dc7dd"
+    },
+    "/burrow-assets/countries/za.svg": {
+      "bytes": 860,
+      "revision": "1755a5e16f1c9f5120e4"
+    },
+    "/burrow-assets/countries/zm.svg": {
+      "bytes": 5421,
+      "revision": "2753554062cd3761e53a"
+    },
+    "/burrow-assets/countries/zw.svg": {
+      "bytes": 6186,
+      "revision": "e27fcdcc882d7175cc4c"
+    },
+    "/burrow-assets/dinosaurs/acrocanthosaurus.jpg": {
+      "bytes": 336775,
+      "revision": "14534717cb52a90b8437"
+    },
+    "/burrow-assets/dinosaurs/albertosaurus.jpg": {
+      "bytes": 224725,
+      "revision": "049d29ca8b2e4bc3eaa7"
+    },
+    "/burrow-assets/dinosaurs/allosaurus.jpg": {
+      "bytes": 126461,
+      "revision": "3dc30a58cb48663dc95d"
+    },
+    "/burrow-assets/dinosaurs/amargasaurus.jpg": {
+      "bytes": 264004,
+      "revision": "8c86da91e29325faaab5"
+    },
+    "/burrow-assets/dinosaurs/ankylosaurus.png": {
+      "bytes": 348888,
+      "revision": "8fe8b88b740f2bdecfa0"
+    },
+    "/burrow-assets/dinosaurs/apatosaurus.jpg": {
+      "bytes": 76718,
+      "revision": "9055796c84289cea56d5"
+    },
+    "/burrow-assets/dinosaurs/archaeopteryx.jpg": {
+      "bytes": 140882,
+      "revision": "4143050dececcbdfca48"
+    },
+    "/burrow-assets/dinosaurs/argentinosaurus.jpg": {
+      "bytes": 45302,
+      "revision": "d0517de8ad567d469ea9"
+    },
+    "/burrow-assets/dinosaurs/baryonyx.jpg": {
+      "bytes": 173478,
+      "revision": "a2064fedc9bb8e17df19"
+    },
+    "/burrow-assets/dinosaurs/brachiosaurus.jpg": {
+      "bytes": 86973,
+      "revision": "a534583d5ee83d6b6a31"
+    },
+    "/burrow-assets/dinosaurs/brontosaurus.png": {
+      "bytes": 265137,
+      "revision": "38dbbd998c805facfe1c"
+    },
+    "/burrow-assets/dinosaurs/carnotaurus.jpg": {
+      "bytes": 209248,
+      "revision": "d199e2aa15e163245692"
+    },
+    "/burrow-assets/dinosaurs/ceratosaurus.jpg": {
+      "bytes": 116370,
+      "revision": "0e8c074566067f80ed18"
+    },
+    "/burrow-assets/dinosaurs/compsognathus.png": {
+      "bytes": 502848,
+      "revision": "27812ca62cbe9f2d6c39"
+    },
+    "/burrow-assets/dinosaurs/corythosaurus.png": {
+      "bytes": 316154,
+      "revision": "36c3309d168b194ed0cf"
+    },
+    "/burrow-assets/dinosaurs/deinonychus.png": {
+      "bytes": 323620,
+      "revision": "ec8ef563b64a1e76a3e5"
+    },
+    "/burrow-assets/dinosaurs/dilophosaurus.jpg": {
+      "bytes": 104750,
+      "revision": "ae05b14f2fb2f5a16669"
+    },
+    "/burrow-assets/dinosaurs/dimetrodon.jpg": {
+      "bytes": 326460,
+      "revision": "df43c790bdc7ed0b9d1b"
+    },
+    "/burrow-assets/dinosaurs/diplodocus.jpg": {
+      "bytes": 59714,
+      "revision": "29c2969cd8d1dabf649a"
+    },
+    "/burrow-assets/dinosaurs/edmontosaurus.png": {
+      "bytes": 303565,
+      "revision": "d3ce9ad8ca9c020fb7fc"
+    },
+    "/burrow-assets/dinosaurs/gallimimus.png": {
+      "bytes": 324702,
+      "revision": "d2a6987f67737af9fb2a"
+    },
+    "/burrow-assets/dinosaurs/giganotosaurus.jpg": {
+      "bytes": 121574,
+      "revision": "be280a3dd89eccc3d78b"
+    },
+    "/burrow-assets/dinosaurs/hadrosaurus.png": {
+      "bytes": 396678,
+      "revision": "c08f12706c03825e2e6c"
+    },
+    "/burrow-assets/dinosaurs/iguanodon.png": {
+      "bytes": 324513,
+      "revision": "f6bd2c644bb86b419153"
+    },
+    "/burrow-assets/dinosaurs/kentrosaurus.png": {
+      "bytes": 361661,
+      "revision": "dade2417f8fa48536eac"
+    },
+    "/burrow-assets/dinosaurs/lambeosaurus.jpg": {
+      "bytes": 188200,
+      "revision": "1f3c7b6dfae0bd81ce76"
+    },
+    "/burrow-assets/dinosaurs/maiasaura.jpg": {
+      "bytes": 191325,
+      "revision": "14f60c0ed481c500a560"
+    },
+    "/burrow-assets/dinosaurs/megalodon.jpg": {
+      "bytes": 158970,
+      "revision": "352aaec2d072dc9c4287"
+    },
+    "/burrow-assets/dinosaurs/mosasaurus.jpg": {
+      "bytes": 86188,
+      "revision": "5a4044d2209949e03b2a"
+    },
+    "/burrow-assets/dinosaurs/oviraptor.jpg": {
+      "bytes": 203498,
+      "revision": "fe5cf157b237f24c66f8"
+    },
+    "/burrow-assets/dinosaurs/pachycephalosaurus.jpg": {
+      "bytes": 81788,
+      "revision": "935af72e7c5b1e3d101f"
+    },
+    "/burrow-assets/dinosaurs/parasaurolophus.png": {
+      "bytes": 270167,
+      "revision": "30b3cee3546d42e375a9"
+    },
+    "/burrow-assets/dinosaurs/plesiosaurus.jpg": {
+      "bytes": 709479,
+      "revision": "482a2e18263cefcfb6f4"
+    },
+    "/burrow-assets/dinosaurs/protoceratops.png": {
+      "bytes": 548085,
+      "revision": "e6b15c5fd8b94814acfb"
+    },
+    "/burrow-assets/dinosaurs/pteranodon.png": {
+      "bytes": 3861484,
+      "revision": "c04fd8f617897c3690fb"
+    },
+    "/burrow-assets/dinosaurs/pterodactylus.png": {
+      "bytes": 285349,
+      "revision": "1667f999cdf1c4c4fc70"
+    },
+    "/burrow-assets/dinosaurs/quetzalcoatlus.png": {
+      "bytes": 1940135,
+      "revision": "3634abdadf69bd0cd5b3"
+    },
+    "/burrow-assets/dinosaurs/smilodon.jpg": {
+      "bytes": 161691,
+      "revision": "6240624ac8ffb449b59a"
+    },
+    "/burrow-assets/dinosaurs/spinosaurus.png": {
+      "bytes": 390209,
+      "revision": "a32f88f6dd4164c659c4"
+    },
+    "/burrow-assets/dinosaurs/stegosaurus.png": {
+      "bytes": 413728,
+      "revision": "d6c42f93c03e0d8d30a3"
+    },
+    "/burrow-assets/dinosaurs/suchomimus.png": {
+      "bytes": 269999,
+      "revision": "f289f3e82cb8913e233b"
+    },
+    "/burrow-assets/dinosaurs/therizinosaurus.jpg": {
+      "bytes": 109245,
+      "revision": "b55df195a1be9d9dede1"
+    },
+    "/burrow-assets/dinosaurs/triceratops.png": {
+      "bytes": 590873,
+      "revision": "599493ce9751690ee612"
+    },
+    "/burrow-assets/dinosaurs/tyrannosaurus-rex.jpg": {
+      "bytes": 116373,
+      "revision": "29562594e08631107068"
+    },
+    "/burrow-assets/dinosaurs/utahraptor.png": {
+      "bytes": 255028,
+      "revision": "bb943271629075f00360"
+    },
+    "/burrow-assets/dinosaurs/velociraptor.png": {
+      "bytes": 331660,
+      "revision": "6c17c1948b05d0c095ea"
+    },
+    "/burrow-assets/dinosaurs/woolly-mammoth.jpg": {
+      "bytes": 281421,
+      "revision": "73b5278dcbeccc52ab6b"
+    },
+    "/burrow-assets/hot-sauces/8-dragon.jpg": {
+      "bytes": 218049,
+      "revision": "7460cc3441027dc8c9c8"
+    },
+    "/burrow-assets/hot-sauces/akabanga-chili-oil.jpg": {
+      "bytes": 42307,
+      "revision": "7de212b292f46ccf8dd0"
+    },
+    "/burrow-assets/hot-sauces/apple-caraway.jpg": {
+      "bytes": 42477,
+      "revision": "3db8357b42dda3d35daa"
+    },
+    "/burrow-assets/hot-sauces/aprichot.jpg": {
+      "bytes": 48904,
+      "revision": "881e07ebf129ca2d3033"
+    },
+    "/burrow-assets/hot-sauces/arbol-scorpion.jpg": {
+      "bytes": 40927,
+      "revision": "9dc00fe6fc312f557f07"
+    },
+    "/burrow-assets/hot-sauces/balacco-reaper-oil.jpg": {
+      "bytes": 95229,
+      "revision": "8fc76742ab7ec2cfea56"
+    },
+    "/burrow-assets/hot-sauces/bang-bang-oil.jpg": {
+      "bytes": 42303,
+      "revision": "49242a4eec637646e6fe"
+    },
+    "/burrow-assets/hot-sauces/bravado-black-garlic-reaper.jpg": {
+      "bytes": 36145,
+      "revision": "519ddfeabc6d63e40647"
+    },
+    "/burrow-assets/hot-sauces/chairman-meows-revenge.jpg": {
+      "bytes": 41021,
+      "revision": "99b7c6a67ec409650c81"
+    },
+    "/burrow-assets/hot-sauces/chickpotle.jpg": {
+      "bytes": 173924,
+      "revision": "abfdf03efc66d0ba7f1d"
+    },
+    "/burrow-assets/hot-sauces/chile-crunch-original.jpg": {
+      "bytes": 107698,
+      "revision": "abb66e85235bee6943e3"
+    },
+    "/burrow-assets/hot-sauces/cholula-original.jpg": {
+      "bytes": 50320,
+      "revision": "84acdda45555b4b3fcf0"
+    },
+    "/burrow-assets/hot-sauces/classic-chili-maple.jpg": {
+      "bytes": 46869,
+      "revision": "cad1a49936a6c5a4d076"
+    },
+    "/burrow-assets/hot-sauces/classic-garlic-fresno.jpg": {
+      "bytes": 47881,
+      "revision": "0aefaaad08fb84e59124"
+    },
+    "/burrow-assets/hot-sauces/coffee-date.jpg": {
+      "bytes": 112847,
+      "revision": "28ce2d7716c30d0f8114"
+    },
+    "/burrow-assets/hot-sauces/creaper-choil.jpg": {
+      "bytes": 698597,
+      "revision": "adae7387667a696da328"
+    },
+    "/burrow-assets/hot-sauces/crema-macha.jpg": {
+      "bytes": 106261,
+      "revision": "b7491a6ac90023c62eb1"
+    },
+    "/burrow-assets/hot-sauces/crystal-original.jpg": {
+      "bytes": 47542,
+      "revision": "cab46b7915f0aa8114d3"
+    },
+    "/burrow-assets/hot-sauces/da-bomb-evolution.jpg": {
+      "bytes": 48030,
+      "revision": "8cfac8166d16addc7bb5"
+    },
+    "/burrow-assets/hot-sauces/el-yucateco-green-habanero.jpg": {
+      "bytes": 47591,
+      "revision": "d6e0a83acfb186698c4e"
+    },
+    "/burrow-assets/hot-sauces/elotes-loco-fire.jpg": {
+      "bytes": 106515,
+      "revision": "02abb8753790b41c56c0"
+    },
+    "/burrow-assets/hot-sauces/fermented-kimchi.jpg": {
+      "bytes": 36119,
+      "revision": "fd20fbdcb3cd16ab8727"
+    },
+    "/burrow-assets/hot-sauces/fly-by-jing-sichuan-chili-crisp.jpg": {
+      "bytes": 108602,
+      "revision": "d0ae69c7a5f4d8b1e35d"
+    },
+    "/burrow-assets/hot-sauces/franks-redhot-original.jpg": {
+      "bytes": 54122,
+      "revision": "9c6c31e2304b2d261ca3"
+    },
+    "/burrow-assets/hot-sauces/funken-yellow.jpg": {
+      "bytes": 105568,
+      "revision": "2f6da76c4f4d34bcc2c9"
+    },
+    "/burrow-assets/hot-sauces/gator-sauce.jpg": {
+      "bytes": 38348,
+      "revision": "ccafe9c3b8adf296e22d"
+    },
+    "/burrow-assets/hot-sauces/ghost-pepper-pear.jpg": {
+      "bytes": 40850,
+      "revision": "22af54bf3a1846922b43"
+    },
+    "/burrow-assets/hot-sauces/habamix-sorrento.jpg": {
+      "bytes": 26914,
+      "revision": "d7e675712838a5490aa6"
+    },
+    "/burrow-assets/hot-sauces/hellfire-fear-this.jpg": {
+      "bytes": 44236,
+      "revision": "da59068b4a245c13ea94"
+    },
+    "/burrow-assets/hot-sauces/hot-bergine.jpg": {
+      "bytes": 141381,
+      "revision": "4436ab3737480b6f3217"
+    },
+    "/burrow-assets/hot-sauces/hot-house-sauce.jpg": {
+      "bytes": 97916,
+      "revision": "62a8528865f1a6d67930"
+    },
+    "/burrow-assets/hot-sauces/hot-ones-number-8.jpg": {
+      "bytes": 253750,
+      "revision": "aa8d67b6df49ac389a95"
+    },
+    "/burrow-assets/hot-sauces/hot-ones-the-classic.jpg": {
+      "bytes": 46288,
+      "revision": "a14c80208c3ad49aaa07"
+    },
+    "/burrow-assets/hot-sauces/huy-fong-sriracha.jpg": {
+      "bytes": 45472,
+      "revision": "716cbab0dbda6304edda"
+    },
+    "/burrow-assets/hot-sauces/il-mig-plus.jpg": {
+      "bytes": 41455,
+      "revision": "7ee31482af0ca914dc8d"
+    },
+    "/burrow-assets/hot-sauces/jerk-scotch-bonnet.jpg": {
+      "bytes": 51469,
+      "revision": "9a3a7c2a8479e9ebee5f"
+    },
+    "/burrow-assets/hot-sauces/karma-lift-off.jpg": {
+      "bytes": 98052,
+      "revision": "589bd3528310d8c5dc9b"
+    },
+    "/burrow-assets/hot-sauces/lao-gan-ma-spicy-chili-crisp.jpg": {
+      "bytes": 85161,
+      "revision": "360c8c5d813e17f334a5"
+    },
+    "/burrow-assets/hot-sauces/last-dab-reaper-edition.jpg": {
+      "bytes": 49207,
+      "revision": "973184e7a0d9fc3da6f3"
+    },
+    "/burrow-assets/hot-sauces/last-dab-thermageddon.jpg": {
+      "bytes": 200640,
+      "revision": "090673af492f88c607ae"
+    },
+    "/burrow-assets/hot-sauces/last-dab-triple-x.jpg": {
+      "bytes": 53642,
+      "revision": "0aa846d02e2418ee59bd"
+    },
+    "/burrow-assets/hot-sauces/last-dab-xperience.jpg": {
+      "bytes": 58025,
+      "revision": "719d5cc2f64f60f8f8d8"
+    },
+    "/burrow-assets/hot-sauces/lee-kum-kee-chiu-chow-oil.jpg": {
+      "bytes": 92382,
+      "revision": "d671f8648a9d359c6df8"
+    },
+    "/burrow-assets/hot-sauces/los-calientes-barbacoa.jpg": {
+      "bytes": 57931,
+      "revision": "705e890ae91043a20086"
+    },
+    "/burrow-assets/hot-sauces/los-calientes-rojo.jpg": {
+      "bytes": 172535,
+      "revision": "6062bd59af5a12e12225"
+    },
+    "/burrow-assets/hot-sauces/los-calientes-verde.jpg": {
+      "bytes": 59477,
+      "revision": "880a6c4505d9a8bd0ace"
+    },
+    "/burrow-assets/hot-sauces/louisiana-original.jpg": {
+      "bytes": 42991,
+      "revision": "6cb0a8ed36ba88a606fa"
+    },
+    "/burrow-assets/hot-sauces/marie-sharps-belizean-heat.jpg": {
+      "bytes": 40952,
+      "revision": "9eb5a5fde12a1d5e1f35"
+    },
+    "/burrow-assets/hot-sauces/mr-naga-hot-pepper-pickle.jpg": {
+      "bytes": 90801,
+      "revision": "2442ed30025ddd91062d"
+    },
+    "/burrow-assets/hot-sauces/nandos-hot-peri-peri.jpg": {
+      "bytes": 32780,
+      "revision": "00174111a33d73c7a336"
+    },
+    "/burrow-assets/hot-sauces/ninja-napalm.jpg": {
+      "bytes": 48246,
+      "revision": "9a0e0a8f74a4e60ece4f"
+    },
+    "/burrow-assets/hot-sauces/passiflora.jpg": {
+      "bytes": 148513,
+      "revision": "40871b6aa4c034b20257"
+    },
+    "/burrow-assets/hot-sauces/peppers-up.jpg": {
+      "bytes": 57837,
+      "revision": "77388dca94695e3dd612"
+    },
+    "/burrow-assets/hot-sauces/pickled-garlic-sriracha.jpg": {
+      "bytes": 180432,
+      "revision": "4d096ebb1d8ba58f5993"
+    },
+    "/burrow-assets/hot-sauces/pikliz-n-scorpion.jpg": {
+      "bytes": 177517,
+      "revision": "8c7b48e2cb88648e3096"
+    },
+    "/burrow-assets/hot-sauces/piko-volkano.jpg": {
+      "bytes": 100742,
+      "revision": "53dd990914251bf648a8"
+    },
+    "/burrow-assets/hot-sauces/puckerbutt-the-reaper.jpg": {
+      "bytes": 41466,
+      "revision": "7c24739ae3bf2d112a26"
+    },
+    "/burrow-assets/hot-sauces/queen-majesty-sicilian-scorpion.jpg": {
+      "bytes": 52137,
+      "revision": "0f09a2ce3155da75dff3"
+    },
+    "/burrow-assets/hot-sauces/reaper-squeezins.jpg": {
+      "bytes": 30948,
+      "revision": "c2ec48f4a369de058fd7"
+    },
+    "/burrow-assets/hot-sauces/red-flag.jpg": {
+      "bytes": 39650,
+      "revision": "e82ab332989c8472daed"
+    },
+    "/burrow-assets/hot-sauces/s-b-la-yu-chili-oil.jpg": {
+      "bytes": 42767,
+      "revision": "0db1a621d165264c591f"
+    },
+    "/burrow-assets/hot-sauces/salt-gang-ghost-crisp.jpg": {
+      "bytes": 94428,
+      "revision": "d0fb1689da5db38520fc"
+    },
+    "/burrow-assets/hot-sauces/secret-aardvark-habanero.jpg": {
+      "bytes": 52606,
+      "revision": "fc7c92512d91a356ea5a"
+    },
+    "/burrow-assets/hot-sauces/seeing-double.jpg": {
+      "bytes": 45086,
+      "revision": "39559cffe53a1ad03ebd"
+    },
+    "/burrow-assets/hot-sauces/senor-lechuga-0006.jpg": {
+      "bytes": 65926,
+      "revision": "4e375e2d60231bddab01"
+    },
+    "/burrow-assets/hot-sauces/smoked-onion.jpg": {
+      "bytes": 50819,
+      "revision": "5c03e3ff148e960211e7"
+    },
+    "/burrow-assets/hot-sauces/suckerpunch.jpg": {
+      "bytes": 51259,
+      "revision": "671f54785ba3e22e0f5e"
+    },
+    "/burrow-assets/hot-sauces/tabasco-original.jpg": {
+      "bytes": 47102,
+      "revision": "c12b71b1c42f76ace362"
+    },
+    "/burrow-assets/hot-sauces/tapatio-original.jpg": {
+      "bytes": 37294,
+      "revision": "c4f603b79bfcda69c1ec"
+    },
+    "/burrow-assets/hot-sauces/texas-pete-original.jpg": {
+      "bytes": 51098,
+      "revision": "0e7df43202cce2bb58bf"
+    },
+    "/burrow-assets/hot-sauces/thats-what-shishito-said.jpg": {
+      "bytes": 167425,
+      "revision": "45f4f1adc076ed426c68"
+    },
+    "/burrow-assets/hot-sauces/tropical-amarillo.jpg": {
+      "bytes": 176559,
+      "revision": "4ef41668b96e2e717425"
+    },
+    "/burrow-assets/hot-sauces/valentina-original.jpg": {
+      "bytes": 40671,
+      "revision": "543fb45278f0ddac651c"
+    },
+    "/burrow-assets/hot-sauces/xxx-salsa-vibes.jpg": {
+      "bytes": 216891,
+      "revision": "1979e6d1d206dc84bf83"
+    },
+    "/burrow-assets/hot-sauces/zuzus-7-pot.jpg": {
+      "bytes": 44486,
+      "revision": "3a89bb1ffcfab3fef0f9"
+    },
+    "/burrow-assets/jets/a-10-thunderbolt-ii.jpg": {
+      "bytes": 104270,
+      "revision": "f833021c54e9c9462783"
+    },
+    "/burrow-assets/jets/av-8b-harrier-ii.jpg": {
+      "bytes": 134572,
+      "revision": "33bc95d9603985cd060a"
+    },
+    "/burrow-assets/jets/b-1-lancer.jpg": {
+      "bytes": 125342,
+      "revision": "25f2947f1840f28679bb"
+    },
+    "/burrow-assets/jets/b-2-spirit.jpg": {
+      "bytes": 60338,
+      "revision": "08648373df443ae08d39"
+    },
+    "/burrow-assets/jets/b-21-raider.jpg": {
+      "bytes": 91439,
+      "revision": "98835b9cb3c95c6a07ed"
+    },
+    "/burrow-assets/jets/b-52-stratofortress.jpg": {
+      "bytes": 144927,
+      "revision": "113d11c887cf7a55bd1c"
+    },
+    "/burrow-assets/jets/english-electric-lightning.jpg": {
+      "bytes": 68214,
+      "revision": "73dc37c7977f47920782"
+    },
+    "/burrow-assets/jets/eurofighter-typhoon.jpg": {
+      "bytes": 116470,
+      "revision": "9edcfcb2cfcc5a097e79"
+    },
+    "/burrow-assets/jets/f-117-nighthawk.jpg": {
+      "bytes": 131472,
+      "revision": "72c78b46afa72eb9137d"
+    },
+    "/burrow-assets/jets/f-14-tomcat.jpg": {
+      "bytes": 131222,
+      "revision": "43fc044db19ca0f26f93"
+    },
+    "/burrow-assets/jets/f-15-eagle.jpg": {
+      "bytes": 81269,
+      "revision": "70ae16b8abb4adf6118f"
+    },
+    "/burrow-assets/jets/f-15j.jpg": {
+      "bytes": 51292,
+      "revision": "6297aae73bc04129deca"
+    },
+    "/burrow-assets/jets/f-16-fighting-falcon.jpg": {
+      "bytes": 106194,
+      "revision": "234eef686a0dcb58d756"
+    },
+    "/burrow-assets/jets/f-22-raptor.jpg": {
+      "bytes": 96751,
+      "revision": "99e00f2803ce645d5d23"
+    },
+    "/burrow-assets/jets/f-35-lightning-ii.jpg": {
+      "bytes": 62618,
+      "revision": "faa491b8036d533f78c1"
+    },
+    "/burrow-assets/jets/f-4-phantom-ii.jpg": {
+      "bytes": 93043,
+      "revision": "a960925cfbda9bf2e4a2"
+    },
+    "/burrow-assets/jets/f-5.jpg": {
+      "bytes": 88814,
+      "revision": "4b5e4291497989387743"
+    },
+    "/burrow-assets/jets/f-a-18-hornet.jpg": {
+      "bytes": 132688,
+      "revision": "513139f65576fad89ae4"
+    },
+    "/burrow-assets/jets/f-a-18-super-hornet.jpg": {
+      "bytes": 59143,
+      "revision": "dffd04aa063d8f6d1e2a"
+    },
+    "/burrow-assets/jets/f-ck-1.jpg": {
+      "bytes": 74428,
+      "revision": "6544990403498f8fe046"
+    },
+    "/burrow-assets/jets/fc-31.jpg": {
+      "bytes": 32824,
+      "revision": "eb61e473cebffcc6a6f9"
+    },
+    "/burrow-assets/jets/hal-tejas.jpg": {
+      "bytes": 69646,
+      "revision": "cd1c51f7979e1b07d764"
+    },
+    "/burrow-assets/jets/hawker-harrier.jpg": {
+      "bytes": 178950,
+      "revision": "c2d6d7ae8fb0bdfbec7a"
+    },
+    "/burrow-assets/jets/hongdu-l-15.jpg": {
+      "bytes": 215594,
+      "revision": "483f1d7d33485a047ef6"
+    },
+    "/burrow-assets/jets/iai-kfir.jpg": {
+      "bytes": 100538,
+      "revision": "6debcae3365767e3beb6"
+    },
+    "/burrow-assets/jets/j-10.jpg": {
+      "bytes": 51167,
+      "revision": "3ceabadd3e91e3306276"
+    },
+    "/burrow-assets/jets/j-11.jpg": {
+      "bytes": 100618,
+      "revision": "fe23288f54c76d034a33"
+    },
+    "/burrow-assets/jets/j-16.jpg": {
+      "bytes": 49413,
+      "revision": "9f990b749f12201fa330"
+    },
+    "/burrow-assets/jets/j-20.jpg": {
+      "bytes": 150819,
+      "revision": "53e8f6a90731c86d9678"
+    },
+    "/burrow-assets/jets/jas-39-gripen.jpg": {
+      "bytes": 54090,
+      "revision": "5c8080ae88d80e350635"
+    },
+    "/burrow-assets/jets/l-39-albatros.jpg": {
+      "bytes": 224658,
+      "revision": "5a10412bdc2531a5d259"
+    },
+    "/burrow-assets/jets/mig-21.jpg": {
+      "bytes": 44640,
+      "revision": "836c241fa5c9b7702ba7"
+    },
+    "/burrow-assets/jets/mig-29.jpg": {
+      "bytes": 112527,
+      "revision": "6fec5a5fbadca7649a8d"
+    },
+    "/burrow-assets/jets/mig-31.jpg": {
+      "bytes": 140194,
+      "revision": "54ee361dbf80877deea3"
+    },
+    "/burrow-assets/jets/mirage-2000.jpg": {
+      "bytes": 113112,
+      "revision": "ff6582344f141133d808"
+    },
+    "/burrow-assets/jets/mirage-f1.jpg": {
+      "bytes": 94673,
+      "revision": "3cc1c51eaabfd0764934"
+    },
+    "/burrow-assets/jets/mitsubishi-f-2.jpg": {
+      "bytes": 70290,
+      "revision": "2c945e31c0ab233f1d8b"
+    },
+    "/burrow-assets/jets/panavia-tornado.jpg": {
+      "bytes": 85660,
+      "revision": "2ebd85b5ce84d21329dc"
+    },
+    "/burrow-assets/jets/rafale.jpg": {
+      "bytes": 134573,
+      "revision": "d460aec08dcdb70c43d6"
+    },
+    "/burrow-assets/jets/sepecat-jaguar.jpg": {
+      "bytes": 141084,
+      "revision": "5cb00b4737f4f1f6ce44"
+    },
+    "/burrow-assets/jets/sr-71-blackbird.jpg": {
+      "bytes": 242825,
+      "revision": "5968662291d63784622a"
+    },
+    "/burrow-assets/jets/su-27.jpg": {
+      "bytes": 45676,
+      "revision": "2f65998a121b36f2ee52"
+    },
+    "/burrow-assets/jets/su-34.jpg": {
+      "bytes": 61421,
+      "revision": "caf420367abb6296ec1b"
+    },
+    "/burrow-assets/jets/su-35.jpg": {
+      "bytes": 46828,
+      "revision": "62b4a53e1ceacd9b3481"
+    },
+    "/burrow-assets/jets/su-57.jpg": {
+      "bytes": 93090,
+      "revision": "cd80d5448af5e0c83f8e"
+    },
+    "/burrow-assets/jets/t-50-golden-eagle.jpg": {
+      "bytes": 103992,
+      "revision": "577dbb52f77c121fb7e1"
+    },
+    "/burrow-assets/jets/tu-160.jpg": {
+      "bytes": 78186,
+      "revision": "f6370edd7f104e8ed182"
+    },
+    "/burrow-assets/jets/tu-22m.jpg": {
+      "bytes": 44295,
+      "revision": "a938b31617ec5b18c279"
+    },
+    "/burrow-assets/jets/u-2.jpg": {
+      "bytes": 145868,
+      "revision": "d01b69eb55278005fd2f"
+    },
+    "/burrow-assets/jets/yak-130.jpg": {
+      "bytes": 53385,
+      "revision": "2a287b4d63916bde5521"
+    },
+    "/burrow-assets/peppers/aji-amarillo.jpg": {
+      "bytes": 122922,
+      "revision": "c4804ef44033c98f2a86"
+    },
+    "/burrow-assets/peppers/aji-angelo.jpg": {
+      "bytes": 539143,
+      "revision": "d10de7db2606f349b904"
+    },
+    "/burrow-assets/peppers/aji-ayuyo.jpg": {
+      "bytes": 112405,
+      "revision": "1bfb2d47e730dcb400ef"
+    },
+    "/burrow-assets/peppers/aji-benito.jpg": {
+      "bytes": 286322,
+      "revision": "10d3e76b8eebb38029dd"
+    },
+    "/burrow-assets/peppers/aji-charapita.jpg": {
+      "bytes": 372784,
+      "revision": "bd555093f9f75a489908"
+    },
+    "/burrow-assets/peppers/aji-cito.jpg": {
+      "bytes": 76870,
+      "revision": "acac5c417ac22c9bc36f"
+    },
+    "/burrow-assets/peppers/aji-confusion.jpg": {
+      "bytes": 381978,
+      "revision": "a7c3226f864c69178cf1"
+    },
+    "/burrow-assets/peppers/aji-cristal.jpg": {
+      "bytes": 108800,
+      "revision": "a1f8cce3163e4cc65ad9"
+    },
+    "/burrow-assets/peppers/aji-delight.jpg": {
+      "bytes": 720961,
+      "revision": "0da0dd0295318f02428f"
+    },
+    "/burrow-assets/peppers/aji-dulce.jpg": {
+      "bytes": 133219,
+      "revision": "7756ebd367a4542b691c"
+    },
+    "/burrow-assets/peppers/aji-fantasy.jpg": {
+      "bytes": 241116,
+      "revision": "1d7778a072f12f4960b9"
+    },
+    "/burrow-assets/peppers/aji-flor-morado.jpg": {
+      "bytes": 482948,
+      "revision": "9291da0e42fce7fc8f24"
+    },
+    "/burrow-assets/peppers/aji-habanero.jpg": {
+      "bytes": 57793,
+      "revision": "0584be421948174047cd"
+    },
+    "/burrow-assets/peppers/aji-limo.jpg": {
+      "bytes": 383085,
+      "revision": "2335db9add9ae98704ff"
+    },
+    "/burrow-assets/peppers/aji-mango.jpg": {
+      "bytes": 70376,
+      "revision": "c9fc5fe954ee673da3b7"
+    },
+    "/burrow-assets/peppers/aji-norteno.jpg": {
+      "bytes": 498241,
+      "revision": "92985708a2de24104a92"
+    },
+    "/burrow-assets/peppers/aji-omnicolor.jpg": {
+      "bytes": 76349,
+      "revision": "6d4c2e1ab51f851dd09d"
+    },
+    "/burrow-assets/peppers/aji-panca.jpg": {
+      "bytes": 149661,
+      "revision": "f6986a76db17e7e738bb"
+    },
+    "/burrow-assets/peppers/aji-pineapple.jpg": {
+      "bytes": 82342,
+      "revision": "8c9beec26365396a8265"
+    },
+    "/burrow-assets/peppers/aji-rojo.jpg": {
+      "bytes": 329013,
+      "revision": "706e6cd22cb7c0cb4c0c"
+    },
+    "/burrow-assets/peppers/aji-sivri.jpg": {
+      "bytes": 98612,
+      "revision": "fc413cdec64a60b42c0b"
+    },
+    "/burrow-assets/peppers/aleppo.jpg": {
+      "bytes": 88212,
+      "revision": "e1d733df93a5114737da"
+    },
+    "/burrow-assets/peppers/alma-paprika.jpg": {
+      "bytes": 13654,
+      "revision": "40cf1f89241b70ba605c"
+    },
+    "/burrow-assets/peppers/anaheim.jpg": {
+      "bytes": 285438,
+      "revision": "cd4cdf78342f5cc7c300"
+    },
+    "/burrow-assets/peppers/ancho.jpg": {
+      "bytes": 263781,
+      "revision": "a32fe92603402e3a72f0"
+    },
+    "/burrow-assets/peppers/armageddon.png": {
+      "bytes": 2044397,
+      "revision": "8442d9e62b34ddc0d5fd"
+    },
+    "/burrow-assets/peppers/banana-pepper.jpg": {
+      "bytes": 356315,
+      "revision": "24cc530169e3631a672e"
+    },
+    "/burrow-assets/peppers/bell-pepper.jpg": {
+      "bytes": 517697,
+      "revision": "96f878d1c8aad0848623"
+    },
+    "/burrow-assets/peppers/biquinho.jpg": {
+      "bytes": 91231,
+      "revision": "093c4841f9d283adbf39"
+    },
+    "/burrow-assets/peppers/bishop-crown.jpg": {
+      "bytes": 103305,
+      "revision": "5178126f7d38ebb797cb"
+    },
+    "/burrow-assets/peppers/black-pearl.jpg": {
+      "bytes": 284124,
+      "revision": "26a79a0d3f351038b40e"
+    },
+    "/burrow-assets/peppers/bolivian-rainbow.jpg": {
+      "bytes": 175304,
+      "revision": "1936d6d33c455080c171"
+    },
+    "/burrow-assets/peppers/brain-strain.jpg": {
+      "bytes": 54641,
+      "revision": "fb447e49b4185b0decf3"
+    },
+    "/burrow-assets/peppers/brazilian-starfish.jpg": {
+      "bytes": 63353,
+      "revision": "ec696aef373dd058395d"
+    },
+    "/burrow-assets/peppers/bulgarian-carrot.jpg": {
+      "bytes": 71182,
+      "revision": "3073eb4a022b5a9e1dc7"
+    },
+    "/burrow-assets/peppers/caribbean-red.jpg": {
+      "bytes": 109601,
+      "revision": "804830b90bdd298f4629"
+    },
+    "/burrow-assets/peppers/carmen-italian-sweet.jpg": {
+      "bytes": 30669,
+      "revision": "547fe0a1d7b4bdedd2d2"
+    },
+    "/burrow-assets/peppers/carolina-reaper.jpg": {
+      "bytes": 199617,
+      "revision": "24e6e91e264bc5746aef"
+    },
+    "/burrow-assets/peppers/cascabel.jpg": {
+      "bytes": 204138,
+      "revision": "36c57cb9b88b16878d55"
+    },
+    "/burrow-assets/peppers/cascabella.jpg": {
+      "bytes": 113885,
+      "revision": "725506b6ad392aa0ddca"
+    },
+    "/burrow-assets/peppers/cayenne.jpg": {
+      "bytes": 167105,
+      "revision": "73d0497bd798e41e9607"
+    },
+    "/burrow-assets/peppers/cheiro-roxa.jpg": {
+      "bytes": 213896,
+      "revision": "af3f0179668227fa0b0b"
+    },
+    "/burrow-assets/peppers/cherry-pepper.jpg": {
+      "bytes": 100792,
+      "revision": "99df041dcfaa5edcc160"
+    },
+    "/burrow-assets/peppers/chilaca.jpg": {
+      "bytes": 34024,
+      "revision": "0a3b2f5af9fc57acfe90"
+    },
+    "/burrow-assets/peppers/chile-de-arbol.jpg": {
+      "bytes": 164024,
+      "revision": "b4f81135842d2db2449c"
+    },
+    "/burrow-assets/peppers/chilhuacle-amarillo.jpg": {
+      "bytes": 104352,
+      "revision": "4eb0306535acb1b6c123"
+    },
+    "/burrow-assets/peppers/chiltepin.jpg": {
+      "bytes": 305212,
+      "revision": "02573d633b29de1abe19"
+    },
+    "/burrow-assets/peppers/chimayo.jpg": {
+      "bytes": 55535,
+      "revision": "242f09a19509b1ef39a7"
+    },
+    "/burrow-assets/peppers/chinese-five-color.jpg": {
+      "bytes": 163130,
+      "revision": "24202af6d732dfe7b63c"
+    },
+    "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg": {
+      "bytes": 379648,
+      "revision": "4458e932aaae45d77225"
+    },
+    "/burrow-assets/peppers/chocolate-bhutlah.jpg": {
+      "bytes": 452274,
+      "revision": "ab23200099a802972c57"
+    },
+    "/burrow-assets/peppers/chocolate-ghost.png": {
+      "bytes": 2480161,
+      "revision": "e86f5ee7ddc5750ad93b"
+    },
+    "/burrow-assets/peppers/chocolate-habanero.jpg": {
+      "bytes": 73467,
+      "revision": "a79e7203a161d5a77ab7"
+    },
+    "/burrow-assets/peppers/chocolate-moruga-scorpion.png": {
+      "bytes": 2667531,
+      "revision": "724cc1392fe1dc1d56ba"
+    },
+    "/burrow-assets/peppers/chocolate-rocoto-x.png": {
+      "bytes": 2605234,
+      "revision": "3c95573a5b25a77393fd"
+    },
+    "/burrow-assets/peppers/chocolate-scotch-bonnet.png": {
+      "bytes": 2228133,
+      "revision": "f17613f4f1624d33df6a"
+    },
+    "/burrow-assets/peppers/corno-di-toro.jpg": {
+      "bytes": 104645,
+      "revision": "4e529482f95cc710e135"
+    },
+    "/burrow-assets/peppers/cowhorn.jpg": {
+      "bytes": 89790,
+      "revision": "f66dbfb96954e3033db9"
+    },
+    "/burrow-assets/peppers/criolla-sella.jpg": {
+      "bytes": 1031043,
+      "revision": "8f9d261739c0cbf3e4c8"
+    },
+    "/burrow-assets/peppers/cubanelle.jpg": {
+      "bytes": 329850,
+      "revision": "e9ac7b6985d3b6ca11db"
+    },
+    "/burrow-assets/peppers/datil.jpg": {
+      "bytes": 403560,
+      "revision": "fdb391670af82d07a232"
+    },
+    "/burrow-assets/peppers/devils-tongue.jpg": {
+      "bytes": 73368,
+      "revision": "eb1481adb29ccd8d1ff2"
+    },
+    "/burrow-assets/peppers/dolmalik.jpg": {
+      "bytes": 182505,
+      "revision": "ee5dd1b502fa4eab5f2d"
+    },
+    "/burrow-assets/peppers/dorset-naga.jpg": {
+      "bytes": 47099,
+      "revision": "9655f5bb95557179ff85"
+    },
+    "/burrow-assets/peppers/doux-des-landes.jpg": {
+      "bytes": 60629,
+      "revision": "a7949eb8f5da2be73d5f"
+    },
+    "/burrow-assets/peppers/dragons-breath.jpg": {
+      "bytes": 112951,
+      "revision": "04d3c16e61df385e3a29"
+    },
+    "/burrow-assets/peppers/dundicut.jpg": {
+      "bytes": 116823,
+      "revision": "c27e92d90037192053ca"
+    },
+    "/burrow-assets/peppers/espelette.jpg": {
+      "bytes": 120415,
+      "revision": "2e6ee3df9c18f872bfe4"
+    },
+    "/burrow-assets/peppers/fatalii.jpg": {
+      "bytes": 349758,
+      "revision": "15dda0fe3bd0e4bcfe26"
+    },
+    "/burrow-assets/peppers/fish-pepper.jpg": {
+      "bytes": 508713,
+      "revision": "1aac9dad9c4464387409"
+    },
+    "/burrow-assets/peppers/fresno.jpg": {
+      "bytes": 148093,
+      "revision": "56d376d6e22be688f2ab"
+    },
+    "/burrow-assets/peppers/gator-jigsaw.jpg": {
+      "bytes": 394359,
+      "revision": "154c693c8a81e69be1c6"
+    },
+    "/burrow-assets/peppers/ghost-breath.jpg": {
+      "bytes": 441608,
+      "revision": "9af60d1f98fe53ee96e6"
+    },
+    "/burrow-assets/peppers/ghost-pepper.jpg": {
+      "bytes": 194637,
+      "revision": "44afed198a85dafa47c7"
+    },
+    "/burrow-assets/peppers/goat-pepper.jpg": {
+      "bytes": 961502,
+      "revision": "9868dc35cbab39350d78"
+    },
+    "/burrow-assets/peppers/goat-trail.png": {
+      "bytes": 2199213,
+      "revision": "cbbe44819991b3fedc69"
+    },
+    "/burrow-assets/peppers/guajillo.jpg": {
+      "bytes": 119926,
+      "revision": "023c3c6363a6f315c2bd"
+    },
+    "/burrow-assets/peppers/guntur-sannam.jpg": {
+      "bytes": 284713,
+      "revision": "af0744e463ee77b4b1ee"
+    },
+    "/burrow-assets/peppers/gypsy-pepper.jpg": {
+      "bytes": 54568,
+      "revision": "a7645ed19690def4dc06"
+    },
+    "/burrow-assets/peppers/habanada.jpg": {
+      "bytes": 86022,
+      "revision": "253c302043060d7fcb4a"
+    },
+    "/burrow-assets/peppers/habanero.jpg": {
+      "bytes": 165785,
+      "revision": "8fb21c8efa56f079198b"
+    },
+    "/burrow-assets/peppers/hatch-chile.jpg": {
+      "bytes": 411290,
+      "revision": "f4afbdf2d34a6931328c"
+    },
+    "/burrow-assets/peppers/hungarian-wax.jpg": {
+      "bytes": 294437,
+      "revision": "ab8d58f72d7c92baa7b3"
+    },
+    "/burrow-assets/peppers/italian-wax.jpg": {
+      "bytes": 100663,
+      "revision": "7c2b59fa17643870ade2"
+    },
+    "/burrow-assets/peppers/jalapeno.jpg": {
+      "bytes": 1173476,
+      "revision": "1efe9075a99269ea6a59"
+    },
+    "/burrow-assets/peppers/jimmy-nardello.png": {
+      "bytes": 1255933,
+      "revision": "309bc427382bedbc2836"
+    },
+    "/burrow-assets/peppers/kashmiri-chili.jpg": {
+      "bytes": 236333,
+      "revision": "17810b0a60fb134d9be7"
+    },
+    "/burrow-assets/peppers/komodo-dragon.jpg": {
+      "bytes": 127587,
+      "revision": "2409f56dc35bdea0896e"
+    },
+    "/burrow-assets/peppers/lemon-drop.jpg": {
+      "bytes": 598873,
+      "revision": "57b83bb971f943f7f9f2"
+    },
+    "/burrow-assets/peppers/madame-jeanette.jpg": {
+      "bytes": 437149,
+      "revision": "0897314ce4990234f798"
+    },
+    "/burrow-assets/peppers/malagueta.jpg": {
+      "bytes": 429779,
+      "revision": "fd2f72c67196fe1325ac"
+    },
+    "/burrow-assets/peppers/manzano.jpg": {
+      "bytes": 39113,
+      "revision": "d6e7df5e1a6872a27ef4"
+    },
+    "/burrow-assets/peppers/mattapeno.jpg": {
+      "bytes": 98458,
+      "revision": "b8d71c44fd07a005505a"
+    },
+    "/burrow-assets/peppers/mirasol.jpg": {
+      "bytes": 91684,
+      "revision": "f51a528f217c20209f0d"
+    },
+    "/burrow-assets/peppers/moruga-red.png": {
+      "bytes": 2461020,
+      "revision": "9b800a304424ad8539df"
+    },
+    "/burrow-assets/peppers/mulato.jpg": {
+      "bytes": 710581,
+      "revision": "f8798f6e565b174ae4d7"
+    },
+    "/burrow-assets/peppers/mustard-seven-pot.jpg": {
+      "bytes": 318974,
+      "revision": "582dec61cd512da8f6b1"
+    },
+    "/burrow-assets/peppers/naga-jolokia-closeup.jpg": {
+      "bytes": 143507,
+      "revision": "4bcf517b3dd6b8127f11"
+    },
+    "/burrow-assets/peppers/naga-jolokia-fruiting-plant.jpg": {
+      "bytes": 336985,
+      "revision": "9f582f1a365982b1e312"
+    },
+    "/burrow-assets/peppers/naga-jolokia.png": {
+      "bytes": 1902105,
+      "revision": "9235b35ffb3f4fe5dd50"
+    },
+    "/burrow-assets/peppers/naga-morich.jpg": {
+      "bytes": 83234,
+      "revision": "b23d7bfd0363ebe8a1d3"
+    },
+    "/burrow-assets/peppers/naga-viper.jpg": {
+      "bytes": 271736,
+      "revision": "e55bb00bac8aaaa698a4"
+    },
+    "/burrow-assets/peppers/new-mexico-chile.jpg": {
+      "bytes": 259697,
+      "revision": "69717f8d7f0026f124d1"
+    },
+    "/burrow-assets/peppers/numex-twilight.jpg": {
+      "bytes": 171464,
+      "revision": "cfa311e98e97b4677071"
+    },
+    "/burrow-assets/peppers/orange-aji-fantasy.jpg": {
+      "bytes": 305027,
+      "revision": "052a2a7f14c0eaa30641"
+    },
+    "/burrow-assets/peppers/orange-butch-t.png": {
+      "bytes": 2165678,
+      "revision": "5307c8034ed7537cbe61"
+    },
+    "/burrow-assets/peppers/orange-seven-pot.jpg": {
+      "bytes": 381549,
+      "revision": "a90e4579c3ef58fa04f6"
+    },
+    "/burrow-assets/peppers/padron.jpg": {
+      "bytes": 164015,
+      "revision": "9d69d26371e8dc8deed4"
+    },
+    "/burrow-assets/peppers/pasilla.jpg": {
+      "bytes": 86525,
+      "revision": "9f5df89ec0734bb36f2b"
+    },
+    "/burrow-assets/peppers/peach-aribibi-gusano.jpg": {
+      "bytes": 85782,
+      "revision": "cbff7983d9a9aa72f43b"
+    },
+    "/burrow-assets/peppers/peachadew.jpg": {
+      "bytes": 301837,
+      "revision": "afe6958fa220a739f9b6"
+    },
+    "/burrow-assets/peppers/peppapeach-stripey.jpg": {
+      "bytes": 369604,
+      "revision": "e64e74b62e75681a8b29"
+    },
+    "/burrow-assets/peppers/pepper-x.png": {
+      "bytes": 1221798,
+      "revision": "fdd92befc3f780ddd494"
+    },
+    "/burrow-assets/peppers/pepper-y.png": {
+      "bytes": 2041357,
+      "revision": "90bcbd2605b72f719dc4"
+    },
+    "/burrow-assets/peppers/pepperoncini.jpg": {
+      "bytes": 200578,
+      "revision": "995b4e0536aee1a01a94"
+    },
+    "/burrow-assets/peppers/pequin.jpg": {
+      "bytes": 399413,
+      "revision": "5c97c775fc4d2fc43228"
+    },
+    "/burrow-assets/peppers/peter-pepper.jpg": {
+      "bytes": 84343,
+      "revision": "1207d49244a5564cdfe4"
+    },
+    "/burrow-assets/peppers/piccante-calabrese.jpg": {
+      "bytes": 222800,
+      "revision": "dceaa749d34c5d254a53"
+    },
+    "/burrow-assets/peppers/piment-de-bresse.jpg": {
+      "bytes": 134330,
+      "revision": "97acd1239e649e41833a"
+    },
+    "/burrow-assets/peppers/pink-tiger.jpg": {
+      "bytes": 392358,
+      "revision": "091da91669db69391729"
+    },
+    "/burrow-assets/peppers/piquillo.jpg": {
+      "bytes": 134613,
+      "revision": "9bd3b0fe1f12d592c537"
+    },
+    "/burrow-assets/peppers/piri-piri.jpg": {
+      "bytes": 436161,
+      "revision": "108c3f12b6f914ddd5af"
+    },
+    "/burrow-assets/peppers/poblano.jpg": {
+      "bytes": 143132,
+      "revision": "5a1e80a22c150b365841"
+    },
+    "/burrow-assets/peppers/purple-beauty.jpg": {
+      "bytes": 84334,
+      "revision": "e1697397a03fcb47989c"
+    },
+    "/burrow-assets/peppers/purple-jalapeno.jpg": {
+      "bytes": 74226,
+      "revision": "b739d6450c7bcf7815e9"
+    },
+    "/burrow-assets/peppers/purple-taj-mahal.jpg": {
+      "bytes": 336862,
+      "revision": "61c2c3871d82ea9d1809"
+    },
+    "/burrow-assets/peppers/purple-thai.jpg": {
+      "bytes": 74757,
+      "revision": "73c19cb3bd08542a407e"
+    },
+    "/burrow-assets/peppers/purple-tiger.jpg": {
+      "bytes": 58314,
+      "revision": "77e9b4e8c2f116c73f43"
+    },
+    "/burrow-assets/peppers/red-primotalii.jpg": {
+      "bytes": 328813,
+      "revision": "b6f834747be0571df4d1"
+    },
+    "/burrow-assets/peppers/red-savina.jpg": {
+      "bytes": 93174,
+      "revision": "8f5516dc1a0637619abc"
+    },
+    "/burrow-assets/peppers/red-thunder-mountain-longhorn.jpg": {
+      "bytes": 569104,
+      "revision": "63f542a9b093b4aab0f3"
+    },
+    "/burrow-assets/peppers/rocoto.jpg": {
+      "bytes": 109031,
+      "revision": "fbd959ea9049549057bc"
+    },
+    "/burrow-assets/peppers/santa-fe-grande.jpg": {
+      "bytes": 62856,
+      "revision": "f4fba85871e7b1d7dd23"
+    },
+    "/burrow-assets/peppers/santaka.jpg": {
+      "bytes": 453527,
+      "revision": "a1bcdb7726cae51ee61e"
+    },
+    "/burrow-assets/peppers/scotch-bonnet.jpg": {
+      "bytes": 130876,
+      "revision": "155b46df3abaace8aa5d"
+    },
+    "/burrow-assets/peppers/serrano.jpg": {
+      "bytes": 493308,
+      "revision": "d889500fab966f0d9b3d"
+    },
+    "/burrow-assets/peppers/seven-pot-barrackpore.jpg": {
+      "bytes": 80510,
+      "revision": "47838b00e464dcfc06cb"
+    },
+    "/burrow-assets/peppers/seven-pot-douglah.jpg": {
+      "bytes": 81155,
+      "revision": "f5c20d83bf2edfced5c9"
+    },
+    "/burrow-assets/peppers/seven-pot-primo.jpg": {
+      "bytes": 318157,
+      "revision": "a97ba11f490fc00bb28d"
+    },
+    "/burrow-assets/peppers/shishito.jpg": {
+      "bytes": 397017,
+      "revision": "a39141e2550cd28f8baf"
+    },
+    "/burrow-assets/peppers/sugar-rush-cream.jpg": {
+      "bytes": 299759,
+      "revision": "ea222a6687530a3f3be5"
+    },
+    "/burrow-assets/peppers/sugar-rush-peach.jpg": {
+      "bytes": 44214,
+      "revision": "32f0772637a2525fee2e"
+    },
+    "/burrow-assets/peppers/sugar-rush-stripey.jpg": {
+      "bytes": 77224,
+      "revision": "2b18e4c4523c6e9c6e55"
+    },
+    "/burrow-assets/peppers/super-chilli.png": {
+      "bytes": 2156247,
+      "revision": "fd35a4872e4269b7e61e"
+    },
+    "/burrow-assets/peppers/tabasco.jpg": {
+      "bytes": 297240,
+      "revision": "a49e9b4965fa27ce3131"
+    },
+    "/burrow-assets/peppers/tangerine-dream.png": {
+      "bytes": 2322973,
+      "revision": "87713b35aa75a87eab38"
+    },
+    "/burrow-assets/peppers/thai-chili.jpg": {
+      "bytes": 191449,
+      "revision": "2c24745c7df9a0b96f77"
+    },
+    "/burrow-assets/peppers/the-noah.png": {
+      "bytes": 2121637,
+      "revision": "7ed9c31c4cfd48b962e3"
+    },
+    "/burrow-assets/peppers/thors-thunderbolt.jpg": {
+      "bytes": 422505,
+      "revision": "62d13968e1417f1c5862"
+    },
+    "/burrow-assets/peppers/trinidad-perfume.jpg": {
+      "bytes": 627558,
+      "revision": "51fc7ed51c8951e656a8"
+    },
+    "/burrow-assets/peppers/trinidad-scorpion-butch-t.png": {
+      "bytes": 1947372,
+      "revision": "6ab446789be530fbdf14"
+    },
+    "/burrow-assets/peppers/trinidad-scorpion.jpg": {
+      "bytes": 157406,
+      "revision": "565a0d8d79d7bf488321"
+    },
+    "/burrow-assets/peppers/white-aji-fantasy.jpg": {
+      "bytes": 356219,
+      "revision": "7404d1f6c5eebd6d82cc"
+    },
+    "/burrow-assets/peppers/white-carolina-reaper.jpg": {
+      "bytes": 374179,
+      "revision": "4cb191ca97495a5430da"
+    },
+    "/burrow-assets/peppers/wiri-wiri.jpg": {
+      "bytes": 165371,
+      "revision": "5acf0d0c38e07b9a860e"
+    },
+    "/burrow-assets/peppers/yellow-bhut-assam.png": {
+      "bytes": 860739,
+      "revision": "0fecfbabaa4464f4bde1"
+    },
+    "/burrow-assets/sharks/angelshark.jpg": {
+      "bytes": 96325,
+      "revision": "d83cb333abc7fa3ccc35"
+    },
+    "/burrow-assets/sharks/bamboo-shark.jpg": {
+      "bytes": 132814,
+      "revision": "6680acb45fc798698c51"
+    },
+    "/burrow-assets/sharks/basking-shark.jpg": {
+      "bytes": 111877,
+      "revision": "5aa2b8f210f8feded335"
+    },
+    "/burrow-assets/sharks/bigeye-thresher.jpg": {
+      "bytes": 84123,
+      "revision": "13a632c0b045f37f58a8"
+    },
+    "/burrow-assets/sharks/blacktip-reef.jpg": {
+      "bytes": 161583,
+      "revision": "1083b4fadab9388bde69"
+    },
+    "/burrow-assets/sharks/blue-shark.jpg": {
+      "bytes": 39209,
+      "revision": "9012a83055cd3daf3e93"
+    },
+    "/burrow-assets/sharks/bonnethead.jpg": {
+      "bytes": 79839,
+      "revision": "620c44603358a94f448f"
+    },
+    "/burrow-assets/sharks/bull-shark.jpg": {
+      "bytes": 76159,
+      "revision": "8d2c51356e4fcc0ff0ec"
+    },
+    "/burrow-assets/sharks/caribbean-reef.jpg": {
+      "bytes": 33379,
+      "revision": "61b05fe9d80f88d01928"
+    },
+    "/burrow-assets/sharks/common-thresher.png": {
+      "bytes": 120922,
+      "revision": "b9df6ee661386fac6bad"
+    },
+    "/burrow-assets/sharks/cookiecutter.jpg": {
+      "bytes": 137751,
+      "revision": "d752e416eb786372351a"
+    },
+    "/burrow-assets/sharks/dunkleosteus.jpg": {
+      "bytes": 91645,
+      "revision": "4976c0b3e2f772685dec"
+    },
+    "/burrow-assets/sharks/dusky-shark.jpg": {
+      "bytes": 59137,
+      "revision": "fd9c1c6499513dec4c12"
+    },
+    "/burrow-assets/sharks/epaulette-shark.jpg": {
+      "bytes": 89311,
+      "revision": "0a6fc2621f794ffca517"
+    },
+    "/burrow-assets/sharks/frilled-shark.jpg": {
+      "bytes": 124562,
+      "revision": "97bf5462055aed558c4b"
+    },
+    "/burrow-assets/sharks/galapagos-shark.jpg": {
+      "bytes": 166451,
+      "revision": "80c02089950a239be7b2"
+    },
+    "/burrow-assets/sharks/goblin-shark.jpg": {
+      "bytes": 111448,
+      "revision": "e4fc47072d9cfcdbabb5"
+    },
+    "/burrow-assets/sharks/great-hammerhead.jpg": {
+      "bytes": 70144,
+      "revision": "9954c0d3a731b2fc2164"
+    },
+    "/burrow-assets/sharks/great-white.jpg": {
+      "bytes": 135210,
+      "revision": "6d17f8838a59a514f937"
+    },
+    "/burrow-assets/sharks/greenland-shark.jpg": {
+      "bytes": 120838,
+      "revision": "e13d97472e05d1435f03"
+    },
+    "/burrow-assets/sharks/grey-reef-shark.jpg": {
+      "bytes": 50729,
+      "revision": "96f6f48f3924c054f516"
+    },
+    "/burrow-assets/sharks/horn-shark.jpg": {
+      "bytes": 108938,
+      "revision": "fe0243c22ded807a7b8c"
+    },
+    "/burrow-assets/sharks/lemon-shark.jpg": {
+      "bytes": 60958,
+      "revision": "94646e8d53efaaad651b"
+    },
+    "/burrow-assets/sharks/longfin-mako.jpg": {
+      "bytes": 137683,
+      "revision": "42ebc0b91e51fa937c5a"
+    },
+    "/burrow-assets/sharks/megalodon.jpg": {
+      "bytes": 3201571,
+      "revision": "66731ffb5cef83aaa27a"
+    },
+    "/burrow-assets/sharks/megamouth.jpg": {
+      "bytes": 116996,
+      "revision": "99c1e51416f79d713ef1"
+    },
+    "/burrow-assets/sharks/nurse-shark.jpg": {
+      "bytes": 142951,
+      "revision": "a60b6792c8d9bd358b4e"
+    },
+    "/burrow-assets/sharks/oceanic-whitetip.jpg": {
+      "bytes": 66350,
+      "revision": "2877951f3b4c3132f0d8"
+    },
+    "/burrow-assets/sharks/pelagic-thresher.jpg": {
+      "bytes": 345081,
+      "revision": "d6c08bb87984ff735007"
+    },
+    "/burrow-assets/sharks/porbeagle.jpg": {
+      "bytes": 127269,
+      "revision": "18551cf2056d50a50e17"
+    },
+    "/burrow-assets/sharks/port-jackson-shark.jpg": {
+      "bytes": 262612,
+      "revision": "1a8ceb47c2855f1c3703"
+    },
+    "/burrow-assets/sharks/pyjama-shark.jpg": {
+      "bytes": 210162,
+      "revision": "11f421860ec6cd6816f3"
+    },
+    "/burrow-assets/sharks/salmon-shark.jpg": {
+      "bytes": 35646,
+      "revision": "74cb5799e2397a0f6bb2"
+    },
+    "/burrow-assets/sharks/sand-tiger.jpg": {
+      "bytes": 90213,
+      "revision": "d18d11f8cc6a229c678b"
+    },
+    "/burrow-assets/sharks/sandbar-shark.jpg": {
+      "bytes": 291329,
+      "revision": "41dc9fdfabfc2273f950"
+    },
+    "/burrow-assets/sharks/sawshark.jpg": {
+      "bytes": 320578,
+      "revision": "3bd641034ecc6417d1b6"
+    },
+    "/burrow-assets/sharks/scalloped-hammerhead.jpg": {
+      "bytes": 50208,
+      "revision": "41768097546b04244bb9"
+    },
+    "/burrow-assets/sharks/shortfin-mako.jpg": {
+      "bytes": 3425258,
+      "revision": "19bdb969071003d48e81"
+    },
+    "/burrow-assets/sharks/silky-shark.jpg": {
+      "bytes": 86267,
+      "revision": "6b4f068fbea30f3da713"
+    },
+    "/burrow-assets/sharks/silvertip-shark.jpg": {
+      "bytes": 40328,
+      "revision": "fa291d5f0e02e37a7ae6"
+    },
+    "/burrow-assets/sharks/smooth-hammerhead.jpg": {
+      "bytes": 172440,
+      "revision": "8997ed139c11a7055ed4"
+    },
+    "/burrow-assets/sharks/spinner-shark.jpg": {
+      "bytes": 55847,
+      "revision": "3f5b7e27543e7d72bd77"
+    },
+    "/burrow-assets/sharks/spotted-wobbegong.jpg": {
+      "bytes": 120275,
+      "revision": "53fe87afb937b37f5db7"
+    },
+    "/burrow-assets/sharks/stethacanthus.jpg": {
+      "bytes": 3260234,
+      "revision": "657fa02491f4af5a3f10"
+    },
+    "/burrow-assets/sharks/swell-shark.jpg": {
+      "bytes": 72911,
+      "revision": "35df394d956ba06f7cb2"
+    },
+    "/burrow-assets/sharks/tiger-shark.jpg": {
+      "bytes": 86763,
+      "revision": "e776cac86116b242c64a"
+    },
+    "/burrow-assets/sharks/whale-shark.jpg": {
+      "bytes": 59550,
+      "revision": "ee28aab57d82c231529a"
+    },
+    "/burrow-assets/sharks/whitetip-reef.jpg": {
+      "bytes": 650226,
+      "revision": "22f19b65f316c6dfca09"
+    },
+    "/burrow-assets/sharks/zambezi-shark.jpg": {
+      "bytes": 59448,
+      "revision": "18086ac1f33f7cefa409"
+    },
+    "/burrow-assets/sharks/zebra-shark.jpg": {
+      "bytes": 160541,
+      "revision": "4566c640aa41a1990dc4"
+    },
+    "/burrow-assets/space/andromeda-galaxy.jpg": {
+      "bytes": 710960,
+      "revision": "8b5460b3e653443c9109"
+    },
+    "/burrow-assets/space/antares.jpg": {
+      "bytes": 26680,
+      "revision": "5b3eb89b695a27fa5d6a"
+    },
+    "/burrow-assets/space/ariel.jpg": {
+      "bytes": 70089,
+      "revision": "b03125d2a9717abaf987"
+    },
+    "/burrow-assets/space/asteroid-belt.jpg": {
+      "bytes": 109507,
+      "revision": "6103a41f38e6af664a27"
+    },
+    "/burrow-assets/space/betelgeuse.jpg": {
+      "bytes": 30415,
+      "revision": "127b2aa14d87426c701a"
+    },
+    "/burrow-assets/space/black-hole.jpg": {
+      "bytes": 14777,
+      "revision": "3ff4afb2a06fb93ece45"
+    },
+    "/burrow-assets/space/callisto.jpg": {
+      "bytes": 73687,
+      "revision": "a9e532314a8f1e5097c7"
+    },
+    "/burrow-assets/space/ceres.jpg": {
+      "bytes": 245457,
+      "revision": "749cffa1a9817c0a9757"
+    },
+    "/burrow-assets/space/charon.jpg": {
+      "bytes": 127490,
+      "revision": "d565cb9ab9782376e335"
+    },
+    "/burrow-assets/space/deimos.jpg": {
+      "bytes": 40817,
+      "revision": "935f16890d36547579b4"
+    },
+    "/burrow-assets/space/dione.jpg": {
+      "bytes": 55116,
+      "revision": "52baba3e55519eae6666"
+    },
+    "/burrow-assets/space/earth.jpg": {
+      "bytes": 267290,
+      "revision": "16eaa54446f761a80ee8"
+    },
+    "/burrow-assets/space/enceladus.jpg": {
+      "bytes": 90213,
+      "revision": "440946c96fd6d15b2d32"
+    },
+    "/burrow-assets/space/eris.jpg": {
+      "bytes": 29274,
+      "revision": "a3bf124cb0a299212678"
+    },
+    "/burrow-assets/space/europa.jpg": {
+      "bytes": 473625,
+      "revision": "f644222399e87b8b4eab"
+    },
+    "/burrow-assets/space/ganymede.jpg": {
+      "bytes": 85699,
+      "revision": "d16883959a960ca6c7f4"
+    },
+    "/burrow-assets/space/haumea.jpg": {
+      "bytes": 8711,
+      "revision": "cea9e9cf72094bce22de"
+    },
+    "/burrow-assets/space/iapetus.jpg": {
+      "bytes": 192722,
+      "revision": "444ef3fa3228c40990db"
+    },
+    "/burrow-assets/space/io.jpg": {
+      "bytes": 157472,
+      "revision": "60aa9d55b6a9c30f8042"
+    },
+    "/burrow-assets/space/jupiter.jpg": {
+      "bytes": 143547,
+      "revision": "c40306b066f21da214e1"
+    },
+    "/burrow-assets/space/kuiper-belt.jpg": {
+      "bytes": 93465,
+      "revision": "4b736d3672680da8ed1b"
+    },
+    "/burrow-assets/space/makemake.jpg": {
+      "bytes": 35621,
+      "revision": "18d85135e31ca366251a"
+    },
+    "/burrow-assets/space/mars.jpg": {
+      "bytes": 104636,
+      "revision": "2c84c135318680e81b18"
+    },
+    "/burrow-assets/space/mercury.jpg": {
+      "bytes": 125647,
+      "revision": "a9873bba43947bb42069"
+    },
+    "/burrow-assets/space/milky-way.jpg": {
+      "bytes": 74716,
+      "revision": "85d035213ea3f44feda1"
+    },
+    "/burrow-assets/space/mimas.jpg": {
+      "bytes": 158359,
+      "revision": "b6bd5286de86e332e083"
+    },
+    "/burrow-assets/space/miranda.jpg": {
+      "bytes": 128947,
+      "revision": "89497e5f3ef41e412079"
+    },
+    "/burrow-assets/space/moon.jpg": {
+      "bytes": 210750,
+      "revision": "33b2d4e03296f294481d"
+    },
+    "/burrow-assets/space/nebula.jpg": {
+      "bytes": 530932,
+      "revision": "ba13b1a9afd4a88747fb"
+    },
+    "/burrow-assets/space/neptune.jpg": {
+      "bytes": 98840,
+      "revision": "80dece213a5c574ea9b6"
+    },
+    "/burrow-assets/space/oberon.jpg": {
+      "bytes": 120097,
+      "revision": "6f7b1ee6271631d52272"
+    },
+    "/burrow-assets/space/oort-cloud.jpg": {
+      "bytes": 318804,
+      "revision": "9f81907caa72804eeb55"
+    },
+    "/burrow-assets/space/phobos.jpg": {
+      "bytes": 88067,
+      "revision": "97c8dce01f0fe1af8c0c"
+    },
+    "/burrow-assets/space/pluto.jpg": {
+      "bytes": 190939,
+      "revision": "8118784751a77c09c9b3"
+    },
+    "/burrow-assets/space/polaris.jpg": {
+      "bytes": 88324,
+      "revision": "66dd2c43b2ad4a34210f"
+    },
+    "/burrow-assets/space/proxima-centauri.jpg": {
+      "bytes": 217624,
+      "revision": "7e8a4013ebd7e274f96a"
+    },
+    "/burrow-assets/space/rhea.jpg": {
+      "bytes": 78952,
+      "revision": "feaac904c2887948dce9"
+    },
+    "/burrow-assets/space/rigel.jpg": {
+      "bytes": 273396,
+      "revision": "90c07efc13fb0865092d"
+    },
+    "/burrow-assets/space/saturn.jpg": {
+      "bytes": 24004,
+      "revision": "b6583056fc1da93c4773"
+    },
+    "/burrow-assets/space/sirius.jpg": {
+      "bytes": 227199,
+      "revision": "485791435f14832c4f56"
+    },
+    "/burrow-assets/space/stephenson-2-18.jpg": {
+      "bytes": 59406,
+      "revision": "39f8b7479fd46cddce15"
+    },
+    "/burrow-assets/space/supernova.jpg": {
+      "bytes": 280494,
+      "revision": "864af5ed6ba98fa274be"
+    },
+    "/burrow-assets/space/tethys.jpg": {
+      "bytes": 150884,
+      "revision": "4926f96d3298fc4c3fe8"
+    },
+    "/burrow-assets/space/titan.jpg": {
+      "bytes": 257277,
+      "revision": "1bff592e5eb16b44a655"
+    },
+    "/burrow-assets/space/titania.jpg": {
+      "bytes": 87330,
+      "revision": "d5f7bb155d18e3c17786"
+    },
+    "/burrow-assets/space/triton.jpg": {
+      "bytes": 126966,
+      "revision": "b5964e92e4ab5fcc4dc1"
+    },
+    "/burrow-assets/space/uranus.jpg": {
+      "bytes": 40427,
+      "revision": "067edf27d15ab4d7aff5"
+    },
+    "/burrow-assets/space/vega.jpg": {
+      "bytes": 94056,
+      "revision": "fd61d2441592382fdd81"
+    },
+    "/burrow-assets/space/venus.jpg": {
+      "bytes": 224927,
+      "revision": "713808ef1f2f879a734a"
+    },
+    "/burrow-assets/space/vy-canis-majoris.jpg": {
+      "bytes": 120022,
+      "revision": "de87cea51414977d9069"
+    },
+    "/burrow-assets/tall-trees/atlantis.jpg": {
+      "bytes": 131836,
+      "revision": "88907c6f32ad3368e2dd"
+    },
+    "/burrow-assets/tall-trees/big-ben.jpg": {
+      "bytes": 9344635,
+      "revision": "ae3343db66b7724bf7e5"
+    },
+    "/burrow-assets/tall-trees/centurion.jpg": {
+      "bytes": 681048,
+      "revision": "bf990cdb25362f4b70e8"
+    },
+    "/burrow-assets/tall-trees/dave-human.svg": {
+      "bytes": 1281,
+      "revision": "b1b755da51cb89c9e72e"
+    },
+    "/burrow-assets/tall-trees/doerner-fir.jpg": {
+      "bytes": 739392,
+      "revision": "2a95ce3e1b8709307d2f"
+    },
+    "/burrow-assets/tall-trees/douglas-fir.jpg": {
+      "bytes": 257374,
+      "revision": "29fee5414dda936e697c"
+    },
+    "/burrow-assets/tall-trees/english-oak.jpg": {
+      "bytes": 102389,
+      "revision": "f06c36597c5a742011fd"
+    },
+    "/burrow-assets/tall-trees/general-sherman.jpg": {
+      "bytes": 1098206,
+      "revision": "241f3354127f638c0345"
+    },
+    "/burrow-assets/tall-trees/giant-sequoia.jpg": {
+      "bytes": 559144,
+      "revision": "096e070bbd47fa70485e"
+    },
+    "/burrow-assets/tall-trees/giraffe.jpg": {
+      "bytes": 2318975,
+      "revision": "3fefd156641837650e48"
+    },
+    "/burrow-assets/tall-trees/hyperion-height-chart.webp": {
+      "bytes": 83172,
+      "revision": "c3f552d992b1ff348ab8"
+    },
+    "/burrow-assets/tall-trees/karri.jpg": {
+      "bytes": 390137,
+      "revision": "1623a00f875f6113ed7c"
+    },
+    "/burrow-assets/tall-trees/manna-gum.jpg": {
+      "bytes": 1265470,
+      "revision": "2de034e409069b22040e"
+    },
+    "/burrow-assets/tall-trees/mountain-ash.jpg": {
+      "bytes": 4239518,
+      "revision": "a9bb963c453f8f394296"
+    },
+    "/burrow-assets/tall-trees/noble-fir.jpg": {
+      "bytes": 10745438,
+      "revision": "0beffda1827f0eed7721"
+    },
+    "/burrow-assets/tall-trees/sitka-spruce.jpg": {
+      "bytes": 561242,
+      "revision": "8ca7ccf5db373444a3e2"
+    },
+    "/burrow-assets/tall-trees/south-tibetan-cypress.jpg": {
+      "bytes": 4394296,
+      "revision": "3005d0018c055c988dfc"
+    },
+    "/burrow-assets/tall-trees/southern-blue-gum.jpg": {
+      "bytes": 1061476,
+      "revision": "359ba2e7290610c613af"
+    },
+    "/burrow-assets/tall-trees/yellow-meranti.jpg": {
+      "bytes": 311724,
+      "revision": "5fa245bca6eb6eafee9e"
+    },
+    "/burrow-assets/tallest-mountains/aconcagua.jpg": {
+      "bytes": 232762,
+      "revision": "02e6c2752fca6e22fe27"
+    },
+    "/burrow-assets/tallest-mountains/aconcagua.svg": {
+      "bytes": 1019,
+      "revision": "21756aa7f3714cc387a2"
+    },
+    "/burrow-assets/tallest-mountains/annapurna-i.jpg": {
+      "bytes": 230973,
+      "revision": "c22148474cb2683ddaaa"
+    },
+    "/burrow-assets/tallest-mountains/annapurna-i.svg": {
+      "bytes": 1022,
+      "revision": "b10fc4ed4787c7b21afb"
+    },
+    "/burrow-assets/tallest-mountains/annapurna-ii.jpg": {
+      "bytes": 219593,
+      "revision": "f005a2fd91ed26649e4c"
+    },
+    "/burrow-assets/tallest-mountains/annapurna-ii.svg": {
+      "bytes": 1022,
+      "revision": "a9b275d11272575b354d"
+    },
+    "/burrow-assets/tallest-mountains/aoraki-mount-cook.jpg": {
+      "bytes": 315909,
+      "revision": "924a86012f40cb98410c"
+    },
+    "/burrow-assets/tallest-mountains/aoraki-mount-cook.svg": {
+      "bytes": 1049,
+      "revision": "e89324686a0106da6245"
+    },
+    "/burrow-assets/tallest-mountains/batura-sar.jpg": {
+      "bytes": 127365,
+      "revision": "bdb1c80d18fe3144906c"
+    },
+    "/burrow-assets/tallest-mountains/batura-sar.svg": {
+      "bytes": 1022,
+      "revision": "2f52cdd257f34f4163f2"
+    },
+    "/burrow-assets/tallest-mountains/broad-peak.jpg": {
+      "bytes": 251686,
+      "revision": "83907353ccfd78526471"
+    },
+    "/burrow-assets/tallest-mountains/broad-peak.svg": {
+      "bytes": 1028,
+      "revision": "5807185c608b49e31b2f"
+    },
+    "/burrow-assets/tallest-mountains/chimborazo.jpg": {
+      "bytes": 186648,
+      "revision": "444ace31639332b0d0b9"
+    },
+    "/burrow-assets/tallest-mountains/chimborazo.svg": {
+      "bytes": 1124,
+      "revision": "692b132da9dd25c6f52c"
+    },
+    "/burrow-assets/tallest-mountains/cho-oyu.jpg": {
+      "bytes": 117033,
+      "revision": "886de47f178b991e266e"
+    },
+    "/burrow-assets/tallest-mountains/cho-oyu.svg": {
+      "bytes": 1018,
+      "revision": "b4967df4889d46343815"
+    },
+    "/burrow-assets/tallest-mountains/chomo-lonzo.jpg": {
+      "bytes": 372683,
+      "revision": "c4c5733511fc02664a86"
+    },
+    "/burrow-assets/tallest-mountains/chomo-lonzo.svg": {
+      "bytes": 1020,
+      "revision": "755cf3702ff4fd981efc"
+    },
+    "/burrow-assets/tallest-mountains/denali.jpg": {
+      "bytes": 275072,
+      "revision": "7e54b34b9066b35f3fab"
+    },
+    "/burrow-assets/tallest-mountains/denali.svg": {
+      "bytes": 1024,
+      "revision": "a96530c19f2b506f5b45"
+    },
+    "/burrow-assets/tallest-mountains/dhaulagiri-i.jpg": {
+      "bytes": 163013,
+      "revision": "76133a004d5989a7457a"
+    },
+    "/burrow-assets/tallest-mountains/dhaulagiri-i.svg": {
+      "bytes": 1022,
+      "revision": "af1bcd9688ba1bf1ffd3"
+    },
+    "/burrow-assets/tallest-mountains/dhaulagiri-ii.jpg": {
+      "bytes": 158199,
+      "revision": "164921e2537f1892986d"
+    },
+    "/burrow-assets/tallest-mountains/dhaulagiri-ii.svg": {
+      "bytes": 1026,
+      "revision": "d2d03b68000848c4dc27"
+    },
+    "/burrow-assets/tallest-mountains/distaghil-sar.jpg": {
+      "bytes": 153697,
+      "revision": "7511a9740208f04714ce"
+    },
+    "/burrow-assets/tallest-mountains/distaghil-sar.svg": {
+      "bytes": 1030,
+      "revision": "09ee40161ac4dc5ba0ab"
+    },
+    "/burrow-assets/tallest-mountains/gasherbrum-i.jpg": {
+      "bytes": 66731,
+      "revision": "bd84b81c4018cb3c228e"
+    },
+    "/burrow-assets/tallest-mountains/gasherbrum-i.svg": {
+      "bytes": 1032,
+      "revision": "ad3918970e987eec13cd"
+    },
+    "/burrow-assets/tallest-mountains/gasherbrum-ii.jpg": {
+      "bytes": 31352,
+      "revision": "43ac8f4104435208c301"
+    },
+    "/burrow-assets/tallest-mountains/gasherbrum-ii.svg": {
+      "bytes": 1034,
+      "revision": "bcfded3e9395c6373878"
+    },
+    "/burrow-assets/tallest-mountains/gasherbrum-iv.jpg": {
+      "bytes": 289524,
+      "revision": "8db0dcdf3324af1cf9df"
+    },
+    "/burrow-assets/tallest-mountains/gasherbrum-iv.svg": {
+      "bytes": 942,
+      "revision": "2e1858b1d8943206e56a"
+    },
+    "/burrow-assets/tallest-mountains/gyachung-kang.jpg": {
+      "bytes": 150094,
+      "revision": "5c983091ab16157c2075"
+    },
+    "/burrow-assets/tallest-mountains/gyachung-kang.svg": {
+      "bytes": 1030,
+      "revision": "9e62eeb11b99ee19319f"
+    },
+    "/burrow-assets/tallest-mountains/himalchuli.jpg": {
+      "bytes": 119778,
+      "revision": "a0d5fce400ab820da3a3"
+    },
+    "/burrow-assets/tallest-mountains/himalchuli.svg": {
+      "bytes": 1018,
+      "revision": "fc105438deff2440762c"
+    },
+    "/burrow-assets/tallest-mountains/k2.jpg": {
+      "bytes": 249812,
+      "revision": "3c2edcc16eae7c49f81c"
+    },
+    "/burrow-assets/tallest-mountains/k2.svg": {
+      "bytes": 926,
+      "revision": "5e6431e4aa071803b9e9"
+    },
+    "/burrow-assets/tallest-mountains/kamet.jpg": {
+      "bytes": 100703,
+      "revision": "4839e94f1779f6f01034"
+    },
+    "/burrow-assets/tallest-mountains/kamet.svg": {
+      "bytes": 1008,
+      "revision": "60a69f3a4da1f6a8a937"
+    },
+    "/burrow-assets/tallest-mountains/kangchenjunga.jpg": {
+      "bytes": 210296,
+      "revision": "9ddfa2bb8042defbd604"
+    },
+    "/burrow-assets/tallest-mountains/kangchenjunga.svg": {
+      "bytes": 1030,
+      "revision": "930bd12de055c2f8084a"
+    },
+    "/burrow-assets/tallest-mountains/kanjut-sar.jpg": {
+      "bytes": 372888,
+      "revision": "5fa7a619a66c03567a39"
+    },
+    "/burrow-assets/tallest-mountains/kanjut-sar.svg": {
+      "bytes": 1022,
+      "revision": "836f3a3f336fb10e4e5c"
+    },
+    "/burrow-assets/tallest-mountains/khunyang-chhish.jpg": {
+      "bytes": 173948,
+      "revision": "235af90f8e6f06f5e271"
+    },
+    "/burrow-assets/tallest-mountains/khunyang-chhish.svg": {
+      "bytes": 1034,
+      "revision": "5201eb2250ee7bc9115d"
+    },
+    "/burrow-assets/tallest-mountains/lhotse.jpg": {
+      "bytes": 216278,
+      "revision": "4a80482572ecec54c47c"
+    },
+    "/burrow-assets/tallest-mountains/lhotse.svg": {
+      "bytes": 1018,
+      "revision": "4cbceaffa426ade19ac7"
+    },
+    "/burrow-assets/tallest-mountains/makalu.jpg": {
+      "bytes": 138499,
+      "revision": "726286acdc0363ff817a"
+    },
+    "/burrow-assets/tallest-mountains/makalu.svg": {
+      "bytes": 1018,
+      "revision": "c69dbc8c0a654415f91c"
+    },
+    "/burrow-assets/tallest-mountains/manaslu.jpg": {
+      "bytes": 114935,
+      "revision": "ec5898700bc7f6ec7f81"
+    },
+    "/burrow-assets/tallest-mountains/manaslu.svg": {
+      "bytes": 1012,
+      "revision": "ad408edeb8d261916849"
+    },
+    "/burrow-assets/tallest-mountains/masherbrum.jpg": {
+      "bytes": 468271,
+      "revision": "eb3b9efa25b063574375"
+    },
+    "/burrow-assets/tallest-mountains/masherbrum.svg": {
+      "bytes": 1022,
+      "revision": "3eac03102777686d66d3"
+    },
+    "/burrow-assets/tallest-mountains/matterhorn.jpg": {
+      "bytes": 145179,
+      "revision": "ea7c7eb6691a99e8bcb0"
+    },
+    "/burrow-assets/tallest-mountains/matterhorn.svg": {
+      "bytes": 940,
+      "revision": "d24886bc94e52d75f4c9"
+    },
+    "/burrow-assets/tallest-mountains/mauna-kea.jpg": {
+      "bytes": 128686,
+      "revision": "ebc9c9d1ff6ac06daa27"
+    },
+    "/burrow-assets/tallest-mountains/mauna-kea.svg": {
+      "bytes": 1129,
+      "revision": "b20c28bca291ee96bc42"
+    },
+    "/burrow-assets/tallest-mountains/mont-blanc.jpg": {
+      "bytes": 200197,
+      "revision": "e14826f55ae5e6fa085d"
+    },
+    "/burrow-assets/tallest-mountains/mont-blanc.svg": {
+      "bytes": 1023,
+      "revision": "b5bf511e9290b3236e11"
+    },
+    "/burrow-assets/tallest-mountains/mount-elbrus.jpg": {
+      "bytes": 94017,
+      "revision": "d47cac9efed3ba636a85"
+    },
+    "/burrow-assets/tallest-mountains/mount-elbrus.svg": {
+      "bytes": 1130,
+      "revision": "22f1f2995b5ed21e440b"
+    },
+    "/burrow-assets/tallest-mountains/mount-everest.jpg": {
+      "bytes": 219610,
+      "revision": "33b5591eb2edc8da52cf"
+    },
+    "/burrow-assets/tallest-mountains/mount-everest.svg": {
+      "bytes": 1030,
+      "revision": "2b8a403e4f9efe95c6bd"
+    },
+    "/burrow-assets/tallest-mountains/mount-fuji.jpg": {
+      "bytes": 59893,
+      "revision": "d6f98e13de45a0ec5328"
+    },
+    "/burrow-assets/tallest-mountains/mount-fuji.svg": {
+      "bytes": 996,
+      "revision": "a95f3c758714de7a410c"
+    },
+    "/burrow-assets/tallest-mountains/mount-kenya.jpg": {
+      "bytes": 106893,
+      "revision": "b5bde7238c6d4125085b"
+    },
+    "/burrow-assets/tallest-mountains/mount-kenya.svg": {
+      "bytes": 1131,
+      "revision": "d85bd406f9cf2e7a03f1"
+    },
+    "/burrow-assets/tallest-mountains/mount-kilimanjaro.jpg": {
+      "bytes": 160908,
+      "revision": "aac3e6f5feedb72e6e64"
+    },
+    "/burrow-assets/tallest-mountains/mount-kilimanjaro.svg": {
+      "bytes": 1012,
+      "revision": "0a39ce043f78cebbbba7"
+    },
+    "/burrow-assets/tallest-mountains/mount-kosciuszko.jpg": {
+      "bytes": 224863,
+      "revision": "dc59b6199fcc3c8c94f3"
+    },
+    "/burrow-assets/tallest-mountains/mount-kosciuszko.svg": {
+      "bytes": 1043,
+      "revision": "c1c600d11e8ebb1f8c5a"
+    },
+    "/burrow-assets/tallest-mountains/mount-rainier.jpg": {
+      "bytes": 95306,
+      "revision": "19f840c8f59600f10294"
+    },
+    "/burrow-assets/tallest-mountains/mount-rainier.svg": {
+      "bytes": 1144,
+      "revision": "b4f25b1619ebb730a3b0"
+    },
+    "/burrow-assets/tallest-mountains/mount-vinson.jpg": {
+      "bytes": 83948,
+      "revision": "bdbdc899bd56736b1450"
+    },
+    "/burrow-assets/tallest-mountains/mount-vinson.svg": {
+      "bytes": 1035,
+      "revision": "f5868d9349aad8fa092a"
+    },
+    "/burrow-assets/tallest-mountains/mount-whitney.jpg": {
+      "bytes": 258453,
+      "revision": "19d457566ad21dfe939a"
+    },
+    "/burrow-assets/tallest-mountains/mount-whitney.svg": {
+      "bytes": 1039,
+      "revision": "dd1407340a852d7ce3a8"
+    },
+    "/burrow-assets/tallest-mountains/namcha-barwa.jpg": {
+      "bytes": 188032,
+      "revision": "982668c0542b79356a3b"
+    },
+    "/burrow-assets/tallest-mountains/namcha-barwa.svg": {
+      "bytes": 1022,
+      "revision": "8904a0c716a33a44e826"
+    },
+    "/burrow-assets/tallest-mountains/nanda-devi.jpg": {
+      "bytes": 120385,
+      "revision": "6b3ed28e6c018fe315cd"
+    },
+    "/burrow-assets/tallest-mountains/nanda-devi.svg": {
+      "bytes": 1018,
+      "revision": "f3ff48c79d83e5e4eeac"
+    },
+    "/burrow-assets/tallest-mountains/nanga-parbat.jpg": {
+      "bytes": 263245,
+      "revision": "ea2ba2d0365addfcc776"
+    },
+    "/burrow-assets/tallest-mountains/nanga-parbat.svg": {
+      "bytes": 939,
+      "revision": "a97871c7226fcd7ac474"
+    },
+    "/burrow-assets/tallest-mountains/ngadi-chuli.jpg": {
+      "bytes": 476291,
+      "revision": "a061fa0fc51fcc3986fc"
+    },
+    "/burrow-assets/tallest-mountains/ngadi-chuli.svg": {
+      "bytes": 1020,
+      "revision": "c9498efc4e297edd294e"
+    },
+    "/burrow-assets/tallest-mountains/puncak-jaya.jpg": {
+      "bytes": 288847,
+      "revision": "11460ae3ff37288a450f"
+    },
+    "/burrow-assets/tallest-mountains/puncak-jaya.svg": {
+      "bytes": 1032,
+      "revision": "c76ca196e42098bf3cb2"
+    },
+    "/burrow-assets/tallest-mountains/rakaposhi.jpg": {
+      "bytes": 270507,
+      "revision": "71a6ed090d8b976b04bc"
+    },
+    "/burrow-assets/tallest-mountains/rakaposhi.svg": {
+      "bytes": 934,
+      "revision": "9b6bcdf131480f26f0cb"
+    },
+    "/burrow-assets/tallest-mountains/shishapangma.jpg": {
+      "bytes": 167399,
+      "revision": "1e866292eac42be083dc"
+    },
+    "/burrow-assets/tallest-mountains/shishapangma.svg": {
+      "bytes": 1022,
+      "revision": "8a527e9d2774aff4ac23"
+    }
+  }
+}

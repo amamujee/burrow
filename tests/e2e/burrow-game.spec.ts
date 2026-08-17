@@ -1550,13 +1550,44 @@ test("offline saving stays in Setup and the app shell supports an offline reload
   await page.getByRole("button", { name: "Setup", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Setup" })).toBeVisible();
   await expect(page.getByText("Offline", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Save offline" })).toBeVisible();
-  await page.getByRole("button", { name: "Close setup" }).click();
+  await expect(page.getByText(/Save \d+ selected cards · up to \d+ (?:KB|MB)/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Save offline" })).toBeEnabled();
 
   await page.evaluate(async () => {
     if (!("serviceWorker" in navigator)) throw new Error("Service workers are unavailable");
     await navigator.serviceWorker.ready;
   });
+
+  const incrementalCache = await page.evaluate(async () => {
+    const registration = await navigator.serviceWorker.ready;
+    const worker = registration.active;
+    if (!worker) throw new Error("Service worker is not active");
+    const entries = [
+      { url: "/icons/burrow-icon-32.png", revision: "offline-test-v1", bytes: 1 },
+      { url: "/icons/burrow-icon-64.png", revision: "offline-test-v1", bytes: 1 },
+    ];
+    const cacheEntries = (requestId: string) => new Promise<{ cached: number; downloaded: number; failed: number }>((resolve, reject) => {
+      const timeout = window.setTimeout(() => reject(new Error("Offline cache request timed out")), 10_000);
+      const handleMessage = (event: MessageEvent) => {
+        const message = event.data;
+        if (message?.type !== "OFFLINE_CACHE_COMPLETE" || message.requestId !== requestId) return;
+        window.clearTimeout(timeout);
+        navigator.serviceWorker.removeEventListener("message", handleMessage);
+        resolve({ cached: message.cached, downloaded: message.downloaded, failed: message.failed });
+      };
+      navigator.serviceWorker.addEventListener("message", handleMessage);
+      worker.postMessage({ type: "CACHE_URLS", requestId, entries });
+    });
+    return {
+      first: await cacheEntries("offline-test-first"),
+      second: await cacheEntries("offline-test-second"),
+    };
+  });
+
+  expect(incrementalCache.first).toEqual({ cached: 0, downloaded: 2, failed: 0 });
+  expect(incrementalCache.second).toEqual({ cached: 2, downloaded: 0, failed: 0 });
+
+  await page.getByRole("button", { name: "Close setup" }).click();
 
   await context.setOffline(true);
   try {
