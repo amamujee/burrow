@@ -1818,6 +1818,156 @@ const pepperSeeds: PepperSeed[] = [
       accuracyNote: "The 10,000-30,000-SHU range comes from specialist grower descriptions rather than a published cultivar-specific laboratory test, so Burrow marks it unofficial.",
     },
   },
+  {
+    id: "jays-peach-ghost-scorpion",
+    name: "Jay's Peach Ghost Scorpion",
+    species: "Capsicum chinense",
+    shuMin: 1000000,
+    shuMax: 1000000,
+    scovilleStatus: "unofficial",
+    color: "light green to peach",
+    ...permittedPepperImage("jays-peach-ghost-scorpion", "peachghost.jpg", "https://peppergeek.com/jays-peach-ghost-scorpion-pepper/", "Pepper Geek"),
+    fact: "Jay Weaver selected this Pennsylvania-born cross after spotting an unusual pod among ghost peppers; its peach skin, deep wrinkles, and curling scorpion tail make it unmistakable.",
+    metadata: {
+      accuracyNote: "Pepper Geek estimates about 1,000,000 SHU but does not cite a cultivar-specific laboratory result, so Burrow marks the value unofficial.",
+    },
+  },
+  {
+    id: "purple-ufo",
+    name: "Purple UFO",
+    species: "Capsicum annuum",
+    shuMin: 10000,
+    shuMax: 10000,
+    scovilleStatus: "unofficial",
+    color: "violet purple to red",
+    ...permittedPepperImage("purple-ufo", "Purple-UFO-peppers-unripe-and-ripe.jpeg", "https://peppergeek.com/purple-ufo-pepper/", "Pepper Geek"),
+    fact: "Purple UFO is an open-pollinated heirloom with crisp, flying-saucer-shaped pods that begin bright violet and ripen through burgundy to red.",
+    metadata: {
+      accuracyNote: "Pepper Geek describes the heat as likely around 10,000 SHU rather than reporting a laboratory measurement, so Burrow marks it unofficial.",
+    },
+  },
+  {
+    id: "khang-starr-lemon-starrburst",
+    name: "Khang Starr Lemon StarrBurst",
+    species: "Capsicum chinense",
+    shuMin: 100000,
+    shuMax: 200000,
+    scovilleStatus: "unofficial",
+    color: "lemon yellow",
+    ...permittedPepperImage("khang-starr-lemon-starrburst", "KSLS-2-peppers.jpeg", "https://peppergeek.com/khang-starr-lemon-starrburst-pepper/", "Pepper Geek"),
+    fact: "Khang Starr crossed a Bahamian Goat with a MOA Scotch Bonnet to create this lemony yellow pepper, whose flattened bonnet shape often ends in a small pointed stinger.",
+    metadata: {
+      accuracyNote: "No official Scoville test is published; Pepper Geek gives a community estimate of 100,000-200,000 SHU, so Burrow marks the range unofficial.",
+    },
+  },
+  {
+    id: "quintisho",
+    name: "Quintisho",
+    species: "Capsicum chinense",
+    shuMin: 30000,
+    shuMax: 50000,
+    scovilleStatus: "unofficial",
+    color: "green to bright orange",
+    ...permittedPepperImage("quintisho", "Quintisho-peppers-on-plant-3.jpeg", "https://peppergeek.com/quintisho-pepper/", "Pepper Geek"),
+    fact: "Quintisho is a Bolivian heirloom with sturdy branching plants and juicy, cherry-shaped orange pods that carry floral and lemony aromas.",
+    metadata: {
+      accuracyNote: "Pepper Geek reports an estimated 30,000-50,000-SHU range without a cited cultivar-specific laboratory test, so Burrow marks it unofficial.",
+    },
+  },
+  {
+    id: "cobanero",
+    name: "Cobanero",
+    species: "Capsicum annuum",
+    shuMin: 30000,
+    shuMax: 50000,
+    scovilleStatus: "unofficial",
+    color: "deep green to bright red",
+    ...permittedPepperImage("cobanero", "cobanero-pepper-2.jpg", "https://peppergeek.com/cobanero-pepper/", "Pepper Geek"),
+    fact: "Named for Cobán, Guatemala, the tiny Cobanero is traditionally dried and smoked on a wooden griddle before seasoning dishes such as the Maya turkey stew kak'ik.",
+    metadata: {
+      accuracyNote: "Pepper Geek gives 30,000-50,000 SHU as a guide range without citing a cultivar-specific laboratory result, so Burrow marks it unofficial.",
+    },
+  },
+  {
+    id: "farmers-market-jalapeno",
+    name: "Farmer's Market Jalapeño",
+    species: "Capsicum annuum",
+    shuMin: 3000,
+    shuMax: 3000,
+    scovilleStatus: "unofficial",
+    color: "green to red beneath dense tan corking",
+    ...permittedPepperImage("farmers-market-jalapeno", "Farmers-Jalapenos.jpg", "https://peppergeek.com/farmers-jalapeno-peppers/", "Pepper Geek"),
+    fact: "Also called the potato jalapeño, this unusually large pepper develops so much harmless corking that its green or red skin can look almost completely cream colored.",
+    metadata: {
+      accuracyNote: "Pepper Geek places the cultivar around 3,000 SHU but does not cite a laboratory measurement, so Burrow marks the value unofficial.",
+    },
+  },
+  {
+    id: "pimenta-da-neyde",
+    name: "Pimenta da Neyde",
+    species: "Capsicum chinense × Capsicum annuum",
+    shuMin: 150000,
+    shuMax: 250000,
+    scovilleStatus: "unofficial",
+    color: "deep purple to nearly black",
+    ...permittedPepperImage("pimenta-da-neyde", "SM-Pimenta-da-Neyde-peppers.jpeg", "https://peppergeek.com/pimenta-da-neyde/", "Pepper Geek"),
+    fact: "Discovered in Brazil by Neyde Hidalgo, this mysterious dark-fruited pepper keeps its purple-black color when ripe and has become an important parent of modern ornamental superhots.",
+    metadata: {
+      accuracyNote: "The hybrid ancestry is widely believed rather than documented, and Pepper Geek's 150,000-250,000-SHU range has no cited cultivar-specific laboratory test.",
+    },
+  },
+  {
+    id: "cgn-21500",
+    name: "CGN 21500",
+    species: "Capsicum chinense",
+    shuMin: 100000,
+    shuMax: 100000,
+    scovilleStatus: "unofficial",
+    color: "green and purple to peach with purple blush",
+    ...permittedPepperImage("cgn-21500", "CGN-21500-3-sm.jpg", "https://peppergeek.com/cgn-21500-peppers/", "Pepper Geek"),
+    fact: "This Brazilian land variety grows tiny pumpkin-shaped pods whose sunlit purple anthocyanin blush remains visible as the fruit ripens to peach.",
+    metadata: {
+      accuracyNote: "Pepper Geek describes CGN 21500 as around 100,000 SHU without citing a cultivar-specific laboratory measurement, so Burrow marks it unofficial.",
+    },
+  },
+  {
+    id: "peachgum-tiger",
+    name: "Peachgum Tiger",
+    species: "Capsicum chinense hybrid",
+    shuMin: 300000,
+    shuMax: 300000,
+    scovilleStatus: "unofficial",
+    color: "purple-black to peach with violet streaks",
+    ...permittedPepperImage("peachgum-tiger", "SM-Peach-gum-tiger-pepper-ripe.jpg", "https://peppergeek.com/weird-pepper-varieties/", "Pepper Geek"),
+    fact: "Enrico Lai bred Peachgum Tiger from two complex dark-leaved crosses; its purple-black pods ripen peach while a dark, flower-like calyx seems to bleed color into the fruit.",
+    metadata: {
+      accuracyNote: "This still-variable hybrid is commonly estimated around 300,000 SHU, but published grower estimates disagree and no laboratory result was found, so Burrow marks it unofficial.",
+    },
+  },
+  {
+    id: "paradeisfruchtiger-gelber",
+    name: "Paradeisfrüchtiger Gelber",
+    species: "Capsicum annuum",
+    shuMin: 0,
+    shuMax: 0,
+    color: "green to deep golden yellow",
+    ...permittedPepperImage("paradeisfruchtiger-gelber", "Paradeisfruchtiger-Gelber-sm.jpg", "https://peppergeek.com/weird-pepper-varieties/", "Pepper Geek"),
+    fact: "Its German name means yellow tomato pepper, a perfect description of this sweet, heatless heirloom's flattened ribs, thick walls, and crisp golden fruit.",
+  },
+  {
+    id: "macedonian-rezha",
+    name: "Macedonian Rezha",
+    species: "Capsicum annuum",
+    shuMin: 1000,
+    shuMax: 8000,
+    scovilleStatus: "unofficial",
+    color: "green to deep red with pale corking",
+    ...permittedPepperImage("macedonian-rezha", "Rezha-Macedonia-2-sm.jpg", "https://peppergeek.com/weird-pepper-varieties/", "Pepper Geek"),
+    fact: "Rezha means engraved or etched: as this long North Macedonian heirloom ripens, dense pale corking draws a striking network of lines across its red skin.",
+    metadata: {
+      accuracyNote: "Current cultivar guides disagree on the exact heat, commonly spanning about 1,000-8,000 SHU without a cited laboratory result, so Burrow marks the range unofficial.",
+    },
+  },
 ];
 
 const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
@@ -1933,6 +2083,13 @@ const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
   "sugar-rush-cream": { label: "Wales, United Kingdom", countries: ["United Kingdom"], continents: ["Europe"] },
   "aji-ayuyo": { label: "Peru", countries: ["Peru"], continents: ["South America"] },
   "aji-flor-morado": { label: "Brazil", countries: ["Brazil"], continents: ["South America"] },
+  "jays-peach-ghost-scorpion": { label: "Bowers, Pennsylvania, United States", countries: ["United States"], continents: ["North America"] },
+  quintisho: { label: "Bolivia", countries: ["Bolivia"], continents: ["South America"] },
+  cobanero: { label: "Cobán, Guatemala", countries: ["Guatemala"], continents: ["North America"] },
+  "pimenta-da-neyde": { label: "Brazil", countries: ["Brazil"], continents: ["South America"] },
+  "cgn-21500": { label: "Brazil", countries: ["Brazil"], continents: ["South America"] },
+  "peachgum-tiger": { label: "Italy", countries: ["Italy"], continents: ["Europe"] },
+  "macedonian-rezha": { label: "North Macedonia", countries: ["North Macedonia"], continents: ["Europe"] },
 };
 
 const pepperMetadataFor = (id: string): CardMetadata | undefined => {
@@ -1942,7 +2099,7 @@ const pepperMetadataFor = (id: string): CardMetadata | undefined => {
 
 const commonPepperIds = new Set(["bell-pepper", "banana-pepper", "poblano", "anaheim", "jalapeno", "serrano", "cayenne", "tabasco", "habanero", "shishito"]);
 const uncommonPepperIds = new Set(["pepperoncini", "fresno", "thai-chili", "scotch-bonnet", "ghost-pepper", "padron", "ancho", "guajillo", "rocoto", "cubanelle", "hatch-chile", "tangerine-dream"]);
-const epicPepperIds = new Set(["chocolate-bhutlah", "chocolate-rocoto-x", "chocolate-moruga-scorpion", "dragons-breath", "pepper-y", "the-noah", "armageddon", "orange-butch-t", "pepper-x", "carolina-reaper", "trinidad-scorpion", "seven-pot-primo"]);
+const epicPepperIds = new Set(["chocolate-bhutlah", "chocolate-rocoto-x", "chocolate-moruga-scorpion", "dragons-breath", "pepper-y", "the-noah", "armageddon", "orange-butch-t", "pepper-x", "carolina-reaper", "trinidad-scorpion", "seven-pot-primo", "jays-peach-ghost-scorpion"]);
 
 const pepperRarityFor = (id: string): CardRarity => {
   if (commonPepperIds.has(id)) return "common";
@@ -4083,6 +4240,7 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
       { label: "Fatalii Seeds baccatum cultivar directory", url: "https://fataliiseeds.net/product-category/seeds/chili-seeds/capsicum/baccatum/" },
       { label: "Pepperfriends cultivar database", url: "https://www.pepperfriends.org/dbpf/" },
       { label: "Capsicum baccatum diversity research", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3496591/" },
+      { label: "Pepper Geek cultivar guides", url: "https://peppergeek.com/category/types-of-peppers/" },
     ],
     samples: ["Pepper Y", "The Noah", "Armageddon", "Pepper X"],
   },

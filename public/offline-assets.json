@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "36f6a7082028c2a509ec",
-  "assetCount": 892,
-  "totalBytes": 202383920,
+  "version": "bc2a216c2c118a6cbd67",
+  "assetCount": 903,
+  "totalBytes": 203447120,
   "assets": {
     "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.jpg": {
       "bytes": 91997,
@@ -2268,6 +2268,10 @@
       "bytes": 167105,
       "revision": "73d0497bd798e41e9607"
     },
+    "/burrow-assets/peppers/cgn-21500.jpg": {
+      "bytes": 58797,
+      "revision": "f9b4176eeb94546d442a"
+    },
     "/burrow-assets/peppers/cheiro-roxa.jpg": {
       "bytes": 213896,
       "revision": "af3f0179668227fa0b0b"
@@ -2328,6 +2332,10 @@
       "bytes": 2228133,
       "revision": "f17613f4f1624d33df6a"
     },
+    "/burrow-assets/peppers/cobanero.jpg": {
+      "bytes": 75619,
+      "revision": "eb90e0c72dd5b22d95a3"
+    },
     "/burrow-assets/peppers/corno-di-toro.jpg": {
       "bytes": 104645,
       "revision": "4e529482f95cc710e135"
@@ -2375,6 +2383,10 @@
     "/burrow-assets/peppers/espelette.jpg": {
       "bytes": 120415,
       "revision": "2e6ee3df9c18f872bfe4"
+    },
+    "/burrow-assets/peppers/farmers-market-jalapeno.jpg": {
+      "bytes": 66546,
+      "revision": "b22e57b17191e7387e62"
     },
     "/burrow-assets/peppers/fatalii.jpg": {
       "bytes": 349758,
@@ -2444,6 +2456,10 @@
       "bytes": 1173476,
       "revision": "1efe9075a99269ea6a59"
     },
+    "/burrow-assets/peppers/jays-peach-ghost-scorpion.jpg": {
+      "bytes": 76244,
+      "revision": "0969e99cf370849776a5"
+    },
     "/burrow-assets/peppers/jimmy-nardello.png": {
       "bytes": 1255933,
       "revision": "309bc427382bedbc2836"
@@ -2452,6 +2468,10 @@
       "bytes": 236333,
       "revision": "17810b0a60fb134d9be7"
     },
+    "/burrow-assets/peppers/khang-starr-lemon-starrburst.jpg": {
+      "bytes": 114942,
+      "revision": "420928b95eb212d4a37a"
+    },
     "/burrow-assets/peppers/komodo-dragon.jpg": {
       "bytes": 127587,
       "revision": "2409f56dc35bdea0896e"
@@ -2459,6 +2479,10 @@
     "/burrow-assets/peppers/lemon-drop.jpg": {
       "bytes": 598873,
       "revision": "57b83bb971f943f7f9f2"
+    },
+    "/burrow-assets/peppers/macedonian-rezha.jpg": {
+      "bytes": 64837,
+      "revision": "c68f87ff16c998f69d68"
     },
     "/burrow-assets/peppers/madame-jeanette.jpg": {
       "bytes": 437149,
@@ -2536,6 +2560,10 @@
       "bytes": 164015,
       "revision": "9d69d26371e8dc8deed4"
     },
+    "/burrow-assets/peppers/paradeisfruchtiger-gelber.jpg": {
+      "bytes": 58437,
+      "revision": "9f52959248de06f1f2f7"
+    },
     "/burrow-assets/peppers/pasilla.jpg": {
       "bytes": 86525,
       "revision": "9f5df89ec0734bb36f2b"
@@ -2547,6 +2575,10 @@
     "/burrow-assets/peppers/peachadew.jpg": {
       "bytes": 301837,
       "revision": "afe6958fa220a739f9b6"
+    },
+    "/burrow-assets/peppers/peachgum-tiger.jpg": {
+      "bytes": 85514,
+      "revision": "858ac150397b6196c0c8"
     },
     "/burrow-assets/peppers/peppapeach-stripey.jpg": {
       "bytes": 369604,
@@ -2579,6 +2611,10 @@
     "/burrow-assets/peppers/piment-de-bresse.jpg": {
       "bytes": 134330,
       "revision": "97acd1239e649e41833a"
+    },
+    "/burrow-assets/peppers/pimenta-da-neyde.jpg": {
+      "bytes": 164370,
+      "revision": "6cad6b0ad61fca903eb1"
     },
     "/burrow-assets/peppers/pink-tiger.jpg": {
       "bytes": 392358,
@@ -2615,6 +2651,14 @@
     "/burrow-assets/peppers/purple-tiger.jpg": {
       "bytes": 58314,
       "revision": "77e9b4e8c2f116c73f43"
+    },
+    "/burrow-assets/peppers/purple-ufo.jpg": {
+      "bytes": 129563,
+      "revision": "fb5b0b6f74588416065d"
+    },
+    "/burrow-assets/peppers/quintisho.jpg": {
+      "bytes": 168331,
+      "revision": "0dc1b8ffcfb3ac947c99"
     },
     "/burrow-assets/peppers/red-primotalii.jpg": {
       "bytes": 328813,

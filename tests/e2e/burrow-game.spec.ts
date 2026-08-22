@@ -161,7 +161,7 @@ test("built-in topic totals match the playable card catalogs", () => {
     countries: { count: countries.length, eyebrow: `${countries.length} flag cards` },
   };
 
-  expect(peppers).toHaveLength(153);
+  expect(peppers).toHaveLength(164);
   for (const [topic, values] of Object.entries(expected)) {
     const pack = topicPacks[topic as keyof typeof topicPacks];
     expect(pack.libraryCount).toBe(values.count);
@@ -871,6 +871,72 @@ test("10 rare baccatum ajis use real credited photos and honest cultivar metadat
 
   const hardIds = new Set(poolForDifficulty(peppers, 3).map((pepper) => pepper.id));
   for (const id of newPepperIds) expect(hardIds).toContain(id);
+});
+
+test("Jay's Peach Ghost Scorpion and 10 unusual peppers use permitted real photos and honest heat data", () => {
+  const expected = {
+    "jays-peach-ghost-scorpion": [1000000, 1000000],
+    "purple-ufo": [10000, 10000],
+    "khang-starr-lemon-starrburst": [100000, 200000],
+    quintisho: [30000, 50000],
+    cobanero: [30000, 50000],
+    "farmers-market-jalapeno": [3000, 3000],
+    "pimenta-da-neyde": [150000, 250000],
+    "cgn-21500": [100000, 100000],
+    "peachgum-tiger": [300000, 300000],
+    "paradeisfruchtiger-gelber": [0, 0],
+    "macedonian-rezha": [1000, 8000],
+  } as const;
+  const newPepperIds = Object.keys(expected);
+  const newPeppers = peppers.filter((pepper) => newPepperIds.includes(pepper.id));
+
+  expect(newPeppers).toHaveLength(11);
+  expect(new Set(newPeppers.map((pepper) => pepper.image)).size).toBe(11);
+  expect(newPeppers.filter((pepper) => pepper.metadata?.location)).toHaveLength(7);
+
+  for (const pepper of newPeppers) {
+    expect([pepper.shuMin, pepper.shuMax]).toEqual(expected[pepper.id as keyof typeof expected]);
+    expect(pepper.image).toBe(`/burrow-assets/peppers/${pepper.id}.jpg`);
+    expect(pepper.imageSourceFile).not.toMatch(/AI-generated/i);
+    expect(pepper.imageSourceUrl).toMatch(/^https:\/\/peppergeek\.com\//);
+    expect(pepper.imageCredit).toBe("Pepper Geek (used with permission)");
+    expect(pepper.imageFit).toBe("contain");
+    expect(pepper.fact.length).toBeGreaterThanOrEqual(100);
+    if (pepper.scovilleStatus === "unofficial") expect(pepper.metadata?.accuracyNote).toBeTruthy();
+  }
+
+  expect(newPeppers.find((pepper) => pepper.id === "jays-peach-ghost-scorpion")).toMatchObject({
+    name: "Jay's Peach Ghost Scorpion",
+    species: "Capsicum chinense",
+    imageSourceFile: "peachghost.jpg",
+    metadata: {
+      rarity: "epic",
+      location: { label: "Bowers, Pennsylvania, United States", countries: ["United States"], continents: ["North America"] },
+    },
+  });
+  expect(newPeppers.find((pepper) => pepper.id === "pimenta-da-neyde")).toMatchObject({
+    species: "Capsicum chinense × Capsicum annuum",
+    imageSourceFile: "SM-Pimenta-da-Neyde-peppers.jpeg",
+    metadata: { location: { label: "Brazil", countries: ["Brazil"], continents: ["South America"] } },
+  });
+  expect(newPeppers.find((pepper) => pepper.id === "macedonian-rezha")).toMatchObject({
+    imageSourceFile: "Rezha-Macedonia-2-sm.jpg",
+    metadata: { location: { label: "North Macedonia", countries: ["North Macedonia"], continents: ["Europe"] } },
+  });
+
+  const pepperCards = collectionCards().filter((card) => card.topic === "peppers");
+  for (const pepper of newPeppers) {
+    expect(pepperCards.find((card) => card.id === pepper.id)).toMatchObject({
+      image: pepper.image,
+      imageCredit: pepper.imageCredit,
+      statValue: pepper.shuMax,
+      metadata: pepper.metadata,
+    });
+  }
+
+  const hardIds = new Set(poolForDifficulty(peppers, 3).map((pepper) => pepper.id));
+  for (const id of newPepperIds) expect(hardIds).toContain(id);
+  expect(topicPacks.peppers.featuredCount).toBe(peppers.length);
 });
 
 test("Super Chilli, Moruga Red, and three chocolate varieties join normal pepper play", () => {
@@ -2625,7 +2691,7 @@ test("collection only shows selected topics", async ({ page }) => {
     expect.objectContaining({ alt: "Chocolate Bhutlah", src: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
   ]);
 
-  await expect(collection.getByRole("button", { name: "Show all 153 cards" })).toBeVisible();
+  await expect(collection.getByRole("button", { name: "Show all 164 cards" })).toBeVisible();
   expect(await collection.getByText("Locked card", { exact: true }).count()).toBeLessThan(20);
   await expect(collection.getByText("WikiPepper", { exact: true })).not.toBeVisible();
 
