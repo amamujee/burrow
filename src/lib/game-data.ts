@@ -1968,6 +1968,119 @@ const pepperSeeds: PepperSeed[] = [
       accuracyNote: "Current cultivar guides disagree on the exact heat, commonly spanning about 1,000-8,000 SHU without a cited laboratory result, so Burrow marks the range unofficial.",
     },
   },
+  {
+    id: "chipotle",
+    name: "Chipotle Pepper",
+    species: "Capsicum annuum",
+    shuMin: 2500,
+    shuMax: 8000,
+    color: "smoky reddish brown",
+    ...permittedPepperImage("chipotle", "Chipotle-Peppers.jpg", "https://www.chilipeppermadness.com/chili-pepper-types/medium-heat-chili-peppers/chipotle-chili-peppers/", "Chili Pepper Madness"),
+    fact: "A chipotle is a ripe red jalapeño preserved with smoke and drying. Its deep, earthy flavor is familiar in Tex-Mex sauces, canned adobo, and restaurant cooking across the United States.",
+  },
+  {
+    id: "pimento",
+    name: "Pimento Pepper",
+    species: "Capsicum annuum",
+    shuMin: 100,
+    shuMax: 500,
+    color: "bright red",
+    ...permittedPepperImage("pimento", "Pimento-Peppers.jpg", "https://www.chilipeppermadness.com/chili-pepper-types/sweet-mild-chili-peppers/pimento-chili-peppers/", "Chili Pepper Madness"),
+    fact: "Pimento, also spelled pimiento, is a sweet heart-shaped pepper. Americans often meet it inside green olives, in Southern pimento cheese, or dried with other sweet peppers to make paprika.",
+  },
+  {
+    id: "mini-sweet-pepper",
+    name: "Mini Sweet Pepper",
+    species: "Capsicum annuum",
+    shuMin: 0,
+    shuMax: 0,
+    color: "red, orange, or yellow",
+    image: "/burrow-assets/peppers/mini-sweet-pepper.jpg",
+    imageSourceFile: "D4188-1.jpg",
+    imageSourceUrl: "https://www.ars.usda.gov/oc/images/photos/dec19/d4188-1/",
+    imageCredit: "USDA Agricultural Research Service (public domain)",
+    imageFit: "contain",
+    fact: "Mini sweet peppers are snack-size, heatless bell peppers sold in mixed-color bags in many United States produce aisles. Their crisp walls and few seeds make them easy to eat raw.",
+    metadata: {
+      accuracyNote: "Mini sweet pepper is a United States grocery-market category containing several small-fruited sweet bell cultivars, not one single cultivar.",
+    },
+  },
+  {
+    id: "italian-long-hot",
+    name: "Italian Long Hot",
+    species: "Capsicum annuum",
+    shuMin: 100,
+    shuMax: 1000,
+    color: "green to red",
+    ...permittedPepperImage("italian-long-hot", "Italian-Long-Hots-Peppers.webp", "https://www.chilipeppermadness.com/chili-pepper-types/italian-long-hot-peppers/", "Chili Pepper Madness"),
+    fact: "Italian long hots are thin frying peppers with mild, unpredictable heat. They are especially familiar in the northeastern United States, where they top Philadelphia sandwiches, hoagies, and pizza.",
+  },
+  {
+    id: "sport-pepper",
+    name: "Sport Pepper",
+    species: "Capsicum annuum",
+    shuMin: 10000,
+    shuMax: 23000,
+    color: "green when pickled",
+    ...permittedPepperImage("sport-pepper", "Sport-Peppers.jpg", "https://www.chilipeppermadness.com/chili-pepper-types/sport-peppers/", "Chili Pepper Madness"),
+    fact: "Sport peppers are small green chiles usually sold pickled. Their sharp, lively heat is one of the traditional toppings that gives a Chicago-style hot dog its distinctive flavor.",
+  },
+  {
+    id: "sweet-piquante",
+    name: "Sweet Piquanté Pepper",
+    species: "Capsicum baccatum",
+    shuMin: 1177,
+    shuMax: 1177,
+    color: "glossy red",
+    ...permittedPepperImage("sweet-piquante", "Peppadew-Peppers.jpg", "https://www.chilipeppermadness.com/chili-pepper-types/sweet-mild-chili-peppers/picuante-peppadew-chili-peppers/", "Chili Pepper Madness"),
+    fact: "The South African sweet piquanté, or Juanita pepper, is commonly sold pickled and sweetened for salads, sandwiches, pizza, and snacking. Peppadew® is a brand name for this product.",
+  },
+  {
+    id: "korean-gochu",
+    name: "Korean Gochu",
+    species: "Capsicum annuum",
+    shuMin: 1000,
+    shuMax: 10000,
+    scovilleStatus: "unofficial",
+    color: "green to red",
+    ...contentImage("peppers", "korean-gochu", "Go_choo2.jpg"),
+    imageCredit: "Stegano, Wikimedia Commons (public domain)",
+    imageFit: "contain",
+    fact: "Gochu is the Korean word for chile pepper. Fresh green gochu is sold in Korean grocery stores, while ripe red peppers are dried for gochugaru flakes and fermented gochujang paste.",
+    metadata: {
+      accuracyNote: "Gochu names a broad Korean market category ranging from mild asagi peppers to hotter Cheongyang peppers, so Burrow shows a practical culinary range rather than one cultivar's laboratory result.",
+    },
+  },
+  {
+    id: "puya",
+    name: "Puya Chile",
+    species: "Capsicum annuum",
+    shuMin: 5000,
+    shuMax: 8000,
+    color: "deep red",
+    ...permittedPepperImage("puya", "Puya-Peppers.jpg", "https://www.chilipeppermadness.com/chili-pepper-types/medium-heat-chili-peppers/puya-chili-peppers/", "Chili Pepper Madness"),
+    fact: "Puya is a slim dried Mexican chile, smaller and hotter than a guajillo. Its bright, fruity heat makes it a useful pantry pepper for salsas, soups, sauces, and moles.",
+  },
+  {
+    id: "morita",
+    name: "Morita Chile",
+    species: "Capsicum annuum",
+    shuMin: 2500,
+    shuMax: 8000,
+    color: "dark red to brown",
+    ...permittedPepperImage("morita", "Morita-Peppers-SQ.jpg", "https://www.chilipeppermadness.com/chili-pepper-types/medium-heat-chili-peppers/morita-chili-peppers/", "Chili Pepper Madness"),
+    fact: "Morita is a small, red-ripe jalapeño that is smoked for less time than a darker chipotle meco. Its fruitier flavor appears in salsas, marinades, and many cans of chipotles in adobo.",
+  },
+  {
+    id: "chile-japones",
+    name: "Chile Japonés",
+    species: "Capsicum annuum",
+    shuMin: 15000,
+    shuMax: 30000,
+    color: "rust red when dried",
+    ...permittedPepperImage("chile-japones", "Japones-Peppers1b.webp", "https://www.chilipeppermadness.com/chili-pepper-types/japones-pepper/", "Chili Pepper Madness"),
+    fact: "Chile japonés is a slim Mexican chile most often sold dried. Its clean, direct heat is used in Asian, Latin American, and Caribbean sauces, stir-fries, infused oils, and spice blends.",
+  },
 ];
 
 const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
@@ -2090,6 +2203,15 @@ const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
   "cgn-21500": { label: "Brazil", countries: ["Brazil"], continents: ["South America"] },
   "peachgum-tiger": { label: "Italy", countries: ["Italy"], continents: ["Europe"] },
   "macedonian-rezha": { label: "North Macedonia", countries: ["North Macedonia"], continents: ["Europe"] },
+  chipotle: { label: "Mexico", countries: ["Mexico"], continents: ["North America"] },
+  pimento: { label: "Spain and the southern United States", countries: ["Spain", "United States"], continents: ["Europe", "North America"] },
+  "italian-long-hot": { label: "Italy and the northeastern United States", countries: ["Italy", "United States"], continents: ["Europe", "North America"] },
+  "sport-pepper": { label: "Chicago, United States", countries: ["United States"], continents: ["North America"] },
+  "sweet-piquante": { label: "Limpopo, South Africa", countries: ["South Africa"], continents: ["Africa"] },
+  "korean-gochu": { label: "South Korea", countries: ["South Korea"], continents: ["Asia"] },
+  puya: { label: "Mexico", countries: ["Mexico"], continents: ["North America"] },
+  morita: { label: "Mexico", countries: ["Mexico"], continents: ["North America"] },
+  "chile-japones": { label: "Mexico", countries: ["Mexico"], continents: ["North America"] },
 };
 
 const pepperMetadataFor = (id: string): CardMetadata | undefined => {
@@ -2097,27 +2219,33 @@ const pepperMetadataFor = (id: string): CardMetadata | undefined => {
   return location ? { location } : undefined;
 };
 
-const uncommonPepperIds = new Set([
-  "tangerine-dream", "jimmy-nardello", "scotch-bonnet", "fatalii", "naga-jolokia", "yellow-bhut-assam", "chocolate-ghost", "chocolate-scotch-bonnet", "padron", "rocoto",
-  "chiltepin", "aji-charapita", "lemon-drop", "bishop-crown", "fish-pepper", "goat-pepper", "pequin", "trinidad-perfume", "peter-pepper", "purple-beauty",
-  "madame-jeanette", "bolivian-rainbow", "black-pearl", "chocolate-habanero", "sugar-rush-peach", "sugar-rush-stripey", "orange-seven-pot", "pink-tiger", "ghost-breath",
-  "thors-thunderbolt", "gator-jigsaw", "seven-pot-barrackpore", "aji-ayuyo", "aji-flor-morado", "purple-ufo", "khang-starr-lemon-starrburst", "quintisho",
-  "pimenta-da-neyde", "cgn-21500", "peachgum-tiger", "paradeisfruchtiger-gelber",
+// This catalog deliberately includes a long tail of specialty cultivars. Keep
+// those Uncommon by default, and opt only broadly recognized culinary peppers
+// into Common so a newly added niche cultivar cannot accidentally look ordinary.
+const commonPepperIds = new Set([
+  "bell-pepper", "banana-pepper", "pepperoncini", "poblano", "anaheim", "jalapeno", "fresno", "serrano", "cayenne", "tabasco", "thai-chili",
+  "scotch-bonnet", "habanero", "ghost-pepper", "naga-jolokia", "shishito", "padron", "ancho", "guajillo", "chile-de-arbol", "aji-amarillo",
+  "cubanelle", "cherry-pepper", "pasilla", "mulato", "cascabel", "hatch-chile", "new-mexico-chile", "manzano", "pequin", "aji-dulce",
+  "hungarian-wax", "biquinho", "piri-piri", "piquillo", "mirasol", "malagueta", "aleppo", "espelette", "kashmiri-chili", "aji-panca",
+  "chipotle", "pimento", "mini-sweet-pepper", "italian-long-hot", "sport-pepper", "sweet-piquante", "korean-gochu", "puya", "morita", "chile-japones",
 ]);
 const rarePepperIds = new Set([
-  "chocolate-rocoto-x", "orange-butch-t", "pepper-y", "the-noah", "armageddon", "jays-peach-ghost-scorpion", "naga-viper", "komodo-dragon",
+  "chocolate-rocoto-x", "orange-butch-t", "pepper-y", "the-noah", "armageddon", "jays-peach-ghost-scorpion", "goat-trail", "komodo-dragon",
   "red-savina", "dorset-naga", "naga-morich", "seven-pot-douglah", "white-carolina-reaper", "red-primotalii", "brain-strain", "mustard-seven-pot",
+  "pink-tiger", "ghost-breath", "thors-thunderbolt", "gator-jigsaw", "purple-taj-mahal", "khang-starr-lemon-starrburst", "cgn-21500", "peachgum-tiger",
+  "red-thunder-mountain-longhorn", "purple-ufo", "aji-charapita", "yellow-bhut-assam", "moruga-red", "orange-seven-pot", "peppapeach-stripey",
+  "white-aji-fantasy", "seven-pot-barrackpore", "farmers-market-jalapeno",
 ]);
 const epicPepperIds = new Set([
-  "ghost-pepper", "trinidad-scorpion-butch-t", "seven-pot-primo", "chocolate-bhutlah", "chocolate-moruga-scorpion", "trinidad-scorpion",
-  "carolina-reaper", "dragons-breath", "pepper-x",
+  "naga-viper", "trinidad-scorpion-butch-t", "seven-pot-primo", "chocolate-bhutlah", "chocolate-moruga-scorpion", "trinidad-scorpion",
+  "carolina-reaper", "dragons-breath", "pepper-x", "chiltepin", "black-pearl", "habanada", "sugar-rush-stripey", "pimenta-da-neyde",
 ]);
 
 const pepperRarityFor = (id: string): CardRarity => {
   if (epicPepperIds.has(id)) return "epic";
   if (rarePepperIds.has(id)) return "rare";
-  if (uncommonPepperIds.has(id)) return "uncommon";
-  return "common";
+  if (commonPepperIds.has(id)) return "common";
+  return "uncommon";
 };
 
 export const peppers = pepperSeeds.map((pepper) => ({

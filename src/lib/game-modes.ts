@@ -841,6 +841,16 @@ const pepperSizeInches: Record<string, number> = {
   "peachgum-tiger": 2.75,
   "paradeisfruchtiger-gelber": 3.5,
   "macedonian-rezha": 8,
+  chipotle: 3,
+  pimento: 3.5,
+  "mini-sweet-pepper": 3,
+  "italian-long-hot": 7,
+  "sport-pepper": 1.5,
+  "sweet-piquante": 1.5,
+  "korean-gochu": 3.5,
+  puya: 3.5,
+  morita: 3,
+  "chile-japones": 2,
 };
 
 const pepperPlantHeightInches: Record<string, number> = {
@@ -1007,6 +1017,16 @@ const pepperPlantHeightInches: Record<string, number> = {
   "peachgum-tiger": 36,
   "paradeisfruchtiger-gelber": 30,
   "macedonian-rezha": 30,
+  chipotle: 30,
+  pimento: 30,
+  "mini-sweet-pepper": 24,
+  "italian-long-hot": 30,
+  "sport-pepper": 30,
+  "sweet-piquante": 36,
+  "korean-gochu": 36,
+  puya: 30,
+  morita: 30,
+  "chile-japones": 24,
 };
 
 const pepperPlantHeight = (pepper: Pepper) => {

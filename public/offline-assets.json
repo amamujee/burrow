@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "bc2a216c2c118a6cbd67",
-  "assetCount": 903,
-  "totalBytes": 203447120,
+  "version": "51aee915d4363c693f87",
+  "assetCount": 913,
+  "totalBytes": 205547814,
   "assets": {
     "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.jpg": {
       "bytes": 91997,
@@ -2288,6 +2288,10 @@
       "bytes": 164024,
       "revision": "b4f81135842d2db2449c"
     },
+    "/burrow-assets/peppers/chile-japones.jpg": {
+      "bytes": 604838,
+      "revision": "6e48dbe8c19edde10609"
+    },
     "/burrow-assets/peppers/chilhuacle-amarillo.jpg": {
       "bytes": 104352,
       "revision": "4eb0306535acb1b6c123"
@@ -2303,6 +2307,10 @@
     "/burrow-assets/peppers/chinese-five-color.jpg": {
       "bytes": 163130,
       "revision": "24202af6d732dfe7b63c"
+    },
+    "/burrow-assets/peppers/chipotle.jpg": {
+      "bytes": 93031,
+      "revision": "6826c43dcbc2ac728a36"
     },
     "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg": {
       "bytes": 379648,
@@ -2448,6 +2456,10 @@
       "bytes": 294437,
       "revision": "ab8d58f72d7c92baa7b3"
     },
+    "/burrow-assets/peppers/italian-long-hot.jpg": {
+      "bytes": 207212,
+      "revision": "381488892cc796e459f6"
+    },
     "/burrow-assets/peppers/italian-wax.jpg": {
       "bytes": 100663,
       "revision": "7c2b59fa17643870ade2"
@@ -2476,6 +2488,10 @@
       "bytes": 127587,
       "revision": "2409f56dc35bdea0896e"
     },
+    "/burrow-assets/peppers/korean-gochu.jpg": {
+      "bytes": 614335,
+      "revision": "5085cda52c93bdfde773"
+    },
     "/burrow-assets/peppers/lemon-drop.jpg": {
       "bytes": 598873,
       "revision": "57b83bb971f943f7f9f2"
@@ -2500,9 +2516,17 @@
       "bytes": 98458,
       "revision": "b8d71c44fd07a005505a"
     },
+    "/burrow-assets/peppers/mini-sweet-pepper.jpg": {
+      "bytes": 208379,
+      "revision": "570c116eaf4d0515398c"
+    },
     "/burrow-assets/peppers/mirasol.jpg": {
       "bytes": 91684,
       "revision": "f51a528f217c20209f0d"
+    },
+    "/burrow-assets/peppers/morita.jpg": {
+      "bytes": 66564,
+      "revision": "fda435ab606ba8dc4965"
     },
     "/burrow-assets/peppers/moruga-red.png": {
       "bytes": 2461020,
@@ -2616,6 +2640,10 @@
       "bytes": 164370,
       "revision": "6cad6b0ad61fca903eb1"
     },
+    "/burrow-assets/peppers/pimento.jpg": {
+      "bytes": 55231,
+      "revision": "78d990e9547950c7cd9e"
+    },
     "/burrow-assets/peppers/pink-tiger.jpg": {
       "bytes": 392358,
       "revision": "091da91669db69391729"
@@ -2655,6 +2683,10 @@
     "/burrow-assets/peppers/purple-ufo.jpg": {
       "bytes": 129563,
       "revision": "fb5b0b6f74588416065d"
+    },
+    "/burrow-assets/peppers/puya.jpg": {
+      "bytes": 90310,
+      "revision": "92d3aa65f2cefb89231e"
     },
     "/burrow-assets/peppers/quintisho.jpg": {
       "bytes": 168331,
@@ -2708,6 +2740,10 @@
       "bytes": 397017,
       "revision": "a39141e2550cd28f8baf"
     },
+    "/burrow-assets/peppers/sport-pepper.jpg": {
+      "bytes": 63875,
+      "revision": "02e997ad136fae50f878"
+    },
     "/burrow-assets/peppers/sugar-rush-cream.jpg": {
       "bytes": 299759,
       "revision": "ea222a6687530a3f3be5"
@@ -2723,6 +2759,10 @@
     "/burrow-assets/peppers/super-chilli.png": {
       "bytes": 2156247,
       "revision": "fd35a4872e4269b7e61e"
+    },
+    "/burrow-assets/peppers/sweet-piquante.jpg": {
+      "bytes": 96919,
+      "revision": "d7c2c64525946a0af6f2"
     },
     "/burrow-assets/peppers/tabasco.jpg": {
       "bytes": 297240,

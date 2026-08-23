@@ -2,7 +2,8 @@ export type CardDifficultyBand = "easy" | "medium" | "hard";
 
 // Rarity is relative within each collectible topic. Familiar or widely available
 // subjects should stay Common; higher tiers are reserved for increasingly
-// distinctive, limited, record-setting, or otherwise exceptional cards.
+// distinctive, limited, record-setting, or otherwise exceptional cards. Heat,
+// size, speed, or power alone does not determine rarity.
 export const cardRarities = ["common", "uncommon", "rare", "epic"] as const;
 export type CardRarity = (typeof cardRarities)[number];
 
