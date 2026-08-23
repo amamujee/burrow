@@ -2097,15 +2097,27 @@ const pepperMetadataFor = (id: string): CardMetadata | undefined => {
   return location ? { location } : undefined;
 };
 
-const commonPepperIds = new Set(["bell-pepper", "banana-pepper", "poblano", "anaheim", "jalapeno", "serrano", "cayenne", "tabasco", "habanero", "shishito"]);
-const uncommonPepperIds = new Set(["pepperoncini", "fresno", "thai-chili", "scotch-bonnet", "ghost-pepper", "padron", "ancho", "guajillo", "rocoto", "cubanelle", "hatch-chile", "tangerine-dream"]);
-const epicPepperIds = new Set(["chocolate-bhutlah", "chocolate-rocoto-x", "chocolate-moruga-scorpion", "dragons-breath", "pepper-y", "the-noah", "armageddon", "orange-butch-t", "pepper-x", "carolina-reaper", "trinidad-scorpion", "seven-pot-primo", "jays-peach-ghost-scorpion"]);
+const uncommonPepperIds = new Set([
+  "tangerine-dream", "pepperoncini", "fresno", "thai-chili", "scotch-bonnet", "padron", "ancho", "guajillo", "rocoto", "cubanelle", "hatch-chile",
+  "jimmy-nardello", "fatalii", "naga-jolokia", "yellow-bhut-assam", "chocolate-ghost", "chocolate-scotch-bonnet", "chile-de-arbol", "aji-amarillo", "chiltepin",
+  "aji-charapita", "lemon-drop", "bishop-crown", "fish-pepper", "goat-pepper", "pequin", "trinidad-perfume", "peter-pepper", "purple-beauty", "madame-jeanette",
+  "bolivian-rainbow", "black-pearl", "chocolate-habanero", "sugar-rush-peach", "sugar-rush-stripey", "orange-seven-pot", "ghost-breath", "thors-thunderbolt",
+  "seven-pot-barrackpore", "pimenta-da-neyde", "khang-starr-lemon-starrburst",
+]);
+const rarePepperIds = new Set([
+  "chocolate-rocoto-x", "orange-butch-t", "pepper-y", "the-noah", "armageddon", "jays-peach-ghost-scorpion", "naga-viper", "komodo-dragon",
+  "red-savina", "dorset-naga", "naga-morich", "seven-pot-douglah", "white-carolina-reaper", "red-primotalii", "brain-strain", "mustard-seven-pot",
+]);
+const epicPepperIds = new Set([
+  "ghost-pepper", "trinidad-scorpion-butch-t", "seven-pot-primo", "chocolate-bhutlah", "chocolate-moruga-scorpion", "trinidad-scorpion",
+  "carolina-reaper", "dragons-breath", "pepper-x",
+]);
 
 const pepperRarityFor = (id: string): CardRarity => {
-  if (commonPepperIds.has(id)) return "common";
-  if (uncommonPepperIds.has(id)) return "uncommon";
   if (epicPepperIds.has(id)) return "epic";
-  return "rare";
+  if (rarePepperIds.has(id)) return "rare";
+  if (uncommonPepperIds.has(id)) return "uncommon";
+  return "common";
 };
 
 export const peppers = pepperSeeds.map((pepper) => ({
@@ -3518,15 +3530,18 @@ const sharkSeeds: Shark[] = [
   },
 ];
 
-const commonSharkIds = new Set(["great-white", "whale-shark", "tiger-shark", "great-hammerhead", "shortfin-mako", "nurse-shark", "zebra-shark", "blue-shark", "bull-shark", "lemon-shark", "blacktip-reef", "sand-tiger"]);
-const uncommonSharkIds = new Set(["basking-shark", "common-thresher", "greenland-shark", "sawshark", "epaulette-shark", "cookiecutter", "oceanic-whitetip", "scalloped-hammerhead", "silky-shark", "spinner-shark", "sandbar-shark", "whitetip-reef", "grey-reef-shark", "bonnethead", "horn-shark", "bamboo-shark", "caribbean-reef"]);
-const epicSharkIds = new Set(["goblin-shark", "frilled-shark", "megamouth", "stethacanthus", "megalodon", "dunkleosteus"]);
+const uncommonSharkIds = new Set([
+  "basking-shark", "common-thresher", "sawshark", "epaulette-shark", "cookiecutter", "oceanic-whitetip", "scalloped-hammerhead",
+  "bonnethead", "horn-shark", "bamboo-shark", "spotted-wobbegong", "angelshark", "pyjama-shark",
+]);
+const rareSharkIds = new Set(["greenland-shark", "frilled-shark", "megamouth", "stethacanthus", "dunkleosteus"]);
+const epicSharkIds = new Set(["goblin-shark", "megalodon"]);
 
 const sharkRarityFor = (id: string): CardRarity => {
-  if (commonSharkIds.has(id)) return "common";
-  if (uncommonSharkIds.has(id)) return "uncommon";
   if (epicSharkIds.has(id)) return "epic";
-  return "rare";
+  if (rareSharkIds.has(id)) return "rare";
+  if (uncommonSharkIds.has(id)) return "uncommon";
+  return "common";
 };
 
 export const sharks: Shark[] = sharkSeeds.map((shark) => ({
@@ -4198,15 +4213,18 @@ const jetSeeds: Jet[] = [
   { id: "mig-21", name: "MiG-21", country: "Soviet Union", category: "interceptor", maxSpeedMph: 1350, rangeMiles: 750, firepower: 3, ...contentImage("jets", "mig-21", "Croatian MiG-21 (cropped).jpg"), imageCredit: "Christian Volpati/Wikimedia Commons", fact: "The MiG-21 is one of the most-produced supersonic jet fighters in history." },
 ];
 
-const commonJetIds = new Set(["f-15-eagle", "f-a-18-hornet", "f-16-fighting-falcon", "f-14-tomcat", "a-10-thunderbolt-ii", "mig-29", "su-27", "b-52-stratofortress", "f-4-phantom-ii", "mig-21"]);
-const uncommonJetIds = new Set(["f-35-lightning-ii", "f-a-18-super-hornet", "rafale", "eurofighter-typhoon", "jas-39-gripen", "su-35", "b-1-lancer", "mirage-2000", "panavia-tornado", "av-8b-harrier-ii", "hawker-harrier", "l-39-albatros", "j-10", "hal-tejas", "f-15j"]);
-const epicJetIds = new Set(["f-22-raptor", "su-57", "j-20", "b-2-spirit", "b-21-raider", "f-117-nighthawk", "sr-71-blackbird", "fc-31"]);
+const uncommonJetIds = new Set([
+  "f-35-lightning-ii", "f-a-18-super-hornet", "rafale", "eurofighter-typhoon", "jas-39-gripen", "su-35",
+  "b-1-lancer", "av-8b-harrier-ii", "hawker-harrier", "u-2", "mig-31", "tu-160",
+]);
+const rareJetIds = new Set(["f-22-raptor", "su-57", "j-20", "b-21-raider", "f-117-nighthawk", "fc-31"]);
+const epicJetIds = new Set(["b-2-spirit", "sr-71-blackbird"]);
 
 const jetRarityFor = (id: string): CardRarity => {
-  if (commonJetIds.has(id)) return "common";
-  if (uncommonJetIds.has(id)) return "uncommon";
   if (epicJetIds.has(id)) return "epic";
-  return "rare";
+  if (rareJetIds.has(id)) return "rare";
+  if (uncommonJetIds.has(id)) return "uncommon";
+  return "common";
 };
 
 export const jets: Jet[] = jetSeeds.map((jet) => ({

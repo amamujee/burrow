@@ -189,12 +189,12 @@
         { "id": "scoville", "label": "Scoville", "value": 6900, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Fruit hot sauce"],
       "tags": ["pear", "sweet-heat"],
       "metadata": {
-        "difficultyBand": "medium", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "medium", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Ghost pepper", "Carolina Reaper"], "taxonomyGroup": "Fruit-forward sauce",
         "accuracyNote": "HEATONIST publishes 6,900 SHU for this finished sauce despite its superhot pepper ingredients.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -258,12 +258,12 @@
         { "id": "scoville", "label": "Scoville", "value": 52000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Fruit hot sauce"],
       "tags": ["apple", "caraway"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Red pepper blend", "Habanero"], "taxonomyGroup": "Fruit-forward sauce",
         "accuracyNote": "HEATONIST publishes 52,000 SHU; one ingredient is listed only as peppers, not a named variety.",
         "location": { "label": "Canada", "countries": ["Canada"], "continents": ["North America"] }
@@ -281,12 +281,12 @@
         { "id": "scoville", "label": "Scoville", "value": 71000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Jerk hot sauce"],
       "tags": ["tropical", "allspice"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Scotch bonnet", "Cayenne pepper"], "taxonomyGroup": "Caribbean-inspired sauce",
         "accuracyNote": "HEATONIST publishes 71,000 SHU for this finished sauce.",
         "location": { "label": "Canada", "countries": ["Canada"], "continents": ["North America"] }
@@ -304,12 +304,12 @@
         { "id": "scoville", "label": "Scoville", "value": 133000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Scorpion pepper sauce"],
       "tags": ["lime", "curry"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "B",
         "pepperTypes": ["Trinidad Scorpion"], "taxonomyGroup": "Superhot sauce",
         "accuracyNote": "HEATONIST publishes 133,000 SHU for this finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -580,12 +580,12 @@
         { "id": "scoville", "label": "Scoville", "value": 820000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Scorpion pepper sauce"],
       "tags": ["pomegranate", "black-garlic"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "B",
         "pepperTypes": ["Trinidad Scorpion", "Árbol chile"], "taxonomyGroup": "Superhot sauce",
         "accuracyNote": "HEATONIST publishes 820,000 SHU for this finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -649,12 +649,12 @@
         { "id": "scoville", "label": "Scoville", "value": 6200, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Green hot sauce"],
       "tags": ["banana-pepper", "bright"],
       "metadata": {
-        "difficultyBand": "medium", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "medium", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Banana pepper", "Jalapeño"], "taxonomyGroup": "Small-batch pepper sauce",
         "accuracyNote": "HEATONIST publishes 6,200 SHU for this finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -718,12 +718,12 @@
         { "id": "scoville", "label": "Scoville", "value": 54000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Roasted pepper sauce"],
       "tags": ["mustardy", "cilantro"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Habanero", "Trinidad Scorpion"], "taxonomyGroup": "Small-batch pepper sauce",
         "accuracyNote": "HEATONIST publishes 54,000 SHU for this finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -741,12 +741,12 @@
         { "id": "scoville", "label": "Scoville", "value": 71000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Fermented hot sauce"],
       "tags": ["sherry-vinegar", "koji"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Habanero"], "taxonomyGroup": "Catalan hot sauce",
         "accuracyNote": "HEATONIST publishes 71,000 SHU for this finished sauce.",
         "location": { "label": "Spain", "countries": ["Spain"], "continents": ["Europe"] }
@@ -764,12 +764,12 @@
         { "id": "scoville", "label": "Scoville", "value": 126000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Fruit hot sauce"],
       "tags": ["berry", "hibiscus"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Trinidad Scorpion"], "taxonomyGroup": "Fruit-forward sauce",
         "accuracyNote": "HEATONIST publishes 126,000 SHU for this finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -787,12 +787,12 @@
         { "id": "scoville", "label": "Scoville", "value": 700000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Apollo pepper sauce"],
       "tags": ["berry", "yuzu"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "B",
         "pepperTypes": ["Apollo pepper"], "taxonomyGroup": "Extreme superhot sauce",
         "accuracyNote": "The comparison value is HEATONIST's published score for the finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -810,12 +810,12 @@
         { "id": "scoville", "label": "Scoville", "value": 1500000, "unit": "SHU", "display": "~1,500,000 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 2, "unit": "", "display": "C" },
-        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
       ],
       "categories": ["Carolina Reaper sauce"],
       "tags": ["heat-forward", "carolina-reaper"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 3, "rarity": "epic", "flavorGrade": "C",
+        "difficultyBand": "hard", "recognition": 3, "rarity": "rare", "flavorGrade": "C",
         "pepperTypes": ["Carolina Reaper"], "taxonomyGroup": "Extreme superhot sauce",
         "accuracyNote": "The brand does not publish a finished-sauce lab score; this is a pepper-based comparison estimate.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -902,12 +902,12 @@
         { "id": "scoville", "label": "Scoville", "value": 679000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 2, "unit": "", "display": "C" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Carolina Reaper sauce"],
       "tags": ["tomato", "heat-forward"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "C",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "C",
         "pepperTypes": ["Carolina Reaper"], "taxonomyGroup": "Extreme superhot sauce",
         "accuracyNote": "The maker publishes 679,000 SHU for this finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -925,12 +925,12 @@
         { "id": "scoville", "label": "Scoville", "value": 816000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Scorpion pepper sauce"],
       "tags": ["italian-inspired", "herbal"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 3, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 3, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Trinidad Scorpion"], "taxonomyGroup": "Savory superhot sauce",
         "accuracyNote": "HEATONIST publishes 816,000 SHU for this finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -948,12 +948,12 @@
         { "id": "scoville", "label": "Scoville", "value": 104000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Fruit hot sauce"],
       "tags": ["apricot", "lavender"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Proprietary chile blend"], "taxonomyGroup": "Floral fruit sauce",
         "accuracyNote": "HEATONIST publishes 104,000 SHU, but the maker lists the peppers only as chili peppers.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -971,12 +971,12 @@
         { "id": "scoville", "label": "Scoville", "value": 620000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 3, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Seven-pot sauce"],
       "tags": ["fennel", "maple"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Red bell pepper", "Seven-pot pepper", "Ghost pepper"], "taxonomyGroup": "Savory superhot sauce",
         "accuracyNote": "The comparison value is the published finished-sauce score from its Hot Ones lineup.",
         "location": { "label": "Canada", "countries": ["Canada"], "continents": ["North America"] }
@@ -994,12 +994,12 @@
         { "id": "scoville", "label": "Scoville", "value": 2200000, "unit": "SHU", "display": "2,200,000 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
       ],
       "categories": ["Carolina Reaper sauce"],
       "tags": ["caribbean-spices", "heat-forward"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 3, "rarity": "epic", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 3, "rarity": "rare", "flavorGrade": "B",
         "pepperTypes": ["Carolina Reaper"], "taxonomyGroup": "Extreme superhot sauce",
         "accuracyNote": "2,200,000 SHU represents an upper Carolina Reaper pepper rating, not a finished-sauce lab result.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1017,12 +1017,12 @@
         { "id": "scoville", "label": "Scoville", "value": 2693000, "unit": "SHU", "display": "2,693,000 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 3, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
       ],
       "categories": ["Pepper X sauce"],
       "tags": ["pepper-x", "caribbean-spices"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 3, "rarity": "epic", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 3, "rarity": "rare", "flavorGrade": "B",
         "pepperTypes": ["Pepper X", "Chocolate Pepper X", "Peach Pepper X"], "taxonomyGroup": "Extreme superhot sauce",
         "accuracyNote": "2,693,000 SHU is Pepper X's published record average, not a finished-sauce lab result.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1063,12 +1063,12 @@
         { "id": "scoville", "label": "Scoville", "value": 690000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 3, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 2, "unit": "", "display": "C" },
-        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
       ],
       "categories": ["Multi-superhot sauce"],
       "tags": ["lime", "heat-forward"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 3, "rarity": "epic", "flavorGrade": "C",
+        "difficultyBand": "hard", "recognition": 3, "rarity": "rare", "flavorGrade": "C",
         "pepperTypes": ["Carolina Reaper", "Ghost pepper", "Dragon's Breath"], "taxonomyGroup": "Extreme superhot sauce",
         "accuracyNote": "HEATONIST publishes 690,000 SHU for this finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1086,12 +1086,12 @@
         { "id": "scoville", "label": "Scoville", "value": 100000, "unit": "SHU", "display": "~100,000 SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
       ],
       "categories": ["Pepper oil"],
       "tags": ["concentrated", "dropper-bottle"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "uncommon", "flavorGrade": "B",
         "pepperTypes": ["African bird's eye chilli"], "taxonomyGroup": "Rwandan pepper oil",
         "accuracyNote": "No standard finished-oil lab score is published; this uses the upper end of common estimates.",
         "location": { "label": "Rwanda", "countries": ["Rwanda"], "continents": ["Africa"] }
@@ -1201,12 +1201,12 @@
         { "id": "scoville", "label": "Scoville", "value": 900000, "unit": "SHU", "display": "~900,000 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Pepper pickle"],
       "tags": ["naga", "oil-preserved"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "B",
         "pepperTypes": ["Naga Morich"], "taxonomyGroup": "Bangladeshi-style chilli pickle",
         "accuracyNote": "The maker does not publish a finished-product lab score; this is a pepper-based estimate.",
         "location": { "label": "United Kingdom", "countries": ["United Kingdom"], "continents": ["Europe"] }
@@ -1247,12 +1247,12 @@
         { "id": "scoville", "label": "Scoville", "value": 2200000, "unit": "SHU", "display": "~2,200,000 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 7, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
       ],
       "categories": ["Pepper oil"],
       "tags": ["seven-pepper-blend", "cold-infused"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "uncommon", "flavorGrade": "A",
         "pepperTypes": ["Habanero Chocolate", "Habanero Red", "Habanero Orange", "Bhut Jolokia", "Naga Morich", "Moruga Scorpion Red", "Carolina Reaper"],
         "taxonomyGroup": "Italian superhot pepper oil",
         "accuracyNote": "The 2,200,000 SHU figure is Habamix's published rating for the featured Carolina Reaper, not a laboratory test of the finished infused oil.",
@@ -1271,12 +1271,12 @@
         { "id": "scoville", "label": "Scoville", "value": 2100, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Fermented hot sauce"],
       "tags": ["umami", "fire-roasted"],
       "metadata": {
-        "difficultyBand": "medium", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "medium", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Jalapeño", "Shishito"], "taxonomyGroup": "Umami hot sauce",
         "accuracyNote": "HEATONIST publishes an estimated 2,100 SHU comparison score for the finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1294,12 +1294,12 @@
         { "id": "scoville", "label": "Scoville", "value": 7900, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Habanero sauce"],
       "tags": ["eggplant", "savory"],
       "metadata": {
-        "difficultyBand": "medium", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "medium", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Habanero"], "taxonomyGroup": "Vegetable-forward sauce",
         "accuracyNote": "HEATONIST publishes an estimated 7,900 SHU comparison score for the finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1340,12 +1340,12 @@
         { "id": "scoville", "label": "Scoville", "value": 32000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Smoky hot sauce"],
       "tags": ["chipotle", "chickpea"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Chipotle", "Ghost pepper"], "taxonomyGroup": "Creamy smoky sauce",
         "accuracyNote": "HEATONIST publishes an estimated 32,000 SHU comparison score for the finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1363,12 +1363,12 @@
         { "id": "scoville", "label": "Scoville", "value": 54000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Caribbean-style sauce"],
       "tags": ["sour-orange", "cabbage"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Trinidad Scorpion", "Habanero"], "taxonomyGroup": "Pikliz-inspired sauce",
         "accuracyNote": "HEATONIST publishes an estimated 54,000 SHU comparison score for the finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1409,12 +1409,12 @@
         { "id": "scoville", "label": "Scoville", "value": 102000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "blend" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Sweet hot sauce"],
       "tags": ["honey", "orange"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "B",
         "pepperTypes": ["Fresh hot pepper blend"], "taxonomyGroup": "Sweet-savory sauce",
         "accuracyNote": "HEATONIST publishes an estimated 102,000 SHU score; the maker lists only fresh hot peppers rather than named varieties.",
         "location": { "label": "Canada", "countries": ["Canada"], "continents": ["North America"] }
@@ -1432,12 +1432,12 @@
         { "id": "scoville", "label": "Scoville", "value": 135600, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 3, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 2, "unit": "", "display": "C" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Challenge sauce"],
       "tags": ["superhot-blend", "lime"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 3, "rarity": "rare", "flavorGrade": "C",
+        "difficultyBand": "hard", "recognition": 3, "rarity": "common", "flavorGrade": "C",
         "pepperTypes": ["Carolina Reaper", "Scorpion pepper", "Yellow superhot blend"], "taxonomyGroup": "Hot Ones challenge sauce",
         "accuracyNote": "HEATONIST publishes an estimated 135,600 SHU comparison score for the finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1455,12 +1455,12 @@
         { "id": "scoville", "label": "Scoville", "value": 820000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
       ],
       "categories": ["Carolina Reaper sauce"],
       "tags": ["fire-roasted", "salsa-style"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "epic", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
         "pepperTypes": ["Carolina Reaper", "Habanero"], "taxonomyGroup": "Superhot salsa sauce",
         "accuracyNote": "HEATONIST publishes an estimated 820,000 SHU comparison score for the finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1524,12 +1524,12 @@
         { "id": "scoville", "label": "Scoville", "value": 5600, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "blend" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Green hot sauce"],
       "tags": ["lemongrass", "thai-basil"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Green chile blend"], "taxonomyGroup": "Southeast Asian-inspired sauce",
         "accuracyNote": "HEATONIST publishes 5,600 SHU; the maker lists green chiles rather than individual varieties.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1547,12 +1547,12 @@
         { "id": "scoville", "label": "Scoville", "value": 26500, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Árbol sauce"],
       "tags": ["sweet-corn", "elote-inspired"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Árbol chile", "Ghost pepper"], "taxonomyGroup": "Elote-inspired sauce",
         "accuracyNote": "HEATONIST publishes 26,500 SHU for this finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1593,12 +1593,12 @@
         { "id": "scoville", "label": "Scoville", "value": 76000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Habanero sauce"],
       "tags": ["roasted-onion", "sweet-pepper"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Habanero"], "taxonomyGroup": "Roasted vegetable sauce",
         "accuracyNote": "HEATONIST publishes 76,000 SHU for this finished sauce.",
         "location": { "label": "Canada", "countries": ["Canada"], "continents": ["North America"] }
@@ -1616,12 +1616,12 @@
         { "id": "scoville", "label": "Scoville", "value": 131000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 5, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Multi-pepper sauce"],
       "tags": ["five-pepper-blend", "herbal"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "B",
         "pepperTypes": ["Serrano", "Habanero", "Carolina Reaper", "Ghost pepper", "Carmen pepper"], "taxonomyGroup": "Multi-pepper hot sauce",
         "accuracyNote": "HEATONIST publishes 131,000 SHU for this finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1639,12 +1639,12 @@
         { "id": "scoville", "label": "Scoville", "value": 1900, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Fruit hot sauce"],
       "tags": ["coffee", "dates"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Red pepper blend", "Habanero"], "taxonomyGroup": "Coffee-inspired sauce",
         "accuracyNote": "HEATONIST publishes 1,900 SHU; one ingredient is listed only as peppers, not a named variety.",
         "location": { "label": "Canada", "countries": ["Canada"], "continents": ["North America"] }
@@ -1662,12 +1662,12 @@
         { "id": "scoville", "label": "Scoville", "value": 5500, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 3, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Salsa macha sauce"],
       "tags": ["avocado-oil", "sesame"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Limo pepper", "Ají amarillo", "Árbol chile"], "taxonomyGroup": "Creamy salsa macha",
         "accuracyNote": "HEATONIST publishes 5,500 SHU for this finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1685,12 +1685,12 @@
         { "id": "scoville", "label": "Scoville", "value": 28000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Fruit hot sauce"],
       "tags": ["passionfruit", "smoked-onion"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Scotch bonnet"], "taxonomyGroup": "Honduran fruit sauce",
         "accuracyNote": "HEATONIST publishes 28,000 SHU for this finished sauce.",
         "location": { "label": "Honduras", "countries": ["Honduras"], "continents": ["North America"] }
@@ -1708,12 +1708,12 @@
         { "id": "scoville", "label": "Scoville", "value": 670000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 3, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 4, "unit": "", "display": "Epic" }
+        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
       ],
       "categories": ["Scorpion pepper sauce"],
       "tags": ["yellow-moruga", "lime"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "epic", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
         "pepperTypes": ["Yellow Moruga Scorpion", "Red Scorpion pepper", "Fatalii"], "taxonomyGroup": "Multi-superhot sauce",
         "accuracyNote": "HEATONIST publishes 670,000 SHU for this finished sauce.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1731,12 +1731,12 @@
         { "id": "scoville", "label": "Scoville", "value": 2200000, "unit": "SHU", "display": "~2,200,000 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Chili crisp"],
       "tags": ["carolina-reaper", "garlic-shallot"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Carolina Reaper", "Habanero"], "taxonomyGroup": "Superhot chili crisp",
         "accuracyNote": "The maker rates the crisp 5 out of 5 for heat but publishes no lab SHU; this comparison value uses the Carolina Reaper's peak rating.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1754,12 +1754,12 @@
         { "id": "scoville", "label": "Scoville", "value": 1041427, "unit": "SHU", "display": "~1,041,427 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 2, "unit": "", "display": "C" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Pepper oil"],
       "tags": ["ghost-pepper", "pepper-extract"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "C",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "C",
         "pepperTypes": ["Bhut Jolokia"], "taxonomyGroup": "Extract-fortified pepper oil",
         "accuracyNote": "The maker publishes no finished-oil SHU and also adds pepper extract; this conservative comparison value uses a documented ghost-pepper peak.",
         "location": { "label": "United Kingdom", "countries": ["United Kingdom"], "continents": ["Europe"] }
@@ -1777,12 +1777,12 @@
         { "id": "scoville", "label": "Scoville", "value": 1041427, "unit": "SHU", "display": "~1,041,427 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Chili crisp"],
       "tags": ["ghost-pepper", "fourteen-spices"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Ghost pepper", "Er Jing Tiao chile"], "taxonomyGroup": "Chinese-style superhot crisp",
         "accuracyNote": "The maker rates the crisp 5 out of 5 for heat but publishes no lab SHU; this comparison value uses a documented ghost-pepper peak.",
         "location": { "label": "Australia", "countries": ["Australia"], "continents": ["Oceania"] }
@@ -1800,12 +1800,12 @@
         { "id": "scoville", "label": "Scoville", "value": 2200000, "unit": "SHU", "display": "~2,200,000 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 3, "unit": "", "display": "Rare" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Pepper oil"],
       "tags": ["carolina-reaper", "olive-oil"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "rare", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "B",
         "pepperTypes": ["Carolina Reaper"], "taxonomyGroup": "Italian superhot pepper oil",
         "accuracyNote": "The maker publishes no laboratory score for the diluted oil; this comparison value uses the Carolina Reaper's peak rating.",
         "location": { "label": "Italy", "countries": ["Italy"], "continents": ["Europe"] }

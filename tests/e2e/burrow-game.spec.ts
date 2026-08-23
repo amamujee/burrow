@@ -910,7 +910,7 @@ test("Jay's Peach Ghost Scorpion and 10 unusual peppers use permitted real photo
     species: "Capsicum chinense",
     imageSourceFile: "peachghost.jpg",
     metadata: {
-      rarity: "epic",
+      rarity: "rare",
       location: { label: "Bowers, Pennsylvania, United States", countries: ["United States"], continents: ["North America"] },
     },
   });
@@ -1106,6 +1106,54 @@ test("main collectible categories use the standard four rarity tiers", () => {
   }
   for (const [topic, cards] of Object.entries({ buildings, countries, space: spaceCards })) {
     expect(cards.every((card) => card.metadata?.rarity === undefined), `${topic} should not receive artificial rarity labels`).toBe(true);
+  }
+});
+
+test("collectible rarities follow the 60-25-10-5 distribution", () => {
+  const hotSauces = loadPlayablePacks().find((pack) => pack.id === "hot-sauces")?.cards ?? [];
+  const rarityCollections = { peppers, sharks, jets, hotSauces };
+  const expectedByCollection = {
+    peppers: { common: 98, uncommon: 41, rare: 16, epic: 9 },
+    sharks: { common: 30, uncommon: 13, rare: 5, epic: 2 },
+    jets: { common: 30, uncommon: 12, rare: 6, epic: 2 },
+    hotSauces: { common: 45, uncommon: 19, rare: 7, epic: 4 },
+  };
+  const overall = { common: 0, uncommon: 0, rare: 0, epic: 0 };
+
+  for (const [topic, cards] of Object.entries(rarityCollections)) {
+    const counts = { common: 0, uncommon: 0, rare: 0, epic: 0 };
+    for (const card of cards) {
+      const rarity = card.metadata?.rarity;
+      if (!rarity) throw new Error(`${topic}:${card.id} needs rarity metadata`);
+      counts[rarity] += 1;
+      overall[rarity] += 1;
+    }
+    expect(counts, `${topic} rarity distribution drifted`).toEqual(expectedByCollection[topic as keyof typeof expectedByCollection]);
+  }
+
+  expect(overall).toEqual({ common: 203, uncommon: 85, rare: 34, epic: 17 });
+  const total = Object.values(overall).reduce((sum, count) => sum + count, 0);
+  const targetShare = { common: 0.6, uncommon: 0.25, rare: 0.1, epic: 0.05 };
+  for (const rarity of cardRarities) {
+    expect(Math.abs(overall[rarity] / total - targetShare[rarity]), `${rarity} should stay within 0.2 percentage points of target`).toBeLessThanOrEqual(0.002);
+  }
+
+  expect(new Set(peppers.filter((card) => card.metadata?.rarity === "epic").map((card) => card.id))).toEqual(new Set([
+    "ghost-pepper", "trinidad-scorpion-butch-t", "seven-pot-primo", "chocolate-bhutlah", "chocolate-moruga-scorpion",
+    "trinidad-scorpion", "carolina-reaper", "dragons-breath", "pepper-x",
+  ]));
+  expect(new Set(sharks.filter((card) => card.metadata?.rarity === "epic").map((card) => card.id))).toEqual(new Set(["goblin-shark", "megalodon"]));
+  expect(new Set(jets.filter((card) => card.metadata?.rarity === "epic").map((card) => card.id))).toEqual(new Set(["b-2-spirit", "sr-71-blackbird"]));
+  expect(new Set(hotSauces.filter((card) => card.metadata?.rarity === "epic").map((card) => card.id))).toEqual(new Set([
+    "last-dab-xperience", "reaper-squeezins", "gator-sauce", "last-dab-thermageddon",
+  ]));
+
+  for (const card of hotSauces) {
+    const rarity = card.metadata?.rarity;
+    if (!rarity) throw new Error(`hotSauces:${card.id} needs rarity metadata`);
+    const rarityStat = card.stats.find((stat) => stat.id === "rarity");
+    expect(rarityStat?.value, `${card.id} rarity stat should match its metadata`).toBe(cardRarities.indexOf(rarity) + 1);
+    expect(rarityStat?.display).toBe(rarity[0].toUpperCase() + rarity.slice(1));
   }
 });
 
