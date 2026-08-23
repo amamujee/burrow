@@ -1148,6 +1148,29 @@ test("collectible rarities follow the 60-25-10-5 distribution", () => {
     "last-dab-xperience", "reaper-squeezins", "gator-sauce", "last-dab-thermageddon",
   ]));
 
+  const expectRarity = (
+    cards: readonly { id: string; metadata?: { rarity?: string } }[],
+    rarity: string,
+    ids: readonly string[],
+  ) => {
+    for (const id of ids) expect(cards.find((card) => card.id === id)?.metadata?.rarity, `${id} should be ${rarity}`).toBe(rarity);
+  };
+  expectRarity(peppers, "common", [
+    "pepperoncini", "fresno", "thai-chili", "ancho", "guajillo", "chile-de-arbol", "aji-amarillo", "cubanelle", "hatch-chile",
+  ]);
+  expectRarity(peppers, "uncommon", [
+    "pink-tiger", "gator-jigsaw", "aji-ayuyo", "aji-flor-morado", "purple-ufo", "quintisho", "cgn-21500", "peachgum-tiger", "paradeisfruchtiger-gelber",
+  ]);
+  expectRarity(jets, "common", ["f-35-lightning-ii", "f-a-18-super-hornet"]);
+  expectRarity(jets, "uncommon", ["fc-31", "f-ck-1", "english-electric-lightning"]);
+  expectRarity(jets, "rare", ["u-2"]);
+  expectRarity(hotSauces, "common", [
+    "secret-aardvark-habanero", "marie-sharps-belizean-heat", "fly-by-jing-sichuan-chili-crisp", "s-b-la-yu-chili-oil", "chile-crunch-original",
+  ]);
+  expectRarity(hotSauces, "uncommon", [
+    "mr-naga-hot-pepper-pickle", "creaper-choil", "bang-bang-oil", "salt-gang-ghost-crisp", "balacco-reaper-oil",
+  ]);
+
   for (const card of hotSauces) {
     const rarity = card.metadata?.rarity;
     if (!rarity) throw new Error(`hotSauces:${card.id} needs rarity metadata`);

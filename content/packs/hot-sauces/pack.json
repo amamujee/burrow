@@ -97,12 +97,12 @@
         { "id": "scoville", "label": "Scoville", "value": 5000, "unit": "SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Habanero sauce"],
       "tags": ["tomato-rich", "mustardy"],
       "metadata": {
-        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "A",
+        "difficultyBand": "medium", "recognition": 3, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Habanero"], "taxonomyGroup": "Caribbean-inspired sauce",
         "accuracyNote": "The Scoville score is an approximate finished-sauce value; pepper crops and batches vary.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -120,12 +120,12 @@
         { "id": "scoville", "label": "Scoville", "value": 350000, "unit": "SHU", "display": "~350,000 SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Habanero sauce"],
       "tags": ["carrot-based", "citrusy"],
       "metadata": {
-        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "A",
+        "difficultyBand": "medium", "recognition": 3, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Habanero"], "taxonomyGroup": "Belizean pepper sauce",
         "accuracyNote": "Published values vary widely and may reflect pepper heat; this card uses an approximate comparison score.",
         "location": { "label": "Belize", "countries": ["Belize"], "continents": ["North America"] }
@@ -1132,12 +1132,12 @@
         { "id": "scoville", "label": "Scoville", "value": 2500, "unit": "SHU", "display": "~2,500 SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Chili crisp"],
       "tags": ["tingly", "umami"],
       "metadata": {
-        "difficultyBand": "medium", "recognition": 4, "rarity": "uncommon", "flavorGrade": "A",
+        "difficultyBand": "medium", "recognition": 4, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Erjingtiao chile"], "taxonomyGroup": "Sichuan chili crisp",
         "accuracyNote": "The maker does not publish SHU; this mild value is an editorial comparison estimate. Sichuan pepper is a spice, not a chile variety.",
         "location": { "label": "China", "countries": ["China"], "continents": ["Asia"] }
@@ -1178,12 +1178,12 @@
         { "id": "scoville", "label": "Scoville", "value": 500, "unit": "SHU", "display": "~500 SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Pepper oil"],
       "tags": ["clear-oil", "sesame"],
       "metadata": {
-        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "B",
+        "difficultyBand": "medium", "recognition": 3, "rarity": "common", "flavorGrade": "B",
         "pepperTypes": ["Red chile pepper"], "taxonomyGroup": "Japanese rāyu",
         "accuracyNote": "The maker does not publish SHU; this gentle value is an editorial comparison estimate.",
         "location": { "label": "Japan", "countries": ["Japan"], "continents": ["Asia"] }
@@ -1201,12 +1201,12 @@
         { "id": "scoville", "label": "Scoville", "value": 900000, "unit": "SHU", "display": "~900,000 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
       ],
       "categories": ["Pepper pickle"],
       "tags": ["naga", "oil-preserved"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "uncommon", "flavorGrade": "B",
         "pepperTypes": ["Naga Morich"], "taxonomyGroup": "Bangladeshi-style chilli pickle",
         "accuracyNote": "The maker does not publish a finished-product lab score; this is a pepper-based estimate.",
         "location": { "label": "United Kingdom", "countries": ["United Kingdom"], "continents": ["Europe"] }
@@ -1224,12 +1224,12 @@
         { "id": "scoville", "label": "Scoville", "value": 2500, "unit": "SHU", "display": "~2,500 SHU" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
+        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
       ],
       "categories": ["Chili crisp"],
       "tags": ["mexican-inspired", "garlicky"],
       "metadata": {
-        "difficultyBand": "medium", "recognition": 3, "rarity": "uncommon", "flavorGrade": "A",
+        "difficultyBand": "medium", "recognition": 3, "rarity": "common", "flavorGrade": "A",
         "pepperTypes": ["Mexican dried chile blend"], "taxonomyGroup": "Mexican-inspired chile crunch",
         "accuracyNote": "The maker does not publish SHU; this mild value is an editorial comparison estimate.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1731,12 +1731,12 @@
         { "id": "scoville", "label": "Scoville", "value": 2200000, "unit": "SHU", "display": "~2,200,000 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
       ],
       "categories": ["Chili crisp"],
       "tags": ["carolina-reaper", "garlic-shallot"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "uncommon", "flavorGrade": "A",
         "pepperTypes": ["Carolina Reaper", "Habanero"], "taxonomyGroup": "Superhot chili crisp",
         "accuracyNote": "The maker rates the crisp 5 out of 5 for heat but publishes no lab SHU; this comparison value uses the Carolina Reaper's peak rating.",
         "location": { "label": "United States", "countries": ["United States"], "continents": ["North America"] }
@@ -1754,12 +1754,12 @@
         { "id": "scoville", "label": "Scoville", "value": 1041427, "unit": "SHU", "display": "~1,041,427 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 2, "unit": "", "display": "C" },
-        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
       ],
       "categories": ["Pepper oil"],
       "tags": ["ghost-pepper", "pepper-extract"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "C",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "uncommon", "flavorGrade": "C",
         "pepperTypes": ["Bhut Jolokia"], "taxonomyGroup": "Extract-fortified pepper oil",
         "accuracyNote": "The maker publishes no finished-oil SHU and also adds pepper extract; this conservative comparison value uses a documented ghost-pepper peak.",
         "location": { "label": "United Kingdom", "countries": ["United Kingdom"], "continents": ["Europe"] }
@@ -1777,12 +1777,12 @@
         { "id": "scoville", "label": "Scoville", "value": 1041427, "unit": "SHU", "display": "~1,041,427 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 2, "unit": "types" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 4, "unit": "", "display": "A" },
-        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
       ],
       "categories": ["Chili crisp"],
       "tags": ["ghost-pepper", "fourteen-spices"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "A",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "uncommon", "flavorGrade": "A",
         "pepperTypes": ["Ghost pepper", "Er Jing Tiao chile"], "taxonomyGroup": "Chinese-style superhot crisp",
         "accuracyNote": "The maker rates the crisp 5 out of 5 for heat but publishes no lab SHU; this comparison value uses a documented ghost-pepper peak.",
         "location": { "label": "Australia", "countries": ["Australia"], "continents": ["Oceania"] }
@@ -1800,12 +1800,12 @@
         { "id": "scoville", "label": "Scoville", "value": 2200000, "unit": "SHU", "display": "~2,200,000 SHU (pepper-based)" },
         { "id": "pepper-varieties", "label": "Pepper varieties", "value": 1, "unit": "type" },
         { "id": "flavor-grade", "label": "Flavor grade", "value": 3, "unit": "", "display": "B" },
-        { "id": "rarity", "label": "Rarity", "value": 1, "unit": "", "display": "Common" }
+        { "id": "rarity", "label": "Rarity", "value": 2, "unit": "", "display": "Uncommon" }
       ],
       "categories": ["Pepper oil"],
       "tags": ["carolina-reaper", "olive-oil"],
       "metadata": {
-        "difficultyBand": "hard", "recognition": 2, "rarity": "common", "flavorGrade": "B",
+        "difficultyBand": "hard", "recognition": 2, "rarity": "uncommon", "flavorGrade": "B",
         "pepperTypes": ["Carolina Reaper"], "taxonomyGroup": "Italian superhot pepper oil",
         "accuracyNote": "The maker publishes no laboratory score for the diluted oil; this comparison value uses the Carolina Reaper's peak rating.",
         "location": { "label": "Italy", "countries": ["Italy"], "continents": ["Europe"] }

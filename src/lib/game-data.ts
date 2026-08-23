@@ -2098,11 +2098,11 @@ const pepperMetadataFor = (id: string): CardMetadata | undefined => {
 };
 
 const uncommonPepperIds = new Set([
-  "tangerine-dream", "pepperoncini", "fresno", "thai-chili", "scotch-bonnet", "padron", "ancho", "guajillo", "rocoto", "cubanelle", "hatch-chile",
-  "jimmy-nardello", "fatalii", "naga-jolokia", "yellow-bhut-assam", "chocolate-ghost", "chocolate-scotch-bonnet", "chile-de-arbol", "aji-amarillo", "chiltepin",
-  "aji-charapita", "lemon-drop", "bishop-crown", "fish-pepper", "goat-pepper", "pequin", "trinidad-perfume", "peter-pepper", "purple-beauty", "madame-jeanette",
-  "bolivian-rainbow", "black-pearl", "chocolate-habanero", "sugar-rush-peach", "sugar-rush-stripey", "orange-seven-pot", "ghost-breath", "thors-thunderbolt",
-  "seven-pot-barrackpore", "pimenta-da-neyde", "khang-starr-lemon-starrburst",
+  "tangerine-dream", "jimmy-nardello", "scotch-bonnet", "fatalii", "naga-jolokia", "yellow-bhut-assam", "chocolate-ghost", "chocolate-scotch-bonnet", "padron", "rocoto",
+  "chiltepin", "aji-charapita", "lemon-drop", "bishop-crown", "fish-pepper", "goat-pepper", "pequin", "trinidad-perfume", "peter-pepper", "purple-beauty",
+  "madame-jeanette", "bolivian-rainbow", "black-pearl", "chocolate-habanero", "sugar-rush-peach", "sugar-rush-stripey", "orange-seven-pot", "pink-tiger", "ghost-breath",
+  "thors-thunderbolt", "gator-jigsaw", "seven-pot-barrackpore", "aji-ayuyo", "aji-flor-morado", "purple-ufo", "khang-starr-lemon-starrburst", "quintisho",
+  "pimenta-da-neyde", "cgn-21500", "peachgum-tiger", "paradeisfruchtiger-gelber",
 ]);
 const rarePepperIds = new Set([
   "chocolate-rocoto-x", "orange-butch-t", "pepper-y", "the-noah", "armageddon", "jays-peach-ghost-scorpion", "naga-viper", "komodo-dragon",
@@ -4214,10 +4214,10 @@ const jetSeeds: Jet[] = [
 ];
 
 const uncommonJetIds = new Set([
-  "f-35-lightning-ii", "f-a-18-super-hornet", "rafale", "eurofighter-typhoon", "jas-39-gripen", "su-35",
-  "b-1-lancer", "av-8b-harrier-ii", "hawker-harrier", "u-2", "mig-31", "tu-160",
+  "rafale", "eurofighter-typhoon", "jas-39-gripen", "su-35", "b-1-lancer", "av-8b-harrier-ii",
+  "hawker-harrier", "mig-31", "tu-160", "fc-31", "f-ck-1", "english-electric-lightning",
 ]);
-const rareJetIds = new Set(["f-22-raptor", "su-57", "j-20", "b-21-raider", "f-117-nighthawk", "fc-31"]);
+const rareJetIds = new Set(["f-22-raptor", "su-57", "j-20", "b-21-raider", "f-117-nighthawk", "u-2"]);
 const epicJetIds = new Set(["b-2-spirit", "sr-71-blackbird"]);
 
 const jetRarityFor = (id: string): CardRarity => {
