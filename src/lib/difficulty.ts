@@ -1,5 +1,17 @@
 import type { Difficulty } from "./game-data";
 
+// A selected difficulty is a ceiling, not an exclusive question tier. This
+// keeps Hard varied and lets familiar recognition questions continue to appear
+// alongside advanced prompts while the selected card pool remains unchanged.
+export const questionDepthForSelection = (selected: Difficulty, seed: number): Difficulty => {
+  if (selected === 1) return 1;
+  const slot = Math.abs(Math.trunc(seed)) % 10;
+  if (selected === 2) return slot < 3 ? 1 : 2;
+  if (slot < 2) return 1;
+  if (slot < 5) return 2;
+  return 3;
+};
+
 export const autoDifficulty = (
   current: Difficulty,
   correct: boolean,

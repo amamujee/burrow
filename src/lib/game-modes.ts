@@ -24,6 +24,7 @@ import {
 import { scoreFeaturedContent } from "./content-quality";
 import { cardRarityLabels, cardRarityTier, worldLocationDisplay, type CardMetadata, type CardRarity, type WorldContinent, type WorldLocation } from "./card-metadata";
 import { cardDiscoveryIdentities } from "./card-discovery";
+import { questionDepthForSelection } from "./difficulty";
 import { poolForDifficulty } from "./difficulty-pool";
 import { discoveryShuffle, sample, sampleSafe, seedRandom, shuffle } from "./random";
 
@@ -2231,6 +2232,7 @@ export const buildFactRoundFromCards = (
   unlockedTitles: readonly string[] = [],
 ): FactRound => {
   const pool = preferredPool(cardsWithStats(cards), difficulty);
+  const questionDepth = questionDepthForSelection(difficulty, seed);
   if (pool.length < 2) throw new Error(`Need at least 2 stat cards to build a fact round for ${topic}`);
   const truthful = seedRandom(seed + 11) > 0.46;
   const locationPool = pool.filter(hasLocationMetadata);
@@ -2238,7 +2240,7 @@ export const buildFactRoundFromCards = (
   const eligibleLocationPool = truthful ? locationPool : falseLocationPool;
   const useLocation = eligibleLocationPool.length > 0
     && uniqueLocationLabels(locationPool).length >= 2
-    && (difficulty === 1 || seedRandom(seed + 14) > 0.5);
+    && (questionDepth === 1 || seedRandom(seed + 14) > 0.5);
 
   if (useLocation) {
     const card = discoveryShuffle(eligibleLocationPool, seed + 12, unlockedTitles, cardDiscoveryIdentities)[0];
@@ -2269,7 +2271,7 @@ export const buildFactRoundFromCards = (
 
   const card = discoveryShuffle(pool, seed + 12, unlockedTitles, cardDiscoveryIdentities)[0];
   const fakeCard = sampleSafe(pool.filter((item) => item.id !== card.id && item.statValue !== card.statValue), pool.filter((item) => item.id !== card.id), seed + 13);
-  const useStat = difficulty > 1 || seedRandom(seed + 14) > 0.45;
+  const useStat = questionDepth > 1 || seedRandom(seed + 14) > 0.45;
   const statement = truthful
     ? useStat
       ? `${card.title} has ${card.statDisplay}.`
@@ -2297,6 +2299,7 @@ export const buildNumberRoundFromCards = (
   seed: number,
 ): NumberRound => {
   const pool = preferredPool(cardsWithStats(cards).filter((card) => card.statValue >= 0), difficulty);
+  const questionDepth = questionDepthForSelection(difficulty, seed);
   if (pool.length < 2) throw new Error(`Need at least 2 non-negative stat cards to build a number round for ${topic}`);
   const values = pool.map((card) => card.statValue);
   const gap = statValueGap(values);
@@ -2306,10 +2309,10 @@ export const buildNumberRoundFromCards = (
 
   if (requestedOperation === "multiplication") {
     const [card, companion] = shuffle(pool, seed + 40).slice(0, 2);
-    return multiplicationRound(card, companion, topic, difficulty, seed);
+    return multiplicationRound(card, companion, topic, questionDepth, seed);
   }
 
-  if (requestedOperation === "subtraction" && shouldBuildFitRound(difficulty, seed)) {
+  if (requestedOperation === "subtraction" && shouldBuildFitRound(questionDepth, seed)) {
     const sorted = shuffle(pool, seed + 1).sort((a, b) => b.statValue - a.statValue);
     const bigger = sorted[0];
     const smaller = sorted.find((card) => card.id !== bigger.id && card.statValue > 0 && card.statValue <= bigger.statValue / 2);
@@ -2341,7 +2344,7 @@ export const buildNumberRoundFromCards = (
   }
 
   if (shouldAdd) {
-    const count = Math.min(pool.length, additionTermCount(difficulty, seed));
+    const count = Math.min(pool.length, additionTermCount(questionDepth, seed));
     const selected = shuffle(pool, seed + 1).slice(0, count);
     const termValues = selected.map((card) => Math.max(0, roundTo(card.statValue, gap)));
     const answer = sumValues(termValues);
@@ -2491,9 +2494,10 @@ const packAdditionPrompt = (topic: RoundTopic, count: number, statLabel: string)
 export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed: number): NumberRound => {
   const currentTopic = topicOrder(topic, seed);
   const requestedOperation = numberOperationForSeed(seed);
+  const questionDepth = questionDepthForSelection(difficulty, seed);
 
   if (currentTopic === "countries") {
-    const populationStep = difficulty === 1 ? 10 : difficulty === 2 ? 5 : 1;
+    const populationStep = questionDepth === 1 ? 10 : questionDepth === 2 ? 5 : 1;
     const pool = preferredPool(countries.filter((country) => country.population >= 1_000_000), difficulty);
     const first = shuffle(pool, seed + 1)[0];
     const firstMillions = Math.max(populationStep, roundTo(first.population / 1_000_000, populationStep));
@@ -2556,11 +2560,11 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     const pool = preferredPool(pepperPlantPool(), difficulty);
     if (requestedOperation === "multiplication") {
       const [first, second] = shuffle(pool, seed + 1).slice(0, 2);
-      return multiplicationRound(pepperCard(first), pepperCard(second), currentTopic, difficulty, seed);
+      return multiplicationRound(pepperCard(first), pepperCard(second), currentTopic, questionDepth, seed);
     }
 
     const [first, second] = shuffle(pool, seed + 1).slice(0, 2);
-    const countRange = difficulty === 1 ? [2, 7] as const : difficulty === 2 ? [4, 12] as const : [7, 20] as const;
+    const countRange = questionDepth === 1 ? [2, 7] as const : questionDepth === 2 ? [4, 12] as const : [7, 20] as const;
     const firstCount = pickFactor(countRange, seed + 2);
     const secondCount = pickFactor(countRange, seed + 3);
 
@@ -2616,11 +2620,11 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     const pool = preferredPool(buildings, difficulty);
     if (requestedOperation === "multiplication") {
       const [first, second] = shuffle(pool, seed + 3).slice(0, 2);
-      return multiplicationRound(buildingCard(first), buildingCard(second), currentTopic, difficulty, seed);
+      return multiplicationRound(buildingCard(first), buildingCard(second), currentTopic, questionDepth, seed);
     }
-    const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
+    const step = questionDepth === 1 ? 200 : questionDepth === 2 ? 100 : 50;
     if (requestedOperation === "addition") {
-      const count = additionTermCount(difficulty, seed);
+      const count = additionTermCount(questionDepth, seed);
       const selected = shuffle(pool, seed + 4).slice(0, count);
       const values = selected.map((building) => Math.max(step, roundTo(building.heightFt, step)));
       const answer = sumValues(values);
@@ -2640,7 +2644,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         biggerValue: values[0] ?? 0,
         smallerValue: values[1] ?? 0,
         answer,
-        choices: numberChoices(answer, difficulty === 1 ? 400 : 200, seed + 6),
+        choices: numberChoices(answer, questionDepth === 1 ? 400 : 200, seed + 6),
         explanation: `Adding the heights gives ${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} feet.`,
       };
     }
@@ -2664,7 +2668,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       biggerValue,
       smallerValue,
       answer,
-      choices: numberChoices(answer, difficulty === 1 ? 200 : 100, seed + 6),
+      choices: numberChoices(answer, questionDepth === 1 ? 200 : 100, seed + 6),
       explanation: `The height difference is ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} feet.`,
     };
   }
@@ -2673,11 +2677,11 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     const pool = preferredPool(spaceCards, difficulty);
     if (requestedOperation === "multiplication") {
       const [first, second] = shuffle(pool, seed + 6).slice(0, 2);
-      return multiplicationRound(spaceCard(first, "size"), spaceCard(second, "size"), currentTopic, difficulty, seed);
+      return multiplicationRound(spaceCard(first, "size"), spaceCard(second, "size"), currentTopic, questionDepth, seed);
     }
     if (requestedOperation === "addition") {
-      const count = additionTermCount(difficulty, seed);
-      const step = difficulty === 1 ? 500 : difficulty === 2 ? 100 : 50;
+      const count = additionTermCount(questionDepth, seed);
+      const step = questionDepth === 1 ? 500 : questionDepth === 2 ? 100 : 50;
       const selected = shuffle(pool.filter((space) => space.diameterMiles !== undefined), seed + 7).slice(0, count);
       const values = selected.map((space) => Math.max(step, roundTo(space.diameterMiles ?? 0, step)));
       const answer = sumValues(values);
@@ -2697,7 +2701,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         biggerValue: values[0] ?? 0,
         smallerValue: values[1] ?? 0,
         answer,
-        choices: numberChoices(answer, difficulty === 1 ? 1000 : 500, seed + 9),
+        choices: numberChoices(answer, questionDepth === 1 ? 1000 : 500, seed + 9),
         explanation: `Adding the diameters gives ${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} miles.`,
       };
     }
@@ -2705,7 +2709,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     const planetsWithMoonCounts = pool.filter((space) => space.kind === "planet" && space.moons !== undefined);
     const moreMoons = sampleSafe(planetsWithMoonCounts.filter((space) => (space.moons ?? 0) >= 10), planetsWithMoonCounts, seed + 7);
     const fewerMoons = sampleSafe(planetsWithMoonCounts.filter((space) => space.id !== moreMoons.id && (space.moons ?? 0) < (moreMoons.moons ?? 0)), planetsWithMoonCounts.filter((space) => space.id !== moreMoons.id), seed + 8);
-    const step = difficulty === 1 ? 10 : 5;
+    const step = questionDepth === 1 ? 10 : 5;
     const { biggerValue, smallerValue, answer } = roundedSubtractionPair(moreMoons.moons ?? 0, fewerMoons.moons ?? 0, step);
     return {
       id: `${seed}-number-space-${moreMoons.id}-${fewerMoons.id}`,
@@ -2723,7 +2727,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       biggerValue,
       smallerValue,
       answer,
-      choices: numberChoices(answer, difficulty === 1 ? 10 : 5, seed + 9),
+      choices: numberChoices(answer, questionDepth === 1 ? 10 : 5, seed + 9),
       explanation: `The difference is ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} moons.`,
     };
   }
@@ -2732,13 +2736,13 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     const pool = preferredPool(jets, difficulty);
     if (requestedOperation === "multiplication") {
       const [first, second] = shuffle(pool, seed + 9).slice(0, 2);
-      return multiplicationRound(jetCard(first), jetCard(second), currentTopic, difficulty, seed);
+      return multiplicationRound(jetCard(first), jetCard(second), currentTopic, questionDepth, seed);
     }
-    const step = difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50;
+    const step = questionDepth === 1 ? 200 : questionDepth === 2 ? 100 : 50;
     if (requestedOperation === "addition") {
-      const count = additionTermCount(difficulty, seed);
+      const count = additionTermCount(questionDepth, seed);
       const selected = shuffle(pool, seed + 10).slice(0, count);
-      const countRange = difficulty === 1 ? [2, 7] as const : difficulty === 2 ? [4, 12] as const : [7, 20] as const;
+      const countRange = questionDepth === 1 ? [2, 7] as const : questionDepth === 2 ? [4, 12] as const : [7, 20] as const;
       const values = selected.map((_, index) => pickFactor(countRange, seed + 20 + index));
       const answer = sumValues(values);
       return {
@@ -2781,19 +2785,19 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       biggerValue,
       smallerValue,
       answer,
-      choices: numberChoices(answer, difficulty === 1 ? 400 : 200, seed + 12),
+      choices: numberChoices(answer, questionDepth === 1 ? 400 : 200, seed + 12),
       explanation: `The speed difference is ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} mph.`,
     };
   }
 
-  const step = difficulty === 1 ? 5 : 2;
+  const step = questionDepth === 1 ? 5 : 2;
   const sharkPool = preferredPool(sharks, difficulty);
   if (requestedOperation === "multiplication") {
     const [first, second] = shuffle(sharkPool, seed + 9).slice(0, 2);
-    return multiplicationRound(sharkCard(first), sharkCard(second), currentTopic, difficulty, seed);
+    return multiplicationRound(sharkCard(first), sharkCard(second), currentTopic, questionDepth, seed);
   }
   if (requestedOperation === "addition") {
-    const count = additionTermCount(difficulty, seed);
+    const count = additionTermCount(questionDepth, seed);
     const selected = shuffle(sharkPool, seed + 10).slice(0, count);
     const values = selected.map((shark) => Math.max(step, roundTo(shark.lengthFt, step)));
     const answer = sumValues(values);
@@ -2813,7 +2817,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       biggerValue: values[0] ?? 0,
       smallerValue: values[1] ?? 0,
       answer,
-      choices: numberChoices(answer, difficulty === 1 ? 10 : 4, seed + 12),
+      choices: numberChoices(answer, questionDepth === 1 ? 10 : 4, seed + 12),
       explanation: `Adding the lengths gives ${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} feet.`,
     };
   }
@@ -2840,7 +2844,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     biggerValue,
     smallerValue,
     answer,
-    choices: numberChoices(answer, difficulty === 1 ? 5 : 4, seed + 12),
+    choices: numberChoices(answer, questionDepth === 1 ? 5 : 4, seed + 12),
     explanation: `The length difference is ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} feet.`,
   };
 };
@@ -3168,6 +3172,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []): FactRound => {
   const currentTopic = topicOrder(topic, seed);
   const truthful = seedRandom(seed + 11) > 0.46;
+  const questionDepth = questionDepthForSelection(difficulty, seed);
 
   if (currentTopic === "countries") {
     const pool = preferredPool(countries, difficulty);
@@ -3176,9 +3181,9 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       topic: "countries",
       title: item.name,
     }))[0];
-    const factType = difficulty === 1
+    const factType = questionDepth === 1
       ? sample(["capital", "continent"] as const, seed + 13)
-      : difficulty === 2
+      : questionDepth === 2
         ? sample(["capital", "continent", "population", "area"] as const, seed + 13)
         : sample(["population", "area", "neighbors", "highest-point"] as const, seed + 13);
     const alternate = sample(pool.filter((item) => item.id !== country.id), seed + 14);
@@ -3225,7 +3230,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     const locationPool = pool.filter(hasLocationMetadata);
     const falseLocationPool = locationPool.filter((card) => separatedFactLocationPartners(card, locationPool).length > 0);
     const eligibleLocationPool = truthful ? locationPool : falseLocationPool;
-    const useLocation = eligibleLocationPool.length > 0 && (difficulty === 1 ? seedRandom(seed + 15) > 0.35 : seedRandom(seed + 15) > 0.55);
+    const useLocation = eligibleLocationPool.length > 0 && (questionDepth === 1 ? seedRandom(seed + 15) > 0.35 : seedRandom(seed + 15) > 0.55);
     if (useLocation) {
       const locatedPepper = hasLocationMetadata(pepper) && eligibleLocationPool.some((item) => item.id === pepper.id)
         ? pepper
@@ -3263,7 +3268,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     const measuredPool = pool.filter(hasScovilleMeasurement);
     const measuredPepper = hasScovilleMeasurement(pepper) ? pepper : sample(measuredPool, seed + 18);
     const fakeShu = sampleSafe(measuredPool.filter((item) => item.id !== measuredPepper.id && item.shuMax !== measuredPepper.shuMax), measuredPool.filter((item) => item.id !== measuredPepper.id), seed + 14);
-    const useMath = hasScovilleMeasurement(pepper) && difficulty > 1 && seedRandom(seed + 14) > 0.5;
+    const useMath = hasScovilleMeasurement(pepper) && questionDepth > 1 && seedRandom(seed + 14) > 0.5;
     const statement = truthful
       ? useMath
         ? `${pepper.name} can reach about ${formatNumber(pepper.shuMax)} Scoville heat units.`
@@ -3286,7 +3291,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "buildings") {
     const pool = preferredPool(buildings, difficulty);
-    const requestedFactType = difficulty === 1 ? sample(["city", "location"] as const, seed + 17) : sample(["city", "location", "height", "status"] as const, seed + 17);
+    const requestedFactType = questionDepth === 1 ? sample(["city", "location"] as const, seed + 17) : sample(["city", "location", "height", "status"] as const, seed + 17);
     const locationLabel = (item: Building) => item.metadata.location?.label ?? `${item.city}, ${item.country}`;
     const falseLocationPartners = (item: Building) => pool.filter((candidate) =>
       candidate.id !== item.id
@@ -3348,7 +3353,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   if (currentTopic === "space") {
     const pool = preferredPool(spaceCards, difficulty);
     const space = sample(pool, seed + 18);
-    const factType = difficulty === 1 ? "group" : sample(["group", "fact", "temperature", "distance"] as const, seed + 20);
+    const factType = questionDepth === 1 ? "group" : sample(["group", "fact", "temperature", "distance"] as const, seed + 20);
     const realTemperature = space.surfaceTempK ?? space.meanSurfaceTempF;
     const realDistance = space.distanceFromSunMillionMiles ?? space.distanceLightYears;
     const fakeGroup = sampleSafe(pool.filter((item) => item.id !== space.id && item.group !== space.group), pool.filter((item) => item.id !== space.id), seed + 19);
@@ -3401,7 +3406,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "jets") {
     const pool = preferredPool(jets, difficulty);
-    const requestedFactType = difficulty === 1 ? "category" : sample(["category", "speed", "range", "country"] as const, seed + 20);
+    const requestedFactType = questionDepth === 1 ? "category" : sample(["category", "speed", "range", "country"] as const, seed + 20);
     const falseCountryPartners = (item: Jet) => pool.filter((candidate) =>
       candidate.id !== item.id
       && candidate.country !== item.country
@@ -3454,7 +3459,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   const pool = preferredPool(sharks, difficulty);
   const shark = sample(pool, seed + 18);
-  const factType = difficulty === 1 ? "family" : sample(["family", "speed", "size", "diet"] as const, seed + 20);
+  const factType = questionDepth === 1 ? "family" : sample(["family", "speed", "size", "diet"] as const, seed + 20);
   const fakeFamily = sampleSafe(pool.filter((item) => item.id !== shark.id && item.family !== shark.family), pool.filter((item) => item.id !== shark.id), seed + 19);
   const fakeSpeed = sampleSafe(pool.filter((item) => item.id !== shark.id && item.speedMph !== shark.speedMph), pool.filter((item) => item.id !== shark.id), seed + 21);
   const fakeSize = sampleSafe(pool.filter((item) => item.id !== shark.id && item.lengthFt !== shark.lengthFt), pool.filter((item) => item.id !== shark.id), seed + 22);

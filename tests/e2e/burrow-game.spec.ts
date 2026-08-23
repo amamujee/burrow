@@ -12,7 +12,7 @@ import { cardRarities } from "../../src/lib/card-metadata";
 import { cardDiscoveryIdentities, cardUnlockKey, isCardUnlocked } from "../../src/lib/card-discovery";
 import { buildings, countries, jets, peppers, sharks, spaceCards, topicPacks } from "../../src/lib/game-data";
 import { poolForDifficulty } from "../../src/lib/difficulty-pool";
-import { autoDifficulty } from "../../src/lib/difficulty";
+import { autoDifficulty, questionDepthForSelection } from "../../src/lib/difficulty";
 import {
   buildFactRound,
   buildFactRoundFromCards,
@@ -313,11 +313,57 @@ test("Hard retains every Easy subject and adds the rest of every category", () =
   }
 });
 
-test("hard multiplication uses genuinely harder factors", () => {
+test("Hard rotates Easy, Medium, and Hard question depths without narrowing its card pool", () => {
+  const hardDepths = Array.from({ length: 10 }, (_, seed) => questionDepthForSelection(3, seed));
+  expect(hardDepths.filter((depth) => depth === 1)).toHaveLength(2);
+  expect(hardDepths.filter((depth) => depth === 2)).toHaveLength(3);
+  expect(hardDepths.filter((depth) => depth === 3)).toHaveLength(5);
+
+  const mediumDepths = Array.from({ length: 10 }, (_, seed) => questionDepthForSelection(2, seed));
+  expect(new Set(mediumDepths)).toEqual(new Set([1, 2]));
+  expect(questionDepthForSelection(1, 9)).toBe(1);
+
+  const simpleAndAdvancedKinds = {
+    buildings: ["building-name", "building-difference"],
+    sharks: ["shark-name", "shark-power"],
+    space: ["space-name", "space-moons"],
+    jets: ["jet-name", "jet-firepower"],
+    countries: ["country-flag", "country-highest-point"],
+  } as const;
+  for (const [topic, expectedKinds] of Object.entries(simpleAndAdvancedKinds)) {
+    const kinds = new Set(Array.from({ length: 50 }, (_, seed) => buildSession(topic as keyof typeof topicPacks, 3, seed * 97, []))
+      .flat()
+      .map((question) => question.kind));
+    for (const kind of expectedKinds) expect(kinds, `${topic} Hard should retain ${kind}`).toContain(kind);
+  }
+});
+
+test("every collectible card can surface in Hard Peek play", () => {
+  for (const category of playableChallengeCategories) {
+    const unlockedTitles: string[] = [];
+    const seenIds = new Set<string>();
+    const builtIn = Object.prototype.hasOwnProperty.call(topicPacks, category.id);
+
+    for (let roundIndex = 0; roundIndex < category.cards.length * 6 && seenIds.size < category.cards.length; roundIndex += 1) {
+      const round = builtIn
+        ? buildRevealRound(category.id as keyof typeof topicPacks, 3, roundIndex * 101 + 7, unlockedTitles)
+        : buildRevealRoundFromCards(category.cards, category.id, 3, roundIndex * 101 + 7, unlockedTitles);
+      seenIds.add(round.card.id);
+      unlockedTitles.push(round.card.title);
+    }
+
+    expect(seenIds.size, `${category.id} should make every card collectable in Hard`).toBe(category.cards.length);
+  }
+});
+
+test("Hard multiplication mixes easier practice with genuinely hard factors", () => {
   const easyRounds = Array.from({ length: 30 }, (_, seed) => buildNumberRound("peppers", 1, seed * 3 + 2));
-  const hardRounds = Array.from({ length: 30 }, (_, seed) => buildNumberRound("peppers", 3, seed * 3 + 2));
+  const hardSeeds = Array.from({ length: 30 }, (_, seed) => seed * 3 + 2);
+  const hardRounds = hardSeeds.map((seed) => buildNumberRound("peppers", 3, seed));
   expect(easyRounds.every((round) => round.operation === "multiplication" && round.termValues.every((value) => value <= 5))).toBe(true);
-  expect(hardRounds.every((round) => round.operation === "multiplication" && round.termValues.every((value) => value >= 6 && value <= 12))).toBe(true);
+  expect(hardRounds.some((round, index) => questionDepthForSelection(3, hardSeeds[index]) === 1 && round.termValues.every((value) => value <= 5))).toBe(true);
+  expect(hardRounds.some((round, index) => questionDepthForSelection(3, hardSeeds[index]) === 3 && round.termValues.every((value) => value >= 6 && value <= 12))).toBe(true);
+  expect(hardRounds.every((round) => round.operation === "multiplication" && round.termValues.every((value) => value >= 1 && value <= 12))).toBe(true);
 });
 
 test("pack Odd One rounds never ask children to infer a hidden category", () => {
@@ -1495,13 +1541,13 @@ test("Countries & Flags ships an exact 200-card passport catalog", () => {
   expect(countries.find((country) => country.code === "MV")).toMatchObject({ landNeighborCount: 0, highestPointM: 5 });
 });
 
-test("country quiz rotation moves from recognition to deeper metadata", () => {
+test("country quiz rotation keeps recognition while adding deeper metadata", () => {
   const mediumRounds = Array.from({ length: 90 }, (_, seed) => buildSession("countries", 2, seed * 101, [])).flat();
-  expect(new Set(mediumRounds.map((round) => round.kind))).toEqual(new Set(["country-flag", "country-capital", "country-location", "country-population", "country-area"]));
+  expect(new Set(mediumRounds.map((round) => round.kind))).toEqual(new Set(["country-flag", "country-capital", "country-continent", "country-location", "country-population", "country-area"]));
 
   const rounds = Array.from({ length: 90 }, (_, seed) => buildSession("countries", 3, seed * 101, [])).flat();
   const kinds = new Set(rounds.map((round) => round.kind));
-  expect(kinds).toEqual(new Set(["country-population", "country-area", "country-neighbors", "country-highest-point"]));
+  expect(kinds).toEqual(new Set(["country-flag", "country-capital", "country-continent", "country-location", "country-population", "country-area", "country-neighbors", "country-highest-point"]));
 
   const flagRound = mediumRounds.find((round) => round.kind === "country-flag");
   expect(flagRound?.secondChanceClue).toMatch(/capital is .+ in .+ people/);
@@ -1513,8 +1559,8 @@ test("country quiz rotation moves from recognition to deeper metadata", () => {
   expect(mapRound?.map?.choices.some((choice) => choice.id === mapRound.map?.answerId)).toBe(true);
 
   const hardFacts = Array.from({ length: 90 }, (_, seed) => buildFactRound("countries", 3, seed * 103, []));
-  expect(new Set(hardFacts.map((round) => round.id.match(/fact-country-(population|area|neighbors|highest-point)-/)?.[1]))).toEqual(
-    new Set(["population", "area", "neighbors", "highest-point"]),
+  expect(new Set(hardFacts.map((round) => round.id.match(/fact-country-(capital|continent|population|area|neighbors|highest-point)-/)?.[1]))).toEqual(
+    new Set(["capital", "continent", "population", "area", "neighbors", "highest-point"]),
   );
 });
 

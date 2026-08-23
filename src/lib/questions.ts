@@ -22,6 +22,7 @@ import {
   type TopicId,
 } from "./game-data";
 import { cardDiscoveryIdentities } from "./card-discovery";
+import { questionDepthForSelection } from "./difficulty";
 import { poolForDifficulty } from "./difficulty-pool";
 import { discoveryShuffle, sample, seedRandom, shuffle } from "./random";
 import { worldLocationDisplay, type WorldLocation } from "./card-metadata";
@@ -903,6 +904,7 @@ const headToHeadQuestionFromSpec = (spec: HeadToHeadSpec, seed: number): Questio
 };
 
 const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty, seed: number): Question => {
+  const questionDepth = questionDepthForSelection(difficulty, seed);
   if (topic === "peppers") {
     const pool = preferredPool(peppers.filter(hasScovilleMeasurement).filter(isPepperFruit), difficulty);
     const first = sample(pool, seed + 1);
@@ -918,7 +920,7 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
   }
 
   if (topic === "sharks") {
-    const stats: ("length" | "speed" | "power")[] = difficulty === 1 ? ["length", "speed"] : ["length", "speed", "power"];
+    const stats: ("length" | "speed" | "power")[] = questionDepth === 1 ? ["length", "speed"] : ["length", "speed", "power"];
     const stat = sample(stats, seed + 5);
     const pool = preferredPool(sharks, difficulty);
     const first = sample(pool, seed + 6);
@@ -927,7 +929,7 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
   }
 
   if (topic === "jets") {
-    const stats: ("speed" | "range" | "firepower")[] = difficulty === 1 ? ["speed", "range"] : ["speed", "range", "firepower"];
+    const stats: ("speed" | "range" | "firepower")[] = questionDepth === 1 ? ["speed", "range"] : ["speed", "range", "firepower"];
     const stat = sample(stats, seed + 5);
     const pool = preferredPool(jets, difficulty);
     const first = sample(pool, seed + 6);
@@ -947,7 +949,7 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
     return countryComparisonQuestion(seed, first, second, stat);
   }
 
-  const stats: ("temp" | "radius" | "distance" | "moons")[] = difficulty === 1 ? ["radius", "distance", "temp"] : ["temp", "radius", "distance", "moons"];
+  const stats: ("temp" | "radius" | "distance" | "moons")[] = questionDepth === 1 ? ["radius", "distance", "temp"] : ["temp", "radius", "distance", "moons"];
   const stat = sample(stats, seed + 8);
   const pool = preferredPool(stat === "distance" || stat === "moons"
     ? spacePlanets
@@ -961,14 +963,15 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
 
 const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: readonly string[] = []): Question => {
   const pool = preferredPool(countries, difficulty);
+  const questionDepth = questionDepthForSelection(difficulty, seed);
   const country = discoveryShuffle(pool, seed, unlockedTitles, (item) => cardDiscoveryIdentities({
     id: item.id,
     topic: "countries",
     title: item.name,
   }))[0];
-  const kinds: QuestionKind[] = difficulty === 1
+  const kinds: QuestionKind[] = questionDepth === 1
     ? ["country-flag", "country-capital", "country-continent", "country-location", "country-flag"]
-    : difficulty === 2
+    : questionDepth === 2
       ? ["country-flag", "country-capital", "country-location", "country-population", "country-area"]
       : ["country-population", "country-area", "country-neighbors", "country-highest-point", "country-population", "country-area"];
   const kind = sample(kinds, seed + 17);
@@ -976,7 +979,7 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
   if (kind === "country-location") {
     const locatedPool = pool.filter(hasLocationMetadata);
     const locatedCountry = hasLocationMetadata(country) ? country : locatedPool[0];
-    const mapChoices = locationQuestionChoices(locatedCountry, locatedPool, difficulty, seed + 21);
+    const mapChoices = locationQuestionChoices(locatedCountry, locatedPool, questionDepth, seed + 21);
     if (!mapChoices) return countryQuestion(seed + 1, difficulty, unlockedTitles);
     const choices = mapChoices.map((choice) => choice.label);
     return {
@@ -1082,7 +1085,7 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
   }
 
   const sameContinent = pool.filter((item) => item.id !== country.id && item.continents.some((continent) => country.continents.includes(continent)));
-  const distractors = difficulty === 1 || sameContinent.length < 3
+  const distractors = questionDepth === 1 || sameContinent.length < 3
     ? pool.filter((item) => item.id !== country.id)
     : sameContinent;
   return {
@@ -1105,6 +1108,7 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
 
 const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: readonly string[] = []): Question => {
   const pool = preferredPool(peppers, difficulty);
+  const questionDepth = questionDepthForSelection(difficulty, seed);
   const pepper = discoveryShuffle(pool, seed, unlockedTitles, (item) => cardDiscoveryIdentities({
     id: item.id,
     topic: "peppers",
@@ -1113,12 +1117,12 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
   const measuredPool = pool.filter(hasScovilleMeasurement).filter(isPepperFruit);
   const locationPool = pool.filter(hasLocationMetadata);
   const locationCandidates = locationPool.flatMap((item, index) => {
-    const mapChoices = locationQuestionChoices(item, locationPool, difficulty, seed + 5 + index);
+    const mapChoices = locationQuestionChoices(item, locationPool, questionDepth, seed + 5 + index);
     return mapChoices ? [{ item, mapChoices }] : [];
   });
-  const baseKinds: QuestionKind[] = difficulty === 1
+  const baseKinds: QuestionKind[] = questionDepth === 1
     ? ["pepper-heat", "pepper-shu", "pepper-hotter", "pepper-reading"]
-    : difficulty === 2
+    : questionDepth === 2
       ? ["pepper-heat", "pepper-shu", "pepper-hotter", "pepper-reading"]
       : ["pepper-shu", "pepper-hotter", "pepper-reading", "pepper-heat"];
   const kinds = locationCandidates.length ? [...baseKinds, "pepper-location"] : baseKinds;
@@ -1251,15 +1255,16 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
 
 const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
   const pool = preferredPool(buildings, difficulty);
+  const questionDepth = questionDepthForSelection(difficulty, seed);
   const building = sample(pool, seed);
   const locationPool = pool.filter(hasLocationMetadata);
   const locationCandidates = locationPool.flatMap((item, index) => {
-    const mapChoices = locationQuestionChoices(item, locationPool, difficulty, seed + 25 + index);
+    const mapChoices = locationQuestionChoices(item, locationPool, questionDepth, seed + 25 + index);
     return mapChoices ? [{ item, mapChoices }] : [];
   });
-  const baseKinds: QuestionKind[] = difficulty === 1
+  const baseKinds: QuestionKind[] = questionDepth === 1
     ? ["building-name", "building-height", "building-taller", "building-reading"]
-    : difficulty === 2
+    : questionDepth === 2
       ? ["building-name", "building-height", "building-taller", "building-difference", "building-reading"]
       : ["building-height", "building-taller", "building-difference", "building-reading"];
   const kinds = locationCandidates.length ? [...baseKinds, "building-location"] : baseKinds;
@@ -1317,9 +1322,9 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
     const challenger = sample(pool.filter((item) => item.id !== building.id && item.heightFt !== building.heightFt), seed + 28);
     const taller = building.heightFt > challenger.heightFt ? building : challenger;
     const shorter = building.heightFt > challenger.heightFt ? challenger : building;
-    const { biggerValue, smallerValue, diff } = roundedSubtractionPair(taller.heightFt, shorter.heightFt, difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50);
+    const { biggerValue, smallerValue, diff } = roundedSubtractionPair(taller.heightFt, shorter.heightFt, questionDepth === 1 ? 200 : questionDepth === 2 ? 100 : 50);
     const correct = `${formatNumber(diff)} ft`;
-    const choices = buildingDifferenceChoices(diff, difficulty, seed + 29);
+    const choices = buildingDifferenceChoices(diff, questionDepth, seed + 29);
     const cards = shuffle([roundedComparisonCard(buildingCard(taller, "A"), biggerValue, "ft"), roundedComparisonCard(buildingCard(shorter, "B"), smallerValue, "ft")], seed + 30);
     return {
       id: `${seed}-building-difference-${taller.id}-${shorter.id}`,
@@ -1339,19 +1344,19 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
   }
 
   if (kind === "building-reading") {
-    return buildingReadingQuestion(seed, building, difficulty);
+    return buildingReadingQuestion(seed, building, questionDepth);
   }
 
-  const correct = displayHeightChoice(building.heightFt, difficulty);
+  const correct = displayHeightChoice(building.heightFt, questionDepth);
   return {
     id: `${seed}-building-height-${building.id}`,
     topic: "buildings",
     kind: "building-height",
-    prompt: buildingHeightPrompt(building, difficulty),
+    prompt: buildingHeightPrompt(building, questionDepth),
     image: building.image,
     imageAlt: building.name,
     imageCredit: building.imageCredit,
-    choices: buildingHeightChoices(building, difficulty, seed + 32),
+    choices: buildingHeightChoices(building, questionDepth, seed + 32),
     answer: correct,
     explanation: `${buildingHeightSentence(building)}. It is in ${building.city}, ${building.country}.`,
     locations: buildingLocations(building),
@@ -1361,10 +1366,11 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
 
 const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
   const pool = preferredPool(sharks, difficulty);
+  const questionDepth = questionDepthForSelection(difficulty, seed);
   const shark = sample(pool, seed);
-  const kinds: QuestionKind[] = difficulty === 1
+  const kinds: QuestionKind[] = questionDepth === 1
     ? ["shark-name", "shark-family", "shark-bigger", "shark-reading"]
-    : difficulty === 2
+    : questionDepth === 2
       ? ["shark-name", "shark-family", "shark-bigger", "shark-faster", "shark-difference", "shark-power"]
       : ["shark-bigger", "shark-faster", "shark-difference", "shark-power", "shark-family"];
   const kind = sample(kinds, seed + 41);
@@ -1497,10 +1503,11 @@ const jetReadingOptions = (jet: Jet, seed: number, count: number) => {
 
 const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
   const pool = preferredPool(jets, difficulty);
+  const questionDepth = questionDepthForSelection(difficulty, seed);
   const jet = sample(pool, seed);
-  const kinds: QuestionKind[] = difficulty === 1
+  const kinds: QuestionKind[] = questionDepth === 1
     ? ["jet-name", "jet-category", "jet-faster", "jet-reading"]
-    : difficulty === 2
+    : questionDepth === 2
       ? ["jet-name", "jet-category", "jet-faster", "jet-range", "jet-firepower", "jet-difference"]
       : ["jet-faster", "jet-range", "jet-firepower", "jet-difference", "jet-category"];
   const kind = sample(kinds, seed + 53);
@@ -1551,9 +1558,9 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
     const challenger = sample(pool.filter((item) => item.id !== jet.id && item.maxSpeedMph !== jet.maxSpeedMph), seed + 59);
     const faster = jet.maxSpeedMph > challenger.maxSpeedMph ? jet : challenger;
     const slower = jet.maxSpeedMph > challenger.maxSpeedMph ? challenger : jet;
-    const { biggerValue, smallerValue, diff } = roundedSubtractionPair(faster.maxSpeedMph, slower.maxSpeedMph, difficulty === 1 ? 200 : difficulty === 2 ? 100 : 50);
+    const { biggerValue, smallerValue, diff } = roundedSubtractionPair(faster.maxSpeedMph, slower.maxSpeedMph, questionDepth === 1 ? 200 : questionDepth === 2 ? 100 : 50);
     const correct = `${formatNumber(diff)} mph`;
-    const choices = differenceChoices(diff, "mph", difficulty === 1 ? 200 : 100, difficulty, seed + 60);
+    const choices = differenceChoices(diff, "mph", questionDepth === 1 ? 200 : 100, questionDepth, seed + 60);
     const cards = shuffle([roundedComparisonCard(jetCard(faster, "A", "speed"), biggerValue, "mph"), roundedComparisonCard(jetCard(slower, "B", "speed"), smallerValue, "mph")], seed + 61);
     return {
       id: `${seed}-jet-difference-${faster.id}-${slower.id}`,
@@ -1590,10 +1597,11 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
 
 const spaceQuestion = (seed: number, difficulty: Difficulty): Question => {
   const pool = preferredPool(spaceCards, difficulty);
+  const questionDepth = questionDepthForSelection(difficulty, seed);
   const item = sample(pool, seed);
-  const kinds: QuestionKind[] = difficulty === 1
+  const kinds: QuestionKind[] = questionDepth === 1
     ? ["space-name", "space-farther", "space-concept", "space-reading"]
-    : difficulty === 2
+    : questionDepth === 2
       ? ["space-name", "space-hotter", "space-bigger", "space-farther", "space-moons", "space-concept", "space-reading"]
       : ["space-hotter", "space-bigger", "space-farther", "space-moons", "space-concept", "space-reading"];
   const kind = sample(kinds, seed + 61);
