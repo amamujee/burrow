@@ -2371,11 +2371,19 @@ test("a mystery flag gives one clue retry and unlocks a country passport", { tag
 
   const passport = page.getByText("Open country passport", { exact: true }).locator("xpath=ancestor::details[1]");
   await expect(passport).toBeVisible();
+  const passportCard = passport.locator("xpath=ancestor::div[contains(@class, 'overflow-hidden')][1]");
+  await expect(passportCard.getByText("Population", { exact: true })).toBeVisible();
+  const escapedCapital = answerCountry!.capital.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  await expect(passportCard.locator("p").filter({ hasText: new RegExp(`${escapedCapital} ·`) })).toBeVisible();
   await passport.locator("summary").click();
-  await expect(passport.getByText(answerCountry!.capital, { exact: true })).toBeVisible();
-  await expect(passport.getByText("Population", { exact: true })).toBeVisible();
   await expect(passport.getByText("Land area", { exact: true })).toBeVisible();
-  await expect(passport.getByText("Continent", { exact: true })).toBeVisible();
+  await expect(passport.getByText("Land neighbors", { exact: true })).toBeVisible();
+  await expect(passport.getByText("Highest point", { exact: true })).toBeVisible();
+  await expect(passport.getByText("Region", { exact: true })).toBeVisible();
+  await expect(passport.getByText("Country code", { exact: true })).toBeVisible();
+  await expect(passport.getByText(answerCountry!.capital, { exact: true })).toHaveCount(0);
+  await expect(passport.getByText("Population", { exact: true })).toHaveCount(0);
+  await expect(passport.getByText("Continent", { exact: true })).toHaveCount(0);
   await expect(page.getByText(/^Image:/).first()).toBeVisible();
 
   await page.getByRole("button", { name: "Back to game" }).click();
@@ -2927,8 +2935,9 @@ test("collection only shows selected topics", async ({ page }) => {
   await pepperGuides.first().click();
   expect(await pepperGuides.evaluateAll((guides) => guides.every((guide) => guide.closest("details")?.open))).toBe(true);
   const pepperCard = pepperGuides.first().locator("xpath=ancestor::div[contains(@class, 'overflow-hidden')][1]");
-  await expect(pepperCard.getByText("Heat level", { exact: true })).toBeVisible();
-  await expect(pepperCard.getByText("Scoville range", { exact: true })).toBeVisible();
+  await expect(pepperCard.getByText("Scoville", { exact: true })).toBeVisible();
+  await expect(pepperCard.getByText("Heat level", { exact: true })).toHaveCount(0);
+  await expect(pepperCard.getByText("Scoville range", { exact: true })).toHaveCount(0);
   await expect(pepperCard.getByText("Color", { exact: true })).toBeVisible();
   await expect(pepperCard.getByText("Type", { exact: true })).toBeVisible();
 
