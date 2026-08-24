@@ -14,6 +14,7 @@ import { OfflineReady } from "@/components/offline-ready";
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { weightTopicsForAccuracy } from "@/lib/adaptive-topics";
 import { resolvedImagePresentation } from "@/lib/building-image-presentation";
+import { collectionCardProfileDetails } from "@/lib/card-profile";
 import { cardRarities, cardRarityLabels, type CardRarity } from "@/lib/card-metadata";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
 import { cardDiscoveryIdentities, cardUnlockKeysForSubjects, isCardUnlocked } from "@/lib/card-discovery";
@@ -4416,6 +4417,7 @@ function CollectionBook({
         <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
           {visibleCards.map((card) => {
             const isUnlocked = isCardUnlocked(unlockedCardSet, card);
+            const profileDetails = collectionCardProfileDetails(card);
             return (
               <div key={`${card.topic}-${card.id}`} className="overflow-hidden rounded-lg border-2 border-[#092421] bg-white">
                 <div className={`relative flex h-36 overflow-hidden bg-[#e3efe4] ${isUnlocked ? "" : "grayscale"}`}>
@@ -4433,7 +4435,7 @@ function CollectionBook({
                   {isUnlocked && <p className="mt-1 text-[10px] font-black uppercase tracking-[0.08em] text-[#72543e]">{card.subStat}</p>}
                   <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#5f6b5d]">{isUnlocked ? card.fact : "Answer correctly to add it here."}</p>
                   {isUnlocked && <p className="mt-2 text-[9px] font-semibold leading-tight text-[#6b7468]">Image: {card.imageCredit}</p>}
-                  {isUnlocked && card.details?.length ? (
+                  {isUnlocked && profileDetails.length ? (
                     <details
                       open={cardDetailsExpanded}
                       className="group mt-2 rounded-md border-2 border-[#d9c7a7] bg-[#fff9ec] open:border-[#092421] open:shadow-[2px_2px_0_#092421]"
@@ -4450,8 +4452,8 @@ function CollectionBook({
                           <span aria-hidden="true" className="text-base leading-none group-open:rotate-45">+</span>
                         </span>
                       </summary>
-                      <dl className="grid grid-cols-2 gap-px border-t-2 border-[#d9c7a7] bg-[#d9c7a7]">
-                        {card.details.map((detail) => (
+                      <dl className={`grid gap-px border-t-2 border-[#d9c7a7] bg-[#d9c7a7] ${profileDetails.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
+                        {profileDetails.map((detail) => (
                           <div key={`${card.id}-${detail.label}`} className="min-w-0 bg-white p-2">
                             <dt className="text-[8px] font-black uppercase tracking-[0.12em] text-[#72543e]">{detail.label}</dt>
                             <dd className="mt-0.5 break-words text-xs font-black leading-tight text-[#102f36]">{detail.value}</dd>

@@ -8,6 +8,7 @@ import {
   pepperChallengeCampaigns,
 } from "../../src/components/core-mini-challenge";
 import { weightTopicsForAccuracy } from "../../src/lib/adaptive-topics";
+import { collectionCardProfileDetails } from "../../src/lib/card-profile";
 import { cardRarities } from "../../src/lib/card-metadata";
 import { cardDiscoveryIdentities, cardUnlockKey, isCardUnlocked } from "../../src/lib/card-discovery";
 import { buildings, countries, jets, peppers, sharks, spaceCards, topicPacks } from "../../src/lib/game-data";
@@ -524,20 +525,45 @@ test("the derived card catalog is reused across round generation", () => {
   expect(collectionCards()).toBe(collectionCards());
 });
 
-test("every collection card has a structured fact profile", () => {
+test("every collection card profile adds information beyond its headline", () => {
   const cards = [
     ...collectionCards(),
     ...loadPlayablePacks().flatMap((pack) => packToPlayableDeck(pack).cards),
   ];
+  expect(cards.length).toBeGreaterThan(800);
   for (const card of cards) {
-    expect(card.details?.length, `${card.topic}/${card.id} needs structured details`).toBeGreaterThanOrEqual(2);
-    expect(card.details?.some((detail) => detail.label === "Data note"), `${card.topic}/${card.id} should keep data notes out of the child-facing card`).toBe(false);
-    expect(new Set(card.details?.map((detail) => detail.label)).size, `${card.topic}/${card.id} detail labels must be distinct`).toBe(card.details?.length);
-    for (const detail of card.details ?? []) {
+    const profileDetails = collectionCardProfileDetails(card);
+    const normalize = (value: string) => value.toLocaleLowerCase("en-US").replace(/[^a-z0-9]+/g, " ").trim();
+    const normalizedSubStat = ` ${normalize(card.subStat)} `;
+    expect(profileDetails.length, `${card.topic}/${card.id} should only remove details`).toBeLessThanOrEqual(card.details?.length ?? 0);
+    expect(profileDetails.some((detail) => detail.label === "Data note"), `${card.topic}/${card.id} should keep data notes out of the child-facing card`).toBe(false);
+    expect(profileDetails.some((detail) => /rarity|scoville/i.test(detail.label)), `${card.topic}/${card.id} should not repeat rarity or Scoville in its profile`).toBe(false);
+    expect(new Set(profileDetails.map((detail) => detail.label)).size, `${card.topic}/${card.id} detail labels must be distinct`).toBe(profileDetails.length);
+    for (const detail of profileDetails) {
       expect(detail.label.trim(), `${card.topic}/${card.id} has an empty detail label`).toBeTruthy();
       expect(detail.value.trim(), `${card.topic}/${card.id} has an empty detail value`).toBeTruthy();
+      expect(detail.label.toLocaleLowerCase("en-US"), `${card.topic}/${card.id} repeats its headline label`).not.toBe(card.statLabel.toLocaleLowerCase("en-US"));
+      expect(detail.value.toLocaleLowerCase("en-US"), `${card.topic}/${card.id} repeats its headline value`).not.toBe(card.statDisplay.toLocaleLowerCase("en-US"));
+      expect(detail.value.toLocaleLowerCase("en-US"), `${card.topic}/${card.id} repeats its title`).not.toBe(card.title.toLocaleLowerCase("en-US"));
+      const normalizedValue = normalize(detail.value);
+      if (normalizedValue.length >= 4) {
+        expect(normalizedSubStat, `${card.topic}/${card.id} repeats its subheadline value`).not.toContain(` ${normalizedValue} `);
+      }
     }
   }
+
+  const franks = cards.find((card) => card.topic === "hot-sauces" && card.title === "Frank's RedHot Original");
+  expect(collectionCardProfileDetails(franks!).map((detail) => detail.label)).toEqual([
+    "Pepper varieties",
+    "Flavor grade",
+    "Category",
+    "Peppers",
+    "Group",
+    "Traits",
+  ]);
+
+  const milkyWay = cards.find((card) => card.topic === "space" && card.id === "milky-way");
+  expect(collectionCardProfileDetails(milkyWay!)).toEqual([]);
 });
 
 test("every generated Quiz location question carries matching map choices", () => {
