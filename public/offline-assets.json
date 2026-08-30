@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "51aee915d4363c693f87",
-  "assetCount": 913,
-  "totalBytes": 205547814,
+  "version": "db1ecb493275b7dddad2",
+  "assetCount": 931,
+  "totalBytes": 207741426,
   "assets": {
     "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.jpg": {
       "bytes": 91997,
@@ -2188,6 +2188,10 @@
       "bytes": 98612,
       "revision": "fc413cdec64a60b42c0b"
     },
+    "/burrow-assets/peppers/albino-sweet.jpg": {
+      "bytes": 87313,
+      "revision": "7774273682804f6776bc"
+    },
     "/burrow-assets/peppers/aleppo.jpg": {
       "bytes": 88212,
       "revision": "e1d733df93a5114737da"
@@ -2252,6 +2256,10 @@
       "bytes": 30669,
       "revision": "547fe0a1d7b4bdedd2d2"
     },
+    "/burrow-assets/peppers/carolina-cayenne.jpg": {
+      "bytes": 49907,
+      "revision": "9ac83d8d383c8a65dbc5"
+    },
     "/burrow-assets/peppers/carolina-reaper.jpg": {
       "bytes": 199617,
       "revision": "24e6e91e264bc5746aef"
@@ -2263,6 +2271,10 @@
     "/burrow-assets/peppers/cascabella.jpg": {
       "bytes": 113885,
       "revision": "725506b6ad392aa0ddca"
+    },
+    "/burrow-assets/peppers/cayenne-buists-yellow.jpg": {
+      "bytes": 88168,
+      "revision": "69ad0356e0b831ea2ee2"
     },
     "/burrow-assets/peppers/cayenne.jpg": {
       "bytes": 167105,
@@ -2388,6 +2400,10 @@
       "bytes": 116823,
       "revision": "c27e92d90037192053ca"
     },
+    "/burrow-assets/peppers/elephants-ear.jpg": {
+      "bytes": 114708,
+      "revision": "12d9b03db7225379ec99"
+    },
     "/burrow-assets/peppers/espelette.jpg": {
       "bytes": 120415,
       "revision": "2e6ee3df9c18f872bfe4"
@@ -2408,6 +2424,10 @@
       "bytes": 148093,
       "revision": "56d376d6e22be688f2ab"
     },
+    "/burrow-assets/peppers/frontera-sweet.jpg": {
+      "bytes": 89615,
+      "revision": "838c3655facd96ed54ba"
+    },
     "/burrow-assets/peppers/gator-jigsaw.jpg": {
       "bytes": 394359,
       "revision": "154c693c8a81e69be1c6"
@@ -2419,6 +2439,10 @@
     "/burrow-assets/peppers/ghost-pepper.jpg": {
       "bytes": 194637,
       "revision": "44afed198a85dafa47c7"
+    },
+    "/burrow-assets/peppers/giant-szegedi.jpg": {
+      "bytes": 169902,
+      "revision": "f58059917d370f0ebdae"
     },
     "/burrow-assets/peppers/goat-pepper.jpg": {
       "bytes": 961502,
@@ -2452,9 +2476,17 @@
       "bytes": 411290,
       "revision": "f4afbdf2d34a6931328c"
     },
+    "/burrow-assets/peppers/hj8-total-eclipse.jpg": {
+      "bytes": 100413,
+      "revision": "738fa6c0a87929c4a605"
+    },
     "/burrow-assets/peppers/hungarian-wax.jpg": {
       "bytes": 294437,
       "revision": "ab8d58f72d7c92baa7b3"
+    },
+    "/burrow-assets/peppers/infinity.jpg": {
+      "bytes": 61196,
+      "revision": "7ac5e70b0b553488de92"
     },
     "/burrow-assets/peppers/italian-long-hot.jpg": {
       "bytes": 207212,
@@ -2475,6 +2507,10 @@
     "/burrow-assets/peppers/jimmy-nardello.png": {
       "bytes": 1255933,
       "revision": "309bc427382bedbc2836"
+    },
+    "/burrow-assets/peppers/jwala-finger.jpg": {
+      "bytes": 88180,
+      "revision": "083879265ddcb435806d"
     },
     "/burrow-assets/peppers/kashmiri-chili.jpg": {
       "bytes": 236333,
@@ -2516,6 +2552,10 @@
       "bytes": 98458,
       "revision": "b8d71c44fd07a005505a"
     },
+    "/burrow-assets/peppers/medusa.jpg": {
+      "bytes": 274130,
+      "revision": "0914d4cad78698666ea5"
+    },
     "/burrow-assets/peppers/mini-sweet-pepper.jpg": {
       "bytes": 208379,
       "revision": "570c116eaf4d0515398c"
@@ -2531,6 +2571,10 @@
     "/burrow-assets/peppers/moruga-red.png": {
       "bytes": 2461020,
       "revision": "9b800a304424ad8539df"
+    },
+    "/burrow-assets/peppers/moshi.jpg": {
+      "bytes": 137420,
+      "revision": "c04c5b1e6358209fb8d7"
     },
     "/burrow-assets/peppers/mulato.jpg": {
       "bytes": 710581,
@@ -2560,6 +2604,10 @@
       "bytes": 271736,
       "revision": "e55bb00bac8aaaa698a4"
     },
+    "/burrow-assets/peppers/new-mexico-6-4-heritage.jpg": {
+      "bytes": 206911,
+      "revision": "135e118d9d8e452660c8"
+    },
     "/burrow-assets/peppers/new-mexico-chile.jpg": {
       "bytes": 259697,
       "revision": "69717f8d7f0026f124d1"
@@ -2579,6 +2627,10 @@
     "/burrow-assets/peppers/orange-seven-pot.jpg": {
       "bytes": 381549,
       "revision": "a90e4579c3ef58fa04f6"
+    },
+    "/burrow-assets/peppers/orange-thai.jpg": {
+      "bytes": 225127,
+      "revision": "9f1652291599348f58c9"
     },
     "/burrow-assets/peppers/padron.jpg": {
       "bytes": 164015,
@@ -2720,6 +2772,10 @@
       "bytes": 130876,
       "revision": "155b46df3abaace8aa5d"
     },
+    "/burrow-assets/peppers/senise.jpg": {
+      "bytes": 116482,
+      "revision": "188f940271d66487e5e2"
+    },
     "/burrow-assets/peppers/serrano.jpg": {
       "bytes": 493308,
       "revision": "d889500fab966f0d9b3d"
@@ -2740,9 +2796,17 @@
       "bytes": 397017,
       "revision": "a39141e2550cd28f8baf"
     },
+    "/burrow-assets/peppers/spanish-naga.jpg": {
+      "bytes": 73572,
+      "revision": "64cc564cb5891eb85220"
+    },
     "/burrow-assets/peppers/sport-pepper.jpg": {
       "bytes": 63875,
       "revision": "02e997ad136fae50f878"
+    },
+    "/burrow-assets/peppers/sucette-de-provence.jpg": {
+      "bytes": 94955,
+      "revision": "8720f4081830855a101c"
     },
     "/burrow-assets/peppers/sugar-rush-cream.jpg": {
       "bytes": 299759,
@@ -2796,6 +2860,10 @@
       "bytes": 157406,
       "revision": "565a0d8d79d7bf488321"
     },
+    "/burrow-assets/peppers/tshololo.jpg": {
+      "bytes": 80831,
+      "revision": "8ae20d61773824ac5c8d"
+    },
     "/burrow-assets/peppers/white-aji-fantasy.jpg": {
       "bytes": 356219,
       "revision": "7404d1f6c5eebd6d82cc"
@@ -2807,6 +2875,10 @@
     "/burrow-assets/peppers/wiri-wiri.jpg": {
       "bytes": 165371,
       "revision": "5acf0d0c38e07b9a860e"
+    },
+    "/burrow-assets/peppers/yatsafusa.jpg": {
+      "bytes": 134782,
+      "revision": "71cb989473a0ba00a553"
     },
     "/burrow-assets/peppers/yellow-bhut-assam.png": {
       "bytes": 860739,

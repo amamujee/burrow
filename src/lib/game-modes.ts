@@ -852,6 +852,24 @@ const pepperSizeInches: Record<string, number> = {
   puya: 3.5,
   morita: 3,
   "chile-japones": 2,
+  "albino-sweet": 4.25,
+  "elephants-ear": 6.5,
+  "giant-szegedi": 4.5,
+  senise: 6,
+  "frontera-sweet": 2.5,
+  "cayenne-buists-yellow": 4.5,
+  "hj8-total-eclipse": 10,
+  "new-mexico-6-4-heritage": 6.5,
+  medusa: 2.25,
+  "sucette-de-provence": 6,
+  "jwala-finger": 2.5,
+  moshi: 2,
+  "orange-thai": 2.5,
+  yatsafusa: 3,
+  tshololo: 4.5,
+  "carolina-cayenne": 5,
+  "spanish-naga": 3,
+  infinity: 2,
 };
 
 const pepperPlantHeightInches: Record<string, number> = {
@@ -1028,6 +1046,24 @@ const pepperPlantHeightInches: Record<string, number> = {
   puya: 30,
   morita: 30,
   "chile-japones": 24,
+  "albino-sweet": 15,
+  "elephants-ear": 36,
+  "giant-szegedi": 30,
+  senise: 30,
+  "frontera-sweet": 48,
+  "cayenne-buists-yellow": 30,
+  "hj8-total-eclipse": 36,
+  "new-mexico-6-4-heritage": 30,
+  medusa: 7,
+  "sucette-de-provence": 30,
+  "jwala-finger": 30,
+  moshi: 42,
+  "orange-thai": 30,
+  yatsafusa: 24,
+  tshololo: 42,
+  "carolina-cayenne": 36,
+  "spanish-naga": 48,
+  infinity: 48,
 };
 
 const pepperPlantHeight = (pepper: Pepper) => {
@@ -3242,8 +3278,8 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       const location = locatedPepper.metadata.location;
       const fakePepper = truthful ? locatedPepper : sample(separatedFactLocationPartners(locatedPepper, locationPool), seed + 17);
       const statement = truthful
-        ? `${locatedPepper.name} is linked to ${location.label}.`
-        : `${locatedPepper.name} is linked to ${fakePepper.metadata.location.label}.`;
+        ? `${locatedPepper.name} is linked to ${worldLocationLabelInProse(location.label)}.`
+        : `${locatedPepper.name} is linked to ${worldLocationLabelInProse(fakePepper.metadata.location.label)}.`;
       const claimedLocation = truthful ? location : fakePepper.metadata.location;
 
       return {
@@ -3255,7 +3291,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
         imageAlt: locatedPepper.name,
         imageCredit: locatedPepper.imageCredit,
         answer: truthful ? "True" : "False",
-        explanation: `${locatedPepper.name} is linked to ${location.label}. ${pepperHeatExplanation(locatedPepper)}`,
+        explanation: `${locatedPepper.name} is linked to ${worldLocationLabelInProse(location.label)}. ${pepperHeatExplanation(locatedPepper)}`,
         locations: [location],
         map: {
           claimed: geoChoiceForLocation(claimedLocation),
