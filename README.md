@@ -52,9 +52,11 @@ npm run validate:packs # Validate repo-authored pack JSON files
 npm run check:images   # Verify local image files and report duplicates
 npm run qa:content     # Run content-quality checks
 npm run test:logic     # Run logic and content coverage
-npm run test:e2e       # Build and run browser coverage
+npm run test:e2e       # Build and run watchdog-bounded browser coverage
 npm run verify         # Run the complete pre-publish check
 ```
+
+Playwright runs use a process watchdog in `scripts/run-playwright.mjs`. Logic tests stop after 90 seconds without output or five minutes overall; browser projects stop after 150 seconds without output or ten minutes overall. Desktop and mobile projects run in separate Playwright processes, so a stalled teardown cannot silently hold the entire browser suite open.
 
 ## Make Your Own Pack
 
