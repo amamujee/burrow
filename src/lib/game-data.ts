@@ -26,6 +26,8 @@ export type Pepper = {
   heat: HeatBand;
   shuMin: number | null;
   shuMax: number | null;
+  /** Representative score used when a game needs one value from a documented range. */
+  comparisonShu?: number;
   scovilleStatus?: "published" | "unofficial" | "unpublished" | "not-applicable";
   color: string;
   image: string;
@@ -321,20 +323,28 @@ const pepperSeeds: PepperSeed[] = [
     name: "Cayenne",
     shuMin: 30000,
     shuMax: 50000,
+    comparisonShu: 50000,
     color: "red",
     ...contentImage("peppers", "cayenne", "A Fat Red Cayenne Pepper.jpg"),
     imageCredit: "Ashoka Jegroo, Wikimedia Commons",
     fact: "Cayenne peppers are often dried and ground into red pepper powder.",
+    metadata: {
+      accuracyNote: "Cayenne peppers are commonly reported at 30,000 to 50,000 SHU. Burrow uses 50,000 SHU, the upper end of that range, for single-score game comparisons.",
+    },
   },
   {
     id: "tabasco",
     name: "Tabasco",
     shuMin: 30000,
     shuMax: 50000,
+    comparisonShu: 30000,
     color: "red",
     ...contentImage("peppers", "tabasco", "Tabasco peppers.JPG"),
     imageCredit: "Wikimedia Commons",
     fact: "Tabasco peppers are famous for hot sauce.",
+    metadata: {
+      accuracyNote: "Tabasco peppers are commonly reported at 30,000 to 50,000 SHU. Burrow uses 30,000 SHU, the lower end of that range, for single-score game comparisons.",
+    },
   },
   {
     id: "thai-chili",

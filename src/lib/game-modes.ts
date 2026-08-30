@@ -324,16 +324,19 @@ const topicOrder = (topic: TopicScope, seed: number): KnowledgeTopic => {
 
 type MeasuredPepper = Pepper & { shuMin: number; shuMax: number };
 const hasScovilleMeasurement = <T extends Pepper>(pepper: T): pepper is T & MeasuredPepper => pepper.shuMin !== null && pepper.shuMax !== null;
+const pepperComparisonShu = (pepper: MeasuredPepper) => pepper.comparisonShu ?? pepper.shuMax;
 const pepperRange = (pepper: MeasuredPepper) =>
   pepper.shuMin === pepper.shuMax ? formatNumber(pepper.shuMax) : `${formatNumber(pepper.shuMin)}-${formatNumber(pepper.shuMax)}`;
 const pepperScovilleDisplay = (pepper: Pepper) => {
   if (pepper.scovilleStatus === "not-applicable") return "Not on the Scoville scale";
   if (pepper.shuMin !== null && pepper.shuMax === null) return `${formatNumber(pepper.shuMin)}+ SHU (unofficial)`;
   if (!hasScovilleMeasurement(pepper)) return "SHU not published";
-  return `${pepper.scovilleStatus === "unofficial" ? "~" : ""}${formatNumber(pepper.shuMax)} SHU${pepper.scovilleStatus === "unofficial" ? " (unofficial)" : ""}`;
+  return `${pepper.scovilleStatus === "unofficial" ? "~" : ""}${formatNumber(pepperComparisonShu(pepper))} SHU${pepper.scovilleStatus === "unofficial" ? " (unofficial)" : ""}`;
 };
 const pepperHeatExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
-  ? `${pepper.name} can reach ${pepperScovilleDisplay(pepper)}, so it is ${pepper.heat} (${heatBandRangeLabel(pepper.heat)}). Its full range is ${pepperRange(pepper)} SHU.`
+  ? pepper.comparisonShu === undefined
+    ? `${pepper.name} can reach ${pepperScovilleDisplay(pepper)}, so it is ${pepper.heat} (${heatBandRangeLabel(pepper.heat)}). Its full range is ${pepperRange(pepper)} SHU.`
+    : `${pepper.name} uses ${pepperScovilleDisplay(pepper)} for game comparisons, so it is ${pepper.heat} (${heatBandRangeLabel(pepper.heat)}). Its full range is ${pepperRange(pepper)} SHU.`
   : pepper.scovilleStatus === "not-applicable"
     ? `${pepper.name} is not a chile, so the Scoville scale does not apply. Sanshool gives it a tingly, numbing feeling instead of capsaicin heat.`
   : pepper.shuMin !== null
@@ -352,15 +355,15 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
   imageAlt: pepper.name,
   imageCredit: pepper.imageCredit,
   statLabel: "Scoville",
-  statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : Number.NaN,
+  statValue: hasScovilleMeasurement(pepper) ? pepperComparisonShu(pepper) : Number.NaN,
   statDisplay: pepperScovilleDisplay(pepper),
-  collectionSortValue: pepper.shuMax ?? pepper.shuMin ?? Number.NaN,
+  collectionSortValue: hasScovilleMeasurement(pepper) ? pepperComparisonShu(pepper) : pepper.shuMin ?? Number.NaN,
   subStat: pepper.scovilleStatus === "not-applicable"
     ? "tingly · not a chile · ✨"
     : `${heatProfiles[pepper.heat].label} · ${hasScovilleMeasurement(pepper) ? heatBandRangeLabel(pepper.heat) : "SHU not published"} · ${heatProfiles[pepper.heat].emoji}`,
   fact: pepper.fact,
-  qualityScore: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).score,
-  qualityFlags: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepper.shuMax : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).flags,
+  qualityScore: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepperComparisonShu(pepper) : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).score,
+  qualityFlags: scoreFeaturedContent({ ...pepper, statValue: hasScovilleMeasurement(pepper) ? pepperComparisonShu(pepper) : undefined, sourceCaution: hasScovilleMeasurement(pepper) ? undefined : "unpublished Scoville score" }).flags,
   metadata: pepper.metadata,
   details: [
     ...rarityDetails(pepper.metadata),
@@ -1338,7 +1341,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       fact: pepper.fact,
       metadata: pepper.metadata,
       stats: [
-        ...(hasScovilleMeasurement(pepper) ? [{ id: "scoville", label: "Scoville", value: pepper.shuMax, display: pepperScovilleDisplay(pepper), direction: "higher" as const }] : []),
+        ...(hasScovilleMeasurement(pepper) ? [{ id: "scoville", label: "Scoville", value: pepperComparisonShu(pepper), display: pepperScovilleDisplay(pepper), direction: "higher" as const }] : []),
         ...rarityStats(pepper.metadata),
         { id: "size", label: "Fruit size", value: pepperSizeInches[pepper.id] ?? 2, display: inches(pepperSizeInches[pepper.id] ?? 2), direction: "higher" },
         { id: "plant-height", label: "Plant height", value: pepperPlantHeight(pepper), display: plantHeight(pepperPlantHeight(pepper)), direction: "higher" },
@@ -3305,14 +3308,16 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     const fakeHeat = sample(pool.filter((item) => item.id !== pepper.id && item.heat !== pepper.heat), seed + 13);
     const measuredPool = pool.filter(hasScovilleMeasurement);
     const measuredPepper = hasScovilleMeasurement(pepper) ? pepper : sample(measuredPool, seed + 18);
-    const fakeShu = sampleSafe(measuredPool.filter((item) => item.id !== measuredPepper.id && item.shuMax !== measuredPepper.shuMax), measuredPool.filter((item) => item.id !== measuredPepper.id), seed + 14);
+    const fakeShu = sampleSafe(measuredPool.filter((item) => item.id !== measuredPepper.id && pepperComparisonShu(item) !== pepperComparisonShu(measuredPepper)), measuredPool.filter((item) => item.id !== measuredPepper.id), seed + 14);
     const useMath = hasScovilleMeasurement(pepper) && questionDepth > 1 && seedRandom(seed + 14) > 0.5;
     const statement = truthful
       ? useMath
-        ? `${pepper.name} can reach about ${formatNumber(pepper.shuMax)} Scoville heat units.`
+        ? pepper.comparisonShu === undefined
+          ? `${pepper.name} can reach about ${formatNumber(pepperComparisonShu(pepper))} Scoville heat units.`
+          : `${pepper.name} uses ${formatNumber(pepperComparisonShu(pepper))} Scoville heat units as its game comparison score.`
         : `${pepper.name}'s heat level is ${pepper.heat}.`
       : useMath
-        ? `${pepper.name} can reach about ${formatNumber(fakeShu.shuMax)} Scoville heat units.`
+        ? `${pepper.name} uses ${formatNumber(pepperComparisonShu(fakeShu))} Scoville heat units as its game comparison score.`
         : `${pepper.name}'s heat level is ${fakeHeat.heat}.`;
     return {
       id: `${seed}-fact-pepper-${pepper.id}`,

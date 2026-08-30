@@ -690,6 +690,42 @@ test("source-verified Scoville ranges stay accurate", () => {
   });
 });
 
+test("Cayenne and Tabasco keep their shared range but use distinct game comparison scores", () => {
+  const cayenne = peppers.find((pepper) => pepper.id === "cayenne");
+  const tabasco = peppers.find((pepper) => pepper.id === "tabasco");
+
+  expect(cayenne).toMatchObject({
+    name: "Cayenne",
+    shuMin: 30000,
+    shuMax: 50000,
+    comparisonShu: 50000,
+  });
+  expect(tabasco).toMatchObject({
+    name: "Tabasco",
+    shuMin: 30000,
+    shuMax: 50000,
+    comparisonShu: 30000,
+  });
+  expect(cayenne?.metadata?.accuracyNote).toContain("upper end of that range");
+  expect(tabasco?.metadata?.accuracyNote).toContain("lower end of that range");
+
+  const pepperCards = collectionCards().filter((card) => card.topic === "peppers");
+  expect(pepperCards.find((card) => card.id === "cayenne")).toMatchObject({
+    statValue: 50000,
+    statDisplay: "50,000 SHU",
+  });
+  expect(pepperCards.find((card) => card.id === "tabasco")).toMatchObject({
+    statValue: 30000,
+    statDisplay: "30,000 SHU",
+  });
+  for (const id of ["cayenne", "tabasco"]) {
+    expect(pepperCards.find((card) => card.id === id)?.details).toContainEqual({
+      label: "Scoville range",
+      value: "30,000-50,000 SHU",
+    });
+  }
+});
+
 test("15 new peppers share their verified records and real photos across the game", () => {
   const expected = {
     habanada: [0, 0],
@@ -1658,7 +1694,7 @@ test("Yellow Bhut Assam joins normal pepper play with its permitted source image
 
 test("pepper collection cards use their displayed Scoville score from least to hottest", () => {
   const ordered = orderCollectionCardsByScoville(collectionCards().filter((card) => card.topic === "peppers"));
-  const displayedScores = new Map(peppers.map((pepper) => [pepper.id, pepper.shuMax ?? pepper.shuMin ?? Number.POSITIVE_INFINITY]));
+  const displayedScores = new Map(peppers.map((pepper) => [pepper.id, pepper.comparisonShu ?? pepper.shuMax ?? pepper.shuMin ?? Number.POSITIVE_INFINITY]));
   const expectedOrder = [...ordered]
     .sort((a, b) => (displayedScores.get(a.id) ?? Number.POSITIVE_INFINITY) - (displayedScores.get(b.id) ?? Number.POSITIVE_INFINITY)
       || a.title.localeCompare(b.title));
@@ -1669,6 +1705,7 @@ test("pepper collection cards use their displayed Scoville score from least to h
 
   expect(ordered.slice(0, 3).map((card) => card.title)).toEqual(["Aji Delight", "Albino Sweet", "Bell Pepper"]);
   expect(ordered.map((card) => card.id)).toEqual(expectedOrder.map((card) => card.id));
+  expect(ordered.findIndex((card) => card.id === "tabasco")).toBeLessThan(ordered.findIndex((card) => card.id === "cayenne"));
   expect(ordered.findIndex((card) => card.id === "orange-seven-pot")).toBeLessThan(ordered.findIndex((card) => card.id === "armageddon"));
   expect(lowerBoundOnly.every((card) => !Number.isFinite(card.statValue))).toBe(true);
 });

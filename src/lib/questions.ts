@@ -137,8 +137,9 @@ export type Question = {
 const sessionLength = 16;
 type MeasuredPepper = Pepper & { shuMin: number; shuMax: number };
 const hasScovilleMeasurement = <T extends Pepper>(pepper: T): pepper is T & MeasuredPepper => pepper.shuMin !== null && pepper.shuMax !== null;
+const pepperComparisonShu = (pepper: MeasuredPepper) => pepper.comparisonShu ?? pepper.shuMax;
 const isPepperFruit = (pepper: Pepper) => !pepper.isCondiment;
-const maxShu = Math.max(...peppers.filter(hasScovilleMeasurement).map((pepper) => pepper.shuMax));
+const maxShu = Math.max(...peppers.filter(hasScovilleMeasurement).map(pepperComparisonShu));
 const maxHeight = 6562;
 const maxSharkLength = 65;
 const maxSharkSpeed = 45;
@@ -174,7 +175,9 @@ const range = (pepper: MeasuredPepper) => pepper.shuMin === pepper.shuMax ? form
 const feet = (value: number) => `${formatNumber(value)} ft`;
 const heatMeter = (heat: HeatBand) => ({ label: heat, icons: heatProfiles[heat].icons, emoji: heatProfiles[heat].emoji, line: heatProfiles[heat].kidLine });
 const heatBandExplanation = (pepper: Pepper) => hasScovilleMeasurement(pepper)
-  ? `${pepper.name} is ${pepper.heat} because its top Scoville score is ${pepper.scovilleStatus === "unofficial" ? "unofficially " : ""}${formatShu(pepper.shuMax)}, which falls within the ${heatBandRangeLabel(pepper.heat)} range.`
+  ? pepper.comparisonShu === undefined
+    ? `${pepper.name} is ${pepper.heat} because its top Scoville score is ${pepper.scovilleStatus === "unofficial" ? "unofficially " : ""}${formatShu(pepper.shuMax)}, which falls within the ${heatBandRangeLabel(pepper.heat)} range.`
+    : `${pepper.name} has a reported range of ${range(pepper)} SHU and uses ${formatShu(pepperComparisonShu(pepper))} for game comparisons, which falls within the ${heatBandRangeLabel(pepper.heat)} range.`
   : pepper.scovilleStatus === "not-applicable"
     ? `${pepper.name} is not a chile, so the Scoville scale does not apply. Sanshool gives it a tingly, numbing feeling instead of capsaicin heat.`
   : pepper.shuMin !== null
@@ -546,9 +549,9 @@ const pepperCard = (pepper: MeasuredPepper, label: "A" | "B"): ComparisonCard =>
   imageAlt: pepper.name,
   imageCredit: pepper.imageCredit,
   statLabel: "Scoville",
-  statValue: formatShu(pepper.shuMax),
+  statValue: formatShu(pepperComparisonShu(pepper)),
   subStat: `${heatProfiles[pepper.heat].label} · ${heatBandRangeLabel(pepper.heat)}`,
-  meterValue: pepper.shuMax,
+  meterValue: pepperComparisonShu(pepper),
   meterMax: maxShu,
 });
 
@@ -678,7 +681,7 @@ const countryComparisonCard = (country: Country, label: "A" | "B", stat: "popula
 const comparisonAnswer = (cards: ComparisonCard[], winnerName: string) => `${cards.find((card) => card.title === winnerName)?.label}: ${winnerName}`;
 
 const pepperHotterQuestion = (seed: number, first: MeasuredPepper, second: MeasuredPepper): Question => {
-  const hotter = first.shuMax >= second.shuMax ? first : second;
+  const hotter = pepperComparisonShu(first) >= pepperComparisonShu(second) ? first : second;
   const cards = shuffle([pepperCard(first, "A"), pepperCard(second, "B")], seed + 12);
   return {
     id: `${seed}-pepper-hotter-${first.id}-${second.id}`,
@@ -696,7 +699,7 @@ const pepperHotterQuestion = (seed: number, first: MeasuredPepper, second: Measu
     comparison: cards,
     choices: cards.map((card) => `${card.label}: ${card.title}`),
     answer: comparisonAnswer(cards, hotter.name),
-    explanation: `${hotter.name} can reach ${formatShu(hotter.shuMax)}, the higher score in this comparison. A higher Scoville score indicates more heat.`,
+    explanation: `${hotter.name} has the higher game comparison score at ${formatShu(pepperComparisonShu(hotter))}. A higher Scoville score indicates more heat.`,
     locations: itemLocations(first, second),
     heatMeter: heatMeter(hotter.heat),
   };
@@ -1174,7 +1177,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
       explanation: `${heatBandExplanation(pepper)} ${heatProfiles[pepper.heat].kidLine}`,
       locations: itemLocations(pepper),
       heatMeter: heatMeter(pepper.heat),
-      numberLine: hasScovilleMeasurement(pepper) ? { label: "Scoville score", value: pepper.shuMax, max: maxShu, unit: "SHU" } : undefined,
+      numberLine: hasScovilleMeasurement(pepper) ? { label: "Scoville score", value: pepperComparisonShu(pepper), max: maxShu, unit: "SHU" } : undefined,
     };
   }
 
@@ -1249,7 +1252,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
     explanation: `${measuredPepper.name} has a reported range of ${correct}${measuredPepper.scovilleStatus === "unofficial" ? " in unofficial listings" : ""}. Its highest reported score classifies its heat as ${measuredPepper.heat} (${heatBandRangeLabel(measuredPepper.heat)}).`,
     locations: itemLocations(measuredPepper),
     heatMeter: heatMeter(measuredPepper.heat),
-    numberLine: { label: "Heat", value: measuredPepper.shuMax, max: maxShu, unit: "SHU" },
+    numberLine: { label: "Heat", value: pepperComparisonShu(measuredPepper), max: maxShu, unit: "SHU" },
   };
 };
 
