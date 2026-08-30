@@ -162,7 +162,7 @@ test("built-in topic totals match the playable card catalogs", () => {
     countries: { count: countries.length, eyebrow: `${countries.length} flag cards` },
   };
 
-  expect(peppers).toHaveLength(192);
+  expect(peppers).toHaveLength(193);
   for (const [topic, values] of Object.entries(expected)) {
     const pack = topicPacks[topic as keyof typeof topicPacks];
     expect(pack.libraryCount).toBe(values.count);
@@ -1185,8 +1185,45 @@ test("18 globally varied peppers use distinct real photos, complete provenance, 
 
   const hardIds = new Set(poolForDifficulty(peppers, 3).map((pepper) => pepper.id));
   for (const id of newPepperIds) expect(hardIds).toContain(id);
-  expect(topicPacks.peppers.libraryCount).toBe(192);
-  expect(topicPacks.peppers.featuredCount).toBe(192);
+  expect(topicPacks.peppers.libraryCount).toBe(193);
+  expect(topicPacks.peppers.featuredCount).toBe(193);
+});
+
+test("Chocolate Pepper X uses its documented name without borrowing Pepper X's heat record", () => {
+  const pepper = peppers.find((item) => item.id === "chocolate-pepper-x");
+  expect(pepper).toMatchObject({
+    name: "Chocolate Pepper X",
+    heat: "insane",
+    shuMin: null,
+    shuMax: null,
+    scovilleStatus: "unpublished",
+    color: "deep chocolate brown",
+    image: "/burrow-assets/peppers/chocolate-pepper-x.png",
+    imageSourceFile: "AI-generated chocolate-pepper-x.png",
+    imageSourceUrl: "https://openai.com/",
+    imageCredit: "AI-generated for Burrow",
+    metadata: {
+      rarity: "rare",
+      location: { label: "United States", countries: ["United States"], continents: ["North America"] },
+    },
+  });
+  expect(pepper?.fact).toContain("often shortened to Chocolate X");
+  expect(pepper?.metadata?.accuracyNote).toContain("No cultivar-specific Scoville result");
+  expect(pepper?.metadata?.accuracyNote).toContain("2,693,000 SHU belongs only to record-tested Pepper X");
+
+  const card = collectionCards().find((item) => item.id === "chocolate-pepper-x");
+  expect(card).toMatchObject({
+    statDisplay: "SHU not published",
+    collectionSortValue: Number.NaN,
+    details: expect.arrayContaining([
+      { label: "Card rarity", value: "Rare" },
+      { label: "Scoville range", value: "SHU not published" },
+      { label: "Color", value: "deep chocolate brown" },
+      { label: "Origin", value: "United States" },
+    ]),
+  });
+  expect(Number.isNaN(card?.statValue)).toBe(true);
+  expect(poolForDifficulty(peppers, 3).map((item) => item.id)).toContain("chocolate-pepper-x");
 });
 
 test("Super Chilli, Moruga Red, and three chocolate varieties join normal pepper play", () => {
@@ -1364,7 +1401,7 @@ test("collectible rarities use familiarity and exceptionalness rather than a for
   const rarityCollections = { peppers, sharks, jets, hotSauces };
   // These are snapshots of the curated classifications, not target quotas.
   const expectedByCollection = {
-    peppers: { common: 51, uncommon: 90, rare: 37, epic: 14 },
+    peppers: { common: 51, uncommon: 90, rare: 38, epic: 14 },
     sharks: { common: 30, uncommon: 13, rare: 5, epic: 2 },
     jets: { common: 30, uncommon: 12, rare: 6, epic: 2 },
     hotSauces: { common: 45, uncommon: 19, rare: 7, epic: 4 },
@@ -1382,7 +1419,7 @@ test("collectible rarities use familiarity and exceptionalness rather than a for
     expect(counts, `${topic} rarity distribution drifted`).toEqual(expectedByCollection[topic as keyof typeof expectedByCollection]);
   }
 
-  expect(overall).toEqual({ common: 156, uncommon: 134, rare: 55, epic: 22 });
+  expect(overall).toEqual({ common: 156, uncommon: 134, rare: 56, epic: 22 });
   expect(overall.common).toBeGreaterThan(overall.uncommon);
   expect(overall.uncommon).toBeGreaterThan(overall.rare);
   expect(overall.rare).toBeGreaterThan(overall.epic);
@@ -1400,7 +1437,7 @@ test("collectible rarities use familiarity and exceptionalness rather than a for
     "trinidad-scorpion", "carolina-reaper", "dragons-breath", "pepper-x", "chiltepin", "black-pearl", "habanada", "sugar-rush-stripey", "pimenta-da-neyde",
   ]));
   expect(new Set(peppers.filter((card) => card.metadata?.rarity === "rare").map((card) => card.id))).toEqual(new Set([
-    "chocolate-rocoto-x", "orange-butch-t", "pepper-y", "the-noah", "armageddon", "jays-peach-ghost-scorpion", "goat-trail", "komodo-dragon",
+    "chocolate-rocoto-x", "orange-butch-t", "pepper-y", "the-noah", "armageddon", "chocolate-pepper-x", "jays-peach-ghost-scorpion", "goat-trail", "komodo-dragon",
     "red-savina", "dorset-naga", "naga-morich", "seven-pot-douglah", "white-carolina-reaper", "red-primotalii", "brain-strain", "mustard-seven-pot",
     "pink-tiger", "ghost-breath", "thors-thunderbolt", "gator-jigsaw", "purple-taj-mahal", "khang-starr-lemon-starrburst", "cgn-21500", "peachgum-tiger",
     "red-thunder-mountain-longhorn", "purple-ufo", "aji-charapita", "yellow-bhut-assam", "moruga-red", "orange-seven-pot", "peppapeach-stripey",
@@ -3038,7 +3075,7 @@ test("collection only shows selected topics", async ({ page }) => {
     expect.objectContaining({ alt: "Chocolate Bhutlah", src: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
   ]);
 
-  await expect(collection.getByRole("button", { name: "Show all 192 cards" })).toBeVisible();
+  await expect(collection.getByRole("button", { name: "Show all 193 cards" })).toBeVisible();
   expect(await collection.getByText("Locked card", { exact: true }).count()).toBeLessThan(20);
   await expect(collection.getByText("WikiPepper", { exact: true })).not.toBeVisible();
 

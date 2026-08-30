@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "db1ecb493275b7dddad2",
-  "assetCount": 931,
-  "totalBytes": 207741426,
+  "version": "c9e6b827c3102874ba56",
+  "assetCount": 932,
+  "totalBytes": 209556960,
   "assets": {
     "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.jpg": {
       "bytes": 91997,
@@ -2343,6 +2343,10 @@
     "/burrow-assets/peppers/chocolate-moruga-scorpion.png": {
       "bytes": 2667531,
       "revision": "724cc1392fe1dc1d56ba"
+    },
+    "/burrow-assets/peppers/chocolate-pepper-x.png": {
+      "bytes": 1815534,
+      "revision": "4706343ed799e8e0f6cb"
     },
     "/burrow-assets/peppers/chocolate-rocoto-x.png": {
       "bytes": 2605234,

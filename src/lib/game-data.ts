@@ -585,6 +585,20 @@ const pepperSeeds: PepperSeed[] = [
     fact: "Pepper X is the Guinness-recognized hottest pepper, averaging 2,693,000 Scoville Heat Units.",
   },
   {
+    id: "chocolate-pepper-x",
+    name: "Chocolate Pepper X",
+    heat: "insane",
+    shuMin: null,
+    shuMax: null,
+    scovilleStatus: "unpublished",
+    color: "deep chocolate brown",
+    ...generatedContentImage("peppers", "chocolate-pepper-x"),
+    fact: "Chocolate Pepper X, often shortened to Chocolate X, is a dark-brown Pepper X varietal that breeder Ed Currie describes as bumpy, brutally hot, and best used sparingly in hearty dishes or hot sauce.",
+    metadata: {
+      accuracyNote: "Hot Ones identifies Chocolate Pepper X as a distinct Pepper X color varietal, while Ed Currie calls it Chocolate X on camera; that tasting identifies its origin only as the United States. No cultivar-specific Scoville result, fruit-size range, or plant-height range was found, so Burrow leaves the SHU score unpublished and uses Pepper X's 2-inch fruit and 42-inch plant estimates for gameplay; 2,693,000 SHU belongs only to record-tested Pepper X.",
+    },
+  },
+  {
     id: "shishito",
     name: "Shishito",
     shuMin: 50,
@@ -2362,6 +2376,7 @@ const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
   "the-noah": { label: "Fort Mill, United States", countries: ["United States"], continents: ["North America"] },
   armageddon: { label: "United Kingdom", countries: ["United Kingdom"], continents: ["Europe"] },
   "pepper-x": { label: "Fort Mill, United States", countries: ["United States"], continents: ["North America"] },
+  "chocolate-pepper-x": { label: "United States", countries: ["United States"], continents: ["North America"] },
   shishito: { label: "Japan", countries: ["Japan"], continents: ["Asia"] },
   padron: { label: "Padron, Spain", countries: ["Spain"], continents: ["Europe"] },
   ancho: { label: "Puebla, Mexico", countries: ["Mexico"], continents: ["North America"] },
@@ -2501,7 +2516,7 @@ const commonPepperIds = new Set([
   "chipotle", "pimento", "mini-sweet-pepper", "italian-long-hot", "sport-pepper", "sweet-piquante", "korean-gochu", "puya", "morita", "chile-japones",
 ]);
 const rarePepperIds = new Set([
-  "chocolate-rocoto-x", "orange-butch-t", "pepper-y", "the-noah", "armageddon", "jays-peach-ghost-scorpion", "goat-trail", "komodo-dragon",
+  "chocolate-rocoto-x", "orange-butch-t", "pepper-y", "the-noah", "armageddon", "chocolate-pepper-x", "jays-peach-ghost-scorpion", "goat-trail", "komodo-dragon",
   "red-savina", "dorset-naga", "naga-morich", "seven-pot-douglah", "white-carolina-reaper", "red-primotalii", "brain-strain", "mustard-seven-pot",
   "pink-tiger", "ghost-breath", "thors-thunderbolt", "gator-jigsaw", "purple-taj-mahal", "khang-starr-lemon-starrburst", "cgn-21500", "peachgum-tiger",
   "red-thunder-mountain-longhorn", "purple-ufo", "aji-charapita", "yellow-bhut-assam", "moruga-red", "orange-seven-pot", "peppapeach-stripey",
@@ -4645,6 +4660,8 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
       { label: "WikiPepper", url: "https://wikipepper.org/peppers" },
       { label: "PepperScale chile guides", url: "https://pepperscale.com/" },
       { label: "Epicurious pepper tasting", url: "https://www.epicurious.com/video/watch/hot-takes-pepper-x-creator-ed-currie-blind-tastes-12-of-the-worlds-hottest-peppers" },
+      { label: "Epicurious Chocolate X tasting", url: "https://www.epicurious.com/video/watch/pepper-master-tastes-the-hottest-peppers-from-11-countries" },
+      { label: "Hot Ones Chocolate Pepper X listing", url: "https://hotones.com/products/the-last-dab-triplex-hot-sauce-hot-ones-hot-sauce" },
       { label: "Tozer Seeds Armageddon profile", url: "https://www.tozerseeds.com/wp-content/uploads/2021/10/Pepper-Armageddon-TZ-6415-2021-TSA.pdf" },
       { label: "Bonnie Plants Orange Butch T profile", url: "https://bonnieplants.com/products/orange-butch-t-hot-pepper" },
       { label: "PuckerButt Goat Trail profile", url: "https://puckerbuttpeppercompany.com/products/goat-trail" },
