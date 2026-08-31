@@ -1,0 +1,2786 @@
+{
+  "sourceUrl": "https://pepperscale.com/hot-pepper-list/",
+  "snapshotDate": "2026-08-31",
+  "sourceCount": 176,
+  "addedCount": 69,
+  "singleScoreRule": "shuMax",
+  "permission": "PepperScale images used with permission supplied by the user",
+  "coverage": [
+    {
+      "sourceId": "bell-pepper",
+      "sourceName": "Bell Pepper",
+      "burrowId": "bell-pepper",
+      "match": "existing"
+    },
+    {
+      "sourceId": "california-wonder-pepper",
+      "sourceName": "California Wonder Pepper",
+      "burrowId": "california-wonder",
+      "match": "added"
+    },
+    {
+      "sourceId": "carmen-pepper",
+      "sourceName": "Carmen Pepper",
+      "burrowId": "carmen-italian-sweet",
+      "match": "alias"
+    },
+    {
+      "sourceId": "elephant-ears-pepper",
+      "sourceName": "Elephant Ears Pepper",
+      "burrowId": "elephants-ear",
+      "match": "alias"
+    },
+    {
+      "sourceId": "fushimi-pepper",
+      "sourceName": "Fushimi Pepper",
+      "burrowId": "fushimi",
+      "match": "added"
+    },
+    {
+      "sourceId": "gypsy-pepper",
+      "sourceName": "Gypsy Pepper",
+      "burrowId": "gypsy-pepper",
+      "match": "existing"
+    },
+    {
+      "sourceId": "habanada-pepper",
+      "sourceName": "Habanada Pepper",
+      "burrowId": "habanada",
+      "match": "existing"
+    },
+    {
+      "sourceId": "melrose-pepper",
+      "sourceName": "Melrose Pepper",
+      "burrowId": "melrose",
+      "match": "added"
+    },
+    {
+      "sourceId": "peperone-di-senise",
+      "sourceName": "Peperone di Senise",
+      "burrowId": "senise",
+      "match": "alias"
+    },
+    {
+      "sourceId": "purple-beauty-pepper",
+      "sourceName": "Purple Beauty Pepper",
+      "burrowId": "purple-beauty",
+      "match": "existing"
+    },
+    {
+      "sourceId": "tangerine-dream-pepper",
+      "sourceName": "Tangerine Dream Pepper",
+      "burrowId": "tangerine-dream",
+      "match": "existing"
+    },
+    {
+      "sourceId": "chilly-chili",
+      "sourceName": "Chilly Chili",
+      "burrowId": "chilly-chili",
+      "match": "added"
+    },
+    {
+      "sourceId": "shishito-pepper",
+      "sourceName": "Shishito Pepper",
+      "burrowId": "shishito",
+      "match": "existing"
+    },
+    {
+      "sourceId": "banana-pepper",
+      "sourceName": "Banana Pepper",
+      "burrowId": "banana-pepper",
+      "match": "existing"
+    },
+    {
+      "sourceId": "jimmy-nardello-pepper",
+      "sourceName": "Jimmy Nardello Pepper",
+      "burrowId": "jimmy-nardello",
+      "match": "existing"
+    },
+    {
+      "sourceId": "trinidad-perfume",
+      "sourceName": "Trinidad Perfume",
+      "burrowId": "trinidad-perfume",
+      "match": "existing"
+    },
+    {
+      "sourceId": "pepperoncini",
+      "sourceName": "Pepperoncini",
+      "burrowId": "pepperoncini",
+      "match": "existing"
+    },
+    {
+      "sourceId": "pimento-pepper",
+      "sourceName": "Pimento Pepper",
+      "burrowId": "pimento",
+      "match": "existing"
+    },
+    {
+      "sourceId": "mariachi-pepper",
+      "sourceName": "Mariachi Pepper",
+      "burrowId": "mariachi",
+      "match": "added"
+    },
+    {
+      "sourceId": "santa-fe-grande-pepper",
+      "sourceName": "Santa Fe Grande Pepper",
+      "burrowId": "santa-fe-grande",
+      "match": "existing"
+    },
+    {
+      "sourceId": "holy-mole-pepper",
+      "sourceName": "Holy Mole Pepper",
+      "burrowId": "holy-mole",
+      "match": "added"
+    },
+    {
+      "sourceId": "aji-dulce",
+      "sourceName": "Aji Dulce",
+      "burrowId": "aji-dulce",
+      "match": "existing"
+    },
+    {
+      "sourceId": "feher-ozon-paprika-peppers",
+      "sourceName": "Feher Ozon Pepper",
+      "burrowId": "feher-ozon",
+      "match": "added"
+    },
+    {
+      "sourceId": "sedona-sun-pepper",
+      "sourceName": "Sedona Sun Pepper",
+      "burrowId": "sedona-sun",
+      "match": "added"
+    },
+    {
+      "sourceId": "medusa-pepper",
+      "sourceName": "Medusa Pepper",
+      "burrowId": "medusa",
+      "match": "existing"
+    },
+    {
+      "sourceId": "cubanelle-pepper",
+      "sourceName": "Cubanelle Pepper",
+      "burrowId": "cubanelle",
+      "match": "existing"
+    },
+    {
+      "sourceId": "italian-long-hot-peppers",
+      "sourceName": "Italian Long Hot Pepper",
+      "burrowId": "italian-long-hot",
+      "match": "existing"
+    },
+    {
+      "sourceId": "mexibell-pepper",
+      "sourceName": "Mexibell Pepper",
+      "burrowId": "mexibell",
+      "match": "added"
+    },
+    {
+      "sourceId": "beaver-dam-pepper",
+      "sourceName": "Beaver Dam Pepper",
+      "burrowId": "beaver-dam",
+      "match": "added"
+    },
+    {
+      "sourceId": "biquinho-pepper",
+      "sourceName": "Biquinho Pepper",
+      "burrowId": "biquinho",
+      "match": "existing"
+    },
+    {
+      "sourceId": "mad-hatter-pepper",
+      "sourceName": "Mad Hatter Pepper",
+      "burrowId": "mad-hatter",
+      "match": "added"
+    },
+    {
+      "sourceId": "piquillo-peppers",
+      "sourceName": "Piquillo Pepper",
+      "burrowId": "piquillo",
+      "match": "existing"
+    },
+    {
+      "sourceId": "nora-pepper",
+      "sourceName": "Ñora Pepper",
+      "burrowId": "nora",
+      "match": "added"
+    },
+    {
+      "sourceId": "peppadew-pepper",
+      "sourceName": "Peppadew Pepper",
+      "burrowId": "sweet-piquante",
+      "match": "alias"
+    },
+    {
+      "sourceId": "aji-panca",
+      "sourceName": "Aji Panca",
+      "burrowId": "aji-panca",
+      "match": "existing"
+    },
+    {
+      "sourceId": "ancho-pepper",
+      "sourceName": "Ancho Pepper",
+      "burrowId": "ancho",
+      "match": "existing"
+    },
+    {
+      "sourceId": "poblano-peppers",
+      "sourceName": "Poblano Pepper",
+      "burrowId": "poblano",
+      "match": "existing"
+    },
+    {
+      "sourceId": "guindilla-pepper",
+      "sourceName": "Guindilla Pepper",
+      "burrowId": "guindilla",
+      "match": "added"
+    },
+    {
+      "sourceId": "kashmiri-chili",
+      "sourceName": "Kashmiri Chili",
+      "burrowId": "kashmiri-chili",
+      "match": "existing"
+    },
+    {
+      "sourceId": "anaheim-pepper",
+      "sourceName": "Anaheim Pepper",
+      "burrowId": "anaheim",
+      "match": "existing"
+    },
+    {
+      "sourceId": "california-chile",
+      "sourceName": "California Chile",
+      "burrowId": "california-chile",
+      "match": "added"
+    },
+    {
+      "sourceId": "padron-pepper",
+      "sourceName": "Padron Pepper",
+      "burrowId": "padron",
+      "match": "existing"
+    },
+    {
+      "sourceId": "chilaca-pepper",
+      "sourceName": "Chilaca Pepper",
+      "burrowId": "chilaca",
+      "match": "existing"
+    },
+    {
+      "sourceId": "pasilla-pepper",
+      "sourceName": "Pasilla Pepper",
+      "burrowId": "pasilla",
+      "match": "existing"
+    },
+    {
+      "sourceId": "rocotillo-pepper",
+      "sourceName": "Rocotillo Pepper",
+      "burrowId": "rocotillo",
+      "match": "added"
+    },
+    {
+      "sourceId": "cascabel-pepper",
+      "sourceName": "Cascabel Pepper",
+      "burrowId": "cascabel",
+      "match": "existing"
+    },
+    {
+      "sourceId": "mulato-pepper",
+      "sourceName": "Mulato Pepper",
+      "burrowId": "mulato",
+      "match": "existing"
+    },
+    {
+      "sourceId": "numex-big-jim",
+      "sourceName": "NuMex Big Jim",
+      "burrowId": "numex-big-jim",
+      "match": "added"
+    },
+    {
+      "sourceId": "cajun-belle-pepper",
+      "sourceName": "Cajun Belle Pepper",
+      "burrowId": "cajun-belle",
+      "match": "added"
+    },
+    {
+      "sourceId": "espelette-pepper",
+      "sourceName": "Espelette Pepper",
+      "burrowId": "espelette",
+      "match": "existing"
+    },
+    {
+      "sourceId": "cacho-de-cabra",
+      "sourceName": "Cacho de Cabra",
+      "burrowId": "cacho-de-cabra",
+      "match": "added"
+    },
+    {
+      "sourceId": "fire-and-ice-pepper",
+      "sourceName": "Fire and Ice Pepper",
+      "burrowId": "fire-and-ice",
+      "match": "added"
+    },
+    {
+      "sourceId": "hot-pops-yellow-pepper",
+      "sourceName": "Hot Pops Yellow Pepper",
+      "burrowId": "hot-pops-yellow",
+      "match": "added"
+    },
+    {
+      "sourceId": "numex-centennial",
+      "sourceName": "NuMex Centennial",
+      "burrowId": "numex-centennial",
+      "match": "added"
+    },
+    {
+      "sourceId": "sangria-pepper",
+      "sourceName": "Sangria Pepper",
+      "burrowId": "sangria",
+      "match": "added"
+    },
+    {
+      "sourceId": "cherry-bomb-pepper",
+      "sourceName": "Cherry Bomb Pepper",
+      "burrowId": "cherry-bomb",
+      "match": "added"
+    },
+    {
+      "sourceId": "cowhorn-pepper",
+      "sourceName": "Cowhorn Pepper",
+      "burrowId": "cowhorn",
+      "match": "existing"
+    },
+    {
+      "sourceId": "guajillo-pepper",
+      "sourceName": "Guajillo Pepper",
+      "burrowId": "guajillo",
+      "match": "existing"
+    },
+    {
+      "sourceId": "chimayo-pepper",
+      "sourceName": "Chimayo Pepper",
+      "burrowId": "chimayo",
+      "match": "existing"
+    },
+    {
+      "sourceId": "jalafuego-pepper",
+      "sourceName": "Jalafuego Pepper",
+      "burrowId": "jalafuego",
+      "match": "added"
+    },
+    {
+      "sourceId": "sandia-pepper",
+      "sourceName": "Sandia Pepper",
+      "burrowId": "sandia",
+      "match": "added"
+    },
+    {
+      "sourceId": "hatch-peppers",
+      "sourceName": "Hatch Pepper",
+      "burrowId": "hatch-chile",
+      "match": "existing"
+    },
+    {
+      "sourceId": "chipotle-meco",
+      "sourceName": "Chipotle Meco",
+      "burrowId": "chipotle-meco",
+      "match": "added"
+    },
+    {
+      "sourceId": "jalapeno-peppers",
+      "sourceName": "Jalapeño Pepper",
+      "burrowId": "jalapeno",
+      "match": "existing"
+    },
+    {
+      "sourceId": "morita-pepper",
+      "sourceName": "Morita Pepper (Chipotle Morita)",
+      "burrowId": "morita",
+      "match": "existing"
+    },
+    {
+      "sourceId": "purple-jalapeno-pepper",
+      "sourceName": "Purple Jalapeño Pepper",
+      "burrowId": "purple-jalapeno",
+      "match": "existing"
+    },
+    {
+      "sourceId": "pretty-in-purple-pepper",
+      "sourceName": "Pretty in Purple Pepper",
+      "burrowId": "pretty-in-purple",
+      "match": "added"
+    },
+    {
+      "sourceId": "puya-pepper",
+      "sourceName": "Puya Pepper",
+      "burrowId": "puya",
+      "match": "existing"
+    },
+    {
+      "sourceId": "fresno-pepper",
+      "sourceName": "Fresno Pepper",
+      "burrowId": "fresno",
+      "match": "existing"
+    },
+    {
+      "sourceId": "aji-fantasy-pepper",
+      "sourceName": "Aji Fantasy",
+      "burrowId": "aji-fantasy",
+      "match": "existing"
+    },
+    {
+      "sourceId": "black-hungarian-pepper",
+      "sourceName": "Black Hungarian Pepper",
+      "burrowId": "black-hungarian",
+      "match": "added"
+    },
+    {
+      "sourceId": "hungarian-wax-pepper",
+      "sourceName": "Hungarian Wax Pepper",
+      "burrowId": "hungarian-wax",
+      "match": "existing"
+    },
+    {
+      "sourceId": "purple-tiger-pepper",
+      "sourceName": "Purple Tiger Pepper",
+      "burrowId": "purple-tiger",
+      "match": "existing"
+    },
+    {
+      "sourceId": "aleppo-pepper",
+      "sourceName": "Aleppo Pepper",
+      "burrowId": "aleppo",
+      "match": "existing"
+    },
+    {
+      "sourceId": "peter-pepper",
+      "sourceName": "Peter Pepper",
+      "burrowId": "peter-pepper",
+      "match": "existing"
+    },
+    {
+      "sourceId": "serrano-peppers",
+      "sourceName": "Serrano Pepper",
+      "burrowId": "serrano",
+      "match": "existing"
+    },
+    {
+      "sourceId": "sport-peppers",
+      "sourceName": "Sport Pepper",
+      "burrowId": "sport-pepper",
+      "match": "existing"
+    },
+    {
+      "sourceId": "numex-pumpkin-spice",
+      "sourceName": "NuMex Pumpkin Spice",
+      "burrowId": "numex-pumpkin-spice",
+      "match": "added"
+    },
+    {
+      "sourceId": "bishops-crown-pepper",
+      "sourceName": "Bishop's Crown Pepper",
+      "burrowId": "bishop-crown",
+      "match": "existing"
+    },
+    {
+      "sourceId": "black-prince-pepper",
+      "sourceName": "Black Prince Pepper",
+      "burrowId": "black-prince",
+      "match": "added"
+    },
+    {
+      "sourceId": "bulgarian-carrot-pepper",
+      "sourceName": "Bulgarian Carrot Pepper",
+      "burrowId": "bulgarian-carrot",
+      "match": "existing"
+    },
+    {
+      "sourceId": "count-dracula-pepper",
+      "sourceName": "Count Dracula Pepper",
+      "burrowId": "count-dracula",
+      "match": "added"
+    },
+    {
+      "sourceId": "fish-pepper",
+      "sourceName": "Fish Pepper",
+      "burrowId": "fish-pepper",
+      "match": "existing"
+    },
+    {
+      "sourceId": "hinkelhatz-pepper",
+      "sourceName": "Hinkelhatz Pepper",
+      "burrowId": "hinkelhatz",
+      "match": "added"
+    },
+    {
+      "sourceId": "royal-black-pepper",
+      "sourceName": "Royal Black Pepper",
+      "burrowId": "royal-black",
+      "match": "added"
+    },
+    {
+      "sourceId": "black-pearl-pepper",
+      "sourceName": "Black Pearl Pepper",
+      "burrowId": "black-pearl",
+      "match": "existing"
+    },
+    {
+      "sourceId": "bolivian-rainbow-pepper",
+      "sourceName": "Bolivian Rainbow Pepper",
+      "burrowId": "bolivian-rainbow",
+      "match": "existing"
+    },
+    {
+      "sourceId": "inca-red-drop-pepper",
+      "sourceName": "Inca Red Drop Pepper",
+      "burrowId": "inca-red-drop",
+      "match": "added"
+    },
+    {
+      "sourceId": "manzano-pepper",
+      "sourceName": "Manzano Pepper",
+      "burrowId": "manzano",
+      "match": "existing"
+    },
+    {
+      "sourceId": "chile-de-arbol",
+      "sourceName": "Chile De Arbol",
+      "burrowId": "chile-de-arbol",
+      "match": "existing"
+    },
+    {
+      "sourceId": "japones-pepper",
+      "sourceName": "Japones Pepper",
+      "burrowId": "chile-japones",
+      "match": "existing"
+    },
+    {
+      "sourceId": "lemon-drop-pepper",
+      "sourceName": "Lemon Drop Pepper",
+      "burrowId": "lemon-drop",
+      "match": "existing"
+    },
+    {
+      "sourceId": "loco-pepper",
+      "sourceName": "Loco Pepper",
+      "burrowId": "loco",
+      "match": "added"
+    },
+    {
+      "sourceId": "aji-colorado",
+      "sourceName": "Aji Colorado",
+      "burrowId": "aji-colorado",
+      "match": "added"
+    },
+    {
+      "sourceId": "aji-pineapple",
+      "sourceName": "Aji Pineapple",
+      "burrowId": "aji-pineapple",
+      "match": "existing"
+    },
+    {
+      "sourceId": "jwala-pepper",
+      "sourceName": "Jwala Pepper",
+      "burrowId": "jwala-finger",
+      "match": "alias"
+    },
+    {
+      "sourceId": "little-elf-pepper",
+      "sourceName": "Little Elf Pepper",
+      "burrowId": "little-elf",
+      "match": "added"
+    },
+    {
+      "sourceId": "bode-pepper",
+      "sourceName": "Bod'e Pepper",
+      "burrowId": "bode",
+      "match": "added"
+    },
+    {
+      "sourceId": "black-cobra-pepper",
+      "sourceName": "Black Cobra Pepper",
+      "burrowId": "black-cobra",
+      "match": "added"
+    },
+    {
+      "sourceId": "calabrian-pepper",
+      "sourceName": "Calabrian Pepper",
+      "burrowId": "piccante-calabrese",
+      "match": "alias"
+    },
+    {
+      "sourceId": "purple-ufo-pepper",
+      "sourceName": "Purple UFO Pepper",
+      "burrowId": "purple-ufo",
+      "match": "existing"
+    },
+    {
+      "sourceId": "aji-amarillo",
+      "sourceName": "Aji Amarillo",
+      "burrowId": "aji-amarillo",
+      "match": "existing"
+    },
+    {
+      "sourceId": "aji-charapita",
+      "sourceName": "Aji Charapita",
+      "burrowId": "aji-charapita",
+      "match": "existing"
+    },
+    {
+      "sourceId": "aji-limo",
+      "sourceName": "Aji Limo",
+      "burrowId": "aji-limo",
+      "match": "existing"
+    },
+    {
+      "sourceId": "aji-omnicolor",
+      "sourceName": "Aji Omnicolor",
+      "burrowId": "aji-omnicolor",
+      "match": "existing"
+    },
+    {
+      "sourceId": "aurora-pepper",
+      "sourceName": "Aurora Pepper",
+      "burrowId": "aurora",
+      "match": "added"
+    },
+    {
+      "sourceId": "buena-mulata-pepper",
+      "sourceName": "Buena Mulata Pepper",
+      "burrowId": "buena-mulata",
+      "match": "added"
+    },
+    {
+      "sourceId": "cayenne-pepper",
+      "sourceName": "Cayenne Pepper",
+      "burrowId": "cayenne",
+      "match": "existing"
+    },
+    {
+      "sourceId": "explosive-ember-pepper",
+      "sourceName": "Explosive Ember Pepper",
+      "burrowId": "explosive-ember",
+      "match": "added"
+    },
+    {
+      "sourceId": "facing-heaven-pepper",
+      "sourceName": "Facing Heaven Pepper",
+      "burrowId": "facing-heaven",
+      "match": "added"
+    },
+    {
+      "sourceId": "filius-blue-pepper",
+      "sourceName": "Filius Blue Pepper",
+      "burrowId": "filius-blue",
+      "match": "added"
+    },
+    {
+      "sourceId": "numex-twilight",
+      "sourceName": "NuMex Twilight",
+      "burrowId": "numex-twilight",
+      "match": "existing"
+    },
+    {
+      "sourceId": "rooster-spur-pepper",
+      "sourceName": "Rooster Spur Pepper",
+      "burrowId": "rooster-spur",
+      "match": "added"
+    },
+    {
+      "sourceId": "tabasco-pepper",
+      "sourceName": "Tabasco Pepper",
+      "burrowId": "tabasco",
+      "match": "existing"
+    },
+    {
+      "sourceId": "urfa-biber",
+      "sourceName": "Urfa Biber (Isot Pepper)",
+      "burrowId": "urfa-biber",
+      "match": "added"
+    },
+    {
+      "sourceId": "satans-kiss-pepper",
+      "sourceName": "Satan's Kiss Pepper",
+      "burrowId": "satans-kiss",
+      "match": "added"
+    },
+    {
+      "sourceId": "super-chili-pepper",
+      "sourceName": "Super Chili Pepper",
+      "burrowId": "super-chilli",
+      "match": "alias"
+    },
+    {
+      "sourceId": "black-cuban-pepper",
+      "sourceName": "Black Cuban Pepper",
+      "burrowId": "black-cuban",
+      "match": "added"
+    },
+    {
+      "sourceId": "pequin-pepper",
+      "sourceName": "Pequin Pepper",
+      "burrowId": "pequin",
+      "match": "existing"
+    },
+    {
+      "sourceId": "dundicut-pepper",
+      "sourceName": "Dundicut Pepper",
+      "burrowId": "dundicut",
+      "match": "existing"
+    },
+    {
+      "sourceId": "calico-pepper",
+      "sourceName": "Calico Pepper",
+      "burrowId": "calico",
+      "match": "added"
+    },
+    {
+      "sourceId": "tien-tsin-pepper",
+      "sourceName": "Tien Tsin Pepper",
+      "burrowId": "tien-tsin",
+      "match": "added"
+    },
+    {
+      "sourceId": "cheiro-roxa",
+      "sourceName": "Cheiro Roxa",
+      "burrowId": "cheiro-roxa",
+      "match": "existing"
+    },
+    {
+      "sourceId": "prairie-fire-pepper",
+      "sourceName": "Prairie Fire Pepper",
+      "burrowId": "prairie-fire",
+      "match": "added"
+    },
+    {
+      "sourceId": "rocoto-pepper",
+      "sourceName": "Rocoto Pepper",
+      "burrowId": "rocoto",
+      "match": "existing"
+    },
+    {
+      "sourceId": "byadgi-chili",
+      "sourceName": "Byadgi Chili",
+      "burrowId": "byadgi-chili",
+      "match": "added"
+    },
+    {
+      "sourceId": "chiltepin-pepper",
+      "sourceName": "Chiltepin Pepper",
+      "burrowId": "chiltepin",
+      "match": "existing"
+    },
+    {
+      "sourceId": "malagueta-pepper",
+      "sourceName": "Malagueta Pepper",
+      "burrowId": "malagueta",
+      "match": "existing"
+    },
+    {
+      "sourceId": "peri-peri-pepper",
+      "sourceName": "Peri-Peri Pepper",
+      "burrowId": "piri-piri",
+      "match": "alias"
+    },
+    {
+      "sourceId": "thai-dragon-pepper",
+      "sourceName": "Thai Dragon Pepper",
+      "burrowId": "thai-dragon",
+      "match": "added"
+    },
+    {
+      "sourceId": "thai-peppers",
+      "sourceName": "Thai Pepper",
+      "burrowId": "thai-chili",
+      "match": "existing"
+    },
+    {
+      "sourceId": "charleston-hot-pepper",
+      "sourceName": "Charleston Hot Pepper",
+      "burrowId": "charleston-hot",
+      "match": "added"
+    },
+    {
+      "sourceId": "apache-pepper",
+      "sourceName": "Apache Pepper",
+      "burrowId": "apache",
+      "match": "added"
+    },
+    {
+      "sourceId": "siling-labuyo",
+      "sourceName": "Siling Labuyo",
+      "burrowId": "siling-labuyo",
+      "match": "added"
+    },
+    {
+      "sourceId": "cumari-do-para",
+      "sourceName": "Cumari do Para",
+      "burrowId": "cumari-do-para",
+      "match": "added"
+    },
+    {
+      "sourceId": "datil-pepper",
+      "sourceName": "Datil Pepper",
+      "burrowId": "datil",
+      "match": "existing"
+    },
+    {
+      "sourceId": "aji-chombo",
+      "sourceName": "Aji Chombo",
+      "burrowId": "aji-chombo",
+      "match": "added"
+    },
+    {
+      "sourceId": "devils-tongue-pepper",
+      "sourceName": "Devil's Tongue Pepper",
+      "burrowId": "devils-tongue",
+      "match": "existing"
+    },
+    {
+      "sourceId": "madame-jeanette-pepper",
+      "sourceName": "Madame Jeanette Pepper",
+      "burrowId": "madame-jeanette",
+      "match": "existing"
+    },
+    {
+      "sourceId": "goat-pepper",
+      "sourceName": "Goat Pepper",
+      "burrowId": "goat-pepper",
+      "match": "existing"
+    },
+    {
+      "sourceId": "habanero-pepper",
+      "sourceName": "Habanero Pepper",
+      "burrowId": "habanero",
+      "match": "existing"
+    },
+    {
+      "sourceId": "peruvian-white-habanero",
+      "sourceName": "Peruvian White Habanero",
+      "burrowId": "peruvian-white-habanero",
+      "match": "added"
+    },
+    {
+      "sourceId": "scotch-bonnet-pepper",
+      "sourceName": "Scotch Bonnet Pepper",
+      "burrowId": "scotch-bonnet",
+      "match": "existing"
+    },
+    {
+      "sourceId": "wiri-wiri-pepper",
+      "sourceName": "Wiri Wiri Pepper",
+      "burrowId": "wiri-wiri",
+      "match": "existing"
+    },
+    {
+      "sourceId": "peach-habanero",
+      "sourceName": "Peach Habanero",
+      "burrowId": "peach-habanero",
+      "match": "added"
+    },
+    {
+      "sourceId": "fatalii-pepper",
+      "sourceName": "Fatalii Pepper",
+      "burrowId": "fatalii",
+      "match": "existing"
+    },
+    {
+      "sourceId": "hot-paper-lantern",
+      "sourceName": "Hot Paper Lantern",
+      "burrowId": "hot-paper-lantern",
+      "match": "added"
+    },
+    {
+      "sourceId": "caribbean-red-habanero",
+      "sourceName": "Caribbean Red Habanero",
+      "burrowId": "caribbean-red",
+      "match": "alias"
+    },
+    {
+      "sourceId": "roatan-pumpkin-habanero",
+      "sourceName": "Roatan Pumpkin Habanero",
+      "burrowId": "roatan-pumpkin-habanero",
+      "match": "added"
+    },
+    {
+      "sourceId": "red-savina-habanero",
+      "sourceName": "Red Savina Habanero",
+      "burrowId": "red-savina",
+      "match": "alias"
+    },
+    {
+      "sourceId": "chocolate-habanero",
+      "sourceName": "Chocolate Habanero",
+      "burrowId": "chocolate-habanero",
+      "match": "existing"
+    },
+    {
+      "sourceId": "7-pot-bubblegum",
+      "sourceName": "7 Pot Bubblegum",
+      "burrowId": "seven-pot-bubblegum",
+      "match": "added"
+    },
+    {
+      "sourceId": "7-pot-jonah",
+      "sourceName": "7 Pot Jonah",
+      "burrowId": "seven-pot-jonah",
+      "match": "added"
+    },
+    {
+      "sourceId": "bhut-jolokia-chocolate",
+      "sourceName": "Bhut Jolokia Chocolate",
+      "burrowId": "chocolate-ghost",
+      "match": "alias"
+    },
+    {
+      "sourceId": "ghost-pepper",
+      "sourceName": "Ghost Pepper",
+      "burrowId": "ghost-pepper",
+      "match": "existing"
+    },
+    {
+      "sourceId": "kraken-scorpion-pepper",
+      "sourceName": "Kraken Scorpion Pepper",
+      "burrowId": "kraken-scorpion",
+      "match": "added"
+    },
+    {
+      "sourceId": "7-pot-pepper",
+      "sourceName": "Trinidad 7 Pot Pepper",
+      "burrowId": "trinidad-seven-pot",
+      "match": "added"
+    },
+    {
+      "sourceId": "infinity-pepper",
+      "sourceName": "Infinity Pepper",
+      "burrowId": "infinity",
+      "match": "existing"
+    },
+    {
+      "sourceId": "7-pot-primo",
+      "sourceName": "7 Pot Primo",
+      "burrowId": "seven-pot-primo",
+      "match": "existing"
+    },
+    {
+      "sourceId": "7-pot-barrackpore",
+      "sourceName": "7 Pot Barrackpore",
+      "burrowId": "seven-pot-barrackpore",
+      "match": "existing"
+    },
+    {
+      "sourceId": "7-pot-brain-strain",
+      "sourceName": "7 Pot Brain Strain",
+      "burrowId": "brain-strain",
+      "match": "existing"
+    },
+    {
+      "sourceId": "naga-viper",
+      "sourceName": "Naga Viper",
+      "burrowId": "naga-viper",
+      "match": "existing"
+    },
+    {
+      "sourceId": "trinidad-scorpion-butch-t",
+      "sourceName": "Trinidad Scorpion \"Butch-T\"",
+      "burrowId": "trinidad-scorpion-butch-t",
+      "match": "existing"
+    },
+    {
+      "sourceId": "naga-morich",
+      "sourceName": "Naga Morich",
+      "burrowId": "naga-morich",
+      "match": "existing"
+    },
+    {
+      "sourceId": "death-spiral-pepper",
+      "sourceName": "Death Spiral Pepper",
+      "burrowId": "death-spiral",
+      "match": "added"
+    },
+    {
+      "sourceId": "dorset-naga",
+      "sourceName": "Dorset Naga",
+      "burrowId": "dorset-naga",
+      "match": "existing"
+    },
+    {
+      "sourceId": "7-pot-douglah",
+      "sourceName": "7 Pot Douglah",
+      "burrowId": "seven-pot-douglah",
+      "match": "existing"
+    },
+    {
+      "sourceId": "apocalypse-scorpion-pepper",
+      "sourceName": "Apocalypse Scorpion Pepper",
+      "burrowId": "apocalypse-scorpion",
+      "match": "added"
+    },
+    {
+      "sourceId": "trinidad-moruga-scorpion",
+      "sourceName": "Trinidad Moruga Scorpion",
+      "burrowId": "trinidad-scorpion",
+      "match": "existing"
+    },
+    {
+      "sourceId": "trinidad-scorpion-chocolate",
+      "sourceName": "Trinidad Scorpion Chocolate",
+      "burrowId": "chocolate-moruga-scorpion",
+      "match": "alias"
+    },
+    {
+      "sourceId": "chocolate-bhutlah",
+      "sourceName": "Chocolate Bhutlah",
+      "burrowId": "chocolate-bhutlah",
+      "match": "existing"
+    },
+    {
+      "sourceId": "carolina-reaper",
+      "sourceName": "Carolina Reaper",
+      "burrowId": "carolina-reaper",
+      "match": "existing"
+    },
+    {
+      "sourceId": "komodo-dragon-pepper",
+      "sourceName": "Komodo Dragon Pepper",
+      "burrowId": "komodo-dragon",
+      "match": "existing"
+    },
+    {
+      "sourceId": "dragons-breath-pepper",
+      "sourceName": "Dragon's Breath Pepper",
+      "burrowId": "dragons-breath",
+      "match": "existing"
+    },
+    {
+      "sourceId": "pepper-x",
+      "sourceName": "Pepper X",
+      "burrowId": "pepper-x",
+      "match": "existing"
+    },
+    {
+      "sourceId": "apollo-pepper",
+      "sourceName": "Apollo Pepper",
+      "burrowId": "apollo",
+      "match": "added"
+    }
+  ],
+  "addedPeppers": [
+    {
+      "id": "california-wonder",
+      "sourceId": "california-wonder-pepper",
+      "name": "California Wonder Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 0,
+      "shuMax": 0,
+      "sourceMedian": 0,
+      "color": "green to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Bitter, Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/08/California-Wonder-Pepper.jpg",
+      "imageSourceFile": "California-Wonder-Pepper.jpg",
+      "imageSourceUrl": "https://pepperscale.com/california-wonder-pepper/",
+      "fact": "California Wonder Pepper is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as bitter and sweet and reports 0 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "fushimi",
+      "sourceId": "fushimi-pepper",
+      "name": "Fushimi Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 0,
+      "shuMax": 0,
+      "sourceMedian": 0,
+      "color": "green to red",
+      "sourceOrigin": "Japan",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2020/07/Fushimi-Pepper-500x375.jpg",
+      "imageSourceFile": "Fushimi-Pepper-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/fushimi-pepper/",
+      "fact": "Fushimi Pepper is a culinary Capsicum annuum pepper linked to Japan. PepperScale describes its flavor as sweet and reports 0 SHU.",
+      "location": {
+        "label": "Japan",
+        "countries": [
+          "Japan"
+        ],
+        "continents": [
+          "Asia"
+        ]
+      }
+    },
+    {
+      "id": "melrose",
+      "sourceId": "melrose-pepper",
+      "name": "Melrose Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 0,
+      "shuMax": 0,
+      "sourceMedian": 0,
+      "color": "green to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2015/10/melrose-pepper-300x225.jpg",
+      "imageSourceFile": "melrose-pepper-300x225.jpg",
+      "imageSourceUrl": "https://pepperscale.com/melrose-pepper/",
+      "fact": "Melrose Pepper is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as sweet and reports 0 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "chilly-chili",
+      "sourceId": "chilly-chili",
+      "name": "Chilly Chili",
+      "species": "Capsicum annuum",
+      "shuMin": 1,
+      "shuMax": 100,
+      "sourceMedian": 51,
+      "color": "yellow to orange-red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/03/chilly-chili.jpg",
+      "imageSourceFile": "chilly-chili.jpg",
+      "imageSourceUrl": "https://pepperscale.com/chilly-chili/",
+      "fact": "Chilly Chili is an ornamental Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as neutral and reports 1 to 100 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "mariachi",
+      "sourceId": "mariachi-pepper",
+      "name": "Mariachi Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 500,
+      "shuMax": 600,
+      "sourceMedian": 550,
+      "color": "green to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2019/06/mariachi-pepper-500x375.jpg",
+      "imageSourceFile": "mariachi-pepper-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/mariachi-pepper/",
+      "fact": "Mariachi Pepper is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as sweet and reports 500 to 600 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "holy-mole",
+      "sourceId": "holy-mole-pepper",
+      "name": "Holy Mole Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 700,
+      "shuMax": 800,
+      "sourceMedian": 750,
+      "color": "green to dark brown",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Nutty, Tangy",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2016/06/holy-mole-pepper-lg-450x338.jpg",
+      "imageSourceFile": "holy-mole-pepper-lg-450x338.jpg",
+      "imageSourceUrl": "https://pepperscale.com/holy-mole-pepper/",
+      "fact": "Holy Mole Pepper is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as nutty and tangy and reports 700 to 800 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "feher-ozon",
+      "sourceId": "feher-ozon-paprika-peppers",
+      "name": "Feher Ozon Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 0,
+      "shuMax": 1000,
+      "sourceMedian": 500,
+      "color": "ivory to pale yellow",
+      "sourceOrigin": "Hungary",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Fruity",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2025/03/Feher-Ozon-Peppers_1-500x375.jpeg",
+      "imageSourceFile": "Feher-Ozon-Peppers_1-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/feher-ozon-paprika-peppers/",
+      "fact": "Feher Ozon Pepper is a culinary Capsicum annuum pepper linked to Hungary. PepperScale describes its flavor as sweet and fruity and reports 0 to 1,000 SHU.",
+      "location": {
+        "label": "Hungary",
+        "countries": [
+          "Hungary"
+        ],
+        "continents": [
+          "Europe"
+        ]
+      }
+    },
+    {
+      "id": "sedona-sun",
+      "sourceId": "sedona-sun-pepper",
+      "name": "Sedona Sun Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 0,
+      "shuMax": 1000,
+      "sourceMedian": 500,
+      "color": "yellow to orange",
+      "sourceOrigin": "United States",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2023/11/Sedona-Sun-Pepper-e1699968533825-500x375.jpeg",
+      "imageSourceFile": "Sedona-Sun-Pepper-e1699968533825-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/sedona-sun-pepper/",
+      "fact": "Sedona Sun Pepper is an ornamental Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as sweet and reports 0 to 1,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "mexibell",
+      "sourceId": "mexibell-pepper",
+      "name": "Mexibell Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 100,
+      "shuMax": 1000,
+      "sourceMedian": 550,
+      "color": "green to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/08/Mexibell-Pepper.jpg",
+      "imageSourceFile": "Mexibell-Pepper.jpg",
+      "imageSourceUrl": "https://pepperscale.com/mexibell-pepper/",
+      "fact": "Mexibell Pepper is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as sweet and reports 100 to 1,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "beaver-dam",
+      "sourceId": "beaver-dam-pepper",
+      "name": "Beaver Dam Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 500,
+      "shuMax": 1000,
+      "sourceMedian": 750,
+      "color": "green to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2015/10/Beaver-Dam-Pepper_3.jpg",
+      "imageSourceFile": "Beaver-Dam-Pepper_3.jpg",
+      "imageSourceUrl": "https://pepperscale.com/beaver-dam-pepper/",
+      "fact": "Beaver Dam Pepper is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as sweet and reports 500 to 1,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "mad-hatter",
+      "sourceId": "mad-hatter-pepper",
+      "name": "Mad Hatter Pepper",
+      "species": "Capsicum baccatum",
+      "shuMin": 500,
+      "shuMax": 1000,
+      "sourceMedian": 750,
+      "color": "green to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Fruity, Citrusy, Floral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2021/02/Mad-Hatter-Pepper-e1670121188334-500x375.jpg",
+      "imageSourceFile": "Mad-Hatter-Pepper-e1670121188334-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/mad-hatter-pepper/",
+      "fact": "Mad Hatter Pepper is a culinary Capsicum baccatum pepper linked to the United States. PepperScale describes its flavor as sweet, fruity, citrusy, and floral and reports 500 to 1,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "nora",
+      "sourceId": "nora-pepper",
+      "name": "Ñora Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 500,
+      "shuMax": 1000,
+      "sourceMedian": 750,
+      "color": "deep red when dried",
+      "sourceOrigin": "Spain",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Earthy, Smoky",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2023/11/nora-pepper-500x375.jpeg",
+      "imageSourceFile": "nora-pepper-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/nora-pepper/",
+      "fact": "Ñora is a small, round Spanish pepper commonly dried after it ripens red. PepperScale reports 500 to 1,000 SHU and a sweet, earthy, smoky flavor.",
+      "location": {
+        "label": "Spain",
+        "countries": [
+          "Spain"
+        ],
+        "continents": [
+          "Europe"
+        ]
+      }
+    },
+    {
+      "id": "guindilla",
+      "sourceId": "guindilla-pepper",
+      "name": "Guindilla Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 1000,
+      "shuMax": 2000,
+      "sourceMedian": 1500,
+      "color": "green to red",
+      "sourceOrigin": "Spain",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2016/05/Guindilla-Pepper.jpg",
+      "imageSourceFile": "Guindilla-Pepper.jpg",
+      "imageSourceUrl": "https://pepperscale.com/guindilla-pepper/",
+      "fact": "Guindilla Pepper is a culinary Capsicum annuum pepper linked to Spain. PepperScale describes its flavor as sweet and reports 1,000 to 2,000 SHU.",
+      "location": {
+        "label": "Spain",
+        "countries": [
+          "Spain"
+        ],
+        "continents": [
+          "Europe"
+        ]
+      }
+    },
+    {
+      "id": "california-chile",
+      "sourceId": "california-chile",
+      "name": "California Chile",
+      "species": "Capsicum annuum",
+      "shuMin": 500,
+      "shuMax": 2500,
+      "sourceMedian": 1500,
+      "color": "deep red when dried",
+      "sourceOrigin": "Mexico",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Earthy, Fruity",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2026/07/California-Chile-500x375.jpeg",
+      "imageSourceFile": "California-Chile-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/california-chile/",
+      "fact": "California chiles are ripe Anaheim peppers sold in dried form. PepperScale reports 500 to 2,500 SHU and a sweet, earthy, fruity flavor.",
+      "location": {
+        "label": "Mexico",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "rocotillo",
+      "sourceId": "rocotillo-pepper",
+      "name": "Rocotillo Pepper",
+      "species": "Capsicum baccatum",
+      "shuMin": 1500,
+      "shuMax": 2500,
+      "sourceMedian": 2000,
+      "color": "green to red",
+      "sourceOrigin": "Peru",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Tropical",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2013/07/rocotillo-pepper-450x338.jpg",
+      "imageSourceFile": "rocotillo-pepper-450x338.jpg",
+      "imageSourceUrl": "https://pepperscale.com/rocotillo-pepper/",
+      "fact": "Rocotillo Pepper is a culinary Capsicum baccatum pepper linked to Peru. PepperScale describes its flavor as sweet and tropical and reports 1,500 to 2,500 SHU.",
+      "location": {
+        "label": "Peru",
+        "countries": [
+          "Peru"
+        ],
+        "continents": [
+          "South America"
+        ]
+      }
+    },
+    {
+      "id": "numex-big-jim",
+      "sourceId": "numex-big-jim",
+      "name": "NuMex Big Jim",
+      "species": "Capsicum annuum",
+      "shuMin": 2500,
+      "shuMax": 3000,
+      "sourceMedian": 2750,
+      "color": "green to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Bright, Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/10/numex-big-jim.jpg",
+      "imageSourceFile": "numex-big-jim.jpg",
+      "imageSourceUrl": "https://pepperscale.com/numex-big-jim/",
+      "fact": "NuMex Big Jim is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as bright and sweet and reports 2,500 to 3,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "cajun-belle",
+      "sourceId": "cajun-belle-pepper",
+      "name": "Cajun Belle Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 500,
+      "shuMax": 4000,
+      "sourceMedian": 2250,
+      "color": "green to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/07/cajun-belle-pepper-e1724846464877-500x375.jpg",
+      "imageSourceFile": "cajun-belle-pepper-e1724846464877-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/cajun-belle-pepper/",
+      "fact": "Cajun Belle Pepper is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as sweet and reports 500 to 4,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "cacho-de-cabra",
+      "sourceId": "cacho-de-cabra",
+      "name": "Cacho de Cabra",
+      "species": "Capsicum annuum",
+      "shuMin": 1000,
+      "shuMax": 5000,
+      "sourceMedian": 3000,
+      "color": "red",
+      "sourceOrigin": "Chile",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Fruity, Smoky, Earthy",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2023/12/Cacho-de-Cabra-peppers-500x375.png",
+      "imageSourceFile": "Cacho-de-Cabra-peppers-500x375.png",
+      "imageSourceUrl": "https://pepperscale.com/cacho-de-cabra/",
+      "fact": "Cacho de Cabra is a culinary Capsicum annuum pepper linked to Chile. PepperScale describes its flavor as sweet, fruity, smoky, and earthy and reports 1,000 to 5,000 SHU.",
+      "location": {
+        "label": "Chile",
+        "countries": [
+          "Chile"
+        ],
+        "continents": [
+          "South America"
+        ]
+      }
+    },
+    {
+      "id": "fire-and-ice",
+      "sourceId": "fire-and-ice-pepper",
+      "name": "Fire and Ice Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 1000,
+      "shuMax": 5000,
+      "sourceMedian": 3000,
+      "color": "ivory to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2023/11/Fire-and-Ice-Pepper-e1701303973233-500x375.jpeg",
+      "imageSourceFile": "Fire-and-Ice-Pepper-e1701303973233-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/fire-and-ice-pepper/",
+      "fact": "Fire and Ice Pepper is an ornamental Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as sweet and reports 1,000 to 5,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "hot-pops-yellow",
+      "sourceId": "hot-pops-yellow-pepper",
+      "name": "Hot Pops Yellow Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 1000,
+      "shuMax": 5000,
+      "sourceMedian": 3000,
+      "color": "yellow to red",
+      "sourceOrigin": "South America",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Peppery, Bitter",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2025/03/Hot-Pops-Yellow-Pepper-500x375.jpeg",
+      "imageSourceFile": "Hot-Pops-Yellow-Pepper-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/hot-pops-yellow-pepper/",
+      "fact": "Hot Pops Yellow Pepper is an ornamental Capsicum annuum pepper linked to South America. PepperScale describes its flavor as peppery and bitter and reports 1,000 to 5,000 SHU."
+    },
+    {
+      "id": "numex-centennial",
+      "sourceId": "numex-centennial",
+      "name": "NuMex Centennial",
+      "species": "Capsicum annuum",
+      "shuMin": 1000,
+      "shuMax": 5000,
+      "sourceMedian": 3000,
+      "color": "purple to orange-red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Bitter, Bright",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2016/09/NuMex-Centennial.jpg",
+      "imageSourceFile": "NuMex-Centennial.jpg",
+      "imageSourceUrl": "https://pepperscale.com/numex-centennial/",
+      "fact": "NuMex Centennial is an ornamental Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as bitter and bright and reports 1,000 to 5,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "sangria",
+      "sourceId": "sangria-pepper",
+      "name": "Sangria Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 1000,
+      "shuMax": 5000,
+      "sourceMedian": 3000,
+      "color": "green to red",
+      "sourceOrigin": "Unknown",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/11/sangria-pepper.jpg",
+      "imageSourceFile": "sangria-pepper.jpg",
+      "imageSourceUrl": "https://pepperscale.com/sangria-pepper/",
+      "fact": "Sangria Pepper is an ornamental Capsicum annuum pepper with an uncertain recorded origin. PepperScale describes its flavor as neutral and reports 1,000 to 5,000 SHU."
+    },
+    {
+      "id": "cherry-bomb",
+      "sourceId": "cherry-bomb-pepper",
+      "name": "Cherry Bomb Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 2500,
+      "shuMax": 5000,
+      "sourceMedian": 3750,
+      "color": "red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2016/01/cherry-bomb-pepper_1-300x225.jpg",
+      "imageSourceFile": "cherry-bomb-pepper_1-300x225.jpg",
+      "imageSourceUrl": "https://pepperscale.com/cherry-bomb-pepper/",
+      "fact": "Cherry Bomb Pepper is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as sweet and reports 2,500 to 5,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "jalafuego",
+      "sourceId": "jalafuego-pepper",
+      "name": "Jalafuego Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 4000,
+      "shuMax": 6000,
+      "sourceMedian": 5000,
+      "color": "dark green",
+      "sourceOrigin": "Mexico",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Bright, Grassy",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/10/jalafuego-pepper-e1507590141227.jpg",
+      "imageSourceFile": "jalafuego-pepper-e1507590141227.jpg",
+      "imageSourceUrl": "https://pepperscale.com/jalafuego-pepper/",
+      "fact": "Jalafuego Pepper is a culinary Capsicum annuum pepper linked to Mexico. PepperScale describes its flavor as bright and grassy and reports 4,000 to 6,000 SHU.",
+      "location": {
+        "label": "Mexico",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "sandia",
+      "sourceId": "sandia-pepper",
+      "name": "Sandia Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 5000,
+      "shuMax": 7000,
+      "sourceMedian": 6000,
+      "color": "green to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2016/03/Sandia-Pepper-450x335.jpg",
+      "imageSourceFile": "Sandia-Pepper-450x335.jpg",
+      "imageSourceUrl": "https://pepperscale.com/sandia-pepper/",
+      "fact": "Sandia Pepper is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as sweet and reports 5,000 to 7,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "chipotle-meco",
+      "sourceId": "chipotle-meco",
+      "name": "Chipotle Meco",
+      "species": "Capsicum annuum",
+      "shuMin": 2500,
+      "shuMax": 8000,
+      "sourceMedian": 5250,
+      "color": "tan-brown when dried",
+      "sourceOrigin": "Mexico",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Smoky, Fruity, Earthy",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2023/11/chipotle-meco-e1701038527749-500x375.jpeg",
+      "imageSourceFile": "chipotle-meco-e1701038527749-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/chipotle-meco/",
+      "fact": "Chipotle meco is a ripe jalapeño smoked and dried until it becomes tan-brown. PepperScale reports 2,500 to 8,000 SHU and a smoky, fruity, earthy flavor.",
+      "location": {
+        "label": "Mexico",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "pretty-in-purple",
+      "sourceId": "pretty-in-purple-pepper",
+      "name": "Pretty in Purple Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 4000,
+      "shuMax": 8000,
+      "sourceMedian": 6000,
+      "color": "purple to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2023/06/Pretty-in-Purple-Pepper-e1686404215948-500x375.jpeg",
+      "imageSourceFile": "Pretty-in-Purple-Pepper-e1686404215948-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/pretty-in-purple-pepper/",
+      "fact": "Pretty in Purple Pepper is an ornamental Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as neutral and reports 4,000 to 8,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "black-hungarian",
+      "sourceId": "black-hungarian-pepper",
+      "name": "Black Hungarian Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 5000,
+      "shuMax": 10000,
+      "sourceMedian": 7500,
+      "color": "glossy black-purple to red",
+      "sourceOrigin": "Hungary",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2016/03/black-hungarian-pepper.jpeg",
+      "imageSourceFile": "black-hungarian-pepper.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/black-hungarian-pepper/",
+      "fact": "Black Hungarian Pepper is a culinary Capsicum annuum pepper linked to Hungary. PepperScale describes its flavor as sweet and reports 5,000 to 10,000 SHU.",
+      "location": {
+        "label": "Hungary",
+        "countries": [
+          "Hungary"
+        ],
+        "continents": [
+          "Europe"
+        ]
+      }
+    },
+    {
+      "id": "numex-pumpkin-spice",
+      "sourceId": "numex-pumpkin-spice",
+      "name": "NuMex Pumpkin Spice",
+      "species": "Capsicum annuum",
+      "shuMin": 20000,
+      "shuMax": 25000,
+      "sourceMedian": 22500,
+      "color": "orange",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Earthy, Fruity",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2024/12/NuMex-Pumpkin-Spice_1-500x375.jpeg",
+      "imageSourceFile": "NuMex-Pumpkin-Spice_1-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/numex-pumpkin-spice/",
+      "fact": "NuMex Pumpkin Spice is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as sweet, earthy, and fruity and reports 20,000 to 25,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "black-prince",
+      "sourceId": "black-prince-pepper",
+      "name": "Black Prince Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 5000,
+      "shuMax": 30000,
+      "sourceMedian": 17500,
+      "color": "deep purple",
+      "sourceOrigin": "Mexico",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/11/Black-Prince-Pepper-500x375.jpeg",
+      "imageSourceFile": "Black-Prince-Pepper-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/black-prince-pepper/",
+      "fact": "Black Prince Pepper is an ornamental Capsicum annuum pepper linked to Mexico. PepperScale describes its flavor as neutral and reports 5,000 to 30,000 SHU.",
+      "location": {
+        "label": "Mexico",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "count-dracula",
+      "sourceId": "count-dracula-pepper",
+      "name": "Count Dracula Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 5000,
+      "shuMax": 30000,
+      "sourceMedian": 17500,
+      "color": "glossy black-purple",
+      "sourceOrigin": "Unknown",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/10/count-dracula-pepper.jpg",
+      "imageSourceFile": "count-dracula-pepper.jpg",
+      "imageSourceUrl": "https://pepperscale.com/count-dracula-pepper/",
+      "fact": "Count Dracula Pepper is an ornamental Capsicum annuum pepper with an uncertain recorded origin. PepperScale describes its flavor as neutral and reports 5,000 to 30,000 SHU."
+    },
+    {
+      "id": "hinkelhatz",
+      "sourceId": "hinkelhatz-pepper",
+      "name": "Hinkelhatz Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 5000,
+      "shuMax": 30000,
+      "sourceMedian": 17500,
+      "color": "green to orange-red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/04/Hinkelhatz-Pepper-e1682384331621-500x375.jpg",
+      "imageSourceFile": "Hinkelhatz-Pepper-e1682384331621-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/hinkelhatz-pepper/",
+      "fact": "Hinkelhatz Pepper is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as neutral and reports 5,000 to 30,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "royal-black",
+      "sourceId": "royal-black-pepper",
+      "name": "Royal Black Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 5000,
+      "shuMax": 30000,
+      "sourceMedian": 17500,
+      "color": "black-purple",
+      "sourceOrigin": "Unknown",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/10/royal-black-pepper-300x225.jpg",
+      "imageSourceFile": "royal-black-pepper-300x225.jpg",
+      "imageSourceUrl": "https://pepperscale.com/royal-black-pepper/",
+      "fact": "Royal Black Pepper is an ornamental Capsicum annuum pepper with an uncertain recorded origin. PepperScale describes its flavor as neutral and reports 5,000 to 30,000 SHU."
+    },
+    {
+      "id": "inca-red-drop",
+      "sourceId": "inca-red-drop-pepper",
+      "name": "Inca Red Drop Pepper",
+      "species": "Capsicum baccatum",
+      "shuMin": 10000,
+      "shuMax": 30000,
+      "sourceMedian": 20000,
+      "color": "red",
+      "sourceOrigin": "Peru",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Fruity, Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/12/inca-red-drop-pepper-300x225.jpg",
+      "imageSourceFile": "inca-red-drop-pepper-300x225.jpg",
+      "imageSourceUrl": "https://pepperscale.com/inca-red-drop-pepper/",
+      "fact": "Inca Red Drop Pepper is an ornamental Capsicum baccatum pepper linked to Peru. PepperScale describes its flavor as fruity and sweet and reports 10,000 to 30,000 SHU.",
+      "location": {
+        "label": "Peru",
+        "countries": [
+          "Peru"
+        ],
+        "continents": [
+          "South America"
+        ]
+      }
+    },
+    {
+      "id": "loco",
+      "sourceId": "loco-pepper",
+      "name": "Loco Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 15000,
+      "shuMax": 30000,
+      "sourceMedian": 22500,
+      "color": "purple to red",
+      "sourceOrigin": "England",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Sweet, Peppery",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2023/11/loco-pepper-e1700230324613-500x375.jpeg",
+      "imageSourceFile": "loco-pepper-e1700230324613-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/loco-pepper/",
+      "fact": "Loco Pepper is an ornamental Capsicum annuum pepper linked to England. PepperScale describes its flavor as sweet and peppery and reports 15,000 to 30,000 SHU.",
+      "location": {
+        "label": "England, United Kingdom",
+        "countries": [
+          "United Kingdom"
+        ],
+        "continents": [
+          "Europe"
+        ]
+      }
+    },
+    {
+      "id": "aji-colorado",
+      "sourceId": "aji-colorado",
+      "name": "Aji Colorado",
+      "species": "Capsicum baccatum",
+      "shuMin": 20000,
+      "shuMax": 30000,
+      "sourceMedian": 25000,
+      "color": "dark red-brown when dried",
+      "sourceOrigin": "Peru",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Fruity, Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/12/aji-colorado_2-500x375.jpeg",
+      "imageSourceFile": "aji-colorado_2-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/aji-colorado/",
+      "fact": "Aji Colorado is a culinary Capsicum baccatum pepper linked to Peru. PepperScale describes its flavor as fruity and sweet and reports 20,000 to 30,000 SHU.",
+      "location": {
+        "label": "Peru",
+        "countries": [
+          "Peru"
+        ],
+        "continents": [
+          "South America"
+        ]
+      }
+    },
+    {
+      "id": "little-elf",
+      "sourceId": "little-elf-pepper",
+      "name": "Little Elf Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 20000,
+      "shuMax": 30000,
+      "sourceMedian": 25000,
+      "color": "green to orange-red",
+      "sourceOrigin": "Hungary",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Earthy",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/11/little-elf-pepper-300x225.jpg",
+      "imageSourceFile": "little-elf-pepper-300x225.jpg",
+      "imageSourceUrl": "https://pepperscale.com/little-elf-pepper/",
+      "fact": "Little Elf Pepper is an ornamental Capsicum annuum pepper linked to Hungary. PepperScale describes its flavor as earthy and reports 20,000 to 30,000 SHU.",
+      "location": {
+        "label": "Hungary",
+        "countries": [
+          "Hungary"
+        ],
+        "continents": [
+          "Europe"
+        ]
+      }
+    },
+    {
+      "id": "bode",
+      "sourceId": "bode-pepper",
+      "name": "Bod'e Pepper",
+      "species": "Capsicum chinense",
+      "shuMin": 30000,
+      "shuMax": 32000,
+      "sourceMedian": 31000,
+      "color": "green to red",
+      "sourceOrigin": "Brazil",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Fruity, Sweet, Smoky",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2018/02/bode-pepper-500x375.jpeg",
+      "imageSourceFile": "bode-pepper-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/bode-pepper/",
+      "fact": "Bod'e Pepper is a culinary Capsicum chinense pepper linked to Brazil. PepperScale describes its flavor as fruity, sweet, and smoky and reports 30,000 to 32,000 SHU.",
+      "location": {
+        "label": "Brazil",
+        "countries": [
+          "Brazil"
+        ],
+        "continents": [
+          "South America"
+        ]
+      }
+    },
+    {
+      "id": "black-cobra",
+      "sourceId": "black-cobra-pepper",
+      "name": "Black Cobra Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 20000,
+      "shuMax": 40000,
+      "sourceMedian": 30000,
+      "color": "dark purple to red",
+      "sourceOrigin": "South America",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Neutral, Bitter",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2016/05/Black-Cobra-Pepper-1-450x338.jpg",
+      "imageSourceFile": "Black-Cobra-Pepper-1-450x338.jpg",
+      "imageSourceUrl": "https://pepperscale.com/black-cobra-pepper/",
+      "fact": "Black Cobra Pepper is an ornamental Capsicum annuum pepper linked to South America. PepperScale describes its flavor as neutral and bitter and reports 20,000 to 40,000 SHU."
+    },
+    {
+      "id": "aurora",
+      "sourceId": "aurora-pepper",
+      "name": "Aurora Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 30000,
+      "shuMax": 50000,
+      "sourceMedian": 40000,
+      "color": "purple to orange-red",
+      "sourceOrigin": "Mexico",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/08/aurora-pepper.jpg",
+      "imageSourceFile": "aurora-pepper.jpg",
+      "imageSourceUrl": "https://pepperscale.com/aurora-pepper/",
+      "fact": "Aurora Pepper is an ornamental Capsicum annuum pepper linked to Mexico. PepperScale describes its flavor as neutral and reports 30,000 to 50,000 SHU.",
+      "location": {
+        "label": "Mexico",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "buena-mulata",
+      "sourceId": "buena-mulata-pepper",
+      "name": "Buena Mulata Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 30000,
+      "shuMax": 50000,
+      "sourceMedian": 40000,
+      "color": "purple to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2020/10/Buena-Mulata-Pepper-500x375.jpg",
+      "imageSourceFile": "Buena-Mulata-Pepper-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/buena-mulata-pepper/",
+      "fact": "Buena Mulata Pepper is an ornamental Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as sweet and reports 30,000 to 50,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "explosive-ember",
+      "sourceId": "explosive-ember-pepper",
+      "name": "Explosive Ember Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 30000,
+      "shuMax": 50000,
+      "sourceMedian": 40000,
+      "color": "purple to red",
+      "sourceOrigin": "Unknown",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/09/explosive-ember-pepper.jpg",
+      "imageSourceFile": "explosive-ember-pepper.jpg",
+      "imageSourceUrl": "https://pepperscale.com/explosive-ember-pepper/",
+      "fact": "Explosive Ember Pepper is an ornamental Capsicum annuum pepper with an uncertain recorded origin. PepperScale describes its flavor as sweet and reports 30,000 to 50,000 SHU."
+    },
+    {
+      "id": "facing-heaven",
+      "sourceId": "facing-heaven-pepper",
+      "name": "Facing Heaven Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 30000,
+      "shuMax": 50000,
+      "sourceMedian": 40000,
+      "color": "green to red",
+      "sourceOrigin": "China",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Floral, Citrusy",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2023/11/Facing-Heaven-Pepper-e1699882527922-500x375.jpeg",
+      "imageSourceFile": "Facing-Heaven-Pepper-e1699882527922-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/facing-heaven-pepper/",
+      "fact": "Facing Heaven Pepper is a culinary Capsicum annuum pepper linked to China. PepperScale describes its flavor as sweet, floral, and citrusy and reports 30,000 to 50,000 SHU.",
+      "location": {
+        "label": "China",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ]
+      }
+    },
+    {
+      "id": "filius-blue",
+      "sourceId": "filius-blue-pepper",
+      "name": "Filius Blue Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 30000,
+      "shuMax": 50000,
+      "sourceMedian": 40000,
+      "color": "blue-purple to red",
+      "sourceOrigin": "Mexico",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/09/filius-blue-pepper-300x225.jpg",
+      "imageSourceFile": "filius-blue-pepper-300x225.jpg",
+      "imageSourceUrl": "https://pepperscale.com/filius-blue-pepper/",
+      "fact": "Filius Blue Pepper is an ornamental Capsicum annuum pepper linked to Mexico. PepperScale describes its flavor as neutral and reports 30,000 to 50,000 SHU.",
+      "location": {
+        "label": "Mexico",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "rooster-spur",
+      "sourceId": "rooster-spur-pepper",
+      "name": "Rooster Spur Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 30000,
+      "shuMax": 50000,
+      "sourceMedian": 40000,
+      "color": "green to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Peppery",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/08/rooster-spur-pepper.jpg",
+      "imageSourceFile": "rooster-spur-pepper.jpg",
+      "imageSourceUrl": "https://pepperscale.com/rooster-spur-pepper/",
+      "fact": "Rooster Spur Pepper is an ornamental Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as peppery and reports 30,000 to 50,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "urfa-biber",
+      "sourceId": "urfa-biber",
+      "name": "Urfa Biber (Isot Pepper)",
+      "species": "Capsicum annuum",
+      "shuMin": 30000,
+      "shuMax": 50000,
+      "sourceMedian": 40000,
+      "color": "deep burgundy flakes",
+      "sourceOrigin": "Turkey",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Earthy, Smoky, Sweet, Tangy, Salty",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2022/03/urfa-biber_isot-pepper-500x375.jpg",
+      "imageSourceFile": "urfa-biber_isot-pepper-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/urfa-biber/",
+      "fact": "Urfa biber is a Turkish chile dried and cured into dark flakes. PepperScale reports 30,000 to 50,000 SHU and an earthy, smoky, sweet flavor.",
+      "location": {
+        "label": "Turkey",
+        "countries": [
+          "Turkey"
+        ],
+        "continents": [
+          "Asia"
+        ]
+      },
+      "isCondiment": true,
+      "accuracyNote": "The permitted PepperScale image shows the dried, cured flake seasoning rather than a fresh pod, so Burrow treats this as a condiment card and excludes it from plant-stat comparisons."
+    },
+    {
+      "id": "satans-kiss",
+      "sourceId": "satans-kiss-pepper",
+      "name": "Satan's Kiss Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 40000,
+      "shuMax": 50000,
+      "sourceMedian": 45000,
+      "color": "red",
+      "sourceOrigin": "Italy",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2020/09/Satans-Kiss-Pepper-500x375.jpg",
+      "imageSourceFile": "Satans-Kiss-Pepper-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/satans-kiss-pepper/",
+      "fact": "Satan's Kiss Pepper is a culinary Capsicum annuum pepper linked to Italy. PepperScale describes its flavor as neutral and reports 40,000 to 50,000 SHU.",
+      "location": {
+        "label": "Italy",
+        "countries": [
+          "Italy"
+        ],
+        "continents": [
+          "Europe"
+        ]
+      }
+    },
+    {
+      "id": "black-cuban",
+      "sourceId": "black-cuban-pepper",
+      "name": "Black Cuban Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 40000,
+      "shuMax": 58000,
+      "sourceMedian": 49000,
+      "color": "black-purple to red",
+      "sourceOrigin": "Cuba",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2018/01/black-cuban-pepper-e1516152091242-500x375.jpg",
+      "imageSourceFile": "black-cuban-pepper-e1516152091242-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/black-cuban-pepper/",
+      "fact": "Black Cuban Pepper is an ornamental Capsicum annuum pepper linked to Cuba. PepperScale describes its flavor as neutral and reports 40,000 to 58,000 SHU.",
+      "location": {
+        "label": "Cuba",
+        "countries": [
+          "Cuba"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "calico",
+      "sourceId": "calico-pepper",
+      "name": "Calico Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 50000,
+      "shuMax": 70000,
+      "sourceMedian": 60000,
+      "color": "purple-black to red",
+      "sourceOrigin": "Mexico",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/11/calico-pepper_1-500x375.jpg",
+      "imageSourceFile": "calico-pepper_1-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/calico-pepper/",
+      "fact": "Calico Pepper is an ornamental Capsicum annuum pepper linked to Mexico. PepperScale describes its flavor as neutral and reports 50,000 to 70,000 SHU.",
+      "location": {
+        "label": "Mexico",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "tien-tsin",
+      "sourceId": "tien-tsin-pepper",
+      "name": "Tien Tsin Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 50000,
+      "shuMax": 75000,
+      "sourceMedian": 62500,
+      "color": "red when dried",
+      "sourceOrigin": "China",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2016/04/tien-tsin-pepper.jpg",
+      "imageSourceFile": "tien-tsin-pepper.jpg",
+      "imageSourceUrl": "https://pepperscale.com/tien-tsin-pepper/",
+      "fact": "Tien Tsin Pepper is a culinary Capsicum annuum pepper linked to China. PepperScale describes its flavor as neutral and reports 50,000 to 75,000 SHU.",
+      "location": {
+        "label": "China",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ]
+      }
+    },
+    {
+      "id": "prairie-fire",
+      "sourceId": "prairie-fire-pepper",
+      "name": "Prairie Fire Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 70000,
+      "shuMax": 80000,
+      "sourceMedian": 75000,
+      "color": "yellow to orange-red",
+      "sourceOrigin": "Mexico",
+      "sourceUse": "Ornamental",
+      "sourceFlavor": "Fruity, Tangy",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2016/06/prairie-fire-pepper.jpg",
+      "imageSourceFile": "prairie-fire-pepper.jpg",
+      "imageSourceUrl": "https://pepperscale.com/prairie-fire-pepper/",
+      "fact": "Prairie Fire Pepper is an ornamental Capsicum annuum pepper linked to Mexico. PepperScale describes its flavor as fruity and tangy and reports 70,000 to 80,000 SHU.",
+      "location": {
+        "label": "Mexico",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "byadgi-chili",
+      "sourceId": "byadgi-chili",
+      "name": "Byadgi Chili",
+      "species": "Capsicum annuum",
+      "shuMin": 50000,
+      "shuMax": 100000,
+      "sourceMedian": 75000,
+      "color": "deep red when dried",
+      "sourceOrigin": "India",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/07/byadgi-chili.jpg",
+      "imageSourceFile": "byadgi-chili.jpg",
+      "imageSourceUrl": "https://pepperscale.com/byadgi-chili/",
+      "fact": "Byadgi Chili is a culinary Capsicum annuum pepper linked to India. PepperScale describes its flavor as sweet and reports 50,000 to 100,000 SHU.",
+      "location": {
+        "label": "India",
+        "countries": [
+          "India"
+        ],
+        "continents": [
+          "Asia"
+        ]
+      }
+    },
+    {
+      "id": "thai-dragon",
+      "sourceId": "thai-dragon-pepper",
+      "name": "Thai Dragon Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 50000,
+      "shuMax": 100000,
+      "sourceMedian": 75000,
+      "color": "green to red",
+      "sourceOrigin": "Thailand",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Fruity, Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2023/12/Thai-Dragon-Pepper-e1701476532153-500x375.jpg",
+      "imageSourceFile": "Thai-Dragon-Pepper-e1701476532153-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/thai-dragon-pepper/",
+      "fact": "Thai Dragon Pepper is a culinary Capsicum annuum pepper linked to Thailand. PepperScale describes its flavor as fruity and sweet and reports 50,000 to 100,000 SHU.",
+      "location": {
+        "label": "Thailand",
+        "countries": [
+          "Thailand"
+        ],
+        "continents": [
+          "Asia"
+        ]
+      }
+    },
+    {
+      "id": "charleston-hot",
+      "sourceId": "charleston-hot-pepper",
+      "name": "Charleston Hot Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 70000,
+      "shuMax": 100000,
+      "sourceMedian": 85000,
+      "color": "green to red",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2016/07/Charleston-Hot-Pepper-300x225.jpg",
+      "imageSourceFile": "Charleston-Hot-Pepper-300x225.jpg",
+      "imageSourceUrl": "https://pepperscale.com/charleston-hot-pepper/",
+      "fact": "Charleston Hot Pepper is a culinary Capsicum annuum pepper linked to the United States. PepperScale describes its flavor as neutral and reports 70,000 to 100,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "apache",
+      "sourceId": "apache-pepper",
+      "name": "Apache Pepper",
+      "species": "Capsicum annuum",
+      "shuMin": 80000,
+      "shuMax": 100000,
+      "sourceMedian": 90000,
+      "color": "green to red",
+      "sourceOrigin": "Unknown",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/09/apache-pepper-300x225.jpg",
+      "imageSourceFile": "apache-pepper-300x225.jpg",
+      "imageSourceUrl": "https://pepperscale.com/apache-pepper/",
+      "fact": "Apache Pepper is a culinary Capsicum annuum pepper with an uncertain recorded origin. PepperScale describes its flavor as sweet and reports 80,000 to 100,000 SHU."
+    },
+    {
+      "id": "siling-labuyo",
+      "sourceId": "siling-labuyo",
+      "name": "Siling Labuyo",
+      "species": "Capsicum frutescens",
+      "shuMin": 80000,
+      "shuMax": 100000,
+      "sourceMedian": 90000,
+      "color": "green to red",
+      "sourceOrigin": "Philippines",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Neutral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/04/siling-labuyo-300x225.jpg",
+      "imageSourceFile": "siling-labuyo-300x225.jpg",
+      "imageSourceUrl": "https://pepperscale.com/siling-labuyo/",
+      "fact": "Siling Labuyo is a culinary Capsicum frutescens pepper linked to the Philippines. PepperScale describes its flavor as neutral and reports 80,000 to 100,000 SHU.",
+      "location": {
+        "label": "Philippines",
+        "countries": [
+          "Philippines"
+        ],
+        "continents": [
+          "Asia"
+        ]
+      }
+    },
+    {
+      "id": "cumari-do-para",
+      "sourceId": "cumari-do-para",
+      "name": "Cumari do Para",
+      "species": "Capsicum chinense",
+      "shuMin": 50000,
+      "shuMax": 300000,
+      "sourceMedian": 175000,
+      "color": "pale yellow",
+      "sourceOrigin": "Brazil",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Fruity, Sweet, Tropical",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/12/cumari-do-para_1-500x375.jpg",
+      "imageSourceFile": "cumari-do-para_1-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/cumari-do-para/",
+      "fact": "Cumari do Para is a culinary Capsicum chinense pepper linked to Brazil. PepperScale describes its flavor as fruity, sweet, and tropical and reports 50,000 to 300,000 SHU.",
+      "location": {
+        "label": "Brazil",
+        "countries": [
+          "Brazil"
+        ],
+        "continents": [
+          "South America"
+        ]
+      }
+    },
+    {
+      "id": "aji-chombo",
+      "sourceId": "aji-chombo",
+      "name": "Aji Chombo",
+      "species": "Capsicum chinense",
+      "shuMin": 125000,
+      "shuMax": 325000,
+      "sourceMedian": 225000,
+      "color": "green to red",
+      "sourceOrigin": "Panama",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Fruity, Tropical",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/01/Aji-Chombo.jpg",
+      "imageSourceFile": "Aji-Chombo.jpg",
+      "imageSourceUrl": "https://pepperscale.com/aji-chombo/",
+      "fact": "Aji Chombo is a culinary Capsicum chinense pepper linked to Panama. PepperScale describes its flavor as sweet, fruity, and tropical and reports 125,000 to 325,000 SHU.",
+      "location": {
+        "label": "Panama",
+        "countries": [
+          "Panama"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "peruvian-white-habanero",
+      "sourceId": "peruvian-white-habanero",
+      "name": "Peruvian White Habanero",
+      "species": "Capsicum chinense",
+      "shuMin": 100000,
+      "shuMax": 350000,
+      "sourceMedian": 225000,
+      "color": "creamy white",
+      "sourceOrigin": "Peru",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Fruity",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2016/05/Peruvian-White-Habanero.jpg",
+      "imageSourceFile": "Peruvian-White-Habanero.jpg",
+      "imageSourceUrl": "https://pepperscale.com/peruvian-white-habanero/",
+      "fact": "Peruvian White Habanero is a culinary Capsicum chinense pepper linked to Peru. PepperScale describes its flavor as sweet and fruity and reports 100,000 to 350,000 SHU.",
+      "location": {
+        "label": "Peru",
+        "countries": [
+          "Peru"
+        ],
+        "continents": [
+          "South America"
+        ]
+      }
+    },
+    {
+      "id": "peach-habanero",
+      "sourceId": "peach-habanero",
+      "name": "Peach Habanero",
+      "species": "Capsicum chinense",
+      "shuMin": 150000,
+      "shuMax": 350000,
+      "sourceMedian": 250000,
+      "color": "peach",
+      "sourceOrigin": "Caribbean",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Fruity",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2018/07/habanero-peach-500x375.jpg",
+      "imageSourceFile": "habanero-peach-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/peach-habanero/",
+      "fact": "Peach Habanero is a culinary Capsicum chinense pepper linked to the Caribbean. PepperScale describes its flavor as sweet and fruity and reports 150,000 to 350,000 SHU."
+    },
+    {
+      "id": "hot-paper-lantern",
+      "sourceId": "hot-paper-lantern",
+      "name": "Hot Paper Lantern",
+      "species": "Capsicum chinense",
+      "shuMin": 150000,
+      "shuMax": 400000,
+      "sourceMedian": 275000,
+      "color": "green to red",
+      "sourceOrigin": "Peru",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Smoky",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2025/03/Hot-Paper-Lantern-500x375.jpeg",
+      "imageSourceFile": "Hot-Paper-Lantern-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/hot-paper-lantern/",
+      "fact": "Hot Paper Lantern is a culinary Capsicum chinense pepper linked to Peru. PepperScale describes its flavor as sweet and smoky and reports 150,000 to 400,000 SHU.",
+      "location": {
+        "label": "Peru",
+        "countries": [
+          "Peru"
+        ],
+        "continents": [
+          "South America"
+        ]
+      }
+    },
+    {
+      "id": "roatan-pumpkin-habanero",
+      "sourceId": "roatan-pumpkin-habanero",
+      "name": "Roatan Pumpkin Habanero",
+      "species": "Capsicum chinense",
+      "shuMin": 100000,
+      "shuMax": 500000,
+      "sourceMedian": 300000,
+      "color": "orange",
+      "sourceOrigin": "Caribbean",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Fruity, Citrusy",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/10/roatan-pumpkin-habanero.jpg",
+      "imageSourceFile": "roatan-pumpkin-habanero.jpg",
+      "imageSourceUrl": "https://pepperscale.com/roatan-pumpkin-habanero/",
+      "fact": "Roatan Pumpkin Habanero is a culinary Capsicum chinense pepper linked to the Caribbean. PepperScale describes its flavor as sweet, fruity, and citrusy and reports 100,000 to 500,000 SHU."
+    },
+    {
+      "id": "seven-pot-bubblegum",
+      "sourceId": "7-pot-bubblegum",
+      "name": "7 Pot Bubblegum",
+      "species": "Capsicum chinense",
+      "shuMin": 800000,
+      "shuMax": 1000000,
+      "sourceMedian": 900000,
+      "color": "green to red",
+      "sourceOrigin": "United Kingdom",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Fruity",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/07/7-Pot-Bubblegum-300x225.jpg",
+      "imageSourceFile": "7-Pot-Bubblegum-300x225.jpg",
+      "imageSourceUrl": "https://pepperscale.com/7-pot-bubblegum/",
+      "fact": "7 Pot Bubblegum is a culinary Capsicum chinense pepper linked to the United Kingdom. PepperScale describes its flavor as sweet and fruity and reports 800,000 to 1,000,000 SHU.",
+      "location": {
+        "label": "United Kingdom",
+        "countries": [
+          "United Kingdom"
+        ],
+        "continents": [
+          "Europe"
+        ]
+      }
+    },
+    {
+      "id": "seven-pot-jonah",
+      "sourceId": "7-pot-jonah",
+      "name": "7 Pot Jonah",
+      "species": "Capsicum chinense",
+      "shuMin": 800000,
+      "shuMax": 1000000,
+      "sourceMedian": 900000,
+      "color": "red",
+      "sourceOrigin": "Trinidad",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Fruity",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/08/7-Pot-Jonah.jpg",
+      "imageSourceFile": "7-Pot-Jonah.jpg",
+      "imageSourceUrl": "https://pepperscale.com/7-pot-jonah/",
+      "fact": "7 Pot Jonah is a culinary Capsicum chinense pepper linked to Trinidad. PepperScale describes its flavor as sweet and fruity and reports 800,000 to 1,000,000 SHU.",
+      "location": {
+        "label": "Trinidad and Tobago",
+        "countries": [
+          "Trinidad and Tobago"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "kraken-scorpion",
+      "sourceId": "kraken-scorpion-pepper",
+      "name": "Kraken Scorpion Pepper",
+      "species": "Capsicum chinense",
+      "shuMin": 1000000,
+      "shuMax": 1200000,
+      "sourceMedian": 1100000,
+      "color": "chocolate brown",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Earthy, Floral, Smoky",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2024/08/Kraken-Scorpion-Pepper_1-Large-500x375.jpeg",
+      "imageSourceFile": "Kraken-Scorpion-Pepper_1-Large-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/kraken-scorpion-pepper/",
+      "fact": "Kraken Scorpion Pepper is a culinary Capsicum chinense pepper linked to the United States. PepperScale describes its flavor as earthy, floral, and smoky and reports 1,000,000 to 1,200,000 SHU.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "trinidad-seven-pot",
+      "sourceId": "7-pot-pepper",
+      "name": "Trinidad 7 Pot Pepper",
+      "species": "Capsicum chinense",
+      "shuMin": 1000000,
+      "shuMax": 1200000,
+      "sourceMedian": 1100000,
+      "color": "red",
+      "sourceOrigin": "Trinidad",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Fruity, Nutty",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2017/05/trinidad-7-pot-pepper.jpg",
+      "imageSourceFile": "trinidad-7-pot-pepper.jpg",
+      "imageSourceUrl": "https://pepperscale.com/7-pot-pepper/",
+      "fact": "Trinidad 7 Pot Pepper is a culinary Capsicum chinense pepper linked to Trinidad. PepperScale describes its flavor as sweet, fruity, and nutty and reports 1,000,000 to 1,200,000 SHU.",
+      "location": {
+        "label": "Trinidad and Tobago",
+        "countries": [
+          "Trinidad and Tobago"
+        ],
+        "continents": [
+          "North America"
+        ]
+      }
+    },
+    {
+      "id": "death-spiral",
+      "sourceId": "death-spiral-pepper",
+      "name": "Death Spiral Pepper",
+      "species": "Capsicum chinense",
+      "shuMin": 1300000,
+      "shuMax": 1500000,
+      "sourceMedian": 1400000,
+      "color": "red",
+      "sourceOrigin": "United Kingdom",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Citrusy, Floral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2022/03/Death-Spiral-Pepper-e1647632458458-500x375.jpeg",
+      "imageSourceFile": "Death-Spiral-Pepper-e1647632458458-500x375.jpeg",
+      "imageSourceUrl": "https://pepperscale.com/death-spiral-pepper/",
+      "fact": "Death Spiral Pepper is a culinary Capsicum chinense pepper linked to the United Kingdom. PepperScale describes its flavor as sweet, citrusy, and floral and reports 1,300,000 to 1,500,000 SHU.",
+      "location": {
+        "label": "United Kingdom",
+        "countries": [
+          "United Kingdom"
+        ],
+        "continents": [
+          "Europe"
+        ]
+      }
+    },
+    {
+      "id": "apocalypse-scorpion",
+      "sourceId": "apocalypse-scorpion-pepper",
+      "name": "Apocalypse Scorpion Pepper",
+      "species": "Capsicum chinense",
+      "shuMin": 1200000,
+      "shuMax": 2000000,
+      "sourceMedian": 1600000,
+      "color": "red",
+      "sourceOrigin": "Italy",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Fruity, Floral",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2022/03/apocalypse-scorpion-pepper-e1648216896907-500x375.jpg",
+      "imageSourceFile": "apocalypse-scorpion-pepper-e1648216896907-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/apocalypse-scorpion-pepper/",
+      "fact": "Apocalypse Scorpion Pepper is a culinary Capsicum chinense pepper linked to Italy. PepperScale describes its flavor as sweet, fruity, and floral and reports 1,200,000 to 2,000,000 SHU.",
+      "location": {
+        "label": "Italy",
+        "countries": [
+          "Italy"
+        ],
+        "continents": [
+          "Europe"
+        ]
+      }
+    },
+    {
+      "id": "apollo",
+      "sourceId": "apollo-pepper",
+      "name": "Apollo Pepper",
+      "species": "Capsicum chinense",
+      "shuMin": 3000000,
+      "shuMax": 3000000,
+      "sourceMedian": 3000000,
+      "color": "not publicly documented",
+      "sourceOrigin": "United States",
+      "sourceUse": "Culinary",
+      "sourceFlavor": "Sweet, Fruity, Earthy",
+      "sourceImageUrl": "https://pepperscale.com/wp-content/uploads/2022/03/The-Apollo-Pepper-The-Last-Dab-Apollo-500x375.jpg",
+      "imageSourceFile": "The-Apollo-Pepper-The-Last-Dab-Apollo-500x375.jpg",
+      "imageSourceUrl": "https://pepperscale.com/apollo-pepper/",
+      "fact": "The Apollo Pepper is a reported Pepper X and Carolina Reaper cross known publicly through The Last Dab Apollo hot sauce. PepperScale lists an unofficial 3,000,000 SHU figure.",
+      "location": {
+        "label": "United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ]
+      },
+      "isCondiment": true,
+      "scovilleStatus": "unofficial",
+      "accuracyNote": "PepperScale presents 3,000,000 SHU as an unofficial reported figure. A public lab result and the raw pod's appearance have not been released; the permitted source image shows The Last Dab Apollo sauce rather than a pepper pod."
+    }
+  ]
+}

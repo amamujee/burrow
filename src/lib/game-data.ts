@@ -1,5 +1,6 @@
 import type { CardMetadata, CardRarity, WorldContinent, WorldLocation } from "./card-metadata";
 import { countries } from "./countries-data";
+import pepperScaleCatalog from "./pepperscale-peppers.json";
 export { countries, type Country } from "./countries-data";
 
 export type TopicId = "peppers" | "buildings" | "sharks" | "space" | "jets" | "countries" | "mixed";
@@ -26,8 +27,6 @@ export type Pepper = {
   heat: HeatBand;
   shuMin: number | null;
   shuMax: number | null;
-  /** Representative score used when a game needs one value from a documented range. */
-  comparisonShu?: number;
   scovilleStatus?: "published" | "unofficial" | "unpublished" | "not-applicable";
   color: string;
   image: string;
@@ -157,6 +156,46 @@ const permittedPepperImage = (id: string, sourceFile: string, sourceUrl: string,
   imageCredit: `${sourceLabel} (used with permission)`,
   imageFit: "contain" as const,
 });
+
+type PepperScaleAddedPepper = {
+  id: string;
+  name: string;
+  species: string;
+  shuMin: number;
+  shuMax: number;
+  color: string;
+  imageSourceFile: string;
+  imageSourceUrl: string;
+  fact: string;
+  location?: WorldLocation;
+  isCondiment?: boolean;
+  scovilleStatus?: Pepper["scovilleStatus"];
+  accuracyNote?: string;
+};
+
+const pepperScaleRangeLabel = (pepper: PepperScaleAddedPepper) => pepper.shuMin === pepper.shuMax
+  ? `${pepper.shuMax.toLocaleString("en-US")} SHU`
+  : `${pepper.shuMin.toLocaleString("en-US")}-${pepper.shuMax.toLocaleString("en-US")} SHU`;
+
+const pepperScalePepperSeeds: PepperSeed[] = (pepperScaleCatalog.addedPeppers as PepperScaleAddedPepper[]).map((pepper) => ({
+  id: pepper.id,
+  name: pepper.name,
+  species: pepper.species,
+  ...(pepper.isCondiment ? { isCondiment: true } : {}),
+  shuMin: pepper.shuMin,
+  shuMax: pepper.shuMax,
+  ...(pepper.scovilleStatus ? { scovilleStatus: pepper.scovilleStatus } : {}),
+  color: pepper.color,
+  ...permittedPepperImage(pepper.id, pepper.imageSourceFile, pepper.imageSourceUrl, "PepperScale"),
+  fact: pepper.fact,
+  metadata: {
+    ...(pepper.location ? { location: pepper.location } : {}),
+    accuracyNote: [
+      pepper.accuracyNote,
+      `PepperScale's ${pepperScaleCatalog.snapshotDate} list snapshot reports ${pepperScaleRangeLabel(pepper)}. Burrow uses the source-listed maximum of ${pepper.shuMax.toLocaleString("en-US")} SHU whenever one score is required.`,
+    ].filter(Boolean).join(" "),
+  },
+}));
 
 const generatedContentImage = (topic: KnowledgeTopic, id: string, extension = "png") => ({
   image: `/burrow-assets/${topic}/${id}.${extension}`,
@@ -323,28 +362,20 @@ const pepperSeeds: PepperSeed[] = [
     name: "Cayenne",
     shuMin: 30000,
     shuMax: 50000,
-    comparisonShu: 50000,
     color: "red",
     ...contentImage("peppers", "cayenne", "A Fat Red Cayenne Pepper.jpg"),
     imageCredit: "Ashoka Jegroo, Wikimedia Commons",
     fact: "Cayenne peppers are often dried and ground into red pepper powder.",
-    metadata: {
-      accuracyNote: "Cayenne peppers are commonly reported at 30,000 to 50,000 SHU. Burrow uses 50,000 SHU, the upper end of that range, for single-score game comparisons.",
-    },
   },
   {
     id: "tabasco",
     name: "Tabasco",
     shuMin: 30000,
     shuMax: 50000,
-    comparisonShu: 30000,
     color: "red",
     ...contentImage("peppers", "tabasco", "Tabasco peppers.JPG"),
     imageCredit: "Wikimedia Commons",
     fact: "Tabasco peppers are famous for hot sauce.",
-    metadata: {
-      accuracyNote: "Tabasco peppers are commonly reported at 30,000 to 50,000 SHU. Burrow uses 30,000 SHU, the lower end of that range, for single-score game comparisons.",
-    },
   },
   {
     id: "thai-chili",
@@ -2359,6 +2390,7 @@ const pepperSeeds: PepperSeed[] = [
       accuracyNote: "Record-era references report both 1,067,286 and 1,176,182 SHU for Infinity. Burrow shows that published span instead of choosing one conflicting figure.",
     },
   },
+  ...pepperScalePepperSeeds,
 ];
 
 const pepperLocationsById: Partial<Record<string, WorldLocation>> = {
@@ -2524,6 +2556,7 @@ const commonPepperIds = new Set([
   "cubanelle", "cherry-pepper", "pasilla", "mulato", "cascabel", "hatch-chile", "new-mexico-chile", "manzano", "pequin", "aji-dulce",
   "hungarian-wax", "biquinho", "piri-piri", "piquillo", "mirasol", "malagueta", "aleppo", "espelette", "kashmiri-chili", "aji-panca",
   "chipotle", "pimento", "mini-sweet-pepper", "italian-long-hot", "sport-pepper", "sweet-piquante", "korean-gochu", "puya", "morita", "chile-japones",
+  "fushimi", "nora", "guindilla", "california-chile", "cherry-bomb", "chipotle-meco", "byadgi-chili", "thai-dragon", "urfa-biber",
 ]);
 const rarePepperIds = new Set([
   "chocolate-rocoto-x", "orange-butch-t", "pepper-y", "the-noah", "armageddon", "chocolate-pepper-x", "jays-peach-ghost-scorpion", "goat-trail", "komodo-dragon",
@@ -2531,6 +2564,7 @@ const rarePepperIds = new Set([
   "pink-tiger", "ghost-breath", "thors-thunderbolt", "gator-jigsaw", "purple-taj-mahal", "khang-starr-lemon-starrburst", "cgn-21500", "peachgum-tiger",
   "red-thunder-mountain-longhorn", "purple-ufo", "aji-charapita", "yellow-bhut-assam", "moruga-red", "orange-seven-pot", "peppapeach-stripey",
   "white-aji-fantasy", "seven-pot-barrackpore", "farmers-market-jalapeno", "hj8-total-eclipse", "spanish-naga", "infinity",
+  "seven-pot-bubblegum", "seven-pot-jonah", "kraken-scorpion", "trinidad-seven-pot", "death-spiral", "apocalypse-scorpion", "apollo",
 ]);
 const epicPepperIds = new Set([
   "naga-viper", "trinidad-scorpion-butch-t", "seven-pot-primo", "chocolate-bhutlah", "chocolate-moruga-scorpion", "trinidad-scorpion",
@@ -4668,7 +4702,7 @@ export const topicPacks: Record<KnowledgeTopic, TopicPack> = {
     featuredCount: peppers.length,
     sources: [
       { label: "WikiPepper", url: "https://wikipepper.org/peppers" },
-      { label: "PepperScale chile guides", url: "https://pepperscale.com/" },
+      { label: "PepperScale hot pepper list", url: "https://pepperscale.com/hot-pepper-list/" },
       { label: "Epicurious pepper tasting", url: "https://www.epicurious.com/video/watch/hot-takes-pepper-x-creator-ed-currie-blind-tastes-12-of-the-worlds-hottest-peppers" },
       { label: "Epicurious Chocolate X tasting", url: "https://www.epicurious.com/video/watch/pepper-master-tastes-the-hottest-peppers-from-11-countries" },
       { label: "Hot Ones Chocolate Pepper X listing", url: "https://hotones.com/products/the-last-dab-triplex-hot-sauce-hot-ones-hot-sauce" },

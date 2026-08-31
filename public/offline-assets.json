@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "c9e6b827c3102874ba56",
-  "assetCount": 932,
-  "totalBytes": 209556960,
+  "version": "27e0e6e97b7fbea6ab4a",
+  "assetCount": 1001,
+  "totalBytes": 215419300,
   "assets": {
     "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.jpg": {
       "bytes": 91997,
@@ -2124,9 +2124,17 @@
       "bytes": 372784,
       "revision": "bd555093f9f75a489908"
     },
+    "/burrow-assets/peppers/aji-chombo.jpg": {
+      "bytes": 134066,
+      "revision": "ae4bc5264f8b7b4647f6"
+    },
     "/burrow-assets/peppers/aji-cito.jpg": {
       "bytes": 76870,
       "revision": "acac5c417ac22c9bc36f"
+    },
+    "/burrow-assets/peppers/aji-colorado.jpg": {
+      "bytes": 56115,
+      "revision": "7fe46e5b824baa3f393c"
     },
     "/burrow-assets/peppers/aji-confusion.jpg": {
       "bytes": 381978,
@@ -2208,13 +2216,33 @@
       "bytes": 263781,
       "revision": "a32fe92603402e3a72f0"
     },
+    "/burrow-assets/peppers/apache.jpg": {
+      "bytes": 15278,
+      "revision": "a2eebdcc11e3a5df2bfe"
+    },
+    "/burrow-assets/peppers/apocalypse-scorpion.jpg": {
+      "bytes": 27879,
+      "revision": "6a381cabbfdf5d836af7"
+    },
+    "/burrow-assets/peppers/apollo.jpg": {
+      "bytes": 33233,
+      "revision": "e249efa71c49e6e6c05f"
+    },
     "/burrow-assets/peppers/armageddon.png": {
       "bytes": 2044397,
       "revision": "8442d9e62b34ddc0d5fd"
     },
+    "/burrow-assets/peppers/aurora.jpg": {
+      "bytes": 249191,
+      "revision": "60995716f7f1b2f9848a"
+    },
     "/burrow-assets/peppers/banana-pepper.jpg": {
       "bytes": 356315,
       "revision": "24cc530169e3631a672e"
+    },
+    "/burrow-assets/peppers/beaver-dam.jpg": {
+      "bytes": 152194,
+      "revision": "1bc85d861ecf8378fddb"
     },
     "/burrow-assets/peppers/bell-pepper.jpg": {
       "bytes": 517697,
@@ -2228,9 +2256,29 @@
       "bytes": 103305,
       "revision": "5178126f7d38ebb797cb"
     },
+    "/burrow-assets/peppers/black-cobra.jpg": {
+      "bytes": 41650,
+      "revision": "c4e1f3ce56e0a14487ad"
+    },
+    "/burrow-assets/peppers/black-cuban.jpg": {
+      "bytes": 38935,
+      "revision": "f0ebb7ca8590bc93d52e"
+    },
+    "/burrow-assets/peppers/black-hungarian.jpg": {
+      "bytes": 47983,
+      "revision": "98e9fd0a96842fed27bc"
+    },
     "/burrow-assets/peppers/black-pearl.jpg": {
       "bytes": 284124,
       "revision": "26a79a0d3f351038b40e"
+    },
+    "/burrow-assets/peppers/black-prince.jpg": {
+      "bytes": 61323,
+      "revision": "9b312be17c7a9795e354"
+    },
+    "/burrow-assets/peppers/bode.jpg": {
+      "bytes": 7552,
+      "revision": "e955a900f1bc7e40644e"
     },
     "/burrow-assets/peppers/bolivian-rainbow.jpg": {
       "bytes": 175304,
@@ -2244,9 +2292,37 @@
       "bytes": 63353,
       "revision": "ec696aef373dd058395d"
     },
+    "/burrow-assets/peppers/buena-mulata.jpg": {
+      "bytes": 47779,
+      "revision": "2e16edd41b9403ebcf16"
+    },
     "/burrow-assets/peppers/bulgarian-carrot.jpg": {
       "bytes": 71182,
       "revision": "3073eb4a022b5a9e1dc7"
+    },
+    "/burrow-assets/peppers/byadgi-chili.jpg": {
+      "bytes": 298654,
+      "revision": "b2ece819e0528a886109"
+    },
+    "/burrow-assets/peppers/cacho-de-cabra.jpg": {
+      "bytes": 54904,
+      "revision": "84e466e19f197c4506d4"
+    },
+    "/burrow-assets/peppers/cajun-belle.jpg": {
+      "bytes": 37242,
+      "revision": "6e9d82657508251893bc"
+    },
+    "/burrow-assets/peppers/calico.jpg": {
+      "bytes": 21846,
+      "revision": "d534fac859150efcb6a9"
+    },
+    "/burrow-assets/peppers/california-chile.jpg": {
+      "bytes": 52455,
+      "revision": "c8c52144cfb7c6352db2"
+    },
+    "/burrow-assets/peppers/california-wonder.jpg": {
+      "bytes": 111676,
+      "revision": "98df47f10a6dacc88da1"
     },
     "/burrow-assets/peppers/caribbean-red.jpg": {
       "bytes": 109601,
@@ -2284,9 +2360,17 @@
       "bytes": 58797,
       "revision": "f9b4176eeb94546d442a"
     },
+    "/burrow-assets/peppers/charleston-hot.jpg": {
+      "bytes": 19428,
+      "revision": "9859242b73bfba531c6a"
+    },
     "/burrow-assets/peppers/cheiro-roxa.jpg": {
       "bytes": 213896,
       "revision": "af3f0179668227fa0b0b"
+    },
+    "/burrow-assets/peppers/cherry-bomb.jpg": {
+      "bytes": 7068,
+      "revision": "17d34b24d16b62b765de"
     },
     "/burrow-assets/peppers/cherry-pepper.jpg": {
       "bytes": 100792,
@@ -2308,6 +2392,10 @@
       "bytes": 104352,
       "revision": "4eb0306535acb1b6c123"
     },
+    "/burrow-assets/peppers/chilly-chili.jpg": {
+      "bytes": 84676,
+      "revision": "b64fdcc51907475d3cae"
+    },
     "/burrow-assets/peppers/chiltepin.jpg": {
       "bytes": 305212,
       "revision": "02573d633b29de1abe19"
@@ -2319,6 +2407,10 @@
     "/burrow-assets/peppers/chinese-five-color.jpg": {
       "bytes": 163130,
       "revision": "24202af6d732dfe7b63c"
+    },
+    "/burrow-assets/peppers/chipotle-meco.jpg": {
+      "bytes": 26758,
+      "revision": "44335eadd3fdb7fd44e4"
     },
     "/burrow-assets/peppers/chipotle.jpg": {
       "bytes": 93031,
@@ -2364,6 +2456,10 @@
       "bytes": 104645,
       "revision": "4e529482f95cc710e135"
     },
+    "/burrow-assets/peppers/count-dracula.jpg": {
+      "bytes": 232925,
+      "revision": "52349da7774678d7f173"
+    },
     "/burrow-assets/peppers/cowhorn.jpg": {
       "bytes": 89790,
       "revision": "f66dbfb96954e3033db9"
@@ -2376,9 +2472,17 @@
       "bytes": 329850,
       "revision": "e9ac7b6985d3b6ca11db"
     },
+    "/burrow-assets/peppers/cumari-do-para.jpg": {
+      "bytes": 21502,
+      "revision": "5ca95e807e17ad5480eb"
+    },
     "/burrow-assets/peppers/datil.jpg": {
       "bytes": 403560,
       "revision": "fdb391670af82d07a232"
+    },
+    "/burrow-assets/peppers/death-spiral.jpg": {
+      "bytes": 33923,
+      "revision": "54b41e5615f5e4db0927"
     },
     "/burrow-assets/peppers/devils-tongue.jpg": {
       "bytes": 73368,
@@ -2412,6 +2516,14 @@
       "bytes": 120415,
       "revision": "2e6ee3df9c18f872bfe4"
     },
+    "/burrow-assets/peppers/explosive-ember.jpg": {
+      "bytes": 193336,
+      "revision": "f20d61bdb4f433307a17"
+    },
+    "/burrow-assets/peppers/facing-heaven.jpg": {
+      "bytes": 79718,
+      "revision": "b27af0652d5bdf011084"
+    },
     "/burrow-assets/peppers/farmers-market-jalapeno.jpg": {
       "bytes": 66546,
       "revision": "b22e57b17191e7387e62"
@@ -2419,6 +2531,18 @@
     "/burrow-assets/peppers/fatalii.jpg": {
       "bytes": 349758,
       "revision": "15dda0fe3bd0e4bcfe26"
+    },
+    "/burrow-assets/peppers/feher-ozon.jpg": {
+      "bytes": 17015,
+      "revision": "c9c1b601755283fad541"
+    },
+    "/burrow-assets/peppers/filius-blue.jpg": {
+      "bytes": 23229,
+      "revision": "12b0b6d5cef630ad2b92"
+    },
+    "/burrow-assets/peppers/fire-and-ice.jpg": {
+      "bytes": 60897,
+      "revision": "afd35fce93c96a084994"
     },
     "/burrow-assets/peppers/fish-pepper.jpg": {
       "bytes": 508713,
@@ -2431,6 +2555,10 @@
     "/burrow-assets/peppers/frontera-sweet.jpg": {
       "bytes": 89615,
       "revision": "838c3655facd96ed54ba"
+    },
+    "/burrow-assets/peppers/fushimi.jpg": {
+      "bytes": 23846,
+      "revision": "8365e753ab4192143173"
     },
     "/burrow-assets/peppers/gator-jigsaw.jpg": {
       "bytes": 394359,
@@ -2460,6 +2588,10 @@
       "bytes": 119926,
       "revision": "023c3c6363a6f315c2bd"
     },
+    "/burrow-assets/peppers/guindilla.jpg": {
+      "bytes": 128751,
+      "revision": "4c0a2986d9df47e81b37"
+    },
     "/burrow-assets/peppers/guntur-sannam.jpg": {
       "bytes": 284713,
       "revision": "af0744e463ee77b4b1ee"
@@ -2480,13 +2612,33 @@
       "bytes": 411290,
       "revision": "f4afbdf2d34a6931328c"
     },
+    "/burrow-assets/peppers/hinkelhatz.jpg": {
+      "bytes": 31811,
+      "revision": "9d15a30fa2899d4e065d"
+    },
     "/burrow-assets/peppers/hj8-total-eclipse.jpg": {
       "bytes": 100413,
       "revision": "738fa6c0a87929c4a605"
     },
+    "/burrow-assets/peppers/holy-mole.jpg": {
+      "bytes": 54089,
+      "revision": "aa09d3dc28194c95af1d"
+    },
+    "/burrow-assets/peppers/hot-paper-lantern.jpg": {
+      "bytes": 44714,
+      "revision": "073c051652b92dabd263"
+    },
+    "/burrow-assets/peppers/hot-pops-yellow.jpg": {
+      "bytes": 44458,
+      "revision": "f431c9c5a55d85674a6f"
+    },
     "/burrow-assets/peppers/hungarian-wax.jpg": {
       "bytes": 294437,
       "revision": "ab8d58f72d7c92baa7b3"
+    },
+    "/burrow-assets/peppers/inca-red-drop.jpg": {
+      "bytes": 17543,
+      "revision": "0f9aaee89b198e53e142"
     },
     "/burrow-assets/peppers/infinity.jpg": {
       "bytes": 61196,
@@ -2499,6 +2651,10 @@
     "/burrow-assets/peppers/italian-wax.jpg": {
       "bytes": 100663,
       "revision": "7c2b59fa17643870ade2"
+    },
+    "/burrow-assets/peppers/jalafuego.jpg": {
+      "bytes": 75059,
+      "revision": "27834738ab712318bfca"
     },
     "/burrow-assets/peppers/jalapeno.jpg": {
       "bytes": 1173476,
@@ -2532,13 +2688,29 @@
       "bytes": 614335,
       "revision": "5085cda52c93bdfde773"
     },
+    "/burrow-assets/peppers/kraken-scorpion.jpg": {
+      "bytes": 23415,
+      "revision": "0d1bcc83f81b32b2faea"
+    },
     "/burrow-assets/peppers/lemon-drop.jpg": {
       "bytes": 598873,
       "revision": "57b83bb971f943f7f9f2"
     },
+    "/burrow-assets/peppers/little-elf.jpg": {
+      "bytes": 22473,
+      "revision": "23b2c0c5f7e79018e84d"
+    },
+    "/burrow-assets/peppers/loco.jpg": {
+      "bytes": 57528,
+      "revision": "8d48ca9d60f5f315bb9b"
+    },
     "/burrow-assets/peppers/macedonian-rezha.jpg": {
       "bytes": 64837,
       "revision": "c68f87ff16c998f69d68"
+    },
+    "/burrow-assets/peppers/mad-hatter.jpg": {
+      "bytes": 37629,
+      "revision": "d6f1345e731ef3ba8002"
     },
     "/burrow-assets/peppers/madame-jeanette.jpg": {
       "bytes": 437149,
@@ -2552,6 +2724,10 @@
       "bytes": 39113,
       "revision": "d6e7df5e1a6872a27ef4"
     },
+    "/burrow-assets/peppers/mariachi.jpg": {
+      "bytes": 22663,
+      "revision": "ce1421cee3ea3cbc5d91"
+    },
     "/burrow-assets/peppers/mattapeno.jpg": {
       "bytes": 98458,
       "revision": "b8d71c44fd07a005505a"
@@ -2559,6 +2735,14 @@
     "/burrow-assets/peppers/medusa.jpg": {
       "bytes": 274130,
       "revision": "0914d4cad78698666ea5"
+    },
+    "/burrow-assets/peppers/melrose.jpg": {
+      "bytes": 22727,
+      "revision": "098c3dd6c133ab2856de"
+    },
+    "/burrow-assets/peppers/mexibell.jpg": {
+      "bytes": 158168,
+      "revision": "1362350f50feac38dfd1"
     },
     "/burrow-assets/peppers/mini-sweet-pepper.jpg": {
       "bytes": 208379,
@@ -2616,6 +2800,22 @@
       "bytes": 259697,
       "revision": "69717f8d7f0026f124d1"
     },
+    "/burrow-assets/peppers/nora.jpg": {
+      "bytes": 28890,
+      "revision": "719e52541e0838bcecb1"
+    },
+    "/burrow-assets/peppers/numex-big-jim.jpg": {
+      "bytes": 598159,
+      "revision": "b9b75bd6b4a4e521859c"
+    },
+    "/burrow-assets/peppers/numex-centennial.jpg": {
+      "bytes": 115559,
+      "revision": "a634eb600b026267b5d3"
+    },
+    "/burrow-assets/peppers/numex-pumpkin-spice.jpg": {
+      "bytes": 22801,
+      "revision": "a8b08b30d6c98a8925be"
+    },
     "/burrow-assets/peppers/numex-twilight.jpg": {
       "bytes": 171464,
       "revision": "cfa311e98e97b4677071"
@@ -2652,6 +2852,10 @@
       "bytes": 85782,
       "revision": "cbff7983d9a9aa72f43b"
     },
+    "/burrow-assets/peppers/peach-habanero.jpg": {
+      "bytes": 27693,
+      "revision": "cbc3a5b129392bc01d72"
+    },
     "/burrow-assets/peppers/peachadew.jpg": {
       "bytes": 301837,
       "revision": "afe6958fa220a739f9b6"
@@ -2679,6 +2883,10 @@
     "/burrow-assets/peppers/pequin.jpg": {
       "bytes": 399413,
       "revision": "5c97c775fc4d2fc43228"
+    },
+    "/burrow-assets/peppers/peruvian-white-habanero.jpg": {
+      "bytes": 145457,
+      "revision": "4c07b05447ad2726134f"
     },
     "/burrow-assets/peppers/peter-pepper.jpg": {
       "bytes": 84343,
@@ -2715,6 +2923,14 @@
     "/burrow-assets/peppers/poblano.jpg": {
       "bytes": 143132,
       "revision": "5a1e80a22c150b365841"
+    },
+    "/burrow-assets/peppers/prairie-fire.jpg": {
+      "bytes": 294264,
+      "revision": "9813e23eefd25ad3bb15"
+    },
+    "/burrow-assets/peppers/pretty-in-purple.jpg": {
+      "bytes": 30637,
+      "revision": "fb487832a67228f6820b"
     },
     "/burrow-assets/peppers/purple-beauty.jpg": {
       "bytes": 84334,
@@ -2760,9 +2976,33 @@
       "bytes": 569104,
       "revision": "63f542a9b093b4aab0f3"
     },
+    "/burrow-assets/peppers/roatan-pumpkin-habanero.jpg": {
+      "bytes": 199524,
+      "revision": "b591c4909c523c45b543"
+    },
+    "/burrow-assets/peppers/rocotillo.jpg": {
+      "bytes": 33773,
+      "revision": "5e26fbe86ddcee13f9c9"
+    },
     "/burrow-assets/peppers/rocoto.jpg": {
       "bytes": 109031,
       "revision": "fbd959ea9049549057bc"
+    },
+    "/burrow-assets/peppers/rooster-spur.jpg": {
+      "bytes": 281368,
+      "revision": "6f956ed7c73724c9b80d"
+    },
+    "/burrow-assets/peppers/royal-black.jpg": {
+      "bytes": 16185,
+      "revision": "5fed4fa5a3fe9370ea52"
+    },
+    "/burrow-assets/peppers/sandia.jpg": {
+      "bytes": 39937,
+      "revision": "b78ef27c7b2d81178d94"
+    },
+    "/burrow-assets/peppers/sangria.jpg": {
+      "bytes": 308593,
+      "revision": "f2cd43e2ca2fca3afb38"
     },
     "/burrow-assets/peppers/santa-fe-grande.jpg": {
       "bytes": 62856,
@@ -2772,9 +3012,17 @@
       "bytes": 453527,
       "revision": "a1bcdb7726cae51ee61e"
     },
+    "/burrow-assets/peppers/satans-kiss.jpg": {
+      "bytes": 24447,
+      "revision": "8169016e061e880287f9"
+    },
     "/burrow-assets/peppers/scotch-bonnet.jpg": {
       "bytes": 130876,
       "revision": "155b46df3abaace8aa5d"
+    },
+    "/burrow-assets/peppers/sedona-sun.jpg": {
+      "bytes": 45689,
+      "revision": "f49e355fc56e6acd0aa0"
     },
     "/burrow-assets/peppers/senise.jpg": {
       "bytes": 116482,
@@ -2788,9 +3036,17 @@
       "bytes": 80510,
       "revision": "47838b00e464dcfc06cb"
     },
+    "/burrow-assets/peppers/seven-pot-bubblegum.jpg": {
+      "bytes": 14753,
+      "revision": "f58fe3623dbcbf6734d6"
+    },
     "/burrow-assets/peppers/seven-pot-douglah.jpg": {
       "bytes": 81155,
       "revision": "f5c20d83bf2edfced5c9"
+    },
+    "/burrow-assets/peppers/seven-pot-jonah.jpg": {
+      "bytes": 137797,
+      "revision": "3961ff5df53ef770dc42"
     },
     "/burrow-assets/peppers/seven-pot-primo.jpg": {
       "bytes": 318157,
@@ -2799,6 +3055,10 @@
     "/burrow-assets/peppers/shishito.jpg": {
       "bytes": 397017,
       "revision": "a39141e2550cd28f8baf"
+    },
+    "/burrow-assets/peppers/siling-labuyo.jpg": {
+      "bytes": 18981,
+      "revision": "77838fc34b116fce561c"
     },
     "/burrow-assets/peppers/spanish-naga.jpg": {
       "bytes": 73572,
@@ -2844,6 +3104,10 @@
       "bytes": 191449,
       "revision": "2c24745c7df9a0b96f77"
     },
+    "/burrow-assets/peppers/thai-dragon.jpg": {
+      "bytes": 36810,
+      "revision": "68e49edc06ea26b41b71"
+    },
     "/burrow-assets/peppers/the-noah.png": {
       "bytes": 2121637,
       "revision": "7ed9c31c4cfd48b962e3"
@@ -2851,6 +3115,10 @@
     "/burrow-assets/peppers/thors-thunderbolt.jpg": {
       "bytes": 422505,
       "revision": "62d13968e1417f1c5862"
+    },
+    "/burrow-assets/peppers/tien-tsin.jpg": {
+      "bytes": 88501,
+      "revision": "58a75d1dbc9920b6d63c"
     },
     "/burrow-assets/peppers/trinidad-perfume.jpg": {
       "bytes": 627558,
@@ -2864,9 +3132,17 @@
       "bytes": 157406,
       "revision": "565a0d8d79d7bf488321"
     },
+    "/burrow-assets/peppers/trinidad-seven-pot.jpg": {
+      "bytes": 248724,
+      "revision": "336ebfea9b587a6775cd"
+    },
     "/burrow-assets/peppers/tshololo.jpg": {
       "bytes": 80831,
       "revision": "8ae20d61773824ac5c8d"
+    },
+    "/burrow-assets/peppers/urfa-biber.jpg": {
+      "bytes": 48494,
+      "revision": "9d14278f7940fa45471a"
     },
     "/burrow-assets/peppers/white-aji-fantasy.jpg": {
       "bytes": 356219,

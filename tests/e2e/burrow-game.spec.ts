@@ -12,6 +12,7 @@ import { collectionCardProfileDetails } from "../../src/lib/card-profile";
 import { cardRarities } from "../../src/lib/card-metadata";
 import { cardDiscoveryIdentities, cardUnlockKey, isCardUnlocked } from "../../src/lib/card-discovery";
 import { buildings, countries, jets, peppers, sharks, spaceCards, topicPacks } from "../../src/lib/game-data";
+import pepperScaleCatalog from "../../src/lib/pepperscale-peppers.json";
 import { poolForDifficulty } from "../../src/lib/difficulty-pool";
 import { autoDifficulty, questionDepthForSelection } from "../../src/lib/difficulty";
 import {
@@ -162,7 +163,7 @@ test("built-in topic totals match the playable card catalogs", () => {
     countries: { count: countries.length, eyebrow: `${countries.length} flag cards` },
   };
 
-  expect(peppers).toHaveLength(193);
+  expect(peppers).toHaveLength(262);
   for (const [topic, values] of Object.entries(expected)) {
     const pack = topicPacks[topic as keyof typeof topicPacks];
     expect(pack.libraryCount).toBe(values.count);
@@ -690,7 +691,7 @@ test("source-verified Scoville ranges stay accurate", () => {
   });
 });
 
-test("Cayenne and Tabasco keep their shared range but use distinct game comparison scores", () => {
+test("every single-number pepper comparison uses the documented maximum", () => {
   const cayenne = peppers.find((pepper) => pepper.id === "cayenne");
   const tabasco = peppers.find((pepper) => pepper.id === "tabasco");
 
@@ -698,16 +699,12 @@ test("Cayenne and Tabasco keep their shared range but use distinct game comparis
     name: "Cayenne",
     shuMin: 30000,
     shuMax: 50000,
-    comparisonShu: 50000,
   });
   expect(tabasco).toMatchObject({
     name: "Tabasco",
     shuMin: 30000,
     shuMax: 50000,
-    comparisonShu: 30000,
   });
-  expect(cayenne?.metadata?.accuracyNote).toContain("upper end of that range");
-  expect(tabasco?.metadata?.accuracyNote).toContain("lower end of that range");
 
   const pepperCards = collectionCards().filter((card) => card.topic === "peppers");
   expect(pepperCards.find((card) => card.id === "cayenne")).toMatchObject({
@@ -715,15 +712,62 @@ test("Cayenne and Tabasco keep their shared range but use distinct game comparis
     statDisplay: "50,000 SHU",
   });
   expect(pepperCards.find((card) => card.id === "tabasco")).toMatchObject({
-    statValue: 30000,
-    statDisplay: "30,000 SHU",
+    statValue: 50000,
+    statDisplay: "50,000 SHU",
   });
+  for (const pepper of peppers.filter((item) => item.shuMax !== null)) {
+    expect(pepperCards.find((card) => card.id === pepper.id)?.statValue, pepper.id).toBe(pepper.shuMax);
+  }
   for (const id of ["cayenne", "tabasco"]) {
     expect(pepperCards.find((card) => card.id === id)?.details).toContainEqual({
       label: "Scoville range",
       value: "30,000-50,000 SHU",
     });
   }
+});
+
+test("PepperScale's 176-entry list is fully represented by existing aliases and 69 new cards", () => {
+  expect(pepperScaleCatalog).toMatchObject({
+    sourceUrl: "https://pepperscale.com/hot-pepper-list/",
+    sourceCount: 176,
+    addedCount: 69,
+    singleScoreRule: "shuMax",
+  });
+  expect(pepperScaleCatalog.coverage).toHaveLength(176);
+  expect(pepperScaleCatalog.addedPeppers).toHaveLength(69);
+  expect(pepperScaleCatalog.coverage.filter((item) => item.match === "existing")).toHaveLength(95);
+  expect(pepperScaleCatalog.coverage.filter((item) => item.match === "alias")).toHaveLength(12);
+  expect(pepperScaleCatalog.coverage.filter((item) => item.match === "added")).toHaveLength(69);
+
+  const pepperById = new Map(peppers.map((pepper) => [pepper.id, pepper]));
+  expect(new Set(pepperScaleCatalog.coverage.map((item) => item.sourceId)).size).toBe(176);
+  for (const item of pepperScaleCatalog.coverage) expect(pepperById.has(item.burrowId), item.sourceId).toBe(true);
+
+  const cardById = new Map(collectionCards().filter((card) => card.topic === "peppers").map((card) => [card.id, card]));
+  for (const sourcePepper of pepperScaleCatalog.addedPeppers) {
+    const pepper = pepperById.get(sourcePepper.id);
+    expect(pepper, sourcePepper.id).toMatchObject({
+      name: sourcePepper.name,
+      species: sourcePepper.species,
+      shuMin: sourcePepper.shuMin,
+      shuMax: sourcePepper.shuMax,
+      color: sourcePepper.color,
+      image: `/burrow-assets/peppers/${sourcePepper.id}.jpg`,
+      imageSourceFile: sourcePepper.imageSourceFile,
+      imageSourceUrl: sourcePepper.imageSourceUrl,
+      imageCredit: "PepperScale (used with permission)",
+      imageFit: "contain",
+    });
+    expect(pepper?.metadata?.accuracyNote).toContain("source-listed maximum");
+    expect(cardById.get(sourcePepper.id)?.statValue).toBe(sourcePepper.shuMax);
+  }
+
+  expect(pepperById.get("urfa-biber")).toMatchObject({ isCondiment: true, color: "deep burgundy flakes" });
+  expect(pepperById.get("apollo")).toMatchObject({
+    isCondiment: true,
+    scovilleStatus: "unofficial",
+    color: "not publicly documented",
+  });
 });
 
 test("15 new peppers share their verified records and real photos across the game", () => {
@@ -1221,8 +1265,8 @@ test("18 globally varied peppers use distinct real photos, complete provenance, 
 
   const hardIds = new Set(poolForDifficulty(peppers, 3).map((pepper) => pepper.id));
   for (const id of newPepperIds) expect(hardIds).toContain(id);
-  expect(topicPacks.peppers.libraryCount).toBe(193);
-  expect(topicPacks.peppers.featuredCount).toBe(193);
+  expect(topicPacks.peppers.libraryCount).toBe(262);
+  expect(topicPacks.peppers.featuredCount).toBe(262);
 });
 
 test("Chocolate Pepper X uses its documented name without borrowing Pepper X's heat record", () => {
@@ -1437,7 +1481,7 @@ test("collectible rarities use familiarity and exceptionalness rather than a for
   const rarityCollections = { peppers, sharks, jets, hotSauces };
   // These are snapshots of the curated classifications, not target quotas.
   const expectedByCollection = {
-    peppers: { common: 51, uncommon: 90, rare: 38, epic: 14 },
+    peppers: { common: 60, uncommon: 143, rare: 45, epic: 14 },
     sharks: { common: 30, uncommon: 13, rare: 5, epic: 2 },
     jets: { common: 30, uncommon: 12, rare: 6, epic: 2 },
     hotSauces: { common: 45, uncommon: 19, rare: 7, epic: 4 },
@@ -1455,9 +1499,8 @@ test("collectible rarities use familiarity and exceptionalness rather than a for
     expect(counts, `${topic} rarity distribution drifted`).toEqual(expectedByCollection[topic as keyof typeof expectedByCollection]);
   }
 
-  expect(overall).toEqual({ common: 156, uncommon: 134, rare: 56, epic: 22 });
-  expect(overall.common).toBeGreaterThan(overall.uncommon);
-  expect(overall.uncommon).toBeGreaterThan(overall.rare);
+  expect(overall).toEqual({ common: 165, uncommon: 187, rare: 63, epic: 22 });
+  expect(overall.common + overall.uncommon).toBeGreaterThan(overall.rare + overall.epic);
   expect(overall.rare).toBeGreaterThan(overall.epic);
 
   expect(new Set(peppers.filter((card) => card.metadata?.rarity === "common").map((card) => card.id))).toEqual(new Set([
@@ -1466,6 +1509,7 @@ test("collectible rarities use familiarity and exceptionalness rather than a for
     "cubanelle", "cherry-pepper", "pasilla", "mulato", "cascabel", "hatch-chile", "new-mexico-chile", "manzano", "pequin", "aji-dulce",
     "hungarian-wax", "biquinho", "piri-piri", "piquillo", "mirasol", "malagueta", "aleppo", "espelette", "kashmiri-chili", "aji-panca",
     "chipotle", "pimento", "mini-sweet-pepper", "italian-long-hot", "sport-pepper", "sweet-piquante", "korean-gochu", "puya", "morita", "chile-japones",
+    "fushimi", "nora", "guindilla", "california-chile", "cherry-bomb", "chipotle-meco", "byadgi-chili", "thai-dragon", "urfa-biber",
   ]));
 
   expect(new Set(peppers.filter((card) => card.metadata?.rarity === "epic").map((card) => card.id))).toEqual(new Set([
@@ -1478,6 +1522,7 @@ test("collectible rarities use familiarity and exceptionalness rather than a for
     "pink-tiger", "ghost-breath", "thors-thunderbolt", "gator-jigsaw", "purple-taj-mahal", "khang-starr-lemon-starrburst", "cgn-21500", "peachgum-tiger",
     "red-thunder-mountain-longhorn", "purple-ufo", "aji-charapita", "yellow-bhut-assam", "moruga-red", "orange-seven-pot", "peppapeach-stripey",
     "white-aji-fantasy", "seven-pot-barrackpore", "farmers-market-jalapeno", "hj8-total-eclipse", "spanish-naga", "infinity",
+    "seven-pot-bubblegum", "seven-pot-jonah", "kraken-scorpion", "trinidad-seven-pot", "death-spiral", "apocalypse-scorpion", "apollo",
   ]));
   expect(new Set(sharks.filter((card) => card.metadata?.rarity === "epic").map((card) => card.id))).toEqual(new Set(["goblin-shark", "megalodon"]));
   expect(new Set(jets.filter((card) => card.metadata?.rarity === "epic").map((card) => card.id))).toEqual(new Set(["b-2-spirit", "sr-71-blackbird"]));
@@ -1694,7 +1739,7 @@ test("Yellow Bhut Assam joins normal pepper play with its permitted source image
 
 test("pepper collection cards use their displayed Scoville score from least to hottest", () => {
   const ordered = orderCollectionCardsByScoville(collectionCards().filter((card) => card.topic === "peppers"));
-  const displayedScores = new Map(peppers.map((pepper) => [pepper.id, pepper.comparisonShu ?? pepper.shuMax ?? pepper.shuMin ?? Number.POSITIVE_INFINITY]));
+  const displayedScores = new Map(peppers.map((pepper) => [pepper.id, pepper.shuMax ?? pepper.shuMin ?? Number.POSITIVE_INFINITY]));
   const expectedOrder = [...ordered]
     .sort((a, b) => (displayedScores.get(a.id) ?? Number.POSITIVE_INFINITY) - (displayedScores.get(b.id) ?? Number.POSITIVE_INFINITY)
       || a.title.localeCompare(b.title));
@@ -1705,7 +1750,7 @@ test("pepper collection cards use their displayed Scoville score from least to h
 
   expect(ordered.slice(0, 3).map((card) => card.title)).toEqual(["Aji Delight", "Albino Sweet", "Bell Pepper"]);
   expect(ordered.map((card) => card.id)).toEqual(expectedOrder.map((card) => card.id));
-  expect(ordered.findIndex((card) => card.id === "tabasco")).toBeLessThan(ordered.findIndex((card) => card.id === "cayenne"));
+  expect(ordered.findIndex((card) => card.id === "cayenne")).toBeLessThan(ordered.findIndex((card) => card.id === "tabasco"));
   expect(ordered.findIndex((card) => card.id === "orange-seven-pot")).toBeLessThan(ordered.findIndex((card) => card.id === "armageddon"));
   expect(lowerBoundOnly.every((card) => !Number.isFinite(card.statValue))).toBe(true);
 });
@@ -3112,7 +3157,7 @@ test("collection only shows selected topics", async ({ page }) => {
     expect.objectContaining({ alt: "Chocolate Bhutlah", src: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
   ]);
 
-  await expect(collection.getByRole("button", { name: "Show all 193 cards" })).toBeVisible();
+  await expect(collection.getByRole("button", { name: "Show all 262 cards" })).toBeVisible();
   expect(await collection.getByText("Locked card", { exact: true }).count()).toBeLessThan(20);
   await expect(collection.getByText("WikiPepper", { exact: true })).not.toBeVisible();
 

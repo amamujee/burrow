@@ -30,6 +30,7 @@ const {
 } = jiti("./src/lib/game-modes.ts");
 const { packToPlayableDeck } = jiti("./src/lib/pack-adapter.ts");
 const { buildHeadToHeadSession, buildSession } = jiti("./src/lib/questions.ts");
+const pepperScaleCatalog = JSON.parse(fs.readFileSync("src/lib/pepperscale-peppers.json", "utf8"));
 
 const userAgent = "BurrowContentQA/1.0";
 const critical = [];
@@ -76,6 +77,9 @@ const sourceVerifiedScovilleRanges = new Map([
   ["santaka", { min: 30000, max: 50000, source: "https://www.tyler-farms.com/santaka-pepper-seeds/" }],
   ["white-aji-fantasy", { min: 5000, max: 30000, source: "https://www.tyler-farms.com/white-aji-fantasy-pepper-seeds/" }],
 ]);
+for (const pepper of pepperScaleCatalog.addedPeppers) {
+  sourceVerifiedScovilleRanges.set(pepper.id, { min: pepper.shuMin, max: pepper.shuMax, source: pepper.imageSourceUrl });
+}
 
 const isImageFile = (target) => {
   const buffer = fs.readFileSync(target);
@@ -273,6 +277,14 @@ const featuredItems = [
   ...data.spaceCards.map((item) => ({ ...item, topic: "space" })),
   ...data.jets.map((item) => ({ ...item, topic: "jets" })),
 ];
+
+if (pepperScaleCatalog.sourceCount !== 176 || pepperScaleCatalog.coverage.length !== 176) critical.push("PepperScale catalog must cover all 176 source entries");
+if (pepperScaleCatalog.addedCount !== 69 || pepperScaleCatalog.addedPeppers.length !== 69) critical.push("PepperScale catalog must include all 69 genuinely new entries");
+if (pepperScaleCatalog.singleScoreRule !== "shuMax") critical.push("PepperScale catalog must use shuMax for single-score play");
+const pepperIds = new Set(data.peppers.map((pepper) => pepper.id));
+for (const item of pepperScaleCatalog.coverage) {
+  if (!pepperIds.has(item.burrowId)) critical.push(`PepperScale/${item.sourceId}: missing Burrow card ${item.burrowId}`);
+}
 
 for (const item of featuredItems) {
   checkFeaturedMetadata(item);

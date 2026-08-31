@@ -6,6 +6,8 @@ const dataFile = "src/lib/game-data.ts";
 const source = fs.readFileSync(dataFile, "utf8");
 const countriesFile = "src/lib/countries-data.ts";
 const countriesSource = fs.existsSync(countriesFile) ? fs.readFileSync(countriesFile, "utf8") : "";
+const pepperScaleFile = "src/lib/pepperscale-peppers.json";
+const pepperScaleCatalog = fs.existsSync(pepperScaleFile) ? JSON.parse(fs.readFileSync(pepperScaleFile, "utf8")) : { addedPeppers: [] };
 
 const remoteImageReferences = [...source.matchAll(/image:\s*["']https?:\/\//g)];
 const externalImageReferences = [...source.matchAll(/externalImage\(/g)];
@@ -32,6 +34,12 @@ const permittedPepperAssets = [...source.matchAll(/permittedPepperImage\("([^"]+
   id: match[1],
   sourceFile: match[2],
   target: path.join("public", "burrow-assets", "peppers", `${match[1]}.jpg`),
+}));
+const pepperScalePepperAssets = pepperScaleCatalog.addedPeppers.map((pepper) => ({
+  topic: "peppers",
+  id: pepper.id,
+  sourceFile: pepper.imageSourceFile,
+  target: path.join("public", "burrow-assets", "peppers", `${pepper.id}.jpg`),
 }));
 const countryAssets = [...countriesSource.matchAll(/id: "([^"]+)"[^\n]+image: "\/burrow-assets\/countries\/([^"]+\.svg)"/g)].map((match) => ({
   topic: "countries",
@@ -67,6 +75,7 @@ const assets = [
   ...generatedAssets,
   ...tylerFarmsPepperAssets,
   ...permittedPepperAssets,
+  ...pepperScalePepperAssets,
   ...countryAssets,
   ...packAssets(),
 ];
