@@ -1219,7 +1219,11 @@ test("18 globally varied peppers use distinct real photos, complete provenance, 
     expect(pepper.species).toBeTruthy();
     expect(pepper.fact.length).toBeGreaterThanOrEqual(120);
     expect(pepper.metadata?.accuracyNote).toBeTruthy();
-    expect(pepper.metadata?.rarity).toMatch(/^(uncommon|rare)$/);
+    if (pepper.id === "jwala-finger") {
+      expect(pepper.metadata?.rarity).toBe("common");
+    } else {
+      expect(pepper.metadata?.rarity).toMatch(/^(uncommon|rare)$/);
+    }
   }
 
   expect(newPeppers.filter((pepper) => pepper.imageSourceUrl.includes("chilipeppermadness.com"))).toHaveLength(17);
@@ -1481,7 +1485,7 @@ test("collectible rarities use familiarity and exceptionalness rather than a for
   const rarityCollections = { peppers, sharks, jets, hotSauces };
   // These are snapshots of the curated classifications, not target quotas.
   const expectedByCollection = {
-    peppers: { common: 60, uncommon: 143, rare: 45, epic: 14 },
+    peppers: { common: 76, uncommon: 127, rare: 45, epic: 14 },
     sharks: { common: 30, uncommon: 13, rare: 5, epic: 2 },
     jets: { common: 30, uncommon: 12, rare: 6, epic: 2 },
     hotSauces: { common: 45, uncommon: 19, rare: 7, epic: 4 },
@@ -1499,7 +1503,7 @@ test("collectible rarities use familiarity and exceptionalness rather than a for
     expect(counts, `${topic} rarity distribution drifted`).toEqual(expectedByCollection[topic as keyof typeof expectedByCollection]);
   }
 
-  expect(overall).toEqual({ common: 165, uncommon: 187, rare: 63, epic: 22 });
+  expect(overall).toEqual({ common: 181, uncommon: 171, rare: 63, epic: 22 });
   expect(overall.common + overall.uncommon).toBeGreaterThan(overall.rare + overall.epic);
   expect(overall.rare).toBeGreaterThan(overall.epic);
 
@@ -1510,6 +1514,8 @@ test("collectible rarities use familiarity and exceptionalness rather than a for
     "hungarian-wax", "biquinho", "piri-piri", "piquillo", "mirasol", "malagueta", "aleppo", "espelette", "kashmiri-chili", "aji-panca",
     "chipotle", "pimento", "mini-sweet-pepper", "italian-long-hot", "sport-pepper", "sweet-piquante", "korean-gochu", "puya", "morita", "chile-japones",
     "fushimi", "nora", "guindilla", "california-chile", "cherry-bomb", "chipotle-meco", "byadgi-chili", "thai-dragon", "urfa-biber",
+    "california-wonder", "numex-big-jim", "chilaca", "rocoto", "siling-labuyo", "tien-tsin", "facing-heaven", "guntur-sannam", "jwala-finger",
+    "dundicut", "dolmalik", "alma-paprika", "corno-di-toro", "madame-jeanette", "wiri-wiri", "aji-chombo",
   ]));
 
   expect(new Set(peppers.filter((card) => card.metadata?.rarity === "epic").map((card) => card.id))).toEqual(new Set([
@@ -1539,10 +1545,12 @@ test("collectible rarities use familiarity and exceptionalness rather than a for
   };
   expectRarity(peppers, "common", [
     "pepperoncini", "fresno", "thai-chili", "scotch-bonnet", "ghost-pepper", "naga-jolokia", "padron", "ancho", "guajillo", "chile-de-arbol",
-    "aji-amarillo", "cubanelle", "hatch-chile", "pequin",
+    "aji-amarillo", "cubanelle", "hatch-chile", "pequin", "california-wonder", "numex-big-jim", "chilaca", "rocoto", "siling-labuyo",
+    "tien-tsin", "facing-heaven", "guntur-sannam", "jwala-finger", "dundicut", "dolmalik", "alma-paprika", "corno-di-toro",
+    "madame-jeanette", "wiri-wiri", "aji-chombo",
   ]);
   expectRarity(peppers, "uncommon", [
-    "rocoto", "jimmy-nardello", "purple-beauty", "madame-jeanette", "chocolate-habanero", "peach-aribibi-gusano", "aji-confusion",
+    "jimmy-nardello", "purple-beauty", "chocolate-habanero", "peach-aribibi-gusano", "aji-confusion",
     "mattapeno", "aji-ayuyo", "aji-flor-morado", "quintisho", "cheiro-roxa", "brazilian-starfish", "paradeisfruchtiger-gelber",
   ]);
   expectRarity(peppers, "rare", ["goat-trail", "gator-jigsaw", "purple-taj-mahal", "cgn-21500", "red-thunder-mountain-longhorn", "purple-ufo"]);

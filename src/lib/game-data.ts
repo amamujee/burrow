@@ -2548,8 +2548,9 @@ const pepperMetadataFor = (id: string): CardMetadata | undefined => {
 };
 
 // This catalog deliberately includes a long tail of specialty cultivars. Keep
-// those Uncommon by default, and opt only broadly recognized culinary peppers
-// into Common so a newly added niche cultivar cannot accidentally look ordinary.
+// those Uncommon by default, and opt only broadly recognized or culturally
+// significant culinary peppers into Common so a newly added niche cultivar
+// cannot accidentally look ordinary.
 const commonPepperIds = new Set([
   "bell-pepper", "banana-pepper", "pepperoncini", "poblano", "anaheim", "jalapeno", "fresno", "serrano", "cayenne", "tabasco", "thai-chili",
   "scotch-bonnet", "habanero", "ghost-pepper", "naga-jolokia", "shishito", "padron", "ancho", "guajillo", "chile-de-arbol", "aji-amarillo",
@@ -2557,6 +2558,8 @@ const commonPepperIds = new Set([
   "hungarian-wax", "biquinho", "piri-piri", "piquillo", "mirasol", "malagueta", "aleppo", "espelette", "kashmiri-chili", "aji-panca",
   "chipotle", "pimento", "mini-sweet-pepper", "italian-long-hot", "sport-pepper", "sweet-piquante", "korean-gochu", "puya", "morita", "chile-japones",
   "fushimi", "nora", "guindilla", "california-chile", "cherry-bomb", "chipotle-meco", "byadgi-chili", "thai-dragon", "urfa-biber",
+  "california-wonder", "numex-big-jim", "chilaca", "rocoto", "siling-labuyo", "tien-tsin", "facing-heaven", "guntur-sannam", "jwala-finger",
+  "dundicut", "dolmalik", "alma-paprika", "corno-di-toro", "madame-jeanette", "wiri-wiri", "aji-chombo",
 ]);
 const rarePepperIds = new Set([
   "chocolate-rocoto-x", "orange-butch-t", "pepper-y", "the-noah", "armageddon", "chocolate-pepper-x", "jays-peach-ghost-scorpion", "goat-trail", "komodo-dragon",
