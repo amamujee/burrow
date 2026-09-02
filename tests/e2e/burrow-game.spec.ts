@@ -2335,12 +2335,12 @@ test("HUD trays share one slot, stay open on selection, and protect the final to
   await modeControl(page).click();
   await expect(topicsTray(page)).toBeHidden();
   const peekMode = mixOption(page, "Peek");
-  if ((await peekMode.getAttribute("aria-pressed")) !== "true") await peekMode.click();
   await expect(peekMode).toHaveAttribute("aria-pressed", "true");
-  for (const label of modeLabels.filter((label) => label !== "Peek")) {
-    const button = mixOption(page, label);
-    if (await button.isEnabled() && (await button.getAttribute("aria-pressed")) === "true") await button.click();
-  }
+  await peekMode.click();
+  await expect(peekMode).toHaveAttribute("aria-pressed", "false");
+  await expect(modeTray(page)).toBeVisible();
+  await peekMode.click();
+  await expect(peekMode).toHaveAttribute("aria-pressed", "true");
   await expect(modeTray(page)).toBeVisible();
   await expect(modeControl(page)).toHaveText(/Modes/);
 
