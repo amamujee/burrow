@@ -330,9 +330,9 @@ const rememberFreshQuestion = (question: Question, keys: Set<string>) => {
 
 const heightChoiceStep = (value: number, difficulty: Difficulty) => {
   if (difficulty === 3) return 1;
-  if (value < 100) return 10;
-  if (value < 300) return 50;
-  return difficulty === 1 ? 500 : 100;
+  if (value < 100) return 8;
+  if (value < 300) return 40;
+  return difficulty === 1 ? 400 : 80;
 };
 
 const displayHeightChoice = (value: number, difficulty: Difficulty) => {
@@ -362,7 +362,7 @@ const buildingHeightPrompt = (building: Building, difficulty: Difficulty) => {
 const buildingHeightChoices = (building: Building, difficulty: Difficulty, seed: number) => {
   const correct = displayHeightChoice(building.heightFt, difficulty);
   const correctValue = difficulty === 3 ? building.heightFt : roundTo(building.heightFt, heightChoiceStep(building.heightFt, difficulty));
-  const minGap = building.heightFt < 100 ? 20 : building.heightFt < 300 ? 50 : difficulty === 1 ? 500 : difficulty === 2 ? 250 : 160;
+  const minGap = building.heightFt < 100 ? 16 : building.heightFt < 300 ? 40 : difficulty === 1 ? 400 : difficulty === 2 ? 200 : 125;
   const minDistractor = building.heightFt < 100 ? 10 : 100;
   const generated = [
     correctValue - minGap * 2,
@@ -392,7 +392,7 @@ const buildingHeightChoices = (building: Building, difficulty: Difficulty, seed:
 };
 
 const buildingDifferenceChoices = (diff: number, difficulty: Difficulty, seed: number) => {
-  const gap = difficulty === 1 ? 400 : difficulty === 2 ? 200 : 100;
+  const gap = difficulty === 1 ? 300 : difficulty === 2 ? 150 : 75;
   const values = [
     diff,
     diff + gap * 2,
@@ -1322,7 +1322,7 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
     const challenger = sample(pool.filter((item) => item.id !== building.id && item.heightFt !== building.heightFt), seed + 28);
     const taller = building.heightFt > challenger.heightFt ? building : challenger;
     const shorter = building.heightFt > challenger.heightFt ? challenger : building;
-    const { biggerValue, smallerValue, diff } = roundedSubtractionPair(taller.heightFt, shorter.heightFt, questionDepth === 1 ? 200 : questionDepth === 2 ? 100 : 50);
+    const { biggerValue, smallerValue, diff } = roundedSubtractionPair(taller.heightFt, shorter.heightFt, questionDepth === 1 ? 150 : questionDepth === 2 ? 75 : 40);
     const correct = `${formatNumber(diff)} ft`;
     const choices = buildingDifferenceChoices(diff, questionDepth, seed + 29);
     const cards = shuffle([roundedComparisonCard(buildingCard(taller, "A"), biggerValue, "ft"), roundedComparisonCard(buildingCard(shorter, "B"), smallerValue, "ft")], seed + 30);
@@ -1419,12 +1419,12 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
     const challenger = sample(pool.filter((item) => item.id !== shark.id && item.lengthFt !== shark.lengthFt), seed + 48);
     const bigger = shark.lengthFt > challenger.lengthFt ? shark : challenger;
     const smaller = shark.lengthFt > challenger.lengthFt ? challenger : shark;
-    const roundedLengths = roundedSubtractionPair(bigger.lengthFt, smaller.lengthFt, 5);
+    const roundedLengths = roundedSubtractionPair(bigger.lengthFt, smaller.lengthFt, 4);
     const biggerValue = roundedLengths.biggerValue;
     const smallerValue = Math.max(1, roundedLengths.smallerValue);
     const diff = biggerValue - smallerValue;
     const correct = `${formatNumber(diff)} ft`;
-    const choices = differenceChoices(diff, "ft", 5, difficulty, seed + 49);
+    const choices = differenceChoices(diff, "ft", 4, difficulty, seed + 49);
     const cards = shuffle([roundedComparisonCard(sharkCard(bigger, "A", "length"), biggerValue, "ft"), roundedComparisonCard(sharkCard(smaller, "B", "length"), smallerValue, "ft")], seed + 50);
     return {
       id: `${seed}-shark-difference-${bigger.id}-${smaller.id}`,
@@ -1558,9 +1558,11 @@ const jetQuestion = (seed: number, difficulty: Difficulty): Question => {
     const challenger = sample(pool.filter((item) => item.id !== jet.id && item.maxSpeedMph !== jet.maxSpeedMph), seed + 59);
     const faster = jet.maxSpeedMph > challenger.maxSpeedMph ? jet : challenger;
     const slower = jet.maxSpeedMph > challenger.maxSpeedMph ? challenger : jet;
-    const { biggerValue, smallerValue, diff } = roundedSubtractionPair(faster.maxSpeedMph, slower.maxSpeedMph, questionDepth === 1 ? 200 : questionDepth === 2 ? 100 : 50);
+    const step = questionDepth === 1 ? 150 : questionDepth === 2 ? 75 : 40;
+    const { biggerValue, smallerValue, diff } = roundedSubtractionPair(faster.maxSpeedMph, slower.maxSpeedMph, step);
     const correct = `${formatNumber(diff)} mph`;
-    const choices = differenceChoices(diff, "mph", questionDepth === 1 ? 200 : 100, questionDepth, seed + 60);
+    const choiceStep = questionDepth === 1 ? 150 : questionDepth === 2 ? 75 : 80;
+    const choices = differenceChoices(diff, "mph", choiceStep, questionDepth, seed + 60);
     const cards = shuffle([roundedComparisonCard(jetCard(faster, "A", "speed"), biggerValue, "mph"), roundedComparisonCard(jetCard(slower, "B", "speed"), smallerValue, "mph")], seed + 61);
     return {
       id: `${seed}-jet-difference-${faster.id}-${slower.id}`,

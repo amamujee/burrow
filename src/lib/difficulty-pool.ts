@@ -2,6 +2,10 @@ import type { CardMetadata } from "./card-metadata";
 
 export type DifficultyLevel = 1 | 2 | 3;
 
+// The recalibrated pools expose about 22% more subjects at Easy and Medium.
+// Hard continues to use the complete catalog so every card remains playable.
+const poolExpansion = 1.22;
+
 const familiarIds = new Set([
   "bell-pepper",
   "banana-pepper",
@@ -119,9 +123,9 @@ const advancedIds = new Set([
 
 const targetCount = (length: number, difficulty: DifficultyLevel) => {
   if (difficulty === 3) return length;
-  const ratio = difficulty === 1 ? 0.45 : 0.72;
+  const ratioPercent = difficulty === 1 ? 55 : 88;
   const floor = difficulty === 1 ? 10 : 16;
-  return Math.min(length, Math.max(floor, Math.ceil(length * ratio)));
+  return Math.min(length, Math.max(floor, Math.ceil((length * ratioPercent) / 100)));
 };
 
 const bandScore = (metadata?: CardMetadata) => {
@@ -154,5 +158,10 @@ export const poolForDifficulty = <T extends { id: string; metadata?: CardMetadat
   const allowedBands = difficulty === 1 ? new Set(["easy"]) : new Set(["easy", "medium"]);
   const cumulative = sorted.filter((item) => item.metadata?.difficultyBand && allowedBands.has(item.metadata.difficultyBand));
   const minimum = Math.min(10, sorted.length);
-  return cumulative.length >= minimum ? cumulative : sorted.slice(0, targetCount(sorted.length, difficulty));
+  if (cumulative.length < minimum) return sorted.slice(0, targetCount(sorted.length, difficulty));
+
+  const nextBand = difficulty === 1 ? "medium" : "hard";
+  const target = Math.min(sorted.length, Math.ceil(cumulative.length * poolExpansion));
+  const nextBandCards = sorted.filter((item) => item.metadata?.difficultyBand === nextBand);
+  return [...cumulative, ...nextBandCards.slice(0, target - cumulative.length)];
 };

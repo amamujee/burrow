@@ -18,7 +18,7 @@ import { collectionCardProfileDetails } from "@/lib/card-profile";
 import { cardRarities, cardRarityLabels, type CardRarity } from "@/lib/card-metadata";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
 import { cardDiscoveryIdentities, cardUnlockKeysForSubjects, isCardUnlocked } from "@/lib/card-discovery";
-import { autoDifficulty } from "@/lib/difficulty";
+import { autoDifficulty, peekRevealSettings } from "@/lib/difficulty";
 import { poolForDifficulty } from "@/lib/difficulty-pool";
 import { migrateTopicSelection } from "@/lib/topic-selection";
 import { useSoundEffects } from "@/lib/sound-effects";
@@ -3503,9 +3503,7 @@ function RevealMode({
   onNext: () => void;
   onSkip: () => void;
 }) {
-  const totalTiles = difficulty === 1 ? 12 : 16;
-  const startReveal = difficulty === 1 ? 4 : difficulty === 2 ? 2 : 1;
-  const intervalMs = difficulty === 1 ? 850 : difficulty === 2 ? 1050 : 1250;
+  const { totalTiles, startReveal, intervalMs } = peekRevealSettings(difficulty);
   const [revealed, setRevealed] = useState(startReveal);
   const answered = selected !== null;
   const visibleCount = answered ? totalTiles : revealed;

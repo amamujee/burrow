@@ -56,7 +56,7 @@ npm run test:e2e       # Build and run watchdog-bounded browser coverage
 npm run verify         # Run the complete pre-publish check
 ```
 
-Playwright runs use a process watchdog in `scripts/run-playwright.mjs`. Logic tests stop after 90 seconds without output or five minutes overall; browser projects stop after 150 seconds without output or ten minutes overall. Desktop and mobile projects run in separate Playwright processes, so a stalled teardown cannot silently hold the entire browser suite open.
+Playwright runs use a process watchdog in `scripts/run-playwright.mjs`. Logic and browser projects stop after 60 seconds without output, with four- and five-minute overall limits respectively. An idle timeout gets one automatic retry with a single worker and a fresh local server port; normal test failures are not retried. Desktop coverage runs as four isolated shards, followed by the smaller mobile project, so any retry repeats only the affected shard. Each browser attempt owns its Next.js server, preventing a stalled run from silently holding the suite open or poisoning the next attempt with a stale server.
 
 ## Make Your Own Pack
 

@@ -1447,6 +1447,37 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
   };
 };
 
+const topTrumpPairingDistance = (player: TopTrumpCard, computer: TopTrumpCard) => {
+  const comparisons = player.stats.flatMap((playerStat) => {
+    const computerStat = computer.stats.find((stat) => stat.id === playerStat.id);
+    if (!computerStat) return [];
+    return [Math.abs(Math.log1p(Math.abs(playerStat.value)) - Math.log1p(Math.abs(computerStat.value)))];
+  });
+  return comparisons.length
+    ? comparisons.reduce((total, value) => total + value, 0) / comparisons.length
+    : Number.POSITIVE_INFINITY;
+};
+
+const competitiveTopTrumpOpponent = (
+  player: TopTrumpCard,
+  candidates: readonly TopTrumpCard[],
+  difficulty: Difficulty,
+  seed: number,
+) => {
+  const eligible = candidates.filter((candidate) => (
+    candidate.id !== player.id
+    && candidate.stats.some((stat) => player.stats.some((playerStat) => playerStat.id === stat.id))
+  ));
+  if (!eligible.length || difficulty === 1) return eligible[0] ?? candidates[0];
+
+  const ranked = eligible
+    .map((card, index) => ({ card, index, distance: topTrumpPairingDistance(player, card) }))
+    .sort((first, second) => first.distance - second.distance || first.index - second.index);
+  const focusRatio = difficulty === 2 ? 0.9 : 0.8;
+  const focusCount = Math.max(1, Math.ceil(ranked.length * focusRatio));
+  return sample(ranked.slice(0, focusCount), seed + 1).card;
+};
+
 export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, seed: number, unlockedTitles: readonly string[] = []): TopTrumpRound => {
   const currentTopic = topicOrder(topic, seed);
   const pool =
@@ -1463,9 +1494,12 @@ export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, se
     cardDiscoveryIdentities,
   );
   const first = shuffled[0].id;
-  const second = shuffled.find((item) => item.id !== first)?.id ?? shuffled[1].id;
   const player = topTrumpCard(currentTopic, first);
-  const computer = topTrumpCard(currentTopic, second);
+  const computerCandidates = shuffled
+    .filter((item) => item.id !== first)
+    .map((item) => topTrumpCard(currentTopic, item.id))
+    .filter((card): card is TopTrumpCard => Boolean(card));
+  const computer = player ? competitiveTopTrumpOpponent(player, computerCandidates, difficulty, seed + 2) : undefined;
   if (!player || !computer) throw new Error(`Could not build Top Trumps round for ${currentTopic}`);
   const sharedStatIds = new Set(player.stats.map((stat) => stat.id).filter((id) => computer.stats.some((stat) => stat.id === id)));
 
@@ -1524,10 +1558,10 @@ const numberOperationForSeed = (seed: number): NumberOperation => {
 };
 
 const factorRangeForDifficulty = (difficulty: Difficulty) => difficulty === 1
-  ? { groups: [1, 5] as const, items: [1, 5] as const }
+  ? { groups: [1, 6] as const, items: [1, 6] as const }
   : difficulty === 2
-    ? { groups: [2, 10] as const, items: [2, 10] as const }
-    : { groups: [6, 12] as const, items: [6, 12] as const };
+    ? { groups: [2, 12] as const, items: [2, 12] as const }
+    : { groups: [6, 15] as const, items: [6, 15] as const };
 
 const pickFactor = ([min, max]: readonly [number, number], factorSeed: number) => min + Math.floor(seedRandom(factorSeed) * (max - min + 1));
 const countLabel = (count: number, singular: string, plural: string) => `${count} ${count === 1 ? singular : plural}`;
@@ -1744,13 +1778,31 @@ const distinctStatCards = <T extends { statValue: number }>(cards: readonly T[],
   return selected;
 };
 
-const statValueGap = (values: readonly number[]) => {
+const focusedStatCards = <T extends { statValue: number }>(
+  cards: readonly T[],
+  difficulty: Difficulty,
+  seed: number,
+  requestedCount: number,
+) => {
+  const distinct = distinctStatCards(cards, seed, cards.length).sort((first, second) => first.statValue - second.statValue);
+  if (distinct.length <= requestedCount || difficulty === 1) return distinctStatCards(distinct, seed + 1, requestedCount);
+
+  // Keep the same card count and interaction, but trim the widest 10%/20% of
+  // the value range around a rotating window so Medium and Hard orders are
+  // less likely to contain an obvious outlier.
+  const focusRatio = difficulty === 2 ? 0.9 : 0.8;
+  const focusCount = Math.max(requestedCount, Math.ceil(distinct.length * focusRatio));
+  const availableStarts = distinct.length - focusCount + 1;
+  const start = Math.floor(seedRandom(seed + 2) * availableStarts);
+  return distinctStatCards(distinct.slice(start, start + focusCount), seed + 3, requestedCount);
+};
+
+const statValueGap = (values: readonly number[], difficulty: Difficulty) => {
   const sorted = [...new Set(values.map((value) => Math.abs(value)).filter((value) => Number.isFinite(value)))].sort((a, b) => a - b);
   const max = sorted.at(-1) ?? 10;
-  if (max >= 1000) return 100;
-  if (max >= 100) return 10;
-  if (max >= 10) return 2;
-  return 1;
+  const base = max >= 1000 ? 100 : max >= 100 ? 10 : max >= 10 ? 2 : 1;
+  const precision = difficulty === 1 ? 1 : difficulty === 2 ? 0.8 : 0.75;
+  return Math.max(1, Math.round(base * precision));
 };
 
 const sameStatCard = (card: GenericKnowledgeCard, value: number): KnowledgeCard => ({
@@ -1780,10 +1832,10 @@ const geoChoiceCountForDifficulty = (difficulty: Difficulty) => {
   return 4;
 };
 export const geoChoiceSeparationForDifficulty = (difficulty: Difficulty) => difficulty === 1
-  ? { kilometers: 2500, mapPercent: 18 }
+  ? { kilometers: 2000, mapPercent: 14.5 }
   : difficulty === 2
-    ? { kilometers: 1500, mapPercent: 13 }
-    : { kilometers: 750, mapPercent: 9 };
+    ? { kilometers: 1200, mapPercent: 10.5 }
+    : { kilometers: 600, mapPercent: 7 };
 const clampGeo = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 const continentCoordinates: Record<WorldContinent, LatLon> = {
   Africa: [2, 20],
@@ -2191,7 +2243,7 @@ export const buildSortRoundFromCards = (
   const preferred = preferredPool(pool, difficulty);
   if (preferred.length < 3) throw new Error(`Need at least 3 stat cards to build a sort round for ${topic}`);
   const count = Math.min(preferred.length, difficulty === 1 ? 3 : 4);
-  const selected = distinctStatCards(preferred, seed + 1, count);
+  const selected = focusedStatCards(preferred, difficulty, seed + 1, count);
   if (selected.length < 3) throw new Error(`Need at least 3 distinct stat values to build a sort round for ${topic}`);
   const sorted = [...selected].sort((a, b) => a.statValue - b.statValue);
 
@@ -2340,7 +2392,7 @@ export const buildNumberRoundFromCards = (
   const questionDepth = questionDepthForSelection(difficulty, seed);
   if (pool.length < 2) throw new Error(`Need at least 2 non-negative stat cards to build a number round for ${topic}`);
   const values = pool.map((card) => card.statValue);
-  const gap = statValueGap(values);
+  const gap = statValueGap(values, questionDepth);
   const requestedOperation = numberOperationForSeed(seed);
   const shouldAdd = pool.length >= 3 && requestedOperation === "addition";
   const unit = pool[0].stats[0]?.display.replace(formatNumber(pool[0].stats[0].value), "").trim() || "";
@@ -2469,10 +2521,10 @@ export const buildOddRoundFromCards = (
   seed: number,
 ): OddRound => {
   const preferred = preferredPool(cards, difficulty);
-  const preferredWithDistinctStats = distinctStatCards(cardsWithStats(preferred), seed + 1, 4);
+  const preferredWithDistinctStats = focusedStatCards(cardsWithStats(preferred), difficulty, seed + 1, 4);
   const pool = preferredWithDistinctStats.length === 4
     ? preferredWithDistinctStats
-    : distinctStatCards(cardsWithStats(cards), seed + 2, 4);
+    : focusedStatCards(cardsWithStats(cards), difficulty, seed + 2, 4);
   if (pool.length < 4) throw new Error(`Need at least 4 cards to build an odd-one round for ${topic}`);
   const odd = [...pool].sort((a, b) => b.statValue - a.statValue)[0];
   const subjectNoun = subjectNounForCards(topic, pool);
@@ -2503,7 +2555,8 @@ export const buildTopTrumpRoundFromCards = (
   if (pool.length < 2) throw new Error(`Need at least 2 multi-stat cards to build a Top Trumps round for ${topic}`);
   const shuffled = discoveryShuffle(pool, seed + difficulty, unlockedTitles, cardDiscoveryIdentities);
   const player = shuffled[0];
-  const computer = shuffled.find((card) => card.id !== player.id && card.stats.some((stat) => player.stats.some((playerStat) => playerStat.id === stat.id))) ?? shuffled[1];
+  const computer = competitiveTopTrumpOpponent(player, shuffled.slice(1), difficulty, seed + 2);
+  if (!computer) throw new Error(`Could not find a comparable Top Trumps opponent for ${topic}`);
   const sharedStatIds = new Set(computer.stats.map((stat) => stat.id));
   const playerStats = player.stats.filter((stat) => sharedStatIds.has(stat.id));
   const computerStats = computer.stats.filter((stat) => playerStats.some((playerStat) => playerStat.id === stat.id));
@@ -2517,7 +2570,12 @@ export const buildTopTrumpRoundFromCards = (
   };
 };
 
-const additionTermCount = (difficulty: Difficulty, seed: number) => difficulty === 1 ? 2 : difficulty === 3 ? 3 : seedRandom(seed + difficulty * 17) > 0.45 ? 3 : 2;
+const additionTermCount = (difficulty: Difficulty, seed: number) => difficulty === 1 ? 2 : difficulty === 3 ? 3 : seedRandom(seed + difficulty * 17) > 0.33 ? 3 : 2;
+const contextualCountRange = (difficulty: Difficulty) => difficulty === 1
+  ? [2, 9] as const
+  : difficulty === 2
+    ? [4, 15] as const
+    : [7, 25] as const;
 const additionPromptStart = (count: number) => count === 2 ? "Add these together" : "Add all three together";
 const stackedTotalLabel = (count: number) => count === 2 ? "stacked total" : "three-part total";
 const sumValues = (values: number[]) => values.reduce((total, value) => total + value, 0);
@@ -2535,7 +2593,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
   const questionDepth = questionDepthForSelection(difficulty, seed);
 
   if (currentTopic === "countries") {
-    const populationStep = questionDepth === 1 ? 10 : questionDepth === 2 ? 5 : 1;
+    const populationStep = questionDepth === 1 ? 8 : questionDepth === 2 ? 4 : 1;
     const pool = preferredPool(countries.filter((country) => country.population >= 1_000_000), difficulty);
     const first = shuffle(pool, seed + 1)[0];
     const firstMillions = Math.max(populationStep, roundTo(first.population / 1_000_000, populationStep));
@@ -2602,7 +2660,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     }
 
     const [first, second] = shuffle(pool, seed + 1).slice(0, 2);
-    const countRange = questionDepth === 1 ? [2, 7] as const : questionDepth === 2 ? [4, 12] as const : [7, 20] as const;
+    const countRange = contextualCountRange(questionDepth);
     const firstCount = pickFactor(countRange, seed + 2);
     const secondCount = pickFactor(countRange, seed + 3);
 
@@ -2660,7 +2718,9 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       const [first, second] = shuffle(pool, seed + 3).slice(0, 2);
       return multiplicationRound(buildingCard(first), buildingCard(second), currentTopic, questionDepth, seed);
     }
-    const step = questionDepth === 1 ? 200 : questionDepth === 2 ? 100 : 50;
+    const step = questionDepth === 1 ? 150 : questionDepth === 2 ? 75 : 40;
+    const additionChoiceGap = questionDepth === 3 ? step * 4 : step * 2;
+    const subtractionChoiceGap = questionDepth === 3 ? step * 2 : step;
     if (requestedOperation === "addition") {
       const count = additionTermCount(questionDepth, seed);
       const selected = shuffle(pool, seed + 4).slice(0, count);
@@ -2682,7 +2742,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         biggerValue: values[0] ?? 0,
         smallerValue: values[1] ?? 0,
         answer,
-        choices: numberChoices(answer, questionDepth === 1 ? 400 : 200, seed + 6),
+        choices: numberChoices(answer, additionChoiceGap, seed + 6),
         explanation: `Adding the heights gives ${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} feet.`,
       };
     }
@@ -2706,7 +2766,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       biggerValue,
       smallerValue,
       answer,
-      choices: numberChoices(answer, questionDepth === 1 ? 200 : 100, seed + 6),
+      choices: numberChoices(answer, subtractionChoiceGap, seed + 6),
       explanation: `The height difference is ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} feet.`,
     };
   }
@@ -2719,7 +2779,8 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     }
     if (requestedOperation === "addition") {
       const count = additionTermCount(questionDepth, seed);
-      const step = questionDepth === 1 ? 500 : questionDepth === 2 ? 100 : 50;
+      const step = questionDepth === 1 ? 400 : questionDepth === 2 ? 80 : 40;
+      const choiceGap = questionDepth === 1 ? 800 : 400;
       const selected = shuffle(pool.filter((space) => space.diameterMiles !== undefined), seed + 7).slice(0, count);
       const values = selected.map((space) => Math.max(step, roundTo(space.diameterMiles ?? 0, step)));
       const answer = sumValues(values);
@@ -2739,7 +2800,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         biggerValue: values[0] ?? 0,
         smallerValue: values[1] ?? 0,
         answer,
-        choices: numberChoices(answer, questionDepth === 1 ? 1000 : 500, seed + 9),
+        choices: numberChoices(answer, choiceGap, seed + 9),
         explanation: `Adding the diameters gives ${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} miles.`,
       };
     }
@@ -2747,7 +2808,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     const planetsWithMoonCounts = pool.filter((space) => space.kind === "planet" && space.moons !== undefined);
     const moreMoons = sampleSafe(planetsWithMoonCounts.filter((space) => (space.moons ?? 0) >= 10), planetsWithMoonCounts, seed + 7);
     const fewerMoons = sampleSafe(planetsWithMoonCounts.filter((space) => space.id !== moreMoons.id && (space.moons ?? 0) < (moreMoons.moons ?? 0)), planetsWithMoonCounts.filter((space) => space.id !== moreMoons.id), seed + 8);
-    const step = questionDepth === 1 ? 10 : 5;
+    const step = questionDepth === 1 ? 8 : questionDepth === 2 ? 4 : 2;
     const { biggerValue, smallerValue, answer } = roundedSubtractionPair(moreMoons.moons ?? 0, fewerMoons.moons ?? 0, step);
     return {
       id: `${seed}-number-space-${moreMoons.id}-${fewerMoons.id}`,
@@ -2765,7 +2826,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       biggerValue,
       smallerValue,
       answer,
-      choices: numberChoices(answer, questionDepth === 1 ? 10 : 5, seed + 9),
+      choices: numberChoices(answer, step, seed + 9),
       explanation: `The difference is ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} moons.`,
     };
   }
@@ -2776,11 +2837,12 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       const [first, second] = shuffle(pool, seed + 9).slice(0, 2);
       return multiplicationRound(jetCard(first), jetCard(second), currentTopic, questionDepth, seed);
     }
-    const step = questionDepth === 1 ? 200 : questionDepth === 2 ? 100 : 50;
+    const step = questionDepth === 1 ? 150 : questionDepth === 2 ? 75 : 40;
+    const subtractionChoiceGap = questionDepth === 3 ? step * 4 : step * 2;
     if (requestedOperation === "addition") {
       const count = additionTermCount(questionDepth, seed);
       const selected = shuffle(pool, seed + 10).slice(0, count);
-      const countRange = questionDepth === 1 ? [2, 7] as const : questionDepth === 2 ? [4, 12] as const : [7, 20] as const;
+      const countRange = contextualCountRange(questionDepth);
       const values = selected.map((_, index) => pickFactor(countRange, seed + 20 + index));
       const answer = sumValues(values);
       return {
@@ -2823,12 +2885,12 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       biggerValue,
       smallerValue,
       answer,
-      choices: numberChoices(answer, questionDepth === 1 ? 400 : 200, seed + 12),
+      choices: numberChoices(answer, subtractionChoiceGap, seed + 12),
       explanation: `The speed difference is ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} mph.`,
     };
   }
 
-  const step = questionDepth === 1 ? 5 : 2;
+  const step = questionDepth === 1 ? 4 : questionDepth === 2 ? 2 : 1;
   const sharkPool = preferredPool(sharks, difficulty);
   if (requestedOperation === "multiplication") {
     const [first, second] = shuffle(sharkPool, seed + 9).slice(0, 2);
@@ -2855,7 +2917,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       biggerValue: values[0] ?? 0,
       smallerValue: values[1] ?? 0,
       answer,
-      choices: numberChoices(answer, questionDepth === 1 ? 10 : 4, seed + 12),
+      choices: numberChoices(answer, questionDepth === 1 ? 8 : 3, seed + 12),
       explanation: `Adding the lengths gives ${values.map(formatNumber).join(" + ")} = ${formatNumber(answer)} feet.`,
     };
   }
@@ -2882,7 +2944,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
     biggerValue,
     smallerValue,
     answer,
-    choices: numberChoices(answer, questionDepth === 1 ? 5 : 4, seed + 12),
+    choices: numberChoices(answer, questionDepth === 1 ? 4 : 3, seed + 12),
     explanation: `The length difference is ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} feet.`,
   };
 };
@@ -2912,21 +2974,22 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
   if (currentTopic === "peppers") {
     const pepperPlants = pepperPlantPool();
     const preferred = preferredPool(pepperPlants, difficulty);
+    const minimumHeatGap = difficulty === 3 && Math.abs(Math.trunc(seed)) % 5 === 0 ? 1 : 2;
     const preferredEligibleHeats = heatBands.filter((heat) => {
       const sameCount = preferred.filter((pepper) => pepper.heat === heat).length;
-      const hasClearOdd = preferred.some((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= 2);
+      const hasClearOdd = preferred.some((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= minimumHeatGap);
       return sameCount >= 3 && hasClearOdd;
     });
     const pool = preferredEligibleHeats.length ? preferred : pepperPlants;
     const eligibleHeats = (preferredEligibleHeats.length ? preferredEligibleHeats : heatBands).filter((heat) => {
       const sameCount = pool.filter((pepper) => pepper.heat === heat).length;
-      const hasClearOdd = pool.some((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= 2);
+      const hasClearOdd = pool.some((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= minimumHeatGap);
       return sameCount >= 3 && hasClearOdd;
     });
     const heat = sample(eligibleHeats, seed + 1);
     const same = shuffle(pool.filter((pepper) => pepper.heat === heat), seed + 2).slice(0, 3);
     const odd = sampleSafe(
-      pool.filter((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= 2),
+      pool.filter((pepper) => Math.abs(heatRank[pepper.heat] - heatRank[heat]) >= minimumHeatGap),
       pool.filter((pepper) => pepper.heat !== heat),
       seed + 3,
     );
@@ -3112,8 +3175,9 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "countries") {
     const metric: CountryMetric = seedRandom(seed + 1) > 0.48 ? "population" : "area";
-    const cards = distinctStatCards(
+    const cards = focusedStatCards(
       shuffle(preferredPool(countries, difficulty), seed + 2).map((country) => countryCard(country, metric)),
+      difficulty,
       seed + 3,
       count,
     );
@@ -3130,7 +3194,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   }
 
   if (currentTopic === "peppers") {
-    const cards = distinctStatCards(shuffle(preferredPool(pepperPlantPool().filter(hasScovilleMeasurement), difficulty), seed + 1).map(pepperCard), seed + 2, count);
+    const cards = focusedStatCards(shuffle(preferredPool(pepperPlantPool().filter(hasScovilleMeasurement), difficulty), seed + 1).map(pepperCard), difficulty, seed + 2, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-peppers`,
@@ -3144,7 +3208,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   }
 
   if (currentTopic === "buildings") {
-    const cards = distinctStatCards(shuffle(preferredPool(buildings, difficulty), seed + 3).map(buildingCard), seed + 4, count);
+    const cards = focusedStatCards(shuffle(preferredPool(buildings, difficulty), seed + 3).map(buildingCard), difficulty, seed + 4, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-buildings`,
@@ -3165,7 +3229,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       if (metric === "size") return item.radiusSolar !== undefined || item.diameterMiles !== undefined;
       return item.kind === "planet" && item.moons !== undefined;
     });
-    const cards = distinctStatCards(shuffle(preferredPool(pool, difficulty), seed + 6).map((space) => spaceCard(space, metric)), seed + 7, count);
+    const cards = focusedStatCards(shuffle(preferredPool(pool, difficulty), seed + 6).map((space) => spaceCard(space, metric)), difficulty, seed + 7, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-space-${metric}`,
@@ -3180,7 +3244,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "jets") {
     const metric = sample(["speed", "range", "firepower"] as const, seed + 5);
-    const cards = distinctStatCards(shuffle(preferredPool(jets, difficulty), seed + 6).map((jet) => jetCard(jet, metric)), seed + 7, count);
+    const cards = focusedStatCards(shuffle(preferredPool(jets, difficulty), seed + 6).map((jet) => jetCard(jet, metric)), difficulty, seed + 7, count);
     const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
     return {
       id: `${seed}-sort-jets-${metric}`,
@@ -3194,7 +3258,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   }
 
   const metric = sample(["length", "speed", "power"] as const, seed + 5);
-  const cards = distinctStatCards(shuffle(preferredPool(sharks, difficulty), seed + 6).map((shark) => sharkCard(shark, metric)), seed + 7, count);
+  const cards = focusedStatCards(shuffle(preferredPool(sharks, difficulty), seed + 6).map((shark) => sharkCard(shark, metric)), difficulty, seed + 7, count);
   const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
   return {
     id: `${seed}-sort-sharks-${metric}`,

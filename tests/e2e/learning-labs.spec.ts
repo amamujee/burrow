@@ -19,7 +19,7 @@ test("math trail content covers every playable topic with mixed operations", () 
   expect(mathTrailChallenges.some((challenge) => challenge.equation.includes("+"))).toBe(true);
   expect(mathTrailChallenges.some((challenge) => challenge.equation.includes("−"))).toBe(true);
   expect(mathTrailChallenges.some((challenge) => challenge.equation.includes("×"))).toBe(true);
-  expect(mathTrailChallenges).toContainEqual(expect.objectContaining({ equation: "12 × 12 = ?", answer: 144 }));
+  expect(mathTrailChallenges).toContainEqual(expect.objectContaining({ equation: "15 × 15 = ?", answer: 225 }));
   expect(new Set(mathTrailChallenges.flatMap((challenge) => challenge.scene?.images.map((image) => image.image) ?? [] )).size).toBeGreaterThanOrEqual(20);
 });
 
@@ -141,7 +141,7 @@ test("math trail completes all ten stops and continues to Burrow", { tag: "@mobi
     await page.getByRole("button", { name: index === mathTrailChallenges.length - 1 ? "View math summary" : "Next question" }).click();
   }
 
-  await expect(page.getByRole("heading", { name: "Nine worlds of numbers—and 12 × 12" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Nine worlds of numbers—and a 15 × 15 stretch" })).toBeVisible();
   await expect(page.getByText("10/10 solved · every answer explored")).toBeVisible();
   await page.getByRole("link", { name: "Continue to Burrow" }).click();
   await expect(page).toHaveURL(/\/play$/);

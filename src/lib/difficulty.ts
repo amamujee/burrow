@@ -1,16 +1,24 @@
 import type { Difficulty } from "./game-data";
 
-// A selected difficulty is a ceiling, not an exclusive question tier. This
-// keeps Hard varied and lets familiar recognition questions continue to appear
-// alongside advanced prompts while the selected card pool remains unchanged.
+// A selected difficulty is a ceiling, not an exclusive question tier. The
+// calibrated mix keeps some retrieval practice while making advanced prompts
+// more common: Medium is 20/80 Easy/Medium, and Hard is 10/30/60.
 export const questionDepthForSelection = (selected: Difficulty, seed: number): Difficulty => {
   if (selected === 1) return 1;
   const slot = Math.abs(Math.trunc(seed)) % 10;
-  if (selected === 2) return slot < 3 ? 1 : 2;
-  if (slot < 2) return 1;
-  if (slot < 5) return 2;
+  if (selected === 2) return slot < 2 ? 1 : 2;
+  if (slot < 1) return 1;
+  if (slot < 4) return 2;
   return 3;
 };
+
+const peekRevealProfiles: Record<Difficulty, { totalTiles: number; startReveal: number; intervalMs: number }> = {
+  1: { totalTiles: 16, startReveal: 4, intervalMs: 850 },
+  2: { totalTiles: 20, startReveal: 2, intervalMs: 1050 },
+  3: { totalTiles: 20, startReveal: 1, intervalMs: 1250 },
+};
+
+export const peekRevealSettings = (difficulty: Difficulty) => peekRevealProfiles[difficulty];
 
 export const autoDifficulty = (
   current: Difficulty,

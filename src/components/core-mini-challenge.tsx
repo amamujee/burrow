@@ -112,7 +112,7 @@ export const legacyPepperChallengeCampaigns: ChallengeCampaign[] = [
     steps: [
       { id: "pepper-x-reading", skill: "Reading", icon: "🏷️", title: "Read the record card", clue: "Pepper X averages 2,693,000 Scoville Heat Units. Individual peppers can measure above or below that number.", question: "Which statement is supported by the record card?", choices: ["Different fruits can measure above or below 2,693,000 SHU", "Every fruit measures exactly 2,693,000 SHU", "Only one Pepper X fruit was measured"], answer: "Different fruits can measure above or below 2,693,000 SHU", summary: "The average summarizes multiple measurements, while individual peppers can be higher or lower.", evidence: "Individual peppers can measure above or below that number" },
       { id: "pepper-x-geography", skill: "Geography", icon: "🌎", title: "Locate the pepper lab", clue: "Pepper X was developed in Fort Mill, South Carolina, in the southeastern United States.", question: "Which pin marks South Carolina?", choices: ["South Carolina", "California", "Alaska"], answer: "South Carolina", summary: "South Carolina is in the southeastern United States near the Atlantic coast.", map: { hint: "Look on the eastern side of the United States.", choices: [{ label: "South Carolina", x: 28, y: 31 }, { label: "California", x: 17, y: 29 }, { label: "Alaska", x: 8, y: 14 }] } },
-      { id: "pepper-x-math", skill: "Math", icon: "🧺", title: "Fill the seed grid", clue: "12 trays hold 12 seeds each.", question: "12 × 12 = ?", choices: ["132 seeds", "140 seeds", "144 seeds"], answer: "144 seeds", summary: "Twelve equal groups of 12 make 144 seeds.", math: { groups: 12, each: 12, visual: { ariaLabel: "Math picture: 12 equal tray groups of 12 seeds", groupSingular: "tray", groupPlural: "trays", groupEmoji: "🧺", itemSingular: "seed", itemPlural: "seeds", itemEmoji: "•" } } },
+      { id: "pepper-x-math", skill: "Math", icon: "🧺", title: "Fill the seed grid", clue: "15 trays hold 15 seeds each.", question: "15 × 15 = ?", choices: ["195 seeds", "210 seeds", "225 seeds"], answer: "225 seeds", summary: "Fifteen equal groups of 15 make 225 seeds.", math: { groups: 15, each: 15, visual: { ariaLabel: "Math picture: 15 equal tray groups of 15 seeds", groupSingular: "tray", groupPlural: "trays", groupEmoji: "🧺", itemSingular: "seed", itemPlural: "seeds", itemEmoji: "•" } } },
       { id: "pepper-x-science", skill: "Science", icon: "🧪", title: "Mix the recipe and the weather", clue: "Genes give a pepper its recipe. Sun, water, and temperature can change how the fruit grows.", question: "Why can two Pepper X fruits have different heat levels?", choices: ["They grew in different conditions", "Measuring changes their species", "Scoville units only measure color"], answer: "They grew in different conditions", summary: "The fruits share a genetic recipe, but different growing conditions can change their final heat levels.", conceptVisual: "genes-and-growing" },
       { id: "pepper-x-words", skill: "Words", icon: "📖", title: "Unlock a plant word", clue: "Pepper X is a cultivar selected for particular traits.", question: "What is a cultivar?", choices: ["A cultivated plant variety", "A map of a continent", "A tool for measuring rain"], answer: "A cultivated plant variety", summary: "A cultivar is a plant variety people maintain for chosen traits." },
     ],
@@ -302,8 +302,10 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
       ? geographyMap.choices[geographyLocations.findIndex((choiceLocation) => choiceLocation.label === location.label)].label
       : geographyCard.subStat;
 
-    const groups = 3 + campaignIndex;
-    const each = 2 + ((campaignIndex * 3 + 4) % 11);
+    // The ten-campaign sequence averages about 21% more total items than the
+    // previous 3-12 by 2-12 progression, while keeping the same visual model.
+    const groups = 4 + campaignIndex;
+    const each = 2 + ((campaignIndex * 3 + 4) % 14);
     const product = groups * each;
     const mathAnswer = `${product.toLocaleString("en-US")} notes`;
     const mathChoiceValues = uniqueBy([

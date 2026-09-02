@@ -14,7 +14,7 @@ import { cardDiscoveryIdentities, cardUnlockKey, isCardUnlocked } from "../../sr
 import { buildings, countries, jets, peppers, sharks, spaceCards, topicPacks } from "../../src/lib/game-data";
 import pepperScaleCatalog from "../../src/lib/pepperscale-peppers.json";
 import { poolForDifficulty } from "../../src/lib/difficulty-pool";
-import { autoDifficulty, questionDepthForSelection } from "../../src/lib/difficulty";
+import { autoDifficulty, peekRevealSettings, questionDepthForSelection } from "../../src/lib/difficulty";
 import {
   buildFactRound,
   buildFactRoundFromCards,
@@ -293,14 +293,29 @@ test("difficulty pools grow cumulatively from familiar to obscure countries", ()
   const hard = new Set(poolForDifficulty(countries, 3).map((country) => country.name));
 
   expect(easy).toContain("United States");
-  expect(easy).not.toContain("Belgium");
+  expect(easy).toContain("Belgium");
   expect(easy).not.toContain("Guinea");
-  expect(medium).toContain("United States");
-  expect(medium).toContain("Belgium");
-  expect(medium).not.toContain("Guinea");
-  expect(hard).toContain("United States");
-  expect(hard).toContain("Belgium");
+  expect(easy.size).toBeLessThan(medium.size);
+  expect(medium.size).toBeLessThan(hard.size);
+  expect([...easy].every((name) => medium.has(name))).toBe(true);
+  expect([...medium].every((name) => hard.has(name))).toBe(true);
   expect(hard).toContain("Guinea");
+});
+
+test("difficulty calibration expands subject breadth by about twenty-two percent", () => {
+  const unbanded = Array.from({ length: 100 }, (_, index) => ({ id: `subject-${index}` }));
+  expect(poolForDifficulty(unbanded, 1)).toHaveLength(55);
+  expect(poolForDifficulty(unbanded, 2)).toHaveLength(88);
+  expect(poolForDifficulty(unbanded, 3)).toHaveLength(100);
+
+  const banded = Array.from({ length: 100 }, (_, index) => ({
+    id: `banded-subject-${index}`,
+    metadata: { difficultyBand: index < 20 ? "easy" as const : index < 70 ? "medium" as const : "hard" as const },
+  }));
+  expect(poolForDifficulty(banded, 1)).toHaveLength(25);
+  expect(poolForDifficulty(banded, 2)).toHaveLength(86);
+  expect(poolForDifficulty(banded, 3)).toHaveLength(100);
+  expect(poolForDifficulty(banded, 1).every((item) => item.metadata.difficultyBand !== "hard")).toBe(true);
 });
 
 test("Hard retains every Easy subject and adds the rest of every category", () => {
@@ -315,14 +330,15 @@ test("Hard retains every Easy subject and adds the rest of every category", () =
   }
 });
 
-test("Hard rotates Easy, Medium, and Hard question depths without narrowing its card pool", () => {
+test("Medium and Hard favor deeper questions while preserving retrieval practice", () => {
   const hardDepths = Array.from({ length: 10 }, (_, seed) => questionDepthForSelection(3, seed));
-  expect(hardDepths.filter((depth) => depth === 1)).toHaveLength(2);
+  expect(hardDepths.filter((depth) => depth === 1)).toHaveLength(1);
   expect(hardDepths.filter((depth) => depth === 2)).toHaveLength(3);
-  expect(hardDepths.filter((depth) => depth === 3)).toHaveLength(5);
+  expect(hardDepths.filter((depth) => depth === 3)).toHaveLength(6);
 
   const mediumDepths = Array.from({ length: 10 }, (_, seed) => questionDepthForSelection(2, seed));
-  expect(new Set(mediumDepths)).toEqual(new Set([1, 2]));
+  expect(mediumDepths.filter((depth) => depth === 1)).toHaveLength(2);
+  expect(mediumDepths.filter((depth) => depth === 2)).toHaveLength(8);
   expect(questionDepthForSelection(1, 9)).toBe(1);
 
   const simpleAndAdvancedKinds = {
@@ -358,14 +374,48 @@ test("every collectible card can surface in Hard Peek play", () => {
   }
 });
 
-test("Hard multiplication mixes easier practice with genuinely hard factors", () => {
+test("multiplication ceilings rise by twenty to twenty-five percent", () => {
   const easyRounds = Array.from({ length: 30 }, (_, seed) => buildNumberRound("peppers", 1, seed * 3 + 2));
-  const hardSeeds = Array.from({ length: 30 }, (_, seed) => seed * 3 + 2);
+  const mediumRounds = Array.from({ length: 60 }, (_, seed) => buildNumberRound("peppers", 2, seed * 3 + 2));
+  const hardSeeds = Array.from({ length: 90 }, (_, seed) => seed * 3 + 2);
   const hardRounds = hardSeeds.map((seed) => buildNumberRound("peppers", 3, seed));
-  expect(easyRounds.every((round) => round.operation === "multiplication" && round.termValues.every((value) => value <= 5))).toBe(true);
-  expect(hardRounds.some((round, index) => questionDepthForSelection(3, hardSeeds[index]) === 1 && round.termValues.every((value) => value <= 5))).toBe(true);
-  expect(hardRounds.some((round, index) => questionDepthForSelection(3, hardSeeds[index]) === 3 && round.termValues.every((value) => value >= 6 && value <= 12))).toBe(true);
-  expect(hardRounds.every((round) => round.operation === "multiplication" && round.termValues.every((value) => value >= 1 && value <= 12))).toBe(true);
+  expect(easyRounds.every((round) => round.operation === "multiplication" && round.termValues.every((value) => value <= 6))).toBe(true);
+  expect(easyRounds.some((round) => round.termValues.includes(6))).toBe(true);
+  expect(mediumRounds.every((round) => round.operation === "multiplication" && round.termValues.every((value) => value <= 12))).toBe(true);
+  expect(mediumRounds.some((round) => round.termValues.includes(12))).toBe(true);
+  expect(hardRounds.some((round, index) => questionDepthForSelection(3, hardSeeds[index]) === 1 && round.termValues.every((value) => value <= 6))).toBe(true);
+  expect(hardRounds.some((round, index) => questionDepthForSelection(3, hardSeeds[index]) === 3 && round.termValues.some((value) => value > 12))).toBe(true);
+  expect(hardRounds.every((round) => round.operation === "multiplication" && round.termValues.every((value) => value >= 1 && value <= 15))).toBe(true);
+});
+
+test("context math uses larger quantities and finer round-number steps", () => {
+  const additionRounds = (topic: "peppers" | "jets", difficulty: 1 | 2 | 3) => Array.from({ length: 120 }, (_, index) => (
+    buildNumberRound(topic, difficulty, index * 3)
+  )).filter((round) => round.operation === "addition");
+
+  expect(additionRounds("peppers", 1).some((round) => round.termValues.some((value) => value > 7))).toBe(true);
+  expect(additionRounds("peppers", 2).some((round) => round.termValues.some((value) => value > 12))).toBe(true);
+  expect(additionRounds("peppers", 3).some((round) => round.termValues.some((value) => value > 20))).toBe(true);
+  expect(additionRounds("jets", 3).every((round) => Math.max(...round.choices) - Math.min(...round.choices) < 20)).toBe(true);
+
+  const hardBuildingAdditions = Array.from({ length: 120 }, (_, index) => buildNumberRound("buildings", 3, index * 3))
+    .filter((round) => round.operation === "addition" && questionDepthForSelection(3, Number(round.id.split("-", 1)[0])) === 3);
+  expect(hardBuildingAdditions.some((round) => round.termValues.some((value) => value % 50 !== 0))).toBe(true);
+});
+
+test("Peek begins with twenty to twenty-five percent less of the image exposed", () => {
+  expect(peekRevealSettings(1)).toMatchObject({ totalTiles: 16, startReveal: 4 });
+  expect(peekRevealSettings(2)).toMatchObject({ totalTiles: 20, startReveal: 2 });
+  expect(peekRevealSettings(3)).toMatchObject({ totalTiles: 20, startReveal: 1 });
+  expect(peekRevealSettings(1).startReveal / peekRevealSettings(1).totalTiles).toBe(0.25);
+  expect(peekRevealSettings(2).startReveal / peekRevealSettings(2).totalTiles).toBe(0.1);
+  expect(peekRevealSettings(3).startReveal / peekRevealSettings(3).totalTiles).toBe(0.05);
+});
+
+test("map distractors can sit about twenty percent closer without changing choice count", () => {
+  expect(geoChoiceSeparationForDifficulty(1)).toEqual({ kilometers: 2000, mapPercent: 14.5 });
+  expect(geoChoiceSeparationForDifficulty(2)).toEqual({ kilometers: 1200, mapPercent: 10.5 });
+  expect(geoChoiceSeparationForDifficulty(3)).toEqual({ kilometers: 600, mapPercent: 7 });
 });
 
 test("pack Odd One rounds never ask children to infer a hidden category", () => {
@@ -1896,13 +1946,13 @@ test("every topic offers sensible addition, subtraction, and multiplication roun
   }
 });
 
-test("hard multiplication reaches the full twelve-by-twelve table", () => {
+test("hard multiplication stretches through fifteen-by-fifteen", () => {
   const round = buildNumberRound("peppers", 3, 137);
   expect(round.operation).toBe("multiplication");
-  expect(round.biggerValue).toBe(12);
-  expect(round.smallerValue).toBe(12);
-  expect(round.answer).toBe(144);
-  expect(round.termValues).toEqual([12, 12]);
+  expect(round.biggerValue).toBe(15);
+  expect(round.smallerValue).toBe(15);
+  expect(round.answer).toBe(225);
+  expect(round.termValues).toEqual([15, 15]);
 });
 
 test("every playable category has ten distinct single-subject Challenge deep dives", () => {
@@ -1919,6 +1969,9 @@ test("every playable category has ten distinct single-subject Challenge deep div
       expect(new Set(optionSignatures).size, `${category.id}/${skill} needs 10 distinct options`).toBeGreaterThanOrEqual(10);
       expect(new Set(steps.map((step) => step.image)).size, `${category.id}/${skill} needs 10 distinct subject images`).toBeGreaterThanOrEqual(10);
     }
+    const mathSteps = campaigns.map((campaign) => campaign.steps.find((step) => step.skill === "Math")!);
+    expect(Math.max(...mathSteps.flatMap((step) => step.skill === "Math" ? [step.math.groups, step.math.each] : [])), `${category.id} math should stretch beyond 12 × 12`).toBe(15);
+    expect(mathSteps.reduce((total, step) => total + (step.skill === "Math" ? step.math.groups * step.math.each : 0), 0) / mathSteps.length, `${category.id} math should average about 21% larger`).toBeGreaterThanOrEqual(67);
     const connectionSteps = campaigns.map((campaign) => campaign.steps.find((step) => step.skill === "Geography" || step.skill === "Classification")!);
     expect(new Set(connectionSteps.map((step) => `${step.clue}|${step.question}|${step.answer}`)).size, `${category.id} needs 10 distinct map or classification stops`).toBeGreaterThanOrEqual(10);
     expect(new Set(connectionSteps.map((step) => step.image)).size, `${category.id} needs 10 distinct map or classification images`).toBeGreaterThanOrEqual(10);
@@ -2076,58 +2129,67 @@ test("mobile keeps the question and first answer in the opening viewport", { tag
 });
 
 test("offline saving stays in Setup and the app shell supports an offline reload", { tag: "@mobile" }, async ({ page, context }) => {
-  const moreButton = page.getByRole("button", { name: "More actions" });
-  await moreButton.click();
-  await expect(page.getByLabel("More controls")).toBeVisible();
-  await page.getByRole("button", { name: "Setup", exact: true }).click();
-  await expect(page.getByRole("dialog", { name: "Setup" })).toBeVisible();
-  await expect(page.getByText("Offline", { exact: true })).toBeVisible();
-  await expect(page.getByText(/Save \d+ selected cards · up to \d+ (?:KB|MB)/)).toBeVisible();
-  await expect(page.getByRole("button", { name: "Save offline" })).toBeEnabled();
-
-  await page.evaluate(async () => {
-    if (!("serviceWorker" in navigator)) throw new Error("Service workers are unavailable");
-    await navigator.serviceWorker.ready;
-  });
-
-  const incrementalCache = await page.evaluate(async () => {
-    const registration = await navigator.serviceWorker.ready;
-    const worker = registration.active;
-    if (!worker) throw new Error("Service worker is not active");
-    const entries = [
-      { url: "/icons/burrow-icon-32.png", revision: "offline-test-v1", bytes: 1 },
-      { url: "/icons/burrow-icon-64.png", revision: "offline-test-v1", bytes: 1 },
-    ];
-    const cacheEntries = (requestId: string) => new Promise<{ cached: number; downloaded: number; failed: number }>((resolve, reject) => {
-      const timeout = window.setTimeout(() => reject(new Error("Offline cache request timed out")), 10_000);
-      const handleMessage = (event: MessageEvent) => {
-        const message = event.data;
-        if (message?.type !== "OFFLINE_CACHE_COMPLETE" || message.requestId !== requestId) return;
-        window.clearTimeout(timeout);
-        navigator.serviceWorker.removeEventListener("message", handleMessage);
-        resolve({ cached: message.cached, downloaded: message.downloaded, failed: message.failed });
-      };
-      navigator.serviceWorker.addEventListener("message", handleMessage);
-      worker.postMessage({ type: "CACHE_URLS", requestId, entries });
-    });
-    return {
-      first: await cacheEntries("offline-test-first"),
-      second: await cacheEntries("offline-test-second"),
-    };
-  });
-
-  expect(incrementalCache.first).toEqual({ cached: 0, downloaded: 2, failed: 0 });
-  expect(incrementalCache.second).toEqual({ cached: 2, downloaded: 0, failed: 0 });
-
-  await page.getByRole("button", { name: "Close setup" }).click();
-
-  await context.setOffline(true);
   try {
+    const moreButton = page.getByRole("button", { name: "More actions" });
+    await moreButton.click();
+    await expect(page.getByLabel("More controls")).toBeVisible();
+    await page.getByRole("button", { name: "Setup", exact: true }).click();
+    await expect(page.getByRole("dialog", { name: "Setup" })).toBeVisible();
+    await expect(page.getByText("Offline", { exact: true })).toBeVisible();
+    await expect(page.getByText(/Save \d+ selected cards · up to \d+ (?:KB|MB)/)).toBeVisible();
+    await expect(page.getByRole("button", { name: "Save offline" })).toBeEnabled();
+
+    await page.evaluate(async () => {
+      if (!("serviceWorker" in navigator)) throw new Error("Service workers are unavailable");
+      await navigator.serviceWorker.ready;
+    });
+
+    const incrementalCache = await page.evaluate(async () => {
+      const registration = await navigator.serviceWorker.ready;
+      const worker = registration.active;
+      if (!worker) throw new Error("Service worker is not active");
+      const entries = [
+        { url: "/icons/burrow-icon-32.png", revision: "offline-test-v1", bytes: 1 },
+        { url: "/icons/burrow-icon-64.png", revision: "offline-test-v1", bytes: 1 },
+      ];
+      const cacheEntries = (requestId: string) => new Promise<{ cached: number; downloaded: number; failed: number }>((resolve, reject) => {
+        const timeout = window.setTimeout(() => reject(new Error("Offline cache request timed out")), 10_000);
+        const handleMessage = (event: MessageEvent) => {
+          const message = event.data;
+          if (message?.type !== "OFFLINE_CACHE_COMPLETE" || message.requestId !== requestId) return;
+          window.clearTimeout(timeout);
+          navigator.serviceWorker.removeEventListener("message", handleMessage);
+          resolve({ cached: message.cached, downloaded: message.downloaded, failed: message.failed });
+        };
+        navigator.serviceWorker.addEventListener("message", handleMessage);
+        worker.postMessage({ type: "CACHE_URLS", requestId, entries });
+      });
+      return {
+        first: await cacheEntries("offline-test-first"),
+        second: await cacheEntries("offline-test-second"),
+      };
+    });
+
+    expect(incrementalCache.first).toEqual({ cached: 0, downloaded: 2, failed: 0 });
+    expect(incrementalCache.second).toEqual({ cached: 2, downloaded: 0, failed: 0 });
+
+    await page.getByRole("button", { name: "Close setup" }).click();
+
+    await context.setOffline(true);
     await page.reload({ waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
     await page.waitForFunction(() => document.documentElement.dataset.burrowHydrated === "true");
   } finally {
     await context.setOffline(false);
+    if (!page.isClosed()) {
+      await page.evaluate(async () => {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map((registration) => registration.unregister()));
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.filter((name) => name.startsWith("burrow-")).map((name) => caches.delete(name)));
+      });
+      await page.goto("about:blank");
+    }
   }
 });
 
@@ -3048,11 +3110,11 @@ test("peek rounds reset their reveal count after skip", async ({ page }) => {
   await chooseOnlyMode(page, "Peek");
 
   await expect(page.getByText("Peek round", { exact: true })).toBeVisible();
-  await expect(page.getByText("4/12 open")).toBeVisible();
-  await expect(page.getByText("5/12 open")).toBeVisible({ timeout: 2_000 });
+  await expect(page.getByText("4/16 open")).toBeVisible();
+  await expect(page.getByText("5/16 open")).toBeVisible({ timeout: 2_000 });
 
   await page.getByRole("button", { name: "Skip question" }).click();
-  await expect(page.getByText("4/12 open")).toBeVisible();
+  await expect(page.getByText("4/16 open")).toBeVisible();
 });
 
 test("Peek location rounds show the complete named subject before map feedback", async ({ page }) => {
