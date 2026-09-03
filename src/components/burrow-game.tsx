@@ -1,6 +1,7 @@
 "use client";
 
 import { track } from "@vercel/analytics";
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   ChallengeMode,
@@ -230,6 +231,27 @@ const playEventSchemaVersion = 2;
 const playEventHistoryLimit = 1500;
 const playEventPendingLimit = 500;
 const playEventBatchLimit = 25;
+type DeferredTask = { kind: "idle" | "timeout"; id: number };
+type IdleWindow = Window & typeof globalThis & {
+  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+  cancelIdleCallback?: (id: number) => void;
+};
+
+const scheduleDeferredTask = (callback: () => void): DeferredTask => {
+  const idleWindow = window as IdleWindow;
+  if (idleWindow.requestIdleCallback) {
+    return { kind: "idle", id: idleWindow.requestIdleCallback(callback, { timeout: 800 }) };
+  }
+  return { kind: "timeout", id: window.setTimeout(callback, 50) };
+};
+
+const cancelDeferredTask = (task: DeferredTask | null) => {
+  if (!task) return;
+  const idleWindow = window as IdleWindow;
+  if (task.kind === "idle") idleWindow.cancelIdleCallback?.(task.id);
+  else window.clearTimeout(task.id);
+};
+
 const difficultyOptions: { id: Difficulty; label: string }[] = [
   { id: 1, label: "Easy" },
   { id: 2, label: "Med" },
@@ -500,12 +522,6 @@ const writePendingPlayEvents = (events: PlayTelemetryEvent[]) => {
   window.localStorage.setItem(pendingPlayEventsKey, JSON.stringify(events.slice(-playEventPendingLimit)));
 };
 
-const queuePendingPlayEvent = (event: PlayTelemetryEvent) => {
-  const pending = [...loadPendingPlayEvents(), event].slice(-playEventPendingLimit);
-  writePendingPlayEvents(pending);
-  return pending;
-};
-
 const dropPendingPlayEvents = (eventIds: Set<string>) => {
   writePendingPlayEvents(loadPendingPlayEvents().filter((event) => !eventIds.has(event.id)));
 };
@@ -529,6 +545,18 @@ const addUnique = (items: string[], additions: string[]) => {
 const playableTopic = (topic: RoundTopic | "mixed", interests: RoundTopic[]): RoundTopic | "mixed" => (topic !== "mixed" && !interests.includes(topic) ? "mixed" : topic);
 
 type PlayableTopicScope = RoundTopic | "mixed" | readonly RoundTopic[];
+
+type ConfiguredRoundOptions = {
+  scope: PlayableTopicScope;
+  nextMode: GameMode;
+  interests: readonly RoundTopic[];
+  difficulty: Difficulty;
+  seed: number;
+  seenIds: string[];
+  requestedModes: readonly ChallengeMode[];
+  unlockedTitles: readonly string[];
+  history: readonly LearningExposure[];
+};
 
 const topicScopeFor = (topic: RoundTopic | "mixed", interests: RoundTopic[], availableTopics: readonly RoundTopic[] = allKnowledgeTopics): PlayableTopicScope => {
   const activeInterests = normalizeInterests(interests, availableTopics);
@@ -561,7 +589,9 @@ const buildQuestionRunRaw = (
   if (mode === "mix") {
     const pattern = mixModes.length ? mixModes : defaultMixPattern;
     const base = buildSession(topic, difficulty, sessionSeed, seenIds, unlockedTitles);
-    const versusQuestions = buildQuestionRunRaw(topic, "versus", difficulty, sessionSeed + 503, seenIds, mixModes, unlockedTitles);
+    const versusQuestions = pattern.includes("versus")
+      ? buildQuestionRunRaw(topic, "versus", difficulty, sessionSeed + 503, seenIds, mixModes, unlockedTitles)
+      : [];
     let versusIndex = 0;
     return base.map((question, index) => {
       if (pattern[index % pattern.length] !== "versus") return question;
@@ -886,40 +916,137 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const [lastResult, setLastResult] = useState<ResultState | null>(null);
   const [miniChallengeActive, setMiniChallengeActive] = useState(false);
   const [miniChallengePending, setMiniChallengePending] = useState(false);
+  const [roundsPreparing, setRoundsPreparing] = useState(false);
   const anonymousInstallIdRef = useRef<string | null>(null);
   const playSessionIdRef = useRef("");
   const playEventSequenceRef = useRef(0);
   const playFlushInFlightRef = useRef(false);
+  const playEventHistoryRef = useRef<PlayTelemetryEvent[] | null>(null);
+  const pendingPlayEventsRef = useRef<PlayTelemetryEvent[] | null>(null);
+  const queuedPlayEventsRef = useRef<PlayTelemetryEvent[]>([]);
+  const playEventPersistenceTaskRef = useRef<DeferredTask | null>(null);
+  const roundRegenerationTimerRef = useRef<number | null>(null);
   const roundStartedAtRef = useRef(0);
   const lastViewedPlayKeyRef = useRef("");
+
+  const mixConfigurationFor = useCallback((
+    interests: readonly RoundTopic[],
+    difficulty: Difficulty,
+    requestedModes: readonly ChallengeMode[],
+  ) => {
+    const hasBuiltIn = interests.some(isKnowledgeTopic);
+    const hasPack = interests.some((interest) => packDeckById.has(interest));
+    const geoCapableTopics = geoCapableTopicsByDifficulty.get(difficulty) ?? new Set<RoundTopic>();
+    const hasGeo = interests.some((interest) => geoCapableTopics.has(interest));
+    const available = defaultMixPattern.filter((item) => {
+      if (!hasBuiltIn && item === "quiz") return false;
+      if (!hasBuiltIn && !hasPack && item === "versus") return false;
+      if (!hasGeo && item === "geo") return false;
+      return true;
+    });
+    const selected = (requestedModes.length ? requestedModes : available)
+      .filter((item) => hasBuiltIn || item !== "quiz")
+      .filter((item) => hasBuiltIn || hasPack || item !== "versus")
+      .filter((item) => hasGeo || item !== "geo");
+    return { available, selected, active: selected.length ? selected : ["peek" as const] };
+  }, [geoCapableTopicsByDifficulty, packDeckById]);
+
+  const prepareRoundForMode = useCallback((
+    challengeMode: ChallengeMode,
+    scope: PlayableTopicScope,
+    difficulty: Difficulty,
+    seed: number,
+    unlockedTitles: readonly string[],
+    history: readonly LearningExposure[],
+  ) => {
+    if (challengeMode === "sort") setSortRound(buildSortForScope(scope, difficulty, seed + 31, history));
+    else if (challengeMode === "fact") setFactRound(buildFactForScope(scope, difficulty, seed + 47, unlockedTitles, history));
+    else if (challengeMode === "peek") setRevealRound(buildRevealForScope(scope, difficulty, seed + 61, unlockedTitles, history));
+    else if (challengeMode === "geo") setGeoRound(buildGeoForScope(scope, difficulty, seed + 73, unlockedTitles, history));
+    else if (challengeMode === "number") setNumberRound(buildNumberForScope(scope, difficulty, seed + 89, history));
+    else if (challengeMode === "odd") setOddRound(buildOddForScope(scope, difficulty, seed + 97, history));
+    else if (challengeMode === "trumps") setTopTrumpRound(buildTopTrumpForScope(scope, difficulty, seed + 113, unlockedTitles, history));
+  }, [buildFactForScope, buildGeoForScope, buildNumberForScope, buildOddForScope, buildRevealForScope, buildSortForScope, buildTopTrumpForScope]);
+
+  const regenerateConfiguredRounds = useCallback(({
+    scope,
+    nextMode,
+    interests,
+    difficulty,
+    seed,
+    seenIds,
+    requestedModes,
+    unlockedTitles,
+    history,
+  }: ConfiguredRoundOptions) => {
+    const pattern = nextMode === "mix"
+      ? mixConfigurationFor(interests, difficulty, requestedModes).active
+      : [nextMode as ChallengeMode];
+    if (pattern.some((item) => item === "quiz" || item === "versus")) {
+      setQuestions(buildQuestionsForScope(scope, nextMode, difficulty, seed, seenIds, [...pattern], unlockedTitles, history));
+    }
+    const firstMode = pattern[0] ?? "peek";
+    if (firstMode !== "quiz" && firstMode !== "versus") {
+      prepareRoundForMode(firstMode, scope, difficulty, seed, unlockedTitles, history);
+    }
+  }, [buildQuestionsForScope, mixConfigurationFor, prepareRoundForMode]);
+
+  const scheduleConfiguredRoundRegeneration = useCallback((options: ConfiguredRoundOptions) => {
+    setRoundsPreparing(true);
+    if (roundRegenerationTimerRef.current !== null) window.clearTimeout(roundRegenerationTimerRef.current);
+    roundRegenerationTimerRef.current = window.setTimeout(() => {
+      roundRegenerationTimerRef.current = null;
+      regenerateConfiguredRounds(options);
+      setRoundsPreparing(false);
+    }, 140);
+  }, [regenerateConfiguredRounds]);
+
+  useEffect(() => () => {
+    if (roundRegenerationTimerRef.current !== null) window.clearTimeout(roundRegenerationTimerRef.current);
+  }, []);
 
   const allCards = useMemo(() => [...collectionCards(), ...packDecks.flatMap((deck) => deck.cards)], [packDecks]);
   const cardPoolsByTopic = useMemo(() => new Map(
     playableTopics.map((topicId) => [topicId, allCards.filter((card) => card.topic === topicId)]),
   ), [allCards, playableTopics]);
-  const difficultyForCard = useCallback((card: Pick<KnowledgeCard, "id" | "topic">): Difficulty => {
-    const pool = cardPoolsByTopic.get(card.topic) ?? [];
-    if (poolForDifficulty(pool, 1).some((item) => item.id === card.id)) return 1;
-    if (poolForDifficulty(pool, 2).some((item) => item.id === card.id)) return 2;
-    return 3;
+  const cardDifficultyByKey = useMemo(() => {
+    const difficulties = new Map<string, Difficulty>();
+    for (const [topicId, pool] of cardPoolsByTopic) {
+      const easyIds = new Set(poolForDifficulty(pool, 1).map((card) => card.id));
+      const mediumIds = new Set(poolForDifficulty(pool, 2).map((card) => card.id));
+      for (const card of pool) {
+        difficulties.set(`${topicId}:${card.id}`, easyIds.has(card.id) ? 1 : mediumIds.has(card.id) ? 2 : 3);
+      }
+    }
+    return difficulties;
   }, [cardPoolsByTopic]);
+  const difficultyForCard = useCallback((card: Pick<KnowledgeCard, "id" | "topic">): Difficulty => {
+    return cardDifficultyByKey.get(`${card.topic}:${card.id}`) ?? 3;
+  }, [cardDifficultyByKey]);
   const difficultyForCards = useCallback((cards: readonly Pick<KnowledgeCard, "id" | "topic">[]): Difficulty => (
     greatestDifficulty(cards.map(difficultyForCard))
   ), [difficultyForCard]);
-  const miniChallengeCategories = useMemo(() => activeInterestKey.split("|").filter(Boolean).map((id) => ({
-      id: id as RoundTopic,
-      label: topicMetaById.get(id as RoundTopic)?.label ?? "Mixed topics",
-      cards: allCards.filter((card) => card.topic === id),
-    })), [activeInterestKey, allCards, topicMetaById]);
-  const miniChallengeCatalog = useMemo(
-    () => buildChallengeCampaignCatalog(miniChallengeCategories),
-    [miniChallengeCategories],
+  const activeTopicSet = useMemo(() => new Set(activeInterestKey.split("|").filter(Boolean)), [activeInterestKey]);
+  const miniChallengeCatalog = useMemo(() => buildChallengeCampaignCatalog(playableTopics.map((id) => ({
+    id,
+    label: topicMetaById.get(id)?.label ?? "Mixed topics",
+    cards: cardPoolsByTopic.get(id) ?? [],
+  }))), [cardPoolsByTopic, playableTopics, topicMetaById]);
+  const miniChallengeCatalogByTopic = useMemo(
+    () => new Map(miniChallengeCatalog.map((entry) => [entry.category.id, entry])),
+    [miniChallengeCatalog],
+  );
+  const activeMiniChallengeCatalog = useMemo(
+    () => activeInterestKey.split("|").flatMap((id) => {
+      const entry = miniChallengeCatalogByTopic.get(id);
+      return entry ? [entry] : [];
+    }),
+    [activeInterestKey, miniChallengeCatalogByTopic],
   );
   const miniChallengeCampaign = useMemo(
-    () => challengeCampaignFromCatalog(progress.answered, miniChallengeCatalog),
-    [miniChallengeCatalog, progress.answered],
+    () => challengeCampaignFromCatalog(progress.answered, activeMiniChallengeCatalog),
+    [activeMiniChallengeCatalog, progress.answered],
   );
-  const activeTopicSet = useMemo(() => new Set(activeInterestKey.split("|").filter(Boolean)), [activeInterestKey]);
   const selectedCards = useMemo(() => allCards.filter((card) => activeTopicSet.has(card.topic)), [activeTopicSet, allCards]);
   const unlockedCardSet = useMemo(() => new Set(progress.unlockedCards), [progress.unlockedCards]);
   const question = questions[questionIndex];
@@ -943,21 +1070,10 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   ]);
   const oddDifficulty = greatestDifficulty([2, difficultyForCards(oddRound.cards)]);
   const topTrumpDifficulty = greatestDifficulty([2, difficultyForCards([topTrumpRound.player, topTrumpRound.computer])]);
-  const hasBuiltInInterests = activeInterests.some(isKnowledgeTopic);
-  const hasPackInterests = activeInterests.some((interest) => packDeckById.has(interest));
-  const geoCapableTopics = geoCapableTopicsByDifficulty.get(progress.difficulty) ?? new Set<RoundTopic>();
-  const hasGeoInterests = activeInterests.some((interest) => geoCapableTopics.has(interest));
-  const availableMixPattern = defaultMixPattern.filter((item) => {
-    if (!hasBuiltInInterests && item === "quiz") return false;
-    if (!hasBuiltInInterests && !hasPackInterests && item === "versus") return false;
-    if (!hasGeoInterests && item === "geo") return false;
-    return true;
-  });
-  const selectedMixModes = (mixModes.length ? mixModes : availableMixPattern)
-    .filter((item) => hasBuiltInInterests || item !== "quiz")
-    .filter((item) => hasBuiltInInterests || hasPackInterests || item !== "versus")
-    .filter((item) => hasGeoInterests || item !== "geo");
-  const activeMixPattern: ChallengeMode[] = selectedMixModes.length ? selectedMixModes : ["peek"];
+  const mixConfiguration = mixConfigurationFor(activeInterests, progress.difficulty, mixModes);
+  const availableMixPattern = mixConfiguration.available;
+  const selectedMixModes = mixConfiguration.selected;
+  const activeMixPattern: ChallengeMode[] = mixConfiguration.active;
   const activeChallengeMode: ChallengeMode = mode === "mix" ? activeMixPattern[questionIndex % activeMixPattern.length] : mode;
   const isQuestionMode = !showCollection && (activeChallengeMode === "quiz" || activeChallengeMode === "versus");
   const answered = isQuestionMode && selected !== null;
@@ -1031,22 +1147,11 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     document.documentElement.dataset.burrowHydrated = "true";
     anonymousInstallIdRef.current = loadAnonymousInstallId();
     playSessionIdRef.current = makeBrowserId("session");
+    playEventHistoryRef.current = loadPlayEvents();
+    pendingPlayEventsRef.current = loadPendingPlayEvents();
     roundStartedAtRef.current = Date.now();
     return () => {
       delete document.documentElement.dataset.burrowHydrated;
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden") flushPendingPlayEventsWithBeacon();
-    };
-
-    window.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("pagehide", flushPendingPlayEventsWithBeacon);
-    return () => {
-      window.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("pagehide", flushPendingPlayEventsWithBeacon);
     };
   }, []);
 
@@ -1057,19 +1162,22 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       const loadedInterests = normalizeInterests(loadedProfile.interests, playableTopics);
       const loadedScope = adaptiveTopicScopeFor("mixed", loadedInterests, loadedProfile.progress, playableTopics);
       setProfilesState(loadedProfiles);
-      setQuestions(buildQuestionsForScope(loadedScope, "mix", loadedProfile.progress.difficulty, 20260430, loadedProfile.progress.seenIds, defaultMixPattern, loadedProfile.progress.unlockedCards, loadedProfile.progress.learningHistory));
-      setSortRound(buildSortForScope(loadedScope, loadedProfile.progress.difficulty, 20260461, loadedProfile.progress.learningHistory));
-      setFactRound(buildFactForScope(loadedScope, loadedProfile.progress.difficulty, 20260477, loadedProfile.progress.unlockedCards, loadedProfile.progress.learningHistory));
-      setRevealRound(buildRevealForScope(loadedScope, loadedProfile.progress.difficulty, 20260493, loadedProfile.progress.unlockedCards, loadedProfile.progress.learningHistory));
-      setGeoRound(buildGeoForScope(loadedScope, loadedProfile.progress.difficulty, 20260503, loadedProfile.progress.unlockedCards, loadedProfile.progress.learningHistory));
-      setNumberRound(buildNumberForScope(loadedScope, loadedProfile.progress.difficulty, 20260513, loadedProfile.progress.learningHistory));
-      setOddRound(buildOddForScope(loadedScope, loadedProfile.progress.difficulty, 20260523, loadedProfile.progress.learningHistory));
-      setTopTrumpRound(buildTopTrumpForScope(loadedScope, loadedProfile.progress.difficulty, 20260531, loadedProfile.progress.unlockedCards, loadedProfile.progress.learningHistory));
+      regenerateConfiguredRounds({
+        scope: loadedScope,
+        nextMode: "mix",
+        interests: loadedInterests,
+        difficulty: loadedProfile.progress.difficulty,
+        seed: 20260430,
+        seenIds: loadedProfile.progress.seenIds,
+        requestedModes: defaultMixPattern,
+        unlockedTitles: loadedProfile.progress.unlockedCards,
+        history: loadedProfile.progress.learningHistory,
+      });
       setProfilesReady(true);
     }, 0);
 
     return () => window.clearTimeout(loadSavedProfiles);
-  }, [buildFactForScope, buildGeoForScope, buildNumberForScope, buildOddForScope, buildQuestionsForScope, buildRevealForScope, buildSortForScope, buildTopTrumpForScope, playableTopics]);
+  }, [playableTopics, regenerateConfiguredRounds]);
 
   useEffect(() => {
     if (!profilesReady) return;
@@ -1082,7 +1190,9 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
 
   const flushPlayEvents = useCallback(async () => {
     if (playFlushInFlightRef.current || typeof window === "undefined") return;
-    const batch = loadPendingPlayEvents().slice(0, playEventBatchLimit);
+    const pending = pendingPlayEventsRef.current ?? loadPendingPlayEvents();
+    pendingPlayEventsRef.current = pending;
+    const batch = pending.slice(0, playEventBatchLimit);
     if (!batch.length) return;
 
     playFlushInFlightRef.current = true;
@@ -1094,13 +1204,87 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         keepalive: true,
       });
       if (!response.ok) throw new Error(`Play event log failed with ${response.status}`);
-      dropPendingPlayEvents(new Set(batch.map((playEvent) => playEvent.id)));
+      const sentIds = new Set(batch.map((playEvent) => playEvent.id));
+      const remaining = (pendingPlayEventsRef.current ?? []).filter((playEvent) => !sentIds.has(playEvent.id));
+      pendingPlayEventsRef.current = remaining;
+      writePendingPlayEvents(remaining);
     } catch (error) {
       console.warn("Play events could not be written to the server log.", error);
     } finally {
       playFlushInFlightRef.current = false;
     }
   }, []);
+
+  const persistQueuedPlayEvents = useCallback((sendToServer = true) => {
+    playEventPersistenceTaskRef.current = null;
+    const queued = queuedPlayEventsRef.current.splice(0);
+    if (!queued.length) return;
+
+    try {
+      const history = playEventHistoryRef.current ?? loadPlayEvents();
+      const nextHistory = [...queued].reverse().concat(history).slice(0, playEventHistoryLimit);
+      playEventHistoryRef.current = nextHistory;
+      window.localStorage.setItem(playEventsKey, JSON.stringify(nextHistory));
+
+      const pending = pendingPlayEventsRef.current ?? loadPendingPlayEvents();
+      const nextPending = [...pending, ...queued].slice(-playEventPendingLimit);
+      pendingPlayEventsRef.current = nextPending;
+      writePendingPlayEvents(nextPending);
+    } catch (error) {
+      console.warn("Play events could not be written to browser storage.", error);
+    }
+
+    for (const playEvent of queued) {
+      try {
+        track("Burrow Play", {
+          action: playEvent.action,
+          mode: playEvent.mode,
+          challengeMode: playEvent.challengeMode,
+          topic: playEvent.topic,
+          itemKey: shortTelemetryValue(playEvent.itemKey),
+          itemHash: playEvent.itemHash,
+          profileHash: playEvent.profileHash,
+          questionKind: playEvent.questionKind ?? null,
+          correct: playEvent.correct ?? null,
+          difficulty: playEvent.difficulty,
+          roundIndex: playEvent.roundIndex ?? null,
+          answerMs: playEvent.answerMs ?? null,
+        });
+      } catch (error) {
+        console.warn("Play event could not be sent to analytics.", error);
+      }
+    }
+
+    if (sendToServer) void flushPlayEvents();
+  }, [flushPlayEvents]);
+
+  const schedulePlayEventPersistence = useCallback(() => {
+    if (playEventPersistenceTaskRef.current) return;
+    playEventPersistenceTaskRef.current = scheduleDeferredTask(() => persistQueuedPlayEvents());
+  }, [persistQueuedPlayEvents]);
+
+  useEffect(() => {
+    const flushForPageExit = () => {
+      cancelDeferredTask(playEventPersistenceTaskRef.current);
+      playEventPersistenceTaskRef.current = null;
+      persistQueuedPlayEvents(false);
+      flushPendingPlayEventsWithBeacon();
+      pendingPlayEventsRef.current = loadPendingPlayEvents();
+    };
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") flushForPageExit();
+    };
+
+    window.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("pagehide", flushForPageExit);
+    return () => {
+      window.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("pagehide", flushForPageExit);
+      cancelDeferredTask(playEventPersistenceTaskRef.current);
+      playEventPersistenceTaskRef.current = null;
+      persistQueuedPlayEvents(false);
+    };
+  }, [persistQueuedPlayEvents]);
 
   const recordPlayEvent = useCallback((event: PlayTelemetryInput) => {
     const itemKey = event.itemKey ?? stableRoundKey(event.itemId);
@@ -1130,35 +1314,9 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       answerMs: event.answerMs ?? (actionNeedsElapsed ? Math.max(0, Date.now() - roundStartedAtRef.current) : undefined),
     };
     playEventSequenceRef.current = playEvent.sequence;
-
-    try {
-      const nextEvents = [playEvent, ...loadPlayEvents()].slice(0, playEventHistoryLimit);
-      window.localStorage.setItem(playEventsKey, JSON.stringify(nextEvents));
-      queuePendingPlayEvent(playEvent);
-      void flushPlayEvents();
-    } catch (error) {
-      console.warn("Play event could not be written to browser storage.", error);
-    }
-
-    try {
-      track("Burrow Play", {
-        action: playEvent.action,
-        mode: playEvent.mode,
-        challengeMode: playEvent.challengeMode,
-        topic: playEvent.topic,
-        itemKey: shortTelemetryValue(playEvent.itemKey),
-        itemHash: playEvent.itemHash,
-        profileHash: playEvent.profileHash,
-        questionKind: playEvent.questionKind ?? null,
-        correct: playEvent.correct ?? null,
-        difficulty: playEvent.difficulty,
-        roundIndex: playEvent.roundIndex ?? null,
-        answerMs: playEvent.answerMs ?? null,
-      });
-    } catch (error) {
-      console.warn("Play event could not be sent to analytics.", error);
-    }
-  }, [accuracy, activeProfile.id, flushPlayEvents, progress.answered, progress.correct, progress.difficulty, progress.level, progress.streak]);
+    queuedPlayEventsRef.current.push(playEvent);
+    schedulePlayEventPersistence();
+  }, [accuracy, activeProfile.id, progress.answered, progress.correct, progress.difficulty, progress.level, progress.streak, schedulePlayEventPersistence]);
 
   const recordChallengeEvent = useCallback((challengeMode: ChallengeMode, event: Omit<PlayTelemetryInput, "mode" | "challengeMode">) => {
     recordPlayEvent({
@@ -1484,14 +1642,17 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const scope = adaptiveTopicScopeFor(safeTopic, nextInterests, nextProfile.progress, playableTopics);
     setTopic(safeTopic);
     resetRunState();
-    setQuestions(buildQuestionsForScope(scope, nextMode, nextProfile.progress.difficulty, seed, nextProfile.progress.seenIds, selectedMixModes, nextProfile.progress.unlockedCards, nextProfile.progress.learningHistory));
-    setSortRound(buildSortForScope(scope, nextProfile.progress.difficulty, seed + 31, nextProfile.progress.learningHistory));
-    setFactRound(buildFactForScope(scope, nextProfile.progress.difficulty, seed + 47, nextProfile.progress.unlockedCards, nextProfile.progress.learningHistory));
-    setRevealRound(buildRevealForScope(scope, nextProfile.progress.difficulty, seed + 61, nextProfile.progress.unlockedCards, nextProfile.progress.learningHistory));
-    setGeoRound(buildGeoForScope(scope, nextProfile.progress.difficulty, seed + 73, nextProfile.progress.unlockedCards, nextProfile.progress.learningHistory));
-    setNumberRound(buildNumberForScope(scope, nextProfile.progress.difficulty, seed + 89, nextProfile.progress.learningHistory));
-    setOddRound(buildOddForScope(scope, nextProfile.progress.difficulty, seed + 97, nextProfile.progress.learningHistory));
-    setTopTrumpRound(buildTopTrumpForScope(scope, nextProfile.progress.difficulty, seed + 113, nextProfile.progress.unlockedCards, nextProfile.progress.learningHistory));
+    scheduleConfiguredRoundRegeneration({
+      scope,
+      nextMode,
+      interests: nextInterests,
+      difficulty: nextProfile.progress.difficulty,
+      seed,
+      seenIds: nextProfile.progress.seenIds,
+      requestedModes: mixModes,
+      unlockedTitles: nextProfile.progress.unlockedCards,
+      history: nextProfile.progress.learningHistory,
+    });
   };
 
   const setQuestionDifficulty = (nextDifficulty: Difficulty) => {
@@ -1500,14 +1661,17 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     recordSetupEvent("difficulty", difficultyLabel(nextDifficulty), nextDifficulty);
     setProgress((current) => ({ ...current, difficulty: nextDifficulty }));
     resetRunState();
-    setQuestions(buildQuestionsForScope(currentTopicScope, mode, nextDifficulty, seed, progress.seenIds, selectedMixModes, progress.unlockedCards, progress.learningHistory));
-    setSortRound(buildSortForScope(currentTopicScope, nextDifficulty, seed + 41, progress.learningHistory));
-    setFactRound(buildFactForScope(currentTopicScope, nextDifficulty, seed + 47, progress.unlockedCards, progress.learningHistory));
-    setRevealRound(buildRevealForScope(currentTopicScope, nextDifficulty, seed + 53, progress.unlockedCards, progress.learningHistory));
-    setGeoRound(buildGeoForScope(currentTopicScope, nextDifficulty, seed + 59, progress.unlockedCards, progress.learningHistory));
-    setNumberRound(buildNumberForScope(currentTopicScope, nextDifficulty, seed + 67, progress.learningHistory));
-    setOddRound(buildOddForScope(currentTopicScope, nextDifficulty, seed + 71, progress.learningHistory));
-    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, nextDifficulty, seed + 79, progress.unlockedCards, progress.learningHistory));
+    scheduleConfiguredRoundRegeneration({
+      scope: currentTopicScope,
+      nextMode: mode,
+      interests: activeInterests,
+      difficulty: nextDifficulty,
+      seed,
+      seenIds: progress.seenIds,
+      requestedModes: mixModes,
+      unlockedTitles: progress.unlockedCards,
+      history: progress.learningHistory,
+    });
     setCelebration(`${difficultyLabel(nextDifficulty)} questions.`);
   };
 
@@ -1595,14 +1759,17 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setShowCollection(false);
     setMixModes(safeModes);
     resetRunState();
-    setQuestions(buildQuestionsForScope(currentTopicScope, "mix", progress.difficulty, seed, progress.seenIds, safeModes, progress.unlockedCards, progress.learningHistory));
-    setSortRound(buildSortForScope(currentTopicScope, progress.difficulty, seed + 29, progress.learningHistory));
-    setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed + 37, progress.unlockedCards, progress.learningHistory));
-    setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed + 43, progress.unlockedCards, progress.learningHistory));
-    setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed + 47, progress.unlockedCards, progress.learningHistory));
-    setNumberRound(buildNumberForScope(currentTopicScope, progress.difficulty, seed + 53, progress.learningHistory));
-    setOddRound(buildOddForScope(currentTopicScope, progress.difficulty, seed + 59, progress.learningHistory));
-    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed + 67, progress.unlockedCards, progress.learningHistory));
+    scheduleConfiguredRoundRegeneration({
+      scope: currentTopicScope,
+      nextMode: "mix",
+      interests: activeInterests,
+      difficulty: progress.difficulty,
+      seed,
+      seenIds: progress.seenIds,
+      requestedModes: safeModes,
+      unlockedTitles: progress.unlockedCards,
+      history: progress.learningHistory,
+    });
     setCelebration(message);
   };
 
@@ -2197,14 +2364,17 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     recordSetupEvent("reset-progress", "confirmed", reset.difficulty);
     setProgress(reset);
     setShowCollection(false);
-    setQuestions(buildQuestionsForScope(currentTopicScope, mode, reset.difficulty, seed, reset.seenIds, selectedMixModes, reset.unlockedCards, reset.learningHistory));
-    setSortRound(buildSortForScope(currentTopicScope, reset.difficulty, seed + 29, reset.learningHistory));
-    setFactRound(buildFactForScope(currentTopicScope, reset.difficulty, seed + 37, reset.unlockedCards, reset.learningHistory));
-    setRevealRound(buildRevealForScope(currentTopicScope, reset.difficulty, seed + 43, reset.unlockedCards, reset.learningHistory));
-    setGeoRound(buildGeoForScope(currentTopicScope, reset.difficulty, seed + 47, reset.unlockedCards, reset.learningHistory));
-    setNumberRound(buildNumberForScope(currentTopicScope, reset.difficulty, seed + 53, reset.learningHistory));
-    setOddRound(buildOddForScope(currentTopicScope, reset.difficulty, seed + 59, reset.learningHistory));
-    setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, reset.difficulty, seed + 67, reset.unlockedCards, reset.learningHistory));
+    scheduleConfiguredRoundRegeneration({
+      scope: currentTopicScope,
+      nextMode: mode,
+      interests: activeInterests,
+      difficulty: reset.difficulty,
+      seed,
+      seenIds: reset.seenIds,
+      requestedModes: mixModes,
+      unlockedTitles: reset.unlockedCards,
+      history: reset.learningHistory,
+    });
     resetRunState();
     setCelebration("Progress reset. Fresh start.");
   };
@@ -2247,7 +2417,19 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           onSoundToggle={soundEffects.toggle}
         />
 
-        {miniChallengeActive ? (
+        {roundsPreparing ? (
+          <section
+            role="status"
+            aria-live="polite"
+            aria-label="Preparing the next round"
+            className="grid min-h-[320px] flex-1 place-items-center rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-6 text-center shadow-[4px_4px_0_#092421] min-[760px]:min-h-[460px]"
+          >
+            <div>
+              <span aria-hidden="true" className="mx-auto block h-8 w-8 rounded-lg border-2 border-[#092421] bg-[#f0c84b] shadow-[2px_2px_0_#092421]" />
+              <p className="mt-3 text-lg font-black text-[#102f36]">Preparing the next round…</p>
+            </div>
+          </section>
+        ) : miniChallengeActive ? (
           <ChallengeMode
             campaign={miniChallengeCampaign}
             milestone={progress.answered}
@@ -4896,11 +5078,16 @@ function MediaImage({ image, imageAlt, topic, compact = false }: { image: string
   }
 
   return (
-    <div className={`field-guide-media flex ${frameSize} w-full items-center justify-center overflow-hidden ${imageSurface}`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+    <div className={`field-guide-media relative flex ${frameSize} w-full items-center justify-center overflow-hidden ${imageSurface}`}>
+      <Image
         src={image}
         alt={imageAlt}
+        fill
+        sizes="(max-width: 759px) 100vw, (max-width: 1280px) 50vw, 640px"
+        loading={compact ? "lazy" : "eager"}
+        decoding="async"
+        draggable={false}
+        data-original-src={image}
         onError={() => setFailedImage(image)}
         style={{ objectFit: imageFit, objectPosition: presentation.position }}
         className={`h-full w-full ${imageFit === "contain" ? "p-2" : ""}`}

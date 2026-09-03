@@ -93,6 +93,18 @@ const cacheFirst = async (request) => {
   return response;
 };
 
+const optimizedImageResponse = async (request) => {
+  try {
+    return await cacheFirst(request);
+  } catch {
+    const optimizedUrl = new URL(request.url);
+    const originalPath = optimizedUrl.searchParams.get("url");
+    const originalUrl = originalPath ? sameOriginUrl(originalPath) : null;
+    if (!originalUrl) return Response.error();
+    return (await caches.match(originalUrl.href, { ignoreVary: true })) ?? Response.error();
+  }
+};
+
 const networkFirst = async (request, cacheName) => {
   try {
     const response = await fetch(request);
@@ -138,8 +150,12 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  if (url.pathname.startsWith("/_next/image")) {
+    event.respondWith(optimizedImageResponse(request));
+    return;
+  }
+
   const cacheable = url.pathname.startsWith("/_next/static/")
-    || url.pathname.startsWith("/_next/image")
     || url.pathname.startsWith("/burrow-assets/")
     || url.pathname.startsWith("/icons/")
     || url.pathname === "/world-map-land.svg"

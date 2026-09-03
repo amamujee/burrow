@@ -79,6 +79,7 @@ const chooseOnlyMode = async (page: Page, target: string) => {
   await expect(modeTray(page)).toBeVisible();
   await expect(modeControl(page)).toHaveText(/Modes/);
   await modeControl(page).click();
+  await expect(page.getByLabel("Preparing the next round")).toBeHidden();
 };
 
 const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
@@ -96,6 +97,7 @@ const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
   }
   await expect(topicsControl(page)).toHaveText(/Topics/);
   await topicsControl(page).click();
+  await expect(page.getByLabel("Preparing the next round")).toBeHidden();
 };
 
 const openChallengeAt = async (page: Page, milestone: number, topicLabel: string) => {
@@ -2996,6 +2998,10 @@ test("play events capture anonymous question quality context", async ({ page }) 
   await page.getByRole("button", { name: /^Choose [AB]:/ }).first().click();
   await expect(page.getByRole("button", { name: /Next|Finish round/ })).toBeVisible();
 
+  await expect.poll(async () => page.evaluate(() => {
+    const events = JSON.parse(window.localStorage.getItem("burrow-play-events-v1") ?? "[]") as Record<string, unknown>[];
+    return events.some((event) => event.action === "answer" && event.challengeMode === "versus");
+  })).toBe(true);
   const events = await page.evaluate(() => JSON.parse(window.localStorage.getItem("burrow-play-events-v1") ?? "[]") as Record<string, unknown>[]);
   const answerEvent = events.find((event) => event.action === "answer" && event.challengeMode === "versus");
   const viewEvent = events.find((event) => event.action === "view" && event.challengeMode === "versus");
@@ -3215,15 +3221,15 @@ test("collection only shows selected topics", async ({ page }) => {
     const frameBox = photo.parentElement?.getBoundingClientRect();
     return {
       alt: photo.getAttribute("alt"),
-      src: photo.getAttribute("src"),
+      originalSrc: photo.getAttribute("data-original-src"),
       fullyContained: frameBox ? imageBox.top >= frameBox.top - 1 && imageBox.bottom <= frameBox.bottom + 1 : false,
     };
   }));
   expect(photoLayout).toEqual([
-    expect.objectContaining({ alt: "Habanada", src: "/burrow-assets/peppers/habanada.jpg", fullyContained: true }),
-    expect.objectContaining({ alt: "Naga Jolokia", src: "/burrow-assets/peppers/naga-jolokia.png", fullyContained: true }),
-    expect.objectContaining({ alt: "7 Pot Douglah", src: "/burrow-assets/peppers/seven-pot-douglah.jpg", fullyContained: true }),
-    expect.objectContaining({ alt: "Chocolate Bhutlah", src: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
+    expect.objectContaining({ alt: "Habanada", originalSrc: "/burrow-assets/peppers/habanada.jpg", fullyContained: true }),
+    expect.objectContaining({ alt: "Naga Jolokia", originalSrc: "/burrow-assets/peppers/naga-jolokia.png", fullyContained: true }),
+    expect.objectContaining({ alt: "7 Pot Douglah", originalSrc: "/burrow-assets/peppers/seven-pot-douglah.jpg", fullyContained: true }),
+    expect.objectContaining({ alt: "Chocolate Bhutlah", originalSrc: "/burrow-assets/peppers/chocolate-bhutlah-plant-closeup.jpg", fullyContained: true }),
   ]);
 
   await expect(collection.getByRole("button", { name: "Show all 262 cards" })).toBeVisible();

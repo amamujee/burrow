@@ -34,7 +34,8 @@ summary {
 }
 
 button,
-select {
+select,
+summary {
   touch-action: manipulation;
 }
 
@@ -78,6 +79,18 @@ button:focus-visible {
 
 .field-guide-media {
   filter: saturate(1.08) contrast(1.03);
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .field-guide-media {
+    filter: none;
+  }
+
+  .burrow-next-dock {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-color: rgba(255, 253, 246, 0.98);
+  }
 }
 
 @media (min-width: 760px) {
