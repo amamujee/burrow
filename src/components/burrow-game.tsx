@@ -41,9 +41,9 @@ import {
   collectionCards,
   canBuildGeoRoundFromCards,
   canBuildGeoRound,
+  isSortOrderCorrect,
   modeOptions,
   orderCollectionCardsForCategory,
-  slotSortCardIds,
   topTrumpOutcome,
   type FactRound,
   type GeoRound,
@@ -718,8 +718,6 @@ const isSortSlotCorrect = (round: SortRound, pickedId: string | undefined, index
   const pickedCard = sortCardById(round, pickedId);
   return Boolean(pickedCard && sortAcceptableCardsAt(round, index).some((card) => card.id === pickedCard.id));
 };
-const isSortAnswerCorrect = (round: SortRound, picked: readonly (string | undefined)[]) =>
-  round.answerIds.every((_, index) => isSortSlotCorrect(round, picked[index], index));
 
 export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const soundEffects = useSoundEffects();
@@ -1740,8 +1738,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
 
   const checkSort = () => {
     if (sortChecked || sortPicked.length !== sortRound.answerIds.length) return;
-    const slottedPicked = slotSortCardIds(sortRound, sortPicked);
-    const correct = isSortAnswerCorrect(sortRound, slottedPicked);
+    const correct = isSortOrderCorrect(sortRound, sortPicked);
     const itemKey = stableRoundKey(sortRound.id);
     const xpGain = correct ? 30 + progress.difficulty * 6 : 8;
     const unlocked = sortRound.cards.filter((card) => sortRound.answerIds.includes(card.id)).map((card) => card.title);
@@ -1762,7 +1759,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       questionKind: "sort",
       prompt: sortRound.prompt,
       title: "Sort round",
-      choice: slottedPicked.filter((id): id is string => Boolean(id)).join(","),
+      choice: sortPicked.join(","),
       answer: sortRound.answerIds.join(","),
       correct,
       roundIndex: mode === "mix" ? questionIndex + 1 : miniRunAnswered + 1,
@@ -3202,7 +3199,6 @@ function SortMode({
     }, [])
     .map((group) => group.titles.join(" / "))
     .join(" -> ");
-  const slottedPicked = slotSortCardIds(round, picked);
   const desktopGridColumns = round.cards.length <= 2
     ? "min-[760px]:grid-cols-2"
     : round.cards.length === 3
@@ -3280,7 +3276,7 @@ function SortMode({
 
         {checked && <div data-sort-graded-order className="mt-3 grid gap-2">
           {round.answerIds.map((id, index) => {
-            const pickedId = slottedPicked[index];
+            const pickedId = picked[index];
             const card = sortCardById(round, pickedId);
             const acceptableCards = sortAcceptableCardsAt(round, index);
             const correctCard = acceptableCards[0] ?? sortCardById(round, id);

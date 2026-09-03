@@ -82,18 +82,21 @@ export type SortRound = {
   statLabel: string;
 };
 
-export const slotSortCardIds = (round: SortRound, pickedIds: readonly string[]) => {
-  const remaining = [...pickedIds];
-  return round.answerIds.map((answerId) => {
-    const answerCard = round.cards.find((card) => card.id === answerId);
-    if (!answerCard) return undefined;
+export const isSortOrderCorrect = (round: SortRound, pickedIds: readonly string[]) => {
+  if (pickedIds.length !== round.answerIds.length || new Set(pickedIds).size !== pickedIds.length) return false;
 
-    const matchIndex = remaining.findIndex((pickedId) => {
-      const pickedCard = round.cards.find((card) => card.id === pickedId);
-      return pickedCard && (pickedCard.statValue === answerCard.statValue || pickedCard.statDisplay === answerCard.statDisplay);
-    });
-    if (matchIndex < 0) return undefined;
-    return remaining.splice(matchIndex, 1)[0];
+  const cardsById = new Map(round.cards.map((card) => [card.id, card]));
+  const answerIdSet = new Set(round.answerIds);
+  if (pickedIds.some((id) => !answerIdSet.has(id))) return false;
+
+  return round.answerIds.every((answerId, index) => {
+    const answerCard = cardsById.get(answerId);
+    const pickedCard = cardsById.get(pickedIds[index]);
+    return Boolean(
+      answerCard
+      && pickedCard
+      && (pickedCard.statValue === answerCard.statValue || pickedCard.statDisplay === answerCard.statDisplay)
+    );
   });
 };
 

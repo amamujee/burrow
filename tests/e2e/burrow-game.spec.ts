@@ -32,9 +32,9 @@ import {
   geoChoiceSeparationForDifficulty,
   geoPointDistanceKm,
   geoPointMapDistance,
+  isSortOrderCorrect,
   orderCollectionCardsByScoville,
   orderCollectionCardsForCategory,
-  slotSortCardIds,
   topTrumpOutcome,
   type GenericKnowledgeCard,
 } from "../../src/lib/game-modes";
@@ -1697,7 +1697,7 @@ test("Pepper Y, Armageddon, and The Noah join with Noah's open-ended estimate ma
   }
 });
 
-test("Pepper Y snaps directly into the hottest sort slot", () => {
+test("sort grading respects the player's chosen order", () => {
   let round: ReturnType<typeof buildSortRound> | undefined;
   for (let seed = 0; seed < 500; seed += 1) {
     const candidate = buildSortRound("peppers", 3, seed);
@@ -1709,10 +1709,9 @@ test("Pepper Y snaps directly into the hottest sort slot", () => {
 
   expect(round).toBeDefined();
   expect(round?.answerIds.at(-1)).toBe("pepper-y");
-  expect(slotSortCardIds(round!, ["pepper-y"])).toEqual([
-    ...Array(round!.answerIds.length - 1).fill(undefined),
-    "pepper-y",
-  ]);
+  expect(isSortOrderCorrect(round!, round!.answerIds)).toBe(true);
+  expect(isSortOrderCorrect(round!, ["pepper-y", ...round!.answerIds.slice(0, -1)])).toBe(false);
+  expect(isSortOrderCorrect(round!, round!.answerIds.slice(0, -1))).toBe(false);
 });
 
 test("Orange Butch T and Goat Trail join normal pepper play with Goat Trail's cayenne-based estimate marked unofficial", () => {
@@ -3297,7 +3296,7 @@ test("collection category picker shows one category album at a time", { tag: "@m
   await expect(page.getByLabel("Sky Scrapers card collection").getByLabel("Filter cards by rarity")).toHaveCount(0);
 });
 
-test("sort cards snap into their ranked slots instead of the next empty slot", { tag: "@mobile" }, async ({ page }) => {
+test("sort cards are graded in the order they were tapped", { tag: "@mobile" }, async ({ page }) => {
   await chooseOnlyMode(page, "Sort");
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
 
@@ -3309,7 +3308,8 @@ test("sort cards snap into their ranked slots instead of the next empty slot", {
   }));
   expect(cards.length).toBeGreaterThanOrEqual(3);
 
-  const hottest = [...cards].sort((a, b) => b.score - a.score)[0];
+  const descendingCards = [...cards].sort((a, b) => b.score - a.score);
+  const hottest = descendingCards[0];
   await cardButtons.nth(hottest.index).click();
   await expect(page.getByLabel(`Selected position 1: ${hottest.title}`)).toBeVisible();
   await expect(cardButtons.nth(hottest.index)).toHaveAttribute("aria-pressed", "true");
@@ -3321,12 +3321,13 @@ test("sort cards snap into their ranked slots instead of the next empty slot", {
   await cardButtons.nth(hottest.index).click();
   await expect(page.getByLabel(`Selected position 1: ${hottest.title}`)).toBeVisible();
 
-  for (const card of cards.filter((item) => item.index !== hottest.index)) {
+  for (const card of descendingCards.slice(1)) {
     await cardButtons.nth(card.index).click();
   }
   await page.getByRole("button", { name: "Check order" }).click();
-  await expect(page.getByLabel(`Sort slot ${cards.length}: ${hottest.title}`)).toBeVisible();
-  await expect(page.getByText("Perfect order!")).toBeVisible();
+  await expect(page.getByLabel(`Sort slot 1: ${hottest.title}`)).toBeVisible();
+  await expect(page.getByLabel("Answer feedback").getByText("Good try.", { exact: true })).toBeVisible();
+  await expect(page.getByText("Perfect order!", { exact: true })).toHaveCount(0);
 });
 
 test("a correct head to head answer unlocks both peppers, while skips do not", async ({ page }) => {
