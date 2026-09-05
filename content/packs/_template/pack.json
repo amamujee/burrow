@@ -32,6 +32,18 @@
       "imageCredit": "Photographer or source name",
       "imageSourceUrl": "https://example.com/source-image",
       "fact": "Write one short, concrete fact that a kid can read and a parent can verify.",
+      "metadata": {
+        "difficultyBand": "medium",
+        "taxonomyGroup": "example category",
+        "accuracyNote": "Explain the measurement basis, date, variant and any uncertainty. Label editorial game ratings explicitly.",
+        "sources": [
+          {
+            "label": "Factual reference for this subject",
+            "url": "https://example.com/factual-reference",
+            "note": "Identify which facts and measurements this reference supports; keep image rights in imageCredit and imageSourceUrl."
+          }
+        ]
+      },
       "stats": [
         {
           "id": "size",

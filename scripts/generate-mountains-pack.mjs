@@ -13,10 +13,10 @@ const cards = [
   ["kangchenjunga", "Kangchenjunga", "Himalaya", "Nepal/India", 8586, 3922, 1955, 9, "Kangchenjunga is the world's third-highest mountain and rises on the border of Nepal and India.", "https://en.wikipedia.org/wiki/Kangchenjunga", ["top-15", "eight-thousander", "himalaya", "border-peak"]],
   ["lhotse", "Lhotse", "Himalaya", "Nepal/China", 8516, 610, 1956, 8, "Lhotse sits next to Everest and has one of the most dramatic south faces in the Himalaya.", "https://en.wikipedia.org/wiki/Lhotse", ["top-15", "eight-thousander", "himalaya", "everest-region"]],
   ["makalu", "Makalu", "Himalaya", "Nepal/China", 8485, 2378, 1955, 8, "Makalu is a sharply pyramid-shaped Himalayan giant east of Everest.", "https://en.wikipedia.org/wiki/Makalu", ["top-15", "eight-thousander", "himalaya", "pyramid-peak"]],
-  ["cho-oyu", "Cho Oyu", "Himalaya", "China/Nepal", 8188, 2340, 1954, 8, "Cho Oyu is often called one of the more approachable eight-thousanders, though it is still extremely high.", "https://en.wikipedia.org/wiki/Cho_Oyu", ["top-15", "eight-thousander", "himalaya", "everest-region"]],
+  ["cho-oyu", "Cho Oyu", "Himalaya", "China/Nepal", 8188, 2340, 1954, 8, "Cho Oyu stands on the Nepal–China border and is one of the fourteen mountains higher than 8,000 metres.", "https://en.wikipedia.org/wiki/Cho_Oyu", ["top-15", "eight-thousander", "himalaya", "everest-region"]],
   ["dhaulagiri-i", "Dhaulagiri I", "Himalaya", "Nepal", 8167, 3357, 1960, 8, "Dhaulagiri I towers over central Nepal and was once thought to be the world's highest mountain.", "https://en.wikipedia.org/wiki/Dhaulagiri", ["top-15", "eight-thousander", "himalaya", "nepal"]],
   ["manaslu", "Manaslu", "Himalaya", "Nepal", 8163, 3092, 1956, 8, "Manaslu means Mountain of the Spirit and is the eighth-highest mountain in the world.", "https://en.wikipedia.org/wiki/Manaslu", ["top-15", "eight-thousander", "himalaya", "nepal"]],
-  ["nanga-parbat", "Nanga Parbat", "Himalaya", "Pakistan", 8126, 4608, 1953, 9, "Nanga Parbat has enormous relief from nearby valleys and is sometimes called a contender for tallest land rise.", "https://en.wikipedia.org/wiki/Nanga_Parbat", ["top-15", "eight-thousander", "himalaya", "famous-climb"]],
+  ["nanga-parbat", "Nanga Parbat", "Himalaya", "Pakistan", 8126, 4608, 1953, 9, "Nanga Parbat rises above the Indus River region at the western end of the Himalaya.", "https://en.wikipedia.org/wiki/Nanga_Parbat", ["top-15", "eight-thousander", "himalaya", "famous-climb"]],
   ["annapurna-i", "Annapurna I", "Himalaya", "Nepal", 8091, 2984, 1950, 9, "Annapurna I was the first eight-thousander climbed, reached by a French expedition in 1950.", "https://en.wikipedia.org/wiki/Annapurna", ["top-15", "eight-thousander", "himalaya", "historic-ascent"]],
   ["gasherbrum-i", "Gasherbrum I", "Karakoram", "Pakistan/China", 8080, 2155, 1958, 7, "Gasherbrum I is also called Hidden Peak because it sits deep inside the Karakoram.", "https://en.wikipedia.org/wiki/Gasherbrum_I", ["top-15", "eight-thousander", "karakoram", "hidden-peak"]],
   ["broad-peak", "Broad Peak", "Karakoram", "Pakistan/China", 8051, 1701, 1957, 7, "Broad Peak gets its name from its wide summit ridge near K2.", "https://en.wikipedia.org/wiki/Broad_Peak", ["top-15", "eight-thousander", "karakoram", "k2-region"]],
@@ -43,12 +43,12 @@ const cards = [
   ["mount-kilimanjaro", "Mount Kilimanjaro", "Eastern Rift", "Tanzania", 5895, 5885, 1889, 10, "Mount Kilimanjaro is Africa's highest mountain and a huge freestanding volcano.", "https://en.wikipedia.org/wiki/Mount_Kilimanjaro", ["seven-summits", "volcano", "africa", "freestanding"]],
   ["mount-elbrus", "Mount Elbrus", "Caucasus", "Russia", 5642, 4741, 1874, 9, "Mount Elbrus is a dormant volcano and is often counted as Europe's highest mountain.", "https://en.wikipedia.org/wiki/Mount_Elbrus", ["seven-summits", "volcano", "europe", "caucasus"]],
   ["mount-vinson", "Mount Vinson", "Sentinel Range", "Antarctica", 4892, 4892, 1966, 8, "Mount Vinson is Antarctica's highest mountain and one of the Seven Summits.", "https://en.wikipedia.org/wiki/Vinson_Massif", ["seven-summits", "antarctica", "polar", "remote"]],
-  ["puncak-jaya", "Puncak Jaya", "Sudirman Range", "Indonesia", 4884, 4884, 1962, 8, "Puncak Jaya is the highest island peak in the world and one version of Oceania's Seven Summit.", "https://en.wikipedia.org/wiki/Puncak_Jaya", ["seven-summits", "oceania", "island-peak", "limestone"]],
+  ["puncak-jaya", "Puncak Jaya", "Sudirman Range", "Indonesia", 4884, 4884, 1962, 8, "Puncak Jaya is the highest island peak in the world and one of the continental high points included in the Seven Summits.", "https://en.wikipedia.org/wiki/Puncak_Jaya", ["seven-summits", "oceania", "island-peak", "limestone"]],
   ["mont-blanc", "Mont Blanc", "Alps", "France/Italy", 4807, 4696, 1786, 10, "Mont Blanc is the highest mountain in the Alps and a classic symbol of European mountaineering.", "https://en.wikipedia.org/wiki/Mont_Blanc", ["alps", "europe", "famous-climb", "snow-peak"]],
   ["matterhorn", "Matterhorn", "Alps", "Switzerland/Italy", 4478, 1042, 1865, 10, "The Matterhorn's sharp pyramid shape makes it one of the most recognizable mountains in the world.", "https://en.wikipedia.org/wiki/Matterhorn", ["alps", "famous-shape", "famous-climb", "europe"]],
   ["mount-whitney", "Mount Whitney", "Sierra Nevada", "United States", 4421, 3071, 1873, 9, "Mount Whitney is the highest summit in the contiguous United States.", "https://en.wikipedia.org/wiki/Mount_Whitney", ["north-america", "united-states", "record-holder", "sierra-nevada"]],
   ["mauna-kea", "Mauna Kea", "Hawaii", "United States", 4207, 4207, 1823, 10, "Mauna Kea is modest above sea level, but from the Pacific seafloor it rises higher than Everest.", "https://en.wikipedia.org/wiki/Mauna_Kea", ["volcano", "island-peak", "special-measure", "hawaii"]],
-  ["mount-fuji", "Mount Fuji", "Japanese Alps", "Japan", 3776, 3776, 663, 10, "Mount Fuji is Japan's highest mountain and one of the world's most famous volcano silhouettes.", "https://en.wikipedia.org/wiki/Mount_Fuji", ["volcano", "asia", "famous-shape", "sacred-mountain"]],
+  ["mount-fuji", "Mount Fuji", "Japanese volcanic arc", "Japan", 3776, 3776, 663, 10, "Mount Fuji is Japan's highest mountain and one of the world's most famous volcano silhouettes.", "https://en.wikipedia.org/wiki/Mount_Fuji", ["volcano", "asia", "famous-shape", "sacred-mountain"]],
   ["aoraki-mount-cook", "Aoraki / Mount Cook", "Southern Alps", "New Zealand", 3724, 3724, 1894, 8, "Aoraki / Mount Cook is New Zealand's highest mountain and a centerpiece of the Southern Alps.", "https://en.wikipedia.org/wiki/Aoraki_/_Mount_Cook", ["oceania", "southern-alps", "record-holder", "famous-climb"]],
   ["mount-rainier", "Mount Rainier", "Cascade Range", "United States", 4392, 4027, 1870, 9, "Mount Rainier is a heavily glaciated volcano that dominates the skyline near Seattle and Tacoma.", "https://en.wikipedia.org/wiki/Mount_Rainier", ["volcano", "north-america", "cascade-range", "famous-view"]],
   ["chimborazo", "Chimborazo", "Andes", "Ecuador", 6263, 4118, 1880, 8, "Chimborazo's summit is often described as the farthest point from Earth's center because of the equatorial bulge.", "https://en.wikipedia.org/wiki/Chimborazo", ["andes", "volcano", "special-measure", "ecuador"]],
@@ -90,9 +90,14 @@ const worldLocationFor = (label) => {
 };
 
 const existingPackFile = path.join(packDir, "pack.json");
-const existingCardsById = fs.existsSync(existingPackFile)
-  ? new Map(JSON.parse(fs.readFileSync(existingPackFile, "utf8")).cards.map((card) => [card.id, card]))
-  : new Map();
+const existingPack = fs.existsSync(existingPackFile) ? JSON.parse(fs.readFileSync(existingPackFile, "utf8")) : {};
+const existingCardsById = new Map((existingPack.cards ?? []).map((card) => [card.id, card]));
+const ascentNotes = {
+  "mount-fuji": "The often-repeated 663 ascent is a traditional attribution, not a securely documented first ascent; no comparison year is used.",
+  "mauna-kea": "The 1823 European visit was not necessarily the first human ascent. Native Hawaiian use of the high mountain predates it; no first-ascent comparison year is used.",
+  "mount-kosciuszko": "The 1840 Strzelecki ascent is a European record, not evidence that Aboriginal people had never reached the mountain; no first-ascent comparison year is used.",
+  "ngadi-chuli": "1979 is the first confirmed ascent; a possible 1970 ascent remains unconfirmed.",
+};
 
 const cardObject = ([id, name, range, location, elevationM, prominenceM, firstAscent, recognition, fact, sourceUrl, categories]) => {
   const existingCard = existingCardsById.get(id);
@@ -105,11 +110,11 @@ const cardObject = ([id, name, range, location, elevationM, prominenceM, firstAs
     imageSourceUrl: existingCard?.imageSourceUrl ?? sourceUrl,
     fact,
     stats: [
-      { id: "elevation-ft", label: "Elevation", value: metersToFeet(elevationM), unit: "ft", direction: "higher" },
-      { id: "elevation-m", label: "Elevation", value: elevationM, unit: "m", direction: "higher" },
-      { id: "prominence-m", label: "Prominence", value: prominenceM, unit: "m", direction: "higher" },
-      { id: "first-ascent-year", label: "First ascent", value: firstAscent, unit: "year", direction: "lower" },
-      { id: "fame", label: "Fame", value: recognition, unit: "/10", direction: "higher" },
+      { id: "elevation-ft", label: "Elevation", value: metersToFeet(elevationM), unit: "ft", direction: "higher", note: "Elevation above sea level, converted from the rounded metre reference. Snow-covered summits and surveys can vary." },
+      { id: "elevation-m", label: "Elevation", value: elevationM, unit: "m", direction: "higher", note: "The same sea-level elevation in metres, not a second independent measurement." },
+      { id: "prominence-m", label: "Prominence", value: prominenceM, unit: "m", direction: "higher", note: "Rounded topographic prominence: the summit's rise above its key saddle connecting it to higher ground. This is not base-to-summit height." },
+      ...(["mount-fuji", "mauna-kea", "mount-kosciuszko"].includes(id) ? [] : [{ id: "first-ascent-year", label: "Recorded ascent", value: firstAscent, unit: "year", direction: "lower", note: ascentNotes[id] ?? "First documented summit ascent in the cited reference; older unrecorded visits may be unknown." }]),
+      { id: "fame", label: "Fame rating", value: recognition, unit: "/10", direction: "higher", note: "Burrow editorial recognition rating, not an official measurement or a climbing difficulty grade." },
     ],
     categories: [range, location, ...categories],
     tags: Array.from(new Set([
@@ -118,10 +123,18 @@ const cardObject = ([id, name, range, location, elevationM, prominenceM, firstAs
       categories[0].replace(/[^a-z0-9]+/g, "-"),
     ])),
     metadata: {
+      ...existingCard?.metadata,
       difficultyBand: difficultyFor(recognition, elevationM),
       recognition: metadataRecognitionFor(recognition),
       taxonomyGroup: range,
       location: worldLocationFor(location),
+      accuracyNote: ["Elevation and prominence are rounded reference estimates. Fame is an editorial rating.", ascentNotes[id], id === "mont-blanc" ? "The snow-covered summit changes: 4,807 m is a rounded reference, not a permanent exact height. The local authority reported 4,805.59 m for its 2023 survey." : undefined].filter(Boolean).join(" "),
+      sources: [
+        { label: `${name} reference`, url: sourceUrl, note: "Secondary reference for elevation, prominence, location and ascent history. Values retain survey and historical uncertainty." },
+        ...(id === "mont-blanc" ? [{ label: "Chamonix valley 2023 summit survey", url: "https://www.cc-valleedechamonixmontblanc.fr/culture/10-rubriqueactu/actualites/1227-le-sommet-de-notre-territoire-le-mont-blanc-mesure-a-4805-59-metres-d-altitude.html", note: "Primary report demonstrates the snow summit's variable elevation; 2023 measurement: 4,805.59 m." }] : []),
+        ...(id === "mauna-kea" ? [{ label: "USGS Mauna Kea geology", url: "https://www.usgs.gov/volcanoes/mauna-kea/science/geology-and-history-mauna-kea", note: "Volcano identity and geological setting." }] : []),
+        ...(id === "mount-kosciuszko" ? [{ label: "NSW national park management plan", url: "https://www.environment.nsw.gov.au/sites/default/files/kosciuszko-national-park-plan-of-management-210174.pdf", note: "Aboriginal use and European exploration history." }] : []),
+      ],
     },
     readingPrompts: [`What makes ${name} special?`, `How does ${name}'s elevation compare with another mountain?`],
   };
@@ -166,11 +179,13 @@ fs.mkdirSync(packDir, { recursive: true });
 fs.mkdirSync(assetDir, { recursive: true });
 
 const pack = {
+  ...existingPack,
   $schema: "../pack.schema.json",
   id: packId,
   title: "Tallest Mountains",
   summary: "The world's highest Himalaya and Karakoram peaks plus famous global mountains become elevation, prominence, history, and fame challenges.",
   status: "playable",
+  dataNote: "Elevations are above sea level, not base-to-summit height. Prominence measures rise above the connecting saddle to higher terrain. Both are rounded reference estimates. Recorded ascents can omit earlier unrecorded visits; uncertain or legendary first ascents are not assigned comparison years. Fame is a Burrow editorial rating.",
   audience: {
     minAge: 6,
     maxAge: 11,
@@ -181,7 +196,7 @@ const pack = {
     {
       label: "Wikipedia list of highest mountains on Earth",
       url: "https://en.wikipedia.org/wiki/List_of_highest_mountains_on_Earth",
-      note: "Primary source for top-ranked Himalaya and Karakoram elevations, prominence, and ascent years.",
+      note: "Secondary reference compilation for top-ranked Himalaya and Karakoram elevations, prominence, and ascent years; individual card references are retained in metadata.",
     },
     {
       label: "Wikipedia Seven Summits",
@@ -197,8 +212,8 @@ const pack = {
   cards: cards.map(cardObject),
 };
 
-for (const card of cards) {
-  fs.writeFileSync(path.join(assetDir, `${card[0]}.svg`), svgFor(card));
+if (process.argv.includes("--write-illustrations")) {
+  for (const card of cards) fs.writeFileSync(path.join(assetDir, `${card[0]}.svg`), svgFor(card));
 }
 
 fs.writeFileSync(path.join(packDir, "pack.json"), `${JSON.stringify(pack, null, 2)}\n`);

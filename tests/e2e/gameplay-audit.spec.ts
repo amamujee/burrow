@@ -127,7 +127,7 @@ test.describe("gameplay audit regressions", { tag: ["@browser", "@mobile"] }, ()
     const cards = page.getByRole("button", { name: /^Choose [AB]:/ });
     await expect(cards).toHaveCount(2);
     const counts = (await cards.allTextContents()).map((text) => {
-      const match = text.match(/Pepper varieties\s*(\d+)/);
+      const match = text.match(/Listed pepper types\s*(\d+)/);
       expect(match).not.toBeNull();
       return Number(match![1]);
     });

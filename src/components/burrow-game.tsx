@@ -648,7 +648,9 @@ const buildPackHeadToHeadSession = (
         const secondStats = new Map(second.stats.map((stat) => [stat.id, stat]));
         const shared = first.stats.filter((stat) => {
           const counterpart = secondStats.get(stat.id);
-          return counterpart && counterpart.value !== stat.value;
+          return counterpart && counterpart.value !== stat.value
+            && counterpart.unit === stat.unit
+            && (counterpart.direction ?? "higher") === (stat.direction ?? "higher");
         });
         const requested = preferredStatIds.flatMap((statId) => shared.filter((stat) => stat.id === statId));
         const selected = requested.length ? requested : deck.id === "hot-sauces" ? [] : shared.slice(0, 2);
@@ -699,7 +701,7 @@ const buildPackHeadToHeadSession = (
     };
     const winnerLabel = winner.id === first.id ? "A" : "B";
     const prompt = candidate.statId === "pepper-varieties"
-      ? "Which one uses more pepper varieties?"
+      ? "Which one lists more pepper types?"
       : `Which one has the ${direction === "lower" ? "lower" : "higher"} ${firstStat.label.toLowerCase()}?`;
     return {
       id: `${sessionSeed + index}-pack-comparison-${deck.id}-${candidate.statId}-${first.id}-${second.id}`,
@@ -713,7 +715,7 @@ const buildPackHeadToHeadSession = (
       choices: [`A: ${first.title}`, `B: ${second.title}`],
       answer: `${winnerLabel}: ${winner.title}`,
       explanation: candidate.statId === "pepper-varieties"
-        ? `${winner.title} uses ${winningStat.display}, compared with ${loser.title} at ${losingStat.display}. More named pepper varieties wins this Head to Head.`
+        ? `${winner.title} lists ${winningStat.display}, compared with ${loser.title} at ${losingStat.display}. The card with more listed pepper types wins this Head to Head.`
         : `${winner.title} has ${winningStat.display}, compared with ${loser.title} at ${losingStat.display}.`,
       collectionTitles: [first.title, second.title],
       secondChanceClue: `Compare the ${firstStat.label.toLowerCase()} printed on both cards.`,

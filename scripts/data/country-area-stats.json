@@ -1,0 +1,821 @@
+{
+  "source": {
+    "label": "UN Demographic Yearbook 2024, Table 3",
+    "url": "https://unstats.un.org/unsd/demographic-social/products/dyb/documents/DYB2024/table03.pdf",
+    "note": "Extracted 2026-09-05. Country-reported surface area follows the table’s territory/water conventions, including explicit exceptions. Areas rounded to two decimal places."
+  },
+  "countries": {
+    "AF": {
+      "value": 652864,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "AL": {
+      "value": 28748,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "DZ": {
+      "value": 2381741,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "AD": {
+      "value": 468,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "AO": {
+      "value": 1246700,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "AG": {
+      "value": 442,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "AR": {
+      "value": 2796427,
+      "note": "Includes continental areas and islands, excluding the Antarctic claim."
+    },
+    "AM": {
+      "value": 29743,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "AU": {
+      "value": 7692024,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "AT": {
+      "value": 83878,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "AZ": {
+      "value": 86600,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BS": {
+      "value": 13940,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BH": {
+      "value": 778.4,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BD": {
+      "value": 148460,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BB": {
+      "value": 431,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BY": {
+      "value": 207600,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BE": {
+      "value": 30528,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BZ": {
+      "value": 22966,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BJ": {
+      "value": 114763,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BT": {
+      "value": 38394,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BO": {
+      "value": 1098581,
+      "note": "Includes inland water and snow-covered areas."
+    },
+    "BA": {
+      "value": 51209,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BW": {
+      "value": 581730,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BR": {
+      "value": 8510417,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BN": {
+      "value": 5765,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BG": {
+      "value": 110372,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BF": {
+      "value": 272969,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "BI": {
+      "value": 27834,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CV": {
+      "value": 4033,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "KH": {
+      "value": 181035,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CM": {
+      "value": 475650,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CA": {
+      "value": 9984670,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CF": {
+      "value": 622984,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "TD": {
+      "value": 1284000,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CL": {
+      "value": 756102,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CN": {
+      "value": 9600000,
+      "note": "The UN table lists Hong Kong and Macao separately."
+    },
+    "CO": {
+      "value": 1141748,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "KM": {
+      "value": 2235,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CK": {
+      "value": 236,
+      "note": "Excludes Niue, which has its own card."
+    },
+    "CR": {
+      "value": 51170,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CI": {
+      "value": 322462,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "HR": {
+      "value": 56594,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CU": {
+      "value": 109884,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CY": {
+      "value": 9251,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CZ": {
+      "value": 78871.01,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CD": {
+      "value": 2345410,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "DK": {
+      "value": 42947,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "DJ": {
+      "value": 23200,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "DM": {
+      "value": 750,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "DO": {
+      "value": 48671,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "EC": {
+      "value": 257215.3,
+      "note": "Uses the area reported in UN Table 3; historical boundary and population scope differ between datasets."
+    },
+    "EG": {
+      "value": 1002000,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SV": {
+      "value": 21041,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "GQ": {
+      "value": 28051,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "ER": {
+      "value": 121144,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "EE": {
+      "value": 45399,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SZ": {
+      "value": 17363,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "ET": {
+      "value": 1104300,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "FM": {
+      "value": 702,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "FJ": {
+      "value": 18272,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "FI": {
+      "value": 336884,
+      "note": "Excludes the Åland Islands, which the UN table lists separately."
+    },
+    "FR": {
+      "value": 551500,
+      "note": "Metropolitan France; overseas areas are listed separately by the UN."
+    },
+    "GA": {
+      "value": 267668,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "GM": {
+      "value": 11295,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "GE": {
+      "value": 69700,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "DE": {
+      "value": 357581,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "GH": {
+      "value": 238537,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "GR": {
+      "value": 131957,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "GD": {
+      "value": 345,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "GT": {
+      "value": 108889,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "GN": {
+      "value": 245836,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "GW": {
+      "value": 36125,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "GY": {
+      "value": 214969,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "HT": {
+      "value": 27750,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "HN": {
+      "value": 112492,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "HU": {
+      "value": 93025,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "IS": {
+      "value": 103000,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "IN": {
+      "value": 3287263,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "ID": {
+      "value": 1892410.09,
+      "note": "Area follows the 9 November 2022 Ministry of Home Affairs decree."
+    },
+    "IR": {
+      "value": 1630848,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "IQ": {
+      "value": 435052,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "IE": {
+      "value": 69825,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "IL": {
+      "value": 22072,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "IT": {
+      "value": 302068,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "JM": {
+      "value": 10990.5,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "JP": {
+      "value": 377930,
+      "note": "The table marks this area as an October 2007 figure."
+    },
+    "JO": {
+      "value": 89318,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "KZ": {
+      "value": 2724910,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "KE": {
+      "value": 591958,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "KI": {
+      "value": 726.34,
+      "note": "Land area only; excludes 84 square kilometers of uninhabited islands."
+    },
+    "XK": {
+      "value": 10908,
+      "source": {
+        "label": "Kosovo Agency of Statistics census metadata",
+        "url": "https://askapi.rks-gov.net/Custom/df156963-00dc-4211-8034-c177c21683f2.pdf"
+      },
+      "note": "Territory area from the national census geography description; Kosovo is not separately listed in UN Table 3."
+    },
+    "KW": {
+      "value": 17818,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "KG": {
+      "value": 199.95,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "LA": {
+      "value": 236800,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "LV": {
+      "value": 64594,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "LB": {
+      "value": 10452,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "LS": {
+      "value": 30355,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "LR": {
+      "value": 111369,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "LY": {
+      "value": 1676198,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "LI": {
+      "value": 160,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "LT": {
+      "value": 65286,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "LU": {
+      "value": 2586,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MG": {
+      "value": 587041,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MW": {
+      "value": 117726,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MY": {
+      "value": 330621,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MV": {
+      "value": 300,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "ML": {
+      "value": 1240192,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MT": {
+      "value": 315,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MH": {
+      "value": 181,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MR": {
+      "value": 1030700,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MU": {
+      "value": 1979,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MX": {
+      "value": 1964375,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MD": {
+      "value": 33847,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MC": {
+      "value": 2,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MN": {
+      "value": 1564116,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "ME": {
+      "value": 13888,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MA": {
+      "value": 446550,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MZ": {
+      "value": 799380,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MM": {
+      "value": 676577,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "NA": {
+      "value": 825228.73,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "NR": {
+      "value": 21,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "NP": {
+      "value": 147181,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "NL": {
+      "value": 41543,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "NZ": {
+      "value": 268164.31,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "NI": {
+      "value": 130373.5,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "NE": {
+      "value": 1267000,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "NG": {
+      "value": 923768,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "NU": {
+      "value": 260,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "KP": {
+      "value": 120538,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "MK": {
+      "value": 25713,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "NO": {
+      "value": 323772,
+      "note": "Mainland Norway; the UN table lists Svalbard and Jan Mayen separately."
+    },
+    "OM": {
+      "value": 309980,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "PK": {
+      "value": 796096,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "PW": {
+      "value": 459,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "PS": {
+      "value": 6020,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "PA": {
+      "value": 75320,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "PG": {
+      "value": 462840,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "PY": {
+      "value": 406752,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "PE": {
+      "value": 1285215.6,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "PH": {
+      "value": 300000,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "PL": {
+      "value": 312679,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "PT": {
+      "value": 92225.2,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "QA": {
+      "value": 11636.81,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CG": {
+      "value": 342000,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "RO": {
+      "value": 238398,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "RU": {
+      "value": 17098246,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "RW": {
+      "value": 26338,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "KN": {
+      "value": 261,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "LC": {
+      "value": 616,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "VC": {
+      "value": 389,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "WS": {
+      "value": 2841.76,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SM": {
+      "value": 61,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "ST": {
+      "value": 964,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SA": {
+      "value": 2206714,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SN": {
+      "value": 196712,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "RS": {
+      "value": 88444,
+      "note": "The UN table reports 88,444 square kilometers for Serbia, including Kosovo. Kosovo also has a separate card; these areas must not be added together."
+    },
+    "SC": {
+      "value": 457,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SL": {
+      "value": 72300,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SG": {
+      "value": 735.6,
+      "note": "Land area of the mainland and islands; reclamation changes this figure."
+    },
+    "SK": {
+      "value": 49035,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SI": {
+      "value": 20273,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SB": {
+      "value": 28896,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SO": {
+      "value": 637657,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "ZA": {
+      "value": 1221037,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "KR": {
+      "value": 100459.87,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SS": {
+      "value": 658841,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "ES": {
+      "value": 506009,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "LK": {
+      "value": 65610,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SD": {
+      "value": 1886068,
+      "source": {
+        "label": "mledoze countries geography snapshot",
+        "url": "https://github.com/mledoze/countries/blob/master/countries.json"
+      },
+      "note": "Retained mledoze geography snapshot: UN Table 3 reports no Sudan area value. Boundary and water conventions may differ."
+    },
+    "SR": {
+      "value": 163820,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SE": {
+      "value": 438574,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "CH": {
+      "value": 41291,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "SY": {
+      "value": 185180,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "TW": {
+      "value": 36193,
+      "source": {
+        "label": "mledoze countries geography snapshot",
+        "url": "https://github.com/mledoze/countries/blob/master/countries.json"
+      },
+      "note": "Retained mledoze geography snapshot: Taiwan has no separate row in UN Table 3. Boundary and water conventions may differ."
+    },
+    "TJ": {
+      "value": 141400,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "TZ": {
+      "value": 947303,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "TH": {
+      "value": 513140,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "TL": {
+      "value": 14954.43,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "TG": {
+      "value": 56785,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "TO": {
+      "value": 747,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "TT": {
+      "value": 5127,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "TN": {
+      "value": 163610,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "TR": {
+      "value": 783562,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "TM": {
+      "value": 488100,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "TV": {
+      "value": 26,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "UG": {
+      "value": 241550,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "UA": {
+      "value": 603500,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "AE": {
+      "value": 71024,
+      "note": "The UN table explicitly reports land area only."
+    },
+    "GB": {
+      "value": 244376,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "US": {
+      "value": 9833516.8,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "UY": {
+      "value": 173626,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "UZ": {
+      "value": 448969,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "VU": {
+      "value": 12189,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "VA": {
+      "value": 0.44,
+      "note": "The UN table reports 0.44 square kilometers."
+    },
+    "VE": {
+      "value": 929690,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "VN": {
+      "value": 331345,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "EH": {
+      "value": 266000,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "YE": {
+      "value": 527968,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "ZM": {
+      "value": 752612,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    },
+    "ZW": {
+      "value": 390757,
+      "note": "UN Demographic Yearbook 2024 surface-area series; includes inland water unless the source states otherwise."
+    }
+  }
+}

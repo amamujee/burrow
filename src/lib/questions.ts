@@ -1,23 +1,23 @@
 import {
-  buildings,
+  buildings as buildingRecords,
   countries,
   heatBands,
   heatBandRangeLabel,
   heatProfiles,
-  jets,
+  jets as jetRecords,
   peppers,
-  sharks,
+  sharks as sharkRecords,
   spaceCards,
   topicIds,
-  type Building,
+  type Building as BuildingRecord,
   type Country,
   type Difficulty,
   type HeatBand,
-  type Jet,
+  type Jet as JetRecord,
   type JetCategory,
   type KnowledgeTopic,
   type Pepper,
-  type Shark,
+  type Shark as SharkRecord,
   type SpaceCard,
   type TopicId,
 } from "./game-data";
@@ -42,6 +42,19 @@ import {
 } from "./game-modes";
 
 export type TopicScope = TopicId | readonly KnowledgeTopic[];
+
+// Keep unknown performance out of numerical questions while preserving every collection ID.
+type Building = BuildingRecord & { heightFt: number };
+type Shark = SharkRecord & { lengthFt: number };
+const sharks = sharkRecords.filter((item): item is Shark => item.lengthFt !== null && item.id !== "zambezi-shark");
+type Jet = JetRecord & { maxSpeedMph: number; rangeMiles: number };
+const buildings = buildingRecords.filter((item): item is Building => item.heightFt !== null);
+const jets = jetRecords.filter((item): item is Jet => item.maxSpeedMph !== null && item.rangeMiles !== null);
+const sharkComparisonValue = (shark: Shark, stat: "length" | "speed" | "power") => {
+  const value = stat === "length" ? shark.lengthFt : stat === "speed" ? shark.speedMph : shark.power;
+  if (value === null) throw new Error(`Unavailable shark ${stat}: ${shark.id}`);
+  return value;
+};
 
 export type QuestionKind =
   | "pepper-heat"
@@ -586,10 +599,10 @@ const sharkCard = (shark: Shark, label: "A" | "B", stat: "length" | "speed" | "p
   image: shark.image,
   imageAlt: shark.name,
   imageCredit: shark.imageCredit,
-  statLabel: stat === "length" ? "Size" : stat === "speed" ? "Speed" : "Power",
-  statValue: stat === "length" ? feet(shark.lengthFt) : stat === "speed" ? `${formatNumber(shark.speedMph)} mph` : `${shark.power}/5`,
+  statLabel: stat === "length" ? "Size" : stat === "speed" ? "Speed" : "Power (game rating)",
+  statValue: stat === "length" ? feet(shark.lengthFt) : stat === "speed" ? shark.speedMph === null ? "Unknown" : `${formatNumber(shark.speedMph)} mph` : `${shark.power}/5`,
   subStat: `${shark.family} · eats ${shark.diet}`,
-  meterValue: stat === "length" ? shark.lengthFt : stat === "speed" ? shark.speedMph : shark.power,
+  meterValue: sharkComparisonValue(shark, stat),
   meterMax: stat === "length" ? maxSharkLength : stat === "speed" ? maxSharkSpeed : maxSharkPower,
 });
 
@@ -611,7 +624,7 @@ const jetCard = (jet: Jet, label: "A" | "B", stat: "speed" | "range" | "firepowe
   image: jet.image,
   imageAlt: jet.name,
   imageCredit: jet.imageCredit,
-  statLabel: stat === "speed" ? "Speed" : stat === "range" ? "Range" : "Firepower",
+  statLabel: stat === "speed" ? "Speed" : stat === "range" ? "Range" : "Firepower (game rating)",
   statValue: stat === "speed" ? `${formatNumber(jet.maxSpeedMph)} mph` : stat === "range" ? `${formatNumber(jet.rangeMiles)} mi` : `${jet.firepower}/5`,
   subStat: `${jet.country} · ${jetCategoryLabels[jet.category]}`,
   meterValue: stat === "speed" ? jet.maxSpeedMph : stat === "range" ? jet.rangeMiles : jet.firepower,
@@ -678,7 +691,7 @@ const countryComparisonCard = (country: Country, label: "A" | "B", stat: "popula
   image: country.image,
   imageAlt: `Flag of ${country.name}`,
   imageCredit: country.imageCredit,
-  statLabel: stat === "population" ? "Population" : "Land area",
+  statLabel: stat === "population" ? "Population" : "Area",
   statValue: stat === "population" ? `${formatNumber(country.population)} people` : `${formatNumber(country.areaKm2)} km²`,
   subStat: `${countryCapitalLabel(country)} · ${worldContinentLabel(country.continents)}`,
   meterValue: stat === "population" ? country.population : country.areaKm2,
@@ -725,16 +738,16 @@ const countryComparisonQuestion = (seed: number, first: Country, second: Country
     kind: stat === "population" ? "country-population" : "country-area",
     prompt: stat === "population"
       ? `Which country has more people, ${countryNameInProse(first)} or ${countryNameInProse(second)}?`
-      : `Which country has the larger land area, ${countryNameInProse(first)} or ${countryNameInProse(second)}?`,
+      : `Which country has the larger area, ${countryNameInProse(first)} or ${countryNameInProse(second)}?`,
     image: winner.image,
     imageAlt: `Flag of ${winner.name}`,
     imageCredit: winner.imageCredit,
     comparison: cards,
     choices: cards.map((card) => `${card.label}: ${card.title}`),
     answer: comparisonAnswer(cards, winner.name),
-    explanation: `${sentenceStart(countryNameInProse(winner))} has the higher value: ${formatNumber(winningValue)} ${unit}. ${stat === "population" ? `This population figure is from ${winner.populationYear}.` : "Land area measures the size of the country's land surface."}`,
+    explanation: `${sentenceStart(countryNameInProse(winner))} has the higher value: ${formatNumber(winningValue)} ${unit}. ${stat === "population" ? `This population figure is from ${winner.populationYear}.` : "Area measures how much space a country covers."}`,
     locations: itemLocations(first, second),
-    numberLine: { label: stat === "population" ? "Population" : "Land area", value: winningValue, max: stat === "population" ? maxCountryPopulation : maxCountryArea, unit },
+    numberLine: { label: stat === "population" ? "Population" : "Area", value: winningValue, max: stat === "population" ? maxCountryPopulation : maxCountryArea, unit },
   };
 };
 
@@ -759,14 +772,15 @@ const buildingTallerQuestion = (seed: number, first: Building, second: Building)
 };
 
 const sharkComparisonQuestion = (seed: number, first: Shark, second: Shark, stat: "length" | "speed" | "power"): Question => {
-  const firstValue = stat === "length" ? first.lengthFt : stat === "speed" ? first.speedMph : first.power;
-  const secondValue = stat === "length" ? second.lengthFt : stat === "speed" ? second.speedMph : second.power;
+  if (stat === "speed" && (first.speedMph === null || second.speedMph === null)) stat = "length";
+  const firstValue = sharkComparisonValue(first, stat);
+  const secondValue = sharkComparisonValue(second, stat);
   const winner = firstValue >= secondValue ? first : second;
-  const winnerValue = stat === "length" ? winner.lengthFt : stat === "speed" ? winner.speedMph : winner.power;
+  const winnerValue = sharkComparisonValue(winner, stat);
   const cards = shuffle([sharkCard(first, "A", stat), sharkCard(second, "B", stat)], seed + 47);
   const kind: QuestionKind = stat === "length" ? "shark-bigger" : stat === "speed" ? "shark-faster" : "shark-power";
   const prompt = stat === "length"
-    ? promptVariant(seed + 46, [`Which shark can grow longer, ${first.name} or ${second.name}?`, `Compare the recorded lengths. Which shark is longer, ${first.name} or ${second.name}?`, `Which shark has the greater maximum length, ${first.name} or ${second.name}?`])
+    ? promptVariant(seed + 46, [`Which shark can grow longer, ${first.name} or ${second.name}?`, `Compare the recorded lengths. Which shark is longer, ${first.name} or ${second.name}?`, `Which shark has the greater reference length, ${first.name} or ${second.name}?`])
     : stat === "speed"
       ? promptVariant(seed + 46, [`Which shark is faster, ${first.name} or ${second.name}?`, `Compare the speed cards. Which shark has the higher top speed, ${first.name} or ${second.name}?`, `Which shark can swim faster, ${first.name} or ${second.name}?`])
       : promptVariant(seed + 46, [`Which shark has the higher predator-power rating, ${first.name} or ${second.name}?`, `Compare the predator-power ratings. Which shark scores higher, ${first.name} or ${second.name}?`, `Which shark has the stronger predator-power score, ${first.name} or ${second.name}?`]);
@@ -783,7 +797,7 @@ const sharkComparisonQuestion = (seed: number, first: Shark, second: Shark, stat
     choices: cards.map((card) => `${card.label}: ${card.title}`),
     answer: comparisonAnswer(cards, winner.name),
     explanation: `${winner.name} has the higher value in this comparison: ${formatNumber(winnerValue)} ${unit}.`,
-    numberLine: { label: stat === "length" ? "Size" : stat === "speed" ? "Speed" : "Power", value: winnerValue, max: stat === "length" ? maxSharkLength : stat === "speed" ? maxSharkSpeed : maxSharkPower, unit: stat === "length" ? "ft" : stat === "speed" ? "mph" : "/5" },
+    numberLine: { label: stat === "length" ? "Size" : stat === "speed" ? "Speed" : "Power (game rating)", value: winnerValue, max: stat === "length" ? maxSharkLength : stat === "speed" ? maxSharkSpeed : maxSharkPower, unit: stat === "length" ? "ft" : stat === "speed" ? "mph" : "/5" },
   };
 };
 
@@ -798,7 +812,7 @@ const jetComparisonQuestion = (seed: number, first: Jet, second: Jet, stat: "spe
     ? promptVariant(seed + 56, [`Which jet is faster, ${first.name} or ${second.name}?`, `Compare the top speeds. Which jet is faster, ${first.name} or ${second.name}?`, `Which aircraft has the higher top speed, ${first.name} or ${second.name}?`])
     : stat === "range"
       ? promptVariant(seed + 56, [`Which jet can fly farther, ${first.name} or ${second.name}?`, `Compare the range figures. Which jet can travel farther, ${first.name} or ${second.name}?`, `Which aircraft has the longer range, ${first.name} or ${second.name}?`])
-      : promptVariant(seed + 56, [`Which jet has more firepower, ${first.name} or ${second.name}?`, `Compare the firepower ratings. Which jet scores higher, ${first.name} or ${second.name}?`, `Which aircraft has the stronger firepower rating, ${first.name} or ${second.name}?`]);
+      : promptVariant(seed + 56, [`Which jet has the higher game firepower rating, ${first.name} or ${second.name}?`, `Compare the firepower ratings. Which jet scores higher, ${first.name} or ${second.name}?`, `Which aircraft has the stronger firepower rating, ${first.name} or ${second.name}?`]);
   return {
     id: `${seed}-${kind}-${first.id}-${second.id}`,
     topic: "jets",
@@ -811,7 +825,7 @@ const jetComparisonQuestion = (seed: number, first: Jet, second: Jet, stat: "spe
     choices: cards.map((card) => `${card.label}: ${card.title}`),
     answer: comparisonAnswer(cards, winner.name),
     explanation: `${winner.name} has the higher value: ${stat === "speed" ? `${formatNumber(winnerValue)} mph` : stat === "range" ? `${formatNumber(winnerValue)} miles of range` : `a firepower rating of ${winnerValue}/5`}.`,
-    numberLine: { label: stat === "speed" ? "Speed" : stat === "range" ? "Range" : "Firepower", value: winnerValue, max: stat === "speed" ? maxJetSpeed : stat === "range" ? maxJetRange : maxJetFirepower, unit: stat === "speed" ? "mph" : stat === "range" ? "mi" : "/5" },
+    numberLine: { label: stat === "speed" ? "Speed" : stat === "range" ? "Range" : "Firepower (game rating)", value: winnerValue, max: stat === "speed" ? maxJetSpeed : stat === "range" ? maxJetRange : maxJetFirepower, unit: stat === "speed" ? "mph" : stat === "range" ? "mi" : "/5" },
   };
 };
 
@@ -930,7 +944,7 @@ const randomHeadToHeadQuestion = (topic: KnowledgeTopic, difficulty: Difficulty,
   }
 
   if (topic === "sharks") {
-    const stats: ("length" | "speed" | "power")[] = questionDepth === 1 ? ["length", "speed"] : ["length", "speed", "power"];
+    const stats: ("length" | "speed" | "power")[] = questionDepth === 1 ? ["length"] : ["length", "power"];
     const stat = sample(stats, seed + 5);
     const pool = preferredPool(sharks, difficulty);
     const first = sample(pool, seed + 6);
@@ -1015,7 +1029,7 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
       id: `${seed}-country-capital-${country.id}`,
       topic: "countries",
       kind,
-      prompt: `What is the capital of ${countryNameInProse(country)}?`,
+      prompt: `What is listed as the capital of ${countryNameInProse(country)}?`,
       image: country.image,
       imageAlt: `Flag of ${country.name}`,
       imageCredit: country.imageCredit,
@@ -1108,7 +1122,7 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
     imageCredit: country.imageCredit,
     choices: answerChoices(country.name, distractors.map((item) => item.name), seed + 23, choiceCountForDifficulty(difficulty)),
     answer: country.name,
-    secondChanceClue: `Second-chance clue: its capital is ${countryCapitalLabel(country)}. It is in ${worldContinentLabel(country.continents)} and has about ${compactPeople(country.population)} people.`,
+    secondChanceClue: `Second-chance clue: it is in ${worldContinentLabel(country.continents)} and has about ${compactPeople(country.population)} people. Capital: ${countryCapitalLabel(country).replace(/\.$/, "")}.`,
     explanation: `That is the flag of ${countryNameInProse(country)}. ${countryFactSentence(country)} ${countryPopulationSourceSentence(country)}`,
     collectionTitles: [country.name],
     locations: itemLocations(country),
@@ -1381,8 +1395,8 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
   const kinds: QuestionKind[] = questionDepth === 1
     ? ["shark-name", "shark-family", "shark-bigger", "shark-reading"]
     : questionDepth === 2
-      ? ["shark-name", "shark-family", "shark-bigger", "shark-faster", "shark-difference", "shark-power"]
-      : ["shark-bigger", "shark-faster", "shark-difference", "shark-power", "shark-family"];
+      ? ["shark-name", "shark-family", "shark-bigger", "shark-difference", "shark-power"]
+      : ["shark-bigger", "shark-difference", "shark-power", "shark-family"];
   const kind = sample(kinds, seed + 41);
 
   if (kind === "shark-name") {
@@ -1391,13 +1405,13 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
       id: `${seed}-shark-name-${shark.id}`,
       topic: "sharks",
       kind,
-      prompt: promptVariant(seed + 42, ["Which shark is shown here?", "Study the picture. Which shark name fits?", "Which shark does this field photograph show?"]),
+      prompt: promptVariant(seed + 42, ["Which shark is shown here?", "Study the picture. Which shark name fits?", "Which animal does this image show?"]),
       image: shark.image,
       imageAlt: shark.name,
       imageCredit: shark.imageCredit,
       choices: shuffle([shark.name, ...options], seed + 43),
       answer: shark.name,
-      explanation: `The photograph shows the ${shark.name}. ${shark.fact}`,
+      explanation: `The image shows ${shark.name}. ${shark.fact}`,
       numberLine: { label: "Size", value: shark.lengthFt, max: maxSharkLength, unit: "ft" },
     };
   }
@@ -1409,7 +1423,7 @@ const sharkQuestion = (seed: number, difficulty: Difficulty): Question => {
       id: `${seed}-shark-family-${shark.id}`,
       topic: "sharks",
       kind,
-      prompt: `What shark family does ${shark.name} belong to?`,
+      prompt: `What group does ${shark.name} belong to?`,
       image: shark.image,
       imageAlt: shark.name,
       imageCredit: shark.imageCredit,

@@ -3,7 +3,7 @@
   "id": "dinosaurs",
   "title": "Dinosaur Lab",
   "summary": "Dinosaur icons, Ice Age mammals, and prehistoric favorites become reading, sorting, number, and Top Trumps challenges.",
-  "dataNote": "Fossil length, weight, and speed are rounded scientific estimates that can change with new research. Power is a Burrow gameplay rating.",
+  "dataNote": "Body lengths and masses are rounded fossil-based estimates, not exact measurements of living animals. Mass uses metric tonnes (1,000 kg). Pterosaur wingspans are a separate measure from body length. Unsupported height and mass figures are omitted. Power is a Burrow editorial game rating, not measured strength. Reconstructions show scientific interpretations; colors and some body details are uncertain.",
   "status": "playable",
   "audience": {
     "minAge": 5,
@@ -32,39 +32,14 @@
       "note": "General dinosaur size, diet, and discovery notes."
     },
     {
-      "label": "Encyclopaedia Britannica dinosaurs",
-      "url": "https://www.britannica.com/animal/dinosaur",
-      "note": "General dinosaur background and fossil context."
-    },
-    {
       "label": "Wikimedia Commons life-restoration paleoart",
       "url": "https://commons.wikimedia.org/wiki/Category:Dinosauria",
       "note": "Local gameplay images use dinosaur life-restoration media from Commons file pages."
     },
     {
-      "label": "DinosaurPictures.org dinosaur profiles",
-      "url": "https://dinosaurpictures.org/",
-      "note": "Visual and kid-friendly dinosaur profile reference."
-    },
-    {
-      "label": "Dinopedia dinosaur articles",
-      "url": "https://dinopedia.fandom.com/",
-      "note": "General dinosaur background and species context."
-    },
-    {
-      "label": "Dino Wiki dinosaur articles",
-      "url": "https://dino.fandom.com/wiki/Main_Page",
-      "note": "General dinosaur facts and cross-checking context."
-    },
-    {
-      "label": "Britannica woolly mammoth facts",
-      "url": "https://www.britannica.com/animal/woolly-mammoth",
-      "note": "Woolly mammoth size, diet, adaptations, and extinction context."
-    },
-    {
-      "label": "Britannica saber-toothed cat facts",
-      "url": "https://www.britannica.com/animal/saber-toothed-cat",
-      "note": "Smilodon and saber-toothed cat background."
+      "label": "American Museum of Natural History pterosaur guide",
+      "url": "https://www.amnh.org/explore/ology/paleontology/pterosaurs-the-card-game/meet-the-pterosaurs",
+      "note": "Pterosaur identity and wingspan estimates; wingspan is not body length."
     }
   ],
   "cards": [
@@ -80,30 +55,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 40,
+          "value": 39.4,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 12,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 12 m reference estimate; individuals and reconstructions vary.",
+          "display": "~39.4 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 8,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 7.0,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 7000 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~7 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 10,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -123,7 +96,15 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Tyrannosaurus rex",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/tyrannosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -133,35 +114,33 @@
       "imageAlt": "Life restoration of Triceratops",
       "imageCredit": "Tomopteryx / Wikimedia Commons",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Triceratops_by_Tom_Patker.png",
-      "fact": "Triceratops had three horns and a huge bony frill, useful for defense, display, and pushing through tough plants.",
+      "fact": "Triceratops had three horns and a broad bony frill. Fossil injuries suggest that the horns could be used in fights.",
       "stats": [
         {
           "id": "length",
           "label": "Length",
-          "value": 30,
+          "value": 29.5,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 10,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 9 m reference estimate; individuals and reconstructions vary.",
+          "display": "~29.5 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 12,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 10.0,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 10000 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~10 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 8,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -181,7 +160,15 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "horned dinosaur"
+        "taxonomyGroup": "horned dinosaur",
+        "sources": [
+          {
+            "label": "Natural History Museum Triceratops",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/triceratops.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -196,36 +183,25 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 30,
+          "value": 29.5,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 9,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 5.5,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 9 m reference estimate; individuals and reconstructions vary.",
+          "display": "~29.5 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 7,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "herbivore",
         "plated dinosaur",
-        "jurassic"
+        "late jurassic"
       ],
       "readingPrompts": [
         "What weapon did Stegosaurus carry on its tail?"
@@ -239,7 +215,15 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "plated dinosaur"
+        "taxonomyGroup": "plated dinosaur",
+        "sources": [
+          {
+            "label": "Natural History Museum Stegosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/stegosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -254,30 +238,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 6.8,
+          "value": 5.9,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 1.6,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 1.8 m reference estimate; individuals and reconstructions vary.",
+          "display": "~5.9 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 0.035,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 0.007,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 7 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~7 kg"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 4,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -297,7 +279,15 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Velociraptor",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/velociraptor.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -312,30 +302,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 50,
+          "value": 45.9,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 16,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 14 m reference estimate; individuals and reconstructions vary.",
+          "display": "~45.9 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 7.5,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 7.4,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 7400 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~7.4 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 9,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -355,7 +343,15 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Spinosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/spinosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -370,36 +366,34 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 85,
+          "value": 72.2,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 40,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 22 m reference estimate; individuals and reconstructions vary.",
+          "display": "~72.2 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 35,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 46.9,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 46900 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~46.9 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 7,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "herbivore",
         "sauropod",
-        "jurassic"
+        "late jurassic"
       ],
       "readingPrompts": [
         "Why was Brachiosaurus good at reaching high leaves?"
@@ -413,7 +407,15 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "sauropod"
+        "taxonomyGroup": "sauropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Brachiosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/brachiosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -428,36 +430,34 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 85,
+          "value": 85.3,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 15,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 26 m reference estimate; individuals and reconstructions vary.",
+          "display": "~85.3 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 12,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 15.0,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 15000 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~15 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 6,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "herbivore",
         "sauropod",
-        "jurassic"
+        "late jurassic"
       ],
       "readingPrompts": [
         "Which body parts made Diplodocus look so long?"
@@ -470,7 +470,15 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "sauropod"
+        "taxonomyGroup": "sauropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Diplodocus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/diplodocus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -485,30 +493,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 26,
+          "value": 26.2,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 5.5,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 8 m reference estimate; individuals and reconstructions vary.",
+          "display": "~26.2 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 8,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 8.0,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 8000 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~8 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 8,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -528,7 +534,15 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "armored dinosaur"
+        "taxonomyGroup": "armored dinosaur",
+        "sources": [
+          {
+            "label": "Natural History Museum Ankylosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/ankylosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -543,36 +557,34 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 28,
+          "value": 31.8,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 10,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 9.7 m reference estimate; individuals and reconstructions vary.",
+          "display": "~31.8 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 2.3,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 2.7,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 2700 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~2.7 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 8,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "carnivore",
         "theropod",
-        "jurassic"
+        "late jurassic"
       ],
       "readingPrompts": [
         "Which tools helped Allosaurus hunt?"
@@ -585,7 +597,15 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Allosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/allosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -600,30 +620,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 31,
+          "value": 29.5,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 8,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 9 m reference estimate; individuals and reconstructions vary.",
+          "display": "~29.5 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 3,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 5.0,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 5000 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~5 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 5,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -642,7 +660,15 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "duck-billed dinosaur"
+        "taxonomyGroup": "duck-billed dinosaur",
+        "sources": [
+          {
+            "label": "Natural History Museum Parasaurolophus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/parasaurolophus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -657,30 +683,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 33,
+          "value": 32.8,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 9,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 10 m reference estimate; individuals and reconstructions vary.",
+          "display": "~32.8 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 4.5,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 4.0,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 4000 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~4 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 5,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -699,7 +723,15 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "herbivore"
+        "taxonomyGroup": "ornithopod",
+        "sources": [
+          {
+            "label": "Natural History Museum Iguanodon",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/iguanodon.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -709,35 +741,24 @@
       "imageAlt": "Life restoration of Carnotaurus",
       "imageCredit": "Andrey Atuchin / Wikimedia Commons",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Carnotaurus_sastrei_Andrey_Atuchin.jpg",
-      "fact": "Carnotaurus had short horns above its eyes and tiny arms, but it was still a fast meat-eating hunter.",
+      "fact": "Carnotaurus had two horns above its eyes and extremely short arms. Fossil skin impressions show that its body had scales.",
       "stats": [
         {
           "id": "length",
           "label": "Length",
-          "value": 25,
+          "value": 26.2,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 9,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 1.5,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 8 m reference estimate; individuals and reconstructions vary.",
+          "display": "~26.2 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 7,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -756,7 +777,15 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Carnotaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/carnotaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -771,30 +800,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 11,
+          "value": 11.2,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 3,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 3.4 m reference estimate; individuals and reconstructions vary.",
+          "display": "~11.2 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 0.16,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 0.1,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 100 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~100 kg"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 5,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -813,7 +840,15 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Deinonychus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/deinonychus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -828,30 +863,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 39,
+          "value": 42.7,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 10,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 13 m reference estimate; individuals and reconstructions vary.",
+          "display": "~42.7 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 4,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 3.4,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 3400 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~3.4 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 5,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -870,7 +903,15 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "duck-billed dinosaur"
+        "taxonomyGroup": "duck-billed dinosaur",
+        "sources": [
+          {
+            "label": "Natural History Museum Edmontosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/edmontosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -885,30 +926,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 15,
+          "value": 9.8,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 5,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 3 m reference estimate; individuals and reconstructions vary.",
+          "display": "~9.8 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
           "value": 0.45,
-          "unit": "tons",
-          "direction": "higher"
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 450 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~450 kg"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 6,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -927,7 +966,15 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "dome-headed dinosaur"
+        "taxonomyGroup": "dome-headed dinosaur",
+        "sources": [
+          {
+            "label": "Natural History Museum Pachycephalosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/pachycephalosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -942,30 +989,19 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 33,
+          "value": 32.8,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 16,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 5,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 10 m reference estimate; individuals and reconstructions vary.",
+          "display": "~32.8 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 6,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -984,7 +1020,15 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Therizinosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/therizinosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -999,36 +1043,34 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 1.7,
+          "value": 1.6,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 0.8,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 0.5 m reference estimate; individuals and reconstructions vary.",
+          "display": "~1.6 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 0.002,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 0.0009,
+          "unit": "tonnes",
+          "direction": "higher",
+          "display": "~0.9 kg",
+          "note": "About 0.9 kg is the reconstructed adult mass in Erickson et al. (2009); fossils represent individuals of different ages."
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 2,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "carnivore",
         "bird-like dinosaur",
-        "jurassic"
+        "late jurassic"
       ],
       "readingPrompts": [
         "What features made Archaeopteryx bird-like?"
@@ -1041,7 +1083,20 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "bird-like dinosaur"
+        "taxonomyGroup": "bird-like dinosaur",
+        "sources": [
+          {
+            "label": "Archaeopteryx growth and adult mass study",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2756958/",
+            "note": "Estimated asymptotic adult mass near 0.9 kg."
+          },
+          {
+            "label": "Natural History Museum Archaeopteryx",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/archaeopteryx.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -1056,30 +1111,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 23,
+          "value": 18.0,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 5.5,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 5.5 m reference estimate; individuals and reconstructions vary.",
+          "display": "~18 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 0.7,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 0.35,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 350 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~350 kg"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 7,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1098,7 +1151,15 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Utahraptor",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/utahraptor.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -1115,28 +1176,17 @@
           "label": "Length",
           "value": 30,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 8,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 3,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded reference body-length estimate; individuals and reconstructed proportions vary.",
+          "display": "~30 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 4,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1155,7 +1205,15 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "duck-billed dinosaur"
+        "taxonomyGroup": "duck-billed dinosaur",
+        "sources": [
+          {
+            "label": "Museum of the Rockies Maiasaura",
+            "url": "https://museumoftherockies.org/online-learning/stories-behind-the-objects-maiasaura-montanas-state-fossil",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating. The cited research does not establish a single reliable mass, so that statistic is omitted."
       }
     },
     {
@@ -1170,36 +1228,34 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 20,
+          "value": 23.0,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 5,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 7 m reference estimate; individuals and reconstructions vary.",
+          "display": "~23 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
           "value": 0.4,
-          "unit": "tons",
-          "direction": "higher"
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 400 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~400 kg"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 6,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "carnivore",
         "theropod",
-        "jurassic"
+        "early jurassic"
       ],
       "readingPrompts": [
         "What did Dilophosaurus really have on its head?"
@@ -1212,41 +1268,38 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Dilophosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/dilophosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
       "id": "brontosaurus",
       "name": "Brontosaurus",
-      "fact": "Brontosaurus was the classic 'thunder lizard,' a long-necked plant eater that became one of the most famous sauropods ever.",
+      "fact": "Brontosaurus was a long-necked plant eater. A detailed study of its bones helped scientists distinguish it from its close relative Apatosaurus.",
       "stats": [
         {
           "id": "length",
           "label": "Length",
           "value": 72,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 15,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 17,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded reference body-length estimate; individuals and reconstructed proportions vary.",
+          "display": "~72 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 7,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1270,7 +1323,15 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "sauropod"
+        "taxonomyGroup": "sauropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Brontosaurus review",
+            "url": "https://www.nhm.ac.uk/discover/brontosaurus-reinstating-a-prehistoric-icon.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating. The cited research does not establish a single reliable mass, so that statistic is omitted."
       }
     },
     {
@@ -1281,30 +1342,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 43,
+          "value": 42.7,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 13,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 13 m reference estimate; individuals and reconstructions vary.",
+          "display": "~42.7 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 8,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 7.2,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 7200 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~7.2 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 10,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1327,47 +1386,59 @@
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "NHM dinosaur size review",
+            "url": "https://www.nhm.ac.uk/discover/what-is-the-biggest-dinosaur.html",
+            "note": "Uses the review estimate of 7.2 tonnes, rather than the conflicting 13.8-tonne figure in the directory."
+          },
+          {
+            "label": "Natural History Museum Giganotosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/giganotosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
       "id": "gallimimus",
       "name": "Gallimimus",
-      "fact": "Gallimimus looked like a giant ostrich with a long tail, long legs, and a toothless beak built for speed.",
+      "fact": "Gallimimus had long legs, a long tail, and a toothless beak. Its ostrich-like shape gave this theropod an unusual silhouette.",
       "stats": [
         {
           "id": "length",
           "label": "Length",
-          "value": 20,
+          "value": 19.7,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 6,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 6 m reference estimate; individuals and reconstructions vary.",
+          "display": "~19.7 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 0.5,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 0.49,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 490 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~490 kg"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 5,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "omnivore",
         "ornithomimid",
-        "late cretaceous"
+        "late cretaceous",
+        "theropod"
       ],
       "readingPrompts": [
         "What modern bird does Gallimimus remind people of?"
@@ -1379,12 +1450,21 @@
       "tags": [
         "omnivore",
         "ornithomimid",
-        "late-cretaceous"
+        "late-cretaceous",
+        "theropod"
       ],
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "omnivore"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Gallimimus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/gallimimus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -1393,32 +1473,21 @@
       "fact": "Pterodactylus is the famous animal many people call a pterodactyl. It was a flying pterosaur, not a dinosaur.",
       "stats": [
         {
-          "id": "length",
-          "label": "Length",
+          "id": "wingspan",
+          "label": "Wingspan",
           "value": 5,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Body length",
-          "value": 3,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 0.02,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Approximate wingspan in the American Museum of Natural History guide; this is not nose-to-tail body length.",
+          "display": "~5 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 4,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1444,7 +1513,14 @@
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "pterosaur",
-        "accuracyNote": "Pterodactylus is included as a popular prehistoric animal, but it was not a dinosaur."
+        "accuracyNote": "Pterodactylus is included as a popular prehistoric animal, but it was not a dinosaur. Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating.",
+        "sources": [
+          {
+            "label": "AMNH pterosaur guide",
+            "url": "https://www.amnh.org/explore/ology/paleontology/pterosaurs-the-card-game/meet-the-pterosaurs",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ]
       }
     },
     {
@@ -1455,30 +1531,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 50,
+          "value": 39.4,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Body depth",
-          "value": 7,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "About 12 m, a conservative reconstruction of M. hoffmannii. Published estimates for the largest fossils span roughly 11–18 m; there is no complete skeleton.",
+          "display": "~39.4 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 15,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 10,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Around 10 metric tonnes is an uncertain adult reconstruction estimate cited by NHM.",
+          "display": "~10 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 10,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1504,7 +1578,14 @@
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "marine reptile",
-        "accuracyNote": "Mosasaurus is included as a popular prehistoric animal, but it was not a dinosaur."
+        "accuracyNote": "Mosasaurus is included as a popular prehistoric animal, but it was not a dinosaur. Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating.",
+        "sources": [
+          {
+            "label": "Natural History Museum mosasaur review",
+            "url": "https://www.nhm.ac.uk/discover/what-is-a-mosasaur.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ]
       }
     },
     {
@@ -1513,32 +1594,21 @@
       "fact": "Pteranodon was a big flying pterosaur with a long head crest. It lived with dinosaurs, but it was not a dinosaur.",
       "stats": [
         {
-          "id": "length",
-          "label": "Length",
-          "value": 23,
+          "id": "wingspan",
+          "label": "Wingspan",
+          "value": 20,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Body length",
-          "value": 6,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 0.02,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Approximate wingspan in the American Museum of Natural History guide; this is not nose-to-tail body length.",
+          "display": "~20 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 5,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1564,7 +1634,14 @@
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "pterosaur",
-        "accuracyNote": "Pteranodon is included as a popular prehistoric animal, but it was not a dinosaur."
+        "accuracyNote": "Pteranodon is included as a popular prehistoric animal, but it was not a dinosaur. Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating.",
+        "sources": [
+          {
+            "label": "AMNH Pteranodon",
+            "url": "https://www.amnh.org/explore/news-blogs/pteranodon-longiceps",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ]
       }
     },
     {
@@ -1573,32 +1650,21 @@
       "fact": "Quetzalcoatlus was one of the largest flying animals ever, a giant pterosaur tall enough to look a person in the eye.",
       "stats": [
         {
-          "id": "length",
-          "label": "Length",
-          "value": 36,
+          "id": "wingspan",
+          "label": "Wingspan",
+          "value": 33,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Standing height",
-          "value": 16,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 0.25,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Approximate wingspan in the American Museum of Natural History guide; this is not nose-to-tail body length.",
+          "display": "~33 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 8,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1624,7 +1690,14 @@
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "pterosaur",
-        "accuracyNote": "Quetzalcoatlus is included as a popular prehistoric animal, but it was not a dinosaur."
+        "accuracyNote": "Quetzalcoatlus is included as a popular prehistoric animal, but it was not a dinosaur. Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating.",
+        "sources": [
+          {
+            "label": "AMNH pterosaur guide",
+            "url": "https://www.amnh.org/explore/ology/paleontology/pterosaurs-the-card-game/meet-the-pterosaurs",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ]
       }
     },
     {
@@ -1637,28 +1710,17 @@
           "label": "Length",
           "value": 11,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Body depth",
-          "value": 3,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 0.5,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded reference body-length estimate; individuals and reconstructed proportions vary.",
+          "display": "~11 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 5,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1684,7 +1746,14 @@
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "marine reptile",
-        "accuracyNote": "Plesiosaurus is included as a popular prehistoric animal, but it was not a dinosaur."
+        "accuracyNote": "Plesiosaurus is included as a popular prehistoric animal, but it was not a dinosaur. Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating. The cited research does not establish a single reliable mass, so that statistic is omitted.",
+        "sources": [
+          {
+            "label": "Plesiosaur body reconstruction study",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13089226/",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ]
       }
     },
     {
@@ -1695,30 +1764,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 65,
+          "value": 79.7,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Body depth",
-          "value": 10,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Upper reconstruction estimate of 24.3 m from the 2025 study discussed by NHM, not a measured complete skeleton or a typical adult.",
+          "display": "~79.7 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 50,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 94,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Model estimate of up to 94 metric tonnes for the 24.3 m reconstruction; older studies and smaller individuals give lower values.",
+          "display": "~94 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 10,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1744,7 +1811,14 @@
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "prehistoric shark",
-        "accuracyNote": "Megalodon is included as a popular prehistoric animal, but it was not a dinosaur."
+        "accuracyNote": "Megalodon is included as a popular prehistoric animal, but it was not a dinosaur. Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating.",
+        "sources": [
+          {
+            "label": "Natural History Museum megalodon review",
+            "url": "https://www.nhm.ac.uk/discover/megalodon--the-truth-about-the-largest-shark-that-ever-lived.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ]
       }
     },
     {
@@ -1757,28 +1831,26 @@
           "label": "Length",
           "value": 16,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Shoulder height",
-          "value": 11,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded reference body-length estimate; individuals and reconstructed proportions vary.",
+          "display": "~16 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 7,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 6,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Large adult male reference estimate: up to about 6 metric tonnes; females and many individuals were smaller.",
+          "display": "~6 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 8,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1804,41 +1876,46 @@
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "ice age mammal",
-        "accuracyNote": "Woolly Mammoth is included as a popular prehistoric animal, but it was not a dinosaur."
+        "accuracyNote": "Woolly Mammoth is included as a popular prehistoric animal, but it was not a dinosaur. Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating.",
+        "sources": [
+          {
+            "label": "Woolly mammoth size guide, Museums Worcestershire",
+            "url": "https://iceageworcestershire.com/wp-content/uploads/2022/01/ice-age-animals.pdf",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ]
       }
     },
     {
       "id": "smilodon",
       "name": "Saber-toothed Cat",
-      "fact": "Smilodon is the famous saber-toothed cat often nicknamed a saber-toothed tiger, with long upper canine teeth for tackling prey.",
+      "fact": "Smilodon fatalis was a saber-toothed cat with long upper canine teeth and strong front limbs. It was a cat, but not a tiger.",
       "stats": [
         {
           "id": "length",
           "label": "Length",
           "value": 6,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Shoulder height",
-          "value": 3.5,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded reference body-length estimate; individuals and reconstructed proportions vary.",
+          "display": "~6 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 0.3,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 0.28,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Upper end of the Florida Museum estimate of 160–280 kg for Smilodon fatalis, not the larger S. populator.",
+          "display": "~280 kg"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 9,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1864,7 +1941,14 @@
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "ice age mammal",
-        "accuracyNote": "Saber-toothed Cat is included as a popular prehistoric animal, but it was not a dinosaur."
+        "accuracyNote": "Saber-toothed Cat is included as a popular prehistoric animal, but it was not a dinosaur. Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating.",
+        "sources": [
+          {
+            "label": "Florida Museum Smilodon fatalis",
+            "url": "https://www.floridamuseum.ufl.edu/florida-vertebrate-fossils/species/smilodon-fatalis/",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ]
       }
     },
     {
@@ -1875,30 +1959,19 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 75,
+          "value": 68.9,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 15,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 25,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 21 m reference estimate; individuals and reconstructions vary.",
+          "display": "~68.9 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 7,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1922,41 +1995,38 @@
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
-        "taxonomyGroup": "sauropod"
+        "taxonomyGroup": "sauropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Apatosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/apatosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
       "id": "dimetrodon",
       "name": "Dimetrodon",
-      "fact": "Dimetrodon had a huge sail on its back and lived long before dinosaurs. It was a synapsid, closer to mammals than reptiles.",
+      "fact": "Dimetrodon lived before dinosaurs and carried a tall sail on its back. It belonged to the synapsids, the branch of the family tree that includes mammals.",
       "stats": [
         {
           "id": "length",
           "label": "Length",
           "value": 15,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 4,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 0.4,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded reference body-length estimate; individuals and reconstructed proportions vary.",
+          "display": "~15 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 7,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -1982,7 +2052,14 @@
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "synapsid",
-        "accuracyNote": "Dimetrodon is included as a popular prehistoric animal, but it was not a dinosaur."
+        "accuracyNote": "Dimetrodon is included as a popular prehistoric animal, but it was not a dinosaur. Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating. The cited research does not establish a single reliable mass, so that statistic is omitted.",
+        "sources": [
+          {
+            "label": "Smithsonian Dimetrodon posture research",
+            "url": "https://naturalhistory.si.edu/sites/default/files/media/file/2017-abbott-poster.pdf",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ]
       }
     },
     {
@@ -1993,36 +2070,35 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 100,
+          "value": 114.8,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 23,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 35 m reference estimate; individuals and reconstructions vary.",
+          "display": "~114.8 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 75,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 70.0,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 70000 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~70 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 9,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "herbivore",
         "titanosaur",
-        "late cretaceous"
+        "late cretaceous",
+        "sauropod"
       ],
       "readingPrompts": [
         "Why is Argentinosaurus famous among giant dinosaurs?"
@@ -2034,52 +2110,60 @@
       "tags": [
         "herbivore",
         "titanosaur",
-        "late-cretaceous"
+        "late-cretaceous",
+        "sauropod"
       ],
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "herbivore"
+        "taxonomyGroup": "sauropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Argentinosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/argentinosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
       "id": "oviraptor",
       "name": "Oviraptor",
-      "fact": "Oviraptor was a beaked, feathered dinosaur once blamed for stealing eggs, but later finds showed it may have guarded nests.",
+      "fact": "Oviraptor had a toothless beak. Its name means egg thief, but discoveries of related dinosaurs on nests changed how scientists interpreted the fossil evidence.",
       "stats": [
         {
           "id": "length",
           "label": "Length",
-          "value": 6,
+          "value": 6.6,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 3,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 2 m reference estimate; individuals and reconstructions vary.",
+          "display": "~6.6 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 0.08,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 0.02,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 20 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~20 kg"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 4,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "omnivore",
         "oviraptorosaur",
-        "late cretaceous"
+        "late cretaceous",
+        "theropod"
       ],
       "readingPrompts": [
         "What changed scientists' ideas about Oviraptor and eggs?"
@@ -2091,52 +2175,60 @@
       "tags": [
         "omnivore",
         "oviraptorosaur",
-        "late-cretaceous"
+        "late-cretaceous",
+        "theropod"
       ],
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "omnivore"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Oviraptor",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/oviraptor.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
       "id": "protoceratops",
       "name": "Protoceratops",
-      "fact": "Protoceratops was a sheep-sized horned dinosaur with a neck frill, famous from fossils found in Mongolia.",
+      "fact": "Protoceratops was a small plant eater with a neck frill and a beak, but it lacked the large horns of Triceratops.",
       "stats": [
         {
           "id": "length",
           "label": "Length",
-          "value": 6,
+          "value": 5.9,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 2,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 1.8 m reference estimate; individuals and reconstructions vary.",
+          "display": "~5.9 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 0.2,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 0.4,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 400 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~400 kg"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 5,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "herbivore",
         "ceratopsian",
-        "late cretaceous"
+        "late cretaceous",
+        "horned dinosaur"
       ],
       "readingPrompts": [
         "Which famous horned dinosaur group was Protoceratops related to?"
@@ -2148,12 +2240,21 @@
       "tags": [
         "herbivore",
         "ceratopsian",
-        "late-cretaceous"
+        "late-cretaceous",
+        "horned-dinosaur"
       ],
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "herbivore"
+        "taxonomyGroup": "horned dinosaur",
+        "sources": [
+          {
+            "label": "Natural History Museum Protoceratops",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/protoceratops.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -2164,36 +2265,35 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 30,
+          "value": 32.8,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 9,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 10 m reference estimate; individuals and reconstructions vary.",
+          "display": "~32.8 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 2,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 2.0,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 2000 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~2 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 8,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "carnivore",
         "spinosaurid",
-        "early cretaceous"
+        "early cretaceous",
+        "theropod"
       ],
       "readingPrompts": [
         "What kind of food did Baryonyx probably catch near water?"
@@ -2205,12 +2305,21 @@
       "tags": [
         "carnivore",
         "spinosaurid",
-        "early-cretaceous"
+        "early-cretaceous",
+        "theropod"
       ],
       "metadata": {
         "difficultyBand": "medium",
         "recognition": 4,
-        "taxonomyGroup": "carnivore"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Baryonyx",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/baryonyx.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -2221,36 +2330,26 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 36,
+          "value": 36.1,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 10,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 4,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 11 m reference estimate; individuals and reconstructions vary.",
+          "display": "~36.1 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 8,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "carnivore",
         "spinosaurid",
-        "early cretaceous"
+        "early cretaceous",
+        "theropod"
       ],
       "readingPrompts": [
         "Why does the name Suchomimus mean crocodile mimic?"
@@ -2262,12 +2361,21 @@
       "tags": [
         "carnivore",
         "spinosaurid",
-        "early-cretaceous"
+        "early-cretaceous",
+        "theropod"
       ],
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "carnivore"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Suchomimus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/suchomimus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -2278,30 +2386,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 20,
+          "value": 23.0,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 6,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 7 m reference estimate; individuals and reconstructions vary.",
+          "display": "~23 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 1,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 0.98,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 980 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~980 kg"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 7,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -2324,41 +2430,47 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Ceratosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/ceratosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
       "id": "compsognathus",
       "name": "Compsognathus",
-      "fact": "Compsognathus was a tiny, fast Jurassic meat-eater, once famous as one of the smallest known dinosaurs.",
+      "fact": "Compsognathus was a small Jurassic meat eater. Its light body and long tail looked very different from the giant sauropods of the same period.",
       "stats": [
         {
           "id": "length",
           "label": "Length",
-          "value": 3,
+          "value": 2.3,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 1,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 0.7 m reference estimate; individuals and reconstructions vary.",
+          "display": "~2.3 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 0.01,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 0.003,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 3 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~3 kg"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 2,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -2381,7 +2493,15 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Compsognathus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/compsognathus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -2392,36 +2512,26 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 30,
+          "value": 32.8,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 8,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 4,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 10 m reference estimate; individuals and reconstructions vary.",
+          "display": "~32.8 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 6,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "herbivore",
         "hadrosaur",
-        "late cretaceous"
+        "late cretaceous",
+        "duck-billed dinosaur"
       ],
       "readingPrompts": [
         "What was special about Corythosaurus's head crest?"
@@ -2433,12 +2543,21 @@
       "tags": [
         "herbivore",
         "hadrosaur",
-        "late-cretaceous"
+        "late-cretaceous",
+        "duck-billed-dinosaur"
       ],
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "herbivore"
+        "taxonomyGroup": "duck-billed dinosaur",
+        "sources": [
+          {
+            "label": "Natural History Museum Corythosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/corythosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -2449,36 +2568,26 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 25,
+          "value": 29.5,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 7,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 3,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 9 m reference estimate; individuals and reconstructions vary.",
+          "display": "~29.5 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 5,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "herbivore",
         "hadrosaur",
-        "late cretaceous"
+        "late cretaceous",
+        "duck-billed dinosaur"
       ],
       "readingPrompts": [
         "Why was Hadrosaurus important to dinosaur science?"
@@ -2490,12 +2599,21 @@
       "tags": [
         "herbivore",
         "hadrosaur",
-        "late-cretaceous"
+        "late-cretaceous",
+        "duck-billed-dinosaur"
       ],
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "herbivore"
+        "taxonomyGroup": "duck-billed dinosaur",
+        "sources": [
+          {
+            "label": "Natural History Museum Hadrosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/hadrosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -2506,36 +2624,26 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 17,
+          "value": 16.4,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 5,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 2,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 5 m reference estimate; individuals and reconstructions vary.",
+          "display": "~16.4 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 7,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "herbivore",
         "stegosaur",
-        "late jurassic"
+        "late jurassic",
+        "plated dinosaur"
       ],
       "readingPrompts": [
         "How was Kentrosaurus protected?"
@@ -2547,12 +2655,21 @@
       "tags": [
         "herbivore",
         "stegosaur",
-        "late-jurassic"
+        "late-jurassic",
+        "plated-dinosaur"
       ],
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "herbivore"
+        "taxonomyGroup": "plated dinosaur",
+        "sources": [
+          {
+            "label": "Natural History Museum Kentrosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/kentrosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -2565,34 +2682,24 @@
           "label": "Length",
           "value": 30,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 8,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 5,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded reference body-length estimate; individuals and reconstructed proportions vary.",
+          "display": "~30 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 6,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "herbivore",
         "hadrosaur",
-        "late cretaceous"
+        "late cretaceous",
+        "duck-billed dinosaur"
       ],
       "readingPrompts": [
         "What head feature makes Lambeosaurus stand out?"
@@ -2604,12 +2711,21 @@
       "tags": [
         "herbivore",
         "hadrosaur",
-        "late-cretaceous"
+        "late-cretaceous",
+        "duck-billed-dinosaur"
       ],
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "herbivore"
+        "taxonomyGroup": "duck-billed dinosaur",
+        "sources": [
+          {
+            "label": "Lambeosaurine anatomy study",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8103918/",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating. The cited research does not establish a single reliable mass, so that statistic is omitted."
       }
     },
     {
@@ -2620,30 +2736,19 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 38,
+          "value": 39.4,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 12,
-          "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "weight",
-          "label": "Weight",
-          "value": 6,
-          "unit": "tons",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 12 m reference estimate; individuals and reconstructions vary.",
+          "display": "~39.4 ft"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 9,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -2666,47 +2771,54 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "theropod"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Acrocanthosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/acrocanthosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
       "id": "albertosaurus",
       "name": "Albertosaurus",
-      "fact": "Albertosaurus was a tyrannosaur from Canada, smaller than T. rex but still a fast and dangerous late Cretaceous hunter.",
+      "fact": "Albertosaurus was a smaller relative of Tyrannosaurus rex. A bonebed in Alberta preserves remains of several individuals.",
       "stats": [
         {
           "id": "length",
           "label": "Length",
-          "value": 30,
+          "value": 29.5,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 9,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 9 m reference estimate; individuals and reconstructions vary.",
+          "display": "~29.5 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 2.5,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 1.5,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 1500 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~1.5 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 8,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
         "carnivore",
         "tyrannosaur",
-        "late cretaceous"
+        "late cretaceous",
+        "theropod"
       ],
       "readingPrompts": [
         "Which giant predator was Albertosaurus related to?"
@@ -2718,12 +2830,26 @@
       "tags": [
         "carnivore",
         "tyrannosaur",
-        "late-cretaceous"
+        "late-cretaceous",
+        "theropod"
       ],
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "carnivore"
+        "taxonomyGroup": "theropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Albertosaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/albertosaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          },
+          {
+            "label": "Royal Tyrrell Museum Albertosaurus",
+            "url": "https://tyrrellmuseum.com/whats_on/exhibits/cretaceous_alberta",
+            "note": "Albertosaurus sarcophagus identity and bonebed context; not Gorgosaurus libratus."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     },
     {
@@ -2734,30 +2860,28 @@
         {
           "id": "length",
           "label": "Length",
-          "value": 33,
+          "value": 39.4,
           "unit": "ft",
-          "direction": "higher"
-        },
-        {
-          "id": "height",
-          "label": "Hip height",
-          "value": 9,
-          "unit": "ft",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Rounded from the cited museum's 12 m reference estimate; individuals and reconstructions vary.",
+          "display": "~39.4 ft"
         },
         {
           "id": "weight",
           "label": "Weight",
-          "value": 3,
-          "unit": "tons",
-          "direction": "higher"
+          "value": 9.0,
+          "unit": "tonnes",
+          "direction": "higher",
+          "note": "Reference reconstruction estimate of 9000 kg, expressed in metric tonnes; not a species-wide exact weight.",
+          "display": "~9 tonnes"
         },
         {
           "id": "power",
-          "label": "Power",
+          "label": "Power rating",
           "value": 7,
           "unit": "pts",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Burrow editorial game rating from 1 to 10, not a measured scientific quantity."
         }
       ],
       "categories": [
@@ -2780,7 +2904,15 @@
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 2,
-        "taxonomyGroup": "sauropod"
+        "taxonomyGroup": "sauropod",
+        "sources": [
+          {
+            "label": "Natural History Museum Amargasaurus",
+            "url": "https://www.nhm.ac.uk/discover/dino-directory/amargasaurus.html",
+            "note": "Subject, classification and fossil context. Measurement-specific caveats are recorded with each statistic."
+          }
+        ],
+        "accuracyNote": "Body size is reconstructed from fossils and varies between specimens; Power is an editorial game rating."
       }
     }
   ]

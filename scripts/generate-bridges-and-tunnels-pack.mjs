@@ -15,7 +15,7 @@ const pack = {
   sources: source.cards.flatMap((card) => card.sourceUrls.map((url, index) => ({
     label: `${card.name}${index ? " — additional reference" : ""}`,
     url,
-    note: `Reviewed ${source.auditedOn}. ${card.lengthNote} ${card.openedNote}`,
+    note: `Source record dated ${source.auditedOn}. ${card.lengthNote} ${card.openedNote}`,
   }))),
   cards: source.cards.map((card) => {
     const previous = existingCards.get(card.id);
@@ -31,8 +31,8 @@ const pack = {
       stats: [
         { id: "length-mi", label: "Length", value: card.lengthMi, unit: "mi", direction: "higher", note: card.lengthNote },
         { id: "opened-year", label: "Opened", value: card.opened, unit: "year", direction: "lower", note: card.openedNote },
-        { id: "recognition", label: "Fame", value: card.recognition, unit: "/10", direction: "higher" },
-        { id: "engineering-scale", label: "Engineering scale", value: card.scale, unit: "/10", direction: "higher" },
+        { id: "recognition", label: "Fame rating", value: card.recognition, unit: "/10", direction: "higher", note: "Burrow editorial recognition rating, not an official measurement." },
+        { id: "engineering-scale", label: "Engineering rating", value: card.scale, unit: "/10", direction: "higher", note: "Burrow editorial game rating for the scale of the project, not a safety or structural-performance measure." },
       ],
       categories: unique([...kinds, card.structure, ...card.categories]),
       tags: unique([...kinds, card.structure, ...card.categories]),
@@ -43,6 +43,11 @@ const pack = {
         taxonomyGroup: card.structure,
         accuracyNote: `${card.lengthNote} ${card.openedNote}`,
         location: card.location,
+        sources: card.sourceUrls.map((url, index) => ({
+          label: `${card.name}${index ? " additional reference" : " reference"}`,
+          url,
+          note: `${card.lengthNote} ${card.openedNote}`,
+        })),
       },
       readingPrompts: [
         `What clue tells you ${card.name} is a ${card.kind}?`,

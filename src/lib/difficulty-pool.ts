@@ -158,7 +158,15 @@ export const poolForDifficulty = <T extends { id: string; metadata?: CardMetadat
   const allowedBands = difficulty === 1 ? new Set(["easy"]) : new Set(["easy", "medium"]);
   const cumulative = sorted.filter((item) => item.metadata?.difficultyBand && allowedBands.has(item.metadata.difficultyBand));
   const minimum = Math.min(10, sorted.length);
-  if (cumulative.length < minimum) return sorted.slice(0, targetCount(sorted.length, difficulty));
+  if (cumulative.length < minimum) {
+    // A small familiar set may need medium cards for variety; it must not
+    // silently pull explicitly hard cards into Easy to meet a numeric quota.
+    const eligible = difficulty === 1 ? sorted.filter((item) => item.metadata?.difficultyBand !== "hard") : sorted;
+    // An explicitly scoped/imported deck can contain only advanced subjects.
+    // Preserve that deck's playability when it cannot supply four choices.
+    const usable = eligible.length >= Math.min(4, sorted.length) ? eligible : sorted;
+    return usable.slice(0, targetCount(sorted.length, difficulty));
+  }
 
   const nextBand = difficulty === 1 ? "medium" : "hard";
   const target = Math.min(sorted.length, Math.ceil(cumulative.length * poolExpansion));

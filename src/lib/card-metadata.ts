@@ -26,6 +26,12 @@ export type WorldLocation = {
   states?: string[];
 };
 
+export type CardSource = {
+  label: string;
+  url: string;
+  note?: string;
+};
+
 export type CardMetadata = {
   difficultyBand?: CardDifficultyBand;
   recognition?: 1 | 2 | 3 | 4 | 5;
@@ -34,6 +40,8 @@ export type CardMetadata = {
   pepperTypes?: string[];
   taxonomyGroup?: string;
   accuracyNote?: string;
+  // Factual references, separate from the photograph's license/source.
+  sources?: CardSource[];
   imageDistinctGroup?: string;
   location?: WorldLocation;
 };

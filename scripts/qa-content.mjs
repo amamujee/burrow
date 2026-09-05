@@ -185,6 +185,8 @@ const requireText = (item, field, min = 2) => {
 };
 
 const checkFeaturedMetadata = (item) => {
+  const knownOrExplained = (value, min, max) => isFiniteBetween(value, min, max)
+    || (value === null && Boolean(item.metadata?.accuracyNote) && Boolean(item.metadata?.sources?.length));
   requireText(item, "name");
   requireText(item, "fact", 24);
   requireText(item, "imageCredit");
@@ -205,18 +207,18 @@ const checkFeaturedMetadata = (item) => {
     }
   }
   if (item.topic === "buildings") {
-    if (!isFiniteBetween(item.heightFt, 15, 7000) || !item.city || !item.country) critical.push(`${item.topic}/${item.id}: bad building metadata`);
+    if (!knownOrExplained(item.heightFt, 15, 7000) || !item.city || !item.country) critical.push(`${item.topic}/${item.id}: bad building metadata`);
     if (item.floors !== undefined && !isFiniteBetween(item.floors, 1, 1000)) critical.push(`${item.topic}/${item.id}: implausible floor count`);
     if (!item.metadata?.accuracyNote) critical.push(`${item.topic}/${item.id}: missing height/status data note`);
   }
-  if (item.topic === "sharks" && !(isFiniteBetween(item.lengthFt, 0.4, 80) && isFiniteBetween(item.speedMph, 0.5, 50) && Number.isInteger(item.power) && isFiniteBetween(item.power, 1, 5) && item.family)) critical.push(`${item.topic}/${item.id}: bad shark metadata`);
+  if (item.topic === "sharks" && !(knownOrExplained(item.lengthFt, 0.4, 80) && knownOrExplained(item.speedMph, 0.5, 50) && Number.isInteger(item.power) && isFiniteBetween(item.power, 1, 5) && item.family && item.species)) critical.push(`${item.topic}/${item.id}: bad shark metadata`);
   if (item.topic === "sharks" && item.family) {
     const family = normalizeLabel(item.family);
     const name = normalizeLabel(item.name);
     if (family === name || normalizeLabel(`${item.family} shark`) === name) critical.push(`${item.topic}/${item.id}: circular shark family label "${item.family}"`);
   }
-  if (item.metadata) checkCardMetadata(item, `${item.topic}/${item.id}`);
-  if (item.topic === "jets" && !(isFiniteBetween(item.maxSpeedMph, 100, 5000) && isFiniteBetween(item.rangeMiles, 50, 20000) && Number.isInteger(item.firepower) && isFiniteBetween(item.firepower, 1, 5) && item.country && item.category)) critical.push(`${item.topic}/${item.id}: bad jet metadata`);
+  checkCardMetadata(item, `${item.topic}/${item.id}`);
+  if (item.topic === "jets" && !(knownOrExplained(item.maxSpeedMph, 100, 5000) && knownOrExplained(item.rangeMiles, 50, 20000) && Number.isInteger(item.firepower) && isFiniteBetween(item.firepower, 1, 5) && item.country && item.category)) critical.push(`${item.topic}/${item.id}: bad jet metadata`);
   if (item.topic === "space") {
     if (item.kind === "planet" && !(item.diameterMiles && item.distanceFromSunMillionMiles !== undefined && item.meanSurfaceTempF !== undefined)) critical.push(`${item.topic}/${item.id}: bad planet metadata`);
     if (item.kind === "star" && !(item.surfaceTempK && item.radiusSolar && item.distanceLightYears)) warnings.push(`${item.topic}/${item.id}: star has thin numeric metadata`);
@@ -251,7 +253,22 @@ const checkCardMetadata = (item, label) => {
     }
   }
 
-  if (!item.metadata) return;
+  if (!item.metadata) {
+    critical.push(`${label}: missing reviewed metadata`);
+    return;
+  }
+  if (!item.metadata.sources?.length) critical.push(`${label}: missing factual sources separate from image credit`);
+  if (typeof item.metadata.accuracyNote !== "string" || item.metadata.accuracyNote.trim().length < 8) critical.push(`${label}: missing measurement/source scope note`);
+  if (item.metadata.sources !== undefined) {
+    if (!Array.isArray(item.metadata.sources) || !item.metadata.sources.length) critical.push(`${label}: factual sources must be a non-empty array`);
+    for (const source of item.metadata.sources ?? []) {
+      let validUrl = false;
+      try { validUrl = ["http:", "https:"].includes(new URL(source.url).protocol); } catch { /* reported below */ }
+      if (!validUrl || typeof source.label !== "string" || source.label.trim().length < 2 || (source.note !== undefined && (typeof source.note !== "string" || !source.note.trim()))) critical.push(`${label}: malformed factual source`);
+    }
+    if (new Set(item.metadata.sources.map((source) => source.url)).size !== item.metadata.sources.length) critical.push(`${label}: duplicate factual source URL`);
+    if (item.metadata.sources.length && item.metadata.sources.every((source) => /commons\.wikimedia\.org\/wiki\/File:|openai\.com/i.test(source.url))) critical.push(`${label}: image provenance cannot be the only factual reference`);
+  }
   if (item.metadata.difficultyBand !== undefined && !validDifficultyBands.has(item.metadata.difficultyBand)) critical.push(`${label}: invalid difficultyBand "${item.metadata.difficultyBand}"`);
   if (item.metadata.recognition !== undefined && (!Number.isInteger(item.metadata.recognition) || item.metadata.recognition < 1 || item.metadata.recognition > 5)) critical.push(`${label}: recognition must be 1-5`);
   if (item.metadata.rarity !== undefined && !["common", "uncommon", "rare", "epic"].includes(item.metadata.rarity)) critical.push(`${label}: invalid rarity "${item.metadata.rarity}"`);
@@ -267,6 +284,7 @@ const checkCardMetadata = (item, label) => {
       if (typeof location.label !== "string" || location.label.trim().length < 2) critical.push(`${label}: location metadata needs a label`);
       if (!Array.isArray(location.countries) || location.countries.length < 1 || location.countries.some((country) => typeof country !== "string" || country.trim().length < 2)) critical.push(`${label}: location metadata needs countries`);
       if (!Array.isArray(location.continents) || location.continents.length < 1 || location.continents.some((continent) => !validWorldContinents.has(continent))) critical.push(`${label}: location metadata has invalid continents`);
+      if (location.coordinates !== undefined && (!Array.isArray(location.coordinates) || location.coordinates.length !== 2 || !isFiniteBetween(location.coordinates[0], -90, 90) || !isFiniteBetween(location.coordinates[1], -180, 180))) critical.push(`${label}: location coordinates must be [latitude, longitude] in range`);
     }
   }
 };
@@ -417,8 +435,15 @@ const assertGeoChoiceSeparation = (roundName, round, difficulty) => {
 };
 
 const assertPackPrimarySortStat = (deck) => {
-  const labels = new Set(deck.cards.map((card) => card.statLabel));
-  if (labels.size > 1) critical.push(`${deck.id}: mixed primary sort labels (${Array.from(labels).join(", ")})`);
+  const groups = new Map();
+  for (const card of deck.cards) {
+    const stat = card.stats[0];
+    if (!stat) continue;
+    const key = `${stat.id}:${stat.unit ?? ""}:${stat.direction}`;
+    if (!groups.has(key)) groups.set(key, new Set());
+    groups.get(key).add(stat.value);
+  }
+  if (!Array.from(groups.values()).some((values) => values.size >= 4)) critical.push(`${deck.id}: needs at least four distinct values sharing one primary measurement`);
 };
 
 const checkPackMetadata = (pack) => {
@@ -458,7 +483,7 @@ const checkPackMetadata = (pack) => {
       if (card.metadata?.taxonomyGroup === "bridge-tunnel" && (!card.tags.includes("bridge") || !card.tags.includes("tunnel"))) critical.push(`${label}: bridge-tunnel needs both structure tags`);
     }
     if (pack.id === "dinosaurs") {
-      if (!isFiniteBetween(statValue("length"), 0.5, 150) || !isFiniteBetween(statValue("weight"), 0.001, 150) || !isFiniteBetween(statValue("power"), 1, 10)) critical.push(`${label}: implausible fossil/gameplay stat`);
+      if (!isFiniteBetween(statValue("length") ?? statValue("wingspan"), 0.5, 150) || (statValue("weight") !== undefined && !isFiniteBetween(statValue("weight"), 0.0001, 150)) || !isFiniteBetween(statValue("power"), 1, 10)) critical.push(`${label}: implausible fossil/gameplay stat`);
     }
     if (pack.id === "tall-trees") {
       if (!isFiniteBetween(feetValue, 3, 500) || Math.abs(statValue("dave-stacks") - feetValue / 6) > 1 || Math.abs(statValue("giraffe-stacks") - feetValue / 18) > 1) critical.push(`${label}: implausible height comparison`);

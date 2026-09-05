@@ -24,6 +24,7 @@ const toTopTrumpStat = (stat: PackStat): TopTrumpStat => ({
   value: stat.value,
   display: statDisplay(stat),
   direction: stat.direction ?? "higher",
+  unit: stat.unit,
 });
 
 export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
@@ -45,6 +46,7 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
         statLabel: primary.label,
         statValue: primary.value,
         statDisplay: statDisplay(primary),
+        ...(["scoville", "pepper-scoville"].includes(primary.id) ? { collectionSortValue: primary.value } : {}),
         subStat: card.metadata?.location ? worldLocationDisplay(card.metadata.location) : card.categories[0] ?? pack.title,
         fact: card.fact,
         qualityScore,
@@ -52,7 +54,10 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
         categories: card.categories,
         tags: card.tags,
         metadata: card.metadata,
-        stats: card.stats.map(toTopTrumpStat),
+        // Alternate units remain visible in Collection, but are one choice
+        // in comparisons rather than duplicate ways to win the same round.
+        stats: card.stats.filter((stat, index, stats) =>
+          stats.findIndex((candidate) => candidate.label === stat.label) === index).map(toTopTrumpStat),
         details: [
           ...card.stats.map((stat) => ({
             label: card.stats.filter((candidate) => candidate.label === stat.label).length > 1 && stat.unit
@@ -60,7 +65,12 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
               : stat.label,
             value: statDisplay(stat),
           })),
-          ...card.stats.filter((stat) => stat.note).map((stat) => ({ label: `${stat.label} note`, value: stat.note! })),
+          ...card.stats.filter((stat) => stat.note).map((stat) => ({
+            label: card.stats.filter((candidate) => candidate.label === stat.label).length > 1 && stat.unit
+              ? `${stat.label} (${stat.unit}) note`
+              : `${stat.label} note`,
+            value: stat.note!,
+          })),
           ...(card.categories.length ? [{ label: "Category", value: card.categories.join(" · ") }] : []),
           ...(card.metadata?.location ? [
             { label: "Location", value: card.metadata.location.label },

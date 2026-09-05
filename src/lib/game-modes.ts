@@ -1,12 +1,12 @@
 import {
-  buildings,
+  buildings as buildingRecords,
   countries,
   heatBands,
   heatBandRangeLabel,
   heatProfiles,
-  jets,
+  jets as jetRecords,
   peppers,
-  sharks,
+  sharks as sharkRecords,
   spaceCards,
   topicIds,
   type Building,
@@ -28,6 +28,13 @@ import { cardDiscoveryIdentities } from "./card-discovery";
 import { questionDepthForSelection } from "./difficulty";
 import { poolForDifficulty } from "./difficulty-pool";
 import { discoveryShuffle, sample, sampleSafe, seedRandom, shuffle } from "./random";
+
+const buildings = buildingRecords.filter((item): item is Building & { heightFt: number } => item.heightFt !== null);
+const sharks = sharkRecords.filter((item): item is Shark & { lengthFt: number } => item.lengthFt !== null && item.id !== "zambezi-shark");
+const jets = jetRecords.filter((item): item is Jet & { maxSpeedMph: number; rangeMiles: number } => item.maxSpeedMph !== null && item.rangeMiles !== null);
+const referenceFeet = (value: number | null) => value === null ? "Not confirmed" : feet(value);
+const referenceSpeed = (value: number | null) => value === null ? "Unknown" : `${formatNumber(value)} mph`;
+const referenceRange = (value: number | null) => value === null ? "Unknown" : `${formatNumber(value)} mi`;
 
 export type GameMode = "mix" | "quiz" | "versus" | "trumps" | "sort" | "fact" | "peek" | "number" | "odd" | "geo";
 
@@ -212,6 +219,7 @@ export type TopTrumpStat = {
   value: number;
   display: string;
   direction: TopTrumpDirection;
+  unit?: string;
 };
 
 export type TopTrumpOutcome = "win" | "tie" | "loss";
@@ -294,11 +302,7 @@ export const worldLocationLabelInProse = (label: string) => {
 export const sentenceStart = (value: string) => value.replace(/^./, (letter) => letter.toUpperCase());
 export const countryCapitalLabel = (country: Pick<Country, "capital">) =>
   naturalList(country.capital.split(/\s*\/\s*/).filter(Boolean));
-export const countryFactSentence = (country: Pick<Country, "name" | "capital" | "areaKm2" | "continents">) => {
-  const capital = countryCapitalLabel(country);
-  const capitalClause = capital === "No official capital" ? "It has no official capital" : `Its capital is ${capital}`;
-  return `${sentenceStart(countryNameInProse(country))} is in ${worldContinentLabel(country.continents)}. ${capitalClause}, and it covers ${formatNumber(country.areaKm2)} square kilometers of land.`;
-};
+export const countryFactSentence = (country: Pick<Country, "fact">) => country.fact;
 
 const roundTo = (value: number, step: number) => Math.round(value / step) * step;
 const roundedSubtractionPair = (bigger: number, smaller: number, step: number) => {
@@ -384,7 +388,7 @@ const pepperCard = (pepper: Pepper): KnowledgeCard => ({
 const buildingHeightLabel = (building: Building) => building.heightLabel ?? (building.status === "finished" ? "Height" : "Planned height");
 const buildingHeightSentence = (building: Building) => {
   const label = buildingHeightLabel(building);
-  return label === "Height" ? `${building.name} is ${feet(building.heightFt)} tall` : `${building.name}'s ${label.toLowerCase()} is ${feet(building.heightFt)}`;
+  return label === "Height" ? `${building.name} is ${referenceFeet(building.heightFt)} tall` : `${building.name}'s ${label.toLowerCase()} is ${referenceFeet(building.heightFt)}`;
 };
 
 const buildingCard = (building: Building): KnowledgeCard => ({
@@ -395,16 +399,16 @@ const buildingCard = (building: Building): KnowledgeCard => ({
   imageAlt: building.name,
   imageCredit: building.imageCredit,
   statLabel: buildingHeightLabel(building),
-  statValue: building.heightFt,
-  statDisplay: feet(building.heightFt),
+  statValue: building.heightFt ?? Number.NaN,
+  statDisplay: referenceFeet(building.heightFt),
   subStat: worldLocationDisplay(building.metadata.location!),
   fact: building.fact,
-  qualityScore: scoreFeaturedContent({ ...building, statValue: building.heightFt }).score,
-  qualityFlags: scoreFeaturedContent({ ...building, statValue: building.heightFt }).flags,
+  qualityScore: scoreFeaturedContent({ ...building, statValue: building.heightFt ?? undefined }).score,
+  qualityFlags: scoreFeaturedContent({ ...building, statValue: building.heightFt ?? undefined }).flags,
   metadata: building.metadata,
   details: [
     ...rarityDetails(building.metadata),
-    { label: buildingHeightLabel(building), value: feet(building.heightFt) },
+    { label: buildingHeightLabel(building), value: referenceFeet(building.heightFt) },
     { label: "Floors", value: building.floors ? formatNumber(building.floors) : "Not listed" },
     { label: "Status", value: building.status.replace(/^./, (letter) => letter.toUpperCase()) },
     { label: "City", value: building.city },
@@ -420,35 +424,44 @@ const sharkCard = (shark: Shark, metric: "length" | "speed" | "power" = "length"
   image: shark.image,
   imageAlt: shark.name,
   imageCredit: shark.imageCredit,
-  statLabel: metric === "length" ? "Size" : metric === "speed" ? "Speed" : "Power",
-  statValue: metric === "length" ? shark.lengthFt : metric === "speed" ? shark.speedMph : shark.power,
-  statDisplay: metric === "length" ? feet(shark.lengthFt) : metric === "speed" ? `${formatNumber(shark.speedMph)} mph` : `${shark.power}/5`,
+  statLabel: metric === "length" ? "Size" : metric === "speed" ? "Speed" : "Power (game rating)",
+  statValue: metric === "length" ? shark.lengthFt ?? Number.NaN : metric === "speed" ? shark.speedMph ?? Number.NaN : shark.power,
+  statDisplay: metric === "length" ? referenceFeet(shark.lengthFt) : metric === "speed" ? referenceSpeed(shark.speedMph) : `${shark.power}/5`,
   subStat: `${shark.family} · eats ${shark.diet}`,
   fact: shark.fact,
-  qualityScore: scoreFeaturedContent({ ...shark, statValue: metric === "length" ? shark.lengthFt : metric === "speed" ? shark.speedMph : shark.power }).score,
-  qualityFlags: scoreFeaturedContent({ ...shark, statValue: metric === "length" ? shark.lengthFt : metric === "speed" ? shark.speedMph : shark.power }).flags,
+  qualityScore: scoreFeaturedContent({ ...shark, statValue: metric === "length" ? shark.lengthFt ?? Number.NaN : metric === "speed" ? shark.speedMph ?? Number.NaN : shark.power }).score,
+  qualityFlags: scoreFeaturedContent({ ...shark, statValue: metric === "length" ? shark.lengthFt ?? Number.NaN : metric === "speed" ? shark.speedMph ?? Number.NaN : shark.power }).flags,
   tags: shark.tags,
   metadata: shark.metadata,
   details: [
     ...rarityDetails(shark.metadata),
-    { label: "Length", value: feet(shark.lengthFt) },
-    { label: "Speed", value: `${formatNumber(shark.speedMph)} mph` },
-    { label: "Power", value: `${shark.power}/5` },
-    { label: "Family", value: shark.family },
+    { label: "Length", value: referenceFeet(shark.lengthFt) },
+    { label: "Speed", value: referenceSpeed(shark.speedMph) },
+    { label: "Power (game rating)", value: `${shark.power}/5` },
+    { label: "Scientific name", value: shark.species ?? shark.name },
+    { label: "Family / group", value: shark.metadata?.taxonomyGroup ?? shark.family },
     { label: "Diet", value: shark.diet },
     ...(shark.metadata?.location ? [{ label: "Range", value: shark.metadata.location.label }] : []),
   ],
 });
 
 const spaceMetricValue = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons") => {
-  if (metric === "distance") return space.distanceFromSunMillionMiles ?? space.distanceLightYears ?? 0;
-  if (metric === "temperature") return space.surfaceTempK ?? space.meanSurfaceTempF ?? 0;
-  if (metric === "size") return space.radiusSolar ?? space.diameterMiles ?? 0;
-  return space.moons ?? 0;
+  if (metric === "distance") return space.distanceFromSunMillionMiles ?? space.distanceLightYears ?? Number.NaN;
+  if (metric === "temperature") return space.surfaceTempK ?? space.meanSurfaceTempF ?? Number.NaN;
+  if (metric === "size") return space.radiusSolar ?? space.diameterMiles ?? Number.NaN;
+  return space.moons ?? Number.NaN;
+};
+
+const spaceComparableValue = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons") => {
+  if (metric === "distance") return space.distanceFromSunMillionMiles ?? (space.distanceLightYears === undefined ? Number.NaN : space.distanceLightYears * 5878625.373);
+  if (metric === "temperature") return space.surfaceTempK ?? (space.meanSurfaceTempF === undefined ? Number.NaN : (space.meanSurfaceTempF - 32) * 5 / 9 + 273.15);
+  if (metric === "size") return space.diameterMiles ?? (space.radiusSolar === undefined ? Number.NaN : space.radiusSolar * 864600);
+  return space.moons ?? Number.NaN;
 };
 
 const spaceMetricDisplay = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons") => {
   const value = spaceMetricValue(space, metric);
+  if (!Number.isFinite(value)) return "Not measured";
   if (metric === "distance") return space.kind === "star" ? `${formatNumber(value)} ly` : `${formatNumber(value)}M mi`;
   if (metric === "temperature") return space.kind === "star" ? `${formatNumber(value)} K` : `${formatNumber(value)}°F`;
   if (metric === "size") return space.kind === "star" ? `${formatNumber(value)}x Sun` : `${formatNumber(value)} mi`;
@@ -456,6 +469,7 @@ const spaceMetricDisplay = (space: SpaceCard, metric: "distance" | "temperature"
 };
 const spaceMetricProse = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons") => {
   const value = spaceMetricValue(space, metric);
+  if (!Number.isFinite(value)) return "Not measured";
   if (metric === "distance") return space.kind === "star" ? `${formatNumber(value)} light-years` : `${formatNumber(value)} million miles`;
   if (metric === "temperature") return space.kind === "star" ? `${formatNumber(value)} kelvins` : `${formatNumber(value)} degrees Fahrenheit`;
   if (metric === "size") return space.kind === "star" ? `${formatNumber(value)} times the Sun's radius` : `${formatNumber(value)} miles wide`;
@@ -469,19 +483,19 @@ const spaceCard = (space: SpaceCard, metric: "distance" | "temperature" | "size"
   image: space.image,
   imageAlt: space.name,
   imageCredit: space.imageCredit,
-  statLabel: metric === "distance" ? "Distance" : metric === "temperature" ? "Temperature" : metric === "size" ? "Size" : "Moons",
-  statValue: spaceMetricValue(space, metric),
-  statDisplay: spaceMetricDisplay(space, metric),
+  statLabel: Number.isFinite(spaceMetricValue(space, metric)) ? metric === "distance" ? "Distance" : metric === "temperature" ? "Temperature" : metric === "size" ? "Size" : "Moons" : "Object type",
+  statValue: spaceComparableValue(space, metric),
+  statDisplay: Number.isFinite(spaceMetricValue(space, metric)) ? spaceMetricDisplay(space, metric) : space.kind.replace(/^./, (letter) => letter.toUpperCase()),
   subStat: `${space.group} · ${space.kind}`,
   fact: space.fact,
   qualityScore: scoreFeaturedContent({
     ...space,
-    statValue: spaceMetricValue(space, metric),
+    statValue: spaceComparableValue(space, metric),
     sourceCaution: space.statNote ? "estimated stat" : undefined,
   }).score,
   qualityFlags: scoreFeaturedContent({
     ...space,
-    statValue: spaceMetricValue(space, metric),
+    statValue: spaceComparableValue(space, metric),
     sourceCaution: space.statNote ? "estimated stat" : undefined,
   }).flags,
   metadata: space.metadata,
@@ -550,19 +564,19 @@ const jetCard = (jet: Jet, metric: "speed" | "range" | "firepower" = "speed"): K
   image: jet.image,
   imageAlt: jet.name,
   imageCredit: jet.imageCredit,
-  statLabel: metric === "speed" ? "Speed" : metric === "range" ? "Range" : "Firepower",
-  statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower,
-  statDisplay: metric === "speed" ? `${formatNumber(jet.maxSpeedMph)} mph` : metric === "range" ? `${formatNumber(jet.rangeMiles)} mi` : `${jet.firepower}/5`,
+  statLabel: metric === "speed" ? "Speed" : metric === "range" ? "Range" : "Firepower (game rating)",
+  statValue: metric === "speed" ? jet.maxSpeedMph ?? Number.NaN : metric === "range" ? jet.rangeMiles ?? Number.NaN : jet.firepower,
+  statDisplay: metric === "speed" ? referenceSpeed(jet.maxSpeedMph) : metric === "range" ? referenceRange(jet.rangeMiles) : `${jet.firepower}/5`,
   subStat: `${jet.country} · ${jetCategoryLabels[jet.category]}`,
   fact: jet.fact,
   metadata: { ...jet.metadata, location: jetWorldLocation(jet) },
-  qualityScore: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower }).score,
-  qualityFlags: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph : metric === "range" ? jet.rangeMiles : jet.firepower }).flags,
+  qualityScore: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph ?? Number.NaN : metric === "range" ? jet.rangeMiles ?? Number.NaN : jet.firepower }).score,
+  qualityFlags: scoreFeaturedContent({ ...jet, statValue: metric === "speed" ? jet.maxSpeedMph ?? Number.NaN : metric === "range" ? jet.rangeMiles ?? Number.NaN : jet.firepower }).flags,
   details: [
     ...rarityDetails(jet.metadata),
-    { label: "Top speed", value: `${formatNumber(jet.maxSpeedMph)} mph` },
-    { label: "Range", value: `${formatNumber(jet.rangeMiles)} mi` },
-    { label: "Firepower", value: `${jet.firepower}/5` },
+    { label: "Top speed", value: referenceSpeed(jet.maxSpeedMph) },
+    { label: "Range", value: referenceRange(jet.rangeMiles) },
+    { label: "Firepower (game rating)", value: `${jet.firepower}/5` },
     { label: "Country", value: jet.country },
     { label: "Aircraft type", value: jetCategoryLabels[jet.category].replace(/^./, (letter) => letter.toUpperCase()) },
     { label: "Continent", value: worldContinentLabel(jetWorldLocation(jet).continents) },
@@ -576,7 +590,7 @@ const countryNeighborDisplay = (country: Country) => `${country.landNeighborCoun
 const countryHighestPointDisplay = (country: Country) => `${formatNumber(country.highestPointM)} m`;
 const countryTrumpStats = (country: Country): TopTrumpStat[] => [
   { id: "population", label: "Population", value: country.population, display: countryPopulationDisplay(country), direction: "higher" },
-  { id: "area", label: "Land area", value: country.areaKm2, display: countryAreaDisplay(country), direction: "higher" },
+  { id: "area", label: "Area", value: country.areaKm2, display: countryAreaDisplay(country), direction: "higher" },
   { id: "land-neighbors", label: "Land neighbors", value: country.landNeighborCount, display: countryNeighborDisplay(country), direction: "higher" },
   { id: "highest-point", label: "Highest point", value: country.highestPointM, display: countryHighestPointDisplay(country), direction: "higher" },
 ];
@@ -596,7 +610,7 @@ const countryCard = (country: Country, metric: CountryMetric = "population"): Kn
     image: country.image,
     imageAlt: `Flag of ${country.name}`,
     imageCredit: country.imageCredit,
-    statLabel: metric === "population" ? "Population" : "Land area",
+    statLabel: metric === "population" ? "Population" : "Area",
     statValue,
     statDisplay: metric === "population" ? countryPopulationDisplay(country) : countryAreaDisplay(country),
     subStat: `${country.flagEmoji} ${countryCapitalLabel(country)} · ${worldContinentLabel(country.continents)}`,
@@ -607,7 +621,7 @@ const countryCard = (country: Country, metric: CountryMetric = "population"): Kn
     details: [
       { label: "Capital", value: countryCapitalLabel(country) },
       { label: "Population", value: `${formatNumber(country.population)} (${country.populationYear})` },
-      { label: "Land area", value: countryAreaDisplay(country) },
+      { label: "Area", value: countryAreaDisplay(country) },
       { label: "Land neighbors", value: countryNeighborDisplay(country) },
       { label: "Highest point", value: `${country.highestPointName} · ${countryHighestPointDisplay(country)}` },
       { label: "Continent", value: worldContinentLabel(country.continents) },
@@ -629,10 +643,10 @@ const countryGenericCard = (country: Country): GenericKnowledgeCard => ({
 
 const collectionCardCatalog: KnowledgeCard[] = [
   ...peppers.map(pepperCard),
-  ...buildings.map(buildingCard),
-  ...sharks.map((shark) => sharkCard(shark)),
+  ...buildingRecords.map(buildingCard),
+  ...sharkRecords.map((shark) => sharkCard(shark)),
   ...spaceCards.map((space) => spaceCard(space, space.kind === "star" ? "temperature" : space.kind === "planet" ? "distance" : "size")),
-  ...jets.map((jet) => jetCard(jet)),
+  ...jetRecords.map((jet) => jetCard(jet)),
   ...countries.map((country) => countryCard(country)),
 ];
 
@@ -658,7 +672,7 @@ export const orderCollectionCardsByScoville = (cards: readonly KnowledgeCard[]):
 };
 
 const comparableCollectionStatLabel = (cards: readonly KnowledgeCard[]): string | null => {
-  if (cards.length === 0 || !cards.every((card) => Number.isFinite(card.statValue))) return null;
+  if (!cards.some((card) => Number.isFinite(card.statValue))) return null;
   if (cards.every((card) => card.topic === "buildings")) return "Height";
   const statLabels = new Set(cards.map((card) => card.statLabel));
   return statLabels.size === 1 ? cards[0].statLabel : null;
@@ -671,13 +685,14 @@ export const orderCollectionCardsForCategory = (cards: readonly KnowledgeCard[])
 
   const hasComparablePrimaryStat = comparableCollectionStatLabel(cards) !== null;
   return [...cards].sort((a, b) => hasComparablePrimaryStat
-    ? b.statValue - a.statValue || a.title.localeCompare(b.title)
+    ? (Number.isFinite(b.statValue) ? b.statValue : Number.NEGATIVE_INFINITY) - (Number.isFinite(a.statValue) ? a.statValue : Number.NEGATIVE_INFINITY) || a.title.localeCompare(b.title)
     : a.title.localeCompare(b.title));
 };
 
 export const collectionOrderLabel = (cards: readonly KnowledgeCard[]): string => {
   if (cards.length === 0) return "No cards";
-  if (cards.every((card) => card.topic === "peppers" || card.topic === "hot-sauces")) return "Scoville · mildest to hottest";
+  if (cards.every((card) => card.topic === "hot-sauces")) return "Scoville references · lowest to highest";
+  if (cards.every((card) => card.topic === "peppers")) return "Scoville · mildest to hottest";
   const statLabel = comparableCollectionStatLabel(cards);
   return statLabel
     ? `${statLabel} · highest to lowest`
@@ -1088,7 +1103,6 @@ const rarityStat = (rarity: CardRarity): TopTrumpStat => ({
 const rarityStats = (metadata?: CardMetadata): TopTrumpStat[] => metadata?.rarity ? [rarityStat(metadata.rarity)] : [];
 const plantHeight = (value: number) => (value >= 24 && value % 12 === 0 ? `${value / 12} ft` : `${value} in`);
 
-const sharkWeightLb = (shark: Shark) => Math.round(Math.max(10, shark.lengthFt ** 2.85 * (shark.power >= 4 ? 0.85 : 0.55)));
 const buildingCompletedYear = (building: Building) => {
   const years: Record<string, number> = {
     "willis-tower": 1974,
@@ -1135,7 +1149,7 @@ const buildingCompletedYear = (building: Building) => {
     "eiffel-tower": 1889,
     "leaning-tower-of-pisa": 1372,
   };
-  return years[building.id] ?? (building.status === "finished" ? 2018 : 2030);
+  return building.status === "finished" ? years[building.id] ?? null : null;
 };
 
 const buildingStatusLabel = (building: Building) => {
@@ -1149,8 +1163,8 @@ const buildingYearDisplay = (building: Building) => building.status === "propose
 const buildingIsInAsia = (building: Building) =>
   ["China", "Hong Kong", "Malaysia", "Saudi Arabia", "South Korea", "Taiwan", "United Arab Emirates", "Vietnam"].includes(building.country);
 const buildingIsInBrooklyn = (building: Building) => ["brooklyn-tower", "brooklyn-point", "ava-dobro", "11-hoyt", "the-everly", "385-atlantic-avenue"].includes(building.id);
-const buildingIsSupertall = (building: Building) => building.heightFt >= 984;
-const buildingIsMegaTall = (building: Building) => building.heightFt >= 1968;
+const buildingIsSupertall = (building: Building) => building.heightFt !== null && building.heightFt >= 984;
+const buildingIsMegaTall = (building: Building) => building.heightFt !== null && building.heightFt >= 1968;
 
 const jetFirstFlightYear = (jet: Jet) => {
   const years: Record<string, number> = {
@@ -1205,17 +1219,16 @@ const jetFirstFlightYear = (jet: Jet) => {
     "english-electric-lightning": 1954,
     "mig-21": 1955,
   };
-  return years[jet.id] ?? 1985;
+  return years[jet.id] ?? null;
 };
 
 const jetWeightLb = (jet: Jet) => {
   const weights: Record<string, number> = {
     "f-35-lightning-ii": 70000,
     "f-22-raptor": 83500,
-    "su-57": 77000,
+    "su-57": 74957,
     "j-20": 81600,
     "b-2-spirit": 336500,
-    "b-21-raider": 160000,
     "f-117-nighthawk": 52500,
     "sr-71-blackbird": 172000,
     "u-2": 40000,
@@ -1227,51 +1240,44 @@ const jetWeightLb = (jet: Jet) => {
     "a-10-thunderbolt-ii": 51000,
     rafale: 54000,
     "eurofighter-typhoon": 51800,
-    "jas-39-gripen": 36400,
-    "mig-29": 40800,
-    "su-27": 67100,
+    "jas-39-gripen": 30865,
+    "mig-29": 39683,
+    "su-27": 72753,
     "su-35": 76100,
-    "su-34": 99200,
-    "mig-31": 101000,
+    "su-34": 99428,
+    "mig-31": 101854,
     "tu-160": 606000,
-    "tu-22m": 275600,
+    "tu-22m": 277782,
     "b-1-lancer": 477000,
     "b-52-stratofortress": 488000,
-    "mirage-2000": 37500,
+    "mirage-2000": 38500,
     "mirage-f1": 35700,
-    "sepecat-jaguar": 34400,
-    "panavia-tornado": 61700,
+    "sepecat-jaguar": 34613,
+    "panavia-tornado": 59999,
     "av-8b-harrier-ii": 31000,
     "hawker-harrier": 25200,
-    "l-39-albatros": 10360,
-    "t-50-golden-eagle": 27300,
+    "l-39-albatros": 10362,
+    "t-50-golden-eagle": 23638,
     "yak-130": 22700,
-    "hongdu-l-15": 21600,
-    "j-10": 42500,
     "j-11": 72750,
     "j-16": 77000,
-    "fc-31": 61700,
-    "hal-tejas": 29100,
+    "hal-tejas": 29762,
     "mitsubishi-f-2": 48700,
     "f-15j": 68000,
-    "f-ck-1": 26900,
+    "f-ck-1": 27600,
     "iai-kfir": 36400,
-    "f-5": 24700,
-    "f-4-phantom-ii": 61795,
     "english-electric-lightning": 45750,
-    "mig-21": 22900,
   };
-  return weights[jet.id] ?? 30000;
+  return weights[jet.id] ?? null;
 };
 
 const jetAltitudeFt = (jet: Jet) => {
   const altitudes: Record<string, number> = {
     "f-35-lightning-ii": 50000,
     "f-22-raptor": 65000,
-    "su-57": 66000,
+    "su-57": 61700,
     "j-20": 66000,
     "b-2-spirit": 50000,
-    "b-21-raider": 50000,
     "f-117-nighthawk": 45000,
     "sr-71-blackbird": 85000,
     "u-2": 70000,
@@ -1285,39 +1291,36 @@ const jetAltitudeFt = (jet: Jet) => {
     "eurofighter-typhoon": 65000,
     "jas-39-gripen": 50000,
     "mig-29": 59000,
-    "su-27": 62000,
+    "su-27": 60700,
     "su-35": 59000,
     "su-34": 56000,
     "mig-31": 67000,
     "tu-160": 52000,
-    "tu-22m": 44000,
+    "tu-22m": 43600,
     "b-1-lancer": 60000,
     "b-52-stratofortress": 50000,
-    "mirage-2000": 59000,
+    "mirage-2000": 60000,
     "mirage-f1": 66000,
     "sepecat-jaguar": 46000,
     "panavia-tornado": 50000,
-    "av-8b-harrier-ii": 50000,
-    "hawker-harrier": 51000,
-    "l-39-albatros": 36000,
+    "av-8b-harrier-ii": 38000,
+    "hawker-harrier": 55000,
+    "l-39-albatros": 37730,
     "t-50-golden-eagle": 48000,
     "yak-130": 41000,
-    "hongdu-l-15": 52000,
-    "j-10": 59000,
-    "j-11": 62000,
-    "j-16": 59000,
-    "fc-31": 52000,
+    "j-11": 60700,
+    "j-16": 56800,
     "hal-tejas": 50000,
     "mitsubishi-f-2": 59000,
     "f-15j": 65000,
-    "f-ck-1": 55000,
+    "f-ck-1": 51500,
     "iai-kfir": 58000,
     "f-5": 51800,
-    "f-4-phantom-ii": 60000,
+    "f-4-phantom-ii": 62250,
     "english-electric-lightning": 60000,
-    "mig-21": 57400,
+    "mig-21": 62000,
   };
-  return altitudes[jet.id] ?? 50000;
+  return altitudes[jet.id] ?? null;
 };
 
 const spaceTrumpPool = () => spaceCards.filter((card) =>
@@ -1352,7 +1355,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
   }
 
   if (topic === "buildings") {
-    const building = buildings.find((item) => item.id === id);
+    const building = buildingRecords.find((item) => item.id === id);
     if (!building) return null;
     return {
       id: building.id,
@@ -1366,16 +1369,15 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       metadata: building.metadata,
       stats: [
         ...rarityStats(building.metadata),
-        { id: "height", label: buildingHeightLabel(building), value: building.heightFt, display: feet(building.heightFt), direction: "higher" },
-        { id: "floors", label: "Floors", value: building.floors ?? 0, display: `${building.floors ?? "?"}`, direction: "higher" },
-        { id: "year", label: "Year built", value: buildingCompletedYear(building), display: buildingYearDisplay(building), direction: "lower" },
-        { id: "fame", label: "Skyline fame", value: Math.min(10, Math.max(5, Math.round(building.heightFt / 350) + (building.status === "finished" ? 2 : 0))), display: `${Math.min(10, Math.max(5, Math.round(building.heightFt / 350) + (building.status === "finished" ? 2 : 0)))}/10`, direction: "higher" },
+        ...(building.heightFt === null ? [] : [{ id: "height", label: buildingHeightLabel(building), value: building.heightFt, display: referenceFeet(building.heightFt), direction: "higher" as const }]),
+        ...(building.floors === undefined ? [] : [{ id: "floors", label: building.status === "finished" ? "Floors" : "Planned floors", value: building.floors, display: `${building.floors}`, direction: "higher" as const }]),
+        ...(buildingCompletedYear(building) === null ? [] : [{ id: "year", label: "Year built", value: buildingCompletedYear(building)!, display: buildingYearDisplay(building), direction: "lower" as const }]),
       ],
     };
   }
 
   if (topic === "sharks") {
-    const shark = sharks.find((item) => item.id === id);
+    const shark = sharkRecords.find((item) => item.id === id);
     if (!shark) return null;
     return {
       id: shark.id,
@@ -1389,10 +1391,9 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       metadata: shark.metadata,
       stats: [
         ...rarityStats(shark.metadata),
-        { id: "speed", label: "Speed", value: shark.speedMph, display: `${formatNumber(shark.speedMph)} mph`, direction: "higher" },
-        { id: "weight", label: "Weight", value: sharkWeightLb(shark), display: pounds(sharkWeightLb(shark)), direction: "higher" },
-        { id: "length", label: "Length", value: shark.lengthFt, display: feet(shark.lengthFt), direction: "higher" },
-        { id: "power", label: "Predator power", value: shark.power * 2, display: `${shark.power * 2}/10`, direction: "higher" },
+        ...(shark.speedMph === null ? [] : [{ id: "speed", label: "Reported burst speed", value: shark.speedMph, display: referenceSpeed(shark.speedMph), direction: "higher" as const }]),
+        ...(shark.lengthFt === null ? [] : [{ id: "length", label: "Length", value: shark.lengthFt, display: referenceFeet(shark.lengthFt), direction: "higher" as const }]),
+        { id: "power", label: "Power (game rating)", value: shark.power * 2, display: `${shark.power * 2}/10`, direction: "higher" },
       ],
     };
   }
@@ -1400,8 +1401,10 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
   if (topic === "space") {
     const space = spaceCards.find((item) => item.id === id);
     if (!space) return null;
-    const sizeValue = space.radiusSolar ?? space.diameterMiles ?? 0;
-    const tempValue = space.surfaceTempK ?? space.meanSurfaceTempF ?? 0;
+    // Compare diameters in miles and temperatures in kelvin, including values
+    // below 0°F. Missing measurements must never become a claimed zero.
+    const sizeValue = space.diameterMiles ?? (space.radiusSolar === undefined ? undefined : space.radiusSolar * 864600);
+    const tempValue = space.surfaceTempK ?? (space.meanSurfaceTempF === undefined ? undefined : (space.meanSurfaceTempF - 32) * 5 / 9 + 273.15);
     return {
       id: space.id,
       topic,
@@ -1414,11 +1417,11 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
       metadata: space.metadata,
       stats: ([
         ...rarityStats(space.metadata),
-        { id: "size", label: "Size", value: sizeValue, display: space.radiusSolar ? `${formatNumber(sizeValue)}x Sun` : `${formatNumber(sizeValue)} mi`, direction: "higher" },
-        { id: "temperature", label: "Temperature", value: tempValue, display: space.surfaceTempK ? `${formatNumber(tempValue)} K` : `${formatNumber(tempValue)}°F`, direction: "higher" },
-        { id: "distance", label: "Distance from Sun", value: space.distanceFromSunMillionMiles ?? 0, display: `${formatNumber(space.distanceFromSunMillionMiles ?? 0)}M mi`, direction: "higher" },
-        { id: "moons", label: "Moons", value: space.moons ?? 0, display: `${formatNumber(space.moons ?? 0)}`, direction: "higher" },
-      ] satisfies TopTrumpStat[]).filter((stat) => stat.value > 0 || stat.id === "moons"),
+        ...(sizeValue === undefined ? [] : [{ id: "size", label: "Diameter", value: sizeValue, display: `${formatNumber(sizeValue)} mi`, direction: "higher" as const }]),
+        ...(tempValue === undefined ? [] : [{ id: "temperature", label: "Temperature", value: tempValue, display: `${formatNumber(Math.round(tempValue))} K`, direction: "higher" as const }]),
+        ...(space.distanceFromSunMillionMiles === undefined ? [] : [{ id: "distance", label: "Distance from Sun", value: space.distanceFromSunMillionMiles, display: `${formatNumber(space.distanceFromSunMillionMiles)}M mi`, direction: "higher" as const }]),
+        ...(space.moons === undefined ? [] : [{ id: "moons", label: "Moons", value: space.moons, display: `${formatNumber(space.moons)}`, direction: "higher" as const }]),
+      ] satisfies TopTrumpStat[]),
     };
   }
 
@@ -1428,7 +1431,7 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
     return countryGenericCard(country);
   }
 
-  const jet = jets.find((item) => item.id === id);
+  const jet = jetRecords.find((item) => item.id === id);
   if (!jet) return null;
   return {
     id: jet.id,
@@ -1442,12 +1445,12 @@ const topTrumpCard = (topic: KnowledgeTopic, id: string): TopTrumpCard | null =>
     metadata: { ...jet.metadata, location: jetWorldLocation(jet) },
     stats: [
       ...rarityStats(jet.metadata),
-      { id: "speed", label: "Speed", value: jet.maxSpeedMph, display: `${formatNumber(jet.maxSpeedMph)} mph`, direction: "higher" },
-      { id: "range", label: "Range", value: jet.rangeMiles, display: `${formatNumber(jet.rangeMiles)} mi`, direction: "higher" },
-      { id: "weight", label: "Weight", value: jetWeightLb(jet), display: pounds(jetWeightLb(jet)), direction: "higher" },
-      { id: "deadliness", label: "Deadliness", value: jet.firepower * 2, display: `${jet.firepower * 2}/10`, direction: "higher" },
-      { id: "year", label: "Year created", value: jetFirstFlightYear(jet), display: `${jetFirstFlightYear(jet)} (older wins)`, direction: "lower" },
-      { id: "altitude", label: "Max altitude", value: jetAltitudeFt(jet), display: feet(jetAltitudeFt(jet)), direction: "higher" },
+      ...(jet.maxSpeedMph === null ? [] : [{ id: "speed", label: "Speed", value: jet.maxSpeedMph, display: referenceSpeed(jet.maxSpeedMph), direction: "higher" as const }]),
+      ...(jet.rangeMiles === null ? [] : [{ id: "range", label: "Reference range", value: jet.rangeMiles, display: referenceRange(jet.rangeMiles), direction: "higher" as const }]),
+      ...(jetWeightLb(jet) === null ? [] : [{ id: "weight", label: "Max takeoff weight", value: jetWeightLb(jet)!, display: pounds(jetWeightLb(jet)!), direction: "higher" as const }]),
+      { id: "deadliness", label: "Firepower (game rating)", value: jet.firepower * 2, display: `${jet.firepower * 2}/10`, direction: "higher" },
+      ...(jetFirstFlightYear(jet) === null ? [] : [{ id: "year", label: "First flight", value: jetFirstFlightYear(jet)!, display: `${jetFirstFlightYear(jet)} (older wins)`, direction: "lower" as const }]),
+      ...(jetAltitudeFt(jet) === null ? [] : [{ id: "altitude", label: "Service ceiling", value: jetAltitudeFt(jet)!, display: feet(jetAltitudeFt(jet)!), direction: "higher" as const }]),
     ],
   };
 };
@@ -1523,7 +1526,9 @@ export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed
   const allCards = collectionCards();
   const topicCards = preferredPool(allCards.filter((card) => card.topic === currentTopic), difficulty);
   const card = discoveryShuffle(topicCards, seed + 1, unlockedTitles, cardDiscoveryIdentities)[0];
-  const distractors = shuffle(topicCards.filter((item) => item.id !== card.id).map((item) => item.title), seed + 2).slice(0, count - 1);
+  const distractors = shuffle(topicCards.filter((item) => item.id !== card.id
+    && !(card.metadata?.imageDistinctGroup === "bull-shark-alias" && item.metadata?.imageDistinctGroup === "bull-shark-alias"))
+    .map((item) => item.title), seed + 2).slice(0, count - 1);
 
   return {
     id: `${seed}-peek-${currentTopic}-${card.id}`,
@@ -1771,6 +1776,24 @@ const multiplicationRound = (
 
 const cardsWithStats = (cards: readonly GenericKnowledgeCard[]) => cards.filter((card) => card.stats.length && Number.isFinite(card.statValue));
 
+// A pack may contain body lengths and wingspans, or products with no
+// published heat score. Numeric rounds need one common measurement.
+const comparablePrimaryStatCards = (cards: readonly GenericKnowledgeCard[]) => {
+  const groups = new Map<string, GenericKnowledgeCard[]>();
+  for (const card of cardsWithStats(cards)) {
+    const primary = card.stats[0];
+    const key = `${primary.id}|${primary.unit ?? ""}`;
+    const group = groups.get(key) ?? [];
+    group.push(card);
+    groups.set(key, group);
+  }
+  return [...groups.values()].sort((a, b) => b.length - a.length)[0] ?? [];
+};
+
+const primaryStatUnit = (card: GenericKnowledgeCard) => card.stats[0]?.unit
+  ?? card.stats[0]?.display.replace(formatNumber(card.stats[0].value), "").replace(/^~\s*/, "").trim()
+  ?? "";
+
 const distinctStatCards = <T extends { statValue: number }>(cards: readonly T[], seed: number, requestedCount: number) => {
   const selected: T[] = [];
   const seenValues = new Set<number>();
@@ -1813,7 +1836,7 @@ const statValueGap = (values: readonly number[], difficulty: Difficulty) => {
 const sameStatCard = (card: GenericKnowledgeCard, value: number): KnowledgeCard => ({
   ...card,
   statValue: value,
-  statDisplay: numberWithUnit(value, card.stats[0]?.display.replace(formatNumber(card.stats[0].value), "").trim() || ""),
+  statDisplay: numberWithUnit(value, primaryStatUnit(card)),
 });
 
 const shouldBuildFitRound = (difficulty: Difficulty, seed: number) => difficulty > 1 && seedRandom(seed + 21) > 0.48;
@@ -2151,12 +2174,19 @@ const cachedGeoCapability = (cards: readonly KnowledgeCard[], difficulty: Diffic
 
 export const canBuildGeoRoundFromCards = (cards: readonly KnowledgeCard[], difficulty: Difficulty = 1) => {
   return cachedGeoCapability(cards, difficulty, () => {
-    const count = geoChoiceCountForDifficulty(difficulty);
-    const candidates = geoChoiceCandidates(preferredPool(geoCards(cards), difficulty));
-    const usCandidates = candidates.filter((choice) => isUsMapLocation(choice.location) && choice.location.states?.length);
-    return usCandidates.some((answer, index) => diverseGeoChoices(answer, usCandidates, count, difficulty, index, "us") !== null)
-      || candidates.some((answer, index) => diverseGeoChoices(answer, candidates, count, difficulty, index) !== null);
+    const { pool, choicesPool } = geoPoolPlanForCards(cards, difficulty);
+    return hasPlayableGeoChoices(pool, choicesPool, difficulty);
   });
+};
+
+const hasPlayableGeoChoices = (cards: readonly LocatedKnowledgeCard[], choices: readonly GeoChoice[], difficulty: Difficulty) => {
+  const count = geoChoiceCountForDifficulty(difficulty);
+  const answers = geoChoiceCandidates(cards);
+  const usChoices = choices.filter((choice) => isUsMapLocation(choice.location) && choice.location.states?.length);
+  return answers.some((answer, index) =>
+    (isUsMapLocation(answer.location) && answer.location.states?.length
+      && diverseGeoChoices(answer, usChoices, count, difficulty, index, "us") !== null)
+    || diverseGeoChoices(answer, choices, count, difficulty, index) !== null);
 };
 
 const geoScopedCards = new Map<string, KnowledgeCard[]>();
@@ -2191,8 +2221,12 @@ const geoPoolPlanForCards = (cards: readonly KnowledgeCard[], difficulty: Diffic
 
   const allLocatedCards = geoCards(cards);
   const preferred = preferredPool(allLocatedCards, difficulty);
-  const pool = canBuildGeoRoundFromCards(preferred, difficulty) ? preferred : allLocatedCards;
-  const plan = { pool, choicesPool: geoChoiceCandidates(pool) };
+  const preferredChoices = geoChoiceCandidates(preferred);
+  // Familiar aircraft can share one origin. Use other locations from the same
+  // selected catalog as distractors while keeping the subject at its level.
+  const choicesPool = hasPlayableGeoChoices(preferred, preferredChoices, difficulty)
+    ? preferredChoices : geoChoiceCandidates(allLocatedCards);
+  const plan = { pool: preferred, choicesPool };
   const nextCache = cachedByDifficulty ?? new Map<Difficulty, GeoPoolPlan>();
   nextCache.set(difficulty, plan);
   if (!cachedByDifficulty) geoPoolPlanCache.set(cards, nextCache);
@@ -2259,7 +2293,7 @@ export const buildSortRoundFromCards = (
   difficulty: Difficulty,
   seed: number,
 ): SortRound => {
-  const pool = cardsWithStats(cards);
+  const pool = comparablePrimaryStatCards(cards);
   const preferred = preferredPool(pool, difficulty);
   if (preferred.length < 3) throw new Error(`Need at least 3 stat cards to build a sort round for ${topic}`);
   const count = Math.min(preferred.length, difficulty === 1 ? 3 : 4);
@@ -2341,11 +2375,11 @@ export const buildFactRoundFromCards = (
   seed: number,
   unlockedTitles: readonly string[] = [],
 ): FactRound => {
-  const pool = preferredPool(cardsWithStats(cards), difficulty);
+  const pool = preferredPool(comparablePrimaryStatCards(cards), difficulty);
   const questionDepth = questionDepthForSelection(difficulty, seed);
   if (pool.length < 2) throw new Error(`Need at least 2 stat cards to build a fact round for ${topic}`);
   const truthful = seedRandom(seed + 11) > 0.46;
-  const locationPool = pool.filter(hasLocationMetadata);
+  const locationPool = preferredPool(cardsWithStats(cards), difficulty).filter(hasLocationMetadata);
   const falseLocationPool = locationPool.filter((card) => separatedFactLocationPartners(card, locationPool).length > 0);
   const eligibleLocationPool = truthful ? locationPool : falseLocationPool;
   const useLocation = eligibleLocationPool.length > 0
@@ -2357,8 +2391,8 @@ export const buildFactRoundFromCards = (
     const location = card.metadata.location;
     const fakeCard = truthful ? card : sample(separatedFactLocationPartners(card, locationPool), seed + 13);
     const statement = truthful
-      ? `${card.title} is found in ${location.label}.`
-      : `${card.title} is found in ${fakeCard.metadata.location.label}.`;
+      ? `The location listed for ${card.title} is ${location.label}.`
+      : `The location listed for ${card.title} is ${fakeCard.metadata.location.label}.`;
     const claimedLocation = truthful ? location : fakeCard.metadata.location;
 
     return {
@@ -2370,7 +2404,7 @@ export const buildFactRoundFromCards = (
       imageAlt: card.imageAlt,
       imageCredit: card.imageCredit,
       answer: truthful ? "True" : "False",
-      explanation: `${card.title} is actually connected with ${worldLocationLabelInProse(location.label)}. ${card.fact}`,
+      explanation: `The location on ${card.title}'s card is ${location.label}. ${card.fact}`,
       locations: [location],
       map: {
         claimed: geoChoiceForLocation(claimedLocation),
@@ -2384,9 +2418,9 @@ export const buildFactRoundFromCards = (
   const useStat = questionDepth > 1 || seedRandom(seed + 14) > 0.45;
   const statement = truthful
     ? useStat
-      ? `${card.title} has ${card.statDisplay}.`
+      ? `The listed ${card.statLabel.toLowerCase()} for ${card.title} is ${card.statDisplay}.`
       : card.fact
-    : `${card.title} has ${fakeCard.statDisplay}.`;
+    : `The listed ${card.statLabel.toLowerCase()} for ${card.title} is ${fakeCard.statDisplay}.`;
 
   return {
     id: `${seed}-fact-${topic}-${card.id}`,
@@ -2408,14 +2442,14 @@ export const buildNumberRoundFromCards = (
   difficulty: Difficulty,
   seed: number,
 ): NumberRound => {
-  const pool = preferredPool(cardsWithStats(cards).filter((card) => card.statValue >= 0), difficulty);
+  const pool = preferredPool(comparablePrimaryStatCards(cards).filter((card) => card.statValue >= 0), difficulty);
   const questionDepth = questionDepthForSelection(difficulty, seed);
   if (pool.length < 2) throw new Error(`Need at least 2 non-negative stat cards to build a number round for ${topic}`);
   const values = pool.map((card) => card.statValue);
   const gap = statValueGap(values, questionDepth);
   const requestedOperation = numberOperationForSeed(seed);
   const shouldAdd = pool.length >= 3 && requestedOperation === "addition";
-  const unit = pool[0].stats[0]?.display.replace(formatNumber(pool[0].stats[0].value), "").trim() || "";
+  const unit = primaryStatUnit(pool[0]);
 
   if (requestedOperation === "multiplication") {
     const [card, companion] = shuffle(pool, seed + 40).slice(0, 2);
@@ -2540,11 +2574,12 @@ export const buildOddRoundFromCards = (
   difficulty: Difficulty,
   seed: number,
 ): OddRound => {
-  const preferred = preferredPool(cards, difficulty);
+  const comparable = comparablePrimaryStatCards(cards);
+  const preferred = preferredPool(comparable, difficulty);
   const preferredWithDistinctStats = focusedStatCards(cardsWithStats(preferred), difficulty, seed + 1, 4);
   const pool = preferredWithDistinctStats.length === 4
     ? preferredWithDistinctStats
-    : focusedStatCards(cardsWithStats(cards), difficulty, seed + 2, 4);
+    : focusedStatCards(comparable, difficulty, seed + 2, 4);
   if (pool.length < 4) throw new Error(`Need at least 4 cards to build an odd-one round for ${topic}`);
   const odd = [...pool].sort((a, b) => b.statValue - a.statValue)[0];
   const subjectNoun = subjectNounForCards(topic, pool);
@@ -2571,15 +2606,20 @@ export const buildTopTrumpRoundFromCards = (
   seed: number,
   unlockedTitles: readonly string[] = [],
 ): TopTrumpRound => {
-  const pool = preferredPool(cards.filter((card) => card.stats.length >= 2), difficulty);
+  const multiStatCards = cards.filter((card) => card.stats.length >= 2);
+  const sharesChoices = (first: GenericKnowledgeCard, second: GenericKnowledgeCard) =>
+    first.id !== second.id && first.stats.filter((stat) => second.stats.some((other) =>
+      stat.id === other.id && stat.unit === other.unit && stat.direction === other.direction)).length >= 2;
+  const pool = preferredPool(multiStatCards.filter((card) => multiStatCards.some((other) => sharesChoices(card, other))), difficulty);
   if (pool.length < 2) throw new Error(`Need at least 2 multi-stat cards to build a Top Trumps round for ${topic}`);
   const shuffled = discoveryShuffle(pool, seed + difficulty, unlockedTitles, cardDiscoveryIdentities);
   const player = shuffled[0];
-  const computer = competitiveTopTrumpOpponent(player, shuffled.slice(1), difficulty, seed + 2);
+  const computer = competitiveTopTrumpOpponent(player, shuffled.slice(1).filter((card) => sharesChoices(player, card)), difficulty, seed + 2);
   if (!computer) throw new Error(`Could not find a comparable Top Trumps opponent for ${topic}`);
-  const sharedStatIds = new Set(computer.stats.map((stat) => stat.id));
-  const playerStats = player.stats.filter((stat) => sharedStatIds.has(stat.id));
-  const computerStats = computer.stats.filter((stat) => playerStats.some((playerStat) => playerStat.id === stat.id));
+  const playerStats = player.stats.filter((stat) => computer.stats.some((other) =>
+    stat.id === other.id && stat.unit === other.unit && stat.direction === other.direction));
+  const computerStats = playerStats.map((stat) => computer.stats.find((other) =>
+    stat.id === other.id && stat.unit === other.unit && stat.direction === other.direction)!);
 
   return {
     id: `${seed}-trumps-${topic}-${player.id}-${computer.id}`,
@@ -2600,7 +2640,7 @@ const additionPromptStart = (count: number) => count === 2 ? "Add these together
 const stackedTotalLabel = (count: number) => count === 2 ? "stacked total" : "three-part total";
 const sumValues = (values: number[]) => values.reduce((total, value) => total + value, 0);
 const packAdditionPrompt = (topic: RoundTopic, count: number, statLabel: string) => {
-  if (topic === "dinosaurs") return `${additionPromptStart(count)}. If these dinosaurs lined up nose to tail, what is their total length?`;
+  if (topic === "dinosaurs") return `${additionPromptStart(count)}. If these prehistoric animals lined up nose to tail, what is their total length?`;
   if (topic === "tall-trees") return `${additionPromptStart(count)}. If these trees were placed end to end, what is their total height?`;
   if (topic === "bridges-and-tunnels") return `${additionPromptStart(count)}. If these routes were joined end to end, what is their total length?`;
   if (topic === "tallest-mountains") return `${additionPromptStart(count)}. In this number puzzle, what is the sum of their elevations?`;
@@ -3086,7 +3126,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
         prompt: "Which building is not supertall?",
         same: buildingIsSupertall,
         odd: (building) => !buildingIsSupertall(building),
-        reason: (odd) => `${odd.name} is ${feet(odd.heightFt)}; the others are at least ${feet(984)}.`,
+        reason: (odd) => `${odd.name} is ${referenceFeet(odd.heightFt)}; the others are at least ${feet(984)}.`,
         explanation: (odd) => `The rule is height. ${odd.name} is below the 984-foot supertall mark.`,
       },
       {
@@ -3094,7 +3134,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
         prompt: "Which building is not megatall?",
         same: buildingIsMegaTall,
         odd: (building) => !buildingIsMegaTall(building),
-        reason: (odd) => `${odd.name} is ${feet(odd.heightFt)}; the others are at least ${feet(1968)}.`,
+        reason: (odd) => `${odd.name} is ${referenceFeet(odd.heightFt)}; the others are at least ${feet(1968)}.`,
         explanation: (odd) => `The rule is height. ${odd.name} is below the 1,968-foot megatall mark.`,
       },
       {
@@ -3205,11 +3245,11 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     return {
       id: `${seed}-sort-countries-${metric}`,
       topic: currentTopic,
-      prompt: metric === "population" ? "Tap the countries in order from the smallest population to the largest." : "Tap the countries in order from the smallest land area to the largest.",
+      prompt: metric === "population" ? "Tap the countries in order from the smallest population to the largest." : "Tap the countries in order from the smallest area to the largest.",
       cards: shuffle(cards, seed + 4),
       answerIds: sorted.map((card) => card.id),
       explanation: sortOrderExplanation(sorted),
-      statLabel: metric === "population" ? "Population" : "Land area",
+      statLabel: metric === "population" ? "Population" : "Area",
     };
   }
 
@@ -3243,8 +3283,9 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   if (currentTopic === "space") {
     const metric = sample(["distance", "temperature", "size", "moons"] as const, seed + 5);
+    const stellarDistance = metric === "distance" && difficulty > 1 && seedRandom(seed + 4) > 0.5;
     const pool = spaceCards.filter((item) => {
-      if (metric === "distance") return item.distanceFromSunMillionMiles !== undefined || item.distanceLightYears !== undefined;
+      if (metric === "distance") return stellarDistance ? item.distanceLightYears !== undefined : item.distanceFromSunMillionMiles !== undefined;
       if (metric === "temperature") return item.surfaceTempK !== undefined || item.meanSurfaceTempF !== undefined;
       if (metric === "size") return item.radiusSolar !== undefined || item.diameterMiles !== undefined;
       return item.kind === "planet" && item.moons !== undefined;
@@ -3254,7 +3295,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     return {
       id: `${seed}-sort-space-${metric}`,
       topic: currentTopic,
-      prompt: metric === "distance" ? "Tap the space cards in order from the nearest to the farthest." : metric === "temperature" ? "Tap the space cards in order from the coolest to the hottest." : metric === "size" ? "Tap the space cards in order from the smallest to the largest." : "Tap the space cards in order from the fewest moons to the most.",
+      prompt: metric === "distance" ? `Tap the space cards in order from the nearest to the farthest from ${stellarDistance ? "Earth" : "the Sun"}.` : metric === "temperature" ? "Tap the space cards in order from the coolest to the hottest." : metric === "size" ? "Tap the space cards in order from the smallest to the largest." : "Tap the space cards in order from the fewest moons to the most.",
       cards: shuffle(cards, seed + 8),
       answerIds,
       explanation: sortOrderExplanation([...cards].sort((a, b) => a.statValue - b.statValue)),
@@ -3273,21 +3314,21 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       cards: shuffle(cards, seed + 8),
       answerIds,
       explanation: sortOrderExplanation([...cards].sort((a, b) => a.statValue - b.statValue)),
-      statLabel: metric === "speed" ? "Speed" : metric === "range" ? "Range" : "Firepower",
+      statLabel: metric === "speed" ? "Speed" : metric === "range" ? "Range" : "Firepower (game rating)",
     };
   }
 
-  const metric = sample(["length", "speed", "power"] as const, seed + 5);
+  const metric = sample(["length", "power"] as const, seed + 5);
   const cards = focusedStatCards(shuffle(preferredPool(sharks, difficulty), seed + 6).map((shark) => sharkCard(shark, metric)), difficulty, seed + 7, count);
   const answerIds = [...cards].sort((a, b) => a.statValue - b.statValue).map((card) => card.id);
   return {
     id: `${seed}-sort-sharks-${metric}`,
     topic: currentTopic,
-    prompt: metric === "length" ? "Tap the sharks in order from the shortest to the longest." : metric === "speed" ? "Tap the sharks in order from the slowest to the fastest." : "Tap the sharks in order from the lowest power rating to the highest.",
+    prompt: metric === "length" ? "Tap the sharks in order from the shortest to the longest." : "Tap the sharks in order from the lowest power rating to the highest.",
     cards: shuffle(cards, seed + 8),
     answerIds,
     explanation: sortOrderExplanation([...cards].sort((a, b) => a.statValue - b.statValue)),
-    statLabel: metric === "length" ? "Size" : metric === "speed" ? "Speed" : "Power",
+    statLabel: metric === "length" ? "Size" : "Power (game rating)",
   };
 };
 
@@ -3308,7 +3349,12 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       : questionDepth === 2
         ? sample(["capital", "continent", "population", "area"] as const, seed + 13)
         : sample(["population", "area", "neighbors", "highest-point"] as const, seed + 13);
-    const alternate = sample(pool.filter((item) => item.id !== country.id), seed + 14);
+    const factValue = (item: Country) => factType === "capital" ? item.capital
+      : factType === "population" ? item.population
+        : factType === "area" ? item.areaKm2
+          : factType === "neighbors" ? item.landNeighborCount
+            : factType === "highest-point" ? item.highestPointName : item.id;
+    const alternate = sample(pool.filter((item) => item.id !== country.id && factValue(item) !== factValue(country)), seed + 14);
     const claimedCapital = truthful ? country.capital : alternate.capital;
     const falseContinents = (["Africa", "Asia", "Europe", "North America", "Oceania", "South America"] as WorldContinent[])
       .filter((continent) => !country.continents.includes(continent));
@@ -3318,13 +3364,13 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     const claimedNeighbors = truthful ? country.landNeighborCount : alternate.landNeighborCount;
     const claimedHighestPoint = truthful ? country.highestPointName : alternate.highestPointName;
     const statement = factType === "capital"
-      ? `${claimedCapital} is the capital of ${countryNameInProse(country)}.`
+      ? `Capital of ${countryNameInProse(country)}: ${countryCapitalLabel({ capital: claimedCapital }).replace(/\.$/, "")}.`
       : factType === "continent"
         ? `${sentenceStart(countryNameInProse(country))} is in ${claimedContinent}.`
         : factType === "population"
           ? `${sentenceStart(countryNameInProse(country))} has about ${formatNumber(claimedPopulation)} people.`
           : factType === "area"
-            ? `${sentenceStart(countryNameInProse(country))} has about ${formatNumber(claimedArea)} square kilometers of land area.`
+            ? `${sentenceStart(countryNameInProse(country))} has about ${formatNumber(claimedArea)} square kilometers of area.`
             : factType === "neighbors"
               ? `${sentenceStart(countryNameInProse(country))} has ${formatNumber(claimedNeighbors)} land ${claimedNeighbors === 1 ? "neighbor" : "neighbors"}.`
               : `${claimedHighestPoint} is the highest point in ${countryNameInProse(country)}.`;
@@ -3461,7 +3507,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       imageAlt: building.name,
       imageCredit: building.imageCredit,
       answer: truthful ? "True" : "False",
-      explanation: `${building.name} is ${feet(building.heightFt)} tall and is in ${building.city}, ${building.country}.`,
+      explanation: `${building.name} is ${referenceFeet(building.heightFt)} tall and is in ${building.city}, ${building.country}.`,
       locations: actualLocation ? [actualLocation] : undefined,
       map: (factType === "city" || factType === "location") && claimedLocation && actualLocation
         ? {
@@ -3581,22 +3627,17 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
 
   const pool = preferredPool(sharks, difficulty);
   const shark = sample(pool, seed + 18);
-  const factType = questionDepth === 1 ? "family" : sample(["family", "speed", "size", "diet"] as const, seed + 20);
+  const factType = questionDepth === 1 ? "family" : sample(["family", "size", "diet"] as const, seed + 20);
   const fakeFamily = sampleSafe(pool.filter((item) => item.id !== shark.id && item.family !== shark.family), pool.filter((item) => item.id !== shark.id), seed + 19);
-  const fakeSpeed = sampleSafe(pool.filter((item) => item.id !== shark.id && item.speedMph !== shark.speedMph), pool.filter((item) => item.id !== shark.id), seed + 21);
   const fakeSize = sampleSafe(pool.filter((item) => item.id !== shark.id && item.lengthFt !== shark.lengthFt), pool.filter((item) => item.id !== shark.id), seed + 22);
   const fakeDiet = sampleSafe(pool.filter((item) => item.id !== shark.id && item.diet !== shark.diet), pool.filter((item) => item.id !== shark.id), seed + 23);
   const statement = truthful
-    ? factType === "speed"
-      ? `${shark.name} can swim about ${formatNumber(shark.speedMph)} mph.`
-      : factType === "size"
-        ? `${shark.name} can grow to about ${feet(shark.lengthFt)}.`
+    ? factType === "size"
+        ? `${shark.name} can grow to about ${referenceFeet(shark.lengthFt)}.`
         : factType === "diet"
           ? `${shark.name} eats ${shark.diet}.`
           : `${shark.name} belongs to the ${shark.family} family.`
-    : factType === "speed"
-      ? `${shark.name} can swim about ${formatNumber(fakeSpeed.speedMph)} mph.`
-      : factType === "size"
+    : factType === "size"
         ? `${shark.name} can grow to about ${feet(fakeSize.lengthFt)}.`
         : factType === "diet"
           ? `${shark.name} eats ${fakeDiet.diet}.`
@@ -3610,6 +3651,6 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     imageAlt: shark.name,
     imageCredit: shark.imageCredit,
     answer: truthful ? "True" : "False",
-    explanation: `${shark.name} belongs to the ${shark.family} family, can grow to about ${feet(shark.lengthFt)}, and eats ${shark.diet}.`,
+    explanation: `${shark.name} belongs to the ${shark.family} family, can grow to about ${referenceFeet(shark.lengthFt)}, and eats ${shark.diet}.`,
   };
 };

@@ -227,7 +227,7 @@ test("Hot Sauces ships 75 sourced cards with complete comparison metadata", () =
   const habamix = pack?.cards.find((card) => card.id === "habamix-sorrento");
   expect(habamix?.categories).toContain("Pepper oil");
   expect(habamix?.metadata?.pepperTypes).toHaveLength(7);
-  expect(habamix?.stats.find((stat) => stat.id === "scoville")?.display).toBe("~2,200,000 SHU (pepper-based)");
+  expect(habamix?.stats.find((stat) => stat.id === "pepper-scoville")?.display).toBe("~2,200,000 SHU (pepper-based)");
 
   const recentSauceIds = ["thats-what-shishito-said", "pickled-garlic-sriracha", "last-dab-thermageddon", "funken-yellow"];
   expect(recentSauceIds.every((id) => pack?.cards.some((card) => card.id === id))).toBe(true);
@@ -236,7 +236,7 @@ test("Hot Sauces ships 75 sourced cards with complete comparison metadata", () =
   for (const id of extremeOilIds) {
     const oil = pack?.cards.find((card) => card.id === id);
     expect(oil?.categories.some((category) => category === "Pepper oil" || category === "Chili crisp")).toBe(true);
-    expect(oil?.stats.find((stat) => stat.id === "scoville")?.display).toContain("pepper-based");
+    expect(oil?.stats.find((stat) => stat.id === "pepper-scoville")?.display).toContain("pepper-based");
     expect(oil?.metadata?.difficultyBand).toBe("hard");
   }
 });
@@ -367,7 +367,7 @@ test("every collectible card can surface in Hard Peek play", () => {
     for (let roundIndex = 0; roundIndex < category.cards.length * 6 && seenIds.size < category.cards.length; roundIndex += 1) {
       const round = builtIn
         ? buildRevealRound(category.id as keyof typeof topicPacks, 3, roundIndex * 101 + 7, unlockedTitles)
-        : buildRevealRoundFromCards(category.cards, category.id, 3, roundIndex * 101 + 7, unlockedTitles);
+        : buildRevealRoundFromCards(category.cards as GenericKnowledgeCard[], category.id, 3, roundIndex * 101 + 7, unlockedTitles);
       seenIds.add(round.card.id);
       unlockedTitles.push(round.card.title);
     }
@@ -607,8 +607,10 @@ test("every collection card profile adds information beyond its headline", () =>
 
   const franks = cards.find((card) => card.topic === "hot-sauces" && card.title === "Frank's RedHot Original");
   expect(collectionCardProfileDetails(franks!).map((detail) => detail.label)).toEqual([
-    "Pepper varieties",
-    "Flavor grade",
+    "Listed pepper types",
+    "Flavor rating",
+    "Listed pepper types note",
+    "Flavor rating note",
     "Category",
     "Peppers",
     "Group",
@@ -1824,18 +1826,24 @@ test("category collections keep every card in its meaningful order", () => {
   expect(hotSaucePack).toBeTruthy();
   const hotSauceCards = packToPlayableDeck(hotSaucePack!).cards;
   const orderedHotSauces = orderCollectionCardsForCategory(hotSauceCards);
-  expect(orderedHotSauces.map((card) => card.statValue)).toEqual(
-    [...orderedHotSauces.map((card) => card.statValue)].sort((a, b) => a - b),
+  const knownSauces = orderedHotSauces.filter((card) => card.collectionSortValue !== undefined);
+  const unknownSauces = orderedHotSauces.filter((card) => card.collectionSortValue === undefined);
+  expect(knownSauces.map((card) => card.collectionSortValue)).toEqual(
+    [...knownSauces.map((card) => card.collectionSortValue)].sort((a, b) => a! - b!),
   );
+  expect(unknownSauces).toHaveLength(8);
+  expect(orderedHotSauces.slice(-unknownSauces.length)).toEqual(unknownSauces);
   expect(orderedHotSauces.at(0)?.title).toBe("Frank's RedHot Original");
-  expect(orderedHotSauces.at(-1)?.title).toBe("PuckerButt Gator Sauce");
-  expect(collectionOrderLabel(orderedHotSauces)).toBe("Scoville · mildest to hottest");
+  expect(knownSauces.at(-1)?.title).toBe("PuckerButt Gator Sauce");
+  expect(collectionOrderLabel(orderedHotSauces)).toBe("Scoville references · lowest to highest");
 
   const buildingCards = collectionCards().filter((card) => card.topic === "buildings");
   const orderedBuildings = orderCollectionCardsForCategory(buildingCards);
-  expect(orderedBuildings.map((card) => card.statValue)).toEqual(
-    [...orderedBuildings.map((card) => card.statValue)].sort((a, b) => b - a),
+  const knownBuildings = orderedBuildings.filter((card) => Number.isFinite(card.statValue));
+  expect(knownBuildings.map((card) => card.statValue)).toEqual(
+    [...knownBuildings.map((card) => card.statValue)].sort((a, b) => b - a),
   );
+  expect(orderedBuildings.slice(knownBuildings.length).every((card) => !Number.isFinite(card.statValue))).toBe(true);
   expect(collectionOrderLabel(orderedBuildings)).toBe("Height · highest to lowest");
 });
 
@@ -1850,7 +1858,7 @@ test("Countries & Flags ships an exact 200-card passport catalog", () => {
 
   const countryCards = collectionCards().filter((card) => card.topic === "countries");
   expect(countryCards).toHaveLength(200);
-  expect(countryCards.every((card) => card.details?.map((detail) => detail.label).join("|") === "Capital|Population|Land area|Land neighbors|Highest point|Continent|Region|Country code")).toBe(true);
+  expect(countryCards.every((card) => card.details?.map((detail) => detail.label).join("|") === "Capital|Population|Area|Land neighbors|Highest point|Continent|Region|Country code")).toBe(true);
 
   expect(countries.find((country) => country.code === "CM")).toMatchObject({ landNeighborCount: 6, highestPointM: 4045 });
   expect(countries.find((country) => country.code === "CN")).toMatchObject({ landNeighborCount: 14, highestPointName: "Mount Everest", highestPointM: 8849 });
@@ -1866,7 +1874,7 @@ test("country quiz rotation keeps recognition while adding deeper metadata", () 
   expect(kinds).toEqual(new Set(["country-flag", "country-capital", "country-continent", "country-location", "country-population", "country-area", "country-neighbors", "country-highest-point"]));
 
   const flagRound = mediumRounds.find((round) => round.kind === "country-flag");
-  expect(flagRound?.secondChanceClue).toMatch(/capital is .+ in .+ people/);
+  expect(flagRound?.secondChanceClue).toMatch(/in .+ people\. Capital: .+\./);
   expect(flagRound?.imageAlt).toBe("Mystery country flag");
   expect(flagRound?.collectionTitles).toEqual([flagRound?.answer]);
 
@@ -1897,7 +1905,7 @@ test("country play works across every card-game mode", () => {
   expect(Number.isFinite(geo.point.x) && Number.isFinite(geo.point.y)).toBe(true);
 
   const sort = buildSortRound("countries", 3, 911);
-  expect(["Population", "Land area"]).toContain(sort.statLabel);
+  expect(["Population", "Area"]).toContain(sort.statLabel);
   expect(sort.cards).toHaveLength(4);
 
   const odd = buildOddRound("countries", 3, 919);
@@ -1910,7 +1918,7 @@ test("country play works across every card-game mode", () => {
   const trumps = buildTopTrumpRound("countries", 3, 941);
   expect(trumps.player.stats.map((stat) => stat.id)).toEqual(["population", "area", "land-neighbors", "highest-point"]);
   expect(trumps.computer.stats.map((stat) => stat.id)).toEqual(["population", "area", "land-neighbors", "highest-point"]);
-  expect(trumps.player.stats.map((stat) => stat.label)).toEqual(["Population", "Land area", "Land neighbors", "Highest point"]);
+  expect(trumps.player.stats.map((stat) => stat.label)).toEqual(["Population", "Area", "Land neighbors", "Highest point"]);
 });
 
 test("every topic offers sensible addition, subtraction, and multiplication rounds", () => {
@@ -2067,7 +2075,7 @@ test("Challenge copy keeps comparison subjects honest and space sizes in miles",
   const nandos = buildChallengeCampaignsForCategory(hotSauces).find((campaign) => campaign.name === "Nando's Hot PERi-PERi")!;
   expect(nandos.steps.find((step) => step.skill === "Reading")?.question).toBe("Which field note belongs with this sauce?");
   expect(nandos.steps.find((step) => step.skill === "Reading")?.answer).toBe("This sauce centers African bird's eye chillies, a pepper also called peri-peri or piri-piri.");
-  expect(nandos.steps.find((step) => step.skill === "Science")?.title).toBe("Compare the Scoville rating");
+  expect(nandos.steps.find((step) => step.skill === "Science")?.title).toBe("Interpret the listed pepper types");
   expect(nandos.steps.find((step) => step.skill === "Science")?.answer).not.toBe(nandos.name);
 });
 
@@ -2707,7 +2715,7 @@ test("a mystery flag gives one clue retry and unlocks a country passport", { tag
   const escapedCapital = answerCountry!.capital.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   await expect(passportCard.locator("p").filter({ hasText: new RegExp(`${escapedCapital} ·`) })).toBeVisible();
   await passport.locator("summary").click();
-  await expect(passport.getByText("Land area", { exact: true })).toBeVisible();
+  await expect(passport.getByText("Area", { exact: true })).toBeVisible();
   await expect(passport.getByText("Land neighbors", { exact: true })).toBeVisible();
   await expect(passport.getByText("Highest point", { exact: true })).toBeVisible();
   await expect(passport.getByText("Region", { exact: true })).toBeVisible();
@@ -2860,7 +2868,8 @@ test("automatic Challenge Mode respects the selected category and keeps one subj
 test("Hot Sauces Challenge replaces the answer-giving Scoville prompt with a real comparison", { tag: "@mobile" }, async ({ page }) => {
   const hotSauces = playableChallengeCategories.find((category) => category.id === "hot-sauces")!;
   const campaigns = buildChallengeCampaignsForCategory(hotSauces);
-  const campaignIndex = campaigns.findIndex((campaign) => campaign.name === "Nando's Hot PERi-PERi");
+  // Use an available campaign with sourced heat; Nando's unverified SHU is intentionally absent.
+  const campaignIndex = campaigns.findIndex((campaign) => campaign.steps.some((step) => step.title === "Compare the Scoville rating"));
   expect(campaignIndex).toBeGreaterThanOrEqual(0);
   const campaign = campaigns[campaignIndex];
   await openChallengeAt(page, (campaignIndex + 1) * challengeQuestionInterval, "Hot Sauces");
@@ -3424,12 +3433,12 @@ test("playable dinosaur pack appears in first-class topics", async ({ page }) =>
   await expect(page.getByText("Dinosaur Lab", { exact: true })).toBeVisible();
 });
 
-test("Hot Sauces Head to Head compares the number of pepper varieties", async ({ page }) => {
+test("Hot Sauces Head to Head compares the number of listed pepper types", async ({ page }) => {
   await chooseOnlyMode(page, "Head to Head");
   await chooseOnlyBuiltInTopic(page, "Hot Sauces");
 
-  await expect(page.getByRole("heading", { name: "Which one uses more pepper varieties?" })).toBeVisible();
-  await expect(page.getByText("Pepper varieties", { exact: true })).toHaveCount(2);
+  await expect(page.getByRole("heading", { name: "Which one lists more pepper types?" })).toBeVisible();
+  await expect(page.getByText("Listed pepper types", { exact: true })).toHaveCount(2);
   await expect(page.getByLabel("Answer choices").getByRole("button")).toHaveCount(2);
 });
 
@@ -3453,7 +3462,7 @@ test("country Top Trumps offers four meaningful geography stats", async ({ page 
   await chooseOnlyBuiltInTopic(page, "Countries & Flags");
 
   const gamePanel = page.locator("main article").last();
-  for (const label of ["Population", "Land area", "Land neighbors", "Highest point"]) {
+  for (const label of ["Population", "Area", "Land neighbors", "Highest point"]) {
     await expect(gamePanel.getByRole("button", { name: new RegExp(label) })).toBeVisible();
   }
   await expect(page.getByText("Capital name length", { exact: true })).toHaveCount(0);

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "8ec67ea8c751acc3111f",
-  "assetCount": 1021,
-  "totalBytes": 219065009,
+  "version": "01a86d39b3b5dea8c752",
+  "assetCount": 1036,
+  "totalBytes": 222967337,
   "assets": {
     "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.jpg": {
       "bytes": 91997,
@@ -3605,8 +3605,8 @@
       "revision": "485791435f14832c4f56"
     },
     "/burrow-assets/space/stephenson-2-18.jpg": {
-      "bytes": 59406,
-      "revision": "39f8b7479fd46cddce15"
+      "bytes": 222077,
+      "revision": "a36985df55a3e01c1cb2"
     },
     "/burrow-assets/space/supernova.jpg": {
       "bytes": 280494,
@@ -3644,6 +3644,14 @@
       "bytes": 120022,
       "revision": "de87cea51414977d9069"
     },
+    "/burrow-assets/tall-trees/african-baobab.jpg": {
+      "bytes": 259113,
+      "revision": "7236c23f1b9f19d08abc"
+    },
+    "/burrow-assets/tall-trees/american-sycamore.jpg": {
+      "bytes": 379674,
+      "revision": "9a685d869723ca22c2d7"
+    },
     "/burrow-assets/tall-trees/atlantis.jpg": {
       "bytes": 131836,
       "revision": "88907c6f32ad3368e2dd"
@@ -3656,9 +3664,21 @@
       "bytes": 681048,
       "revision": "bf990cdb25362f4b70e8"
     },
+    "/burrow-assets/tall-trees/coast-redwood.jpg": {
+      "bytes": 197780,
+      "revision": "9ce18872cd0a3cc9419a"
+    },
     "/burrow-assets/tall-trees/dave-human.svg": {
       "bytes": 1281,
       "revision": "b1b755da51cb89c9e72e"
+    },
+    "/burrow-assets/tall-trees/dawn-redwood.jpg": {
+      "bytes": 121085,
+      "revision": "9882d36df51ac5380244"
+    },
+    "/burrow-assets/tall-trees/doerner-fir-exact.jpg": {
+      "bytes": 352518,
+      "revision": "09cdefcd94ebd41404f6"
     },
     "/burrow-assets/tall-trees/doerner-fir.jpg": {
       "bytes": 739392,
@@ -3667,6 +3687,10 @@
     "/burrow-assets/tall-trees/douglas-fir.jpg": {
       "bytes": 257374,
       "revision": "29fee5414dda936e697c"
+    },
+    "/burrow-assets/tall-trees/eastern-white-pine.jpg": {
+      "bytes": 102016,
+      "revision": "1a18a936869eb7131304"
     },
     "/burrow-assets/tall-trees/english-oak.jpg": {
       "bytes": 102389,
@@ -3680,6 +3704,10 @@
       "bytes": 559144,
       "revision": "096e070bbd47fa70485e"
     },
+    "/burrow-assets/tall-trees/ginkgo.jpg": {
+      "bytes": 333082,
+      "revision": "4f2865beaa2986d8826b"
+    },
     "/burrow-assets/tall-trees/giraffe.jpg": {
       "bytes": 2318975,
       "revision": "3fefd156641837650e48"
@@ -3687,6 +3715,14 @@
     "/burrow-assets/tall-trees/hyperion-height-chart.webp": {
       "bytes": 83172,
       "revision": "c3f552d992b1ff348ab8"
+    },
+    "/burrow-assets/tall-trees/kapok.jpg": {
+      "bytes": 241630,
+      "revision": "ce63cde47dfaee7a8cce"
+    },
+    "/burrow-assets/tall-trees/karri-forest.jpg": {
+      "bytes": 242078,
+      "revision": "ef4003e07b6927e6229e"
     },
     "/burrow-assets/tall-trees/karri.jpg": {
       "bytes": 390137,
@@ -3696,6 +3732,10 @@
       "bytes": 1265470,
       "revision": "2de034e409069b22040e"
     },
+    "/burrow-assets/tall-trees/monkey-puzzle.jpg": {
+      "bytes": 326899,
+      "revision": "946b270817561b44d9bc"
+    },
     "/burrow-assets/tall-trees/mountain-ash.jpg": {
       "bytes": 4239518,
       "revision": "a9bb963c453f8f394296"
@@ -3703,6 +3743,14 @@
     "/burrow-assets/tall-trees/noble-fir.jpg": {
       "bytes": 10745438,
       "revision": "0beffda1827f0eed7721"
+    },
+    "/burrow-assets/tall-trees/ponderosa-pine.jpg": {
+      "bytes": 261616,
+      "revision": "b5dfeab9927ebc34b2d2"
+    },
+    "/burrow-assets/tall-trees/river-red-gum.jpg": {
+      "bytes": 201104,
+      "revision": "fdab51aab8c4bd3ead92"
     },
     "/burrow-assets/tall-trees/sitka-spruce.jpg": {
       "bytes": 561242,
@@ -3715,6 +3763,18 @@
     "/burrow-assets/tall-trees/southern-blue-gum.jpg": {
       "bytes": 1061476,
       "revision": "359ba2e7290610c613af"
+    },
+    "/burrow-assets/tall-trees/sugar-maple.jpg": {
+      "bytes": 158560,
+      "revision": "f99226c4cf3ad4b3ba16"
+    },
+    "/burrow-assets/tall-trees/tulip-tree.jpg": {
+      "bytes": 336001,
+      "revision": "1054152dad5898274c43"
+    },
+    "/burrow-assets/tall-trees/western-redcedar.jpg": {
+      "bytes": 226501,
+      "revision": "bde82def4ddaa65af5ec"
     },
     "/burrow-assets/tall-trees/yellow-meranti.jpg": {
       "bytes": 311724,

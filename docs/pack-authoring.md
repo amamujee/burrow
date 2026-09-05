@@ -85,6 +85,8 @@ For every card:
 - Preserve the exact product, institution, photographer, or reference URL.
 - Distinguish measured values from ranges, estimates, featured-component values, and editorial ratings.
 - Put material uncertainty in `metadata.accuracyNote` or the pack `dataNote`.
+- Every playable card needs `metadata.sources` with factual reference labels and HTTP(S) URLs, plus an `accuracyNote` describing measurement scope or uncertainty. Image credit/source fields document the photograph separately.
+- Keep incompatible measurements under separate stat IDs (for example body length versus wingspan, or finished-sauce SHU versus ingredient-pepper SHU). Unknown measurements stay absent; editorial ratings must say they are ratings.
 - Label Burrow-created ratings as editorial, not scientific.
 - Do not silently convert a pepper rating into a finished-sauce rating, a claimed height into a measured height, or marketing language into fact.
 - Use complete educational prose suitable for the stated audience.

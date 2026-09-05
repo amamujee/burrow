@@ -98,7 +98,7 @@ const validateCardMetadata = (packId, card, cardLabel) => {
       addError(packId, `${cardLabel}: metadata must be an object`);
       return;
     }
-    const allowedKeys = new Set(["difficultyBand", "recognition", "rarity", "flavorGrade", "pepperTypes", "taxonomyGroup", "accuracyNote", "imageDistinctGroup", "location"]);
+    const allowedKeys = new Set(["difficultyBand", "recognition", "rarity", "flavorGrade", "pepperTypes", "taxonomyGroup", "accuracyNote", "sources", "imageDistinctGroup", "location"]);
     for (const key of Object.keys(card.metadata)) {
       if (!allowedKeys.has(key)) addError(packId, `${cardLabel}: metadata.${key} is not supported`);
     }
@@ -109,6 +109,18 @@ const validateCardMetadata = (packId, card, cardLabel) => {
     if (card.metadata.pepperTypes !== undefined && (!Array.isArray(card.metadata.pepperTypes) || card.metadata.pepperTypes.length < 1 || card.metadata.pepperTypes.some((pepper) => !hasText(pepper, 2)))) addError(packId, `${cardLabel}: metadata.pepperTypes needs at least one named pepper`);
     if (card.metadata.taxonomyGroup !== undefined && !hasText(card.metadata.taxonomyGroup, 2)) addError(packId, `${cardLabel}: metadata.taxonomyGroup needs text`);
     if (card.metadata.accuracyNote !== undefined && !hasText(card.metadata.accuracyNote, 8)) addError(packId, `${cardLabel}: metadata.accuracyNote needs text`);
+    if (card.metadata.sources !== undefined) {
+      if (!Array.isArray(card.metadata.sources) || !card.metadata.sources.length) {
+        addError(packId, `${cardLabel}: metadata.sources needs factual references`);
+      } else {
+        for (const source of card.metadata.sources) {
+          if (!isObject(source) || !hasText(source.label, 2) || !isUrl(source.url) || (source.note !== undefined && !hasText(source.note))) {
+            addError(packId, `${cardLabel}: metadata.sources needs a label, HTTP(S) URL, and nonempty optional note`);
+          }
+        }
+        uniqueCheck(packId, card.metadata.sources.map((source) => source?.url), `${cardLabel} factual source URL`);
+      }
+    }
     if (card.metadata.imageDistinctGroup !== undefined && (!hasText(card.metadata.imageDistinctGroup) || !slugPattern.test(card.metadata.imageDistinctGroup))) addError(packId, `${cardLabel}: metadata.imageDistinctGroup must be a lowercase slug`);
     if (card.metadata.location !== undefined) {
       const location = card.metadata.location;

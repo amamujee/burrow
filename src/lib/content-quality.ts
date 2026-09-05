@@ -3,6 +3,9 @@ export type ContentQuality = {
   flags: string[];
 };
 
+// A completeness heuristic for content selection, not a fact-check confidence
+// score. Factual accuracy is reviewed against metadata.sources and scope notes.
+
 const clampScore = (score: number) => Math.max(0, Math.min(100, Math.round(score)));
 
 export const scoreFeaturedContent = ({
@@ -35,7 +38,7 @@ export const scoreFeaturedContent = ({
   if (fact && fact.length >= 32) score += 15;
   else flags.push("thin fact");
 
-  if (typeof statValue === "number" && Number.isFinite(statValue) && statValue > 0) score += 10;
+  if (typeof statValue === "number" && Number.isFinite(statValue)) score += 10;
   else flags.push("weak stat");
 
   if (sourceCaution) {

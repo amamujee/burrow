@@ -20,11 +20,56 @@ const hardCodes = new Set([
 ]);
 
 const populationSupplements = {
-  TW: { value: 23400220, year: 2024, status: "estimate", note: "2024 national estimate" },
-  VA: { value: 882, year: 2024, status: "estimate", note: "Recent resident estimate" },
-  CK: { value: 15040, year: 2021, status: "census", note: "2021 census" },
-  NU: { value: 1681, year: 2022, status: "census", note: "2022 census" },
-  EH: { value: 600904, year: 2024, status: "estimate", note: "2024 UN-style estimate" },
+  "TW": {
+    "value": 23400220,
+    "year": 2024,
+    "status": "estimate",
+    "note": "End-of-December 2024 household-registration population",
+    "source": {
+      "label": "Taiwan Ministry of the Interior: December 2024 population",
+      "url": "https://www.ris.gov.tw/info-liferay/app/channel/newsEnglishDetail/25010859"
+    }
+  },
+  "VA": {
+    "value": 882,
+    "year": 2024,
+    "status": "estimate",
+    "note": "Residents at 31 December 2024",
+    "source": {
+      "label": "Vatican City: residents at 31 December 2024",
+      "url": "https://www.vaticanstate.va/en/state-and-government/general-informations/population.html"
+    }
+  },
+  "CK": {
+    "value": 15040,
+    "year": 2021,
+    "status": "census",
+    "note": "2021 census-night count, including visitors",
+    "source": {
+      "label": "Cook Islands Statistics Office: 2021 census",
+      "url": "https://stats.gov.ck/2021-census-of-population-and-dwellings/"
+    }
+  },
+  "NU": {
+    "value": 1681,
+    "year": 2022,
+    "status": "census",
+    "note": "2022 census-night count, including visitors",
+    "source": {
+      "label": "Niue Statistics Office: 2022 census",
+      "url": "https://niuestatistics.nu/population/niue-census-of-population-and-housing-2022/"
+    }
+  },
+  "EH": {
+    "value": 601000,
+    "year": 2025,
+    "status": "estimate",
+    "note": "UN 2025 medium-variant projection, rounded to the nearest thousand",
+    "source": {
+      "label": "UNdata Western Sahara profile",
+      "url": "https://data.un.org/en/iso/eh.html"
+    }
+  }
 };
 
 const displayNameOverrides = {
@@ -33,6 +78,65 @@ const displayNameOverrides = {
   CI: "Côte d’Ivoire",
   CV: "Cabo Verde",
   FM: "Federated States of Micronesia",
+};
+
+// Explicit roles prevent an upstream city list from flattening disputed or shared capitals.
+const capitalOverrides = {
+  GQ: {
+    capital: "Ciudad de la Paz",
+    clause: "Its capital is Ciudad de la Paz",
+    note: "Ciudad de la Paz was declared the capital on 2 January 2026; the decree allows one year for government offices to move from Malabo.",
+    sources: [{ label: "Equatorial Guinea government: Decree 1/2026", url: "https://www.guineaecuatorialpress.com/noticias/decreto_ley_por_el_que_se_declara_la_ciudad_de_la_paz_djibloho_capital_de_la_republica_de_guinea_ecuatorial" }],
+  },
+  LK: {
+    capital: "Sri Jayewardenepura Kotte",
+    clause: "Its administrative capital is Sri Jayewardenepura Kotte",
+    note: "Sri Jayewardenepura Kotte is the administrative capital and the location of Parliament.",
+    sources: [{ label: "Sri Jayewardenepura Kotte Municipal Council", url: "https://www.kotte.mc.gov.lk/index.php?Itemid=175&id=25&lang=en&option=com_content&view=article" }],
+  },
+  NR: {
+    capital: "No official capital",
+    clause: "It has no official capital; government offices are in Yaren",
+    note: "Yaren is a government district, not an officially designated capital.",
+    sources: [{ label: "Commonwealth: Naoero country profile", url: "https://thecommonwealth.org/our-member-countries/naeoro" }],
+  },
+  SZ: {
+    capital: "Mbabane and Lobamba",
+    clause: "Mbabane is its administrative capital; Lobamba is its royal and legislative capital",
+    note: "Capital functions are shared between Mbabane and Lobamba.",
+    sources: [
+      { label: "Government of Eswatini: country description", url: "https://www.gov.sz/images/Bank-of-Eswatini-Information-Statement-Executed.pdf" },
+      { label: "Eswatini Tourism Authority: Lobamba", url: "https://www.thekingdomofeswatini.com/news-blogs/lobamba-walking-tour-with-all-out-africa-now-on-offer/" },
+    ],
+  },
+  ZA: {
+    capital: "Pretoria, Bloemfontein, and Cape Town",
+    clause: "Its three capitals are Pretoria, Bloemfontein, and Cape Town",
+    note: "Pretoria is the administrative capital, Bloemfontein the judicial capital, and Cape Town the legislative capital.",
+    sources: [{ label: "South African government: three capitals", url: "https://www.gov.za/ts/about-sa/south-africas-provinces" }],
+  },
+  PS: {
+    capital: "East Jerusalem (claimed); Ramallah (administrative)",
+    clause: "Palestine claims East Jerusalem as its capital; Ramallah is its administrative center",
+    note: "East Jerusalem is the claimed capital; Ramallah hosts Palestinian Authority institutions. Jerusalem's final status remains disputed.",
+    sources: [
+      { label: "Palestinian Ministry of Foreign Affairs: Jerusalem claim", url: "https://www.mfae.gov.ps/en-us/fundamentalissues/jerusalem" },
+      { label: "Ramallah Municipality: administrative center", url: "https://www.ramallah.ps/en/Category/61/international-partnerships-and-relations" },
+    ],
+  },
+  IL: {
+    capital: "Jerusalem (disputed status)",
+    clause: "Israel names Jerusalem as its capital; the city's status is disputed",
+    note: "Israel declares Jerusalem its capital. The city's final status and sovereignty are disputed internationally.",
+    sources: [{ label: "United Nations: Jerusalem status", url: "https://www.un.org/unispal/permanent-status-issues/" }],
+  },
+  EH: {
+    capital: "Disputed",
+    officialName: "Western Sahara",
+    clause: "Its political status is disputed",
+    note: "The UN lists Western Sahara as a Non-Self-Governing Territory. A capital or claimant's state name is not presented as an agreed sovereign status.",
+    sources: [{ label: "United Nations: Western Sahara status", url: "https://www.un.org/dppa/decolonization/en/node/703" }],
+  },
 };
 
 const continentOverrides = {
@@ -87,17 +191,25 @@ const naturalList = (items) => {
   return `${items.slice(0, -1).join(", ")}, and ${items.at(-1)}`;
 };
 
-const tsString = (value) => JSON.stringify(value);
+const namesWithLeadingArticle = new Set([
+  "Bahamas", "Central African Republic", "Democratic Republic of the Congo",
+  "Dominican Republic", "Federated States of Micronesia", "Gambia", "Maldives",
+  "Marshall Islands", "Netherlands", "Philippines", "Republic of the Congo",
+  "Seychelles", "Solomon Islands", "United Arab Emirates", "United Kingdom", "United States",
+]);
+const sentence = (text) => `${text.replace(/[.!?]+$/, "")}.`;
 
 const main = async () => {
-  const [countriesResponse, populationResponse, physicalStatsJson] = await Promise.all([
+  const [countriesResponse, populationResponse, physicalStatsJson, areaStatsJson] = await Promise.all([
     readUrl(countriesUrl),
     readUrl(populationUrl),
     fs.readFile(physicalStatsFile, "utf8"),
+    fs.readFile(path.join(repoRoot, "scripts/data/country-area-stats.json"), "utf8"),
   ]);
   const [sourceCountries, populationCsv] = await Promise.all([countriesResponse.json(), populationResponse.text()]);
   const populations = populationRows(populationCsv);
   const physicalStats = JSON.parse(physicalStatsJson);
+  const areaStats = JSON.parse(areaStatsJson);
   const selected = sourceCountries
     .filter((country) => country.unMember || specialCountryCodes.has(country.cca2))
     .sort((first, second) => (displayNameOverrides[first.cca2] ?? first.name.common).localeCompare(displayNameOverrides[second.cca2] ?? second.name.common));
@@ -118,7 +230,8 @@ const main = async () => {
     }
 
     const name = displayNameOverrides[code] ?? country.name.common;
-    const capital = country.capital?.length ? naturalList(country.capital) : "No official capital";
+    const capitalDetail = capitalOverrides[code];
+    const capital = capitalDetail?.capital ?? (code === "US" ? "Washington, D.C." : country.capital?.length ? naturalList(country.capital) : "No official capital");
     const population = populations.get(populationCodeOverrides[code] ?? country.cca3) ?? populationSupplements[code];
     if (!population) throw new Error(`Missing population for ${name} (${country.cca3})`);
     const physical = physicalStats[code];
@@ -128,21 +241,27 @@ const main = async () => {
     const continents = worldContinents(country);
     const difficultyBand = easyCodes.has(code) ? "easy" : hardCodes.has(code) ? "hard" : "medium";
     const recognition = difficultyBand === "easy" ? 5 : difficultyBand === "hard" ? 1 : 3;
-    const capitalClause = capital === "No official capital" ? "It has no official capital" : `Its capital is ${capital}`;
-    const fact = `${name} is in ${naturalList(continents)}. ${capitalClause}, and it covers ${country.area.toLocaleString("en-US", { maximumFractionDigits: 2 })} square kilometers of land.`;
+    const capitalClause = capitalDetail?.clause ?? (capital === "No official capital" ? "It has no official capital" : `Its ${country.capital?.length > 1 ? "capitals are" : "capital is"} ${capital}`);
+    const area = areaStats.countries[code];
+    if (!area) throw new Error(`Missing audited area for ${code}`);
+    const areaSource = area.source ?? areaStats.source;
+    const subject = namesWithLeadingArticle.has(name) ? `The ${name}` : name;
+    const fact = `${subject} is in ${naturalList(continents)}. ${sentence(capitalClause)} Its reported area is ${area.value.toLocaleString("en-US", { maximumFractionDigits: 2 })} square kilometers.`;
 
     records.push({
       id: `country-${slug(name)}`,
       code,
       code3: country.cca3,
       name,
-      officialName: country.name.official,
+      officialName: capitalDetail?.officialName ?? country.name.official,
       capital,
       population: population.value,
       populationYear: population.year,
       populationStatus: population.status,
       populationNote: population.note,
-      areaKm2: country.area,
+      areaKm2: area.value,
+      areaNote: area.note,
+      areaSource,
       landNeighborCount: physical.landNeighborCount,
       highestPointName: physical.highestPointName,
       highestPointM: physical.highestPointM,
@@ -189,10 +308,29 @@ const main = async () => {
     "  metadata: CardMetadata;",
     "};",
     "",
-    "// Generated from mledoze/countries, the World Bank population series, and the final public-domain CIA World Factbook snapshot.",
+    "// Generated from mledoze/countries, World Bank population, UN surface areas, the archived CIA physical snapshot, and cited exceptions.",
     "// The catalog intentionally contains the 193 UN members, Vatican City, Palestine, Kosovo, Taiwan, Cook Islands, Niue, and Western Sahara: 200 cards total.",
     "export const countries: Country[] = [",
-    ...records.map((country) => `  { id: ${tsString(country.id)}, code: ${tsString(country.code)}, code3: ${tsString(country.code3)}, name: ${tsString(country.name)}, officialName: ${tsString(country.officialName)}, capital: ${tsString(country.capital)}, population: ${country.population}, populationYear: ${country.populationYear}, populationStatus: ${tsString(country.populationStatus)}, populationNote: ${tsString(country.populationNote)}, areaKm2: ${country.areaKm2}, landNeighborCount: ${country.landNeighborCount}, highestPointName: ${tsString(country.highestPointName)}, highestPointM: ${country.highestPointM}, continents: ${JSON.stringify(country.continents)}, subregion: ${tsString(country.subregion)}, latitude: ${country.latitude}, longitude: ${country.longitude}, flagEmoji: ${tsString(country.flagEmoji)}, image: ${tsString(`/burrow-assets/countries/${country.code.toLowerCase()}.svg`)}, imageSourceUrl: ${tsString(`https://github.com/lipis/flag-icons/blob/main/flags/4x3/${country.code.toLowerCase()}.svg`)}, imageCredit: \"National flag · flag-icons (MIT)\", fact: ${tsString(country.fact)}, metadata: { difficultyBand: ${tsString(country.difficultyBand)}, recognition: ${country.recognition}, taxonomyGroup: ${tsString(country.subregion)}, accuracyNote: ${tsString(`Population: ${country.populationNote}. Area, capital, borders, and map position use the mledoze countries snapshot. Highest point uses the final public-domain CIA World Factbook snapshot.`)}, location: { label: ${tsString(country.name)}, countries: [${tsString(country.name)}], continents: ${JSON.stringify(country.continents)}, coordinates: [${country.latitude}, ${country.longitude}] } } },`),
+    ...records.map(({ difficultyBand, recognition, areaNote, areaSource, ...country }) => `  ${JSON.stringify({
+      ...country,
+      image: `/burrow-assets/countries/${country.code.toLowerCase()}.svg`,
+      imageSourceUrl: `https://github.com/lipis/flag-icons/blob/main/flags/4x3/${country.code.toLowerCase()}.svg`,
+      imageCredit: "National flag · flag-icons (MIT)",
+      metadata: {
+        difficultyBand, recognition, taxonomyGroup: country.subregion,
+        accuracyNote: `Population: ${country.populationNote}. Area: ${areaNote} ${capitalOverrides[country.code]?.note ?? "Capital uses the mledoze snapshot."} Map center uses the mledoze snapshot. Highest point and land neighbors use the archived CIA snapshot. Figures describe the source’s geographic scope.`,
+        sources: [
+          { label: "mledoze countries geography snapshot", url: "https://github.com/mledoze/countries/blob/master/countries.json", note: `${capitalOverrides[country.code] ? "Names, region and approximate map center; capital roles and disputed status follow the separately cited sources." : "Capital, names, region and approximate map center."}${areaSource.url === "https://github.com/mledoze/countries/blob/master/countries.json" ? ` Area: ${areaNote}` : ""}` },
+          ...(capitalOverrides[country.code]?.sources ?? []),
+          country.populationStatus === "world-bank"
+            ? { label: "World Bank population series", url: `https://data.worldbank.org/indicator/SP.POP.TOTL?locations=${country.code}`, note: `Retained ${country.populationYear} estimate.` }
+            : populationSupplements[country.code].source,
+          { label: areaSource.label, url: areaSource.url, note: areaNote },
+          { label: "CIA World Factbook archived geography", url: "https://www.cia.gov/the-world-factbook/about/archives/", note: "Existing highest point and land-neighbor snapshot; definitions and disputed boundaries can differ." },
+        ].filter((source, index, all) => source && all.findIndex((item) => item?.url === source.url) === index),
+        location: { label: country.name, countries: [country.name], continents: country.continents, coordinates: [country.latitude, country.longitude] },
+      },
+    })},`),
     "];",
     "",
   ];
