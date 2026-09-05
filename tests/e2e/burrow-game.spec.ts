@@ -333,10 +333,10 @@ test("Hard retains every Easy subject and adds the rest of every category", () =
 });
 
 test("Medium and Hard favor deeper questions while preserving retrieval practice", () => {
-  const hardDepths = Array.from({ length: 10 }, (_, seed) => questionDepthForSelection(3, seed));
-  expect(hardDepths.filter((depth) => depth === 1)).toHaveLength(1);
-  expect(hardDepths.filter((depth) => depth === 2)).toHaveLength(3);
-  expect(hardDepths.filter((depth) => depth === 3)).toHaveLength(6);
+  const hardDepths = Array.from({ length: 25 }, (_, seed) => questionDepthForSelection(3, seed));
+  expect(hardDepths.filter((depth) => depth === 1)).toHaveLength(2);
+  expect(hardDepths.filter((depth) => depth === 2)).toHaveLength(5);
+  expect(hardDepths.filter((depth) => depth === 3)).toHaveLength(18);
 
   const mediumDepths = Array.from({ length: 10 }, (_, seed) => questionDepthForSelection(2, seed));
   expect(mediumDepths.filter((depth) => depth === 1)).toHaveLength(2);
@@ -376,7 +376,7 @@ test("every collectible card can surface in Hard Peek play", () => {
   }
 });
 
-test("multiplication ceilings rise by twenty to twenty-five percent", () => {
+test("multiplication keeps bounded factors and retrieval practice at each difficulty", () => {
   const easyRounds = Array.from({ length: 30 }, (_, seed) => buildNumberRound("peppers", 1, seed * 3 + 2));
   const mediumRounds = Array.from({ length: 60 }, (_, seed) => buildNumberRound("peppers", 2, seed * 3 + 2));
   const hardSeeds = Array.from({ length: 90 }, (_, seed) => seed * 3 + 2);
@@ -387,7 +387,7 @@ test("multiplication ceilings rise by twenty to twenty-five percent", () => {
   expect(mediumRounds.some((round) => round.termValues.includes(12))).toBe(true);
   expect(hardRounds.some((round, index) => questionDepthForSelection(3, hardSeeds[index]) === 1 && round.termValues.every((value) => value <= 6))).toBe(true);
   expect(hardRounds.some((round, index) => questionDepthForSelection(3, hardSeeds[index]) === 3 && round.termValues.some((value) => value > 12))).toBe(true);
-  expect(hardRounds.every((round) => round.operation === "multiplication" && round.termValues.every((value) => value >= 1 && value <= 15))).toBe(true);
+  expect(hardRounds.every((round) => round.operation === "multiplication" && round.termValues.every((value) => value >= 1 && value <= 16))).toBe(true);
 });
 
 test("context math uses larger quantities and finer round-number steps", () => {
@@ -1947,13 +1947,13 @@ test("every topic offers sensible addition, subtraction, and multiplication roun
   }
 });
 
-test("hard multiplication stretches through fifteen-by-fifteen", () => {
+test("hard multiplication stretches through sixteen-by-sixteen", () => {
   const round = buildNumberRound("peppers", 3, 137);
   expect(round.operation).toBe("multiplication");
-  expect(round.biggerValue).toBe(15);
-  expect(round.smallerValue).toBe(15);
-  expect(round.answer).toBe(225);
-  expect(round.termValues).toEqual([15, 15]);
+  expect(round.biggerValue).toBe(16);
+  expect(round.smallerValue).toBe(16);
+  expect(round.answer).toBe(256);
+  expect(round.termValues).toEqual([16, 16]);
 });
 
 test("every playable category has ten distinct single-subject Challenge deep dives", () => {
@@ -2322,6 +2322,35 @@ test("the level button opens progress stats and tracks topic and game-type activ
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await expect(levelButton).toBeFocused();
+});
+
+test("Setup keeps keyboard focus inside and restores the More actions control", async ({ page }) => {
+  const more = page.getByRole("button", { name: "More actions" });
+  const initialOverflow = await page.evaluate(() => document.body.style.overflow);
+  await more.click();
+  await page.getByRole("button", { name: "Setup", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Setup", exact: true });
+  const close = dialog.getByRole("button", { name: "Close setup" });
+  await expect(close).toBeFocused();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe("hidden");
+
+  await page.keyboard.press("Shift+Tab");
+  await expect(close).not.toBeFocused();
+  expect(await dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(dialog.getByRole("combobox", { name: "Player", exact: true })).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(more).toBeFocused();
+  expect(await page.evaluate(() => document.body.style.overflow)).toBe(initialOverflow);
+
+  await more.click();
+  await page.getByRole("button", { name: "Setup", exact: true }).click();
+  await close.click();
+  await expect(more).toBeFocused();
 });
 
 test("HUD trays share one slot, stay open on selection, and protect the final topic", async ({ page }) => {

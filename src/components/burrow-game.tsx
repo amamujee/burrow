@@ -13,6 +13,7 @@ import { EqualGroupsBoard } from "@/components/equal-groups-board";
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid, GameQuestionCard, GameRoundLayout } from "@/components/game-question-ui";
 import { OfflineReady } from "@/components/offline-ready";
 import { WorldMapSurface } from "@/components/world-map-surface";
+import { useModalFocus } from "@/components/use-modal-focus";
 import { weightTopicsForAccuracy } from "@/lib/adaptive-topics";
 import { resolvedImagePresentation } from "@/lib/building-image-presentation";
 import { collectionCardProfileDetails } from "@/lib/card-profile";
@@ -725,11 +726,15 @@ const buildVariedRound = <T,>(
   history: readonly LearningExposure[],
   identityFor: (round: T) => LearningIdentity,
   build: (candidateSeed: number) => T,
-) => chooseVariedCandidate(
-  Array.from({ length: 10 }, (_, index) => build(seed + index * 137)),
-  identityFor,
-  history,
-);
+) => {
+  // Without previous exposure every candidate has the same variety score.
+  if (history.length === 0) return build(seed);
+  return chooseVariedCandidate(
+    Array.from({ length: 10 }, (_, index) => build(seed + index * 137)),
+    identityFor,
+    history,
+  );
+};
 
 const difficultyLabel = (difficulty: Difficulty) => difficultyOptions.find((item) => item.id === difficulty)?.label ?? "Easy";
 const isQuestionAnswerCorrect = (question: Question, choice: string) => choice === question.answer;
@@ -2672,6 +2677,9 @@ function GameHud({
   const [confirmReset, setConfirmReset] = useState(false);
   const [showSetup, setShowSetup] = useState(false);
   const [showProgressStats, setShowProgressStats] = useState(false);
+  const moreActionsRef = useRef<HTMLButtonElement>(null);
+  const closeSetup = useCallback(() => setShowSetup(false), []);
+  const setupDialogRef = useModalFocus(showSetup, closeSetup, moreActionsRef);
   const closeProgressStats = useCallback(() => setShowProgressStats(false), []);
   const toggleTray = (tray: "mode" | "topics" | "more") => {
     setConfirmReset(false);
@@ -2744,6 +2752,7 @@ function GameHud({
           <button
             type="button"
             aria-label="More actions"
+            ref={moreActionsRef}
             aria-expanded={openTray === "more"}
             aria-controls="hud-more-tray"
             onClick={() => toggleTray("more")}
@@ -2811,7 +2820,7 @@ function GameHud({
 
       {showSetup && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-[#092421]/80 p-3 backdrop-blur-[2px]" onMouseDown={(event) => { if (event.target === event.currentTarget) setShowSetup(false); }}>
-          <section role="dialog" aria-modal="true" aria-label="Setup" className="max-h-[calc(100dvh-24px)] w-full max-w-xl overflow-y-auto rounded-2xl border-2 border-[#092421] bg-[#fffdf6] shadow-[7px_7px_0_#092421]">
+          <section ref={setupDialogRef} role="dialog" aria-modal="true" aria-label="Setup" className="max-h-[calc(100dvh-24px)] w-full max-w-xl overflow-y-auto rounded-2xl border-2 border-[#092421] bg-[#fffdf6] shadow-[7px_7px_0_#092421]">
             <header className="sticky top-0 z-10 flex items-center justify-between gap-3 border-b-2 border-[#092421] bg-[#f4e8c8] px-4 py-3">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#7d5a3f]">Burrow settings</p>
@@ -2930,7 +2939,7 @@ function HudProgress({
 }
 
 function ProgressStatsModal({ stats, onClose }: { stats: ProgressStats; onClose: () => void }) {
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useModalFocus(true, onClose);
   const practicedTopics = stats.topics.filter((item) => item.answered > 0);
   const playedModes = stats.modes.filter((item) => item.answered > 0 || item.collected > 0);
   const modeAnswers = stats.modes.reduce((total, item) => total + item.answered, 0);
@@ -2941,28 +2950,6 @@ function ProgressStatsModal({ stats, onClose }: { stats: ProgressStats; onClose:
     earlierAnswers > 0 ? `${earlierAnswers} questions` : "",
     earlierCollections > 0 ? `${earlierCollections} cards` : "",
   ].filter(Boolean).join(" and ");
-
-  useEffect(() => {
-    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const previousOverflow = document.body.style.overflow;
-    const handleModalKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-      if (event.key === "Tab") {
-        event.preventDefault();
-        closeButtonRef.current?.focus();
-      }
-    };
-
-    document.body.style.overflow = "hidden";
-    document.addEventListener("keydown", handleModalKey);
-    closeButtonRef.current?.focus();
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", handleModalKey);
-      previousFocus?.focus();
-    };
-  }, [onClose]);
 
   const summary = [
     { label: "Questions", value: stats.answered, color: "#f0c84b" },
@@ -2982,6 +2969,7 @@ function ProgressStatsModal({ stats, onClose }: { stats: ProgressStats; onClose:
         role="dialog"
         aria-modal="true"
         aria-labelledby="progress-stats-title"
+        ref={dialogRef}
         className="max-h-[calc(100dvh-24px)] w-full max-w-4xl overflow-y-auto rounded-2xl border-2 border-[#092421] bg-[#fffdf6] shadow-[7px_7px_0_#092421] sm:max-h-[calc(100dvh-48px)]"
       >
         <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b-2 border-[#092421] bg-[#f4e8c8] px-4 py-3 sm:px-6 sm:py-4">
@@ -2991,7 +2979,6 @@ function ProgressStatsModal({ stats, onClose }: { stats: ProgressStats; onClose:
             <p className="mt-1.5 text-sm font-bold text-[#5f6b5d]">A simple look at where the learning time is going.</p>
           </div>
           <button
-            ref={closeButtonRef}
             type="button"
             aria-label="Close progress stats"
             onClick={onClose}
@@ -3174,10 +3161,12 @@ function QuestionRun({
 }) {
   const [firstWrongChoice, setFirstWrongChoice] = useState<string | null>(null);
   const isDifferenceQuestion = question.kind === "building-difference" || question.kind === "shark-difference" || question.kind === "jet-difference";
+  const photoStatRevealsAnswer = isDifferenceQuestion || question.kind === "building-height" || question.kind === "pepper-shu";
   const showNumberLine = Boolean(question.numberLine) && (answered || (Boolean(question.comparison) && !isDifferenceQuestion));
   const showComparisonTable = Boolean(question.comparison) && (answered || !isDifferenceQuestion);
+  const canChooseComparisonCard = question.comparison?.every((card) => question.choices.includes(comparisonChoiceForCard(card)));
   const choices = question.comparison ? orderedComparisonChoices(question.choices) : question.choices;
-  const photoStat = question.numberLine
+  const photoStat = question.numberLine && (answered || !photoStatRevealsAnswer)
     ? `${question.numberLine.value.toLocaleString("en-US")} ${question.numberLine.unit}`
     : null;
   const chooseAnswer = (choice: string) => {
@@ -3202,8 +3191,9 @@ function QuestionRun({
           <ComparisonStage
             cards={question.comparison}
             selected={selected}
+            disabledChoice={firstWrongChoice ?? undefined}
             answer={question.answer}
-            onSelect={onAnswer}
+            onSelect={canChooseComparisonCard ? chooseAnswer : undefined}
           />
         ) : (
           <QuestionImage question={question} />
@@ -3212,7 +3202,7 @@ function QuestionRun({
           {roundLabel}
         </div>
         {photoStat && (
-          <div className="absolute right-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#fffdf6] px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
+          <div data-question-photo-stat className="absolute right-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#fffdf6] px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
             {photoStat}
           </div>
         )}
@@ -3754,7 +3744,7 @@ function RevealMode({
             <span>{round.map ? `${round.choices.length} places` : `${Math.round((visibleCount / totalTiles) * 100)}%`}</span>
           </div>
           {round.map ? (
-            <p className="mt-1 text-xs font-bold text-[#5f6b5d]">Read the subject name, then choose its location. The map appears after you answer.</p>
+            <p className="mt-1 text-xs font-bold text-[#5f6b5d]">Read the subject name, then choose where it is found.</p>
           ) : (
             <div className="mt-2 h-3 overflow-hidden rounded-full bg-[#e6d7bc]">
               <div className="h-full bg-[#9f3f2b] transition-[width] duration-500 ease-out" style={{ width: `${Math.round((visibleCount / totalTiles) * 100)}%` }} />
@@ -4920,34 +4910,38 @@ function TrumpCardView({ card, badge, revealStats }: { card: TopTrumpRound["play
 function ComparisonStage({
   cards,
   selected,
+  disabledChoice,
   answer,
   onSelect,
 }: {
   cards: ComparisonCard[];
   selected?: string | null;
+  disabledChoice?: string;
   answer?: string;
   onSelect?: (choice: string) => void;
 }) {
   const displayCards = orderedComparisonCards(cards);
+  const CardElement = onSelect ? "button" : "div";
   return (
     <div className="grid h-full min-h-[260px] grid-cols-2 gap-1.5 bg-[#102f36] p-1.5">
       {displayCards.map((card) => {
         const choice = comparisonChoiceForCard(card);
-        const chosen = selected === choice;
+        const chosen = selected === choice || disabledChoice === choice;
         const correctChoice = Boolean(selected && answer && choice === answer);
         const cardState = correctChoice
           ? "border-[#092421] bg-[#70d392]"
           : chosen
             ? "border-[#092421] bg-[#f59a7d]"
-            : "border-[#092421] bg-[#fff9ec] hover:border-[#f0c84b]";
+            : `border-[#092421] bg-[#fff9ec] ${onSelect ? "hover:border-[#f0c84b]" : ""}`;
 
         return (
-          <button
+          <CardElement
             key={`${card.label}-${card.title}`}
-            type="button"
-            onClick={() => onSelect?.(choice)}
-            aria-label={`Choose ${choice}`}
-            className={`relative overflow-hidden rounded-lg border-2 text-left shadow-[3px_3px_0_#092421] transition active:translate-y-0.5 ${onSelect ? "cursor-pointer" : "cursor-default"} ${cardState}`}
+            type={onSelect ? "button" : undefined}
+            disabled={onSelect ? Boolean(selected) || disabledChoice === choice : undefined}
+            onClick={onSelect ? () => onSelect(choice) : undefined}
+            aria-label={onSelect ? `Choose ${choice}` : undefined}
+            className={`relative overflow-hidden rounded-lg border-2 text-left shadow-[3px_3px_0_#092421] ${onSelect ? "cursor-pointer transition active:translate-y-0.5" : "cursor-default"} ${cardState}`}
           >
             <div className="absolute left-2 top-2 z-10 rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-sm font-black shadow-[2px_2px_0_#092421]">
               {card.label}
@@ -4966,7 +4960,7 @@ function ComparisonStage({
                 <div className="h-full bg-[#9f3f2b]" style={{ width: `${Math.max(2, Math.min(100, (card.meterValue / card.meterMax) * 100))}%` }} />
               </div>
             </div>
-          </button>
+          </CardElement>
         );
       })}
     </div>

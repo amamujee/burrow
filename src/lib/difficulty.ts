@@ -2,13 +2,16 @@ import type { Difficulty } from "./game-data";
 
 // A selected difficulty is a ceiling, not an exclusive question tier. The
 // calibrated mix keeps some retrieval practice while making advanced prompts
-// more common: Medium is 20/80 Easy/Medium, and Hard is 10/30/60.
+// more common: Medium is 20/80 Easy/Medium, and Hard is 8/20/72. Hard now has
+// 20% more advanced prompts than its previous 60% share.
 export const questionDepthForSelection = (selected: Difficulty, seed: number): Difficulty => {
   if (selected === 1) return 1;
-  const slot = Math.abs(Math.trunc(seed)) % 10;
-  if (selected === 2) return slot < 2 ? 1 : 2;
-  if (slot < 1) return 1;
-  if (slot < 4) return 2;
+  const normalizedSeed = Math.abs(Math.trunc(seed));
+  if (selected === 2) return normalizedSeed % 10 < 2 ? 1 : 2;
+  // Spread the two Easy and five Medium slots through each 25-seed cycle.
+  const slot = ((normalizedSeed % 25) * 7) % 25;
+  if (slot < 2) return 1;
+  if (slot < 7) return 2;
   return 3;
 };
 

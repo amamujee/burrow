@@ -276,6 +276,16 @@ const locationQuestionChoices = <T extends { metadata?: { location?: WorldLocati
   difficulty,
   seed,
 );
+function* locationQuestionCandidates<T extends { metadata: { location: WorldLocation } }>(
+  options: readonly T[],
+  difficulty: Difficulty,
+  seed: number,
+) {
+  for (const [index, item] of options.entries()) {
+    const mapChoices = locationQuestionChoices(item, options, difficulty, seed + index);
+    if (mapChoices) yield { item, mapChoices };
+  }
+}
 const roundTo = (value: number, step: number) => Math.max(step, Math.round(value / step) * step);
 const roundedSubtractionPair = (bigger: number, smaller: number, step: number) => {
   const biggerValue = roundTo(bigger, step);
@@ -392,7 +402,7 @@ const buildingHeightChoices = (building: Building, difficulty: Difficulty, seed:
 };
 
 const buildingDifferenceChoices = (diff: number, difficulty: Difficulty, seed: number) => {
-  const gap = difficulty === 1 ? 300 : difficulty === 2 ? 150 : 75;
+  const gap = difficulty === 1 ? 300 : difficulty === 2 ? 150 : 60;
   const values = [
     diff,
     diff + gap * 2,
@@ -1116,10 +1126,9 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
   }))[0];
   const measuredPool = pool.filter(hasScovilleMeasurement).filter(isPepperFruit);
   const locationPool = pool.filter(hasLocationMetadata);
-  const locationCandidates = locationPool.flatMap((item, index) => {
-    const mapChoices = locationQuestionChoices(item, locationPool, questionDepth, seed + 5 + index);
-    return mapChoices ? [{ item, mapChoices }] : [];
-  });
+  const locationIterator = locationQuestionCandidates(locationPool, questionDepth, seed + 5);
+  const firstLocationCandidate = locationIterator.next();
+  const locationCandidates = firstLocationCandidate.done ? [] : [firstLocationCandidate.value];
   const baseKinds: QuestionKind[] = questionDepth === 1
     ? ["pepper-heat", "pepper-shu", "pepper-hotter", "pepper-reading"]
     : questionDepth === 2
@@ -1129,6 +1138,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
   const kind = sample(kinds, seed + 3);
 
   if (kind === "pepper-location") {
+    locationCandidates.push(...locationIterator);
     const locationCandidate = discoveryShuffle(locationCandidates, seed + 4, unlockedTitles, (candidate) => cardDiscoveryIdentities({
       id: candidate.item.id,
       topic: "peppers",
@@ -1258,10 +1268,9 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
   const questionDepth = questionDepthForSelection(difficulty, seed);
   const building = sample(pool, seed);
   const locationPool = pool.filter(hasLocationMetadata);
-  const locationCandidates = locationPool.flatMap((item, index) => {
-    const mapChoices = locationQuestionChoices(item, locationPool, questionDepth, seed + 25 + index);
-    return mapChoices ? [{ item, mapChoices }] : [];
-  });
+  const locationIterator = locationQuestionCandidates(locationPool, questionDepth, seed + 25);
+  const firstLocationCandidate = locationIterator.next();
+  const locationCandidates = firstLocationCandidate.done ? [] : [firstLocationCandidate.value];
   const baseKinds: QuestionKind[] = questionDepth === 1
     ? ["building-name", "building-height", "building-taller", "building-reading"]
     : questionDepth === 2
@@ -1271,6 +1280,7 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
   const kind = sample(kinds, seed + 23);
 
   if (kind === "building-location") {
+    locationCandidates.push(...locationIterator);
     const locationCandidate = sample(locationCandidates, seed + 24);
     const locatedBuilding = locationCandidate.item;
     const mapChoices = locationCandidate.mapChoices;

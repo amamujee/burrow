@@ -1478,7 +1478,7 @@ const competitiveTopTrumpOpponent = (
   const ranked = eligible
     .map((card, index) => ({ card, index, distance: topTrumpPairingDistance(player, card) }))
     .sort((first, second) => first.distance - second.distance || first.index - second.index);
-  const focusRatio = difficulty === 2 ? 0.9 : 0.8;
+  const focusRatio = difficulty === 2 ? 0.9 : 0.64;
   const focusCount = Math.max(1, Math.ceil(ranked.length * focusRatio));
   return sample(ranked.slice(0, focusCount), seed + 1).card;
 };
@@ -1566,7 +1566,7 @@ const factorRangeForDifficulty = (difficulty: Difficulty) => difficulty === 1
   ? { groups: [1, 6] as const, items: [1, 6] as const }
   : difficulty === 2
     ? { groups: [2, 12] as const, items: [2, 12] as const }
-    : { groups: [6, 15] as const, items: [6, 15] as const };
+    : { groups: [6, 16] as const, items: [6, 16] as const };
 
 const pickFactor = ([min, max]: readonly [number, number], factorSeed: number) => min + Math.floor(seedRandom(factorSeed) * (max - min + 1));
 const countLabel = (count: number, singular: string, plural: string) => `${count} ${count === 1 ? singular : plural}`;
@@ -1792,10 +1792,10 @@ const focusedStatCards = <T extends { statValue: number }>(
   const distinct = distinctStatCards(cards, seed, cards.length).sort((first, second) => first.statValue - second.statValue);
   if (distinct.length <= requestedCount || difficulty === 1) return distinctStatCards(distinct, seed + 1, requestedCount);
 
-  // Keep the same card count and interaction, but trim the widest 10%/20% of
-  // the value range around a rotating window so Medium and Hard orders are
-  // less likely to contain an obvious outlier.
-  const focusRatio = difficulty === 2 ? 0.9 : 0.8;
+  // Keep the same card count and interaction. Hard's rotating candidate
+  // window is 20% narrower than before, making obvious outliers less common
+  // while still allowing every card to appear across rounds.
+  const focusRatio = difficulty === 2 ? 0.9 : 0.64;
   const focusCount = Math.max(requestedCount, Math.ceil(distinct.length * focusRatio));
   const availableStarts = distinct.length - focusCount + 1;
   const start = Math.floor(seedRandom(seed + 2) * availableStarts);
@@ -2210,13 +2210,16 @@ export const buildGeoRoundFromCards = (
   const { pool, choicesPool } = geoPoolPlanForCards(cards, difficulty);
   const orderedCards = discoveryShuffle(pool, seed + 1, unlockedTitles, cardDiscoveryIdentities);
   const usChoicesPool = choicesPool.filter((choice) => isUsMapLocation(choice.location) && choice.location.states?.length);
-  const selected = orderedCards.map((card, index) => {
+  let selected: { card: LocatedKnowledgeCard; mapRegion: "us" | "world"; choices: GeoChoice[] } | undefined;
+  for (const [index, card] of orderedCards.entries()) {
     const answer = geoChoiceForLocation(card.metadata.location);
     const usChoices = isUsMapLocation(answer.location) && answer.location.states?.length
       ? diverseGeoChoices(answer, usChoicesPool, count, difficulty, seed + index, "us") : null;
-    return { card, mapRegion: usChoices ? "us" as const : "world" as const,
-      choices: usChoices ?? diverseGeoChoices(answer, choicesPool, count, difficulty, seed + index) };
-  }).find((candidate) => candidate.choices !== null);
+    const choices = usChoices ?? diverseGeoChoices(answer, choicesPool, count, difficulty, seed + index);
+    if (!choices) continue;
+    selected = { card, mapRegion: usChoices ? "us" : "world", choices };
+    break;
+  }
   if (!selected?.choices) throw new Error(`Need at least ${count} well-separated mapped locations to build a geo round for ${topic}`);
 
   const { card, choices: diverseChoices } = selected;
@@ -2592,7 +2595,7 @@ const contextualCountRange = (difficulty: Difficulty) => difficulty === 1
   ? [2, 9] as const
   : difficulty === 2
     ? [4, 15] as const
-    : [7, 25] as const;
+    : [7, 30] as const;
 const additionPromptStart = (count: number) => count === 2 ? "Add these together" : "Add all three together";
 const stackedTotalLabel = (count: number) => count === 2 ? "stacked total" : "three-part total";
 const sumValues = (values: number[]) => values.reduce((total, value) => total + value, 0);
