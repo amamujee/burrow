@@ -60,6 +60,7 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
               : stat.label,
             value: statDisplay(stat),
           })),
+          ...card.stats.filter((stat) => stat.note).map((stat) => ({ label: `${stat.label} note`, value: stat.note! })),
           ...(card.categories.length ? [{ label: "Category", value: card.categories.join(" · ") }] : []),
           ...(card.metadata?.location ? [
             { label: "Location", value: card.metadata.location.label },

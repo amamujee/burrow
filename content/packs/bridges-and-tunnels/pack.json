@@ -2,8 +2,8 @@
   "$schema": "../pack.schema.json",
   "id": "bridges-and-tunnels",
   "title": "Bridges & Tunnels",
-  "summary": "Famous bridge icons, major New York area crossings, record-setting viaducts, and long tunnels become length, history, and engineering challenges.",
-  "dataNote": "Lengths and opening years are rounded reference values. Fame and Engineering are Burrow gameplay ratings, not official measurements.",
+  "summary": "Virginia bridge-tunnels, notable crossings across the United States, world-famous bridges, and long tunnels become geography, length, and engineering challenges.",
+  "dataNote": "Lengths are rounded miles for the named bridge, tunnel or crossing. Card notes identify approaches, branches and parallel bores. Opening years identify the first opening of the described structure; replacement and later-span dates are noted. Fame and Engineering are Burrow gameplay ratings, not official measurements.",
   "status": "playable",
   "audience": {
     "minAge": 6,
@@ -27,24 +27,379 @@
   },
   "sources": [
     {
-      "label": "Wikipedia list of bridges",
-      "url": "https://en.wikipedia.org/wiki/List_of_bridges",
-      "note": "General bridge index for landmark cross-checking."
+      "label": "Brooklyn Bridge",
+      "url": "https://www.nyc.gov/html/dot/html/pr2024/brooklyn-bridge-glow-up.shtml",
+      "note": "Reviewed 2026-09-05. Total bridge and approaches: 6,016 ft. Opened in 1883; the year refers to the named structure."
     },
     {
-      "label": "Wikipedia list of longest bridges",
-      "url": "https://en.wikipedia.org/wiki/List_of_longest_bridges",
-      "note": "Length context for record-setting viaducts and sea crossings."
+      "label": "Brooklyn Bridge — additional reference",
+      "url": "https://en.wikipedia.org/wiki/Brooklyn_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge and approaches: 6,016 ft. Opened in 1883; the year refers to the named structure."
     },
     {
-      "label": "Wikipedia list of longest tunnels",
-      "url": "https://en.wikipedia.org/wiki/List_of_longest_tunnels",
-      "note": "Tunnel length context for rail, road, mountain, and undersea tunnels."
+      "label": "Manhattan Bridge",
+      "url": "https://en.wikipedia.org/wiki/Manhattan_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 6,855 ft. Opened in 1909; the year refers to the named structure."
     },
     {
-      "label": "Britannica tunnel list",
-      "url": "https://www.britannica.com/topic/list-of-tunnels-2197876",
-      "note": "Secondary tunnel landmark reference."
+      "label": "Williamsburg Bridge",
+      "url": "https://en.wikipedia.org/wiki/Williamsburg_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 7,308 ft. Opened in 1903; the year refers to the named structure."
+    },
+    {
+      "label": "Queensboro Bridge",
+      "url": "https://www.nyc.gov/html/dot/html/infrastructure/queensboro-bridge.shtml",
+      "note": "Reviewed 2026-09-05. Total bridge and approaches: 7,449 ft; the 3,725 ft figure excludes approaches. Opened in 1909; the year refers to the named structure."
+    },
+    {
+      "label": "Queensboro Bridge — additional reference",
+      "url": "https://en.wikipedia.org/wiki/Queensboro_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge and approaches: 7,449 ft; the 3,725 ft figure excludes approaches. Opened in 1909; the year refers to the named structure."
+    },
+    {
+      "label": "Verrazzano-Narrows Bridge",
+      "url": "https://en.wikipedia.org/wiki/Verrazzano-Narrows_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 13,700 ft; the main span alone is 4,260 ft. Opened in 1964; the year refers to the named structure."
+    },
+    {
+      "label": "George Washington Bridge",
+      "url": "https://en.wikipedia.org/wiki/George_Washington_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 4,760 ft; the main span alone is 3,500 ft. Opened in 1931; the year refers to the named structure."
+    },
+    {
+      "label": "Robert F. Kennedy Bridge",
+      "url": "https://en.wikipedia.org/wiki/Triborough_Bridge",
+      "note": "Reviewed 2026-09-05. Combined branches: 17,710 ft, excluding elevated ramps. This complex has three branches, rather than one end-to-end route. Opened in 1936; the year refers to the named structure."
+    },
+    {
+      "label": "Bronx-Whitestone Bridge",
+      "url": "https://en.wikipedia.org/wiki/Bronx-Whitestone_Bridge",
+      "note": "Reviewed 2026-09-05. Suspension structure: 3,770 ft, excluding approach roads. Opened in 1939; the year refers to the named structure."
+    },
+    {
+      "label": "Throgs Neck Bridge",
+      "url": "https://en.wikipedia.org/wiki/Throgs_Neck_Bridge",
+      "note": "Reviewed 2026-09-05. Total crossing: 11,250 ft including approaches; 2,910 ft is only the length between anchorages. Opened in 1961; the year refers to the named structure."
+    },
+    {
+      "label": "Henry Hudson Bridge",
+      "url": "https://en.wikipedia.org/wiki/Henry_Hudson_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 2,208 ft; the arch span alone is 841 ft. Opened in 1936; the year refers to the named structure."
+    },
+    {
+      "label": "Bayonne Bridge",
+      "url": "https://corpinfo.panynj.gov/content/dam/bridges-tunnels/bayonne-bridge-shpo-documents/Bayonne%20Bridge%20Brochure.pdf",
+      "note": "Reviewed 2026-09-05. Current bridge and approach viaducts: 7,160 ft, per the Port Authority brochure. Opened in 1931; the year refers to the named structure."
+    },
+    {
+      "label": "Bayonne Bridge — additional reference",
+      "url": "https://en.wikipedia.org/wiki/Bayonne_Bridge",
+      "note": "Reviewed 2026-09-05. Current bridge and approach viaducts: 7,160 ft, per the Port Authority brochure. Opened in 1931; the year refers to the named structure."
+    },
+    {
+      "label": "Goethals Bridge",
+      "url": "https://portfolio.panynj.gov/2017/06/13/the-new-goethals-opening-a-road-to-the-future/",
+      "note": "Reviewed 2026-09-05. Modern bridge length: 7,109 ft; one span, not the sum of the parallel roadways. First modern span opened in 2017; the second opened in 2018. The original 1928 bridge was replaced."
+    },
+    {
+      "label": "Goethals Bridge — additional reference",
+      "url": "https://en.wikipedia.org/wiki/Goethals_Bridge",
+      "note": "Reviewed 2026-09-05. Modern bridge length: 7,109 ft; one span, not the sum of the parallel roadways. First modern span opened in 2017; the second opened in 2018. The original 1928 bridge was replaced."
+    },
+    {
+      "label": "Governor Mario M. Cuomo Bridge",
+      "url": "https://thruway.ny.gov/our-system/thruway-system-overview",
+      "note": "Reviewed 2026-09-05. The Thruway Authority describes the current bridge as 3 miles long; the walking path is longer. First span opened in 2017; the second opened in 2018. The original Tappan Zee Bridge opened in 1955."
+    },
+    {
+      "label": "Governor Mario M. Cuomo Bridge — additional reference",
+      "url": "https://en.wikipedia.org/wiki/Governor_Mario_M._Cuomo_Bridge",
+      "note": "Reviewed 2026-09-05. The Thruway Authority describes the current bridge as 3 miles long; the walking path is longer. First span opened in 2017; the second opened in 2018. The original Tappan Zee Bridge opened in 1955."
+    },
+    {
+      "label": "Golden Gate Bridge",
+      "url": "https://en.wikipedia.org/wiki/Golden_Gate_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge and approaches: 8,980 ft; the main suspension span is 4,200 ft. Opened in 1937; the year refers to the named structure."
+    },
+    {
+      "label": "Tower Bridge",
+      "url": "https://www.bridgesofdublin.ie/bridge-building/famous-bridges/tower-bridge-1894",
+      "note": "Reviewed 2026-09-05. Approx. 244 m for the bridge, excluding approach roads; measurements including abutments differ. Opened in 1894; the year refers to the named structure."
+    },
+    {
+      "label": "Tower Bridge — additional reference",
+      "url": "https://en.wikipedia.org/wiki/Tower_Bridge",
+      "note": "Reviewed 2026-09-05. Approx. 244 m for the bridge, excluding approach roads; measurements including abutments differ. Opened in 1894; the year refers to the named structure."
+    },
+    {
+      "label": "London Bridge",
+      "url": "https://en.wikipedia.org/wiki/London_Bridge",
+      "note": "Reviewed 2026-09-05. Current concrete bridge: 269 m; this is the bridge in London, not the relocated bridge in Arizona. Current concrete bridge opened in 1973; earlier London Bridges stood at this crossing."
+    },
+    {
+      "label": "Sydney Harbour Bridge",
+      "url": "https://en.wikipedia.org/wiki/Sydney_Harbour_Bridge",
+      "note": "Reviewed 2026-09-05. Total length including approaches: 1,149 m; the arch span is 503 m. Opened in 1932; the year refers to the named structure."
+    },
+    {
+      "label": "Akashi Kaikyo Bridge",
+      "url": "https://en.wikipedia.org/wiki/Akashi_Kaikyo_Bridge",
+      "note": "Reviewed 2026-09-05. Total length: 3,911 m; the central suspension span is 1,991 m. Opened in 1998; the year refers to the named structure."
+    },
+    {
+      "label": "Millau Viaduct",
+      "url": "https://en.wikipedia.org/wiki/Millau_Viaduct",
+      "note": "Reviewed 2026-09-05. Total bridge length: 2,460 m. Opened in 2004; the year refers to the named structure."
+    },
+    {
+      "label": "Ponte Vecchio",
+      "url": "https://en.wikipedia.org/wiki/Ponte_Vecchio",
+      "note": "Reviewed 2026-09-05. Approx. 95 m for the whole bridge; the central arch spans about 30 m. Opened in 1345; the year refers to the named structure."
+    },
+    {
+      "label": "Rialto Bridge",
+      "url": "https://www.italia.it/it/veneto/venezia/ponte-di-rialto",
+      "note": "Reviewed 2026-09-05. Whole bridge: 48 m; the central arch spans about 32 m. Opened in 1591; the year refers to the named structure."
+    },
+    {
+      "label": "Rialto Bridge — additional reference",
+      "url": "https://en.wikipedia.org/wiki/Rialto_Bridge",
+      "note": "Reviewed 2026-09-05. Whole bridge: 48 m; the central arch spans about 32 m. Opened in 1591; the year refers to the named structure."
+    },
+    {
+      "label": "Charles Bridge",
+      "url": "https://en.wikipedia.org/wiki/Charles_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 515.8 m. Opened in 1402; the year refers to the named structure."
+    },
+    {
+      "label": "Forth Bridge",
+      "url": "https://en.wikipedia.org/wiki/Forth_Bridge",
+      "note": "Reviewed 2026-09-05. Railway bridge length: 8,094 ft; this is distinct from the neighboring road bridges. Opened in 1890; the year refers to the named structure."
+    },
+    {
+      "label": "Oresund Bridge",
+      "url": "https://en.wikipedia.org/wiki/%C3%98resund_Bridge",
+      "note": "Reviewed 2026-09-05. Bridge section only: 7,845 m. The artificial island and Drogden Tunnel are excluded. Opened in 2000; the year refers to the named structure."
+    },
+    {
+      "label": "15 July Martyrs Bridge",
+      "url": "https://en.wikipedia.org/wiki/15_July_Martyrs_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 1,560 m; the central span is 1,074 m. Opened in 1973; the year refers to the named structure."
+    },
+    {
+      "label": "Danyang-Kunshan Grand Bridge",
+      "url": "https://en.wikipedia.org/wiki/Danyang%E2%80%93Kunshan_Grand_Bridge",
+      "note": "Reviewed 2026-09-05. Full railway viaduct: 164.8 km; not one unsupported span. Opened in 2011; the year refers to the named structure."
+    },
+    {
+      "label": "Hong Kong-Zhuhai-Macau Bridge",
+      "url": "https://en.wikipedia.org/wiki/Hong_Kong%E2%80%93Zhuhai%E2%80%93Macau_Bridge",
+      "note": "Reviewed 2026-09-05. Full 55 km crossing system including link roads; the central bridge-tunnel section is shorter. Opened in 2018; the year refers to the named structure."
+    },
+    {
+      "label": "Mackinac Bridge",
+      "url": "https://en.wikipedia.org/wiki/Mackinac_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge and approaches: 26,372 ft; commonly rounded to 5 miles. Opened in 1957; the year refers to the named structure."
+    },
+    {
+      "label": "Sunshine Skyway Bridge",
+      "url": "https://en.wikipedia.org/wiki/Sunshine_Skyway_Bridge",
+      "note": "Reviewed 2026-09-05. Full modern crossing: 4.14 miles; the cable-stayed main span is 1,200 ft. Current cable-stayed crossing opened in 1987, replacing earlier bridges."
+    },
+    {
+      "label": "Bixby Creek Bridge",
+      "url": "https://en.wikipedia.org/wiki/Bixby_Creek_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 714 ft; the central arch spans 360 ft. Opened in 1932; the year refers to the named structure."
+    },
+    {
+      "label": "Gotthard Base Tunnel",
+      "url": "https://en.wikipedia.org/wiki/Gotthard_Base_Tunnel",
+      "note": "Reviewed 2026-09-05. One main rail bore: 57.09 km; parallel bores and service passages are not added together. Opened in 2016; the year refers to the named structure."
+    },
+    {
+      "label": "Seikan Tunnel",
+      "url": "https://en.wikipedia.org/wiki/Seikan_Tunnel",
+      "note": "Reviewed 2026-09-05. Full rail tunnel: 53.85 km, including land sections; only 23.3 km lies beneath the seabed. Opened in 1988; the year refers to the named structure."
+    },
+    {
+      "label": "Channel Tunnel",
+      "url": "https://en.wikipedia.org/wiki/Channel_Tunnel",
+      "note": "Reviewed 2026-09-05. Full tunnel route: 50.46 km; parallel rail bores and the service tunnel are not added together. Opened in 1994; the year refers to the named structure."
+    },
+    {
+      "label": "Loetschberg Base Tunnel",
+      "url": "https://en.wikipedia.org/wiki/L%C3%B6tschberg_Base_Tunnel",
+      "note": "Reviewed 2026-09-05. Main rail tunnel: about 34.58 km. Opened in 2007; the year refers to the named structure."
+    },
+    {
+      "label": "Guadarrama Tunnel",
+      "url": "https://en.wikipedia.org/wiki/Guadarrama_Tunnel",
+      "note": "Reviewed 2026-09-05. One rail bore: about 28.4 km; the two bores are not added together. Opened in 2007; the year refers to the named structure."
+    },
+    {
+      "label": "Chesapeake Bay Bridge-Tunnel",
+      "url": "https://www.vdot.virginia.gov/about/our-system/bridges-tunnels/hr-bridges-tunnels/",
+      "note": "Reviewed 2026-09-05. Shore-to-shore crossing: 17.6 miles, including bridges, tunnels and islands; land approach roads are excluded. Opened in 1964; the year refers to the named structure."
+    },
+    {
+      "label": "Chesapeake Bay Bridge-Tunnel — additional reference",
+      "url": "https://en.wikipedia.org/wiki/Chesapeake_Bay_Bridge%E2%80%93Tunnel",
+      "note": "Reviewed 2026-09-05. Shore-to-shore crossing: 17.6 miles, including bridges, tunnels and islands; land approach roads are excluded. Opened in 1964; the year refers to the named structure."
+    },
+    {
+      "label": "Laerdal Tunnel",
+      "url": "https://en.wikipedia.org/wiki/L%C3%A6rdal_Tunnel",
+      "note": "Reviewed 2026-09-05. Full road tunnel: 24.51 km. Opened in 2000; the year refers to the named structure."
+    },
+    {
+      "label": "Yamate Tunnel",
+      "url": "https://en.wikipedia.org/wiki/Yamate_Tunnel",
+      "note": "Reviewed 2026-09-05. Completed road tunnel route: 18.2 km; not the combined length of its two bores. First section opened in 2007; the full 18.2 km route was completed in 2015."
+    },
+    {
+      "label": "Zhongnanshan Tunnel",
+      "url": "https://en.wikipedia.org/wiki/Zhongnanshan_Tunnel",
+      "note": "Reviewed 2026-09-05. One road bore: 18.04 km; the two parallel bores are not added together. Opened in 2007; the year refers to the named structure."
+    },
+    {
+      "label": "Gotthard Road Tunnel",
+      "url": "https://en.wikipedia.org/wiki/Gotthard_Road_Tunnel",
+      "note": "Reviewed 2026-09-05. Original road tunnel: 16.942 km; excludes the separate railway tunnels. Opened in 1980; the year refers to the named structure."
+    },
+    {
+      "label": "Tokyo Bay Aqua-Line",
+      "url": "https://en.wikipedia.org/wiki/Tokyo_Bay_Aqua-Line",
+      "note": "Reviewed 2026-09-05. Whole bridge-tunnel route: about 15 km, including both bridge and tunnel sections. Opened in 1997; the year refers to the named structure."
+    },
+    {
+      "label": "Ryfylke Tunnel",
+      "url": "https://en.wikipedia.org/wiki/Ryfylke_Tunnel",
+      "note": "Reviewed 2026-09-05. Full road tunnel: 14.4 km; one route, not both parallel bores added together. Opened in 2019; the year refers to the named structure."
+    },
+    {
+      "label": "Monitor–Merrimac Memorial Bridge–Tunnel",
+      "url": "https://www.vdot.virginia.gov/about/our-system/bridges-tunnels/hr-bridges-tunnels/",
+      "note": "Reviewed 2026-09-05. Whole bridge-tunnel crossing: 4.6 miles; not just the submerged tunnel. Opened in 1992; the year refers to the named structure."
+    },
+    {
+      "label": "Monitor–Merrimac Memorial Bridge–Tunnel — additional reference",
+      "url": "https://en.wikipedia.org/wiki/Monitor%E2%80%93Merrimac_Memorial_Bridge%E2%80%93Tunnel",
+      "note": "Reviewed 2026-09-05. Whole bridge-tunnel crossing: 4.6 miles; not just the submerged tunnel. Opened in 1992; the year refers to the named structure."
+    },
+    {
+      "label": "Hampton Roads Bridge–Tunnel",
+      "url": "https://www.vdot.virginia.gov/about/our-system/bridges-tunnels/hr-bridges-tunnels/",
+      "note": "Reviewed 2026-09-05. Whole bridge-tunnel crossing: about 3.5 miles; not just the submerged tunnel. First tunnel opened in 1957; the parallel tunnel opened in 1976. Length describes the established crossing, not the expansion project corridor."
+    },
+    {
+      "label": "Hampton Roads Bridge–Tunnel — additional reference",
+      "url": "https://en.wikipedia.org/wiki/Hampton_Roads_Bridge%E2%80%93Tunnel",
+      "note": "Reviewed 2026-09-05. Whole bridge-tunnel crossing: about 3.5 miles; not just the submerged tunnel. First tunnel opened in 1957; the parallel tunnel opened in 1976. Length describes the established crossing, not the expansion project corridor."
+    },
+    {
+      "label": "James River Bridge",
+      "url": "https://www.vdot.virginia.gov/about/our-system/bridges-tunnels/hr-bridges-tunnels/",
+      "note": "Reviewed 2026-09-05. VDOT describes the current crossing as 4.5 miles; bridge-only inventory measurements are about 4.4 miles. Current four-lane lift bridge completed in 1982; the original bridge opened in 1928."
+    },
+    {
+      "label": "James River Bridge — additional reference",
+      "url": "https://en.wikipedia.org/wiki/James_River_Bridge",
+      "note": "Reviewed 2026-09-05. VDOT describes the current crossing as 4.5 miles; bridge-only inventory measurements are about 4.4 miles. Current four-lane lift bridge completed in 1982; the original bridge opened in 1928."
+    },
+    {
+      "label": "San Francisco–Oakland Bay Bridge",
+      "url": "https://en.wikipedia.org/wiki/San_Francisco%E2%80%93Oakland_Bay_Bridge",
+      "note": "Reviewed 2026-09-05. Crossing via Yerba Buena Island: 4.46 miles, excluding land approaches. Original crossing opened in 1936; the eastern span was replaced in 2013."
+    },
+    {
+      "label": "Tacoma Narrows Bridge",
+      "url": "https://en.wikipedia.org/wiki/Tacoma_Narrows_Bridge",
+      "note": "Reviewed 2026-09-05. One bridge: 5,400 ft; the two parallel bridges are not added together. First surviving span opened in 1950; its twin opened in 2007. The original 1940 bridge collapsed."
+    },
+    {
+      "label": "Lake Pontchartrain Causeway",
+      "url": "https://en.wikipedia.org/wiki/Lake_Pontchartrain_Causeway",
+      "note": "Reviewed 2026-09-05. Longer parallel span: 23.87 miles. The two bridges are not added together. First span opened in 1956; the longer parallel span opened in 1969."
+    },
+    {
+      "label": "New River Gorge Bridge",
+      "url": "https://en.wikipedia.org/wiki/New_River_Gorge_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 3,030 ft; the arch span alone is 1,700 ft. Opened in 1977; the year refers to the named structure."
+    },
+    {
+      "label": "Royal Gorge Bridge",
+      "url": "https://en.wikipedia.org/wiki/Royal_Gorge_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 1,260 ft; height above the river is a different measurement. Opened in 1929; the year refers to the named structure."
+    },
+    {
+      "label": "Seven Mile Bridge",
+      "url": "https://en.wikipedia.org/wiki/Seven_Mile_Bridge",
+      "note": "Reviewed 2026-09-05. Modern bridge length: about 6.765 miles, despite its rounded name. Modern road bridge opened in 1982; the separate original railway bridge opened in 1912."
+    },
+    {
+      "label": "Mike O’Callaghan–Pat Tillman Memorial Bridge",
+      "url": "https://en.wikipedia.org/wiki/Mike_O%27Callaghan%E2%80%93Pat_Tillman_Memorial_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 1,900 ft; excludes the longer bypass highway project. Opened in 2010; the year refers to the named structure."
+    },
+    {
+      "label": "Astoria–Megler Bridge",
+      "url": "https://en.wikipedia.org/wiki/Astoria%E2%80%93Megler_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 21,474 ft; the tall truss is only part of the crossing. Opened in 1966; the year refers to the named structure."
+    },
+    {
+      "label": "Eads Bridge",
+      "url": "https://en.wikipedia.org/wiki/Eads_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge and approaches: 6,442 ft; the central arch spans 520 ft. Opened in 1874; the year refers to the named structure."
+    },
+    {
+      "label": "Arthur Ravenel Jr. Bridge",
+      "url": "https://en.wikipedia.org/wiki/Arthur_Ravenel_Jr._Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge and approaches: 13,200 ft; the central span is 1,546 ft. Opened in 2005; the year refers to the named structure."
+    },
+    {
+      "label": "Leonard P. Zakim Bunker Hill Memorial Bridge",
+      "url": "https://en.wikipedia.org/wiki/Leonard_P._Zakim_Bunker_Hill_Memorial_Bridge",
+      "note": "Reviewed 2026-09-05. Total bridge length: 1,432 ft; the main span is 745 ft. Opened in 2003; the year refers to the named structure."
+    },
+    {
+      "label": "Holland Tunnel",
+      "url": "https://en.wikipedia.org/wiki/Holland_Tunnel",
+      "note": "Reviewed 2026-09-05. Longer westbound tube: 8,558 ft; eastbound tube is 8,371 ft. Parallel tubes are not added together. Both original road tubes opened in 1927."
+    },
+    {
+      "label": "Lincoln Tunnel",
+      "url": "https://en.wikipedia.org/wiki/Lincoln_Tunnel",
+      "note": "Reviewed 2026-09-05. Longest (center) tube: 8,216 ft; the three tubes have different lengths. First (center) tube opened in 1937; the north and south tubes followed in 1945 and 1957."
+    },
+    {
+      "label": "Eisenhower–Johnson Memorial Tunnel",
+      "url": "https://en.wikipedia.org/wiki/Eisenhower_Tunnel",
+      "note": "Reviewed 2026-09-05. Longer Johnson bore: 1.697 miles, rounded to 1.70; Eisenhower bore is 1.693 miles. Eisenhower bore opened in 1973; Johnson bore opened in 1979."
+    },
+    {
+      "label": "Fort McHenry Tunnel",
+      "url": "https://www.mdta.maryland.gov/index.php/Toll_Facilities/FMT.html",
+      "note": "Reviewed 2026-09-05. MDTA describes the tunnel as nearly 1.4 miles; excludes the full I-95 approach project. Opened in 1985; the year refers to the named structure."
+    },
+    {
+      "label": "Fort McHenry Tunnel — additional reference",
+      "url": "https://en.wikipedia.org/wiki/Fort_McHenry_Tunnel",
+      "note": "Reviewed 2026-09-05. MDTA describes the tunnel as nearly 1.4 miles; excludes the full I-95 approach project. Opened in 1985; the year refers to the named structure."
+    },
+    {
+      "label": "Anton Anderson Memorial Tunnel",
+      "url": "https://dot.alaska.gov/creg/whittiertunnel/history.shtml",
+      "note": "Reviewed 2026-09-05. DOT visitor reference: about 2.5 miles through Maynard Mountain; not the 11.59-mile access highway. Railway tunnel opened in 1943; shared road-and-rail operation began in 2000."
+    },
+    {
+      "label": "Anton Anderson Memorial Tunnel — additional reference",
+      "url": "https://en.wikipedia.org/wiki/Anton_Anderson_Memorial_Tunnel",
+      "note": "Reviewed 2026-09-05. DOT visitor reference: about 2.5 miles through Maynard Mountain; not the 11.59-mile access highway. Railway tunnel opened in 1943; shared road-and-rail operation began in 2000."
+    },
+    {
+      "label": "Chesapeake Bay Bridge",
+      "url": "https://en.wikipedia.org/wiki/Chesapeake_Bay_Bridge",
+      "note": "Reviewed 2026-09-05. Longer eastbound span: 21,273 ft; the two parallel bridges are not added together. First span opened in 1952; the parallel span opened in 1973."
     }
   ],
   "cards": [
@@ -53,23 +408,25 @@
       "name": "Brooklyn Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/brooklyn-bridge.jpg",
       "imageAlt": "Brooklyn Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Christian David · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Brooklyn_Bridge_and_the_Lower_Manhattan_skyline_from_Pebble_Beach,_New_York.jpg",
-      "fact": "A New York icon, the Brooklyn Bridge joined Manhattan and Brooklyn with Gothic stone towers and a daring suspended span.",
+      "fact": "The Brooklyn Bridge crosses New York’s East River with stone towers, suspension cables, and extra diagonal stays.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 1.13,
+          "value": 1.14,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge and approaches: 6,016 ft."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1883,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1883; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -90,28 +447,35 @@
         "bridge",
         "suspension",
         "new-york-area",
-        "new-york-area",
-        "suspension",
         "historic"
       ],
       "tags": [
         "bridge",
         "suspension",
-        "new-york-area"
+        "new-york-area",
+        "historic"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "suspension",
         "location": {
-          "label": "New York City, United States",
+          "label": "Manhattan–Brooklyn, New York, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            40.7057,
+            -73.9964
+          ],
+          "states": [
+            "New York"
           ]
-        }
+        },
+        "accuracyNote": "Total bridge and approaches: 6,016 ft. Opened in 1883; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Brooklyn Bridge is a bridge?",
@@ -123,23 +487,25 @@
       "name": "Manhattan Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/manhattan-bridge.jpg",
       "imageAlt": "Manhattan Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Kidfly182 · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Manhattan_Bridge_January_2023_003.jpg",
       "fact": "The Manhattan Bridge carries road, subway, bike, and foot traffic between Lower Manhattan and Brooklyn.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 1.29,
+          "value": 1.3,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge length: 6,855 ft."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1909,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1909; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -160,28 +526,35 @@
         "bridge",
         "suspension",
         "new-york-area",
-        "new-york-area",
-        "suspension",
         "transit"
       ],
       "tags": [
         "bridge",
         "suspension",
-        "new-york-area"
+        "new-york-area",
+        "transit"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "suspension",
         "location": {
-          "label": "New York City, United States",
+          "label": "Manhattan–Brooklyn, New York, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            40.707,
+            -73.9905
+          ],
+          "states": [
+            "New York"
           ]
-        }
+        },
+        "accuracyNote": "Total bridge length: 6,855 ft. Opened in 1909; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Manhattan Bridge is a bridge?",
@@ -193,7 +566,7 @@
       "name": "Williamsburg Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/williamsburg-bridge.jpg",
       "imageAlt": "Williamsburg Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Praneeth Thalla · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Williamsburg_Bridge_full.jpg",
       "fact": "The Williamsburg Bridge links Manhattan's Lower East Side with Brooklyn and was once the world's longest suspension span.",
       "stats": [
@@ -202,14 +575,16 @@
           "label": "Length",
           "value": 1.38,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge length: 7,308 ft."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1903,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1903; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -230,28 +605,35 @@
         "bridge",
         "suspension",
         "new-york-area",
-        "new-york-area",
-        "suspension",
         "historic"
       ],
       "tags": [
         "bridge",
         "suspension",
-        "new-york-area"
+        "new-york-area",
+        "historic"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
         "taxonomyGroup": "suspension",
         "location": {
-          "label": "New York City, United States",
+          "label": "Manhattan–Brooklyn, New York, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            40.71356,
+            -73.97197
+          ],
+          "states": [
+            "New York"
           ]
-        }
+        },
+        "accuracyNote": "Total bridge length: 7,308 ft. Opened in 1903; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Williamsburg Bridge is a bridge?",
@@ -263,23 +645,25 @@
       "name": "Queensboro Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/queensboro-bridge.jpg",
       "imageAlt": "Queensboro Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Simsala111 · CC0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Queensboro_Bridge_from_Manhattan_side.jpg",
       "fact": "The Queensboro Bridge crosses the East River by Roosevelt Island and is also known as the Ed Koch Queensboro Bridge.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 0.71,
+          "value": 1.41,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge and approaches: 7,449 ft; the 3,725 ft figure excludes approaches."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1909,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1909; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -300,28 +684,35 @@
         "bridge",
         "cantilever",
         "new-york-area",
-        "new-york-area",
-        "cantilever",
         "transit"
       ],
       "tags": [
         "bridge",
         "cantilever",
-        "new-york-area"
+        "new-york-area",
+        "transit"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
         "taxonomyGroup": "cantilever",
         "location": {
-          "label": "New York City, United States",
+          "label": "Manhattan–Queens, New York, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            40.7569,
+            -73.9547
+          ],
+          "states": [
+            "New York"
           ]
-        }
+        },
+        "accuracyNote": "Total bridge and approaches: 7,449 ft; the 3,725 ft figure excludes approaches. Opened in 1909; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Queensboro Bridge is a bridge?",
@@ -333,23 +724,25 @@
       "name": "Verrazzano-Narrows Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/verrazzano-narrows-bridge.jpg",
       "imageAlt": "Verrazzano-Narrows Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "H.L.I.T. · Public domain",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Verrazano_Bridge2.jpg",
       "fact": "The Verrazzano-Narrows Bridge connects Brooklyn and Staten Island with a giant suspension span over the Narrows.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 2.6,
+          "value": 2.59,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge length: 13,700 ft; the main span alone is 4,260 ft."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1964,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1964; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -370,28 +763,35 @@
         "bridge",
         "suspension",
         "new-york-area",
-        "new-york-area",
-        "suspension",
         "long-span"
       ],
       "tags": [
         "bridge",
         "suspension",
-        "new-york-area"
+        "new-york-area",
+        "long-span"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "suspension",
         "location": {
-          "label": "New York City, United States",
+          "label": "Brooklyn–Staten Island, New York, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            40.606389,
+            -74.045556
+          ],
+          "states": [
+            "New York"
           ]
-        }
+        },
+        "accuracyNote": "Total bridge length: 13,700 ft; the main span alone is 4,260 ft. Opened in 1964; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Verrazzano-Narrows Bridge is a bridge?",
@@ -403,23 +803,25 @@
       "name": "George Washington Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/george-washington-bridge.jpg",
       "imageAlt": "George Washington Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "John O'Connell · CC BY 2.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:George_Washington_Bridge_from_New_Jersey-edit.jpg",
       "fact": "The George Washington Bridge crosses the Hudson River and is one of the world's busiest motor-vehicle bridges.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 0.91,
+          "value": 0.9,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge length: 4,760 ft; the main span alone is 3,500 ft."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1931,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1931; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -440,28 +842,36 @@
         "bridge",
         "suspension",
         "new-york-area",
-        "new-york-area",
-        "suspension",
         "hudson-river"
       ],
       "tags": [
         "bridge",
         "suspension",
-        "new-york-area"
+        "new-york-area",
+        "hudson-river"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "suspension",
         "location": {
-          "label": "New York-New Jersey, United States",
+          "label": "Manhattan, New York–Fort Lee, New Jersey, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            40.8517,
+            -73.9527
+          ],
+          "states": [
+            "New York",
+            "New Jersey"
           ]
-        }
+        },
+        "accuracyNote": "Total bridge length: 4,760 ft; the main span alone is 3,500 ft. Opened in 1931; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you George Washington Bridge is a bridge?",
@@ -473,23 +883,25 @@
       "name": "Robert F. Kennedy Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/rfk-triborough-bridge.jpg",
       "imageAlt": "Robert F. Kennedy Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Roy Googin · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Randalls_and_Wards_Islands.JPG",
       "fact": "The Robert F. Kennedy Bridge, often called the Triborough, ties Manhattan, Queens, and the Bronx together.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 1.38,
+          "value": 3.35,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Combined branches: 17,710 ft, excluding elevated ramps. This complex has three branches, rather than one end-to-end route."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1936,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1936; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -510,28 +922,35 @@
         "bridge",
         "complex",
         "new-york-area",
-        "new-york-area",
-        "complex",
         "transit"
       ],
       "tags": [
         "bridge",
         "complex",
-        "new-york-area"
+        "new-york-area",
+        "transit"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
         "taxonomyGroup": "complex",
         "location": {
-          "label": "New York City, United States",
+          "label": "Manhattan–Queens–Bronx, New York, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            40.78056,
+            -73.9275
+          ],
+          "states": [
+            "New York"
           ]
-        }
+        },
+        "accuracyNote": "Combined branches: 17,710 ft, excluding elevated ramps. This complex has three branches, rather than one end-to-end route. Opened in 1936; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Robert F. Kennedy Bridge is a bridge?",
@@ -543,7 +962,7 @@
       "name": "Bronx-Whitestone Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/bronx-whitestone-bridge.jpg",
       "imageAlt": "Bronx-Whitestone Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "RoySmith · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Whitestone_Bridge_from_Clason_Point_Park.jpg",
       "fact": "The Bronx-Whitestone Bridge gives drivers a direct East River route between the Bronx and Queens.",
       "stats": [
@@ -552,14 +971,16 @@
           "label": "Length",
           "value": 0.71,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Suspension structure: 3,770 ft, excluding approach roads."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1939,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1939; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -580,28 +1001,35 @@
         "bridge",
         "suspension",
         "new-york-area",
-        "new-york-area",
-        "suspension",
         "east-river"
       ],
       "tags": [
         "bridge",
         "suspension",
-        "new-york-area"
+        "new-york-area",
+        "east-river"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
         "taxonomyGroup": "suspension",
         "location": {
-          "label": "New York City, United States",
+          "label": "Bronx–Queens, New York, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            40.801111,
+            -73.829167
+          ],
+          "states": [
+            "New York"
           ]
-        }
+        },
+        "accuracyNote": "Suspension structure: 3,770 ft, excluding approach roads. Opened in 1939; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Bronx-Whitestone Bridge is a bridge?",
@@ -613,23 +1041,25 @@
       "name": "Throgs Neck Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/throgs-neck-bridge.jpg",
       "imageAlt": "Throgs Neck Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Roadrunnermeep · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:ThrogsNeckBridge.jpg",
       "fact": "The Throgs Neck Bridge is a major suspension bridge connecting the Bronx and Queens near Long Island Sound.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 0.55,
+          "value": 2.13,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total crossing: 11,250 ft including approaches; 2,910 ft is only the length between anchorages."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1961,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1961; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -650,28 +1080,35 @@
         "bridge",
         "suspension",
         "new-york-area",
-        "new-york-area",
-        "suspension",
         "east-river"
       ],
       "tags": [
         "bridge",
         "suspension",
-        "new-york-area"
+        "new-york-area",
+        "east-river"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
         "taxonomyGroup": "suspension",
         "location": {
-          "label": "New York City, United States",
+          "label": "Bronx–Queens, New York, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            40.802,
+            -73.793
+          ],
+          "states": [
+            "New York"
           ]
-        }
+        },
+        "accuracyNote": "Total crossing: 11,250 ft including approaches; 2,910 ft is only the length between anchorages. Opened in 1961; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Throgs Neck Bridge is a bridge?",
@@ -683,7 +1120,7 @@
       "name": "Henry Hudson Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/henry-hudson-bridge.jpg",
       "imageAlt": "Henry Hudson Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Jag9889 · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Henry_Hudson_Bridge_20171010-jag9889.jpg",
       "fact": "The Henry Hudson Bridge is a tall steel arch crossing the Harlem River Ship Canal in northern Manhattan.",
       "stats": [
@@ -692,14 +1129,16 @@
           "label": "Length",
           "value": 0.42,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge length: 2,208 ft; the arch span alone is 841 ft."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1936,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1936; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -720,28 +1159,35 @@
         "bridge",
         "arch",
         "new-york-area",
-        "new-york-area",
-        "arch",
-        "hudson-river"
+        "harlem-river"
       ],
       "tags": [
         "bridge",
         "arch",
-        "new-york-area"
+        "new-york-area",
+        "harlem-river"
       ],
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 3,
         "taxonomyGroup": "arch",
         "location": {
-          "label": "New York City, United States",
+          "label": "Manhattan–Bronx, New York, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            40.877861,
+            -73.921777
+          ],
+          "states": [
+            "New York"
           ]
-        }
+        },
+        "accuracyNote": "Total bridge length: 2,208 ft; the arch span alone is 841 ft. Opened in 1936; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Henry Hudson Bridge is a bridge?",
@@ -753,23 +1199,25 @@
       "name": "Bayonne Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/bayonne-bridge.jpg",
       "imageAlt": "Bayonne Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Jim.henderson · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:High_BB_from_Bayonne_jeh.jpg",
       "fact": "The Bayonne Bridge's roadway was raised so larger ships could pass beneath its graceful steel arch.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 1.03,
+          "value": 1.36,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Current bridge and approach viaducts: 7,160 ft, per the Port Authority brochure."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1931,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1931; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -790,28 +1238,36 @@
         "bridge",
         "arch",
         "new-york-area",
-        "new-york-area",
-        "arch",
         "port"
       ],
       "tags": [
         "bridge",
         "arch",
-        "new-york-area"
+        "new-york-area",
+        "port"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
         "taxonomyGroup": "arch",
         "location": {
-          "label": "New York-New Jersey, United States",
+          "label": "Staten Island, New York–Bayonne, New Jersey, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            40.6419,
+            -74.1422
+          ],
+          "states": [
+            "New York",
+            "New Jersey"
           ]
-        }
+        },
+        "accuracyNote": "Current bridge and approach viaducts: 7,160 ft, per the Port Authority brochure. Opened in 1931; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Bayonne Bridge is a bridge?",
@@ -823,23 +1279,25 @@
       "name": "Goethals Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/goethals-bridge.jpg",
       "imageAlt": "Goethals Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Siddharth Patil · CC0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:New_Goethals_Bridge_from_airplane_cropped.jpg",
       "fact": "The modern Goethals Bridge uses cable-stayed towers to connect Staten Island with Elizabeth, New Jersey.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 1.4,
+          "value": 1.35,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Modern bridge length: 7,109 ft; one span, not the sum of the parallel roadways."
         },
         {
           "id": "opened-year",
           "label": "Opened",
-          "value": 2018,
+          "value": 2017,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "First modern span opened in 2017; the second opened in 2018. The original 1928 bridge was replaced."
         },
         {
           "id": "recognition",
@@ -860,28 +1318,36 @@
         "bridge",
         "cable-stayed",
         "new-york-area",
-        "new-york-area",
-        "cable-stayed",
         "port"
       ],
       "tags": [
         "bridge",
         "cable-stayed",
-        "new-york-area"
+        "new-york-area",
+        "port"
       ],
       "metadata": {
         "difficultyBand": "hard",
         "recognition": 3,
         "taxonomyGroup": "cable-stayed",
         "location": {
-          "label": "New York-New Jersey, United States",
+          "label": "Staten Island, New York–Elizabeth, New Jersey, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            40.635556,
+            -74.197222
+          ],
+          "states": [
+            "New York",
+            "New Jersey"
           ]
-        }
+        },
+        "accuracyNote": "Modern bridge length: 7,109 ft; one span, not the sum of the parallel roadways. First modern span opened in 2017; the second opened in 2018. The original 1928 bridge was replaced."
       },
       "readingPrompts": [
         "What clue tells you Goethals Bridge is a bridge?",
@@ -893,23 +1359,25 @@
       "name": "Governor Mario M. Cuomo Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/governor-mario-cuomo-bridge.jpg",
       "imageAlt": "Governor Mario M. Cuomo Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Komzet · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mario_Cuomo_Bridge_Overhead.jpg",
       "fact": "The Governor Mario M. Cuomo Bridge replaced the old Tappan Zee Bridge across one of the Hudson River's widest points.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 3.1,
+          "value": 3,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "The Thruway Authority describes the current bridge as 3 miles long; the walking path is longer."
         },
         {
           "id": "opened-year",
           "label": "Opened",
-          "value": 2018,
+          "value": 2017,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "First span opened in 2017; the second opened in 2018. The original Tappan Zee Bridge opened in 1955."
         },
         {
           "id": "recognition",
@@ -930,28 +1398,35 @@
         "bridge",
         "cable-stayed",
         "new-york-area",
-        "new-york-area",
-        "cable-stayed",
         "hudson-river"
       ],
       "tags": [
         "bridge",
         "cable-stayed",
-        "new-york-area"
+        "new-york-area",
+        "hudson-river"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
         "taxonomyGroup": "cable-stayed",
         "location": {
-          "label": "New York, United States",
+          "label": "Tarrytown–South Nyack, New York, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            41.071389,
+            -73.891111
+          ],
+          "states": [
+            "New York"
           ]
-        }
+        },
+        "accuracyNote": "The Thruway Authority describes the current bridge as 3 miles long; the walking path is longer. First span opened in 2017; the second opened in 2018. The original Tappan Zee Bridge opened in 1955."
       },
       "readingPrompts": [
         "What clue tells you Governor Mario M. Cuomo Bridge is a bridge?",
@@ -963,7 +1438,7 @@
       "name": "Golden Gate Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/golden-gate-bridge.jpg",
       "imageAlt": "Golden Gate Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Frank Schulenburg · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Golden_Gate_Bridge_as_seen_from_Battery_East.jpg",
       "fact": "The Golden Gate Bridge's orange towers and foggy bay setting make it one of the most recognizable bridges on Earth.",
       "stats": [
@@ -972,14 +1447,16 @@
           "label": "Length",
           "value": 1.7,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge and approaches: 8,980 ft; the main suspension span is 4,200 ft."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1937,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1937; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -999,29 +1476,36 @@
       "categories": [
         "bridge",
         "suspension",
-        "world",
         "global-icon",
-        "suspension",
         "long-span"
       ],
       "tags": [
         "bridge",
         "suspension",
-        "global-icon"
+        "global-icon",
+        "long-span"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 5,
         "taxonomyGroup": "suspension",
         "location": {
-          "label": "San Francisco, United States",
+          "label": "San Francisco–Marin County, California, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            37.819722,
+            -122.478611
+          ],
+          "states": [
+            "California"
           ]
-        }
+        },
+        "accuracyNote": "Total bridge and approaches: 8,980 ft; the main suspension span is 4,200 ft. Opened in 1937; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Golden Gate Bridge is a bridge?",
@@ -1033,7 +1517,7 @@
       "name": "Tower Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/tower-bridge.jpg",
       "imageAlt": "Tower Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Fuzzypiggy · CC BY-SA 3.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tower_Bridge_at_Dawn.jpg",
       "fact": "Tower Bridge combines two castle-like towers with a roadway that can lift for tall ships on the Thames.",
       "stats": [
@@ -1042,14 +1526,16 @@
           "label": "Length",
           "value": 0.15,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Approx. 244 m for the bridge, excluding approach roads; measurements including abutments differ."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1894,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1894; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1069,15 +1555,14 @@
       "categories": [
         "bridge",
         "bascule",
-        "world",
         "global-icon",
-        "bascule",
         "historic"
       ],
       "tags": [
         "bridge",
         "bascule",
-        "global-icon"
+        "global-icon",
+        "historic"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1090,8 +1575,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            51.5056,
+            -0.0753
           ]
-        }
+        },
+        "accuracyNote": "Approx. 244 m for the bridge, excluding approach roads; measurements including abutments differ. Opened in 1894; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Tower Bridge is a bridge?",
@@ -1103,7 +1593,7 @@
       "name": "London Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/london-bridge.jpg",
       "imageAlt": "London Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Jordiferrer · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:London_Bridge_from_St_Olaf_Stairs.jpg",
       "fact": "London Bridge is famous because bridges at this crossing have linked the City of London and Southwark for centuries.",
       "stats": [
@@ -1112,14 +1602,16 @@
           "label": "Length",
           "value": 0.17,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Current concrete bridge: 269 m; this is the bridge in London, not the relocated bridge in Arizona."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1973,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Current concrete bridge opened in 1973; earlier London Bridges stood at this crossing."
         },
         {
           "id": "recognition",
@@ -1139,7 +1631,6 @@
       "categories": [
         "bridge",
         "box-girder",
-        "world",
         "global-icon",
         "historic",
         "river-crossing"
@@ -1147,7 +1638,9 @@
       "tags": [
         "bridge",
         "box-girder",
-        "global-icon"
+        "global-icon",
+        "historic",
+        "river-crossing"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1160,8 +1653,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            51.508056,
+            -0.087778
           ]
-        }
+        },
+        "accuracyNote": "Current concrete bridge: 269 m; this is the bridge in London, not the relocated bridge in Arizona. Current concrete bridge opened in 1973; earlier London Bridges stood at this crossing."
       },
       "readingPrompts": [
         "What clue tells you London Bridge is a bridge?",
@@ -1173,7 +1671,7 @@
       "name": "Sydney Harbour Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/sydney-harbour-bridge.jpg",
       "imageAlt": "Sydney Harbour Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Servite et contribuere · CC0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Sydney_Harbour_Bridge-16_October_2025.jpg",
       "fact": "Sydney Harbour Bridge is nicknamed the Coathanger because of its huge steel arch over the harbor.",
       "stats": [
@@ -1182,14 +1680,16 @@
           "label": "Length",
           "value": 0.71,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total length including approaches: 1,149 m; the arch span is 503 m."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1932,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1932; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1209,15 +1709,14 @@
       "categories": [
         "bridge",
         "arch",
-        "world",
         "global-icon",
-        "arch",
         "harbor"
       ],
       "tags": [
         "bridge",
         "arch",
-        "global-icon"
+        "global-icon",
+        "harbor"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1230,8 +1729,13 @@
           ],
           "continents": [
             "Oceania"
+          ],
+          "coordinates": [
+            -33.852222,
+            151.210556
           ]
-        }
+        },
+        "accuracyNote": "Total length including approaches: 1,149 m; the arch span is 503 m. Opened in 1932; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Sydney Harbour Bridge is a bridge?",
@@ -1243,8 +1747,8 @@
       "name": "Akashi Kaikyo Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.jpg",
       "imageAlt": "Akashi Kaikyo Bridge photo",
-      "imageCredit": "Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:明石海峡大橋_-_panoramio_(1)_(cropped).jpg",
+      "imageCredit": "clear_and_sunny · CC BY 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:%E6%98%8E%E7%9F%B3%E6%B5%B7%E5%B3%A1%E5%A4%A7%E6%A9%8B_-_panoramio_(1)_(cropped).jpg",
       "fact": "The Akashi Kaikyo Bridge has one of the longest central spans ever built for a suspension bridge.",
       "stats": [
         {
@@ -1252,14 +1756,16 @@
           "label": "Length",
           "value": 2.43,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total length: 3,911 m; the central suspension span is 1,991 m."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1998,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1998; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1279,15 +1785,14 @@
       "categories": [
         "bridge",
         "suspension",
-        "world",
         "global-icon",
-        "suspension",
         "long-span"
       ],
       "tags": [
         "bridge",
         "suspension",
-        "global-icon"
+        "global-icon",
+        "long-span"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1300,8 +1805,13 @@
           ],
           "continents": [
             "Asia"
+          ],
+          "coordinates": [
+            34.6162,
+            135.0205
           ]
-        }
+        },
+        "accuracyNote": "Total length: 3,911 m; the central suspension span is 1,991 m. Opened in 1998; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Akashi Kaikyo Bridge is a bridge?",
@@ -1313,8 +1823,8 @@
       "name": "Millau Viaduct",
       "image": "/burrow-assets/bridges-and-tunnels/millau-viaduct.jpg",
       "imageAlt": "Millau Viaduct photo",
-      "imageCredit": "Wikimedia Commons",
-      "imageSourceUrl": "https://en.wikipedia.org/wiki/Millau_Viaduct",
+      "imageCredit": "commons:User:Mike Switzerland · CC-BY-SA-2.5",
+      "imageSourceUrl": "https://en.wikipedia.org/wiki/File:ViaducdeMillau.jpg",
       "fact": "The Millau Viaduct soars above France's Tarn valley and is famous for its very tall, elegant piers.",
       "stats": [
         {
@@ -1322,14 +1832,16 @@
           "label": "Length",
           "value": 1.53,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge length: 2,460 m."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 2004,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 2004; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1349,15 +1861,14 @@
       "categories": [
         "bridge",
         "cable-stayed",
-        "world",
         "global-icon",
-        "cable-stayed",
         "viaduct"
       ],
       "tags": [
         "bridge",
         "cable-stayed",
-        "global-icon"
+        "global-icon",
+        "viaduct"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1370,8 +1881,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            44.079444,
+            3.022222
           ]
-        }
+        },
+        "accuracyNote": "Total bridge length: 2,460 m. Opened in 2004; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Millau Viaduct is a bridge?",
@@ -1383,7 +1899,7 @@
       "name": "Ponte Vecchio",
       "image": "/burrow-assets/bridges-and-tunnels/ponte-vecchio.jpg",
       "imageAlt": "Ponte Vecchio photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Ingo Mehling · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ponte_Vecchio_from_Ponte_alle_Grazie.jpg",
       "fact": "Ponte Vecchio is a medieval Florence bridge lined with shops, making it feel like a tiny street over water.",
       "stats": [
@@ -1392,14 +1908,16 @@
           "label": "Length",
           "value": 0.06,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Approx. 95 m for the whole bridge; the central arch spans about 30 m."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1345,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1345; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1419,15 +1937,14 @@
       "categories": [
         "bridge",
         "arch",
-        "world",
         "global-icon",
-        "arch",
         "historic"
       ],
       "tags": [
         "bridge",
         "arch",
-        "global-icon"
+        "global-icon",
+        "historic"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1440,8 +1957,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            43.76799,
+            11.25316
           ]
-        }
+        },
+        "accuracyNote": "Approx. 95 m for the whole bridge; the central arch spans about 30 m. Opened in 1345; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Ponte Vecchio is a bridge?",
@@ -1453,7 +1975,7 @@
       "name": "Rialto Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/rialto-bridge.jpg",
       "imageAlt": "Rialto Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "kallerna · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Rialto_2025_4.jpg",
       "fact": "The Rialto Bridge is Venice's famous stone crossing over the Grand Canal.",
       "stats": [
@@ -1462,14 +1984,16 @@
           "label": "Length",
           "value": 0.03,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Whole bridge: 48 m; the central arch spans about 32 m."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1591,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1591; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1489,15 +2013,14 @@
       "categories": [
         "bridge",
         "arch",
-        "world",
         "global-icon",
-        "arch",
         "historic"
       ],
       "tags": [
         "bridge",
         "arch",
-        "global-icon"
+        "global-icon",
+        "historic"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1510,8 +2033,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            45.438,
+            12.336
           ]
-        }
+        },
+        "accuracyNote": "Whole bridge: 48 m; the central arch spans about 32 m. Opened in 1591; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Rialto Bridge is a bridge?",
@@ -1523,7 +2051,7 @@
       "name": "Charles Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/charles-bridge.jpg",
       "imageAlt": "Charles Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "A.Savin · FAL",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Prague_07-2016_view_from_Lesser_Town_Tower_of_Charles_Bridge_img3.jpg",
       "fact": "Charles Bridge is a stone bridge lined with statues and is one of Prague's best-known landmarks.",
       "stats": [
@@ -1532,14 +2060,16 @@
           "label": "Length",
           "value": 0.32,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge length: 515.8 m."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1402,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1402; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1559,15 +2089,14 @@
       "categories": [
         "bridge",
         "arch",
-        "world",
         "global-icon",
-        "arch",
         "historic"
       ],
       "tags": [
         "bridge",
         "arch",
-        "global-icon"
+        "global-icon",
+        "historic"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1580,8 +2109,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            50.086389,
+            14.411944
           ]
-        }
+        },
+        "accuracyNote": "Total bridge length: 515.8 m. Opened in 1402; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Charles Bridge is a bridge?",
@@ -1593,23 +2127,25 @@
       "name": "Forth Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/forth-bridge.jpg",
       "imageAlt": "Forth Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "MrMasterKeyboard · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Forth_Bridge_2022.jpg",
       "fact": "The Forth Bridge is a bold red railway cantilever bridge and a UNESCO-listed engineering landmark.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 1.54,
+          "value": 1.53,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Railway bridge length: 8,094 ft; this is distinct from the neighboring road bridges."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1890,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1890; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1629,15 +2165,14 @@
       "categories": [
         "bridge",
         "cantilever",
-        "world",
         "global-icon",
-        "cantilever",
         "railway"
       ],
       "tags": [
         "bridge",
         "cantilever",
-        "global-icon"
+        "global-icon",
+        "railway"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1650,8 +2185,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            56.0004,
+            -3.3886
           ]
-        }
+        },
+        "accuracyNote": "Railway bridge length: 8,094 ft; this is distinct from the neighboring road bridges. Opened in 1890; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Forth Bridge is a bridge?",
@@ -1663,23 +2203,25 @@
       "name": "Oresund Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/oresund-bridge.jpg",
       "imageAlt": "Oresund Bridge photo",
-      "imageCredit": "Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Øresund_Bridge_from_the_air_in_September_2015.jpg",
+      "imageCredit": "Nick-D · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:%C3%98resund_Bridge_from_the_air_in_September_2015.jpg",
       "fact": "The Oresund Bridge links Denmark and Sweden, then continues through a tunnel on the same crossing.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 4.9,
+          "value": 4.87,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Bridge section only: 7,845 m. The artificial island and Drogden Tunnel are excluded."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 2000,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 2000; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1699,15 +2241,14 @@
       "categories": [
         "bridge",
         "cable-stayed",
-        "world",
         "global-icon",
-        "cable-stayed",
         "bridge-tunnel"
       ],
       "tags": [
         "bridge",
         "cable-stayed",
-        "global-icon"
+        "global-icon",
+        "bridge-tunnel"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1721,8 +2262,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            55.570556,
+            12.849444
           ]
-        }
+        },
+        "accuracyNote": "Bridge section only: 7,845 m. The artificial island and Drogden Tunnel are excluded. Opened in 2000; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Oresund Bridge is a bridge?",
@@ -1734,7 +2280,7 @@
       "name": "15 July Martyrs Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/bosphorus-bridge.jpg",
       "imageAlt": "15 July Martyrs Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Alexxx Malev · CC BY-SA 3.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Bosphorus_Bridge_(235499411).jpeg",
       "fact": "The 15 July Martyrs Bridge, often called the Bosphorus Bridge, links Europe and Asia across Istanbul's strait.",
       "stats": [
@@ -1743,14 +2289,16 @@
           "label": "Length",
           "value": 0.97,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge length: 1,560 m; the central span is 1,074 m."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1973,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1973; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1770,15 +2318,14 @@
       "categories": [
         "bridge",
         "suspension",
-        "world",
         "global-icon",
-        "suspension",
         "intercontinental"
       ],
       "tags": [
         "bridge",
         "suspension",
-        "global-icon"
+        "global-icon",
+        "intercontinental"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1792,8 +2339,13 @@
           "continents": [
             "Europe",
             "Asia"
+          ],
+          "coordinates": [
+            41.045278,
+            29.034444
           ]
-        }
+        },
+        "accuracyNote": "Total bridge length: 1,560 m; the central span is 1,074 m. Opened in 1973; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you 15 July Martyrs Bridge is a bridge?",
@@ -1805,7 +2357,7 @@
       "name": "Danyang-Kunshan Grand Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/danyang-kunshan-grand-bridge.jpg",
       "imageAlt": "Danyang-Kunshan Grand Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "MNXANL · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:201603_Danyang-Kunshan_grand_bridge_(wuxi)_(cropped).JPG",
       "fact": "The Danyang-Kunshan Grand Bridge carries high-speed rail and is widely listed as the longest bridge in the world.",
       "stats": [
@@ -1814,14 +2366,16 @@
           "label": "Length",
           "value": 102.4,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Full railway viaduct: 164.8 km; not one unsupported span."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 2011,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 2011; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1841,15 +2395,14 @@
       "categories": [
         "bridge",
         "viaduct",
-        "world",
         "longest",
-        "viaduct",
         "railway"
       ],
       "tags": [
         "bridge",
         "viaduct",
-        "longest"
+        "longest",
+        "railway"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1862,8 +2415,13 @@
           ],
           "continents": [
             "Asia"
+          ],
+          "coordinates": [
+            31.59784,
+            120.45685
           ]
-        }
+        },
+        "accuracyNote": "Full railway viaduct: 164.8 km; not one unsupported span. Opened in 2011; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Danyang-Kunshan Grand Bridge is a bridge?",
@@ -1875,23 +2433,25 @@
       "name": "Hong Kong-Zhuhai-Macau Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/hong-kong-zhuhai-macau-bridge.jpg",
       "imageAlt": "Hong Kong-Zhuhai-Macau Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "N509FZ · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:West_section_of_Hong_Kong-Zhuhai-Macau_Bridge_(20180902174105).jpg",
       "fact": "The Hong Kong-Zhuhai-Macau crossing mixes long sea bridges, artificial islands, and an undersea tunnel.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 34.2,
+          "value": 34.18,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Full 55 km crossing system including link roads; the central bridge-tunnel section is shorter."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 2018,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 2018; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1910,16 +2470,17 @@
       ],
       "categories": [
         "bridge",
+        "tunnel",
         "bridge-tunnel",
-        "world",
         "longest",
-        "bridge-tunnel",
         "sea-crossing"
       ],
       "tags": [
         "bridge",
+        "tunnel",
         "bridge-tunnel",
-        "longest"
+        "longest",
+        "sea-crossing"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -1932,11 +2493,16 @@
           ],
           "continents": [
             "Asia"
+          ],
+          "coordinates": [
+            22.283056,
+            113.780556
           ]
-        }
+        },
+        "accuracyNote": "Full 55 km crossing system including link roads; the central bridge-tunnel section is shorter. Opened in 2018; the year refers to the named structure."
       },
       "readingPrompts": [
-        "What clue tells you Hong Kong-Zhuhai-Macau Bridge is a bridge?",
+        "What clue tells you Hong Kong-Zhuhai-Macau Bridge is a bridge-tunnel?",
         "How does Hong Kong-Zhuhai-Macau Bridge's length compare with another card?"
       ]
     },
@@ -1945,23 +2511,25 @@
       "name": "Mackinac Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/mackinac-bridge.jpg",
       "imageAlt": "Mackinac Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "WMrapids · CC0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mackinac_Bridge_2022.jpg",
       "fact": "The Mackinac Bridge stretches between Michigan's peninsulas and is one of North America's great suspension bridges.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 5,
+          "value": 4.99,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge and approaches: 26,372 ft; commonly rounded to 5 miles."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1957,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1957; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -1981,29 +2549,36 @@
       "categories": [
         "bridge",
         "suspension",
-        "world",
         "global-icon",
-        "suspension",
         "long-span"
       ],
       "tags": [
         "bridge",
         "suspension",
-        "global-icon"
+        "global-icon",
+        "long-span"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
         "taxonomyGroup": "suspension",
         "location": {
-          "label": "Michigan, United States",
+          "label": "Straits of Mackinac, Michigan, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            45.817059,
+            -84.727822
+          ],
+          "states": [
+            "Michigan"
           ]
-        }
+        },
+        "accuracyNote": "Total bridge and approaches: 26,372 ft; commonly rounded to 5 miles. Opened in 1957; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Mackinac Bridge is a bridge?",
@@ -2015,23 +2590,25 @@
       "name": "Sunshine Skyway Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/sunshine-skyway-bridge.jpg",
       "imageAlt": "Sunshine Skyway Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Robert Neff · CC BY 2.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:SunshineSkywayBridge-4SC_6643-15.jpg",
       "fact": "The Sunshine Skyway Bridge is known for bright yellow cables rising over Tampa Bay.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 4.1,
+          "value": 4.14,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Full modern crossing: 4.14 miles; the cable-stayed main span is 1,200 ft."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1987,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Current cable-stayed crossing opened in 1987, replacing earlier bridges."
         },
         {
           "id": "recognition",
@@ -2051,29 +2628,36 @@
       "categories": [
         "bridge",
         "cable-stayed",
-        "world",
         "global-icon",
-        "cable-stayed",
         "harbor"
       ],
       "tags": [
         "bridge",
         "cable-stayed",
-        "global-icon"
+        "global-icon",
+        "harbor"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
         "taxonomyGroup": "cable-stayed",
         "location": {
-          "label": "Florida, United States",
+          "label": "Tampa Bay, Florida, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            27.625,
+            -82.658611
+          ],
+          "states": [
+            "Florida"
           ]
-        }
+        },
+        "accuracyNote": "Full modern crossing: 4.14 miles; the cable-stayed main span is 1,200 ft. Current cable-stayed crossing opened in 1987, replacing earlier bridges."
       },
       "readingPrompts": [
         "What clue tells you Sunshine Skyway Bridge is a bridge?",
@@ -2085,7 +2669,7 @@
       "name": "Bixby Creek Bridge",
       "image": "/burrow-assets/bridges-and-tunnels/bixby-creek-bridge.jpg",
       "imageAlt": "Bixby Creek Bridge photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Diliff · CC BY-SA 3.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Bixby_Creek_Bridge,_California,_USA_-_May_2013.jpg",
       "fact": "Bixby Creek Bridge is a beloved concrete arch on California's Pacific Coast Highway.",
       "stats": [
@@ -2094,14 +2678,16 @@
           "label": "Length",
           "value": 0.14,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Total bridge length: 714 ft; the central arch spans 360 ft."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1932,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1932; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -2121,29 +2707,36 @@
       "categories": [
         "bridge",
         "arch",
-        "world",
         "global-icon",
-        "arch",
         "coastal"
       ],
       "tags": [
         "bridge",
         "arch",
-        "global-icon"
+        "global-icon",
+        "coastal"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
         "taxonomyGroup": "arch",
         "location": {
-          "label": "California, United States",
+          "label": "Big Sur, California, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            36.371389,
+            -121.901944
+          ],
+          "states": [
+            "California"
           ]
-        }
+        },
+        "accuracyNote": "Total bridge length: 714 ft; the central arch spans 360 ft. Opened in 1932; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Bixby Creek Bridge is a bridge?",
@@ -2155,23 +2748,25 @@
       "name": "Gotthard Base Tunnel",
       "image": "/burrow-assets/bridges-and-tunnels/gotthard-base-tunnel.jpg",
       "imageAlt": "Gotthard Base Tunnel photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Hannes Ortlieb (Diskussion) · CC BY-SA 3.0 de",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:20141120_gotthard-basistunnel02-wikipedia-hannes-ortlieb.jpg",
       "fact": "The Gotthard Base Tunnel runs under the Alps and is one of the longest railway tunnels in the world.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 35.5,
+          "value": 35.47,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "One main rail bore: 57.09 km; parallel bores and service passages are not added together."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 2016,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 2016; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -2191,15 +2786,14 @@
       "categories": [
         "tunnel",
         "rail",
-        "world",
         "longest",
-        "rail",
         "mountain"
       ],
       "tags": [
         "tunnel",
         "rail",
-        "longest"
+        "longest",
+        "mountain"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -2212,8 +2806,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            46.83586,
+            8.64647
           ]
-        }
+        },
+        "accuracyNote": "One main rail bore: 57.09 km; parallel bores and service passages are not added together. Opened in 2016; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Gotthard Base Tunnel is a tunnel?",
@@ -2225,23 +2824,25 @@
       "name": "Seikan Tunnel",
       "image": "/burrow-assets/bridges-and-tunnels/seikan-tunnel.jpg",
       "imageAlt": "Seikan Tunnel photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Risto Kaijaluoto · CC BY 3.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Inside_seikan_tunnel.JPG",
       "fact": "The Seikan Tunnel carries trains between Honshu and Hokkaido with a long section under the seabed.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 33.5,
+          "value": 33.46,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Full rail tunnel: 53.85 km, including land sections; only 23.3 km lies beneath the seabed."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1988,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1988; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -2261,15 +2862,14 @@
       "categories": [
         "tunnel",
         "rail",
-        "world",
         "longest",
-        "rail",
         "undersea"
       ],
       "tags": [
         "tunnel",
         "rail",
-        "longest"
+        "longest",
+        "undersea"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -2282,8 +2882,13 @@
           ],
           "continents": [
             "Asia"
+          ],
+          "coordinates": [
+            41.3157,
+            140.3351
           ]
-        }
+        },
+        "accuracyNote": "Full rail tunnel: 53.85 km, including land sections; only 23.3 km lies beneath the seabed. Opened in 1988; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Seikan Tunnel is a tunnel?",
@@ -2295,23 +2900,25 @@
       "name": "Channel Tunnel",
       "image": "/burrow-assets/bridges-and-tunnels/channel-tunnel.jpg",
       "imageAlt": "Channel Tunnel photo",
-      "imageCredit": "Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:TGV_TMST_3011-2_-_Sortie_Tunnel_sous_la_Manche_à_Coquelles.jpg",
+      "imageCredit": "Billy69150 (voir les conditions d'utilisation / see licensing below) · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:TGV_TMST_3011-2_-_Sortie_Tunnel_sous_la_Manche_%C3%A0_Coquelles.jpg",
       "fact": "The Channel Tunnel, or Chunnel, lets trains travel beneath the English Channel between Britain and France.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 31.4,
+          "value": 31.35,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Full tunnel route: 50.46 km; parallel rail bores and the service tunnel are not added together."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1994,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1994; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -2331,15 +2938,14 @@
       "categories": [
         "tunnel",
         "rail",
-        "world",
         "global-icon",
-        "rail",
         "undersea"
       ],
       "tags": [
         "tunnel",
         "rail",
-        "global-icon"
+        "global-icon",
+        "undersea"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -2353,8 +2959,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            51.0125,
+            1.5041
           ]
-        }
+        },
+        "accuracyNote": "Full tunnel route: 50.46 km; parallel rail bores and the service tunnel are not added together. Opened in 1994; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Channel Tunnel is a tunnel?",
@@ -2366,23 +2977,25 @@
       "name": "Loetschberg Base Tunnel",
       "image": "/burrow-assets/bridges-and-tunnels/loetschberg-base-tunnel.jpg",
       "imageAlt": "Loetschberg Base Tunnel photo",
-      "imageCredit": "Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Lötschberg_Basistunnel_Nordportal.jpg",
+      "imageCredit": "Adrian Michael · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:L%C3%B6tschberg_Basistunnel_Nordportal.jpg",
       "fact": "The Loetschberg Base Tunnel is a long Swiss railway tunnel that slices through the Alps.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 21.5,
+          "value": 21.48,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Main rail tunnel: about 34.58 km."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 2007,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 2007; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -2402,15 +3015,14 @@
       "categories": [
         "tunnel",
         "rail",
-        "world",
         "longest",
-        "rail",
         "mountain"
       ],
       "tags": [
         "tunnel",
         "rail",
-        "longest"
+        "longest",
+        "mountain"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -2423,8 +3035,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            46.578,
+            7.649
           ]
-        }
+        },
+        "accuracyNote": "Main rail tunnel: about 34.58 km. Opened in 2007; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Loetschberg Base Tunnel is a tunnel?",
@@ -2436,23 +3053,25 @@
       "name": "Guadarrama Tunnel",
       "image": "/burrow-assets/bridges-and-tunnels/guadarrama-tunnel.jpg",
       "imageAlt": "Guadarrama Tunnel photo",
-      "imageCredit": "Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Túnel_ferroviario_de_Guadarrama.jpg",
+      "imageCredit": "Arturo Francisco Barbero · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:T%C3%BAnel_ferroviario_de_Guadarrama.jpg",
       "fact": "The Guadarrama Tunnel carries high-speed trains through the mountains north of Madrid.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 17.6,
+          "value": 17.65,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "One rail bore: about 28.4 km; the two bores are not added together."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 2007,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 2007; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -2472,15 +3091,14 @@
       "categories": [
         "tunnel",
         "rail",
-        "world",
         "longest",
-        "rail",
         "mountain"
       ],
       "tags": [
         "tunnel",
         "rail",
-        "longest"
+        "longest",
+        "mountain"
       ],
       "metadata": {
         "difficultyBand": "hard",
@@ -2493,8 +3111,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            40.7788,
+            -3.7677
           ]
-        }
+        },
+        "accuracyNote": "One rail bore: about 28.4 km; the two bores are not added together. Opened in 2007; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Guadarrama Tunnel is a tunnel?",
@@ -2506,7 +3129,7 @@
       "name": "Chesapeake Bay Bridge-Tunnel",
       "image": "/burrow-assets/bridges-and-tunnels/chesapeake-bay-bridge-tunnel.jpg",
       "imageAlt": "Chesapeake Bay Bridge-Tunnel photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Famartin · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:2017-07-12_11_23_10_View_south_along_U.S._Route_13_(Chesapeake_Bay_Bridge-Tunnel)_crossing_the_North_Channel_of_the_Chesapeake_Bay_in_Northampton_County,_Virginia.jpg",
       "fact": "The Chesapeake Bay Bridge-Tunnel uses bridges, trestles, islands, and tunnels to cross the mouth of Chesapeake Bay.",
       "stats": [
@@ -2515,14 +3138,16 @@
           "label": "Length",
           "value": 17.6,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Shore-to-shore crossing: 17.6 miles, including bridges, tunnels and islands; land approach roads are excluded."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1964,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1964; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -2540,34 +3165,43 @@
         }
       ],
       "categories": [
+        "bridge",
         "tunnel",
         "bridge-tunnel",
-        "world",
         "global-icon",
-        "bridge-tunnel",
         "sea-crossing"
       ],
       "tags": [
+        "bridge",
         "tunnel",
         "bridge-tunnel",
-        "global-icon"
+        "global-icon",
+        "sea-crossing"
       ],
       "metadata": {
         "difficultyBand": "easy",
         "recognition": 4,
         "taxonomyGroup": "bridge-tunnel",
         "location": {
-          "label": "Virginia, United States",
+          "label": "Virginia Beach–Eastern Shore, Virginia, United States",
           "countries": [
             "United States"
           ],
           "continents": [
             "North America"
+          ],
+          "coordinates": [
+            37.035,
+            -76.076
+          ],
+          "states": [
+            "Virginia"
           ]
-        }
+        },
+        "accuracyNote": "Shore-to-shore crossing: 17.6 miles, including bridges, tunnels and islands; land approach roads are excluded. Opened in 1964; the year refers to the named structure."
       },
       "readingPrompts": [
-        "What clue tells you Chesapeake Bay Bridge-Tunnel is a tunnel?",
+        "What clue tells you Chesapeake Bay Bridge-Tunnel is a bridge-tunnel?",
         "How does Chesapeake Bay Bridge-Tunnel's length compare with another card?"
       ]
     },
@@ -2576,23 +3210,25 @@
       "name": "Laerdal Tunnel",
       "image": "/burrow-assets/bridges-and-tunnels/laerdal-tunnel.jpg",
       "imageAlt": "Laerdal Tunnel photo",
-      "imageCredit": "Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Lærdalstunnelen_Norway.JPG",
+      "imageCredit": "Svein-Magne Tunli · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:L%C3%A6rdalstunnelen_Norway.JPG",
       "fact": "The Laerdal Tunnel is a very long road tunnel in Norway with special caverns that break up the drive.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 15.2,
+          "value": 15.23,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Full road tunnel: 24.51 km."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 2000,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 2000; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -2612,15 +3248,14 @@
       "categories": [
         "tunnel",
         "road",
-        "world",
         "longest",
-        "road",
         "mountain"
       ],
       "tags": [
         "tunnel",
         "road",
-        "longest"
+        "longest",
+        "mountain"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -2633,8 +3268,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            60.971944,
+            7.368333
           ]
-        }
+        },
+        "accuracyNote": "Full road tunnel: 24.51 km. Opened in 2000; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Laerdal Tunnel is a tunnel?",
@@ -2646,23 +3286,25 @@
       "name": "Yamate Tunnel",
       "image": "/burrow-assets/bridges-and-tunnels/yamate-tunnel.jpg",
       "imageAlt": "Yamate Tunnel photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "妖精書士 at ja.wikipedia · CC BY-SA 3.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Shutoko-YamateTunnel.JPG",
       "fact": "The Yamate Tunnel is a long urban road tunnel carrying expressway traffic under Tokyo.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 11.3,
+          "value": 11.31,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Completed road tunnel route: 18.2 km; not the combined length of its two bores."
         },
         {
           "id": "opened-year",
           "label": "Opened",
-          "value": 2015,
+          "value": 2007,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "First section opened in 2007; the full 18.2 km route was completed in 2015."
         },
         {
           "id": "recognition",
@@ -2682,15 +3324,14 @@
       "categories": [
         "tunnel",
         "road",
-        "world",
         "longest",
-        "road",
         "urban"
       ],
       "tags": [
         "tunnel",
         "road",
-        "longest"
+        "longest",
+        "urban"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -2703,8 +3344,13 @@
           ],
           "continents": [
             "Asia"
+          ],
+          "coordinates": [
+            35.69,
+            139.686
           ]
-        }
+        },
+        "accuracyNote": "Completed road tunnel route: 18.2 km; not the combined length of its two bores. First section opened in 2007; the full 18.2 km route was completed in 2015."
       },
       "readingPrompts": [
         "What clue tells you Yamate Tunnel is a tunnel?",
@@ -2716,23 +3362,25 @@
       "name": "Zhongnanshan Tunnel",
       "image": "/burrow-assets/bridges-and-tunnels/zhongnanshan-tunnel.jpg",
       "imageAlt": "Zhongnanshan Tunnel photo",
-      "imageCredit": "Wikimedia Commons",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:柞水_秦岭终南山公路隧道南口.jpg",
+      "imageCredit": "Liuxingy · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:%E6%9F%9E%E6%B0%B4_%E7%A7%A6%E5%B2%AD%E7%BB%88%E5%8D%97%E5%B1%B1%E5%85%AC%E8%B7%AF%E9%9A%A7%E9%81%93%E5%8D%97%E5%8F%A3.jpg",
       "fact": "The Zhongnanshan Tunnel is a major road tunnel through China's Qinling mountains.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 11.2,
+          "value": 11.21,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "One road bore: 18.04 km; the two parallel bores are not added together."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 2007,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 2007; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -2752,15 +3400,14 @@
       "categories": [
         "tunnel",
         "road",
-        "world",
         "longest",
-        "road",
         "mountain"
       ],
       "tags": [
         "tunnel",
         "road",
-        "longest"
+        "longest",
+        "mountain"
       ],
       "metadata": {
         "difficultyBand": "hard",
@@ -2773,8 +3420,13 @@
           ],
           "continents": [
             "Asia"
+          ],
+          "coordinates": [
+            33.883333,
+            108.966667
           ]
-        }
+        },
+        "accuracyNote": "One road bore: 18.04 km; the two parallel bores are not added together. Opened in 2007; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Zhongnanshan Tunnel is a tunnel?",
@@ -2786,23 +3438,25 @@
       "name": "Gotthard Road Tunnel",
       "image": "/burrow-assets/bridges-and-tunnels/gotthard-road-tunnel.jpg",
       "imageAlt": "Gotthard Road Tunnel photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Grzegorz Święch · CC BY 3.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Gotthard_Road_Tunnel_Switzerland.jpg",
       "fact": "The Gotthard Road Tunnel gives highway traffic a long route through the Swiss Alps.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 10.5,
+          "value": 10.53,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Original road tunnel: 16.942 km; excludes the separate railway tunnels."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1980,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1980; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -2822,15 +3476,14 @@
       "categories": [
         "tunnel",
         "road",
-        "world",
         "longest",
-        "road",
         "mountain"
       ],
       "tags": [
         "tunnel",
         "road",
-        "longest"
+        "longest",
+        "mountain"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -2843,8 +3496,13 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            46.671667,
+            8.5925
           ]
-        }
+        },
+        "accuracyNote": "Original road tunnel: 16.942 km; excludes the separate railway tunnels. Opened in 1980; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Gotthard Road Tunnel is a tunnel?",
@@ -2856,23 +3514,25 @@
       "name": "Tokyo Bay Aqua-Line",
       "image": "/burrow-assets/bridges-and-tunnels/tokyo-bay-aqua-line.jpg",
       "imageAlt": "Tokyo Bay Aqua-Line photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Dandy1022 · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tokyo_Wan_Aqua-Line.jpg",
       "fact": "The Tokyo Bay Aqua-Line combines a bridge, an artificial island, and a tunnel under Tokyo Bay.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 9.3,
+          "value": 9.32,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Whole bridge-tunnel route: about 15 km, including both bridge and tunnel sections."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 1997,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 1997; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -2890,17 +3550,18 @@
         }
       ],
       "categories": [
+        "bridge",
         "tunnel",
         "bridge-tunnel",
-        "world",
         "global-icon",
-        "bridge-tunnel",
         "sea-crossing"
       ],
       "tags": [
+        "bridge",
         "tunnel",
         "bridge-tunnel",
-        "global-icon"
+        "global-icon",
+        "sea-crossing"
       ],
       "metadata": {
         "difficultyBand": "easy",
@@ -2913,11 +3574,16 @@
           ],
           "continents": [
             "Asia"
+          ],
+          "coordinates": [
+            35.463056,
+            139.875278
           ]
-        }
+        },
+        "accuracyNote": "Whole bridge-tunnel route: about 15 km, including both bridge and tunnel sections. Opened in 1997; the year refers to the named structure."
       },
       "readingPrompts": [
-        "What clue tells you Tokyo Bay Aqua-Line is a tunnel?",
+        "What clue tells you Tokyo Bay Aqua-Line is a bridge-tunnel?",
         "How does Tokyo Bay Aqua-Line's length compare with another card?"
       ]
     },
@@ -2926,23 +3592,25 @@
       "name": "Ryfylke Tunnel",
       "image": "/burrow-assets/bridges-and-tunnels/ryfylke-tunnel.jpg",
       "imageAlt": "Ryfylke Tunnel photo",
-      "imageCredit": "Wikimedia Commons",
+      "imageCredit": "Tholme · CC BY-SA 4.0",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ryfylketunnelen.jpg",
       "fact": "The Ryfylke Tunnel dives under a Norwegian fjord and is one of the world's longest undersea road tunnels.",
       "stats": [
         {
           "id": "length-mi",
           "label": "Length",
-          "value": 8.9,
+          "value": 8.95,
           "unit": "mi",
-          "direction": "higher"
+          "direction": "higher",
+          "note": "Full road tunnel: 14.4 km; one route, not both parallel bores added together."
         },
         {
           "id": "opened-year",
           "label": "Opened",
           "value": 2019,
           "unit": "year",
-          "direction": "lower"
+          "direction": "lower",
+          "note": "Opened in 2019; the year refers to the named structure."
         },
         {
           "id": "recognition",
@@ -2962,15 +3630,14 @@
       "categories": [
         "tunnel",
         "road",
-        "world",
         "longest",
-        "road",
         "undersea"
       ],
       "tags": [
         "tunnel",
         "road",
-        "longest"
+        "longest",
+        "undersea"
       ],
       "metadata": {
         "difficultyBand": "hard",
@@ -2983,12 +3650,1614 @@
           ],
           "continents": [
             "Europe"
+          ],
+          "coordinates": [
+            59.031389,
+            5.815
           ]
-        }
+        },
+        "accuracyNote": "Full road tunnel: 14.4 km; one route, not both parallel bores added together. Opened in 2019; the year refers to the named structure."
       },
       "readingPrompts": [
         "What clue tells you Ryfylke Tunnel is a tunnel?",
         "How does Ryfylke Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "monitor-merrimac-memorial-bridge-tunnel",
+      "name": "Monitor–Merrimac Memorial Bridge–Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/monitor-merrimac-memorial-bridge-tunnel.jpg",
+      "imageAlt": "Monitor–Merrimac Memorial Bridge–Tunnel photo",
+      "imageCredit": "Scrap104 at English Wikipedia · Public domain",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Monitor-Merrimac_Memorial_Bridge-Tunnel.jpg",
+      "fact": "The Monitor–Merrimac carries I-664 over and under Hampton Roads. Its tunnel lets large ships pass above the road.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 4.6,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Whole bridge-tunnel crossing: 4.6 miles; not just the submerged tunnel."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1992,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Opened in 1992; the year refers to the named structure."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "tunnel",
+        "bridge-tunnel",
+        "virginia",
+        "road",
+        "undersea"
+      ],
+      "tags": [
+        "bridge",
+        "tunnel",
+        "bridge-tunnel",
+        "virginia",
+        "road",
+        "undersea"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "bridge-tunnel",
+        "accuracyNote": "Whole bridge-tunnel crossing: 4.6 miles; not just the submerged tunnel. Opened in 1992; the year refers to the named structure.",
+        "location": {
+          "label": "Newport News–Suffolk, Virginia, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            36.940837,
+            -76.401672
+          ],
+          "states": [
+            "Virginia"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Monitor–Merrimac Memorial Bridge–Tunnel is a bridge-tunnel?",
+        "How does Monitor–Merrimac Memorial Bridge–Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "hampton-roads-bridge-tunnel",
+      "name": "Hampton Roads Bridge–Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/hampton-roads-bridge-tunnel.jpg",
+      "imageAlt": "Hampton Roads Bridge–Tunnel photo",
+      "imageCredit": "Ben Schumin · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Hampton_Roads_Bridge_Tunnel.jpg",
+      "fact": "The Hampton Roads Bridge–Tunnel carries I-64 between Hampton and Norfolk, switching from bridges to a tunnel beneath the busy harbor.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 3.5,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Whole bridge-tunnel crossing: about 3.5 miles; not just the submerged tunnel."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1957,
+          "unit": "year",
+          "direction": "lower",
+          "note": "First tunnel opened in 1957; the parallel tunnel opened in 1976. Length describes the established crossing, not the expansion project corridor."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "tunnel",
+        "bridge-tunnel",
+        "virginia",
+        "road",
+        "undersea"
+      ],
+      "tags": [
+        "bridge",
+        "tunnel",
+        "bridge-tunnel",
+        "virginia",
+        "road",
+        "undersea"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "bridge-tunnel",
+        "accuracyNote": "Whole bridge-tunnel crossing: about 3.5 miles; not just the submerged tunnel. First tunnel opened in 1957; the parallel tunnel opened in 1976. Length describes the established crossing, not the expansion project corridor.",
+        "location": {
+          "label": "Hampton–Norfolk, Virginia, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            36.987197,
+            -76.305542
+          ],
+          "states": [
+            "Virginia"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Hampton Roads Bridge–Tunnel is a bridge-tunnel?",
+        "How does Hampton Roads Bridge–Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "james-river-bridge",
+      "name": "James River Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/james-river-bridge.jpg",
+      "imageAlt": "James River Bridge photo",
+      "imageCredit": "Tony Alter from Newport News, USA · CC BY 2.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Lift_span_of_James_River_Bridge_at_sunset_(2011).jpg",
+      "fact": "The James River Bridge has a central roadway span that lifts straight up between towers so tall ships can pass beneath it.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 4.5,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "VDOT describes the current crossing as 4.5 miles; bridge-only inventory measurements are about 4.4 miles."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1982,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Current four-lane lift bridge completed in 1982; the original bridge opened in 1928."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "vertical-lift",
+        "virginia",
+        "drawbridge",
+        "river-crossing"
+      ],
+      "tags": [
+        "bridge",
+        "vertical-lift",
+        "virginia",
+        "drawbridge",
+        "river-crossing"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "vertical-lift",
+        "accuracyNote": "VDOT describes the current crossing as 4.5 miles; bridge-only inventory measurements are about 4.4 miles. Current four-lane lift bridge completed in 1982; the original bridge opened in 1928.",
+        "location": {
+          "label": "Newport News–Isle of Wight County, Virginia, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            36.991,
+            -76.4836
+          ],
+          "states": [
+            "Virginia"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you James River Bridge is a bridge?",
+        "How does James River Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "san-francisco-oakland-bay-bridge",
+      "name": "San Francisco–Oakland Bay Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/san-francisco-oakland-bay-bridge.jpg",
+      "imageAlt": "San Francisco–Oakland Bay Bridge photo",
+      "imageCredit": "InvadingInvader · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Bay_Bridge_2022.jpg",
+      "fact": "The Bay Bridge links San Francisco and Oakland through Yerba Buena Island. Its eastern span was replaced in 2013.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 4.46,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Crossing via Yerba Buena Island: 4.46 miles, excluding land approaches."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1936,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Original crossing opened in 1936; the eastern span was replaced in 2013."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "global-icon",
+        "bay-crossing"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "global-icon",
+        "bay-crossing"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "suspension",
+        "accuracyNote": "Crossing via Yerba Buena Island: 4.46 miles, excluding land approaches. Original crossing opened in 1936; the eastern span was replaced in 2013.",
+        "location": {
+          "label": "San Francisco–Oakland, California, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            37.818056,
+            -122.346667
+          ],
+          "states": [
+            "California"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you San Francisco–Oakland Bay Bridge is a bridge?",
+        "How does San Francisco–Oakland Bay Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "tacoma-narrows-bridge",
+      "name": "Tacoma Narrows Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/tacoma-narrows-bridge.jpg",
+      "imageAlt": "Tacoma Narrows Bridge photo",
+      "imageCredit": "Sounderbruce · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tacoma_Narrows_Bridge_(117561801).jpeg",
+      "fact": "Two suspension bridges cross the Tacoma Narrows. The first of today’s pair opened in 1950 after the original 1940 bridge collapsed.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.02,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "One bridge: 5,400 ft; the two parallel bridges are not added together."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1950,
+          "unit": "year",
+          "direction": "lower",
+          "note": "First surviving span opened in 1950; its twin opened in 2007. The original 1940 bridge collapsed."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "puget-sound",
+        "twin-spans"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "puget-sound",
+        "twin-spans"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "suspension",
+        "accuracyNote": "One bridge: 5,400 ft; the two parallel bridges are not added together. First surviving span opened in 1950; its twin opened in 2007. The original 1940 bridge collapsed.",
+        "location": {
+          "label": "Tacoma–Gig Harbor, Washington, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            47.268056,
+            -122.550556
+          ],
+          "states": [
+            "Washington"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Tacoma Narrows Bridge is a bridge?",
+        "How does Tacoma Narrows Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "lake-pontchartrain-causeway",
+      "name": "Lake Pontchartrain Causeway",
+      "image": "/burrow-assets/bridges-and-tunnels/lake-pontchartrain-causeway.jpg",
+      "imageAlt": "Lake Pontchartrain Causeway photo",
+      "imageCredit": "formulanone from Huntsville, United States · CC BY-SA 2.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Lake_Pontchatrain_Causeway_Aerial_-_Jan2013_(32382802513).jpg",
+      "fact": "The Lake Pontchartrain Causeway stretches almost 24 miles across a lake in Louisiana, with thousands of short spans supporting the road.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 23.87,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Longer parallel span: 23.87 miles. The two bridges are not added together."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1956,
+          "unit": "year",
+          "direction": "lower",
+          "note": "First span opened in 1956; the longer parallel span opened in 1969."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "trestle",
+        "longest",
+        "lake-crossing"
+      ],
+      "tags": [
+        "bridge",
+        "trestle",
+        "longest",
+        "lake-crossing"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "trestle",
+        "accuracyNote": "Longer parallel span: 23.87 miles. The two bridges are not added together. First span opened in 1956; the longer parallel span opened in 1969.",
+        "location": {
+          "label": "Metairie–Mandeville, Louisiana, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            30.199,
+            -90.123
+          ],
+          "states": [
+            "Louisiana"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Lake Pontchartrain Causeway is a bridge?",
+        "How does Lake Pontchartrain Causeway's length compare with another card?"
+      ]
+    },
+    {
+      "id": "new-river-gorge-bridge",
+      "name": "New River Gorge Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/new-river-gorge-bridge.jpg",
+      "imageAlt": "New River Gorge Bridge photo",
+      "imageCredit": "JaGa · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:New_River_Gorge_Bridge.jpg",
+      "fact": "The New River Gorge Bridge carries a roadway high above a deep West Virginia gorge on a huge steel arch.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.57,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Total bridge length: 3,030 ft; the arch span alone is 1,700 ft."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1977,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Opened in 1977; the year refers to the named structure."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "arch",
+        "national-park",
+        "gorge"
+      ],
+      "tags": [
+        "bridge",
+        "arch",
+        "national-park",
+        "gorge"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "arch",
+        "accuracyNote": "Total bridge length: 3,030 ft; the arch span alone is 1,700 ft. Opened in 1977; the year refers to the named structure.",
+        "location": {
+          "label": "Fayetteville, West Virginia, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            38.068333,
+            -81.083333
+          ],
+          "states": [
+            "West Virginia"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you New River Gorge Bridge is a bridge?",
+        "How does New River Gorge Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "royal-gorge-bridge",
+      "name": "Royal Gorge Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/royal-gorge-bridge.jpg",
+      "imageAlt": "Royal Gorge Bridge photo",
+      "imageCredit": "Bkthomson · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Royal_Gorge_Bridge_(looking_west).jpg",
+      "fact": "The Royal Gorge Bridge hangs high above Colorado’s Arkansas River, giving visitors a view down into the rocky gorge.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.24,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Total bridge length: 1,260 ft; height above the river is a different measurement."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1929,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Opened in 1929; the year refers to the named structure."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "gorge",
+        "historic"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "gorge",
+        "historic"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "suspension",
+        "accuracyNote": "Total bridge length: 1,260 ft; height above the river is a different measurement. Opened in 1929; the year refers to the named structure.",
+        "location": {
+          "label": "Cañon City, Colorado, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            38.46167,
+            -105.325
+          ],
+          "states": [
+            "Colorado"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Royal Gorge Bridge is a bridge?",
+        "How does Royal Gorge Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "seven-mile-bridge",
+      "name": "Seven Mile Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/seven-mile-bridge.jpg",
+      "imageAlt": "Seven Mile Bridge photo",
+      "imageCredit": "© Tinsley Advertising · byways.org · Attribution permission",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Seven_mile_bridge.jpg",
+      "fact": "The Seven Mile Bridge carries the Overseas Highway through the Florida Keys. The modern road bridge runs beside parts of the older railway bridge.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 6.77,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Modern bridge length: about 6.765 miles, despite its rounded name."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1982,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Modern road bridge opened in 1982; the separate original railway bridge opened in 1912."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "box-girder",
+        "coastal",
+        "islands",
+        "road"
+      ],
+      "tags": [
+        "bridge",
+        "box-girder",
+        "coastal",
+        "islands",
+        "road"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "box-girder",
+        "accuracyNote": "Modern bridge length: about 6.765 miles, despite its rounded name. Modern road bridge opened in 1982; the separate original railway bridge opened in 1912.",
+        "location": {
+          "label": "Marathon–Little Duck Key, Florida, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            24.6982,
+            -81.1767
+          ],
+          "states": [
+            "Florida"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Seven Mile Bridge is a bridge?",
+        "How does Seven Mile Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "hoover-dam-bypass",
+      "name": "Mike O’Callaghan–Pat Tillman Memorial Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/hoover-dam-bypass.jpg",
+      "imageAlt": "Mike O’Callaghan–Pat Tillman Memorial Bridge photo",
+      "imageCredit": "Mariordo (Mario Roberto Durán Ortiz) · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mike_O%27Callaghan%E2%80%93Pat_Tillman_Memorial_Bridge_09_2017_4768.jpg",
+      "fact": "This concrete arch bridge crosses the Colorado River beside Hoover Dam, carrying highway traffic between Nevada and Arizona.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.36,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Total bridge length: 1,900 ft; excludes the longer bypass highway project."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2010,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Opened in 2010; the year refers to the named structure."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "arch",
+        "hoover-dam",
+        "river-crossing"
+      ],
+      "tags": [
+        "bridge",
+        "arch",
+        "hoover-dam",
+        "river-crossing"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "arch",
+        "accuracyNote": "Total bridge length: 1,900 ft; excludes the longer bypass highway project. Opened in 2010; the year refers to the named structure.",
+        "location": {
+          "label": "Hoover Dam, Nevada–Arizona, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            36.0125,
+            -114.741389
+          ],
+          "states": [
+            "Nevada",
+            "Arizona"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Mike O’Callaghan–Pat Tillman Memorial Bridge is a bridge?",
+        "How does Mike O’Callaghan–Pat Tillman Memorial Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "astoria-megler-bridge",
+      "name": "Astoria–Megler Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/astoria-megler-bridge.jpg",
+      "imageAlt": "Astoria–Megler Bridge photo",
+      "imageCredit": "Nils Huenerfuerst · CC BY 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Astoria-Megler_Bridge.jpg",
+      "fact": "The Astoria–Megler Bridge crosses the mouth of the Columbia River between Oregon and Washington, with a tall steel truss above the shipping channel.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 4.07,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Total bridge length: 21,474 ft; the tall truss is only part of the crossing."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1966,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Opened in 1966; the year refers to the named structure."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "truss",
+        "columbia-river",
+        "river-crossing"
+      ],
+      "tags": [
+        "bridge",
+        "truss",
+        "columbia-river",
+        "river-crossing"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "truss",
+        "accuracyNote": "Total bridge length: 21,474 ft; the tall truss is only part of the crossing. Opened in 1966; the year refers to the named structure.",
+        "location": {
+          "label": "Astoria, Oregon–Megler, Washington, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            46.217,
+            -123.863
+          ],
+          "states": [
+            "Oregon",
+            "Washington"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Astoria–Megler Bridge is a bridge?",
+        "How does Astoria–Megler Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "eads-bridge",
+      "name": "Eads Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/eads-bridge.jpg",
+      "imageAlt": "Eads Bridge photo",
+      "imageCredit": "Antony-22 · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Eads_Bridge_2025a.jpg",
+      "fact": "The Eads Bridge crosses the Mississippi River at St. Louis on three steel arches, carrying a road above railway tracks.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.22,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Total bridge and approaches: 6,442 ft; the central arch spans 520 ft."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1874,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Opened in 1874; the year refers to the named structure."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "arch",
+        "historic",
+        "mississippi-river"
+      ],
+      "tags": [
+        "bridge",
+        "arch",
+        "historic",
+        "mississippi-river"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "arch",
+        "accuracyNote": "Total bridge and approaches: 6,442 ft; the central arch spans 520 ft. Opened in 1874; the year refers to the named structure.",
+        "location": {
+          "label": "St. Louis, Missouri–East St. Louis, Illinois, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            38.628056,
+            -90.171389
+          ],
+          "states": [
+            "Missouri",
+            "Illinois"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Eads Bridge is a bridge?",
+        "How does Eads Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "arthur-ravenel-jr-bridge",
+      "name": "Arthur Ravenel Jr. Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/arthur-ravenel-jr-bridge.jpg",
+      "imageAlt": "Arthur Ravenel Jr. Bridge photo",
+      "imageCredit": "Juliancolton · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ravenel_Bridge_at_night_from_Mt_Pleasant.jpg",
+      "fact": "The Arthur Ravenel Jr. Bridge crosses the Cooper River in South Carolina. Its diamond-shaped towers hold the road with slanting cables.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 2.5,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Total bridge and approaches: 13,200 ft; the central span is 1,546 ft."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2005,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Opened in 2005; the year refers to the named structure."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "cable-stayed",
+        "river-crossing",
+        "road"
+      ],
+      "tags": [
+        "bridge",
+        "cable-stayed",
+        "river-crossing",
+        "road"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "cable-stayed",
+        "accuracyNote": "Total bridge and approaches: 13,200 ft; the central span is 1,546 ft. Opened in 2005; the year refers to the named structure.",
+        "location": {
+          "label": "Charleston–Mount Pleasant, South Carolina, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            32.802778,
+            -79.915
+          ],
+          "states": [
+            "South Carolina"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Arthur Ravenel Jr. Bridge is a bridge?",
+        "How does Arthur Ravenel Jr. Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "zakim-bridge",
+      "name": "Leonard P. Zakim Bunker Hill Memorial Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/zakim-bridge.jpg",
+      "imageAlt": "Leonard P. Zakim Bunker Hill Memorial Bridge photo",
+      "imageCredit": "NewtonCourt · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Zakim_Bridge_and_railroad_bridge_Boston_P1010835.jpg",
+      "fact": "Boston’s Zakim Bridge crosses the Charles River with two tall towers and fans of cables. Its name honors civil-rights leader Leonard Zakim and Bunker Hill.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 0.27,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Total bridge length: 1,432 ft; the main span is 745 ft."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 2003,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Opened in 2003; the year refers to the named structure."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "cable-stayed",
+        "boston",
+        "river-crossing"
+      ],
+      "tags": [
+        "bridge",
+        "cable-stayed",
+        "boston",
+        "river-crossing"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "cable-stayed",
+        "accuracyNote": "Total bridge length: 1,432 ft; the main span is 745 ft. Opened in 2003; the year refers to the named structure.",
+        "location": {
+          "label": "Boston, Massachusetts, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            42.368889,
+            -71.063333
+          ],
+          "states": [
+            "Massachusetts"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Leonard P. Zakim Bunker Hill Memorial Bridge is a bridge?",
+        "How does Leonard P. Zakim Bunker Hill Memorial Bridge's length compare with another card?"
+      ]
+    },
+    {
+      "id": "holland-tunnel",
+      "name": "Holland Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/holland-tunnel.jpg",
+      "imageAlt": "Holland Tunnel photo",
+      "imageCredit": "Blue Peep · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Holland_Tunnel_Eastbound.jpg",
+      "fact": "The Holland Tunnel carries vehicles beneath the Hudson River. A powerful ventilation system moves fresh air through its two tubes.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.62,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Longer westbound tube: 8,558 ft; eastbound tube is 8,371 ft. Parallel tubes are not added together."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1927,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Both original road tubes opened in 1927."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "road",
+        "new-york-area",
+        "underwater"
+      ],
+      "tags": [
+        "tunnel",
+        "road",
+        "new-york-area",
+        "underwater"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "road",
+        "accuracyNote": "Longer westbound tube: 8,558 ft; eastbound tube is 8,371 ft. Parallel tubes are not added together. Both original road tubes opened in 1927.",
+        "location": {
+          "label": "Manhattan, New York–Jersey City, New Jersey, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            40.727,
+            -74.021
+          ],
+          "states": [
+            "New York",
+            "New Jersey"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Holland Tunnel is a tunnel?",
+        "How does Holland Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "lincoln-tunnel",
+      "name": "Lincoln Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/lincoln-tunnel.jpg",
+      "imageAlt": "Lincoln Tunnel photo",
+      "imageCredit": "Josiah Lau · CC BY 2.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Inside_Lincoln_Tunnel_NY_NJ.jpg",
+      "fact": "The Lincoln Tunnel links Midtown Manhattan and New Jersey beneath the Hudson River. Its three traffic tubes opened in different years.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.56,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Longest (center) tube: 8,216 ft; the three tubes have different lengths."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1937,
+          "unit": "year",
+          "direction": "lower",
+          "note": "First (center) tube opened in 1937; the north and south tubes followed in 1945 and 1957."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "road",
+        "new-york-area",
+        "underwater"
+      ],
+      "tags": [
+        "tunnel",
+        "road",
+        "new-york-area",
+        "underwater"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "taxonomyGroup": "road",
+        "accuracyNote": "Longest (center) tube: 8,216 ft; the three tubes have different lengths. First (center) tube opened in 1937; the north and south tubes followed in 1945 and 1957.",
+        "location": {
+          "label": "Manhattan, New York–Weehawken, New Jersey, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            40.7625,
+            -74.0111
+          ],
+          "states": [
+            "New York",
+            "New Jersey"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Lincoln Tunnel is a tunnel?",
+        "How does Lincoln Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "eisenhower-johnson-tunnel",
+      "name": "Eisenhower–Johnson Memorial Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/eisenhower-johnson-tunnel.jpg",
+      "imageAlt": "Eisenhower–Johnson Memorial Tunnel photo",
+      "imageCredit": "Hustvedt · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Eisenhower_Tunnel_Colorado_West_Entrance.jpg",
+      "fact": "The Eisenhower–Johnson tunnels carry I-70 through the Rocky Mountains beneath the Continental Divide, high above sea level.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.7,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Longer Johnson bore: 1.697 miles, rounded to 1.70; Eisenhower bore is 1.693 miles."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1973,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Eisenhower bore opened in 1973; Johnson bore opened in 1979."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 9,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "road",
+        "mountain",
+        "continental-divide"
+      ],
+      "tags": [
+        "tunnel",
+        "road",
+        "mountain",
+        "continental-divide"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "road",
+        "accuracyNote": "Longer Johnson bore: 1.697 miles, rounded to 1.70; Eisenhower bore is 1.693 miles. Eisenhower bore opened in 1973; Johnson bore opened in 1979.",
+        "location": {
+          "label": "Continental Divide, Colorado, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            39.6785,
+            -105.92
+          ],
+          "states": [
+            "Colorado"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Eisenhower–Johnson Memorial Tunnel is a tunnel?",
+        "How does Eisenhower–Johnson Memorial Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "fort-mchenry-tunnel",
+      "name": "Fort McHenry Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/fort-mchenry-tunnel.jpg",
+      "imageAlt": "Fort McHenry Tunnel photo",
+      "imageCredit": "Ben Schumin · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Fort_McHenry_Tunnel_Bore_2.jpg",
+      "fact": "The Fort McHenry Tunnel carries I-95 beneath Baltimore’s harbor in four tubes, with two traffic lanes in each tube.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 1.4,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "MDTA describes the tunnel as nearly 1.4 miles; excludes the full I-95 approach project."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1985,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Opened in 1985; the year refers to the named structure."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "road",
+        "underwater",
+        "baltimore"
+      ],
+      "tags": [
+        "tunnel",
+        "road",
+        "underwater",
+        "baltimore"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "road",
+        "accuracyNote": "MDTA describes the tunnel as nearly 1.4 miles; excludes the full I-95 approach project. Opened in 1985; the year refers to the named structure.",
+        "location": {
+          "label": "Baltimore, Maryland, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            39.26089,
+            -76.57675
+          ],
+          "states": [
+            "Maryland"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Fort McHenry Tunnel is a tunnel?",
+        "How does Fort McHenry Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "anton-anderson-memorial-tunnel",
+      "name": "Anton Anderson Memorial Tunnel",
+      "image": "/burrow-assets/bridges-and-tunnels/anton-anderson-memorial-tunnel.jpg",
+      "imageAlt": "Anton Anderson Memorial Tunnel photo",
+      "imageCredit": "Gabor Eszes (UED77) · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:AntonAndersonTunnel.jpg",
+      "fact": "Cars and trains take turns using the same narrow tunnel to Whittier, Alaska. It began as a railway tunnel and opened to road traffic in 2000.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 2.5,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "DOT visitor reference: about 2.5 miles through Maynard Mountain; not the 11.59-mile access highway."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1943,
+          "unit": "year",
+          "direction": "lower",
+          "note": "Railway tunnel opened in 1943; shared road-and-rail operation began in 2000."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 7,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "tunnel",
+        "road-rail",
+        "alaska",
+        "mountain"
+      ],
+      "tags": [
+        "tunnel",
+        "road-rail",
+        "alaska",
+        "mountain"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "road-rail",
+        "accuracyNote": "DOT visitor reference: about 2.5 miles through Maynard Mountain; not the 11.59-mile access highway. Railway tunnel opened in 1943; shared road-and-rail operation began in 2000.",
+        "location": {
+          "label": "Whittier, Alaska, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            60.78823,
+            -148.80663
+          ],
+          "states": [
+            "Alaska"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Anton Anderson Memorial Tunnel is a tunnel?",
+        "How does Anton Anderson Memorial Tunnel's length compare with another card?"
+      ]
+    },
+    {
+      "id": "chesapeake-bay-bridge",
+      "name": "Chesapeake Bay Bridge",
+      "image": "/burrow-assets/bridges-and-tunnels/chesapeake-bay-bridge.jpg",
+      "imageAlt": "Chesapeake Bay Bridge photo",
+      "imageCredit": "Carol M. Highsmith · Public domain",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Chesapeake_Bay_Bridge_from_Annapolis_to_Maryland%27s_Eastern_Shore_LCCN2011632486-2.jpg",
+      "fact": "The Chesapeake Bay Bridge links Maryland’s western and eastern shores. Unlike Virginia’s Chesapeake Bay Bridge–Tunnel, this crossing stays above the water.",
+      "stats": [
+        {
+          "id": "length-mi",
+          "label": "Length",
+          "value": 4.03,
+          "unit": "mi",
+          "direction": "higher",
+          "note": "Longer eastbound span: 21,273 ft; the two parallel bridges are not added together."
+        },
+        {
+          "id": "opened-year",
+          "label": "Opened",
+          "value": 1952,
+          "unit": "year",
+          "direction": "lower",
+          "note": "First span opened in 1952; the parallel span opened in 1973."
+        },
+        {
+          "id": "recognition",
+          "label": "Fame",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        },
+        {
+          "id": "engineering-scale",
+          "label": "Engineering scale",
+          "value": 8,
+          "unit": "/10",
+          "direction": "higher"
+        }
+      ],
+      "categories": [
+        "bridge",
+        "suspension",
+        "bay-crossing",
+        "twin-spans"
+      ],
+      "tags": [
+        "bridge",
+        "suspension",
+        "bay-crossing",
+        "twin-spans"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 4,
+        "taxonomyGroup": "suspension",
+        "accuracyNote": "Longer eastbound span: 21,273 ft; the two parallel bridges are not added together. First span opened in 1952; the parallel span opened in 1973.",
+        "location": {
+          "label": "Annapolis–Kent Island, Maryland, United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            38.991667,
+            -76.372222
+          ],
+          "states": [
+            "Maryland"
+          ]
+        }
+      },
+      "readingPrompts": [
+        "What clue tells you Chesapeake Bay Bridge is a bridge?",
+        "How does Chesapeake Bay Bridge's length compare with another card?"
       ]
     }
   ]

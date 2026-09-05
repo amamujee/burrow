@@ -23,6 +23,7 @@ import {
 } from "./game-data";
 import { scoreFeaturedContent } from "./content-quality";
 import { cardRarityLabels, cardRarityTier, worldLocationDisplay, type CardMetadata, type CardRarity, type WorldContinent, type WorldLocation } from "./card-metadata";
+import { isUsMapLocation, usMapDistance } from "./us-map";
 import { cardDiscoveryIdentities } from "./card-discovery";
 import { questionDepthForSelection } from "./difficulty";
 import { poolForDifficulty } from "./difficulty-pool";
@@ -147,6 +148,7 @@ export type GeoChoice = {
 };
 
 export type GeoRound = {
+  mapRegion?: "world" | "us";
   id: string;
   topic: RoundTopic;
   prompt: string;
@@ -1834,7 +1836,9 @@ const geoChoiceCountForDifficulty = (difficulty: Difficulty) => {
   void difficulty;
   return 4;
 };
-export const geoChoiceSeparationForDifficulty = (difficulty: Difficulty) => difficulty === 1
+export const geoChoiceSeparationForDifficulty = (difficulty: Difficulty, region: "world" | "us" = "world") => region === "us"
+  ? { kilometers: 300, mapPercent: 16 }
+  : difficulty === 1
   ? { kilometers: 2000, mapPercent: 14.5 }
   : difficulty === 2
     ? { kilometers: 1200, mapPercent: 10.5 }
@@ -2059,9 +2063,9 @@ export const geoChoiceForLocation = (location: WorldLocation): GeoChoice => {
   return {
     id: location.label,
     label: location.label,
-    location,
+    location: { ...location, coordinates: [point.lat, point.lon] },
     point,
-    mapNote: worldContinentLabel(location.continents),
+    mapNote: location.states?.length ? location.states.join(" / ") : worldContinentLabel(location.continents),
   };
 };
 
@@ -2080,8 +2084,9 @@ const diverseGeoChoices = (
   count: number,
   difficulty: Difficulty,
   seed: number,
+  region: "world" | "us" = "world",
 ) => {
-  const minimum = geoChoiceSeparationForDifficulty(difficulty);
+  const minimum = geoChoiceSeparationForDifficulty(difficulty, region);
   const selected = [answer];
   const remaining = shuffle(candidates.filter((choice) => choice.id !== answer.id), seed);
 
@@ -2090,7 +2095,7 @@ const diverseGeoChoices = (
       .map((choice, index) => {
         const separations = selected.map((selectedChoice) => ({
           kilometers: geoPointDistanceKm(choice.point, selectedChoice.point),
-          mapPercent: geoPointMapDistance(choice.point, selectedChoice.point),
+          mapPercent: region === "us" ? usMapDistance(choice.location, selectedChoice.location) : geoPointMapDistance(choice.point, selectedChoice.point),
         }));
         const qualifies = separations.every((separation) => separation.kilometers >= minimum.kilometers && separation.mapPercent >= minimum.mapPercent);
         const score = Math.min(...separations.map((separation) => Math.min(
@@ -2148,7 +2153,9 @@ export const canBuildGeoRoundFromCards = (cards: readonly KnowledgeCard[], diffi
   return cachedGeoCapability(cards, difficulty, () => {
     const count = geoChoiceCountForDifficulty(difficulty);
     const candidates = geoChoiceCandidates(preferredPool(geoCards(cards), difficulty));
-    return candidates.some((answer, index) => diverseGeoChoices(answer, candidates, count, difficulty, index) !== null);
+    const usCandidates = candidates.filter((choice) => isUsMapLocation(choice.location) && choice.location.states?.length);
+    return usCandidates.some((answer, index) => diverseGeoChoices(answer, usCandidates, count, difficulty, index, "us") !== null)
+      || candidates.some((answer, index) => diverseGeoChoices(answer, candidates, count, difficulty, index) !== null);
   });
 };
 
@@ -2202,9 +2209,13 @@ export const buildGeoRoundFromCards = (
   const count = geoChoiceCountForDifficulty(difficulty);
   const { pool, choicesPool } = geoPoolPlanForCards(cards, difficulty);
   const orderedCards = discoveryShuffle(pool, seed + 1, unlockedTitles, cardDiscoveryIdentities);
+  const usChoicesPool = choicesPool.filter((choice) => isUsMapLocation(choice.location) && choice.location.states?.length);
   const selected = orderedCards.map((card, index) => {
     const answer = geoChoiceForLocation(card.metadata.location);
-    return { card, choices: diverseGeoChoices(answer, choicesPool, count, difficulty, seed + index) };
+    const usChoices = isUsMapLocation(answer.location) && answer.location.states?.length
+      ? diverseGeoChoices(answer, usChoicesPool, count, difficulty, seed + index, "us") : null;
+    return { card, mapRegion: usChoices ? "us" as const : "world" as const,
+      choices: usChoices ?? diverseGeoChoices(answer, choicesPool, count, difficulty, seed + index) };
   }).find((candidate) => candidate.choices !== null);
   if (!selected?.choices) throw new Error(`Need at least ${count} well-separated mapped locations to build a geo round for ${topic}`);
 
@@ -2217,15 +2228,18 @@ export const buildGeoRoundFromCards = (
 
   return {
     id: `${seed}-geo-${card.topic}-${card.id}`,
+    mapRegion: selected.mapRegion,
     topic: card.topic || topic,
-    prompt: `Where on the world map does ${card.title} belong?`,
+    prompt: `Where on the ${selected.mapRegion === "us" ? "US" : "world"} map does ${card.title} belong?`,
     card,
     choices,
     answerId: answer.id,
     answerLabel: answer.label,
     location,
     point,
-    mapHint: `${card.title} belongs in ${continentHint}. Look for a pin in the ${hemisphereLabel(point).toLowerCase()}.`,
+    mapHint: selected.mapRegion === "us"
+      ? `Find ${location.states!.join(" and ")} on the US map. Tap a state to learn its name, then choose a lettered pin.`
+      : `${card.title} belongs in ${continentHint}. Look for a pin in the ${hemisphereLabel(point).toLowerCase()}.`,
     explanation: `${card.title} is connected with ${worldLocationLabelInProse(location.label)}, which is in ${continentHint}. ${card.fact}`,
   };
 };

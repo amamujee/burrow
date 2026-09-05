@@ -29,6 +29,7 @@ const {
   geoPointMapDistance,
 } = jiti("./src/lib/game-modes.ts");
 const { packToPlayableDeck } = jiti("./src/lib/pack-adapter.ts");
+const { usMapDistance } = jiti("./src/lib/us-map.ts");
 const { buildHeadToHeadSession, buildSession } = jiti("./src/lib/questions.ts");
 const pepperScaleCatalog = JSON.parse(fs.readFileSync("src/lib/pepperscale-peppers.json", "utf8"));
 
@@ -401,13 +402,13 @@ const assertDistinctSortValues = (roundName, round) => {
 };
 
 const assertGeoChoiceSeparation = (roundName, round, difficulty) => {
-  const minimum = geoChoiceSeparationForDifficulty(difficulty);
+  const minimum = geoChoiceSeparationForDifficulty(difficulty, round.mapRegion);
   for (let first = 0; first < round.choices.length; first += 1) {
     for (let second = first + 1; second < round.choices.length; second += 1) {
       const firstChoice = round.choices[first];
       const secondChoice = round.choices[second];
       const kilometers = geoPointDistanceKm(firstChoice.point, secondChoice.point);
-      const mapPercent = geoPointMapDistance(firstChoice.point, secondChoice.point);
+      const mapPercent = round.mapRegion === "us" ? usMapDistance(firstChoice.location, secondChoice.location) : geoPointMapDistance(firstChoice.point, secondChoice.point);
       if (kilometers < minimum.kilometers || mapPercent < minimum.mapPercent) {
         critical.push(`${roundName}: ${firstChoice.label} and ${secondChoice.label} are too close (${Math.round(kilometers)} km, ${mapPercent.toFixed(1)}% map distance)`);
       }
@@ -448,6 +449,14 @@ const checkPackMetadata = (pack) => {
     const meterValue = statValue("height-m") ?? statValue("elevation-m");
     if (feetValue !== undefined && meterValue !== undefined && Math.abs(feetValue - meterValue * 3.28084) > 3) critical.push(`${label}: feet/metres conversion differs by more than 3 ft`);
     if (pack.id === "bridges-and-tunnels" && !isFiniteBetween(statValue("length-mi"), 0.01, 150)) critical.push(`${label}: implausible crossing length`);
+    if (pack.id === "bridges-and-tunnels") {
+      const location = card.metadata?.location;
+      if (!location?.coordinates || location.coordinates.length !== 2) critical.push(`${label}: crossing needs a specific map point`);
+      if (location?.countries.includes("United States") && !location.states?.length) critical.push(`${label}: US crossing needs state metadata`);
+      if (!card.stats.find((stat) => stat.id === "length-mi")?.note || !card.stats.find((stat) => stat.id === "opened-year")?.note) critical.push(`${label}: crossing needs length and opening scope notes`);
+      if (new Set(card.categories).size !== card.categories.length) critical.push(`${label}: duplicate categories`);
+      if (card.metadata?.taxonomyGroup === "bridge-tunnel" && (!card.tags.includes("bridge") || !card.tags.includes("tunnel"))) critical.push(`${label}: bridge-tunnel needs both structure tags`);
+    }
     if (pack.id === "dinosaurs") {
       if (!isFiniteBetween(statValue("length"), 0.5, 150) || !isFiniteBetween(statValue("weight"), 0.001, 150) || !isFiniteBetween(statValue("power"), 1, 10)) critical.push(`${label}: implausible fossil/gameplay stat`);
     }

@@ -126,6 +126,16 @@ const validateCardMetadata = (packId, card, cardLabel) => {
         } else {
           uniqueCheck(packId, location.continents, `${cardLabel} metadata.location continent`);
         }
+        if (location.coordinates !== undefined && (!Array.isArray(location.coordinates) || location.coordinates.length !== 2
+          || !Number.isFinite(location.coordinates[0]) || Math.abs(location.coordinates[0]) > 90
+          || !Number.isFinite(location.coordinates[1]) || Math.abs(location.coordinates[1]) > 180)) {
+          addError(packId, `${cardLabel}: metadata.location.coordinates must be [latitude, longitude] in range`);
+        }
+        if (location.states !== undefined) {
+          if (!Array.isArray(location.states) || !location.states.length || location.states.some((state) => !hasText(state, 2))) {
+            addError(packId, `${cardLabel}: metadata.location.states needs named states`);
+          } else uniqueCheck(packId, location.states, `${cardLabel} metadata.location state`);
+        }
       }
     }
   }

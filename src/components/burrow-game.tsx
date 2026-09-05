@@ -3321,6 +3321,7 @@ function QuestionLocationStage({
           label: choice.label,
           x: choice.point.x,
           y: choice.point.y,
+          location: choice.location,
           tone: answered
             ? choice.id === question.map.answerId
               ? "correct" as const
@@ -3531,14 +3532,15 @@ function FactLocationStage({ round, answered }: { round: FactRound & { map: NonN
   const claimedIsActual = round.map.claimed.id === round.map.actual.id;
   const markers = answered && !claimedIsActual
     ? [
-        { id: `claimed-${round.map.claimed.id}`, label: `Claimed: ${round.map.claimed.label}`, x: round.map.claimed.point.x, y: round.map.claimed.point.y, tone: "wrong" as const },
-        { id: `actual-${round.map.actual.id}`, label: `Actual: ${round.map.actual.label}`, x: round.map.actual.point.x, y: round.map.actual.point.y, tone: "correct" as const },
+        { id: `claimed-${round.map.claimed.id}`, label: `Claimed: ${round.map.claimed.label}`, x: round.map.claimed.point.x, y: round.map.claimed.point.y, location: round.map.claimed.location, tone: "wrong" as const },
+        { id: `actual-${round.map.actual.id}`, label: `Actual: ${round.map.actual.label}`, x: round.map.actual.point.x, y: round.map.actual.point.y, location: round.map.actual.location, tone: "correct" as const },
       ]
     : [{
         id: round.map.claimed.id,
         label: round.map.claimed.label,
         x: round.map.claimed.point.x,
         y: round.map.claimed.point.y,
+        location: round.map.claimed.location,
         tone: answered ? "correct" as const : "default" as const,
       }];
 
@@ -3952,11 +3954,13 @@ function GeoMap({
 }) {
   return (
     <WorldMapSurface
+      region={round.mapRegion}
       markers={round.choices.map((choice) => ({
         id: choice.id,
         label: choice.label,
         x: choice.point.x,
         y: choice.point.y,
+        location: choice.location,
         tone: answered
           ? choice.id === round.answerId
             ? "correct" as const

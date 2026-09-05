@@ -23,6 +23,7 @@ export type WorldLocation = {
   countries: string[];
   continents: WorldContinent[];
   coordinates?: readonly [latitude: number, longitude: number];
+  states?: string[];
 };
 
 export type CardMetadata = {

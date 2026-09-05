@@ -26,7 +26,7 @@ type ChallengeStepBase = {
 
 export type ChallengeStep =
   | (ChallengeStepBase & { skill: "Reading"; evidence: string })
-  | (ChallengeStepBase & { skill: "Geography"; map?: { hint: string; choices: { label: string; mapLabel?: string; x: number; y: number }[] } })
+  | (ChallengeStepBase & { skill: "Geography"; map?: { hint: string; choices: { label: string; mapLabel?: string; x: number; y: number; location?: WorldLocation }[] } })
   | (ChallengeStepBase & { skill: "Classification" })
   | (ChallengeStepBase & { skill: "Math"; math: { groups: number; each: number; visual: EqualGroupsVisual } })
   | (ChallengeStepBase & { skill: "Science"; conceptVisual?: ConceptVisual })
@@ -289,7 +289,7 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
           hint: `Find ${location.label} on the world map.`,
           choices: geographyLocations.map((choiceLocation, index) => {
             const point = geoChoiceForLocation(choiceLocation).point;
-            return { label: `Pin ${String.fromCharCode(65 + index)}`, mapLabel: choiceLocation.label, x: point.x, y: point.y };
+            return { label: `Pin ${String.fromCharCode(65 + index)}`, mapLabel: choiceLocation.label, x: point.x, y: point.y, location: geoChoiceForLocation(choiceLocation).location };
           }),
         }
       : undefined;
@@ -614,7 +614,7 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
     return (
       <aside data-challenge-story aria-label="Challenge map story" className="min-h-[430px] rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0">
         <WorldMapSurface
-          markers={step.map.choices.map((choice) => ({ id: choice.label, label: choice.mapLabel ?? choice.label, x: choice.x, y: choice.y, tone: selected ? choice.label === step.answer ? "correct" as const : choice.label === selected ? "wrong" as const : "quiet" as const : "default" as const }))}
+          markers={step.map.choices.map((choice) => ({ id: choice.label, label: choice.mapLabel ?? choice.label, x: choice.x, y: choice.y, location: choice.location, tone: selected ? choice.label === step.answer ? "correct" as const : choice.label === selected ? "wrong" as const : "quiet" as const : "default" as const }))}
           footer={selected ? step.summary : step.map.hint}
           onSelect={onSelect}
           disabled={selected !== null}
