@@ -2560,6 +2560,1086 @@
       "image": "/burrow-assets/bridges-and-tunnels/chesapeake-bay-bridge.jpg",
       "originalFilename": "Chesapeake Bay Bridge from Annapolis to Maryland's Eastern Shore LCCN2011632486-2.jpg",
       "imageLicenseUrl": ""
+    },
+    {
+      "id": "pont-du-gard",
+      "name": "Pont du Gard",
+      "kind": "bridge",
+      "structure": "arch",
+      "location": {
+        "label": "Gardon River near Vers-Pont-du-Gard, France",
+        "countries": [
+          "France"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          43.947222,
+          4.535556
+        ]
+      },
+      "lengthMi": 0.17,
+      "opened": 50,
+      "recognition": 9,
+      "scale": 8,
+      "fact": "The Romans built Pont du Gard with three levels of stone arches to carry water across the Gardon River toward Nîmes.",
+      "categories": [
+        "historic",
+        "aqueduct",
+        "river-crossing",
+        "global-icon"
+      ],
+      "lengthNote": "Length of the surviving upper tier: 275 m. The lower tiers are shorter; the full Nîmes aqueduct ran for about 50 km.",
+      "openedNote": "Built around 50 CE, within an estimated 40–60 CE construction period. This is an approximate ancient construction date, not a recorded opening year.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://pontdugard.fr/en/discover/monument",
+        "https://whc.unesco.org/en/list/344",
+        "https://en.wikipedia.org/wiki/Pont_du_Gard"
+      ],
+      "imageCredit": "Benh LIEU SONG (Flickr) · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pont_du_Gard_BLS.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/pont-du-gard.jpg",
+      "imageAlt": "Pont du Gard with three tiers of stone arches above the Gardon River",
+      "originalFilename": "Pont du Gard BLS.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "openedDisplay": "c. 50 CE"
+    },
+    {
+      "id": "stari-most",
+      "name": "Stari Most",
+      "kind": "bridge",
+      "structure": "arch",
+      "location": {
+        "label": "Neretva River, Mostar, Bosnia and Herzegovina",
+        "countries": [
+          "Bosnia and Herzegovina"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          43.337278,
+          17.815028
+        ]
+      },
+      "lengthMi": 0.02,
+      "opened": 2004,
+      "recognition": 8,
+      "scale": 6,
+      "fact": "Stari Most curves over the Neretva River in one steep stone arch. Its name means Old Bridge, and it was rebuilt to match the original 1566 bridge.",
+      "categories": [
+        "historic",
+        "river-crossing",
+        "pedestrian",
+        "global-icon"
+      ],
+      "lengthNote": "Approx. 30 m for the whole stone bridge; the arch opening is about 27 m.",
+      "openedNote": "The reconstructed bridge reopened in 2004. The original opened in 1566 and was destroyed in 1993.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://whc.unesco.org/en/activities/349",
+        "https://whc.unesco.org/en/list/946",
+        "https://en.wikipedia.org/wiki/Stari_Most"
+      ],
+      "imageCredit": "Mhare (attributed) · CC BY-SA 2.5",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Stari_Most22.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/stari-most.jpg",
+      "imageAlt": "The reconstructed Stari Most stone arch between two towers over the Neretva River",
+      "originalFilename": "Stari Most22.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.5"
+    },
+    {
+      "id": "clifton-suspension-bridge",
+      "name": "Clifton Suspension Bridge",
+      "kind": "bridge",
+      "structure": "suspension",
+      "location": {
+        "label": "Avon Gorge, Bristol, England, United Kingdom",
+        "countries": [
+          "United Kingdom"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          51.4549,
+          -2.6279
+        ]
+      },
+      "lengthMi": 0.26,
+      "opened": 1864,
+      "recognition": 8,
+      "scale": 7,
+      "fact": "Clifton Suspension Bridge hangs above Bristol’s Avon Gorge from iron chains. Isambard Kingdom Brunel began its design when he was only 24.",
+      "categories": [
+        "historic",
+        "gorge",
+        "river-crossing"
+      ],
+      "lengthNote": "Total bridge length: 412 m; the suspended main span between the towers is about 214 m.",
+      "openedNote": "Opened in 1864, after Brunel’s death; engineers John Hawkshaw and William Henry Barlow completed the design.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://cliftonbridge.org.uk/history/",
+        "https://structurae.net/structures/clifton-suspension-bridge",
+        "https://en.wikipedia.org/wiki/Clifton_Suspension_Bridge"
+      ],
+      "imageCredit": "Gothick · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Clifton_Suspension_Bridge-9350.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/clifton-suspension-bridge.jpg",
+      "imageAlt": "Clifton Suspension Bridge spanning the Avon Gorge between its stone towers",
+      "originalFilename": "Clifton Suspension Bridge-9350.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0"
+    },
+    {
+      "id": "szechenyi-chain-bridge",
+      "name": "Széchenyi Chain Bridge",
+      "kind": "bridge",
+      "structure": "suspension",
+      "location": {
+        "label": "Danube River, Budapest, Hungary",
+        "countries": [
+          "Hungary"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          47.498889,
+          19.043611
+        ]
+      },
+      "lengthMi": 0.24,
+      "opened": 1849,
+      "recognition": 9,
+      "scale": 7,
+      "fact": "The Széchenyi Chain Bridge was the first permanent bridge joining Buda and Pest across the Danube. Heavy iron chains support its roadway.",
+      "categories": [
+        "historic",
+        "urban",
+        "river-crossing",
+        "global-icon"
+      ],
+      "lengthNote": "Approx. 380 m across all three spans; the central span is about 203 m. Some references round the overall length differently.",
+      "openedNote": "First opened in 1849. The bridge was rebuilt after wartime destruction and reopened in 1949.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://budavar.abtk.hu/en/streets-squares-buildings/chain-brigde.html",
+        "https://en.wikipedia.org/wiki/Széchenyi_Chain_Bridge"
+      ],
+      "imageCredit": "Wilfredor · CC0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Sz%C3%A9chenyi_Chain_Bridge_in_Budapest_at_night.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/szechenyi-chain-bridge.jpg",
+      "imageAlt": "The illuminated Széchenyi Chain Bridge crossing the Danube at night",
+      "originalFilename": "Széchenyi Chain Bridge in Budapest at night.jpg",
+      "imageLicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+    },
+    {
+      "id": "chapel-bridge",
+      "name": "Chapel Bridge",
+      "kind": "bridge",
+      "structure": "truss",
+      "location": {
+        "label": "Reuss River, Lucerne, Switzerland",
+        "countries": [
+          "Switzerland"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          47.051667,
+          8.3075
+        ]
+      },
+      "lengthMi": 0.13,
+      "opened": 1365,
+      "recognition": 9,
+      "scale": 5,
+      "fact": "Lucerne’s Chapel Bridge has a wooden roof with triangular paintings beneath it. The covered walkway passes beside an octagonal water tower.",
+      "categories": [
+        "historic",
+        "covered",
+        "pedestrian",
+        "river-crossing",
+        "global-icon"
+      ],
+      "lengthNote": "Present bridge length: about 204.7 m; the medieval bridge was longer before later shoreline changes.",
+      "openedNote": "Originally built around 1365. Much of the wooden structure was rebuilt after a 1993 fire and reopened in 1994.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.luzern.com/en/poi/chapel-bridge",
+        "https://en.wikipedia.org/wiki/Kapellbrücke"
+      ],
+      "imageCredit": "Simon Koopmann · CC BY-SA 2.5",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kapellbruecke.JPG",
+      "image": "/burrow-assets/bridges-and-tunnels/chapel-bridge.jpg",
+      "imageAlt": "Lucerne’s wooden Chapel Bridge beside its octagonal stone water tower",
+      "originalFilename": "Kapellbruecke.JPG",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+      "openedDisplay": "c. 1365"
+    },
+    {
+      "id": "iron-bridge",
+      "name": "The Iron Bridge",
+      "kind": "bridge",
+      "structure": "arch",
+      "location": {
+        "label": "River Severn, Ironbridge, England, United Kingdom",
+        "countries": [
+          "United Kingdom"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          52.62736,
+          -2.48544
+        ]
+      },
+      "lengthMi": 0.04,
+      "opened": 1781,
+      "recognition": 8,
+      "scale": 7,
+      "fact": "The Iron Bridge showed that cast iron could support a large bridge. Its curved ribs were assembled from separate iron pieces made in local furnaces.",
+      "categories": [
+        "historic",
+        "river-crossing"
+      ],
+      "lengthNote": "Approx. 60 m overall including the approach spans; the main cast-iron arch spans 30.63 m.",
+      "openedNote": "Formally opened to traffic in 1781. The main iron arch had been erected in 1779.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.english-heritage.org.uk/visit/places/iron-bridge/history",
+        "https://b2.co.uk/world-bridges/ironbridge/",
+        "https://en.wikipedia.org/wiki/The_Iron_Bridge"
+      ],
+      "imageCredit": "Tk420 · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Iron_Bridge_east_side_in_February_2019_(cropped).jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/iron-bridge.jpg",
+      "imageAlt": "The red cast-iron arch and circular ironwork of the Iron Bridge over the River Severn",
+      "originalFilename": "Iron Bridge east side in February 2019 (cropped).jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "id": "glenfinnan-viaduct",
+      "name": "Glenfinnan Viaduct",
+      "kind": "bridge",
+      "structure": "arch",
+      "location": {
+        "label": "Glenfinnan, Scottish Highlands, United Kingdom",
+        "countries": [
+          "United Kingdom"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          56.876285,
+          -5.431914
+        ]
+      },
+      "lengthMi": 0.24,
+      "opened": 1901,
+      "recognition": 9,
+      "scale": 7,
+      "fact": "Glenfinnan Viaduct curves through the Scottish Highlands on 21 concrete arches. It appears in the Harry Potter films carrying the Hogwarts Express.",
+      "categories": [
+        "historic",
+        "railway",
+        "viaduct",
+        "mountain"
+      ],
+      "lengthNote": "Total curved railway viaduct length: about 381 m (1,250 ft), across 21 arches.",
+      "openedNote": "Opened for regular railway service in 1901; construction of the viaduct itself was completed in 1898.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.networkrail.co.uk/stories/film-the-magic-of-the-glenfinnan-viaduct/",
+        "https://en.wikipedia.org/wiki/Glenfinnan_Viaduct"
+      ],
+      "imageCredit": "Matthieu Riegler · CC BY 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Glenfinnan_-_Arches.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/glenfinnan-viaduct.jpg",
+      "imageAlt": "The tall concrete arches of Glenfinnan Viaduct in the Scottish Highlands",
+      "originalFilename": "Glenfinnan - Arches.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0"
+    },
+    {
+      "id": "bridge-of-sighs",
+      "name": "Bridge of Sighs",
+      "kind": "bridge",
+      "structure": "arch",
+      "location": {
+        "label": "Rio di Palazzo, Venice, Italy",
+        "countries": [
+          "Italy"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          45.434056,
+          12.340861
+        ]
+      },
+      "lengthMi": 0.01,
+      "opened": 1600,
+      "recognition": 9,
+      "scale": 4,
+      "fact": "Venice’s Bridge of Sighs is an enclosed stone passage over a canal. It connected the Doge’s Palace to the prison on the opposite bank.",
+      "categories": [
+        "historic",
+        "covered",
+        "pedestrian",
+        "urban"
+      ],
+      "lengthNote": "Whole bridge: about 11 m, rounded to 0.01 mi for gameplay. It is a short enclosed canal crossing.",
+      "openedNote": "Built around 1600, in the early 1600s. The game uses an approximate construction year rather than a documented opening date.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://palazzoducale.visitmuve.it/en/building-and-history/",
+        "https://www.italia.it/en/veneto/venice/bridge-of-sighs",
+        "https://en.wikipedia.org/wiki/Bridge_of_Sighs"
+      ],
+      "imageCredit": "Didier Descouens · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Antonio_Contin_-_Ponte_dei_sospiri_(Venice).jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/bridge-of-sighs.jpg",
+      "imageAlt": "The enclosed white limestone Bridge of Sighs above a narrow Venetian canal",
+      "originalFilename": "Antonio Contin - Ponte dei sospiri (Venice).jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "openedDisplay": "c. 1600"
+    },
+    {
+      "id": "puente-nuevo",
+      "name": "Puente Nuevo",
+      "kind": "bridge",
+      "structure": "arch",
+      "location": {
+        "label": "El Tajo gorge, Ronda, Spain",
+        "countries": [
+          "Spain"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          36.740747,
+          -5.165903
+        ]
+      },
+      "lengthMi": 0.04,
+      "opened": 1787,
+      "recognition": 8,
+      "scale": 7,
+      "fact": "Puente Nuevo joins the two sides of Ronda above a deep gorge. A chamber inside the bridge’s tall central arch once served as a prison.",
+      "categories": [
+        "historic",
+        "gorge",
+        "river-crossing"
+      ],
+      "lengthNote": "Total bridge length: about 66 m across the gorge. The roughly 98 m height is a different measurement.",
+      "openedNote": "Opened to horses and carriages in 1787, according to Ronda’s tourism office. Construction, including the aqueduct work, finished in 1793.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://info.turismoderonda.es/wp-content/uploads/2024/09/PUENTE-NUEVO-ING.pdf",
+        "https://info.turismoderonda.es/patrimonio-cultural/puente-nuevo-sobre-el-tajo/",
+        "https://en.wikipedia.org/wiki/Puente_Nuevo"
+      ],
+      "imageCredit": "CEphoto, Uwe Aranas · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ronda_Spain_Puente-Nuevo-de-Ronda-01.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/puente-nuevo.jpg",
+      "imageAlt": "Puente Nuevo’s tall stone piers and arches rising from the gorge at Ronda",
+      "originalFilename": "Ronda Spain Puente-Nuevo-de-Ronda-01.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0"
+    },
+    {
+      "id": "25-de-abril-bridge",
+      "name": "25 de Abril Bridge",
+      "kind": "bridge",
+      "structure": "suspension",
+      "location": {
+        "label": "Tagus River, Lisbon–Almada, Portugal",
+        "countries": [
+          "Portugal"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          38.689167,
+          -9.176944
+        ]
+      },
+      "lengthMi": 1.43,
+      "opened": 1966,
+      "recognition": 9,
+      "scale": 9,
+      "fact": "Lisbon’s red 25 de Abril Bridge carries cars on its upper deck and trains below. The railway deck opened more than 30 years after the road.",
+      "categories": [
+        "road-rail",
+        "river-crossing",
+        "global-icon"
+      ],
+      "lengthNote": "Approx. 2.3 km for the suspension bridge itself, excluding the northern approach viaduct and access roads; the main span is about 1,013 m.",
+      "openedNote": "The road bridge opened in 1966; the lower railway deck opened in 1999.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.visitlisboa.com/en/places/25-de-abril-bridge",
+        "https://en.wikipedia.org/wiki/25_de_Abril_Bridge"
+      ],
+      "imageCredit": "Mike · CC BY 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:25_De_Abril_Bridge_(226290561).jpeg",
+      "image": "/burrow-assets/bridges-and-tunnels/25-de-abril-bridge.jpg",
+      "imageAlt": "The red towers and cables of Lisbon’s 25 de Abril Bridge above the Tagus River",
+      "originalFilename": "25 De Abril Bridge (226290561).jpeg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0"
+    },
+    {
+      "id": "vasco-da-gama-bridge",
+      "name": "Vasco da Gama Bridge",
+      "kind": "bridge",
+      "structure": "cable-stayed",
+      "location": {
+        "label": "Tagus estuary, Lisbon–Alcochete, Portugal",
+        "countries": [
+          "Portugal"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          38.762,
+          -9.043
+        ]
+      },
+      "lengthMi": 10.69,
+      "opened": 1998,
+      "recognition": 8,
+      "scale": 10,
+      "fact": "The Vasco da Gama Bridge stretches across Lisbon’s broad Tagus estuary. Its long rows of piers lead to a taller section held up by diagonal cables.",
+      "categories": [
+        "viaduct",
+        "long-span",
+        "river-crossing"
+      ],
+      "lengthNote": "Full crossing including viaducts and approach sections: about 17.2 km. The cable-stayed main bridge is only one part of this route.",
+      "openedNote": "Opened in 1998; the year refers to the completed Tagus crossing.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.vinci.com/en/vinci/page/notre_histoire",
+        "https://www.vascodagamatower.com/en/spots/vasco-da-gama-bridge/",
+        "https://en.wikipedia.org/wiki/Vasco_da_Gama_Bridge"
+      ],
+      "imageCredit": "Till Niermann · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Vasco_da_Gama_Bridge_aerial_view.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/vasco-da-gama-bridge.jpg",
+      "imageAlt": "Vasco da Gama Bridge’s cable-stayed section and long line of piers across the Tagus estuary",
+      "originalFilename": "Vasco da Gama Bridge aerial view.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0"
+    },
+    {
+      "id": "1915-canakkale-bridge",
+      "name": "1915 Çanakkale Bridge",
+      "kind": "bridge",
+      "structure": "suspension",
+      "location": {
+        "label": "Dardanelles Strait, Gelibolu–Lapseki, Turkey",
+        "countries": [
+          "Turkey"
+        ],
+        "continents": [
+          "Europe",
+          "Asia"
+        ],
+        "coordinates": [
+          40.34,
+          26.636111
+        ]
+      },
+      "lengthMi": 2.86,
+      "opened": 2022,
+      "recognition": 8,
+      "scale": 10,
+      "fact": "The 1915 Çanakkale Bridge links Europe and Asia across the Dardanelles. Its 2,023-meter central span was the world’s longest suspension span when it opened.",
+      "categories": [
+        "long-span",
+        "sea-crossing",
+        "intercontinental",
+        "longest"
+      ],
+      "lengthNote": "Total bridge with approach viaducts: 4,608 m; the unsupported central suspension span is 2,023 m.",
+      "openedNote": "Opened in 2022. The 1915 in the bridge’s name commemorates a historical event, not its opening year.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.1915canakkale.com/en-us/press-room/timeline/1915canakkale-ready-to-serve-the-nation-and-the-world",
+        "https://intertoll.com.tr/en/project-services/",
+        "https://en.wikipedia.org/wiki/1915_Çanakkale_Bridge"
+      ],
+      "imageCredit": "Glabb · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:1915_%C3%87anakkale_Bridge2.JPG",
+      "image": "/burrow-assets/bridges-and-tunnels/1915-canakkale-bridge.jpg",
+      "imageAlt": "The red-and-white towers and suspension cables of the 1915 Çanakkale Bridge",
+      "originalFilename": "1915 Çanakkale Bridge2.JPG",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0"
+    },
+    {
+      "id": "helix-bridge",
+      "name": "Helix Bridge",
+      "kind": "bridge",
+      "structure": "truss",
+      "location": {
+        "label": "Marina Bay, Singapore",
+        "countries": [
+          "Singapore"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          1.287622,
+          103.860597
+        ]
+      },
+      "lengthMi": 0.17,
+      "opened": 2010,
+      "recognition": 8,
+      "scale": 7,
+      "fact": "Singapore’s Helix Bridge curls around its walkway like the double spiral of DNA. Its two twisting steel structures work together to hold the bridge up.",
+      "categories": [
+        "pedestrian",
+        "urban",
+        "double-helix"
+      ],
+      "lengthNote": "Total pedestrian bridge length: 280 m. This is the curved Helix walkway, not the adjacent road bridge.",
+      "openedNote": "First opened in April 2010; the remaining section opened in July of the same year.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.ura.gov.sg/-/media/Corporate/Guidelines/Street-and-Building-Names/SBNBpublication2020.pdf",
+        "https://www.arup.com/globalassets/downloads/insights/a/arups-innovation-legacy/arup-innovation-legacy.pdf",
+        "https://en.wikipedia.org/wiki/Helix_Bridge"
+      ],
+      "imageCredit": "William Cho · CC BY-SA 2.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Double-Helix-Bridge.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/helix-bridge.jpg",
+      "imageAlt": "The illuminated double-spiral steel frame of Singapore’s Helix Bridge",
+      "originalFilename": "Double-Helix-Bridge.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0"
+    },
+    {
+      "id": "langkawi-sky-bridge",
+      "name": "Langkawi Sky Bridge",
+      "kind": "bridge",
+      "structure": "cable-stayed",
+      "location": {
+        "label": "Mount Machinchang, Langkawi, Malaysia",
+        "countries": [
+          "Malaysia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          6.386442,
+          99.662406
+        ]
+      },
+      "lengthMi": 0.08,
+      "opened": 2005,
+      "recognition": 8,
+      "scale": 7,
+      "fact": "Langkawi Sky Bridge curves high above a forested valley, held by cables from a single leaning tower. Builders used helicopters to lift parts onto the mountain.",
+      "categories": [
+        "pedestrian",
+        "mountain"
+      ],
+      "lengthNote": "Length of the curved pedestrian bridge: 125 m. The cable car and SkyGlide lift are separate structures.",
+      "openedNote": "Opened in 2005; it reopened in 2015 following maintenance and upgrades.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://panoramalangkawi.com/skybridge/",
+        "https://en.wikipedia.org/wiki/Langkawi_Sky_Bridge"
+      ],
+      "imageCredit": "Flickr user \"The Dilly Lama\" · CC BY 2.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Langkawi_sky_bridge.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/langkawi-sky-bridge.jpg",
+      "imageAlt": "The curved Langkawi Sky Bridge suspended from one tower above a forested valley",
+      "originalFilename": "Langkawi sky bridge.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0"
+    },
+    {
+      "id": "golden-bridge-vietnam",
+      "name": "Golden Bridge",
+      "kind": "bridge",
+      "structure": "beam",
+      "location": {
+        "label": "Bà Nà Hills, near Da Nang, Vietnam",
+        "countries": [
+          "Vietnam"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          15.99486,
+          107.99625
+        ]
+      },
+      "lengthMi": 0.09,
+      "opened": 2018,
+      "recognition": 9,
+      "scale": 6,
+      "fact": "Vietnam’s Golden Bridge looks as if two giant stone hands are lifting its golden walkway. The hands are modern sculptures made to look ancient.",
+      "categories": [
+        "pedestrian",
+        "mountain",
+        "global-icon"
+      ],
+      "lengthNote": "Length of the pedestrian bridge: 150 m; the height of the mountain resort is not the bridge’s length.",
+      "openedNote": "Opened in 2018 at the Bà Nà Hills resort.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://sunworld.vn/en/banahills/sunworld-news/golden-coverage-of-golden-bridge-worldwide-1854",
+        "https://en.wikipedia.org/wiki/Golden_Bridge_(Vietnam)"
+      ],
+      "imageCredit": "DvTor8303 · CC0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Golden_Bridge_at_Ba_Na_Hills_20250718.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/golden-bridge-vietnam.jpg",
+      "imageAlt": "Two enormous sculpted hands appearing to support the Golden Bridge in Vietnam",
+      "originalFilename": "Golden Bridge at Ba Na Hills 20250718.jpg",
+      "imageLicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+    },
+    {
+      "id": "howrah-bridge",
+      "name": "Howrah Bridge",
+      "kind": "bridge",
+      "structure": "cantilever",
+      "location": {
+        "label": "Hooghly River, Kolkata–Howrah, India",
+        "countries": [
+          "India"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          22.5851,
+          88.3469
+        ]
+      },
+      "lengthMi": 0.44,
+      "opened": 1943,
+      "recognition": 9,
+      "scale": 8,
+      "fact": "Howrah Bridge joins Kolkata and Howrah with a giant steel framework. Its cantilever arms reach out from the banks, leaving the river’s main channel free of piers.",
+      "categories": [
+        "truss",
+        "urban",
+        "river-crossing",
+        "global-icon"
+      ],
+      "lengthNote": "Total bridge length: about 705 m; the central span is about 457 m.",
+      "openedNote": "The current cantilever bridge opened in 1943, replacing an earlier floating pontoon bridge.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.incredibleindia.gov.in/en/west-bengal/kolkata/howrah-bridge",
+        "https://www.prod.incredibleindia.gov.in/content/incredible-india-v2/en/destinations/kolkata/howrah-bridge.html",
+        "https://en.wikipedia.org/wiki/Howrah_Bridge"
+      ],
+      "imageCredit": "Apoorva Karlekar · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Howrah_bridge_at_night.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/howrah-bridge.jpg",
+      "imageAlt": "Howrah Bridge’s illuminated steel cantilever framework over the Hooghly River",
+      "originalFilename": "Howrah bridge at night.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "id": "victoria-falls-bridge",
+      "name": "Victoria Falls Bridge",
+      "kind": "bridge",
+      "structure": "arch",
+      "location": {
+        "label": "Zambezi River below Victoria Falls, Zambia–Zimbabwe border",
+        "countries": [
+          "Zambia",
+          "Zimbabwe"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          -17.928333,
+          25.857222
+        ]
+      },
+      "lengthMi": 0.12,
+      "opened": 1905,
+      "recognition": 9,
+      "scale": 8,
+      "fact": "Victoria Falls Bridge crosses the Zambezi gorge just downstream from the waterfall. Its steel arch links Zambia and Zimbabwe where spray can drift over passing trains.",
+      "categories": [
+        "historic",
+        "road-rail",
+        "gorge",
+        "river-crossing",
+        "global-icon"
+      ],
+      "lengthNote": "Total bridge length: about 198 m (650 ft); the main steel arch spans about 152 m.",
+      "openedNote": "Opened in 1905; the date refers to the original steel bridge.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.asce.org/about-civil-engineering/history-and-heritage/historic-landmarks/victoria-falls-bridge",
+        "https://en.wikipedia.org/wiki/Victoria_Falls_Bridge"
+      ],
+      "imageCredit": "Diego Delso · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Puente_de_las_cataratas_Victoria,_Zambia-Zimbabue,_2018-07-27,_DD_10.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/victoria-falls-bridge.jpg",
+      "imageAlt": "Victoria Falls Bridge’s steel arch high above the Zambezi gorge",
+      "originalFilename": "Puente de las cataratas Victoria, Zambia-Zimbabue, 2018-07-27, DD 10.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "id": "confederation-bridge",
+      "name": "Confederation Bridge",
+      "kind": "bridge",
+      "structure": "box-girder",
+      "location": {
+        "label": "Northumberland Strait, Prince Edward Island–New Brunswick, Canada",
+        "countries": [
+          "Canada"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          46.215278,
+          -63.745833
+        ]
+      },
+      "lengthMi": 8.02,
+      "opened": 1997,
+      "recognition": 8,
+      "scale": 9,
+      "fact": "Confederation Bridge links Prince Edward Island to mainland Canada across water that freezes in winter. Its curved route replaced a ferry crossing.",
+      "categories": [
+        "sea-crossing",
+        "islands",
+        "long-span"
+      ],
+      "lengthNote": "Full bridge length: 12.9 km, including the approach sections across Northumberland Strait.",
+      "openedNote": "Opened to traffic in 1997.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.confederationbridge.com/about-us/",
+        "https://en.wikipedia.org/wiki/Confederation_Bridge"
+      ],
+      "imageCredit": "Quintin Soloviev · CC BY 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Confederation_Bridge_aerial_view_(from_PEI_side).jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/confederation-bridge.jpg",
+      "imageAlt": "The long curved Confederation Bridge crossing Northumberland Strait",
+      "originalFilename": "Confederation Bridge aerial view (from PEI side).jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/4.0"
+    },
+    {
+      "id": "mont-blanc-tunnel",
+      "name": "Mont Blanc Tunnel",
+      "kind": "tunnel",
+      "structure": "road",
+      "location": {
+        "label": "Mont Blanc massif, Chamonix–Courmayeur, France–Italy",
+        "countries": [
+          "France",
+          "Italy"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          45.854,
+          6.914
+        ]
+      },
+      "lengthMi": 7.21,
+      "opened": 1965,
+      "recognition": 9,
+      "scale": 9,
+      "fact": "Mont Blanc Tunnel takes drivers beneath the Alps between France and Italy. For much of the trip, more than two kilometers of rock lie overhead.",
+      "categories": [
+        "mountain",
+        "road"
+      ],
+      "lengthNote": "One road tunnel, about 11.6 km long. This is the full bore between the French and Italian portals.",
+      "openedNote": "Opened to traffic in 1965. It reopened in 2002 after the 1999 fire and extensive reconstruction.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.tunnelmb.net/public/files/301/01--carta-dei-servizi-ing-2026.pdf",
+        "https://en.wikipedia.org/wiki/Mont_Blanc_Tunnel"
+      ],
+      "imageCredit": "Photo prise par François Trazzi · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tunnel_du_mont-blanc_cot%C3%A9_italien.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/mont-blanc-tunnel.jpg",
+      "imageAlt": "The Italian entrance of Mont Blanc Tunnel beneath a white arch",
+      "originalFilename": "Tunnel du mont-blanc coté italien.jpg",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
+    },
+    {
+      "id": "marmaray-tunnel",
+      "name": "Marmaray Bosphorus Tunnel",
+      "kind": "tunnel",
+      "structure": "rail",
+      "location": {
+        "label": "Bosphorus seabed between Sirkeci and Üsküdar, Istanbul, Turkey",
+        "countries": [
+          "Turkey"
+        ],
+        "continents": [
+          "Europe",
+          "Asia"
+        ],
+        "coordinates": [
+          41.019722,
+          28.996667
+        ]
+      },
+      "lengthMi": 0.86,
+      "opened": 2013,
+      "recognition": 8,
+      "scale": 9,
+      "fact": "Marmaray trains travel between Europe and Asia beneath the Bosphorus. Engineers lowered giant tunnel sections into a trench in the seabed and joined them underwater.",
+      "categories": [
+        "rail",
+        "undersea",
+        "intercontinental",
+        "urban"
+      ],
+      "lengthNote": "Immersed undersea section only: 1,387 m. Excludes the land tunnels, the 13.6 km initial crossing project, and the longer Marmaray railway.",
+      "openedNote": "Opened for passenger services in 2013; the wider Marmaray railway was expanded in 2019.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.taisei.co.jp/assets/about_us/ir/data/date/pdf/annual_report_2015.pdf",
+        "https://en.wikipedia.org/wiki/Marmaray_Tunnel"
+      ],
+      "imageCredit": "Kayra · CC BY 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Marmaray_t%C3%BCp_ge%C3%A7i%C5%9F_t%C3%BCneli_30112024_2.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/marmaray-tunnel.jpg",
+      "imageAlt": "Railway tracks inside the Marmaray tunnel beneath the Bosphorus",
+      "originalFilename": "Marmaray tüp geçiş tüneli 30112024 2.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/4.0"
+    },
+    {
+      "id": "atal-tunnel",
+      "name": "Atal Tunnel",
+      "kind": "tunnel",
+      "structure": "road",
+      "location": {
+        "label": "Rohtang Pass, Himachal Pradesh, India",
+        "countries": [
+          "India"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          32.40127,
+          77.148335
+        ]
+      },
+      "lengthMi": 5.6,
+      "opened": 2020,
+      "recognition": 8,
+      "scale": 9,
+      "fact": "Atal Tunnel runs beneath Rohtang Pass in the Himalayas. It gives the Lahaul valley a road connection even when deep snow blocks the mountain pass.",
+      "categories": [
+        "road",
+        "mountain"
+      ],
+      "lengthNote": "Full road tunnel length: 9.02 km; the emergency passage is within the same structure and is not added to the length.",
+      "openedNote": "Inaugurated in October 2020.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1796961",
+        "https://en.wikipedia.org/wiki/Atal_Tunnel"
+      ],
+      "imageCredit": "Vinayaraj · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Atal_Tunnel_vrtmrgmpksk_(2).jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/atal-tunnel.jpg",
+      "imageAlt": "A car traveling through the broad, illuminated interior of Atal Tunnel",
+      "originalFilename": "Atal Tunnel vrtmrgmpksk (2).jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "id": "guoliang-tunnel",
+      "name": "Guoliang Tunnel",
+      "kind": "tunnel",
+      "structure": "road",
+      "location": {
+        "label": "Taihang Mountains, Guoliang village, Henan, China",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          35.7311,
+          113.604
+        ]
+      },
+      "lengthMi": 0.78,
+      "opened": 1977,
+      "recognition": 8,
+      "scale": 6,
+      "fact": "Villagers carved Guoliang Tunnel through a cliff to give their village a road to the outside world. Openings in the rock act like windows along the route.",
+      "categories": [
+        "road",
+        "mountain",
+        "cliff"
+      ],
+      "lengthNote": "Approx. 1.25 km for the cliff tunnel road; some sources round this to 1.2 km.",
+      "openedNote": "Opened to traffic in 1977 after work began in 1972.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://archive.shine.cn/feature/A-tunnel-that-brought-the-world-to-a-village/shdaily.shtml",
+        "https://en.wikipedia.org/wiki/Guoliang_Tunnel"
+      ],
+      "imageCredit": "FANG Chen from Beijing, China · CC BY 2.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Guoliang_tunnel_road_2011-4-29_17-24-01_(5689275863).jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/guoliang-tunnel.jpg",
+      "imageAlt": "The row of openings along Guoliang Tunnel cut into a sheer cliff",
+      "originalFilename": "Guoliang tunnel road 2011-4-29 17-24-01 (5689275863).jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0"
+    },
+    {
+      "id": "smart-tunnel",
+      "name": "SMART Tunnel",
+      "kind": "tunnel",
+      "structure": "road",
+      "location": {
+        "label": "SMART Tunnel near the Bukit Bintang junction, Kuala Lumpur, Malaysia",
+        "countries": [
+          "Malaysia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          3.13893,
+          101.719164
+        ]
+      },
+      "lengthMi": 6.03,
+      "opened": 2007,
+      "recognition": 8,
+      "scale": 9,
+      "fact": "Kuala Lumpur’s SMART Tunnel carries traffic and diverts floodwater. During severe storms, cars leave and the road section can fill with water to help protect the city.",
+      "categories": [
+        "road",
+        "urban",
+        "flood-control"
+      ],
+      "lengthNote": "Full stormwater bypass tunnel: 9.7 km. Only part also carries cars; the motorway route is about 4 km including its entrance and exit sections.",
+      "openedNote": "The motorway and stormwater system opened in stages in 2007.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.smarttunnel.com.my/construction/fast_facts.htm",
+        "https://www.smarttunnel.com.my/construction/opening_english.html",
+        "https://www.openstreetmap.org/way/160196669",
+        "https://en.wikipedia.org/wiki/SMART_Tunnel"
+      ],
+      "imageCredit": "Gusztáv Klados · CC BY-SA 3.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Smart-tunnel.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/smart-tunnel.jpg",
+      "imageAlt": "Cars inside one of the road levels of Kuala Lumpur’s SMART Tunnel",
+      "originalFilename": "Smart-tunnel.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0"
+    },
+    {
+      "id": "thames-tunnel",
+      "name": "Thames Tunnel",
+      "kind": "tunnel",
+      "structure": "rail",
+      "location": {
+        "label": "River Thames, Rotherhithe–Wapping, London, United Kingdom",
+        "countries": [
+          "United Kingdom"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          51.503056,
+          -0.054444
+        ]
+      },
+      "lengthMi": 0.25,
+      "opened": 1843,
+      "recognition": 8,
+      "scale": 8,
+      "fact": "The Thames Tunnel was the first tunnel built successfully beneath a river used by ships. It opened for pedestrians before being converted to carry trains.",
+      "categories": [
+        "historic",
+        "rail",
+        "underwater",
+        "urban"
+      ],
+      "lengthNote": "Approx. 396 m (1,300 ft) for the historic river tunnel, excluding its vertical entrance shafts; the parallel passages are not added together.",
+      "openedNote": "Opened for pedestrians in 1843; railway services began in 1869.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://thebrunelmuseum.com/explore/marc-isambard-brunel/",
+        "https://en.wikipedia.org/wiki/Thames_Tunnel"
+      ],
+      "imageCredit": "Lars Plougmann from United States · CC BY-SA 2.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Thames_Tunnel_walk.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/thames-tunnel.jpg",
+      "imageAlt": "The arched interior and railway tracks of the historic Thames Tunnel",
+      "originalFilename": "Thames Tunnel walk.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0"
+    },
+    {
+      "id": "simplon-tunnel",
+      "name": "Simplon Tunnel",
+      "kind": "tunnel",
+      "structure": "rail",
+      "location": {
+        "label": "Lepontine Alps, Brig–Iselle, Switzerland–Italy",
+        "countries": [
+          "Switzerland",
+          "Italy"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          46.323611,
+          8.003056
+        ]
+      },
+      "lengthMi": 12.31,
+      "opened": 1906,
+      "recognition": 7,
+      "scale": 9,
+      "fact": "Simplon Tunnel carries trains beneath the Alps between Switzerland and Italy. It was the world’s longest railway tunnel when its first bore opened in 1906.",
+      "categories": [
+        "historic",
+        "rail",
+        "mountain",
+        "longest"
+      ],
+      "lengthNote": "First (eastern) bore: 19.803 km. The parallel western bore is 19.823 km long and is not added to this figure.",
+      "openedNote": "The first bore opened in 1906; the second opened in 1921.",
+      "auditedOn": "2026-09-13",
+      "sourceUrls": [
+        "https://www.bls.ch/en/unternehmen/ueber-uns/unternehmensportraet/geschichte/geschichte-bls-ag",
+        "https://en.wikipedia.org/wiki/Simplon_Tunnel"
+      ],
+      "imageCredit": "Hp.Baumeler · CC BY-SA 4.0",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Simplon_Sudportal.jpg",
+      "image": "/burrow-assets/bridges-and-tunnels/simplon-tunnel.jpg",
+      "imageAlt": "The two southern railway portals of Simplon Tunnel near Iselle, Italy",
+      "originalFilename": "Simplon Sudportal.jpg",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
     }
   ]
 }

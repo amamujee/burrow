@@ -1,9 +1,17 @@
 {
   "schemaVersion": 1,
-  "version": "01a86d39b3b5dea8c752",
-  "assetCount": 1036,
-  "totalBytes": 222967337,
+  "version": "defd791f92d971f2ea91",
+  "assetCount": 1061,
+  "totalBytes": 227962056,
   "assets": {
+    "/burrow-assets/bridges-and-tunnels/1915-canakkale-bridge.jpg": {
+      "bytes": 182945,
+      "revision": "0df855ea6e1f30ffb718"
+    },
+    "/burrow-assets/bridges-and-tunnels/25-de-abril-bridge.jpg": {
+      "bytes": 216394,
+      "revision": "f08b54a45a9ee808543c"
+    },
     "/burrow-assets/bridges-and-tunnels/akashi-kaikyo-bridge.jpg": {
       "bytes": 91997,
       "revision": "aeadccc1a96e39821358"
@@ -23,6 +31,10 @@
     "/burrow-assets/bridges-and-tunnels/astoria-megler-bridge.jpg": {
       "bytes": 241662,
       "revision": "efdac0579053a66e07c0"
+    },
+    "/burrow-assets/bridges-and-tunnels/atal-tunnel.jpg": {
+      "bytes": 220702,
+      "revision": "9d605bcb485fdf306b25"
     },
     "/burrow-assets/bridges-and-tunnels/bayonne-bridge.jpg": {
       "bytes": 121292,
@@ -48,6 +60,10 @@
       "bytes": 1142,
       "revision": "0b71a265cf228677110e"
     },
+    "/burrow-assets/bridges-and-tunnels/bridge-of-sighs.jpg": {
+      "bytes": 261916,
+      "revision": "2cb5572a50fd2cee8c4b"
+    },
     "/burrow-assets/bridges-and-tunnels/bronx-whitestone-bridge.jpg": {
       "bytes": 169100,
       "revision": "6568a3add8d541260289"
@@ -72,6 +88,10 @@
       "bytes": 885,
       "revision": "e0f41a869f4b49faa93e"
     },
+    "/burrow-assets/bridges-and-tunnels/chapel-bridge.jpg": {
+      "bytes": 200069,
+      "revision": "9faa6daea724c302d05d"
+    },
     "/burrow-assets/bridges-and-tunnels/charles-bridge.jpg": {
       "bytes": 292405,
       "revision": "1ef0bccbc0ce26cb8fc7"
@@ -91,6 +111,14 @@
     "/burrow-assets/bridges-and-tunnels/chesapeake-bay-bridge.jpg": {
       "bytes": 196359,
       "revision": "13ba2c333aa7d393c273"
+    },
+    "/burrow-assets/bridges-and-tunnels/clifton-suspension-bridge.jpg": {
+      "bytes": 170885,
+      "revision": "0a2ef0b034c2336727c9"
+    },
+    "/burrow-assets/bridges-and-tunnels/confederation-bridge.jpg": {
+      "bytes": 136567,
+      "revision": "0d429db5b244c2ca8623"
     },
     "/burrow-assets/bridges-and-tunnels/danyang-kunshan-grand-bridge.jpg": {
       "bytes": 61298,
@@ -128,6 +156,10 @@
       "bytes": 1164,
       "revision": "1c50983a3673bb50253b"
     },
+    "/burrow-assets/bridges-and-tunnels/glenfinnan-viaduct.jpg": {
+      "bytes": 302258,
+      "revision": "9a3596506df2a12c5047"
+    },
     "/burrow-assets/bridges-and-tunnels/goethals-bridge.jpg": {
       "bytes": 140963,
       "revision": "1a5a0bdc2a6d955adb75"
@@ -135,6 +167,10 @@
     "/burrow-assets/bridges-and-tunnels/goethals-bridge.svg": {
       "bytes": 1082,
       "revision": "b6169fcd4de6c71ccdaf"
+    },
+    "/burrow-assets/bridges-and-tunnels/golden-bridge-vietnam.jpg": {
+      "bytes": 252653,
+      "revision": "4161db9d91b1b056d7cb"
     },
     "/burrow-assets/bridges-and-tunnels/golden-gate-bridge.jpg": {
       "bytes": 150401,
@@ -176,9 +212,17 @@
       "bytes": 875,
       "revision": "97c4d3274ea472484d9f"
     },
+    "/burrow-assets/bridges-and-tunnels/guoliang-tunnel.jpg": {
+      "bytes": 299264,
+      "revision": "f8e0794708c915cf2058"
+    },
     "/burrow-assets/bridges-and-tunnels/hampton-roads-bridge-tunnel.jpg": {
       "bytes": 222870,
       "revision": "80781d692272c2b693ee"
+    },
+    "/burrow-assets/bridges-and-tunnels/helix-bridge.jpg": {
+      "bytes": 283872,
+      "revision": "43bb1c1a4ddc5f3040a7"
     },
     "/burrow-assets/bridges-and-tunnels/henry-hudson-bridge.jpg": {
       "bytes": 161626,
@@ -204,6 +248,14 @@
       "bytes": 275331,
       "revision": "f831d63f798a9d72f13f"
     },
+    "/burrow-assets/bridges-and-tunnels/howrah-bridge.jpg": {
+      "bytes": 108082,
+      "revision": "328563d20b89895e4f68"
+    },
+    "/burrow-assets/bridges-and-tunnels/iron-bridge.jpg": {
+      "bytes": 172561,
+      "revision": "d10e225b9ca757c42f5b"
+    },
     "/burrow-assets/bridges-and-tunnels/james-river-bridge.jpg": {
       "bytes": 105385,
       "revision": "ae82bd776afb3d804f54"
@@ -219,6 +271,10 @@
     "/burrow-assets/bridges-and-tunnels/lake-pontchartrain-causeway.jpg": {
       "bytes": 79304,
       "revision": "5da4d918f2242f07882a"
+    },
+    "/burrow-assets/bridges-and-tunnels/langkawi-sky-bridge.jpg": {
+      "bytes": 224728,
+      "revision": "95b634d59a4f2b12c2df"
     },
     "/burrow-assets/bridges-and-tunnels/lincoln-tunnel.jpg": {
       "bytes": 130286,
@@ -256,6 +312,10 @@
       "bytes": 1142,
       "revision": "cc03480d3ebb36d9ccec"
     },
+    "/burrow-assets/bridges-and-tunnels/marmaray-tunnel.jpg": {
+      "bytes": 239031,
+      "revision": "3a391345b914d814abc7"
+    },
     "/burrow-assets/bridges-and-tunnels/millau-viaduct.jpg": {
       "bytes": 213002,
       "revision": "d3fb4c80a28735adb4c8"
@@ -267,6 +327,10 @@
     "/burrow-assets/bridges-and-tunnels/monitor-merrimac-memorial-bridge-tunnel.jpg": {
       "bytes": 116979,
       "revision": "3f8d7f0cd07c01819662"
+    },
+    "/burrow-assets/bridges-and-tunnels/mont-blanc-tunnel.jpg": {
+      "bytes": 107283,
+      "revision": "160c73a48f65be9c3824"
     },
     "/burrow-assets/bridges-and-tunnels/new-river-gorge-bridge.jpg": {
       "bytes": 187504,
@@ -280,6 +344,10 @@
       "bytes": 1060,
       "revision": "7dcfdc63a04243212ef1"
     },
+    "/burrow-assets/bridges-and-tunnels/pont-du-gard.jpg": {
+      "bytes": 167852,
+      "revision": "0fbdedb82e08d16359f8"
+    },
     "/burrow-assets/bridges-and-tunnels/ponte-vecchio.jpg": {
       "bytes": 151668,
       "revision": "309928c74b7fdcbfbca3"
@@ -287,6 +355,10 @@
     "/burrow-assets/bridges-and-tunnels/ponte-vecchio.svg": {
       "bytes": 1015,
       "revision": "9682cddf30f3f35ce1f9"
+    },
+    "/burrow-assets/bridges-and-tunnels/puente-nuevo.jpg": {
+      "bytes": 267380,
+      "revision": "2e175b90457095fa7a7c"
     },
     "/burrow-assets/bridges-and-tunnels/queensboro-bridge.jpg": {
       "bytes": 257387,
@@ -340,6 +412,18 @@
       "bytes": 391013,
       "revision": "937d1c63ad356bf69b14"
     },
+    "/burrow-assets/bridges-and-tunnels/simplon-tunnel.jpg": {
+      "bytes": 295312,
+      "revision": "debc885240acbb65f351"
+    },
+    "/burrow-assets/bridges-and-tunnels/smart-tunnel.jpg": {
+      "bytes": 54843,
+      "revision": "4dd96e98cffca0397ee6"
+    },
+    "/burrow-assets/bridges-and-tunnels/stari-most.jpg": {
+      "bytes": 222845,
+      "revision": "3ca54f0c94e80fe2b89a"
+    },
     "/burrow-assets/bridges-and-tunnels/sunshine-skyway-bridge.jpg": {
       "bytes": 114356,
       "revision": "ac0732a06928fb3e0507"
@@ -356,9 +440,17 @@
       "bytes": 1033,
       "revision": "88d981c677657695bc5a"
     },
+    "/burrow-assets/bridges-and-tunnels/szechenyi-chain-bridge.jpg": {
+      "bytes": 163316,
+      "revision": "17b388bdd9fb3daa0ba5"
+    },
     "/burrow-assets/bridges-and-tunnels/tacoma-narrows-bridge.jpg": {
       "bytes": 177281,
       "revision": "ffbe043b6bdf2e245605"
+    },
+    "/burrow-assets/bridges-and-tunnels/thames-tunnel.jpg": {
+      "bytes": 130038,
+      "revision": "de1b83aad68ad7b4a1d1"
     },
     "/burrow-assets/bridges-and-tunnels/throgs-neck-bridge.jpg": {
       "bytes": 170433,
@@ -384,6 +476,10 @@
       "bytes": 961,
       "revision": "917d66cfbcd5f16f4e3a"
     },
+    "/burrow-assets/bridges-and-tunnels/vasco-da-gama-bridge.jpg": {
+      "bytes": 131349,
+      "revision": "c8a7edc60e64609be213"
+    },
     "/burrow-assets/bridges-and-tunnels/verrazzano-narrows-bridge.jpg": {
       "bytes": 208803,
       "revision": "c4e854ed7d983634f268"
@@ -391,6 +487,10 @@
     "/burrow-assets/bridges-and-tunnels/verrazzano-narrows-bridge.svg": {
       "bytes": 1160,
       "revision": "e7277609fcc9df999707"
+    },
+    "/burrow-assets/bridges-and-tunnels/victoria-falls-bridge.jpg": {
+      "bytes": 182574,
+      "revision": "d2556f687aa9d0c518d9"
     },
     "/burrow-assets/bridges-and-tunnels/williamsburg-bridge.jpg": {
       "bytes": 203055,

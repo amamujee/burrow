@@ -8,8 +8,8 @@ import usStates from "../../src/lib/us-map-data.json";
 const pack = loadPlayablePacks().find((pack) => pack.id === "bridges-and-tunnels")!;
 const deck = packToPlayableDeck(pack);
 
-test("audited crossings retain the world collection and add 20 US landmarks", { tag: "@logic" }, () => {
-  expect(pack.cards).toHaveLength(62);
+test("audited crossings include 87 landmarks with complete geography and measurement notes", { tag: "@logic" }, () => {
+  expect(pack.cards).toHaveLength(87);
   expect(pack.cards.filter((card) => card.metadata?.location?.countries.includes("United States"))).toHaveLength(38);
   const stateNames = new Set(usStates.map((state) => state.name));
   for (const card of pack.cards) {

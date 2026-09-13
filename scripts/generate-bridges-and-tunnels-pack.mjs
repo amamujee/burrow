@@ -15,7 +15,7 @@ const pack = {
   sources: source.cards.flatMap((card) => card.sourceUrls.map((url, index) => ({
     label: `${card.name}${index ? " — additional reference" : ""}`,
     url,
-    note: `Source record dated ${source.auditedOn}. ${card.lengthNote} ${card.openedNote}`,
+    note: `Source record dated ${card.auditedOn ?? source.auditedOn}. ${card.lengthNote} ${card.openedNote}`,
   }))),
   cards: source.cards.map((card) => {
     const previous = existingCards.get(card.id);
@@ -24,13 +24,13 @@ const pack = {
       id: card.id,
       name: card.name,
       image: card.image,
-      imageAlt: `${card.name} photo`,
+      imageAlt: card.imageAlt ?? `${card.name} photo`,
       imageCredit: card.imageCredit,
       imageSourceUrl: card.imageSourceUrl,
       fact: card.fact,
       stats: [
         { id: "length-mi", label: "Length", value: card.lengthMi, unit: "mi", direction: "higher", note: card.lengthNote },
-        { id: "opened-year", label: "Opened", value: card.opened, unit: "year", direction: "lower", note: card.openedNote },
+        { id: "opened-year", label: "Opened", value: card.opened, unit: "year", direction: "lower", ...(card.openedDisplay ? { display: card.openedDisplay } : {}), note: card.openedNote },
         { id: "recognition", label: "Fame rating", value: card.recognition, unit: "/10", direction: "higher", note: "Burrow editorial recognition rating, not an official measurement." },
         { id: "engineering-scale", label: "Engineering rating", value: card.scale, unit: "/10", direction: "higher", note: "Burrow editorial game rating for the scale of the project, not a safety or structural-performance measure." },
       ],
