@@ -39,7 +39,7 @@ export const challengeConceptVisualLabels: Record<ConceptVisual, string> = {
   "genes-and-growing": "Diagram showing genes and growing conditions shaping a pepper's heat",
 };
 
-export const challengeQuestionInterval = 25;
+export const challengeQuestionInterval = 40;
 
 export type ChallengeCampaign = {
   id: string;

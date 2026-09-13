@@ -2081,7 +2081,7 @@ test("Challenge copy keeps comparison subjects honest and space sizes in miles",
 
 test("Challenge selection rotates categories before repeating a category campaign", () => {
   const categories = playableChallengeCategories.slice(0, 2);
-  const selected = [25, 50, 75, 100].map((milestone) => challengeCampaignForMilestone(milestone, categories));
+  const selected = [1, 2, 3, 4].map((index) => challengeCampaignForMilestone(index * challengeQuestionInterval, categories));
   expect(selected.map((campaign) => campaign.topicId)).toEqual([
     categories[0].id,
     categories[1].id,
@@ -2751,7 +2751,7 @@ test("Next builds a different round without passing the click event as learning 
   expect(pageErrors).toEqual([]);
 });
 
-test("every twenty-fifth answer opens an automatic mini challenge and returns after its summary", { tag: "@mobile" }, async ({ page }) => {
+test("every fortieth answer opens an automatic mini challenge and returns after its summary", { tag: "@mobile" }, async ({ page }) => {
   const campaign = pepperChallengeCampaigns[0];
   await page.evaluate(() => {
     const key = "burrow-profiles-v1";
@@ -2761,7 +2761,7 @@ test("every twenty-fifth answer opens an automatic mini challenge and returns af
     };
     const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
     if (!active) throw new Error("Active profile was not saved");
-    active.progress.answered = 24;
+    active.progress.answered = 39;
     active.progress.challengeMilestone = 0;
     window.localStorage.setItem(key, JSON.stringify(profiles));
   });
@@ -2811,7 +2811,7 @@ test("every twenty-fifth answer opens an automatic mini challenge and returns af
       profiles: { id: string; progress: { challengeMilestone: number } }[];
     };
     return profiles.profiles.find((profile) => profile.id === profiles.activeProfileId)?.progress.challengeMilestone;
-  })).toBe(25);
+  })).toBe(40);
 });
 
 test("mini challenges do not interrupt before the next milestone", async ({ page }) => {
@@ -2823,7 +2823,7 @@ test("mini challenges do not interrupt before the next milestone", async ({ page
     };
     const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
     if (!active) throw new Error("Active profile was not saved");
-    active.progress.answered = 19;
+    active.progress.answered = 38;
     active.progress.challengeMilestone = 0;
     window.localStorage.setItem(key, JSON.stringify(profiles));
   });

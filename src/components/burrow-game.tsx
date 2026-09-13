@@ -327,7 +327,7 @@ const normalizedChallengeMilestone = (progress?: Partial<Progress>) => {
   const savedMilestone = progress?.challengeMilestone;
   const currentMilestone = Math.floor(answered / challengeQuestionInterval) * challengeQuestionInterval;
 
-  // Migrate milestones saved by the previous 20-question schedule.
+  // Migrate milestones saved by the previous 20- and 25-question schedules.
   if (savedMilestone === undefined || savedMilestone > answered || savedMilestone % challengeQuestionInterval !== 0) {
     return currentMilestone;
   }
