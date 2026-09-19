@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { WorldLocation } from "@/lib/card-metadata";
-import { isUsMapLocation, usMapPoint } from "@/lib/us-map";
+import { isUsMapLocation, mapRegionForLocations, usMapPoint } from "@/lib/us-map";
 import usStates from "@/lib/us-map-data.json";
 
 export type WorldMapMarker = {
@@ -20,7 +20,7 @@ export function WorldMapSurface({
   onSelect,
   disabled = false,
   className = "min-h-[320px]",
-  region = "world",
+  region = mapRegionForLocations(markers.map((marker) => marker.location)),
 }: {
   markers: readonly WorldMapMarker[];
   footer: string;
@@ -29,7 +29,7 @@ export function WorldMapSurface({
   className?: string;
   region?: "world" | "us";
 }) {
-  const mapKey = markers.map((marker) => marker.id).join("|");
+  const mapKey = `${region}:${markers.map((marker) => marker.id).join("|")}`;
   const [view, setView] = useState<{ key: string; region: "world" | "us" } | null>(null);
   const usMarkers = markers.filter((marker) => isUsMapLocation(marker.location));
   const activeRegion = usMarkers.length ? (view?.key === mapKey ? view.region : region) : "world";

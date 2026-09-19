@@ -20,6 +20,14 @@ export const isUsMapLocation = (location?: WorldLocation): location is WorldLoca
   Boolean(location?.countries.length === 1 && location.countries[0] === "United States"
     && location.coordinates && usMapPoint(location.coordinates));
 
+// A country-wide origin belongs on the world map; a mapped US city, state, or
+// landmark can use the state map even when it has no separate states field.
+export const isUsDetailLocation = (location?: WorldLocation) =>
+  isUsMapLocation(location) && location.label !== "United States";
+
+export const mapRegionForLocations = (locations: readonly (WorldLocation | undefined)[]): "world" | "us" =>
+  locations.length > 0 && locations.every(isUsDetailLocation) ? "us" : "world";
+
 export const usMapDistance = (first: WorldLocation, second: WorldLocation) => {
   if (!isUsMapLocation(first) || !isUsMapLocation(second)) return 0;
   const a = usMapPoint(first.coordinates)!;

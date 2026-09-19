@@ -43,6 +43,7 @@ import { packToPlayableDeck } from "../../src/lib/pack-adapter";
 import { loadPlayablePacks } from "../../src/lib/pack-loader";
 import { buildLandingTopicCards } from "../../src/lib/landing-topics";
 import { discoveryShuffle } from "../../src/lib/random";
+import { mapRegionForLocations, usMapDistance } from "../../src/lib/us-map";
 import { migrateTopicSelection } from "../../src/lib/topic-selection";
 import {
   addLearningExposure,
@@ -641,6 +642,7 @@ test("every collection card profile adds information beyond its headline", () =>
 });
 
 test("every generated Quiz location question carries matching map choices", () => {
+  const regions = new Set<string>();
   for (const topic of ["peppers", "buildings"] as const) {
     for (const difficulty of [1, 2, 3] as const) {
       const locationQuestions: ReturnType<typeof buildSession> = [];
@@ -655,18 +657,21 @@ test("every generated Quiz location question carries matching map choices", () =
         expect(question.map, `${question.id} needs a teaching map`).toBeTruthy();
         expect(question.map?.answerId).toBe(question.answer);
         expect(question.map?.choices.map((choice) => choice.label)).toEqual(question.choices);
-        const minimum = geoChoiceSeparationForDifficulty(difficulty);
+        const region = mapRegionForLocations(question.map!.choices.map((choice) => choice.location));
+        regions.add(region);
+        const minimum = geoChoiceSeparationForDifficulty(difficulty, region);
         for (let first = 0; first < (question.map?.choices.length ?? 0); first += 1) {
           for (let second = first + 1; second < (question.map?.choices.length ?? 0); second += 1) {
             const firstChoice = question.map?.choices[first];
             const secondChoice = question.map?.choices[second];
             expect(geoPointDistanceKm(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.kilometers);
-            expect(geoPointMapDistance(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.mapPercent);
+            expect(region === "us" ? usMapDistance(firstChoice!.location, secondChoice!.location) : geoPointMapDistance(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.mapPercent);
           }
         }
       }
     }
   }
+  expect(regions).toEqual(new Set(["us", "world"]));
 });
 
 test("location-based True/False rounds carry claimed and actual map points", () => {
@@ -732,13 +737,14 @@ test("every generated Peek location question carries well-separated map choices"
       expect(round.map, `${round.id} needs a teaching map`).toBeTruthy();
       expect(round.map?.answerId).toBe(round.answer);
       expect(round.map?.choices.map((choice) => choice.label)).toEqual(round.choices);
-      const minimum = geoChoiceSeparationForDifficulty(difficulty);
+      const region = mapRegionForLocations(round.map!.choices.map((choice) => choice.location));
+      const minimum = geoChoiceSeparationForDifficulty(difficulty, region);
       for (let first = 0; first < (round.map?.choices.length ?? 0); first += 1) {
         for (let second = first + 1; second < (round.map?.choices.length ?? 0); second += 1) {
           const firstChoice = round.map?.choices[first];
           const secondChoice = round.map?.choices[second];
           expect(geoPointDistanceKm(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.kilometers);
-          expect(geoPointMapDistance(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.mapPercent);
+          expect(region === "us" ? usMapDistance(firstChoice!.location, secondChoice!.location) : geoPointMapDistance(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.mapPercent);
         }
       }
     }
@@ -3251,12 +3257,12 @@ test("building answers keep location teaching in the round instead of repeating 
   await chooseOnlyBuiltInTopic(page, "Sky Scrapers");
 
   await expect(page.getByLabel("Where in the world")).toHaveCount(0);
-  await expect(page.getByLabel("World map")).toBeVisible();
+  await expect(page.getByLabel(/^(World|United States) map$/)).toBeVisible();
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
 
   await expect(page.getByLabel("Answer feedback")).toBeVisible();
   await expect(page.getByLabel("Where in the world")).toHaveCount(0);
-  await expect(page.getByLabel("World map")).toHaveCount(1);
+  await expect(page.getByLabel(/^(World|United States) map$/)).toHaveCount(1);
 });
 
 test("bridge pack feedback does not repeat a location recap", async ({ page }) => {
@@ -3267,6 +3273,76 @@ test("bridge pack feedback does not repeat a location recap", async ({ page }) =
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
   await expect(page.getByLabel("Answer feedback")).toBeVisible();
   await expect(page.getByLabel("Where in the world")).toHaveCount(0);
+});
+
+test("Quiz automatically uses US and world maps with reachable pins", { tag: "@mobile" }, async ({ page }, testInfo) => {
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+  await chooseOnlyMode(page, "Quiz Run");
+  await page.getByRole("button", { name: "Hard", exact: true }).click();
+  await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+  // Keep one US subject undiscovered so this tests its real Quiz selection
+  // without depending on how often it appears among hundreds of peppers.
+  await page.evaluate((unlockedCards) => {
+    const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!);
+    saved.profiles.find((profile: { id: string }) => profile.id === saved.activeProfileId).progress.unlockedCards = unlockedCards;
+    localStorage.setItem("burrow-profiles-v1", JSON.stringify(saved));
+  }, peppers.filter((pepper) => pepper.id !== "carolina-reaper").map((pepper) => cardUnlockKey("peppers", pepper.id)));
+  await page.reload();
+  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+  await chooseOnlyMode(page, "Quiz Run");
+  const usMap = page.getByLabel("United States map", { exact: true });
+  for (let attempt = 0; attempt < 60 && await usMap.count() === 0; attempt++) {
+    await page.getByRole("button", { name: "Skip question", exact: true }).click();
+    await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+  }
+  await expect(usMap).toBeVisible();
+  const pins = usMap.getByRole("button", { name: /^Choose map pin/ });
+  await expect(pins).toHaveCount(4);
+  for (const pin of await pins.all()) await pin.click({ trial: true });
+  await usMap.getByLabel("Find a US state").selectOption("California");
+  await expect(usMap.getByRole("button", { name: "Explore California", exact: true })).toHaveAttribute("aria-pressed", "true");
+  const pinLabels = await pins.evaluateAll((pins) => pins.map((pin) => pin.getAttribute("aria-label")));
+  await page.screenshot({ path: testInfo.outputPath("quiz-us-map.png"), fullPage: true });
+  await usMap.getByRole("button", { name: "Show world view" }).click();
+  await expect(page.getByLabel("World map", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Show US view" }).click();
+  expect(await pins.evaluateAll((pins) => pins.map((pin) => pin.getAttribute("aria-label")))).toEqual(pinLabels);
+  const subject = await page.locator("[data-question-photo] img[data-original-src]").getAttribute("alt");
+  const answer = peppers.find((pepper) => pepper.name === subject)!.metadata!.location!.label;
+  await usMap.getByRole("button", { name: pinLabels.find((label) => label?.endsWith(`: ${answer}`))!, exact: true }).click();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  expect(await page.evaluate(() => {
+    const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!);
+    return saved.profiles.find((profile: { id: string }) => profile.id === saved.activeProfileId).progress.modeStats.quiz.correct;
+  })).toBe(1);
+  await page.getByRole("button", { name: /^(Next card|Finish round)/ }).click();
+  const worldMap = page.getByLabel("World map", { exact: true });
+  for (let attempt = 0; attempt < 40 && await worldMap.count() === 0; attempt++) {
+    await page.getByRole("button", { name: "Skip question", exact: true }).click();
+    await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+  }
+  await expect(worldMap).toBeVisible();
+  await expect(worldMap.getByRole("button", { name: /^Choose map pin/ })).toHaveCount(4);
+  for (const pin of await worldMap.getByRole("button", { name: /^Choose map pin/ }).all()) await pin.click({ trial: true });
+  await page.screenshot({ path: testInfo.outputPath("quiz-world-map.png"), fullPage: true });
+});
+
+test("True/False shows the detailed US map without clipping it inside the photo", { tag: "@mobile" }, async ({ page }, testInfo) => {
+  await chooseOnlyBuiltInTopic(page, "Bridges & Tunnels");
+  await chooseOnlyMode(page, "True/False");
+  const map = page.getByLabel("United States map", { exact: true });
+  for (let attempt = 0; attempt < 40 && await map.count() === 0; attempt++) {
+    await page.getByRole("button", { name: "Skip question", exact: true }).click();
+    await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+  }
+  await expect(map).toBeVisible();
+  await map.getByLabel("Find a US state").selectOption("Virginia");
+  await expect(map.getByRole("button", { name: "Explore Virginia", exact: true })).toHaveAttribute("aria-pressed", "true");
+  await map.getByRole("button", { name: "Show world view" }).click();
+  await page.getByRole("button", { name: "Show US view" }).click();
+  await page.screenshot({ path: testInfo.outputPath("fact-us-map.png"), fullPage: true });
+  await page.getByRole("button", { name: "False", exact: true }).click();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
 });
 
 test("peek rounds reset their reveal count after skip", async ({ page }) => {
@@ -3317,7 +3393,7 @@ test("geo finder stays inside the selected topic", async ({ page }) => {
   const seenPrompts = new Set<string>();
   for (let round = 0; round < 6; round += 1) {
     await expect(page.getByText("Spicy Peppers", { exact: true })).toBeVisible();
-    const heading = page.getByRole("heading", { name: /^Where on the world map does/ });
+    const heading = page.getByRole("heading", { name: /^Where on the (world|US) map does/ });
     await expect(heading).toBeVisible();
     const prompt = await heading.textContent();
     expect(prompt).toBeTruthy();

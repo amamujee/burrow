@@ -23,7 +23,7 @@ import {
 } from "./game-data";
 import { scoreFeaturedContent } from "./content-quality";
 import { cardRarityLabels, cardRarityTier, worldLocationDisplay, type CardMetadata, type CardRarity, type WorldContinent, type WorldLocation } from "./card-metadata";
-import { isUsMapLocation, usMapDistance } from "./us-map";
+import { isUsDetailLocation, usMapDistance } from "./us-map";
 import { cardDiscoveryIdentities } from "./card-discovery";
 import { questionDepthForSelection } from "./difficulty";
 import { poolForDifficulty } from "./difficulty-pool";
@@ -2086,7 +2086,9 @@ export const geoChoiceForLocation = (location: WorldLocation): GeoChoice => {
   return {
     id: location.label,
     label: location.label,
-    location: { ...location, coordinates: [point.lat, point.lon] },
+    // Country/continent fallbacks are useful on the world map, but must not
+    // masquerade as a precise city or landmark on the detailed US map.
+    location: { ...location, coordinates: location.coordinates ?? locationCoordinateOverrides[location.label] },
     point,
     mapNote: location.states?.length ? location.states.join(" / ") : worldContinentLabel(location.continents),
   };
@@ -2138,6 +2140,17 @@ const diverseGeoChoices = (
   return selected;
 };
 
+const preferredGeoChoices = (answer: GeoChoice, candidates: readonly GeoChoice[], difficulty: Difficulty, seed: number) => {
+  const count = geoChoiceCountForDifficulty(difficulty);
+  const usChoices = isUsDetailLocation(answer.location)
+    ? diverseGeoChoices(answer, candidates.filter((choice) => isUsDetailLocation(choice.location)), count, difficulty, seed, "us")
+    : null;
+  return {
+    mapRegion: usChoices ? "us" as const : "world" as const,
+    choices: usChoices ?? diverseGeoChoices(answer, candidates, count, difficulty, seed),
+  };
+};
+
 export const buildGeoChoicesForLocations = (
   locations: readonly WorldLocation[],
   answerLocation: WorldLocation,
@@ -2150,7 +2163,7 @@ export const buildGeoChoicesForLocations = (
     if (!byLabel.has(choice.id)) byLabel.set(choice.id, choice);
   }
   const answer = geoChoiceForLocation(answerLocation);
-  const diverse = diverseGeoChoices(answer, Array.from(byLabel.values()), geoChoiceCountForDifficulty(difficulty), difficulty, seed);
+  const { choices: diverse } = preferredGeoChoices(answer, Array.from(byLabel.values()), difficulty, seed);
   return diverse ? shuffle(diverse, seed + 1) : null;
 };
 
@@ -2180,13 +2193,9 @@ export const canBuildGeoRoundFromCards = (cards: readonly KnowledgeCard[], diffi
 };
 
 const hasPlayableGeoChoices = (cards: readonly LocatedKnowledgeCard[], choices: readonly GeoChoice[], difficulty: Difficulty) => {
-  const count = geoChoiceCountForDifficulty(difficulty);
   const answers = geoChoiceCandidates(cards);
-  const usChoices = choices.filter((choice) => isUsMapLocation(choice.location) && choice.location.states?.length);
   return answers.some((answer, index) =>
-    (isUsMapLocation(answer.location) && answer.location.states?.length
-      && diverseGeoChoices(answer, usChoices, count, difficulty, index, "us") !== null)
-    || diverseGeoChoices(answer, choices, count, difficulty, index) !== null);
+    preferredGeoChoices(answer, choices, difficulty, index).choices !== null);
 };
 
 const geoScopedCards = new Map<string, KnowledgeCard[]>();
@@ -2243,15 +2252,12 @@ export const buildGeoRoundFromCards = (
   const count = geoChoiceCountForDifficulty(difficulty);
   const { pool, choicesPool } = geoPoolPlanForCards(cards, difficulty);
   const orderedCards = discoveryShuffle(pool, seed + 1, unlockedTitles, cardDiscoveryIdentities);
-  const usChoicesPool = choicesPool.filter((choice) => isUsMapLocation(choice.location) && choice.location.states?.length);
   let selected: { card: LocatedKnowledgeCard; mapRegion: "us" | "world"; choices: GeoChoice[] } | undefined;
   for (const [index, card] of orderedCards.entries()) {
     const answer = geoChoiceForLocation(card.metadata.location);
-    const usChoices = isUsMapLocation(answer.location) && answer.location.states?.length
-      ? diverseGeoChoices(answer, usChoicesPool, count, difficulty, seed + index, "us") : null;
-    const choices = usChoices ?? diverseGeoChoices(answer, choicesPool, count, difficulty, seed + index);
+    const { choices, mapRegion } = preferredGeoChoices(answer, choicesPool, difficulty, seed + index);
     if (!choices) continue;
-    selected = { card, mapRegion: usChoices ? "us" : "world", choices };
+    selected = { card, mapRegion, choices };
     break;
   }
   if (!selected?.choices) throw new Error(`Need at least ${count} well-separated mapped locations to build a geo round for ${topic}`);
@@ -2275,7 +2281,7 @@ export const buildGeoRoundFromCards = (
     location,
     point,
     mapHint: selected.mapRegion === "us"
-      ? `Find ${location.states!.join(" and ")} on the US map. Tap a state to learn its name, then choose a lettered pin.`
+      ? `Find ${location.states?.length ? location.states.join(" and ") : location.label} on the US map. Tap a state to learn its name, then choose a lettered pin.`
       : `${card.title} belongs in ${continentHint}. Look for a pin in the ${hemisphereLabel(point).toLowerCase()}.`,
     explanation: `${card.title} is connected with ${worldLocationLabelInProse(location.label)}, which is in ${continentHint}. ${card.fact}`,
   };

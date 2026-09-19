@@ -3223,7 +3223,7 @@ function QuestionRun({
 
   return (
     <GameRoundLayout>
-      <article data-question-photo className="relative h-[160px] min-h-[160px] overflow-hidden rounded-xl border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0">
+      <article data-question-photo className={`relative ${question.map ? "min-h-[540px]" : "h-[160px] min-h-[160px]"} overflow-hidden rounded-xl border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0`}>
         {question.map ? (
           <QuestionLocationStage
             question={question as Question & { map: NonNullable<Question["map"]> }}
@@ -3350,6 +3350,7 @@ function QuestionLocationStage({
         <MediaImage image={question.image} imageAlt={question.imageAlt} topic={question.topic} />
       </div>
       <WorldMapSurface
+        key={question.id}
         markers={question.map.choices.map((choice) => ({
           id: choice.id,
           label: choice.label,
@@ -3584,6 +3585,7 @@ function FactLocationStage({ round, answered }: { round: FactRound & { map: NonN
         <MediaImage image={round.image} imageAlt={round.imageAlt} topic={round.topic} />
       </div>
       <WorldMapSurface
+        key={round.id}
         markers={markers}
         footer={answered ? `Actual place: ${round.map.actual.label}` : `The statement claims: ${round.map.claimed.label}`}
         onSelect={() => undefined}
@@ -3622,7 +3624,7 @@ function FactMode({
 
   return (
     <GameRoundLayout>
-      <article className="relative h-[160px] min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0">
+      <article className={`relative ${round.map ? "min-h-[510px]" : "h-[160px] min-h-[160px]"} overflow-hidden rounded-lg border-2 border-[#092421] bg-[#e3efe4] shadow-[4px_4px_0_#092421] min-[760px]:h-auto min-[760px]:min-h-0`}>
         {round.map ? (
           <FactLocationStage round={round as FactRound & { map: NonNullable<FactRound["map"]> }} answered={answered} />
         ) : (
@@ -3988,6 +3990,7 @@ function GeoMap({
 }) {
   return (
     <WorldMapSurface
+      key={round.id}
       region={round.mapRegion}
       markers={round.choices.map((choice) => ({
         id: choice.id,

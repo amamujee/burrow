@@ -7,7 +7,8 @@ import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid, GameQuestionCard,
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { buildingImagePresentation } from "@/lib/building-image-presentation";
 import type { WorldLocation } from "@/lib/card-metadata";
-import { collectionCards, geoChoiceForLocation, geoPointMapDistance, sentenceStart, worldContinentLabel, worldLocationLabelInProse, type KnowledgeCard, type RoundTopic } from "@/lib/game-modes";
+import { buildGeoChoicesForLocations, collectionCards, geoChoiceForLocation, geoPointMapDistance, sentenceStart, worldContinentLabel, worldLocationLabelInProse, type KnowledgeCard, type RoundTopic } from "@/lib/game-modes";
+import { isUsDetailLocation, mapRegionForLocations } from "@/lib/us-map";
 
 export type ConceptVisual = "pepper-anatomy" | "flavor-and-heat" | "heat-signal" | "genes-and-growing";
 
@@ -208,6 +209,12 @@ const measurementUnitKey = (display: string) => display
   .toLocaleLowerCase("en-US");
 
 const diverseMapLocations = (answer: WorldLocation, candidates: readonly WorldLocation[], seed: number) => {
+  const mappedAnswer = geoChoiceForLocation(answer).location;
+  if (isUsDetailLocation(mappedAnswer)) {
+    const usLocations = candidates.map((location) => geoChoiceForLocation(location).location).filter(isUsDetailLocation);
+    const usChoices = buildGeoChoicesForLocations(usLocations, mappedAnswer, 3, seed);
+    if (usChoices) return usChoices.map((choice) => choice.location);
+  }
   const available = uniqueBy(candidates, (candidate) => candidate.label)
     .filter((candidate) => candidate.label !== answer.label);
   const shifted = [...available.slice(seed % Math.max(available.length, 1)), ...available.slice(0, seed % Math.max(available.length, 1))];
@@ -286,7 +293,7 @@ export const buildChallengeCampaignsForCategory = ({ id: topicId, label: topicLa
       : [];
     const geographyMap = location && geographyLocations.length === 4
       ? {
-          hint: `Find ${location.label} on the world map.`,
+          hint: `Find ${location.label} on the ${mapRegionForLocations(geographyLocations) === "us" ? "US" : "world"} map.`,
           choices: geographyLocations.map((choiceLocation, index) => {
             const point = geoChoiceForLocation(choiceLocation).point;
             return { label: `Pin ${String.fromCharCode(65 + index)}`, mapLabel: choiceLocation.label, x: point.x, y: point.y, location: geoChoiceForLocation(choiceLocation).location };
@@ -614,6 +621,7 @@ function ChallengeStoryStage({ campaign, step, selected, onSelect }: { campaign:
     return (
       <aside data-challenge-story aria-label="Challenge map story" className="min-h-[430px] rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0">
         <WorldMapSurface
+          key={step.id}
           markers={step.map.choices.map((choice) => ({ id: choice.label, label: choice.mapLabel ?? choice.label, x: choice.x, y: choice.y, location: choice.location, tone: selected ? choice.label === step.answer ? "correct" as const : choice.label === selected ? "wrong" as const : "quiet" as const : "default" as const }))}
           footer={selected ? step.summary : step.map.hint}
           onSelect={onSelect}
