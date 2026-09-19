@@ -63,6 +63,25 @@ const modeTray = (page: Page) => page.getByLabel("Choose game types");
 const topicsTray = (page: Page) => page.getByLabel("Choose topics");
 const mixOption = (page: Page, label: string) => modeTray(page).getByRole("button", { name: label, exact: true });
 
+const failNextRoundPreparation = async (page: Page, failures: number) => {
+  // Throw inside generation, after its deferred loading state is displayed.
+  await page.evaluate((remaining) => {
+    const originalTimeout = window.setTimeout.bind(window);
+    window.setTimeout = ((handler: TimerHandler, timeout?: number, ...args: unknown[]) => {
+      if (timeout !== 140 || typeof handler !== "function") return originalTimeout(handler, timeout, ...args);
+      window.setTimeout = originalTimeout;
+      return originalTimeout(() => {
+        const originalSin = Math.sin;
+        Math.sin = (value) => {
+          if (remaining-- > 0) throw new Error("Simulated question generation failure");
+          return originalSin(value);
+        };
+        try { handler(...args); } finally { Math.sin = originalSin; }
+      }, timeout);
+    }) as typeof window.setTimeout;
+  }, failures);
+};
+
 const chooseOnlyMode = async (page: Page, target: string) => {
   await modeControl(page).click();
   const targetButton = mixOption(page, target);
@@ -1845,6 +1864,14 @@ test("category collections keep every card in its meaningful order", () => {
   );
   expect(orderedBuildings.slice(knownBuildings.length).every((card) => !Number.isFinite(card.statValue))).toBe(true);
   expect(collectionOrderLabel(orderedBuildings)).toBe("Height · highest to lowest");
+
+  const orderedCountries = orderCollectionCardsForCategory(collectionCards().filter((card) => card.topic === "countries"));
+  expect(orderedCountries.map((card) => card.id)).toEqual(
+    [...countries].sort((a, b) => b.areaKm2 - a.areaKm2 || a.name.localeCompare(b.name)).map((country) => country.id),
+  );
+  expect(orderedCountries[0].title).toBe("Russia");
+  expect(orderedCountries.every((card) => card.statLabel === "Area" && card.statDisplay.endsWith("km²"))).toBe(true);
+  expect(collectionOrderLabel(orderedCountries)).toBe("Area · highest to lowest");
 });
 
 test("Countries & Flags ships an exact 200-card passport catalog", () => {
@@ -2135,6 +2162,100 @@ test("mobile keeps the question and first answer in the opening viewport", { tag
   expect(stageBox!.height).toBeLessThanOrEqual(164);
   expect(promptBox!.y).toBeLessThan(viewport!.height);
   expect(choiceBox!.y).toBeLessThan(viewport!.height);
+});
+
+test("mode changes recover when a scheduled question fails to generate", { tag: "@mobile" }, async ({ page }) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await chooseOnlyMode(page, "True/False");
+  await failNextRoundPreparation(page, 1);
+  await modeControl(page).click();
+  await mixOption(page, "Sort").click();
+  await modeControl(page).click();
+  await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+  await expect(page.getByRole("button", { name: "Skip question", exact: true })).toBeVisible();
+  expect(pageErrors).toEqual([]);
+});
+
+test("failed round preparation offers retry and allows another mode", { tag: "@mobile" }, async ({ page }) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await chooseOnlyMode(page, "True/False");
+  for (const recovery of ["retry", "change mode"]) {
+    await failNextRoundPreparation(page, 3);
+    await modeControl(page).click();
+    await mixOption(page, "True/False").click();
+    await modeControl(page).click();
+    await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+    await expect(page.getByRole("alert", { name: "Round could not load" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Skip question", exact: true })).toHaveCount(0);
+    if (recovery === "retry") await page.getByRole("button", { name: "Try again", exact: true }).click();
+    else await chooseOnlyMode(page, "Sort");
+    await expect(page.getByRole("alert", { name: "Round could not load" })).toBeHidden();
+    await expect(page.getByRole("button", { name: "Skip question", exact: true })).toBeVisible();
+  }
+  expect(pageErrors).toEqual([]);
+});
+
+test("rapid mode changes prepare only the latest selection", { tag: "@mobile" }, async ({ page }) => {
+  await chooseOnlyMode(page, "True/False");
+  await page.clock.install();
+  await page.clock.pauseAt(new Date());
+  await modeControl(page).click();
+  await mixOption(page, "Sort").click();
+  await mixOption(page, "True/False").click();
+  await mixOption(page, "Peek").click();
+  await mixOption(page, "Sort").click();
+  await mixOption(page, "True/False").click();
+  await mixOption(page, "Peek").click();
+  await modeControl(page).click();
+  await expect(page.getByLabel("Preparing the next round")).toBeVisible();
+  await page.clock.runFor(200);
+  await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+  await expect(page.getByRole("button", { name: "True", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "True", exact: true }).click();
+  await page.getByRole("button", { name: /^Next card/ }).click();
+  await expect(page.getByRole("button", { name: "True", exact: true })).toBeEnabled();
+});
+
+test("switching through every game mode keeps new questions playable", { tag: "@mobile" }, async ({ page }) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  for (const modeLabel of modeLabels) {
+    await chooseOnlyMode(page, modeLabel);
+    await expect(page.getByRole("button", { name: "Skip question", exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Skip question", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Skip question", exact: true })).toBeVisible();
+  }
+  expect(pageErrors).toEqual([]);
+});
+
+test("iPad Bridges and Tunnels loads Medium after Easy across available modes", { tag: "@mobile" }, async ({ page }) => {
+  await page.setViewportSize({ width: 834, height: 1194 });
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await chooseOnlyBuiltInTopic(page, "Bridges & Tunnels");
+  // Exercise the default mixed selection first, then every available mode.
+  for (const modeLabel of ["mix", ...modeLabels.filter((label) => label !== "Quiz Run")]) {
+    if (modeLabel !== "mix") await chooseOnlyMode(page, modeLabel);
+    await page.getByRole("button", { name: "Easy", exact: true }).click();
+    await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+    await page.getByRole("button", { name: "Skip question", exact: true }).click();
+    await page.getByRole("button", { name: "Med", exact: true }).click();
+    await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+    await expect(page.getByRole("alert", { name: "Round could not load" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Skip question", exact: true })).toBeVisible();
+  }
+  // Also switch difficulty while answered feedback is still on screen.
+  await chooseOnlyMode(page, "True/False");
+  await page.getByRole("button", { name: "Easy", exact: true }).click();
+  await page.getByRole("button", { name: "True", exact: true }).click();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  await page.getByRole("button", { name: "Med", exact: true }).click();
+  await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+  await expect(page.getByLabel("Answer feedback")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "True", exact: true })).toBeEnabled();
+  expect(pageErrors).toEqual([]);
 });
 
 test("offline saving stays in Setup and the app shell supports an offline reload", { tag: "@mobile" }, async ({ page, context }) => {
@@ -2711,17 +2832,17 @@ test("a mystery flag gives one clue retry and unlocks a country passport", { tag
   const passport = page.getByText("Open country passport", { exact: true }).locator("xpath=ancestor::details[1]");
   await expect(passport).toBeVisible();
   const passportCard = passport.locator("xpath=ancestor::div[contains(@class, 'overflow-hidden')][1]");
-  await expect(passportCard.getByText("Population", { exact: true })).toBeVisible();
+  await expect(passportCard.getByText("Area", { exact: true })).toBeVisible();
   const escapedCapital = answerCountry!.capital.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   await expect(passportCard.locator("p").filter({ hasText: new RegExp(`${escapedCapital} ·`) })).toBeVisible();
   await passport.locator("summary").click();
-  await expect(passport.getByText("Area", { exact: true })).toBeVisible();
+  await expect(passport.getByText("Population", { exact: true })).toBeVisible();
   await expect(passport.getByText("Land neighbors", { exact: true })).toBeVisible();
   await expect(passport.getByText("Highest point", { exact: true })).toBeVisible();
   await expect(passport.getByText("Region", { exact: true })).toBeVisible();
   await expect(passport.getByText("Country code", { exact: true })).toBeVisible();
   await expect(passport.getByText(answerCountry!.capital, { exact: true })).toHaveCount(0);
-  await expect(passport.getByText("Population", { exact: true })).toHaveCount(0);
+  await expect(passport.getByText("Area", { exact: true })).toHaveCount(0);
   await expect(passport.getByText("Continent", { exact: true })).toHaveCount(0);
   await expect(page.getByText(/^Image:/).first()).toBeVisible();
 

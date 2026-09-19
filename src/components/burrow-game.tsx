@@ -924,6 +924,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const [miniChallengeActive, setMiniChallengeActive] = useState(false);
   const [miniChallengePending, setMiniChallengePending] = useState(false);
   const [roundsPreparing, setRoundsPreparing] = useState(false);
+  const [roundPreparationFailure, setRoundPreparationFailure] = useState<ConfiguredRoundOptions | null>(null);
   const anonymousInstallIdRef = useRef<string | null>(null);
   const playSessionIdRef = useRef("");
   const playEventSequenceRef = useRef(0);
@@ -998,15 +999,38 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     }
   }, [buildQuestionsForScope, mixConfigurationFor, prepareRoundForMode]);
 
+  const prepareConfiguredRounds = useCallback((options: ConfiguredRoundOptions) => {
+    let lastError: unknown;
+    let attemptOptions = options;
+    try {
+      // A seed-dependent failure must not strand the player on the loading
+      // screen. Try fresh candidates within the same topic/mode selection.
+      for (let attempt = 0; attempt < 3; attempt += 1) {
+        attemptOptions = { ...options, seed: options.seed + attempt * 137 };
+        try {
+          regenerateConfiguredRounds(attemptOptions);
+          setRoundPreparationFailure(null);
+          return;
+        } catch (error) {
+          lastError = error;
+        }
+      }
+      console.error("Could not prepare the next round", lastError);
+      setRoundPreparationFailure(attemptOptions);
+    } finally {
+      setRoundsPreparing(false);
+    }
+  }, [regenerateConfiguredRounds]);
+
   const scheduleConfiguredRoundRegeneration = useCallback((options: ConfiguredRoundOptions) => {
+    setRoundPreparationFailure(null);
     setRoundsPreparing(true);
     if (roundRegenerationTimerRef.current !== null) window.clearTimeout(roundRegenerationTimerRef.current);
     roundRegenerationTimerRef.current = window.setTimeout(() => {
       roundRegenerationTimerRef.current = null;
-      regenerateConfiguredRounds(options);
-      setRoundsPreparing(false);
+      prepareConfiguredRounds(options);
     }, 140);
-  }, [regenerateConfiguredRounds]);
+  }, [prepareConfiguredRounds]);
 
   useEffect(() => () => {
     if (roundRegenerationTimerRef.current !== null) window.clearTimeout(roundRegenerationTimerRef.current);
@@ -1169,7 +1193,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       const loadedInterests = normalizeInterests(loadedProfile.interests, playableTopics);
       const loadedScope = adaptiveTopicScopeFor("mixed", loadedInterests, loadedProfile.progress, playableTopics);
       setProfilesState(loadedProfiles);
-      regenerateConfiguredRounds({
+      prepareConfiguredRounds({
         scope: loadedScope,
         nextMode: "mix",
         interests: loadedInterests,
@@ -1184,7 +1208,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     }, 0);
 
     return () => window.clearTimeout(loadSavedProfiles);
-  }, [playableTopics, regenerateConfiguredRounds]);
+  }, [playableTopics, prepareConfiguredRounds]);
 
   useEffect(() => {
     if (!profilesReady) return;
@@ -1486,14 +1510,14 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   })();
 
   useEffect(() => {
-    if (!profilesReady || !currentPlayTarget) return;
+    if (!profilesReady || roundsPreparing || roundPreparationFailure || !currentPlayTarget) return;
     const itemKey = currentPlayTarget.itemKey ?? stableRoundKey(currentPlayTarget.itemId);
     const viewKey = `${currentPlayTarget.challengeMode}:${currentPlayTarget.itemId}:${itemKey}`;
     if (lastViewedPlayKeyRef.current === viewKey) return;
     lastViewedPlayKeyRef.current = viewKey;
     roundStartedAtRef.current = Date.now();
     recordPlayEvent({ ...currentPlayTarget, action: "view", itemKey });
-  }, [currentPlayTarget, profilesReady, recordPlayEvent]);
+  }, [currentPlayTarget, profilesReady, recordPlayEvent, roundPreparationFailure, roundsPreparing]);
 
   const setProgress = useCallback((update: Progress | ((current: Progress) => Progress)) => {
     const activeProfileId = activeProfile.id;
@@ -2434,6 +2458,24 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
             <div>
               <span aria-hidden="true" className="mx-auto block h-8 w-8 rounded-lg border-2 border-[#092421] bg-[#f0c84b] shadow-[2px_2px_0_#092421]" />
               <p className="mt-3 text-lg font-black text-[#102f36]">Preparing the next round…</p>
+            </div>
+          </section>
+        ) : roundPreparationFailure && !showCollection ? (
+          <section
+            role="alert"
+            aria-label="Round could not load"
+            className="grid min-h-[320px] flex-1 place-items-center rounded-xl border-2 border-[#092421] bg-[#fffdf6] p-6 text-center shadow-[4px_4px_0_#092421]"
+          >
+            <div>
+              <p className="text-lg font-black text-[#102f36]">This round couldn’t load.</p>
+              <p className="mt-2 text-sm font-semibold">Try again, or choose another mode or topic above.</p>
+              <button
+                type="button"
+                onClick={() => scheduleConfiguredRoundRegeneration({ ...roundPreparationFailure, seed: roundPreparationFailure.seed + 137 })}
+                className="mt-4 min-h-12 rounded-lg border-2 border-[#092421] bg-[#102f36] px-5 py-2 font-black text-white shadow-[3px_3px_0_#092421]"
+              >
+                Try again
+              </button>
             </div>
           </section>
         ) : miniChallengeActive ? (

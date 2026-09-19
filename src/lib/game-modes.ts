@@ -647,7 +647,7 @@ const collectionCardCatalog: KnowledgeCard[] = [
   ...sharkRecords.map((shark) => sharkCard(shark)),
   ...spaceCards.map((space) => spaceCard(space, space.kind === "star" ? "temperature" : space.kind === "planet" ? "distance" : "size")),
   ...jetRecords.map((jet) => jetCard(jet)),
-  ...countries.map((country) => countryCard(country)),
+  ...countries.map((country) => countryCard(country, "area")),
 ];
 
 export const collectionCards = (): KnowledgeCard[] => collectionCardCatalog;
