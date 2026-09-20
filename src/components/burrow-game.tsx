@@ -12,6 +12,7 @@ import {
 import { EqualGroupsBoard } from "@/components/equal-groups-board";
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid, GameQuestionCard, GameRoundLayout } from "@/components/game-question-ui";
 import { OfflineReady } from "@/components/offline-ready";
+import { SaveTransfer } from "@/components/save-transfer";
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { useModalFocus } from "@/components/use-modal-focus";
 import { weightTopicsForAccuracy } from "@/lib/adaptive-topics";
@@ -24,6 +25,7 @@ import { autoDifficulty, peekRevealSettings } from "@/lib/difficulty";
 import { poolForDifficulty } from "@/lib/difficulty-pool";
 import { migrateTopicSelection } from "@/lib/topic-selection";
 import { useSoundEffects } from "@/lib/sound-effects";
+import { profilesKey, type LearnerProfile, type ProfilesState, type Progress } from "@/lib/profile-save";
 import {
   buildFactRoundFromCards,
   buildFactRound,
@@ -73,38 +75,6 @@ import {
   type LearningExposure,
   type LearningIdentity,
 } from "@/lib/learning-variety";
-
-type Progress = {
-  xp: number;
-  level: number;
-  streak: number;
-  bestStreak: number;
-  sessions: number;
-  correct: number;
-  answered: number;
-  challengeMilestone: number;
-  difficulty: Difficulty;
-  seenIds: string[];
-  learningHistory: LearningExposure[];
-  unlockedCards: string[];
-  topicWins: Record<KnowledgeTopic, number>;
-  topicStats: Record<string, { correct: number; answered: number }>;
-  modeWins: Record<GameMode, number>;
-  modeStats: Record<ChallengeMode, { correct: number; answered: number; collected: number }>;
-};
-
-type LearnerProfile = {
-  id: string;
-  name: string;
-  interests: RoundTopic[];
-  progress: Progress;
-};
-
-type ProfilesState = {
-  activeProfileId: string;
-  profiles: LearnerProfile[];
-  knownTopics: RoundTopic[];
-};
 
 type ResultState = {
   correct: boolean;
@@ -221,7 +191,6 @@ const initialProgress: Progress = {
   modeStats: emptyModeStats(),
 };
 
-const profilesKey = "burrow-profiles-v1";
 const legacyProfilesKey = "rabbit-hole-profiles-v1";
 const legacyProgressKey = "rabbit-hole-progress-v1";
 const anonymousInstallKey = "burrow-anonymous-install-v1";
@@ -368,6 +337,21 @@ const defaultProfiles = (legacyProgress?: Partial<Progress>, interests: RoundTop
   knownTopics: [...interests],
 });
 
+const normalizeProfiles = (parsed: Partial<ProfilesState>, availableTopics: readonly RoundTopic[]): ProfilesState | null => {
+  const profiles = (parsed.profiles ?? []).map((profile, index) => ({
+    id: profile.id ?? `profile-${index}`,
+    name: profile.name?.trim().slice(0, 18) || `Player ${index + 1}`,
+    interests: migrateTopicSelection({ interests: profile.interests, knownTopics: parsed.knownTopics, availableTopics }).interests,
+    progress: normalizeProgress(profile.progress),
+  }));
+  if (!profiles.length) return null;
+  return {
+    activeProfileId: profiles.some((profile) => profile.id === parsed.activeProfileId) ? parsed.activeProfileId ?? profiles[0].id : profiles[0].id,
+    profiles,
+    knownTopics: [...availableTopics],
+  };
+};
+
 const loadProfiles = (availableTopics: readonly RoundTopic[] = allKnowledgeTopics): ProfilesState => {
   const starterTopics = [...availableTopics];
   if (typeof window === "undefined") return defaultProfiles(undefined, starterTopics);
@@ -375,25 +359,8 @@ const loadProfiles = (availableTopics: readonly RoundTopic[] = allKnowledgeTopic
   const savedProfiles = window.localStorage.getItem(profilesKey) ?? window.localStorage.getItem(legacyProfilesKey);
   if (savedProfiles) {
     try {
-      const parsed = JSON.parse(savedProfiles) as Partial<ProfilesState>;
-      const topicSelection = (interests?: readonly RoundTopic[]) => migrateTopicSelection({
-        interests,
-        knownTopics: parsed.knownTopics,
-        availableTopics,
-      });
-      const profiles = (parsed.profiles ?? []).map((profile, index) => ({
-        id: profile.id ?? `profile-${index}`,
-        name: profile.name?.trim().slice(0, 18) || `Player ${index + 1}`,
-        interests: topicSelection(profile.interests).interests,
-        progress: normalizeProgress(profile.progress),
-      }));
-      if (profiles.length) {
-        return {
-          activeProfileId: profiles.some((profile) => profile.id === parsed.activeProfileId) ? parsed.activeProfileId ?? profiles[0].id : profiles[0].id,
-          profiles,
-          knownTopics: [...availableTopics],
-        };
-      }
+      const normalized = normalizeProfiles(JSON.parse(savedProfiles) as Partial<ProfilesState>, availableTopics);
+      if (normalized) return normalized;
     } catch {
       // Fall through to legacy progress migration.
     }
@@ -1719,6 +1686,32 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setCelebration(`${nextProfile.name}'s turn.`);
   };
 
+  const importProfiles = (saved: ProfilesState) => {
+    const restored = normalizeProfiles(saved, playableTopics);
+    if (!restored) throw new Error("No players to import");
+    // Write first: a quota/storage failure must leave both the current save and UI intact.
+    window.localStorage.setItem(profilesKey, JSON.stringify(restored));
+    const restoredProfile = restored.profiles.find((profile) => profile.id === restored.activeProfileId)!;
+    setProfilesState(restored);
+    setShowCollection(false);
+    setTopic("mixed");
+    setMode("mix");
+    setMixModes([...defaultMixPattern]);
+    resetRunState();
+    scheduleConfiguredRoundRegeneration({
+      scope: adaptiveTopicScopeFor("mixed", restoredProfile.interests, restoredProfile.progress, playableTopics),
+      nextMode: "mix",
+      interests: restoredProfile.interests,
+      difficulty: restoredProfile.progress.difficulty,
+      seed: freshSeed(313),
+      seenIds: restoredProfile.progress.seenIds,
+      requestedModes: defaultMixPattern,
+      unlockedTitles: restoredProfile.progress.unlockedCards,
+      history: restoredProfile.progress.learningHistory,
+    });
+    setCelebration(`${restoredProfile.name}'s save restored.`);
+  };
+
   const createProfile = () => {
     const name = window.prompt("Profile name");
     const cleanName = name?.trim();
@@ -2446,6 +2439,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           onConfirmedReset={() => resetProgress(true)}
           soundEnabled={soundEffects.enabled}
           onSoundToggle={soundEffects.toggle}
+          saveTransfer={<SaveTransfer profilesState={profilesState} cards={allCards} ready={profilesReady} onImport={importProfiles} />}
         />
 
         {roundsPreparing ? (
@@ -2687,6 +2681,7 @@ function GameHud({
   onConfirmedReset,
   soundEnabled,
   onSoundToggle,
+  saveTransfer,
 }: {
   profiles: LearnerProfile[];
   activeProfileId: string;
@@ -2716,6 +2711,7 @@ function GameHud({
   onConfirmedReset: () => void;
   soundEnabled: boolean;
   onSoundToggle: () => void;
+  saveTransfer: ReactNode;
 }) {
   const [openTray, setOpenTray] = useState<"mode" | "topics" | "more" | null>(null);
   const [confirmReset, setConfirmReset] = useState(false);
@@ -2891,6 +2887,7 @@ function GameHud({
                 <span>Sound effects</span><span>{soundEnabled ? "On" : "Off"}</span>
               </button>
               <OfflineReady compact selectedImageUrls={selectedOfflineImages} warmImageUrls={warmOfflineImages} />
+              {saveTransfer}
               <LearningRecapPanel recap={learningRecap} />
             </div>
           </section>

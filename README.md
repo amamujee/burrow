@@ -40,6 +40,16 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000), or go directly to [http://localhost:3000/play](http://localhost:3000/play).
 
+## Move Saved Progress to a New Device
+
+1. On the old device, open Burrow where you normally play (the Home Screen app or your usual browser), then choose **More → Setup → Export save**.
+2. On iPad, use **AirDrop** or **Save to Files** in the share sheet. Browsers without file sharing download a `burrow-save-….json` file instead. Keep a copy outside the old device.
+3. On the new device, open the app or browser you intend to play in, then choose **More → Setup → Import save** and select that file.
+4. Review the saved players, then choose **Replace players and import**. Import replaces all profiles on that device; export any existing progress first if you want to keep it.
+5. Check the active player, level, and collection before erasing the old device.
+
+Saves include every player's progress, cards, learning history, topics, difficulty, and the active player. Play resumes with a new round. Sound preferences and downloaded offline assets stay device-specific. This is a manual transfer, not automatic cloud sync. Safari and the Home Screen app can have separate saves, so export and import inside the place you actually play.
+
 ## Useful Scripts
 
 ```bash
