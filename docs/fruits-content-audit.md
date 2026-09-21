@@ -2,7 +2,7 @@
 
 The Fruits pack adds 125 distinct fruit cards with photographs and representative origin or cultivation associations across six continents. Familiar fruits anchor the easier pool; regional fruits such as pulasan, safou, riberry, cupuaçu and salal add discovery at higher difficulties.
 
-The latest expansion adds 25 familiar fruits and market types, including grapefruit, mandarins, nectarines, cantaloupe, honeydew, dates, cranberries, avocados and olives. Named varieties and cultivar groups are explicitly identified: this is not a count of 125 unique botanical species. All original 100 records and photos are preserved.
+The latest expansion adds 25 familiar fruits and market types, including grapefruit, mandarins, nectarines, cantaloupe, honeydew, dates, cranberries, avocados and olives. Named varieties and cultivar groups are explicitly identified: this is not a count of 125 unique botanical species. All original 100 fruit records are preserved. The subsequent [photograph audit](fruits-photo-audit.md) improves 36 photos across the expanded catalog and refreshes image resolution.
 
 ## Comparison rules
 
@@ -19,10 +19,10 @@ The collection retains scientific name, flavor, texture, finding-it notes, measu
 
 `scripts/data/fruits.json` separates factual `sourceUrls` from `imageSourceUrl`. Weight references include Purdue's *Fruits of Warm Climates*, UF/IFAS extension monographs, the UK 2013 fruit/vegetable sampling report, the Thai Department of Agricultural Extension, UNCTAD, university cultivar trials, the National Fruit Collection, horticultural studies, plant patents, and fruit-specific reference pages. A source supporting a fruit's identity or flavor does not turn an editorial score into a measurement.
 
-Every photo records the original Commons filename, page, creator, license, license URL and original download URL. All 125 are real fruit photographs under a Creative Commons attribution license or public domain; local copies are resized JPEGs and credited as such. Existing category images are unchanged. The photos were checked using contact sheets, direct inspection of replacements, exact hashes and perceptual comparisons.
+Every photo records the original Commons filename, page, creator, license, license URL and original download URL. All 125 are real fruit photographs under a Creative Commons attribution license, CC0 or public domain; local copies are resized JPEGs and credited as such. Existing category images are unchanged. The photos were checked using contact sheets, direct inspection of replacements, exact hashes and perceptual comparisons. The [125-photo inventory and Collection display audit](fruits-photo-audit.md) records the resulting replacements, dimensions and presentation changes.
 
 ## Maintenance and regression coverage
 
-Run `node scripts/generate-fruits-pack.mjs` and `npm run generate:offline-manifest` after editing the source. No network access is needed to regenerate.
+After changing photo files, run `node scripts/fingerprint-fruit-images.mjs` to refresh their versioned paths. Run `node scripts/generate-fruits-pack.mjs` and `npm run generate:offline-manifest` after editing the source. No network access is needed to regenerate.
 
 `tests/e2e/fruits-content.spec.ts` covers the 125-card catalog, profile and image provenance, ascending full-collection order and ties, unknown-weight handling, difficulty sweeps, selected-topic isolation, rating compatibility, numerical accuracy, reachability, and tablet/mobile play and collection rendering. The existing generic round and landing tests also include dynamically loaded Fruits.

@@ -10,6 +10,7 @@ import {
   challengeQuestionInterval,
 } from "@/components/core-mini-challenge";
 import { EqualGroupsBoard } from "@/components/equal-groups-board";
+import { CollectionPhotoDialog } from "@/components/collection-photo-dialog";
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid, GameQuestionCard, GameRoundLayout } from "@/components/game-question-ui";
 import { OfflineReady } from "@/components/offline-ready";
 import { SaveTransfer } from "@/components/save-transfer";
@@ -4476,6 +4477,8 @@ function CollectionBook({
   const [selectedTopic, setSelectedTopic] = useState<RoundTopic | undefined>(initialTopic);
   const [expandedTopic, setExpandedTopic] = useState<RoundTopic | undefined>();
   const [cardDetailsExpanded, setCardDetailsExpanded] = useState(false);
+  const [photoCard, setPhotoCard] = useState<KnowledgeCard | null>(null);
+  const closePhoto = useCallback(() => setPhotoCard(null), []);
   const [rarityFilter, setRarityFilter] = useState<"all" | CardRarity>("all");
   const activeTopic = topicStats.find((item) => item.id === selectedTopic) ?? topicStats[0];
   const categoryCards = activeTopic ? cards.filter((card) => card.topic === activeTopic.id) : [];
@@ -4628,15 +4631,19 @@ function CollectionBook({
             </div>
           )}
         </header>
-        <div className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className={`grid gap-2 ${activeTopic.id === "fruits" ? "grid-cols-[repeat(auto-fill,minmax(min(100%,260px),1fr))]" : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"}`}>
           {visibleCards.map((card) => {
             const isUnlocked = isCardUnlocked(unlockedCardSet, card);
             const profileDetails = collectionCardProfileDetails(card);
             return (
               <div key={`${card.topic}-${card.id}`} className="overflow-hidden rounded-lg border-2 border-[#092421] bg-white">
-                <div className={`relative flex h-36 overflow-hidden bg-[#e3efe4] ${isUnlocked ? "" : "grayscale"}`}>
-                  {isUnlocked ? <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} compact /> : <LockedCard topic={card.topic} />}
-                  {isUnlocked && card.metadata?.rarity ? (
+                <div className={`relative flex ${card.topic === "fruits" ? "aspect-square" : "h-36"} overflow-hidden bg-[#e3efe4] ${isUnlocked ? "" : "grayscale"}`}>
+                  {isUnlocked && card.topic === "fruits" ? (
+                    <button type="button" aria-label={`Enlarge ${card.title} photo`} onClick={() => setPhotoCard(card)} className="flex h-full w-full cursor-zoom-in focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-[#9f3f2b]">
+                      <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} compact />
+                    </button>
+                  ) : isUnlocked ? <MediaImage image={card.image} imageAlt={card.imageAlt} topic={card.topic} compact /> : <LockedCard topic={card.topic} />}
+                  {isUnlocked && card.topic !== "fruits" && card.metadata?.rarity ? (
                     <div className="absolute right-2 top-2 z-10">
                       <RarityBadge rarity={card.metadata.rarity} compact />
                     </div>
@@ -4644,6 +4651,12 @@ function CollectionBook({
                 </div>
                 <div className="p-2">
                   <p className="text-base font-black leading-tight text-[#102f36]">{isUnlocked ? card.title : "Locked card"}</p>
+                  {isUnlocked && card.topic === "fruits" && (
+                    <div className="mt-1 flex items-center justify-between gap-2">
+                      {card.metadata?.rarity && <RarityBadge rarity={card.metadata.rarity} compact />}
+                      <span className="text-[10px] font-bold text-[#5f6b5d]">Tap photo to enlarge</span>
+                    </div>
+                  )}
                   {isUnlocked && <p className="mt-2 text-[8px] font-black uppercase tracking-[0.14em] text-[#72543e]">{card.statLabel}</p>}
                   <p className={`${isUnlocked ? "mt-0.5" : "mt-1"} text-sm font-black text-[#9f3f2b]`}>{isUnlocked ? card.statDisplay : "Win a round"}</p>
                   {isUnlocked && <p className="mt-1 text-[10px] font-black uppercase tracking-[0.08em] text-[#72543e]">{card.subStat}</p>}
@@ -4693,6 +4706,7 @@ function CollectionBook({
           </div>
         )}
       </article>
+      {photoCard && <CollectionPhotoDialog card={photoCard} onClose={closePhoto} />}
     </section>
   );
 }

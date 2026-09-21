@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import sharp from "sharp";
 import { expect, test, type Page } from "@playwright/test";
 import { loadPlayablePacks } from "../../src/lib/pack-loader";
 import { packToPlayableDeck } from "../../src/lib/pack-adapter";
@@ -18,7 +19,7 @@ const deck = packToPlayableDeck(pack);
 const weighted = new Map(source.cards.filter((card) => card.weight).map((card) => [card.id, card.weight!.grams]));
 
 test.describe("Fruits", { tag: "@logic" }, () => {
-  test("125 distinct fruit cards have local photos, provenance and complete profiles across six continents", () => {
+  test("125 distinct fruit cards have detailed local photos, provenance and complete profiles across six continents", async () => {
     expect(pack.cards).toHaveLength(125);
     expect(new Set(pack.cards.map((card) => card.id)).size).toBe(125);
     expect(new Set(pack.cards.map((card) => card.name)).size).toBe(125);
@@ -28,9 +29,16 @@ test.describe("Fruits", { tag: "@logic" }, () => {
     for (const card of source.cards) {
       const data = fs.readFileSync(path.join(process.cwd(), "public", card.image));
       expect(data.byteLength, card.id).toBeGreaterThan(1024);
-      hashes.add(crypto.createHash("sha256").update(data).digest("hex"));
+      const dimensions = await sharp(data).metadata();
+      expect(Math.max(dimensions.width ?? 0, dimensions.height ?? 0), `${card.id} photo resolution`).toBeGreaterThanOrEqual(960);
+      expect(Math.min(dimensions.width ?? 0, dimensions.height ?? 0), `${card.id} photo short edge`).toBeGreaterThanOrEqual(600);
+      const hash = crypto.createHash("sha256").update(data).digest("hex");
+      hashes.add(hash);
+      expect(card.image, `${card.id} must bypass older cached photos`).toBe(`/burrow-assets/fruits/${card.id}-${hash.slice(0, 12)}.jpg`);
       expect(card.imageSourceUrl).toContain("commons.wikimedia.org/wiki/File:");
-      expect(card.imageLicense).toMatch(/CC BY|Public domain/);
+      expect(card.imageLicense).toMatch(/CC BY|CC0|Public domain/);
+      expect(card.imageCreator, card.id).toBeTruthy();
+      expect(card.imageLicenseUrl, card.id).toMatch(/^https?:\/\//);
       expect(card.sourceFile).toBeTruthy();
       expect(card.sourceUrls.length).toBeGreaterThan(0);
       for (const field of [card.scientificName, card.origin, card.flavor, card.texture, card.availabilityBand, card.fact]) expect(field).toBeTruthy();
@@ -174,13 +182,62 @@ test("Fruits opens, plays, and displays sourced profiles on tablet and mobile", 
   const newPhoto = newFruit.getByRole("img", { name: "Golden Kiwifruit fruit", exact: true });
   await expect.poll(() => newPhoto.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
   await newFruit.screenshot({ path: testInfo.outputPath("fruits-new-card.png") });
+  const enlarge = newFruit.getByRole("button", { name: "Enlarge Golden Kiwifruit photo" });
+  const frame = (await enlarge.boundingBox())!;
+  expect(frame.width).toBeGreaterThanOrEqual(260);
+  expect(Math.abs(frame.width - frame.height)).toBeLessThan(2);
+  await expect(newPhoto).toHaveCSS("object-fit", "contain");
+  await enlarge.click();
+  const dialog = page.getByRole("dialog", { name: "Golden Kiwifruit" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "Close fruit photo" })).toBeFocused();
+  const detailImage = dialog.getByRole("img");
+  await expect.poll(() => detailImage.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+  // naturalWidth is density-corrected on high-DPI phones; inspect the decoded
+  // response to verify actual photo pixels rather than CSS pixels.
+  expect(await detailImage.evaluate(async (image: HTMLImageElement) => {
+    const bitmap = await createImageBitmap(await (await fetch(image.currentSrc)).blob());
+    const width = bitmap.width;
+    bitmap.close();
+    return width;
+  })).toBeGreaterThanOrEqual(960);
+  await expect(detailImage).toHaveCSS("object-fit", "contain");
+  await dialog.getByRole("button", { name: "Zoom in" }).click();
+  await expect(dialog.getByRole("button", { name: "Zoom out" })).toHaveAttribute("aria-pressed", "true");
+  const viewport = dialog.getByLabel("Fruit photo detail");
+  expect(await viewport.evaluate((element) => element.scrollWidth >= element.clientWidth * 1.9 && element.scrollHeight >= element.clientHeight * 1.9)).toBe(true);
+  await viewport.evaluate((element) => { element.scrollLeft = 50; element.scrollTop = 50; });
+  expect(await viewport.evaluate((element) => element.scrollLeft === 50 && element.scrollTop === 50)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath("fruits-photo-zoom.png") });
+  await dialog.getByRole("button", { name: "Zoom out" }).click();
+  await dialog.getByText("Photo credit", { exact: true }).click();
+  await expect(dialog.getByText(/Wikimedia Commons/)).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("fruits-photo-detail.png") });
+  const dialogBox = (await dialog.boundingBox())!;
+  expect(dialogBox.y).toBeGreaterThanOrEqual(0);
+  expect(dialogBox.y + dialogBox.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+  await dialog.getByRole("button", { name: "Close fruit photo" }).focus();
+  await page.keyboard.press("Shift+Tab");
+  await expect(dialog.getByText("Photo credit", { exact: true })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(enlarge).toBeFocused();
+  await enlarge.click();
+  await detailImage.dispatchEvent("error");
+  await expect(dialog.getByRole("alert")).toContainText("This photo could not load");
+  await expect(dialog.getByRole("button", { name: "Zoom in" })).toBeDisabled();
+  await dialog.getByRole("button", { name: "Close fruit photo" }).click();
+  await enlarge.click();
+  await expect(dialog.getByRole("alert")).toHaveCount(0);
+  await expect.poll(() => detailImage.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+  await dialog.getByRole("button", { name: "Close fruit photo" }).click();
   const lime = collection.locator("div.overflow-hidden.rounded-lg").filter({ has: page.getByText("Finger Lime", { exact: true }) });
   await expect(lime.getByText("Not documented", { exact: true })).toBeVisible();
   await lime.locator("summary").click();
   await expect(lime.getByText("Citrus australasica", { exact: true })).toBeVisible();
   await expect(lime.getByText("Tiny popping juice pearls", { exact: true })).toBeVisible();
   const photo = lime.getByRole("img", { name: "Finger Lime fruit", exact: true });
-  await expect(photo).toHaveAttribute("data-original-src", "/burrow-assets/fruits/finger-lime.jpg");
+  await expect(photo).toHaveAttribute("data-original-src", source.cards.find((card) => card.id === "finger-lime")!.image);
   await expect.poll(() => photo.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
   expect(await lime.evaluate((card) => [...card.querySelectorAll("p, dt, dd")]
     .filter((text) => text.scrollWidth > text.clientWidth + 1)

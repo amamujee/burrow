@@ -21,7 +21,7 @@ const pack = {
   status: "playable",
   audience: { minAge: 6, maxAge: 11, readingLevel: "short fruit facts with scientific names in the field notes" },
   recommendedModes: ["trumps", "sort", "fact", "peek", "number", "odd", "geo"],
-  landing: { detail: `${fruitCount} fruits, from sweet to surprising`, image: "/burrow-assets/fruits/mangosteen.jpg", imageFit: "cover", order: 120 },
+  landing: { detail: `${fruitCount} fruits, from sweet to surprising`, image: (source.cards.find((card) => card.id === "mangosteen") ?? source.cards[0]).image, imageFit: "cover", order: 120 },
   sources: source.cards.flatMap((card) => card.sourceUrls.map((url, index) => ({
     label: `${card.name}${index ? " — weight reference" : " — fruit reference"}`,
     url,

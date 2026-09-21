@@ -25,7 +25,7 @@
   ],
   "landing": {
     "detail": "125 fruits, from sweet to surprising",
-    "image": "/burrow-assets/fruits/mangosteen.jpg",
+    "image": "/burrow-assets/fruits/mangosteen-487a94b3f8cc.jpg",
     "imageFit": "cover",
     "order": 120
   },
@@ -860,7 +860,7 @@
     {
       "id": "apple",
       "name": "Apple",
-      "image": "/burrow-assets/fruits/apple.jpg",
+      "image": "/burrow-assets/fruits/apple-9d71d4eec189.jpg",
       "imageAlt": "Apple fruit",
       "imageCredit": "Dllu / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Golden Delicious, SweeTango, Granny Smith, and Gala apples 3.JPG",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Golden_Delicious,_SweeTango,_Granny_Smith,_and_Gala_apples_3.JPG",
@@ -978,10 +978,10 @@
     {
       "id": "banana",
       "name": "Banana",
-      "image": "/burrow-assets/fruits/banana.jpg",
-      "imageAlt": "Banana fruit",
-      "imageCredit": "TimothyPilgrim / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Bananavarieties.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Bananavarieties.jpg",
+      "image": "/burrow-assets/fruits/banana-ef61e2694c71.jpg",
+      "imageAlt": "A partially peeled banana against a white background",
+      "imageCredit": "Filo gèn' / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Banana on whitebackground.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Banana_on_whitebackground.jpg",
       "fact": "A banana plant looks like a tree, but its tall stem is made from tightly wrapped leaf bases.",
       "stats": [
         {
@@ -1096,7 +1096,7 @@
     {
       "id": "orange",
       "name": "Orange",
-      "image": "/burrow-assets/fruits/orange.jpg",
+      "image": "/burrow-assets/fruits/orange-89c06feb9e7a.jpg",
       "imageAlt": "Orange fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Oranges - whole-halved-segment.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Oranges_-_whole-halved-segment.jpg",
@@ -1214,7 +1214,7 @@
     {
       "id": "mango",
       "name": "Mango",
-      "image": "/burrow-assets/fruits/mango.jpg",
+      "image": "/burrow-assets/fruits/mango-bd061e7eae24.jpg",
       "imageAlt": "Mango fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Mangos - single and halved.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mangos_-_single_and_halved.jpg",
@@ -1327,10 +1327,10 @@
     {
       "id": "pineapple",
       "name": "Pineapple",
-      "image": "/burrow-assets/fruits/pineapple.jpg",
-      "imageAlt": "Pineapple fruit",
-      "imageCredit": "Suniltg at Malayalam Wikipedia / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: കൈതച്ചക്ക.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:%E0%B4%95%E0%B5%88%E0%B4%A4%E0%B4%9A%E0%B5%8D%E0%B4%9A%E0%B4%95%E0%B5%8D%E0%B4%95.jpg",
+      "image": "/burrow-assets/fruits/pineapple-9c337e00e7a4.jpg",
+      "imageAlt": "Whole pineapple with patterned golden skin and a green leafy crown",
+      "imageCredit": "Tim Reckmann from Hamm, Deutschland / Wikimedia Commons / CC BY 2.0 (https://creativecommons.org/licenses/by/2.0). Resized as JPEG. Original: Ananas (12163192435).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ananas_(12163192435).jpg",
       "fact": "A pineapple forms when many flowers join together into one big fruit.",
       "stats": [
         {
@@ -1440,7 +1440,7 @@
     {
       "id": "strawberry",
       "name": "Strawberry",
-      "image": "/burrow-assets/fruits/strawberry.jpg",
+      "image": "/burrow-assets/fruits/strawberry-afd5a49eefaf.jpg",
       "imageAlt": "Strawberry fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Garden strawberry (Fragaria × ananassa) single2.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Garden_strawberry_(Fragaria_%C3%97_ananassa)_single2.jpg",
@@ -1558,7 +1558,7 @@
     {
       "id": "grape",
       "name": "Grape",
-      "image": "/burrow-assets/fruits/grape.jpg",
+      "image": "/burrow-assets/fruits/grape-8f9003cf2dbf.jpg",
       "imageAlt": "Grape fruit",
       "imageCredit": "Vyacheslav Argenberg / Wikimedia Commons / CC BY 4.0 (https://creativecommons.org/licenses/by/4.0). Resized as JPEG. Original: Grapes, Rostov-on-Don, Russia.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Grapes,_Rostov-on-Don,_Russia.jpg",
@@ -1676,10 +1676,10 @@
     {
       "id": "watermelon",
       "name": "Watermelon",
-      "image": "/burrow-assets/fruits/watermelon.jpg",
-      "imageAlt": "Watermelon fruit",
-      "imageCredit": "Fred Hsu (Wikipedia:User:Fred Hsu on en.wikipedia) / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Taiwan 2009 Tainan City Organic Farm Watermelon FRD 7962.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Taiwan_2009_Tainan_City_Organic_Farm_Watermelon_FRD_7962.jpg",
+      "image": "/burrow-assets/fruits/watermelon-a5a35b900301.jpg",
+      "imageAlt": "Watermelon slices showing pink flesh, black seeds and green rind",
+      "imageCredit": "USDAgov / Wikimedia Commons / Public domain (https://creativecommons.org/publicdomain/mark/1.0/). Resized as JPEG. Original: K7241-7 (8454648710).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:K7241-7_(8454648710).jpg",
       "fact": "Watermelons can have yellow or orange flesh as well as the familiar red.",
       "stats": [
         {
@@ -1789,7 +1789,7 @@
     {
       "id": "peach",
       "name": "Peach",
-      "image": "/burrow-assets/fruits/peach.jpg",
+      "image": "/burrow-assets/fruits/peach-ee0c15f2478f.jpg",
       "imageAlt": "Peach fruit",
       "imageCredit": "Takkk / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Prunus persica - Peach Hungary.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Prunus_persica_-_Peach_Hungary.jpg",
@@ -1897,7 +1897,7 @@
     {
       "id": "pear",
       "name": "Pear",
-      "image": "/burrow-assets/fruits/pear.jpg",
+      "image": "/burrow-assets/fruits/pear-4bc1618749a1.jpg",
       "imageAlt": "Pear fruit",
       "imageCredit": "Keith Weller / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Pears.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pears.jpg",
@@ -2015,7 +2015,7 @@
     {
       "id": "plum",
       "name": "Plum",
-      "image": "/burrow-assets/fruits/plum.jpg",
+      "image": "/burrow-assets/fruits/plum-ada907f02125.jpg",
       "imageAlt": "Plum fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Plums African Rose - whole, halved and slice.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Plums_African_Rose_-_whole,_halved_and_slice.jpg",
@@ -2123,7 +2123,7 @@
     {
       "id": "apricot",
       "name": "Apricot",
-      "image": "/burrow-assets/fruits/apricot.jpg",
+      "image": "/burrow-assets/fruits/apricot-f08f1f0e1b0b.jpg",
       "imageAlt": "Apricot fruit",
       "imageCredit": "Silverije / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Marelica Kečkemetska ruža - zreli plodovi na grani.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Marelica_Ke%C4%8Dkemetska_ru%C5%BEa_-_zreli_plodovi_na_grani.jpg",
@@ -2231,10 +2231,10 @@
     {
       "id": "sweet-cherry",
       "name": "Sweet Cherry",
-      "image": "/burrow-assets/fruits/sweet-cherry.jpg",
-      "imageAlt": "Sweet Cherry fruit",
-      "imageCredit": "MPF / Wikimedia Commons / CC BY 2.5 (https://creativecommons.org/licenses/by/2.5). Resized as JPEG. Original: Prunus avium fruit.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Prunus_avium_fruit.jpg",
+      "image": "/burrow-assets/fruits/sweet-cherry-f068fc35aa71.jpg",
+      "imageAlt": "A handful of red sweet cherries with stems",
+      "imageCredit": "Hans Braxmeier / Wikimedia Commons / CC0 (http://creativecommons.org/publicdomain/zero/1.0/deed.en). Resized as JPEG. Original: Cherry sweet cherry red fruit 167341.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cherry_sweet_cherry_red_fruit_167341.jpg",
       "fact": "A sweet cherry has one hard stone inside, just like its larger relative the peach.",
       "stats": [
         {
@@ -2339,10 +2339,10 @@
     {
       "id": "blueberry",
       "name": "Blueberry",
-      "image": "/burrow-assets/fruits/blueberry.jpg",
-      "imageAlt": "Blueberry fruit",
-      "imageCredit": "The original Uploader was Oven Fresh at English Wikipedia / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Blueberries.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Blueberries.jpg",
+      "image": "/burrow-assets/fruits/blueberry-482269304b83.jpg",
+      "imageAlt": "Close-up of ripe blueberries showing their dusty blue skin and blossom ends",
+      "imageCredit": "Darkone ( talk · contribs ) / Wikimedia Commons / CC BY-SA 2.5 (https://creativecommons.org/licenses/by-sa/2.5). Resized as JPEG. Original: Vaccinium corymbosum Beeren.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Vaccinium_corymbosum_Beeren.jpg",
       "fact": "Blueberries have a tiny crown at the end opposite the stalk.",
       "stats": [
         {
@@ -2457,7 +2457,7 @@
     {
       "id": "raspberry",
       "name": "Raspberry",
-      "image": "/burrow-assets/fruits/raspberry.jpg",
+      "image": "/burrow-assets/fruits/raspberry-21b4d8f89300.jpg",
       "imageAlt": "Raspberry fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Raspberry - halved (Rubus idaeus).jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Raspberry_-_halved_(Rubus_idaeus).jpg",
@@ -2570,7 +2570,7 @@
     {
       "id": "blackberry",
       "name": "Blackberry",
-      "image": "/burrow-assets/fruits/blackberry.jpg",
+      "image": "/burrow-assets/fruits/blackberry-5c88777fabc9.jpg",
       "imageAlt": "Blackberry fruit",
       "imageCredit": "Ragesoss / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Ripe, ripening, and green blackberries.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ripe,_ripening,_and_green_blackberries.jpg",
@@ -2678,7 +2678,7 @@
     {
       "id": "lemon",
       "name": "Lemon",
-      "image": "/burrow-assets/fruits/lemon.jpg",
+      "image": "/burrow-assets/fruits/lemon-9a0ff6f84fb6.jpg",
       "imageAlt": "Lemon fruit",
       "imageCredit": "Elena Chochkova / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: P1030323.JPG",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:P1030323.JPG",
@@ -2786,7 +2786,7 @@
     {
       "id": "key-lime",
       "name": "Key Lime",
-      "image": "/burrow-assets/fruits/key-lime.jpg",
+      "image": "/burrow-assets/fruits/key-lime-65d8fac2a8a7.jpg",
       "imageAlt": "Key Lime fruit",
       "imageCredit": "Dinesh Valke from Thane, India / Wikimedia Commons / CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0). Resized as JPEG. Original: Citrus × aurantiifolia (Christm.) Swingle (51906868474).jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Citrus_%C3%97_aurantiifolia_(Christm.)_Swingle_(51906868474).jpg",
@@ -2894,7 +2894,7 @@
     {
       "id": "coconut",
       "name": "Coconut",
-      "image": "/burrow-assets/fruits/coconut.jpg",
+      "image": "/burrow-assets/fruits/coconut-bf433117aecc.jpg",
       "imageAlt": "Coconut fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Coconuts - single and cracked open.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Coconuts_-_single_and_cracked_open.jpg",
@@ -3007,7 +3007,7 @@
     {
       "id": "pomegranate",
       "name": "Pomegranate",
-      "image": "/burrow-assets/fruits/pomegranate.jpg",
+      "image": "/burrow-assets/fruits/pomegranate-1fbb79eeb0b9.jpg",
       "imageAlt": "Pomegranate fruit",
       "imageCredit": "Augustus Binu : flickr / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Pomegranate Juice (2019).jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pomegranate_Juice_(2019).jpg",
@@ -3115,7 +3115,7 @@
     {
       "id": "fig",
       "name": "Fig",
-      "image": "/burrow-assets/fruits/fig.jpg",
+      "image": "/burrow-assets/fruits/fig-fcb459e8c80b.jpg",
       "imageAlt": "Fig fruit",
       "imageCredit": "FrogsLegs71 / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Fig cut open.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Fig_cut_open.jpg",
@@ -3233,7 +3233,7 @@
     {
       "id": "kiwifruit",
       "name": "Kiwifruit",
-      "image": "/burrow-assets/fruits/kiwifruit.jpg",
+      "image": "/burrow-assets/fruits/kiwifruit-9523063b3ec0.jpg",
       "imageAlt": "Kiwifruit fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Kiwifruit cross section.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kiwifruit_cross_section.jpg",
@@ -3341,10 +3341,10 @@
     {
       "id": "persimmon",
       "name": "Persimmon",
-      "image": "/burrow-assets/fruits/persimmon.jpg",
-      "imageAlt": "Persimmon fruit",
-      "imageCredit": "Sphl / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Kaki 20041002.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kaki_20041002.jpg",
+      "image": "/burrow-assets/fruits/persimmon-4230bf57d868.jpg",
+      "imageAlt": "Whole Fuyu persimmon and a cut half showing orange flesh",
+      "imageCredit": "Frank Schulenburg / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Fuyu persimmon fruits, one cut open.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Fuyu_persimmon_fruits,_one_cut_open.jpg",
       "fact": "Some persimmons stay crisp when ripe; other varieties need to become very soft before they lose their puckering taste.",
       "stats": [
         {
@@ -3454,10 +3454,10 @@
     {
       "id": "guava",
       "name": "Guava",
-      "image": "/burrow-assets/fruits/guava.jpg",
-      "imageAlt": "Guava fruit",
-      "imageCredit": "Wikimedia Commons contributor / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Psidium guajava fruit.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Psidium_guajava_fruit.jpg",
+      "image": "/burrow-assets/fruits/guava-36f828f444e1.jpg",
+      "imageAlt": "Whole green guavas and a cut half showing pink flesh and pale seeds",
+      "imageCredit": "Victoria Rachitzky Hoch / Wikimedia Commons / CC BY 2.0 (https://creativecommons.org/licenses/by/2.0). Resized as JPEG. Original: Goiaba, Guaiaba, Guava (270435530).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Goiaba,_Guaiaba,_Guava_(270435530).jpg",
       "fact": "Guava flesh can be white, pink, yellow or red, depending on the variety.",
       "stats": [
         {
@@ -3572,7 +3572,7 @@
     {
       "id": "papaya",
       "name": "Papaya",
-      "image": "/burrow-assets/fruits/papaya.jpg",
+      "image": "/burrow-assets/fruits/papaya-9f3f8b63e8d8.jpg",
       "imageAlt": "Papaya fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Papaya - longitudinal section.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Papaya_-_longitudinal_section.jpg",
@@ -3690,7 +3690,7 @@
     {
       "id": "rambutan",
       "name": "Rambutan",
-      "image": "/burrow-assets/fruits/rambutan.jpg",
+      "image": "/burrow-assets/fruits/rambutan-5573b48ee1d1.jpg",
       "imageAlt": "Rambutan fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Rambutans with seed.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Rambutans_with_seed.jpg",
@@ -3808,7 +3808,7 @@
     {
       "id": "mangosteen",
       "name": "Mangosteen",
-      "image": "/burrow-assets/fruits/mangosteen.jpg",
+      "image": "/burrow-assets/fruits/mangosteen-487a94b3f8cc.jpg",
       "imageAlt": "Mangosteen fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Mangosteens - whole and opened.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mangosteens_-_whole_and_opened.jpg",
@@ -3926,7 +3926,7 @@
     {
       "id": "durian",
       "name": "Durian",
-      "image": "/burrow-assets/fruits/durian.jpg",
+      "image": "/burrow-assets/fruits/durian-bff335982540.jpg",
       "imageAlt": "Durian fruit",
       "imageCredit": "مانفی / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Durian in black.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Durian_in_black.jpg",
@@ -4039,7 +4039,7 @@
     {
       "id": "jackfruit",
       "name": "Jackfruit",
-      "image": "/burrow-assets/fruits/jackfruit.jpg",
+      "image": "/burrow-assets/fruits/jackfruit-41f3d4525739.jpg",
       "imageAlt": "Jackfruit fruit",
       "imageCredit": "This work was made by Tushar Hossain and released under the license(s) stated below. Please feel free to use it for any purpose as long as you credit Tushar Hossain as author and follow the terms of the chosen license. If you use this work outside of the Wikimedia projects, I would very much like to get a note from you. Thanks! / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: The jackfruit is holding on to the tree.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:The_jackfruit_is_holding_on_to_the_tree.jpg",
@@ -4152,7 +4152,7 @@
     {
       "id": "dragon-fruit",
       "name": "Dragon Fruit",
-      "image": "/burrow-assets/fruits/dragon-fruit.jpg",
+      "image": "/burrow-assets/fruits/dragon-fruit-717269a62e69.jpg",
       "imageAlt": "Dragon Fruit fruit",
       "imageCredit": "SMasters / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Pitaya cross section ed2.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pitaya_cross_section_ed2.jpg",
@@ -4265,10 +4265,10 @@
     {
       "id": "lychee",
       "name": "Lychee",
-      "image": "/burrow-assets/fruits/lychee.jpg",
-      "imageAlt": "Lychee fruit",
-      "imageCredit": "B.navez / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Litchi chinensis fruits.JPG",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Litchi_chinensis_fruits.JPG",
+      "image": "/burrow-assets/fruits/lychee-9157cb68ca37.jpg",
+      "imageAlt": "Whole red lychees and peeled lychee showing translucent white flesh",
+      "imageCredit": "Peggy Greb, USDA ARS / Wikimedia Commons / Public domain (https://creativecommons.org/publicdomain/mark/1.0/). Resized as JPEG. Original: ARS Litchi chinensis.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:ARS_Litchi_chinensis.jpg",
       "fact": "Peel a lychee's bumpy shell and you find pale, juicy flesh around a dark seed.",
       "stats": [
         {
@@ -4378,7 +4378,7 @@
     {
       "id": "longan",
       "name": "Longan",
-      "image": "/burrow-assets/fruits/longan.jpg",
+      "image": "/burrow-assets/fruits/longan-d943b1d3ba8d.jpg",
       "imageAlt": "Longan fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Longan fruits and seed.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Longan_fruits_and_seed.jpg",
@@ -4496,7 +4496,7 @@
     {
       "id": "star-fruit",
       "name": "Star Fruit",
-      "image": "/burrow-assets/fruits/star-fruit.jpg",
+      "image": "/burrow-assets/fruits/star-fruit-052e2c95a1a6.jpg",
       "imageAlt": "Star Fruit fruit",
       "imageCredit": "SMasters / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Carambola Starfruit.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Carambola_Starfruit.jpg",
@@ -4614,7 +4614,7 @@
     {
       "id": "passion-fruit",
       "name": "Passion Fruit",
-      "image": "/burrow-assets/fruits/passion-fruit.jpg",
+      "image": "/burrow-assets/fruits/passion-fruit-ab0eeae43fd3.jpg",
       "imageAlt": "Passion Fruit fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Passion fruits - whole and halved.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Passion_fruits_-_whole_and_halved.jpg",
@@ -4727,7 +4727,7 @@
     {
       "id": "cherimoya",
       "name": "Cherimoya",
-      "image": "/burrow-assets/fruits/cherimoya.jpg",
+      "image": "/burrow-assets/fruits/cherimoya-722294e6b807.jpg",
       "imageAlt": "Cherimoya fruit",
       "imageCredit": "Hannes Grobe 21:17, 5 November 2006 (UTC) / Wikimedia Commons / CC BY-SA 2.5 (https://creativecommons.org/licenses/by-sa/2.5). Resized as JPEG. Original: Cherimoya cut hg.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cherimoya_cut_hg.jpg",
@@ -4845,10 +4845,10 @@
     {
       "id": "soursop",
       "name": "Soursop",
-      "image": "/burrow-assets/fruits/soursop.jpg",
-      "imageAlt": "Soursop fruit",
-      "imageCredit": "Damien Boilley from suburbs of Paris, France / Wikimedia Commons / CC BY 2.0 (https://creativecommons.org/licenses/by/2.0). Resized as JPEG. Original: Annona muricata 1.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Annona_muricata_1.jpg",
+      "image": "/burrow-assets/fruits/soursop-90107f5874f1.jpg",
+      "imageAlt": "Close-up of soursop showing its green skin and curved spines",
+      "imageCredit": "Francisco Farriols Sarabia / Wikimedia Commons / CC BY 4.0 (https://creativecommons.org/licenses/by/4.0). Resized as JPEG. Original: Annona muricata 1023046.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Annona_muricata_1023046.jpg",
       "fact": "Soursop has a green, softly spiked rind and pale flesh often blended into drinks.",
       "stats": [
         {
@@ -4958,10 +4958,10 @@
     {
       "id": "sugar-apple",
       "name": "Sugar Apple",
-      "image": "/burrow-assets/fruits/sugar-apple.jpg",
-      "imageAlt": "Sugar Apple fruit",
-      "imageCredit": "Pouletic / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Sugar Apple deconstructed.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Sugar_Apple_deconstructed.jpg",
+      "image": "/burrow-assets/fruits/sugar-apple-3ef7981426a5.jpg",
+      "imageAlt": "Sugar apple showing the rounded segments of its green skin",
+      "imageCredit": "Filo gèn' / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Annona squamosa ( Annonaceae ).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Annona_squamosa_(_Annonaceae_).jpg",
       "fact": "A sugar apple's knobbly surface is made of sections that become easier to separate as it ripens.",
       "stats": [
         {
@@ -5071,7 +5071,7 @@
     {
       "id": "atemoya",
       "name": "Atemoya",
-      "image": "/burrow-assets/fruits/atemoya.jpg",
+      "image": "/burrow-assets/fruits/atemoya-bac132abbac0.jpg",
       "imageAlt": "Atemoya fruit",
       "imageCredit": "Webysther Nunes / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Webysther 20150411131320 - Atemoya.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Webysther_20150411131320_-_Atemoya.jpg",
@@ -5184,7 +5184,7 @@
     {
       "id": "salak",
       "name": "Salak",
-      "image": "/burrow-assets/fruits/salak.jpg",
+      "image": "/burrow-assets/fruits/salak-1ce1afde7a4e.jpg",
       "imageAlt": "Salak fruit",
       "imageCredit": "Crisco 1492 / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Salak (Salacca zalacca), 2015-05-17.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Salak_(Salacca_zalacca),_2015-05-17.jpg",
@@ -5292,10 +5292,10 @@
     {
       "id": "langsat",
       "name": "Langsat",
-      "image": "/burrow-assets/fruits/langsat.jpg",
-      "imageAlt": "Langsat fruit",
-      "imageCredit": "Izham Alias / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Isi duku langsat.JPG",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Isi_duku_langsat.JPG",
+      "image": "/burrow-assets/fruits/langsat-95cc0c8db1be.jpg",
+      "imageAlt": "Opened langsat showing pale translucent segments inside its thin skin",
+      "imageCredit": "Dr. Alexey Yakovlev / Wikimedia Commons / CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0). Resized as JPEG. Original: Lansium domesticum (Meliaceae) – langsat (49970785441).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Lansium_domesticum_(Meliaceae)_%E2%80%93_langsat_(49970785441).jpg",
       "fact": "Langsats hang in bunches and hide pale segments beneath thin yellowish skins.",
       "stats": [
         {
@@ -5400,10 +5400,10 @@
     {
       "id": "pulasan",
       "name": "Pulasan",
-      "image": "/burrow-assets/fruits/pulasan.jpg",
-      "imageAlt": "Pulasan fruit",
-      "imageCredit": "Michael Hermann www.CropsfortheFuture.org / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Pulasan Nephelium mutabile.JPG",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pulasan_Nephelium_mutabile.JPG",
+      "image": "/burrow-assets/fruits/pulasan-7267f107a8ab.jpg",
+      "imageAlt": "Whole and opened pulasan showing its blunt spines and pale flesh",
+      "imageCredit": "Izhamwong / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: Pulasan.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pulasan.JPG",
       "fact": "Pulasan resembles rambutan, but its rind has short, thick bumps instead of long soft hairs.",
       "stats": [
         {
@@ -5508,7 +5508,7 @@
     {
       "id": "santol",
       "name": "Santol",
-      "image": "/burrow-assets/fruits/santol.jpg",
+      "image": "/burrow-assets/fruits/santol-f92512502b1b.jpg",
       "imageAlt": "Santol fruit",
       "imageCredit": "Steve / Wikimedia Commons / CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0). Resized as JPEG. Original: Gratorn กระท้อน fruit, Santol.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Gratorn_%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%97%E0%B9%89%E0%B8%AD%E0%B8%99_fruit,_Santol.jpg",
@@ -5616,10 +5616,10 @@
     {
       "id": "jabuticaba",
       "name": "Jabuticaba",
-      "image": "/burrow-assets/fruits/jabuticaba.jpg",
-      "imageAlt": "Jabuticaba fruit",
-      "imageCredit": "Bageense / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Jabuticaba (do tupi îabotikaba, 'gordura de jabuti') 07.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Jabuticaba_(do_tupi_%C3%AEabotikaba,_%27gordura_de_jabuti%27)_07.jpg",
+      "image": "/burrow-assets/fruits/jabuticaba-cababca9dc6b.jpg",
+      "imageAlt": "Glossy dark jabuticaba fruits growing on a branch",
+      "imageCredit": "Alexandre Campolina Campola / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: Jabuticaba fruto.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Jabuticaba_fruto.jpg",
       "fact": "Jabuticabas grow right on the trunk and thick branches, making the tree look covered in dark beads.",
       "stats": [
         {
@@ -5724,10 +5724,10 @@
     {
       "id": "cupuacu",
       "name": "Cupuaçu",
-      "image": "/burrow-assets/fruits/cupuacu.jpg",
-      "imageAlt": "Cupuaçu fruit",
-      "imageCredit": "CiXeL at English Wikipedia / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Cupuassu.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cupuassu.jpg",
+      "image": "/burrow-assets/fruits/cupuacu-a78f2f943bf9.jpg",
+      "imageAlt": "Fresh cupuaçu split open to show white fibrous pulp inside its brown shell",
+      "imageCredit": "BjoernS / Wikimedia Commons / CC BY-SA 2.0 de (https://creativecommons.org/licenses/by-sa/2.0/de/deed.en). Resized as JPEG. Original: Cupuacu fruit opened.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cupuacu_fruit_opened.jpg",
       "fact": "Cupuaçu is a relative of cacao, and its fragrant pulp is used in drinks and ice cream.",
       "stats": [
         {
@@ -5842,7 +5842,7 @@
     {
       "id": "feijoa",
       "name": "Feijoa",
-      "image": "/burrow-assets/fruits/feijoa.jpg",
+      "image": "/burrow-assets/fruits/feijoa-99917efd7668.jpg",
       "imageAlt": "Feijoa fruit",
       "imageCredit": "Gabriel Collares / Wikimedia Commons / CC BY 4.0 (https://creativecommons.org/licenses/by/4.0). Resized as JPEG. Original: Goiaba-serrana, ou guarobi (do guarani 'fruto verde'), Feijoa sellowiana, em Bagé, RS, Brasil - 55238473195.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Goiaba-serrana,_ou_guarobi_(do_guarani_%27fruto_verde%27),_Feijoa_sellowiana,_em_Bag%C3%A9,_RS,_Brasil_-_55238473195.jpg",
@@ -5950,7 +5950,7 @@
     {
       "id": "sapodilla",
       "name": "Sapodilla",
-      "image": "/burrow-assets/fruits/sapodilla.jpg",
+      "image": "/burrow-assets/fruits/sapodilla-a02710415a3c.jpg",
       "imageAlt": "Sapodilla fruit",
       "imageCredit": "Sugeesh at Malayalam Wikipedia / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: സപ്പോട്ട.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:%E0%B4%B8%E0%B4%AA%E0%B5%8D%E0%B4%AA%E0%B5%8B%E0%B4%9F%E0%B5%8D%E0%B4%9F.jpg",
@@ -6068,7 +6068,7 @@
     {
       "id": "mamey-sapote",
       "name": "Mamey Sapote",
-      "image": "/burrow-assets/fruits/mamey-sapote.jpg",
+      "image": "/burrow-assets/fruits/mamey-sapote-aeb375c0463b.jpg",
       "imageAlt": "Mamey Sapote fruit",
       "imageCredit": "Wikimedia Commons contributor / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: ARS- Pouteria sapota.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:ARS-_Pouteria_sapota.jpg",
@@ -6186,7 +6186,7 @@
     {
       "id": "black-sapote",
       "name": "Black Sapote",
-      "image": "/burrow-assets/fruits/black-sapote.jpg",
+      "image": "/burrow-assets/fruits/black-sapote-8fb22d4899c2.jpg",
       "imageAlt": "Black Sapote fruit",
       "imageCredit": "Yonygg / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Black Sapote 1.JPG",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Black_Sapote_1.JPG",
@@ -6294,7 +6294,7 @@
     {
       "id": "white-sapote",
       "name": "White Sapote",
-      "image": "/burrow-assets/fruits/white-sapote.jpg",
+      "image": "/burrow-assets/fruits/white-sapote-6fe7a57f87e7.jpg",
       "imageAlt": "White Sapote fruit",
       "imageCredit": "Takoradee / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: White sapote2.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:White_sapote2.jpg",
@@ -6402,7 +6402,7 @@
     {
       "id": "canistel",
       "name": "Canistel",
-      "image": "/burrow-assets/fruits/canistel.jpg",
+      "image": "/burrow-assets/fruits/canistel-f9faade7be64.jpg",
       "imageAlt": "Canistel fruit",
       "imageCredit": "Augustus Binu : flickr / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Egg fruit DS.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Egg_fruit_DS.jpg",
@@ -6515,7 +6515,7 @@
     {
       "id": "abiu",
       "name": "Abiu",
-      "image": "/burrow-assets/fruits/abiu.jpg",
+      "image": "/burrow-assets/fruits/abiu-2b2abf348d91.jpg",
       "imageAlt": "Abiu fruit",
       "imageCredit": "Rodrigo.Argenton / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Abiu em fundo preto - Pouteria caimito.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Abiu_em_fundo_preto_-_Pouteria_caimito.jpg",
@@ -6623,10 +6623,10 @@
     {
       "id": "star-apple",
       "name": "Star Apple",
-      "image": "/burrow-assets/fruits/star-apple.jpg",
-      "imageAlt": "Star Apple fruit",
-      "imageCredit": "No machine-readable author provided. Hans B.~commonswiki assumed (based on copyright claims). / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Chrusophyllum cainito.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Chrusophyllum_cainito.jpg",
+      "image": "/burrow-assets/fruits/star-apple-df3099ff7618.jpg",
+      "imageAlt": "Cut star apples showing the star-shaped seed pattern",
+      "imageCredit": "TopTropicals.com / Wikimedia Commons / CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0). Resized as JPEG. Original: Chrysophylum caimito - Star Apple (52334746354).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Chrysophylum_caimito_-_Star_Apple_(52334746354).jpg",
       "fact": "Cut a star apple across the middle and its seed pattern can look like a star.",
       "stats": [
         {
@@ -6731,7 +6731,7 @@
     {
       "id": "lucuma",
       "name": "Lucuma",
-      "image": "/burrow-assets/fruits/lucuma.jpg",
+      "image": "/burrow-assets/fruits/lucuma-cd6015679e16.jpg",
       "imageAlt": "Lucuma fruit",
       "imageCredit": "OtterAM / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Lúcuma.png",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:L%C3%BAcuma.png",
@@ -6839,7 +6839,7 @@
     {
       "id": "tamarillo",
       "name": "Tamarillo",
-      "image": "/burrow-assets/fruits/tamarillo.jpg",
+      "image": "/burrow-assets/fruits/tamarillo-34407d604c82.jpg",
       "imageAlt": "Tamarillo fruit",
       "imageCredit": "C T Johansson / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Solanum betaceum-IMG 0242.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Solanum_betaceum-IMG_0242.jpg",
@@ -6947,10 +6947,10 @@
     {
       "id": "cape-gooseberry",
       "name": "Cape Gooseberry",
-      "image": "/burrow-assets/fruits/cape-gooseberry.jpg",
-      "imageAlt": "Cape Gooseberry fruit",
-      "imageCredit": "No machine-readable author provided. JuanseG~commonswiki assumed (based on copyright claims). / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Uchuva 2005.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Uchuva_2005.jpg",
+      "image": "/burrow-assets/fruits/cape-gooseberry-78768cd89a31.jpg",
+      "imageAlt": "Orange Cape gooseberry inside its opened papery husk",
+      "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Physalis peruviana calix open close-up.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Physalis_peruviana_calix_open_close-up.jpg",
       "fact": "A cape gooseberry grows inside a papery husk that looks like a little lantern.",
       "stats": [
         {
@@ -7055,7 +7055,7 @@
     {
       "id": "naranjilla",
       "name": "Naranjilla",
-      "image": "/burrow-assets/fruits/naranjilla.jpg",
+      "image": "/burrow-assets/fruits/naranjilla-e63d765a1a87.jpg",
       "imageAlt": "Naranjilla fruit",
       "imageCredit": "Picture taken by Fibonacci. / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Lulo.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Lulo.jpg",
@@ -7163,7 +7163,7 @@
     {
       "id": "cocona",
       "name": "Cocona",
-      "image": "/burrow-assets/fruits/cocona.jpg",
+      "image": "/burrow-assets/fruits/cocona-3c7c2d3ed593.jpg",
       "imageAlt": "Cocona fruit",
       "imageCredit": "Dtarazona / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Cocona.JPG",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cocona.JPG",
@@ -7271,7 +7271,7 @@
     {
       "id": "sweet-granadilla",
       "name": "Sweet Granadilla",
-      "image": "/burrow-assets/fruits/sweet-granadilla.jpg",
+      "image": "/burrow-assets/fruits/sweet-granadilla-506cd0557163.jpg",
       "imageAlt": "Sweet Granadilla fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Sweet granadillas (Passiflora ligularis) - whole and cross section.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Sweet_granadillas_(Passiflora_ligularis)_-_whole_and_cross_section.jpg",
@@ -7379,7 +7379,7 @@
     {
       "id": "banana-passionfruit",
       "name": "Banana Passionfruit",
-      "image": "/burrow-assets/fruits/banana-passionfruit.jpg",
+      "image": "/burrow-assets/fruits/banana-passionfruit-0c769b91ed60.jpg",
       "imageAlt": "Banana Passionfruit fruit",
       "imageCredit": "No machine-readable author provided. Fibonacci assumed (based on copyright claims). / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Curuba.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Curuba.jpg",
@@ -7487,7 +7487,7 @@
     {
       "id": "giant-granadilla",
       "name": "Giant Granadilla",
-      "image": "/burrow-assets/fruits/giant-granadilla.jpg",
+      "image": "/burrow-assets/fruits/giant-granadilla-d6f5c184b298.jpg",
       "imageAlt": "Giant Granadilla fruit",
       "imageCredit": "Wikimedia Commons contributor / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Badea.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Badea.jpg",
@@ -7595,7 +7595,7 @@
     {
       "id": "african-horned-melon",
       "name": "African Horned Melon",
-      "image": "/burrow-assets/fruits/african-horned-melon.jpg",
+      "image": "/burrow-assets/fruits/african-horned-melon-c2775beae1a4.jpg",
       "imageAlt": "African Horned Melon fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Cucumis metuliferus fruit - whole and cross section.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cucumis_metuliferus_fruit_-_whole_and_cross_section.jpg",
@@ -7703,7 +7703,7 @@
     {
       "id": "baobab",
       "name": "Baobab",
-      "image": "/burrow-assets/fruits/baobab.jpg",
+      "image": "/burrow-assets/fruits/baobab-d3669ca5c305.jpg",
       "imageAlt": "Baobab fruit",
       "imageCredit": "Neelix at English WikipediaI am the originator of this photo. I hold the copyright. I release it to the public domain. This photo depicts a fruit. / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Adansonia digitata (Fruit).jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Adansonia_digitata_(Fruit).jpg",
@@ -7811,10 +7811,10 @@
     {
       "id": "marula",
       "name": "Marula",
-      "image": "/burrow-assets/fruits/marula.jpg",
-      "imageAlt": "Marula fruit",
-      "imageCredit": "Pemba.mpimaji / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Marula fruits Ongwediva March 2016.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Marula_fruits_Ongwediva_March_2016.jpg",
+      "image": "/burrow-assets/fruits/marula-5da9a73bf555.jpg",
+      "imageAlt": "Ripe yellow marula fruits against a dark background",
+      "imageCredit": "SAplants / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Sclerocarya birrea subsp. afra 5Dsr 4969.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Sclerocarya_birrea_subsp._afra_5Dsr_4969.jpg",
       "fact": "Marula fruits turn yellow when ripe and contain a hard stone with kernels inside.",
       "stats": [
         {
@@ -7919,7 +7919,7 @@
     {
       "id": "african-star-apple",
       "name": "African Star Apple",
-      "image": "/burrow-assets/fruits/african-star-apple.jpg",
+      "image": "/burrow-assets/fruits/african-star-apple-5ece228d78ea.jpg",
       "imageAlt": "African Star Apple fruit",
       "imageCredit": "Chrysella / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Ụdara (cropped).jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:%E1%BB%A4dara_(cropped).jpg",
@@ -8027,10 +8027,10 @@
     {
       "id": "safou",
       "name": "Safou",
-      "image": "/burrow-assets/fruits/safou.jpg",
-      "imageAlt": "Safou fruit",
-      "imageCredit": "Wikimedia Commons contributor / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Safoutier.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Safoutier.jpg",
+      "image": "/burrow-assets/fruits/safou-205dcee8bec0.jpg",
+      "imageAlt": "Purple safou fruits in a basket showing their mottled skins",
+      "imageCredit": "Benoît Prieur / Wikimedia Commons / CC0 (http://creativecommons.org/publicdomain/zero/1.0/deed.en). Resized as JPEG. Original: Grand Frais (Beynost) safous du Cameroun (août 2023).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Grand_Frais_(Beynost)_safous_du_Cameroun_(ao%C3%BBt_2023).jpg",
       "fact": "Safou is often called African pear, but its purple fruit has rich, oily flesh unlike an ordinary pear.",
       "stats": [
         {
@@ -8135,7 +8135,7 @@
     {
       "id": "finger-lime",
       "name": "Finger Lime",
-      "image": "/burrow-assets/fruits/finger-lime.jpg",
+      "image": "/burrow-assets/fruits/finger-lime-28d72e43a505.jpg",
       "imageAlt": "Finger Lime fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Finger lime with juice vesicles and seeds partially extracted.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Finger_lime_with_juice_vesicles_and_seeds_partially_extracted.jpg",
@@ -8243,7 +8243,7 @@
     {
       "id": "quandong",
       "name": "Quandong",
-      "image": "/burrow-assets/fruits/quandong.jpg",
+      "image": "/burrow-assets/fruits/quandong-e00c15a8cede.jpg",
       "imageAlt": "Quandong fruit",
       "imageCredit": "John Moss / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Santalum acuminatum fruit1.JPG",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Santalum_acuminatum_fruit1.JPG",
@@ -8351,10 +8351,10 @@
     {
       "id": "davidsons-plum",
       "name": "Davidson's Plum",
-      "image": "/burrow-assets/fruits/davidsons-plum.jpg",
-      "imageAlt": "Davidson's Plum fruit",
-      "imageCredit": "John Moss / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Davidsonia jerseyaqna fruit1.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Davidsonia_jerseyaqna_fruit1.jpg",
+      "image": "/burrow-assets/fruits/davidsons-plum-1887054d3f08.jpg",
+      "imageAlt": "Davidson’s plums growing directly from the tree trunk",
+      "imageCredit": "SmallBiologie / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Mullumbimby plum (Davidsonia jerseyana).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mullumbimby_plum_(Davidsonia_jerseyana).jpg",
       "fact": "Davidson's plum grows its dark fruit directly on the trunk and is often used in jams and sauces.",
       "stats": [
         {
@@ -8459,7 +8459,7 @@
     {
       "id": "riberry",
       "name": "Riberry",
-      "image": "/burrow-assets/fruits/riberry.jpg",
+      "image": "/burrow-assets/fruits/riberry-8b1d0f1fd4a9.jpg",
       "imageAlt": "Riberry fruit",
       "imageCredit": "Poyt448 Peter Woodard / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Syzygium luehmannii fruit.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Syzygium_luehmannii_fruit.jpg",
@@ -8567,7 +8567,7 @@
     {
       "id": "kakadu-plum",
       "name": "Kakadu Plum",
-      "image": "/burrow-assets/fruits/kakadu-plum.jpg",
+      "image": "/burrow-assets/fruits/kakadu-plum-19a09ec2acb3.jpg",
       "imageAlt": "Kakadu Plum fruit",
       "imageCredit": "Allthingsnative / Wikimedia Commons / CC BY 4.0 (https://creativecommons.org/licenses/by/4.0). Resized as JPEG. Original: Terminalia ferdinandiana fruit.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Terminalia_ferdinandiana_fruit.jpg",
@@ -8675,7 +8675,7 @@
     {
       "id": "pawpaw",
       "name": "Pawpaw",
-      "image": "/burrow-assets/fruits/pawpaw.jpg",
+      "image": "/burrow-assets/fruits/pawpaw-6aee91c64d26.jpg",
       "imageAlt": "Pawpaw fruit",
       "imageCredit": "Scott Bauer, USDA / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Asimina triloba3.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Asimina_triloba3.jpg",
@@ -8788,7 +8788,7 @@
     {
       "id": "bilimbi",
       "name": "Bilimbi",
-      "image": "/burrow-assets/fruits/bilimbi.jpg",
+      "image": "/burrow-assets/fruits/bilimbi-69493c8841dd.jpg",
       "imageAlt": "Bilimbi fruit",
       "imageCredit": "Sugeesh / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Averrhoa bilimbi fruit by Sugeesh.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Averrhoa_bilimbi_fruit_by_Sugeesh.jpg",
@@ -8896,7 +8896,7 @@
     {
       "id": "serviceberry",
       "name": "Serviceberry",
-      "image": "/burrow-assets/fruits/serviceberry.jpg",
+      "image": "/burrow-assets/fruits/serviceberry-638207b784b3.jpg",
       "imageAlt": "Serviceberry fruit",
       "imageCredit": "Ken Eckert / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Saskatoon Berries in Alberta.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Saskatoon_Berries_in_Alberta.jpg",
@@ -9004,10 +9004,10 @@
     {
       "id": "salal-berry",
       "name": "Salal Berry",
-      "image": "/burrow-assets/fruits/salal-berry.jpg",
-      "imageAlt": "Salal Berry fruit",
-      "imageCredit": "Darren Giles / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Salal berries.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Salal_berries.jpg",
+      "image": "/burrow-assets/fruits/salal-berry-0c13476b2a67.jpg",
+      "imageAlt": "Close-up of salal berries with red and dark ripe fruit",
+      "imageCredit": "John Rusk from Berkeley, CA, United States of America / Wikimedia Commons / CC BY 2.0 (https://creativecommons.org/licenses/by/2.0). Resized as JPEG. Original: J20151022-0016—Gaultheria shallon—RPBG (22315477618).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:J20151022-0016%E2%80%94Gaultheria_shallon%E2%80%94RPBG_(22315477618).jpg",
       "fact": "Salal berries have long been dried into cakes by Indigenous peoples of the Pacific Northwest.",
       "stats": [
         {
@@ -9112,10 +9112,10 @@
     {
       "id": "cloudberry",
       "name": "Cloudberry",
-      "image": "/burrow-assets/fruits/cloudberry.jpg",
-      "imageAlt": "Cloudberry fruit",
-      "imageCredit": "Moravice / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Rubus chamaemorus, from Tromsø, August 2020.jpeg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Rubus_chamaemorus,_from_Troms%C3%B8,_August_2020.jpeg",
+      "image": "/burrow-assets/fruits/cloudberry-eb9804d39030.jpg",
+      "imageAlt": "Close-up of a ripe orange cloudberry showing its rounded drupelets",
+      "imageCredit": "Ryan Hodnett / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Cloudberry (Rubus chamaemorus) - Eidfjord, Norway 2021-07-25 (01).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cloudberry_(Rubus_chamaemorus)_-_Eidfjord,_Norway_2021-07-25_(01).jpg",
       "fact": "Cloudberries turn amber as they ripen and can grow in chilly northern bogs and tundra.",
       "stats": [
         {
@@ -9220,7 +9220,7 @@
     {
       "id": "lingonberry",
       "name": "Lingonberry",
-      "image": "/burrow-assets/fruits/lingonberry.jpg",
+      "image": "/burrow-assets/fruits/lingonberry-7824d7bebbe6.jpg",
       "imageAlt": "Lingonberry fruit",
       "imageCredit": "Jonas Bergsten / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Vaccinium vitis-idaea 20060824 003.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Vaccinium_vitis-idaea_20060824_003.jpg",
@@ -9328,7 +9328,7 @@
     {
       "id": "sea-buckthorn",
       "name": "Sea Buckthorn",
-      "image": "/burrow-assets/fruits/sea-buckthorn.jpg",
+      "image": "/burrow-assets/fruits/sea-buckthorn-fc23d54d50f0.jpg",
       "imageAlt": "Sea Buckthorn fruit",
       "imageCredit": "kallerna / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Tyrnin marjoja.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tyrnin_marjoja.jpg",
@@ -9436,7 +9436,7 @@
     {
       "id": "medlar",
       "name": "Medlar",
-      "image": "/burrow-assets/fruits/medlar.jpg",
+      "image": "/burrow-assets/fruits/medlar-1f27b833ab11.jpg",
       "imageAlt": "Medlar fruit",
       "imageCredit": "Wikimedia Commons contributor / Wikimedia Commons / CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0). Resized as JPEG. Original: Medlar pomes and leaves.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Medlar_pomes_and_leaves.jpg",
@@ -9544,7 +9544,7 @@
     {
       "id": "quince",
       "name": "Quince",
-      "image": "/burrow-assets/fruits/quince.jpg",
+      "image": "/burrow-assets/fruits/quince-40b0dabcb888.jpg",
       "imageAlt": "Quince fruit",
       "imageCredit": "SAplants / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Cydonia oblonga 'Portugal' 5Dsr 2392.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cydonia_oblonga_%27Portugal%27_5Dsr_2392.jpg",
@@ -9657,10 +9657,10 @@
     {
       "id": "strawberry-tree-fruit",
       "name": "Strawberry Tree Fruit",
-      "image": "/burrow-assets/fruits/strawberry-tree-fruit.jpg",
-      "imageAlt": "Strawberry Tree Fruit fruit",
-      "imageCredit": "Wendy Cutler from Vancouver, Canada / Wikimedia Commons / CC BY 2.0 (https://creativecommons.org/licenses/by/2.0). Resized as JPEG. Original: Arbutus unedo off Bayshore Drive at Coal Harbour.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Arbutus_unedo_off_Bayshore_Drive_at_Coal_Harbour.jpg",
+      "image": "/burrow-assets/fruits/strawberry-tree-fruit-5d97fefcee07.jpg",
+      "imageAlt": "Photographs of strawberry-tree fruit showing the bumpy skin, flesh and seeds",
+      "imageCredit": "Martin Cooper from Ipswich, UK / Wikimedia Commons / CC BY 2.0 (https://creativecommons.org/licenses/by/2.0). Resized as JPEG. Original: I eat only one (23062368386).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:I_eat_only_one_(23062368386).jpg",
       "fact": "Strawberry tree fruits look bumpy and red, but the tree is not a strawberry plant.",
       "stats": [
         {
@@ -9765,10 +9765,10 @@
     {
       "id": "loquat",
       "name": "Loquat",
-      "image": "/burrow-assets/fruits/loquat.jpg",
-      "imageAlt": "Loquat fruit",
-      "imageCredit": "Aftabbanoori / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Loquat-0.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Loquat-0.jpg",
+      "image": "/burrow-assets/fruits/loquat-af43480516d4.jpg",
+      "imageAlt": "Golden loquat fruit on a leafy branch",
+      "imageCredit": "Katorisi / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Japanese Loquat, Minamiboso city, Japan.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Japanese_Loquat,_Minamiboso_city,_Japan.jpg",
       "fact": "Loquat trees flower in the cooler months and can have ripe fruit in spring.",
       "stats": [
         {
@@ -9878,7 +9878,7 @@
     {
       "id": "jujube",
       "name": "Jujube",
-      "image": "/burrow-assets/fruits/jujube.jpg",
+      "image": "/burrow-assets/fruits/jujube-d603c86a8e3f.jpg",
       "imageAlt": "Jujube fruit",
       "imageCredit": "Tirithel / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Ziziphus zizyphus fruit inside.jpeg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ziziphus_zizyphus_fruit_inside.jpeg",
@@ -9986,7 +9986,7 @@
     {
       "id": "indian-jujube",
       "name": "Indian Jujube",
-      "image": "/burrow-assets/fruits/indian-jujube.jpg",
+      "image": "/burrow-assets/fruits/indian-jujube-a5bed3c7f599.jpg",
       "imageAlt": "Indian Jujube fruit",
       "imageCredit": "Augustus Binu : flickr / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Indian jujube (fruit).jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Indian_jujube_(fruit).jpg",
@@ -10104,10 +10104,10 @@
     {
       "id": "amla",
       "name": "Amla",
-      "image": "/burrow-assets/fruits/amla.jpg",
-      "imageAlt": "Amla fruit",
-      "imageCredit": "L. Shyamal / Wikimedia Commons / CC BY 2.5 (https://creativecommons.org/licenses/by/2.5). Resized as JPEG. Original: Phyllanthus officinalis.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Phyllanthus_officinalis.jpg",
+      "image": "/burrow-assets/fruits/amla-6f7a860e2b56.jpg",
+      "imageAlt": "Whole amla fruits and a cut half showing the segmented flesh",
+      "imageCredit": "Salil Kumar Mukherjee / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Phyllanthus emblica - whole and cross section.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Phyllanthus_emblica_-_whole_and_cross_section.jpg",
       "fact": "Amla's pale green fruit has shallow vertical grooves and a strongly sour taste.",
       "stats": [
         {
@@ -10217,10 +10217,10 @@
     {
       "id": "bael",
       "name": "Bael",
-      "image": "/burrow-assets/fruits/bael.jpg",
-      "imageAlt": "Bael fruit",
-      "imageCredit": "J.M.Garg / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Bael (Aegle marmelos) fruit at Narendrapur W IMG 4099.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Bael_(Aegle_marmelos)_fruit_at_Narendrapur_W_IMG_4099.jpg",
+      "image": "/burrow-assets/fruits/bael-2a48ae39972f.jpg",
+      "imageAlt": "Whole bael and a cut half showing its hard shell and orange pulp",
+      "imageCredit": "Asit K. Ghosh Thaumaturgist / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Bael11 Mounts Asit.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Bael11_Mounts_Asit.JPG",
       "fact": "Bael has such a hard shell that opening it can take more effort than peeling an orange.",
       "stats": [
         {
@@ -10325,7 +10325,7 @@
     {
       "id": "wood-apple",
       "name": "Wood Apple",
-      "image": "/burrow-assets/fruits/wood-apple.jpg",
+      "image": "/burrow-assets/fruits/wood-apple-121db420007c.jpg",
       "imageAlt": "Wood Apple fruit",
       "imageCredit": "Seisfeldt at English Wikipedia / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Wood-apple dec2007.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Wood-apple_dec2007.jpg",
@@ -10433,7 +10433,7 @@
     {
       "id": "jamun",
       "name": "Jamun",
-      "image": "/burrow-assets/fruits/jamun.jpg",
+      "image": "/burrow-assets/fruits/jamun-842bf174ccc6.jpg",
       "imageAlt": "Jamun fruit",
       "imageCredit": "Rajesh dangi at English Wikipedia / Wikimedia Commons / CC BY 2.5 (https://creativecommons.org/licenses/by/2.5). Resized as JPEG. Original: Ripe jamun fruits.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ripe_jamun_fruits.jpg",
@@ -10541,7 +10541,7 @@
     {
       "id": "rose-apple",
       "name": "Rose Apple",
-      "image": "/burrow-assets/fruits/rose-apple.jpg",
+      "image": "/burrow-assets/fruits/rose-apple-ba2e195b7b80.jpg",
       "imageAlt": "Rose Apple fruit",
       "imageCredit": "Salil Kumar Mukherjee / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Rose-apples, ripe.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Rose-apples,_ripe.jpg",
@@ -10649,10 +10649,10 @@
     {
       "id": "wax-apple",
       "name": "Wax Apple",
-      "image": "/burrow-assets/fruits/wax-apple.jpg",
-      "imageAlt": "Wax Apple fruit",
-      "imageCredit": "Original uploader was Allen Timothy Chang at en.wikipedia / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Wax apple2.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Wax_apple2.jpg",
+      "image": "/burrow-assets/fruits/wax-apple-a26f6b171027.jpg",
+      "imageAlt": "Pink wax apples and a cut half showing pale flesh",
+      "imageCredit": "Basile Morin / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Syzygium fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Syzygium_fruit.jpg",
       "fact": "Wax apples look like shiny little bells and are not members of the apple family.",
       "stats": [
         {
@@ -10757,10 +10757,10 @@
     {
       "id": "ambarella",
       "name": "Ambarella",
-      "image": "/burrow-assets/fruits/ambarella.jpg",
-      "imageAlt": "Ambarella fruit",
-      "imageCredit": "Renjusplace / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Spondias dulcis, June plum.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Spondias_dulcis,_June_plum.jpg",
+      "image": "/burrow-assets/fruits/ambarella-b13cee6c0eb7.jpg",
+      "imageAlt": "Whole and cut ambarella fruits showing green skin and fibrous seeds",
+      "imageCredit": "Anagoria / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: 2014-10-11 Spondias dulcis Goldpflaume anagoria.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:2014-10-11_Spondias_dulcis_Goldpflaume_anagoria.JPG",
       "fact": "An ambarella's central stone is covered with tough fibers that reach into the flesh.",
       "stats": [
         {
@@ -10875,7 +10875,7 @@
     {
       "id": "jocote",
       "name": "Jocote",
-      "image": "/burrow-assets/fruits/jocote.jpg",
+      "image": "/burrow-assets/fruits/jocote-25f4b48a3bc7.jpg",
       "imageAlt": "Jocote fruit",
       "imageCredit": "Elveoflight / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Jocote fruit.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Jocote_fruit.jpg",
@@ -10983,7 +10983,7 @@
     {
       "id": "tamarind",
       "name": "Tamarind",
-      "image": "/burrow-assets/fruits/tamarind.jpg",
+      "image": "/burrow-assets/fruits/tamarind-71dba4bc5935.jpg",
       "imageAlt": "Tamarind fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Tamarind fruits (Tamarindus indica 'Si Thong').jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tamarind_fruits_(Tamarindus_indica_%27Si_Thong%27).jpg",
@@ -11091,7 +11091,7 @@
     {
       "id": "cashew-apple",
       "name": "Cashew Apple",
-      "image": "/burrow-assets/fruits/cashew-apple.jpg",
+      "image": "/burrow-assets/fruits/cashew-apple-26f06c77f03c.jpg",
       "imageAlt": "Cashew Apple fruit",
       "imageCredit": "Abhishek Jacob / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Cashew apples.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cashew_apples.jpg",
@@ -11199,7 +11199,7 @@
     {
       "id": "surinam-cherry",
       "name": "Surinam Cherry",
-      "image": "/burrow-assets/fruits/surinam-cherry.jpg",
+      "image": "/burrow-assets/fruits/surinam-cherry-9779a685080a.jpg",
       "imageAlt": "Surinam Cherry fruit",
       "imageCredit": "Bageense / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Pitanga (do tupi 'ybapytanga) no pampa gaúcho 01.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pitanga_(do_tupi_%27ybapytanga)_no_pampa_ga%C3%BAcho_01.jpg",
@@ -11307,7 +11307,7 @@
     {
       "id": "grumichama",
       "name": "Grumichama",
-      "image": "/burrow-assets/fruits/grumichama.jpg",
+      "image": "/burrow-assets/fruits/grumichama-c452cedc7757.jpg",
       "imageAlt": "Grumichama fruit",
       "imageCredit": "No machine-readable author provided. B.navez assumed (based on copyright claims). / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Eugenia brasiliensis.JPG",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Eugenia_brasiliensis.JPG",
@@ -11415,10 +11415,10 @@
     {
       "id": "acerola",
       "name": "Acerola",
-      "image": "/burrow-assets/fruits/acerola.jpg",
-      "imageAlt": "Acerola fruit",
-      "imageCredit": "Veronidae / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Malpighia emarginata 2013 002.JPG",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Malpighia_emarginata_2013_002.JPG",
+      "image": "/burrow-assets/fruits/acerola-f1c089fbf679.jpg",
+      "imageAlt": "Two bright red acerola fruits growing among green leaves",
+      "imageCredit": "Wilfredor / Wikimedia Commons / CC0 (http://creativecommons.org/publicdomain/zero/1.0/deed.en). Resized as JPEG. Original: Malpighia emarginata in Margarita Island.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Malpighia_emarginata_in_Margarita_Island.jpg",
       "fact": "Acerola resembles a small cherry but belongs to a different plant family.",
       "stats": [
         {
@@ -11523,7 +11523,7 @@
     {
       "id": "miracle-fruit",
       "name": "Miracle Fruit",
-      "image": "/burrow-assets/fruits/miracle-fruit.jpg",
+      "image": "/burrow-assets/fruits/miracle-fruit-6326e9bb7d53.jpg",
       "imageAlt": "Miracle Fruit fruit",
       "imageCredit": "Hamale Lyman / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: MiracleBerry.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:MiracleBerry.jpg",
@@ -11631,7 +11631,7 @@
     {
       "id": "prickly-pear",
       "name": "Prickly Pear",
-      "image": "/burrow-assets/fruits/prickly-pear.jpg",
+      "image": "/burrow-assets/fruits/prickly-pear-147e22e0d7e8.jpg",
       "imageAlt": "Prickly Pear fruit",
       "imageCredit": "No machine-readable author provided. Hippocampus~commonswiki assumed (based on copyright claims). / Wikimedia Commons / CC BY 2.5 (https://creativecommons.org/licenses/by/2.5). Resized as JPEG. Original: Opuntia ficus-indica fruit9.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Opuntia_ficus-indica_fruit9.jpg",
@@ -11739,10 +11739,10 @@
     {
       "id": "pepino",
       "name": "Pepino",
-      "image": "/burrow-assets/fruits/pepino.jpg",
-      "imageAlt": "Pepino fruit",
-      "imageCredit": "Davidals / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Ripe pepinos.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ripe_pepinos.jpg",
+      "image": "/burrow-assets/fruits/pepino-750e3c9d82e0.jpg",
+      "imageAlt": "Whole pale pepino with purple stripes",
+      "imageCredit": "Berthold Werner / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Solanum muricatum 2012-08-07 16-07-45.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Solanum_muricatum_2012-08-07_16-07-45.JPG",
       "fact": "Pepino tastes a little like melon, but it belongs to the tomato and potato family.",
       "stats": [
         {
@@ -11847,10 +11847,10 @@
     {
       "id": "breadfruit",
       "name": "Breadfruit",
-      "image": "/burrow-assets/fruits/breadfruit.jpg",
-      "imageAlt": "Breadfruit fruit",
-      "imageCredit": "Hans Hillewaert / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Artocarpus altilis (fruit).jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Artocarpus_altilis_(fruit).jpg",
+      "image": "/burrow-assets/fruits/breadfruit-41756b7abf96.jpg",
+      "imageAlt": "Large green breadfruit showing its patterned skin on the tree",
+      "imageCredit": "Forest & Kim Starr / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: Starr 040318-0066 Artocarpus altilis.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Starr_040318-0066_Artocarpus_altilis.jpg",
       "fact": "Breadfruit gets its name from the bread-like texture of its cooked flesh.",
       "stats": [
         {
@@ -11960,7 +11960,7 @@
     {
       "id": "grapefruit",
       "name": "Grapefruit",
-      "image": "/burrow-assets/fruits/grapefruit.jpg",
+      "image": "/burrow-assets/fruits/grapefruit-e8409486da21.jpg",
       "imageAlt": "Grapefruit fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Grapefruits - whole-halved-segments.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Grapefruits_-_whole-halved-segments.jpg",
@@ -12078,7 +12078,7 @@
     {
       "id": "pomelo",
       "name": "Pomelo",
-      "image": "/burrow-assets/fruits/pomelo.jpg",
+      "image": "/burrow-assets/fruits/pomelo-bac6186a993b.jpg",
       "imageAlt": "Pomelo fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Pomelo fruit.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pomelo_fruit.jpg",
@@ -12191,7 +12191,7 @@
     {
       "id": "mandarin",
       "name": "Mandarin",
-      "image": "/burrow-assets/fruits/mandarin.jpg",
+      "image": "/burrow-assets/fruits/mandarin-5c7f2cd92eec.jpg",
       "imageAlt": "Mandarin fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Mandarins - whole and halved.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mandarins_-_whole_and_halved.jpg",
@@ -12309,7 +12309,7 @@
     {
       "id": "clementine",
       "name": "Clementine",
-      "image": "/burrow-assets/fruits/clementine.jpg",
+      "image": "/burrow-assets/fruits/clementine-75f1c468f02e.jpg",
       "imageAlt": "Clementine fruit",
       "imageCredit": "carol / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Clementines whole, peeled, half and sectioned.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Clementines_whole,_peeled,_half_and_sectioned.jpg",
@@ -12427,10 +12427,10 @@
     {
       "id": "tangerine",
       "name": "Tangerine",
-      "image": "/burrow-assets/fruits/tangerine.jpg",
-      "imageAlt": "Tangerine fruit",
-      "imageCredit": "Barfooz (Brent Ramerth) / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: TangerineFruit.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:TangerineFruit.jpg",
+      "image": "/burrow-assets/fruits/tangerine-c4f9b6c10cc3.jpg",
+      "imageAlt": "Peeled tangerine halves showing their orange segments",
+      "imageCredit": "多多123 / Wikimedia Commons / CC BY 4.0 (https://creativecommons.org/licenses/by/4.0). Resized as JPEG. Original: Tangerine halves.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tangerine_halves.jpg",
       "fact": "The name tangerine is linked to Tangier in Morocco, once an important port for shipping these fruits.",
       "stats": [
         {
@@ -12545,7 +12545,7 @@
     {
       "id": "satsuma",
       "name": "Satsuma",
-      "image": "/burrow-assets/fruits/satsuma.jpg",
+      "image": "/burrow-assets/fruits/satsuma-9b6e0fc9c24a.jpg",
       "imageAlt": "Satsuma fruit",
       "imageCredit": "Daderot / Wikimedia Commons / Public domain (CC0) (http://creativecommons.org/publicdomain/zero/1.0/deed.en). Resized as JPEG. Original: Satsuma mandarins - San Francisco, CA - DSC02398.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Satsuma_mandarins_-_San_Francisco,_CA_-_DSC02398.jpg",
@@ -12663,7 +12663,7 @@
     {
       "id": "blood-orange",
       "name": "Blood Orange",
-      "image": "/burrow-assets/fruits/blood-orange.jpg",
+      "image": "/burrow-assets/fruits/blood-orange-4a7f482fcb56.jpg",
       "imageAlt": "Blood Orange fruit",
       "imageCredit": "Silentcynic / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: BloodOrange.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:BloodOrange.jpg",
@@ -12781,7 +12781,7 @@
     {
       "id": "kumquat",
       "name": "Kumquat",
-      "image": "/burrow-assets/fruits/kumquat.jpg",
+      "image": "/burrow-assets/fruits/kumquat-2cf38782d51c.jpg",
       "imageAlt": "Kumquat fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Kumquat from Spain.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kumquat_from_Spain.jpg",
@@ -12894,7 +12894,7 @@
     {
       "id": "nectarine",
       "name": "Nectarine",
-      "image": "/burrow-assets/fruits/nectarine.jpg",
+      "image": "/burrow-assets/fruits/nectarine-cdd567876f08.jpg",
       "imageAlt": "Nectarine fruit",
       "imageCredit": "Rhododendrites / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Nectarine on white.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Nectarine_on_white.jpg",
@@ -13012,7 +13012,7 @@
     {
       "id": "cantaloupe",
       "name": "Cantaloupe",
-      "image": "/burrow-assets/fruits/cantaloupe.jpg",
+      "image": "/burrow-assets/fruits/cantaloupe-1cecfb14b5b2.jpg",
       "imageAlt": "Cantaloupe fruit",
       "imageCredit": "USDA photo by Scott Bauer. Image Number K7355-11. / Wikimedia Commons / Public domain (https://creativecommons.org/publicdomain/mark/1.0/). Resized as JPEG. Original: Cucumis melo var. reticulatus (photo by Scott Bauer).jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cucumis_melo_var._reticulatus_(photo_by_Scott_Bauer).jpg",
@@ -13125,7 +13125,7 @@
     {
       "id": "honeydew",
       "name": "Honeydew Melon",
-      "image": "/burrow-assets/fruits/honeydew.jpg",
+      "image": "/burrow-assets/fruits/honeydew-f9e4629c2a2d.jpg",
       "imageAlt": "Honeydew Melon fruit",
       "imageCredit": "Yotoen / Wikimedia Commons / Public domain (https://creativecommons.org/publicdomain/mark/1.0/). Resized as JPEG. Original: Honeydew.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Honeydew.jpg",
@@ -13238,7 +13238,7 @@
     {
       "id": "date",
       "name": "Date",
-      "image": "/burrow-assets/fruits/date.jpg",
+      "image": "/burrow-assets/fruits/date-210407924515.jpg",
       "imageAlt": "Date fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Mazafati dates - whole, halved and seed.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mazafati_dates_-_whole,_halved_and_seed.jpg",
@@ -13356,7 +13356,7 @@
     {
       "id": "cranberry",
       "name": "Cranberry",
-      "image": "/burrow-assets/fruits/cranberry.jpg",
+      "image": "/burrow-assets/fruits/cranberry-3efd957f2ee9.jpg",
       "imageAlt": "Cranberry fruit",
       "imageCredit": "Cjboffoli / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: Cranberries20101210.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cranberries20101210.jpg",
@@ -13474,7 +13474,7 @@
     {
       "id": "gooseberry",
       "name": "Gooseberry",
-      "image": "/burrow-assets/fruits/gooseberry.jpg",
+      "image": "/burrow-assets/fruits/gooseberry-7d94e16fd6a5.jpg",
       "imageAlt": "Gooseberry fruit",
       "imageCredit": "Kornelia und Hartmut Häfele / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Stachelbeeren.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Stachelbeeren.jpg",
@@ -13592,10 +13592,10 @@
     {
       "id": "blackcurrant",
       "name": "Blackcurrant",
-      "image": "/burrow-assets/fruits/blackcurrant.jpg",
-      "imageAlt": "Blackcurrant fruit",
-      "imageCredit": "George Chernilevsky / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Blackcurrant in basket 2021 G1.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Blackcurrant_in_basket_2021_G1.jpg",
+      "image": "/burrow-assets/fruits/blackcurrant-7b3bd1e41bd2.jpg",
+      "imageAlt": "Close-up of glossy blackcurrants in a cluster",
+      "imageCredit": "Paolo Neo / Wikimedia Commons / Public domain (https://creativecommons.org/publicdomain/mark/1.0/). Resized as JPEG. Original: Black currant.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Black_currant.jpg",
       "fact": "Blackcurrants are often turned into juice and jam, where their strong flavor stands out.",
       "stats": [
         {
@@ -13710,7 +13710,7 @@
     {
       "id": "redcurrant",
       "name": "Redcurrant",
-      "image": "/burrow-assets/fruits/redcurrant.jpg",
+      "image": "/burrow-assets/fruits/redcurrant-fc14d3305653.jpg",
       "imageAlt": "Redcurrant fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Redcurrant (Ribes rubrum) fruits.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Redcurrant_(Ribes_rubrum)_fruits.jpg",
@@ -13828,7 +13828,7 @@
     {
       "id": "mulberry",
       "name": "Mulberry",
-      "image": "/burrow-assets/fruits/mulberry.jpg",
+      "image": "/burrow-assets/fruits/mulberry-3d05dd894f20.jpg",
       "imageAlt": "Mulberry fruit",
       "imageCredit": "Miloslav Bahna / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Ripe fruit of morus nigra.JPG",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ripe_fruit_of_morus_nigra.JPG",
@@ -13946,10 +13946,10 @@
     {
       "id": "avocado",
       "name": "Avocado",
-      "image": "/burrow-assets/fruits/avocado.jpg",
-      "imageAlt": "Avocado fruit",
-      "imageCredit": "B.navez / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Persea americana fruit 2.JPG",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Persea_americana_fruit_2.JPG",
+      "image": "/burrow-assets/fruits/avocado-53d21bacaca1.jpg",
+      "imageAlt": "Whole and halved avocado showing green flesh and a large brown seed",
+      "imageCredit": "Edrean / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Branch and fruit of the Maluma avocado cultivar.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Branch_and_fruit_of_the_Maluma_avocado_cultivar.jpg",
       "fact": "An avocado is botanically a berry with one large seed, even though it is usually eaten in savory dishes.",
       "stats": [
         {
@@ -14059,10 +14059,10 @@
     {
       "id": "olive",
       "name": "Olive",
-      "image": "/burrow-assets/fruits/olive.jpg",
-      "imageAlt": "Olive fruit",
-      "imageCredit": "en:User:Nickfraser / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Olivesfromjordan.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Olivesfromjordan.jpg",
+      "image": "/burrow-assets/fruits/olive-e15889b295cb.jpg",
+      "imageAlt": "Close-up of green olives growing on a leafy branch",
+      "imageCredit": "INRA DIST from France / Wikimedia Commons / CC BY 2.0 (https://creativecommons.org/licenses/by/2.0). Resized as JPEG. Original: Olives (DAHBIA) CL3. J Weber (22852496640).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Olives_(DAHBIA)_CL3._J_Weber_(22852496640).jpg",
       "fact": "Olives are usually cured before eating to reduce their natural bitterness. Like cherries, they have a stone inside.",
       "stats": [
         {
@@ -14177,7 +14177,7 @@
     {
       "id": "plantain",
       "name": "Plantain",
-      "image": "/burrow-assets/fruits/plantain.jpg",
+      "image": "/burrow-assets/fruits/plantain-6a65972b4eaa.jpg",
       "imageAlt": "Plantain fruit",
       "imageCredit": "Evan-Amos / Wikimedia Commons / Public domain (https://creativecommons.org/publicdomain/mark/1.0/). Resized as JPEG. Original: Plantain-Yellow.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Plantain-Yellow.jpg",
@@ -14295,7 +14295,7 @@
     {
       "id": "asian-pear",
       "name": "Asian Pear",
-      "image": "/burrow-assets/fruits/asian-pear.jpg",
+      "image": "/burrow-assets/fruits/asian-pear-6a20ae66a06e.jpg",
       "imageAlt": "Asian Pear fruit",
       "imageCredit": "Fir0002 / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Nashi pear.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Nashi_pear.jpg",
@@ -14413,10 +14413,10 @@
     {
       "id": "sour-cherry",
       "name": "Sour Cherry",
-      "image": "/burrow-assets/fruits/sour-cherry.jpg",
-      "imageAlt": "Sour Cherry fruit",
-      "imageCredit": "Rklz2 (talk) / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Ripe sour cherries on a branch.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ripe_sour_cherries_on_a_branch.jpg",
+      "image": "/burrow-assets/fruits/sour-cherry-6154b2f095d6.jpg",
+      "imageAlt": "Red Morello sour cherries on stems with water droplets on their skins",
+      "imageCredit": "Rod Waddington from Kergunyah, Australia / Wikimedia Commons / CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0). Resized as JPEG. Original: Morello Cherries (11530343543).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Morello_Cherries_(11530343543).jpg",
       "fact": "Sour cherries are especially popular in pies and preserves because their tart flavor balances added sweetness.",
       "stats": [
         {
@@ -14531,10 +14531,10 @@
     {
       "id": "greengage",
       "name": "Greengage",
-      "image": "/burrow-assets/fruits/greengage.jpg",
-      "imageAlt": "Greengage fruit",
-      "imageCredit": "No machine-readable author provided. Ranveig assumed (based on copyright claims). / Wikimedia Commons / Public domain (https://creativecommons.org/publicdomain/mark/1.0/). Resized as JPEG. Original: Greengages.jpg",
-      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Greengages.jpg",
+      "image": "/burrow-assets/fruits/greengage-254dcdab6e6c.jpg",
+      "imageAlt": "Three green-gold greengage plums against a white background",
+      "imageCredit": "Filo gèn' / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Prunus on white background.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Prunus_on_white_background.jpg",
       "fact": "Many greengages stay green even when ripe and sweet, so a green skin does not always mean an unripe plum.",
       "stats": [
         {
@@ -14649,7 +14649,7 @@
     {
       "id": "persian-lime",
       "name": "Persian Lime",
-      "image": "/burrow-assets/fruits/persian-lime.jpg",
+      "image": "/burrow-assets/fruits/persian-lime-6be2603f7701.jpg",
       "imageAlt": "Persian Lime fruit",
       "imageCredit": "Forest and Kim Starr / Wikimedia Commons / CC BY 3.0 us (https://creativecommons.org/licenses/by/3.0/us/deed.en). Resized as JPEG. Original: Starr-140117-3997-Citrus latifolia-Tahitian fruit and leaves-Hawea Pl Olinda-Maui (24612312943).jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Starr-140117-3997-Citrus_latifolia-Tahitian_fruit_and_leaves-Hawea_Pl_Olinda-Maui_(24612312943).jpg",
@@ -14767,7 +14767,7 @@
     {
       "id": "golden-kiwifruit",
       "name": "Golden Kiwifruit",
-      "image": "/burrow-assets/fruits/golden-kiwifruit.jpg",
+      "image": "/burrow-assets/fruits/golden-kiwifruit-b646fb0c062d.jpg",
       "imageAlt": "Golden Kiwifruit fruit",
       "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Kiwifruit 'Gold' cross section.jpg",
       "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kiwifruit_%27Gold%27_cross_section.jpg",
