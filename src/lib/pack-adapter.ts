@@ -34,7 +34,9 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
   const cards = pack.cards
     .filter((card) => card.stats.length)
     .map((card) => {
-      const primary = card.stats[0];
+      const primary = pack.primaryStat
+        ? card.stats.find((stat) => stat.id === pack.primaryStat!.id)
+        : card.stats[0];
       const qualityScore = Math.max(65, Math.min(95, 72 + card.stats.length * 4 + card.categories.length * 2));
       return {
         id: card.id,
@@ -43,10 +45,10 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
         image: card.image,
         imageAlt: card.imageAlt,
         imageCredit: card.imageCredit,
-        statLabel: primary.label,
-        statValue: primary.value,
-        statDisplay: statDisplay(primary),
-        ...(["scoville", "pepper-scoville"].includes(primary.id) ? { collectionSortValue: primary.value } : {}),
+        statLabel: primary?.label ?? pack.primaryStat!.label,
+        statValue: primary?.value ?? Number.NaN,
+        statDisplay: primary ? statDisplay(primary) : "Not documented",
+        ...(primary && ["scoville", "pepper-scoville"].includes(primary.id) ? { collectionSortValue: primary.value } : {}),
         subStat: card.metadata?.location ? worldLocationDisplay(card.metadata.location) : card.categories[0] ?? pack.title,
         fact: card.fact,
         qualityScore,
@@ -59,6 +61,7 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
         stats: card.stats.filter((stat, index, stats) =>
           stats.findIndex((candidate) => candidate.label === stat.label) === index).map(toTopTrumpStat),
         details: [
+          ...(card.details ?? []),
           ...card.stats.map((stat) => ({
             label: card.stats.filter((candidate) => candidate.label === stat.label).length > 1 && stat.unit
               ? `${stat.label} (${stat.unit})`

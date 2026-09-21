@@ -4648,7 +4648,7 @@ function CollectionBook({
                   <p className={`${isUnlocked ? "mt-0.5" : "mt-1"} text-sm font-black text-[#9f3f2b]`}>{isUnlocked ? card.statDisplay : "Win a round"}</p>
                   {isUnlocked && <p className="mt-1 text-[10px] font-black uppercase tracking-[0.08em] text-[#72543e]">{card.subStat}</p>}
                   <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#5f6b5d]">{isUnlocked ? card.fact : "Answer correctly to add it here."}</p>
-                  {isUnlocked && <p className="mt-2 text-[9px] font-semibold leading-tight text-[#6b7468]">Image: {card.imageCredit}</p>}
+                  {isUnlocked && <p className="mt-2 break-words text-[9px] font-semibold leading-tight text-[#6b7468]">Image: {card.imageCredit}</p>}
                   {isUnlocked && profileDetails.length ? (
                     <details
                       open={cardDetailsExpanded}
@@ -4666,7 +4666,7 @@ function CollectionBook({
                           <span aria-hidden="true" className="text-base leading-none group-open:rotate-45">+</span>
                         </span>
                       </summary>
-                      <dl className={`grid gap-px border-t-2 border-[#d9c7a7] bg-[#d9c7a7] ${profileDetails.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
+                      <dl className={`grid gap-px border-t-2 border-[#d9c7a7] bg-[#d9c7a7] ${profileDetails.length === 1 || card.topic === "fruits" ? "grid-cols-1" : "grid-cols-2"}`}>
                         {profileDetails.map((detail) => (
                           <div key={`${card.id}-${detail.label}`} className="min-w-0 bg-white p-2">
                             <dt className="text-[8px] font-black uppercase tracking-[0.12em] text-[#72543e]">{detail.label}</dt>

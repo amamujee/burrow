@@ -14,3 +14,9 @@
 `us-states-10m.json` is the public-domain US Census Bureau 2017 cartographic boundary data distributed in [us-atlas 3.0.1](https://github.com/topojson/us-atlas), downloaded from `https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-10m.json`. `node scripts/generate-us-map.mjs` generates the 50 states and Washington, DC using the shared `src/lib/us-map-layout.json`; Alaska and Hawaii have separate inset scales. Both generators work offline with the checked-in snapshots.
 
 See [the September 2026 audit](../../docs/bridges-and-tunnels-audit.md) for corrections and per-card references.
+
+# Fruits
+
+`fruits.json` is the reviewed source for 100 Fruits cards, with scientific names, origin/heritage, flavor, texture, editorial flavor and availability ratings, factual references, and individual photo provenance. Forty cards have documented whole-fruit weight examples; the others explicitly leave weight unknown.
+
+Regenerate with `node scripts/generate-fruits-pack.mjs`, then `npm run generate:offline-manifest`. Both commands work offline. See [the fruit content audit](../../docs/fruits-content-audit.md) for comparison rules and limitations.

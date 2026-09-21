@@ -25,6 +25,24 @@
       "type": "string",
       "minLength": 20
     },
+    "primaryStat": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 2
+        }
+      }
+    },
     "status": {
       "type": "string",
       "enum": ["draft", "needs-review", "playable"]
@@ -288,6 +306,27 @@
                     "type": "array", "minItems": 1, "uniqueItems": true,
                     "items": { "type": "string", "minLength": 2 }
                   }
+                }
+              }
+            }
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "label",
+                "value"
+              ],
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 2
+                },
+                "value": {
+                  "type": "string",
+                  "minLength": 1
                 }
               }
             }

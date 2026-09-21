@@ -23,6 +23,7 @@ export type PackCard = {
   categories: string[];
   tags?: string[];
   metadata?: CardMetadata;
+  details?: { label: string; value: string }[];
   readingPrompts?: string[];
 };
 
@@ -45,6 +46,8 @@ export type Pack = {
   title: string;
   summary: string;
   dataNote?: string;
+  // Cards without this measurement remain playable, but skip numeric rounds.
+  primaryStat?: { id: string; label: string };
   status?: "draft" | "needs-review" | "playable";
   audience: {
     minAge: number;

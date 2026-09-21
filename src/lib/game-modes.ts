@@ -1580,6 +1580,19 @@ const thereAre = (count: number, singular: string, plural: string) =>
 
 const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenario => {
   switch (topic) {
+    case "fruits":
+      return {
+        badge: "Fruit basket",
+        ariaLabel: "Math picture: equal fruit baskets",
+        statLabel: "Fruits per basket",
+        groupSingular: "basket",
+        groupPlural: "baskets",
+        groupEmoji: "🧺",
+        itemSingular: "fruit",
+        itemPlural: "fruits",
+        itemEmoji: "🍎",
+        prompt: (title, groups, items) => `Imagine ${countLabel(groups, "basket", "baskets")} of ${title}. Each basket holds ${countLabel(items, "fruit", "fruits")}. How many fruits are there altogether?`,
+      };
     case "peppers":
       return {
         badge: "Grow case",
@@ -2452,7 +2465,9 @@ export const buildNumberRoundFromCards = (
   const questionDepth = questionDepthForSelection(difficulty, seed);
   if (pool.length < 2) throw new Error(`Need at least 2 non-negative stat cards to build a number round for ${topic}`);
   const values = pool.map((card) => card.statValue);
-  const gap = statValueGap(values, questionDepth);
+  // Fruit examples are already whole grams. A deck-wide 100 g rounding step
+  // would turn a berry into 0 g, or inflate one to 100 g in a ratio question.
+  const gap = topic === "fruits" ? 1 : statValueGap(values, questionDepth);
   const requestedOperation = numberOperationForSeed(seed);
   const shouldAdd = pool.length >= 3 && requestedOperation === "addition";
   const unit = primaryStatUnit(pool[0]);
@@ -2475,13 +2490,15 @@ export const buildNumberRoundFromCards = (
         id: `${seed}-number-${topic}-fit-${bigger.id}-${smaller.id}`,
         topic,
         operation: "fit",
-        prompt: `${bigger.title} has about ${numberWithUnit(biggerValue, unit)}. ${smaller.title} has about ${numberWithUnit(smallerValue, unit)}. About how many ${pluralTitle(smaller.title)} fit into ${bigger.title}?`,
+        prompt: topic === "fruits"
+          ? `The ${bigger.title} example weighs ${numberWithUnit(biggerValue, unit)}. The ${smaller.title} example weighs ${numberWithUnit(smallerValue, unit)}. About how many of the smaller fruits would weigh the same as one larger fruit?`
+          : `${bigger.title} has about ${numberWithUnit(biggerValue, unit)}. ${smaller.title} has about ${numberWithUnit(smallerValue, unit)}. About how many ${pluralTitle(smaller.title)} fit into ${bigger.title}?`,
         cards: [sameStatCard(smaller, smallerValue), sameStatCard(bigger, biggerValue)],
         statLabel: bigger.statLabel,
-        unit: "stacks",
+        unit: topic === "fruits" ? "fruits" : "stacks",
         operator: "x",
         termValues: [smallerValue, biggerValue],
-        resultLabel: "number that fit",
+        resultLabel: topic === "fruits" ? "fruits of the same total weight" : "number that fit",
         biggerLabel: bigger.title,
         smallerLabel: smaller.title,
         biggerValue,
@@ -2509,7 +2526,7 @@ export const buildNumberRoundFromCards = (
       unit,
       operator: "+",
       termValues,
-      resultLabel: stackedTotalLabel(count),
+      resultLabel: topic === "fruits" ? "total weight" : stackedTotalLabel(count),
       biggerLabel: selected[0]?.title ?? "Card",
       smallerLabel: selected[1]?.title ?? "Card",
       biggerValue: termValues[0] ?? 0,
@@ -2522,14 +2539,20 @@ export const buildNumberRoundFromCards = (
 
   const sorted = shuffle(pool, seed + 1).sort((a, b) => b.statValue - a.statValue);
   const bigger = sorted[0];
-  const smaller = sorted.find((card) => card.id !== bigger.id && card.statValue <= bigger.statValue) ?? sorted[1];
-  const { biggerValue, smallerValue, answer } = roundedSubtractionPair(bigger.statValue, smaller.statValue, gap);
+  const smaller = sorted.find((card) => card.id !== bigger.id && (topic === "fruits"
+    ? card.statValue < bigger.statValue
+    : card.statValue <= bigger.statValue)) ?? sorted[1];
+  const { biggerValue, smallerValue, answer } = topic === "fruits"
+    ? { biggerValue: bigger.statValue, smallerValue: smaller.statValue, answer: bigger.statValue - smaller.statValue }
+    : roundedSubtractionPair(bigger.statValue, smaller.statValue, gap);
 
   return {
     id: `${seed}-number-${topic}-${bigger.id}-${smaller.id}`,
     topic,
     operation: "subtraction",
-    prompt: `${bigger.title} has ${numberWithUnit(biggerValue, unit)}. ${smaller.title} has ${numberWithUnit(smallerValue, unit)}. What is the difference?`,
+    prompt: topic === "fruits"
+      ? `The ${bigger.title} example weighs ${numberWithUnit(biggerValue, unit)}. The ${smaller.title} example weighs ${numberWithUnit(smallerValue, unit)}. What is the difference?`
+      : `${bigger.title} has ${numberWithUnit(biggerValue, unit)}. ${smaller.title} has ${numberWithUnit(smallerValue, unit)}. What is the difference?`,
     cards: [sameStatCard(bigger, biggerValue), sameStatCard(smaller, smallerValue)],
     statLabel: bigger.statLabel,
     unit,
@@ -2646,6 +2669,7 @@ const additionPromptStart = (count: number) => count === 2 ? "Add these together
 const stackedTotalLabel = (count: number) => count === 2 ? "stacked total" : "three-part total";
 const sumValues = (values: number[]) => values.reduce((total, value) => total + value, 0);
 const packAdditionPrompt = (topic: RoundTopic, count: number, statLabel: string) => {
+  if (topic === "fruits") return `${additionPromptStart(count)}. What is the total weight of these example fruits?`;
   if (topic === "dinosaurs") return `${additionPromptStart(count)}. If these prehistoric animals lined up nose to tail, what is their total length?`;
   if (topic === "tall-trees") return `${additionPromptStart(count)}. If these trees were placed end to end, what is their total height?`;
   if (topic === "bridges-and-tunnels") return `${additionPromptStart(count)}. If these routes were joined end to end, what is their total length?`;

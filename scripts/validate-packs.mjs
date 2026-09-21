@@ -245,6 +245,11 @@ const validatePack = (packFile) => {
 
   validateLanding(packId, pack);
 
+  if (pack.primaryStat !== undefined && (!isObject(pack.primaryStat)
+    || !slugPattern.test(pack.primaryStat.id) || !hasText(pack.primaryStat.label, 2))) {
+    addError(packId, "primaryStat needs a slug id and label");
+  }
+
   if (!Array.isArray(pack.sources) || pack.sources.length < 1) {
     addError(packId, "at least one source is required");
   } else {
@@ -282,6 +287,14 @@ const validatePack = (packFile) => {
     validateImage(packId, card, isTemplate);
 
     const stats = validateStats(packId, card, cardLabel);
+    if (card.details !== undefined && (!Array.isArray(card.details)
+      || card.details.some((detail) => !isObject(detail) || !hasText(detail.label, 2) || !hasText(detail.value)))) {
+      addError(packId, `${cardLabel}: details need a label and value`);
+    }
+    if (pack.primaryStat && stats.some((stat) => stat.id === pack.primaryStat.id)) {
+      if (stats[0]?.id !== pack.primaryStat.id) addError(packId, `${cardLabel}: primaryStat must be the first stat when documented`);
+      if (stats[0]?.label !== pack.primaryStat.label) addError(packId, `${cardLabel}: primaryStat label must match the pack`);
+    }
     validateCardMetadata(packId, card, cardLabel);
     for (const stat of stats) {
       if (stat.value > 0) commonStatIds.set(stat.id, (commonStatIds.get(stat.id) ?? 0) + 1);

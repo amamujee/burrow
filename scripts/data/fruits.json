@@ -1,0 +1,4192 @@
+{
+  "reviewedOn": "2026-09-20",
+  "methodology": {
+    "weight": "Whole-fruit examples in grams, including natural peel, shell and seeds unless noted. A source may report a range, cultivar or sample mean. Chosen examples are not species averages or record comparisons. Undocumented weights are null and excluded from arithmetic.",
+    "flavorRatings": "Burrow editorial ratings from 1 to 10, interpreting descriptions of ripe fruit: 1 barely sweet/tart, 5 moderate, 10 very sweet/tart. Not Brix, sugar grams, laboratory acidity, health scores or tastiness judgments. Breadfruit is rated at the mature cooking stage. Cultivar, ripeness and personal perception change flavor.",
+    "availability": "Burrow editorial findability bands, 1 to 5, for fresh fruit beyond its home region: 1 local harvest/specialist growers; 2 mostly regional/seasonal; 3 specialty markets; 4 regional staple traded abroad; 5 widely traded. Not a country count, current store inventory, conservation status or price. Based on described cultivation and trade, with no implied worldwide census.",
+    "geography": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated.",
+    "images": "Individually credited Commons photos. Stored as resized JPEGs for offline play; no botanical drawings or generated substitutes."
+  },
+  "cards": [
+    {
+      "id": "apple",
+      "name": "Apple",
+      "scientificName": "Malus domestica",
+      "origin": "Central Asia",
+      "location": {
+        "label": "Central Asia",
+        "countries": [
+          "Kazakhstan"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          43.3,
+          76.9
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 3,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Crisp, sweet to tangy",
+      "texture": "Crunchy and juicy",
+      "group": "pome",
+      "fact": "Apple seeds can grow into trees with fruit very different from the parent apple.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 156,
+        "note": "Rounded from a measured whole-fruit sample mean of 156.2 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average.",
+        "sourceUrl": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Apple",
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      ],
+      "image": "/burrow-assets/fruits/apple.jpg",
+      "imageAlt": "Apple fruit",
+      "sourceFile": "Golden Delicious, SweeTango, Granny Smith, and Gala apples 3.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Golden_Delicious,_SweeTango,_Granny_Smith,_and_Gala_apples_3.JPG",
+      "imageCreator": "Dllu",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Golden_Delicious%2C_SweeTango%2C_Granny_Smith%2C_and_Gala_apples_3.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "banana",
+      "name": "Banana",
+      "scientificName": "Musa hybrids",
+      "origin": "Southeast Asia and New Guinea",
+      "location": {
+        "label": "Southeast Asia and New Guinea",
+        "countries": [
+          "Papua New Guinea"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -6.3,
+          145.4
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 1,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Mild and sweet when ripe",
+      "texture": "Soft and creamy",
+      "group": "berry",
+      "fact": "A banana plant looks like a tree, but its tall stem is made from tightly wrapped leaf bases.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 154,
+        "note": "Rounded from a measured whole-fruit sample mean of 153.8 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average.",
+        "sourceUrl": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Banana",
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      ],
+      "image": "/burrow-assets/fruits/banana.jpg",
+      "imageAlt": "Banana fruit",
+      "sourceFile": "Bananavarieties.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Bananavarieties.jpg",
+      "imageCreator": "TimothyPilgrim",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "orange",
+      "name": "Orange",
+      "scientificName": "Citrus × sinensis",
+      "origin": "Southern China and nearby Asia",
+      "location": {
+        "label": "Southern China and nearby Asia",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          23.1,
+          113.3
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 4,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet citrus with a tang",
+      "texture": "Juicy segments",
+      "group": "citrus",
+      "fact": "An orange is divided into segments, each packed with tiny sacs of juice.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 219,
+        "note": "Rounded from a measured whole-fruit sample mean of 218.6 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average.",
+        "sourceUrl": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Orange_%28fruit%29",
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      ],
+      "image": "/burrow-assets/fruits/orange.jpg",
+      "imageAlt": "Orange fruit",
+      "sourceFile": "Oranges - whole-halved-segment.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Oranges_-_whole-halved-segment.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Oranges_-_whole-halved-segment.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "mango",
+      "name": "Mango",
+      "scientificName": "Mangifera indica",
+      "origin": "South Asia",
+      "location": {
+        "label": "South Asia",
+        "countries": [
+          "India"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          25.6,
+          91.9
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 3,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Rich, sweet and aromatic",
+      "texture": "Soft, sometimes fibrous",
+      "group": "stone-fruit",
+      "fact": "Mangoes can have yellow, orange or green skins, so color alone does not tell you whether one is ripe.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 500,
+        "note": "A 500 g whole-fruit example chosen within the reported 140–2,000 g range; variety and growing conditions change size.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Mango"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Mango"
+      ],
+      "image": "/burrow-assets/fruits/mango.jpg",
+      "imageAlt": "Mango fruit",
+      "sourceFile": "Mangos - single and halved.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mangos_-_single_and_halved.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/74/Mangos_-_single_and_halved.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "pineapple",
+      "name": "Pineapple",
+      "scientificName": "Ananas comosus",
+      "origin": "Tropical South America",
+      "location": {
+        "label": "Tropical South America",
+        "countries": [
+          "Brazil"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -15.8,
+          -47.9
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 6,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet with a sharp tang",
+      "texture": "Juicy and fibrous",
+      "group": "multiple-fruit",
+      "fact": "A pineapple forms when many flowers join together into one big fruit.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 2000,
+        "note": "A 2,000 g example of a whole Red Spanish pineapple; reported cultivar range 1,000–2,000 g. Other cultivars differ.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Pineapple"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Pineapple"
+      ],
+      "image": "/burrow-assets/fruits/pineapple.jpg",
+      "imageAlt": "Pineapple fruit",
+      "sourceFile": "കൈതച്ചക്ക.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:%E0%B4%95%E0%B5%88%E0%B4%A4%E0%B4%9A%E0%B5%8D%E0%B4%9A%E0%B4%95%E0%B5%8D%E0%B4%95.jpg",
+      "imageCreator": "Suniltg at Malayalam Wikipedia",
+      "imageLicense": "CC BY 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/74/%E0%B4%95%E0%B5%88%E0%B4%A4%E0%B4%9A%E0%B5%8D%E0%B4%9A%E0%B4%95%E0%B5%8D%E0%B4%95.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "strawberry",
+      "name": "Strawberry",
+      "scientificName": "Fragaria × ananassa",
+      "origin": "Garden hybrid developed in France",
+      "location": {
+        "label": "Garden hybrid developed in France",
+        "countries": [
+          "France"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          48.4,
+          -4.5
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 4,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Fragrant, sweet and tangy",
+      "texture": "Soft and juicy",
+      "group": "aggregate-fruit",
+      "fact": "Each tiny dot on a strawberry's surface is a small fruit with a seed inside.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 16,
+        "note": "Rounded from a measured whole-fruit sample mean of 15.6 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average.",
+        "sourceUrl": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Strawberry",
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      ],
+      "image": "/burrow-assets/fruits/strawberry.jpg",
+      "imageAlt": "Strawberry fruit",
+      "sourceFile": "Garden strawberry (Fragaria × ananassa) single2.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Garden_strawberry_(Fragaria_%C3%97_ananassa)_single2.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Garden_strawberry_%28Fragaria_%C3%97_ananassa%29_single2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "grape",
+      "name": "Grape",
+      "scientificName": "Vitis species",
+      "origin": "West Asia and other temperate regions",
+      "location": {
+        "label": "West Asia and other temperate regions",
+        "countries": [
+          "Georgia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          41.7,
+          44.8
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 3,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet to gently tart",
+      "texture": "Juicy beneath a thin skin",
+      "group": "berry",
+      "fact": "Grapes grow in bunches on climbing vines rather than on fruit trees.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 6,
+        "note": "Rounded from a measured whole-fruit sample mean of 6.1 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average. Green grapes.",
+        "sourceUrl": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Grape",
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      ],
+      "image": "/burrow-assets/fruits/grape.jpg",
+      "imageAlt": "Grape fruit",
+      "sourceFile": "Grapes, Rostov-on-Don, Russia.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Grapes,_Rostov-on-Don,_Russia.jpg",
+      "imageCreator": "Vyacheslav Argenberg",
+      "imageLicense": "CC BY 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/53/Grapes%2C_Rostov-on-Don%2C_Russia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "watermelon",
+      "name": "Watermelon",
+      "scientificName": "Citrullus lanatus",
+      "origin": "Northeast Africa",
+      "location": {
+        "label": "Northeast Africa",
+        "countries": [
+          "Sudan"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          15.5,
+          32.6
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 1,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Mild, refreshing sweetness",
+      "texture": "Crisp and very juicy",
+      "group": "melon",
+      "fact": "Watermelons can have yellow or orange flesh as well as the familiar red.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 10000,
+        "note": "A 10,000 g example of the Orangeglo cultivar, reported at 9,000–14,000 g. Small watermelons can be much lighter.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Watermelon"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Watermelon"
+      ],
+      "image": "/burrow-assets/fruits/watermelon.jpg",
+      "imageAlt": "Watermelon fruit",
+      "sourceFile": "Taiwan 2009 Tainan City Organic Farm Watermelon FRD 7962.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Taiwan_2009_Tainan_City_Organic_Farm_Watermelon_FRD_7962.jpg",
+      "imageCreator": "Fred Hsu (Wikipedia:User:Fred Hsu on en.wikipedia)",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/47/Taiwan_2009_Tainan_City_Organic_Farm_Watermelon_FRD_7962.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "peach",
+      "name": "Peach",
+      "scientificName": "Prunus persica",
+      "origin": "China",
+      "location": {
+        "label": "China",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          30.3,
+          120.2
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 3,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet and fragrant",
+      "texture": "Juicy flesh, fuzzy skin",
+      "group": "stone-fruit",
+      "fact": "A nectarine is a smooth-skinned form of peach, not a cross between a peach and a plum.",
+      "difficultyBand": "easy",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Peach"
+      ],
+      "image": "/burrow-assets/fruits/peach.jpg",
+      "imageAlt": "Peach fruit",
+      "sourceFile": "Prunus persica - Peach Hungary.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Prunus_persica_-_Peach_Hungary.jpg",
+      "imageCreator": "Takkk",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Prunus_persica_-_Peach_Hungary.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "pear",
+      "name": "Pear",
+      "scientificName": "Pyrus species",
+      "origin": "Europe and Asia",
+      "location": {
+        "label": "Europe and Asia",
+        "countries": [
+          "Turkey"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          39.0,
+          35.2
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 2,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Mild and sweet",
+      "texture": "Juicy with tiny gritty cells",
+      "group": "pome",
+      "fact": "The slight grittiness in a pear comes from tiny groups of hard cells in its flesh.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 169,
+        "note": "Rounded from a measured whole-fruit sample mean of 168.6 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average.",
+        "sourceUrl": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Pear",
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      ],
+      "image": "/burrow-assets/fruits/pear.jpg",
+      "imageAlt": "Pear fruit",
+      "sourceFile": "Pears.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pears.jpg",
+      "imageCreator": "Keith Weller",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Pears.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "plum",
+      "name": "Plum",
+      "scientificName": "Prunus species",
+      "origin": "Europe and Asia",
+      "location": {
+        "label": "Europe and Asia",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          32.1,
+          118.8
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 4,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet flesh with tangy skin",
+      "texture": "Juicy around a hard stone",
+      "group": "stone-fruit",
+      "fact": "Plums belong to the same plant genus as peaches, cherries and apricots.",
+      "difficultyBand": "easy",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Plum"
+      ],
+      "image": "/burrow-assets/fruits/plum.jpg",
+      "imageAlt": "Plum fruit",
+      "sourceFile": "Plums African Rose - whole, halved and slice.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Plums_African_Rose_-_whole,_halved_and_slice.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Plums_African_Rose_-_whole%2C_halved_and_slice.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "apricot",
+      "name": "Apricot",
+      "scientificName": "Prunus armeniaca",
+      "origin": "Central and East Asia",
+      "location": {
+        "label": "Central and East Asia",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          40.1,
+          94.7
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 4,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet and gently tart",
+      "texture": "Soft, slightly velvety",
+      "group": "stone-fruit",
+      "fact": "An apricot has a hard stone in its center and can be eaten fresh or dried.",
+      "difficultyBand": "easy",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Apricot"
+      ],
+      "image": "/burrow-assets/fruits/apricot.jpg",
+      "imageAlt": "Apricot fruit",
+      "sourceFile": "Marelica Kečkemetska ruža - zreli plodovi na grani.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Marelica_Ke%C4%8Dkemetska_ru%C5%BEa_-_zreli_plodovi_na_grani.jpg",
+      "imageCreator": "Silverije",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/29/Marelica_Ke%C4%8Dkemetska_ru%C5%BEa_-_zreli_plodovi_na_grani.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "sweet-cherry",
+      "name": "Sweet Cherry",
+      "scientificName": "Prunus avium",
+      "origin": "Western Eurasia",
+      "location": {
+        "label": "Western Eurasia",
+        "countries": [
+          "Turkey"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          40.5,
+          36.5
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 3,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet with a little tang",
+      "texture": "Firm and juicy",
+      "group": "stone-fruit",
+      "fact": "A sweet cherry has one hard stone inside, just like its larger relative the peach.",
+      "difficultyBand": "easy",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Prunus_avium"
+      ],
+      "image": "/burrow-assets/fruits/sweet-cherry.jpg",
+      "imageAlt": "Sweet Cherry fruit",
+      "sourceFile": "Prunus avium fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Prunus_avium_fruit.jpg",
+      "imageCreator": "MPF",
+      "imageLicense": "CC BY 2.5",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.5",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/49/Prunus_avium_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "blueberry",
+      "name": "Blueberry",
+      "scientificName": "Vaccinium section Cyanococcus",
+      "origin": "North America",
+      "location": {
+        "label": "North America",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          44.3,
+          -69.4
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 4,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Mildly sweet and tangy",
+      "texture": "Soft, juicy berries",
+      "group": "berry",
+      "fact": "Blueberries have a tiny crown at the end opposite the stalk.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 2,
+        "note": "Rounded from a measured whole-fruit sample mean of 1.8 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average.",
+        "sourceUrl": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Blueberry",
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      ],
+      "image": "/burrow-assets/fruits/blueberry.jpg",
+      "imageAlt": "Blueberry fruit",
+      "sourceFile": "Blueberries.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Blueberries.jpg",
+      "imageCreator": "The original Uploader was Oven Fresh at English Wikipedia",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/15/Blueberries.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "raspberry",
+      "name": "Raspberry",
+      "scientificName": "Rubus idaeus and relatives",
+      "origin": "Northern temperate regions",
+      "location": {
+        "label": "Northern temperate regions",
+        "countries": [
+          "United Kingdom"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          56.5,
+          -4.2
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 5,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet with a bright tang",
+      "texture": "Delicate little juice sacs",
+      "group": "aggregate-fruit",
+      "fact": "A picked raspberry is hollow because its central core stays behind on the plant.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 4,
+        "note": "Midpoint of the reported 3–5 g range for one fresh raspberry.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Raspberry"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Raspberry"
+      ],
+      "image": "/burrow-assets/fruits/raspberry.jpg",
+      "imageAlt": "Raspberry fruit",
+      "sourceFile": "Raspberry - halved (Rubus idaeus).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Raspberry_-_halved_(Rubus_idaeus).jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Raspberry_-_halved_%28Rubus_idaeus%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "blackberry",
+      "name": "Blackberry",
+      "scientificName": "Rubus subgenus Rubus",
+      "origin": "Temperate regions across several continents",
+      "location": {
+        "label": "Temperate regions across several continents",
+        "countries": [
+          "United Kingdom"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          52.5,
+          -1.8
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 5,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet, tart and earthy",
+      "texture": "Juicy clusters with a firm core",
+      "group": "aggregate-fruit",
+      "fact": "A blackberry's middle stays inside the fruit when you pick it, unlike a raspberry's hollow center.",
+      "difficultyBand": "easy",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Blackberry"
+      ],
+      "image": "/burrow-assets/fruits/blackberry.jpg",
+      "imageAlt": "Blackberry fruit",
+      "sourceFile": "Ripe, ripening, and green blackberries.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ripe,_ripening,_and_green_blackberries.jpg",
+      "imageCreator": "Ragesoss",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/78/Ripe%2C_ripening%2C_and_green_blackberries.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "lemon",
+      "name": "Lemon",
+      "scientificName": "Citrus × limon",
+      "origin": "Probably northeastern India; origin uncertain",
+      "location": {
+        "label": "Probably northeastern India; origin uncertain",
+        "countries": [
+          "India"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          26.2,
+          91.7
+        ]
+      },
+      "sweetness": 1,
+      "tartness": 10,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Strongly sour citrus",
+      "texture": "Juicy segments",
+      "group": "citrus",
+      "fact": "Citric acid gives lemon juice its sharp, sour flavor.",
+      "difficultyBand": "easy",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Lemon"
+      ],
+      "image": "/burrow-assets/fruits/lemon.jpg",
+      "imageAlt": "Lemon fruit",
+      "sourceFile": "P1030323.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:P1030323.JPG",
+      "imageCreator": "Elena Chochkova",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e4/P1030323.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "key-lime",
+      "name": "Key Lime",
+      "scientificName": "Citrus × aurantiifolia",
+      "origin": "Tropical Southeast Asia",
+      "location": {
+        "label": "Tropical Southeast Asia",
+        "countries": [
+          "Malaysia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          4.2,
+          102.0
+        ]
+      },
+      "sweetness": 1,
+      "tartness": 10,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sharp, fragrant citrus",
+      "texture": "Juicy segments",
+      "group": "citrus",
+      "fact": "Key limes turn yellow when fully ripe, although shops often sell them while still green.",
+      "difficultyBand": "easy",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Key_lime"
+      ],
+      "image": "/burrow-assets/fruits/key-lime.jpg",
+      "imageAlt": "Key Lime fruit",
+      "sourceFile": "Citrus × aurantiifolia (Christm.) Swingle (51906868474).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Citrus_%C3%97_aurantiifolia_(Christm.)_Swingle_(51906868474).jpg",
+      "imageCreator": "Dinesh Valke from Thane, India",
+      "imageLicense": "CC BY-SA 2.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/24/Citrus_%C3%97_aurantiifolia_%28Christm.%29_Swingle_%2851906868474%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "coconut",
+      "name": "Coconut",
+      "scientificName": "Cocos nucifera",
+      "origin": "Indo-Pacific tropics; early history debated",
+      "location": {
+        "label": "Indo-Pacific tropics; early history debated",
+        "countries": [
+          "Indonesia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          -1.0,
+          120.0
+        ]
+      },
+      "sweetness": 3,
+      "tartness": 1,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Mild, nutty and slightly sweet",
+      "texture": "Firm flesh inside a hard shell",
+      "group": "drupe",
+      "fact": "A whole coconut has a thick fibrous husk outside the hard shell sold in many shops.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 1400,
+        "note": "Reported approximate mass of one full-sized coconut including its fibrous husk; not just the de-husked nut or edible flesh.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Coconut"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Coconut"
+      ],
+      "image": "/burrow-assets/fruits/coconut.jpg",
+      "imageAlt": "Coconut fruit",
+      "sourceFile": "Coconuts - single and cracked open.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Coconuts_-_single_and_cracked_open.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Coconuts_-_single_and_cracked_open.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "pomegranate",
+      "name": "Pomegranate",
+      "scientificName": "Punica granatum",
+      "origin": "Iran and neighboring western Asia",
+      "location": {
+        "label": "Iran and neighboring western Asia",
+        "countries": [
+          "Iran"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          32.0,
+          53.0
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 6,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet to sharply tangy",
+      "texture": "Juice-filled seed coverings",
+      "group": "berry",
+      "fact": "The juicy red parts of a pomegranate are coverings around its seeds.",
+      "difficultyBand": "easy",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Pomegranate"
+      ],
+      "image": "/burrow-assets/fruits/pomegranate.jpg",
+      "imageAlt": "Pomegranate fruit",
+      "sourceFile": "Pomegranate Juice (2019).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pomegranate_Juice_(2019).jpg",
+      "imageCreator": "Augustus Binu : flickr",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Pomegranate_Juice_%282019%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "fig",
+      "name": "Fig",
+      "scientificName": "Ficus carica",
+      "origin": "Mediterranean region and western Asia",
+      "location": {
+        "label": "Mediterranean region and western Asia",
+        "countries": [
+          "Turkey"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          38.4,
+          27.1
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 1,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Honey-like sweetness",
+      "texture": "Soft flesh with tiny crunchy seeds",
+      "group": "multiple-fruit",
+      "fact": "A fig's tiny flowers grow inside the hollow structure that becomes the fruit.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 42,
+        "note": "Reported weight of a Poona fig, one named cultivar; other fig varieties differ.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/fig.html"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Fig",
+        "https://hort.purdue.edu/newcrop/morton/fig.html"
+      ],
+      "image": "/burrow-assets/fruits/fig.jpg",
+      "imageAlt": "Fig fruit",
+      "sourceFile": "Fig cut open.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Fig_cut_open.jpg",
+      "imageCreator": "FrogsLegs71",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Fig_cut_open.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "kiwifruit",
+      "name": "Kiwifruit",
+      "scientificName": "Actinidia chinensis var. deliciosa",
+      "origin": "China",
+      "location": {
+        "label": "China",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          30.0,
+          111.0
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 6,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet and tangy",
+      "texture": "Soft flesh with tiny seeds",
+      "group": "berry",
+      "fact": "Kiwifruit came from China before growers in New Zealand helped make it famous around the world.",
+      "difficultyBand": "easy",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Kiwifruit"
+      ],
+      "image": "/burrow-assets/fruits/kiwifruit.jpg",
+      "imageAlt": "Kiwifruit fruit",
+      "sourceFile": "Kiwifruit cross section.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kiwifruit_cross_section.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/Kiwifruit_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "persimmon",
+      "name": "Persimmon",
+      "scientificName": "Diospyros kaki",
+      "origin": "East Asia",
+      "location": {
+        "label": "East Asia",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          34.3,
+          108.9
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 1,
+      "availability": 4,
+      "availabilityBand": "Regional staple; traded abroad",
+      "flavor": "Very sweet when properly ripe",
+      "texture": "Firm or jelly-soft, depending on variety",
+      "group": "berry",
+      "fact": "Some persimmons stay crisp when ripe; other varieties need to become very soft before they lose their puckering taste.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 500,
+        "note": "A large-fruit example at the reported upper size of 500 g; this is not a typical-fruit average.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Diospyros_kaki"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Diospyros_kaki"
+      ],
+      "image": "/burrow-assets/fruits/persimmon.jpg",
+      "imageAlt": "Persimmon fruit",
+      "sourceFile": "Kaki 20041002.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kaki_20041002.jpg",
+      "imageCreator": "Sphl",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Kaki_20041002.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "guava",
+      "name": "Guava",
+      "scientificName": "Psidium guajava",
+      "origin": "Tropical Americas; exact native range debated",
+      "location": {
+        "label": "Tropical Americas; exact native range debated",
+        "countries": [
+          "Brazil"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -10.0,
+          -52.0
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 4,
+      "availability": 4,
+      "availabilityBand": "Regional staple; traded abroad",
+      "flavor": "Fragrant, sweet and tangy",
+      "texture": "Soft flesh with hard seeds",
+      "group": "berry",
+      "fact": "Guava flesh can be white, pink, yellow or red, depending on the variety.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 250,
+        "note": "A 250 g whole-fruit example within UF/IFAS’s reported 28–1,400 g range; guava cultivars vary widely.",
+        "sourceUrl": "https://ask.ifas.ufl.edu/publication/MG045"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Psidium_guajava",
+        "https://ask.ifas.ufl.edu/publication/MG045"
+      ],
+      "image": "/burrow-assets/fruits/guava.jpg",
+      "imageAlt": "Guava fruit",
+      "sourceFile": "Psidium guajava fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Psidium_guajava_fruit.jpg",
+      "imageCreator": "Wikimedia Commons contributor",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Psidium_guajava_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "papaya",
+      "name": "Papaya",
+      "scientificName": "Carica papaya",
+      "origin": "Southern Mexico and Central America",
+      "location": {
+        "label": "Southern Mexico and Central America",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          17.0,
+          -96.7
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 1,
+      "availability": 4,
+      "availabilityBand": "Regional staple; traded abroad",
+      "flavor": "Mild, musky sweetness",
+      "texture": "Soft and smooth",
+      "group": "berry",
+      "fact": "A ripe papaya has a hollow center holding many small dark seeds.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 750,
+        "note": "Midpoint of the reported 500–1,000 g whole-fruit range for Solo papayas; larger papaya varieties can be much heavier.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/papaya_ars.html"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Papaya",
+        "https://hort.purdue.edu/newcrop/morton/papaya_ars.html"
+      ],
+      "image": "/burrow-assets/fruits/papaya.jpg",
+      "imageAlt": "Papaya fruit",
+      "sourceFile": "Papaya - longitudinal section.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Papaya_-_longitudinal_section.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/09/Papaya_-_longitudinal_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "rambutan",
+      "name": "Rambutan",
+      "scientificName": "Nephelium lappaceum",
+      "origin": "Southeast Asia",
+      "location": {
+        "label": "Southeast Asia",
+        "countries": [
+          "Indonesia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          0.5,
+          101.4
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 3,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Sweet with a gentle tang",
+      "texture": "Juicy, translucent flesh",
+      "group": "soapberry-relative",
+      "fact": "Rambutan gets its name from a Malay word for hair, a clue to its shaggy-looking skin.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 40,
+        "note": "Midpoint of the reported 20–60 g whole-fruit range, including skin and seed.",
+        "sourceUrl": "https://rfcarchives.org.au/Next/Fruits/Rambutan/RambutanBig11-81.htm"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Rambutan",
+        "https://rfcarchives.org.au/Next/Fruits/Rambutan/RambutanBig11-81.htm"
+      ],
+      "image": "/burrow-assets/fruits/rambutan.jpg",
+      "imageAlt": "Rambutan fruit",
+      "sourceFile": "Rambutans with seed.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Rambutans_with_seed.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Rambutans_with_seed.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "mangosteen",
+      "name": "Mangosteen",
+      "scientificName": "Garcinia mangostana",
+      "origin": "Southeast Asia; exact origin uncertain",
+      "location": {
+        "label": "Southeast Asia; exact origin uncertain",
+        "countries": [
+          "Malaysia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          4.2,
+          102.0
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 4,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Sweet and delicately tangy",
+      "texture": "Soft, juicy white segments",
+      "group": "berry",
+      "fact": "A mangosteen's thick purple rind hides pale segments of soft fruit inside.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 90,
+        "note": "Midpoint of the Thai Department of Agricultural Extension’s reported 70–110 g range, including the thick rind.",
+        "sourceUrl": "https://www.doae.go.th/en/mangosteen-2/"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Mangosteen",
+        "https://www.doae.go.th/en/mangosteen-2/"
+      ],
+      "image": "/burrow-assets/fruits/mangosteen.jpg",
+      "imageAlt": "Mangosteen fruit",
+      "sourceFile": "Mangosteens - whole and opened.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mangosteens_-_whole_and_opened.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/93/Mangosteens_-_whole_and_opened.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "durian",
+      "name": "Durian",
+      "scientificName": "Durio zibethinus",
+      "origin": "Borneo, Sumatra and the Malay Peninsula",
+      "location": {
+        "label": "Borneo, Sumatra and the Malay Peninsula",
+        "countries": [
+          "Malaysia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          2.3,
+          113.0
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 2,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Rich and sweet with savory notes",
+      "texture": "Thick and custard-like",
+      "group": "capsule-fruit",
+      "fact": "A durian's spiky shell hides soft flesh with a strong smell that people react to very differently.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 2000,
+        "note": "Midpoint of the reported usual 1,000–3,000 g whole-fruit range, including the heavy shell.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Durian"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Durian"
+      ],
+      "image": "/burrow-assets/fruits/durian.jpg",
+      "imageAlt": "Durian fruit",
+      "sourceFile": "Durian in black.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Durian_in_black.jpg",
+      "imageCreator": "مانفی",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Durian_in_black.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "jackfruit",
+      "name": "Jackfruit",
+      "scientificName": "Artocarpus heterophyllus",
+      "origin": "South Asia",
+      "location": {
+        "label": "South Asia",
+        "countries": [
+          "India"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          10.9,
+          76.3
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 2,
+      "availability": 4,
+      "availabilityBand": "Regional staple; traded abroad",
+      "flavor": "Sweet, fruity and fragrant when ripe",
+      "texture": "Firm, chewy bulbs",
+      "group": "multiple-fruit",
+      "fact": "Jackfruit grows directly on thick branches or the trunk, helping support its enormous fruit.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 10000,
+        "note": "A 10,000 g whole-fruit example within the reported 4,500–50,000 g mature-fruit range; not a record or a universal average.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Jackfruit"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Jackfruit"
+      ],
+      "image": "/burrow-assets/fruits/jackfruit.jpg",
+      "imageAlt": "Jackfruit fruit",
+      "sourceFile": "The jackfruit is holding on to the tree.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:The_jackfruit_is_holding_on_to_the_tree.jpg",
+      "imageCreator": "This work was made by Tushar Hossain and released under the license(s) stated below. Please feel free to use it for any purpose as long as you credit Tushar Hossain as author and follow the terms of the chosen license. If you use this work outside of the Wikimedia projects, I would very much like to get a note from you. Thanks!",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3b/The_jackfruit_is_holding_on_to_the_tree.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "dragon-fruit",
+      "name": "Dragon Fruit",
+      "scientificName": "Selenicereus species",
+      "origin": "Mexico and Central America",
+      "location": {
+        "label": "Mexico and Central America",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          16.8,
+          -93.1
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 2,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Mild sweetness",
+      "texture": "Soft flesh with crunchy tiny seeds",
+      "group": "cactus-fruit",
+      "fact": "Dragon fruit grows on a climbing cactus and can have white, red or purple flesh.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 375,
+        "note": "Midpoint of the reported 150–600 g whole-fruit range; some individual fruits can be larger.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Dragon_fruit"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Dragon_fruit"
+      ],
+      "image": "/burrow-assets/fruits/dragon-fruit.jpg",
+      "imageAlt": "Dragon Fruit fruit",
+      "sourceFile": "Pitaya cross section ed2.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pitaya_cross_section_ed2.jpg",
+      "imageCreator": "SMasters",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/43/Pitaya_cross_section_ed2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "lychee",
+      "name": "Lychee",
+      "scientificName": "Litchi chinensis",
+      "origin": "Southern China and nearby Southeast Asia",
+      "location": {
+        "label": "Southern China and nearby Southeast Asia",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          23.1,
+          113.3
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 3,
+      "availability": 4,
+      "availabilityBand": "Regional staple; traded abroad",
+      "flavor": "Sweet and floral",
+      "texture": "Juicy, translucent flesh",
+      "group": "soapberry-relative",
+      "fact": "Peel a lychee's bumpy shell and you find pale, juicy flesh around a dark seed.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 20,
+        "note": "Reported approximate weight of one whole lychee, including skin and seed.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Lychee"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Lychee"
+      ],
+      "image": "/burrow-assets/fruits/lychee.jpg",
+      "imageAlt": "Lychee fruit",
+      "sourceFile": "Litchi chinensis fruits.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Litchi_chinensis_fruits.JPG",
+      "imageCreator": "B.navez",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/46/Litchi_chinensis_fruits.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "longan",
+      "name": "Longan",
+      "scientificName": "Dimocarpus longan",
+      "origin": "Southern China and Southeast Asia",
+      "location": {
+        "label": "Southern China and Southeast Asia",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          24.5,
+          118.1
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 1,
+      "availability": 4,
+      "availabilityBand": "Regional staple; traded abroad",
+      "flavor": "Mild, musky sweetness",
+      "texture": "Juicy and translucent",
+      "group": "soapberry-relative",
+      "fact": "Longan means dragon's eye: its dark seed can look like a pupil through the pale flesh.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 12,
+        "note": "Rounded midpoint of the UF/IFAS whole-fruit range of 6–19 g.",
+        "sourceUrl": "https://ask.ifas.ufl.edu/publication/MG049"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Longan",
+        "https://ask.ifas.ufl.edu/publication/MG049"
+      ],
+      "image": "/burrow-assets/fruits/longan.jpg",
+      "imageAlt": "Longan fruit",
+      "sourceFile": "Longan fruits and seed.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Longan_fruits_and_seed.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/17/Longan_fruits_and_seed.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "star-fruit",
+      "name": "Star Fruit",
+      "scientificName": "Averrhoa carambola",
+      "origin": "Tropical Southeast Asia",
+      "location": {
+        "label": "Tropical Southeast Asia",
+        "countries": [
+          "Malaysia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          4.2,
+          102.0
+        ]
+      },
+      "sweetness": 4,
+      "tartness": 7,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Sweet-tart to very sour",
+      "texture": "Crisp and juicy",
+      "group": "berry",
+      "fact": "Slice a star fruit across its ridges and each slice looks like a little star.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 121,
+        "note": "Rounded from a measured whole-fruit study mean of 120.8 g; one study sample, not a universal average.",
+        "sourceUrl": "https://academic.oup.com/ijfst/article/49/9/2101/7864427"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Carambola",
+        "https://academic.oup.com/ijfst/article/49/9/2101/7864427"
+      ],
+      "image": "/burrow-assets/fruits/star-fruit.jpg",
+      "imageAlt": "Star Fruit fruit",
+      "sourceFile": "Carambola Starfruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Carambola_Starfruit.jpg",
+      "imageCreator": "SMasters",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Carambola_Starfruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "passion-fruit",
+      "name": "Passion Fruit",
+      "scientificName": "Passiflora edulis",
+      "origin": "Southern Brazil, Paraguay and northern Argentina",
+      "location": {
+        "label": "Southern Brazil, Paraguay and northern Argentina",
+        "countries": [
+          "Brazil"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -25.4,
+          -49.3
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 9,
+      "availability": 4,
+      "availabilityBand": "Regional staple; traded abroad",
+      "flavor": "Strongly aromatic and tart",
+      "texture": "Seedy jelly-like pulp",
+      "group": "passionfruit",
+      "fact": "Passion fruit grows on a vine and holds crunchy seeds inside fragrant, juicy pulp.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 35,
+        "note": "Reported approximate weight for a purple passion fruit; yellow-fruited forms are generally larger.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Passiflora_edulis"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Passiflora_edulis"
+      ],
+      "image": "/burrow-assets/fruits/passion-fruit.jpg",
+      "imageAlt": "Passion Fruit fruit",
+      "sourceFile": "Passion fruits - whole and halved.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Passion_fruits_-_whole_and_halved.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/21/Passion_fruits_-_whole_and_halved.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "cherimoya",
+      "name": "Cherimoya",
+      "scientificName": "Annona cherimola",
+      "origin": "Central America; long cultivated in the Andes",
+      "location": {
+        "label": "Central America; long cultivated in the Andes",
+        "countries": [
+          "Guatemala"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          15.5,
+          -90.3
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 2,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Sweet and custard-like",
+      "texture": "Soft, creamy flesh",
+      "group": "custard-apple-relative",
+      "fact": "A cherimoya can look like a green heart covered in fingerprints or soft bumps.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 325,
+        "note": "Midpoint of the reported common 150–500 g whole-fruit range; exceptionally large fruit excluded.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/cherimoya.html"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Cherimoya",
+        "https://hort.purdue.edu/newcrop/morton/cherimoya.html"
+      ],
+      "image": "/burrow-assets/fruits/cherimoya.jpg",
+      "imageAlt": "Cherimoya fruit",
+      "sourceFile": "Cherimoya cut hg.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cherimoya_cut_hg.jpg",
+      "imageCreator": "Hannes Grobe 21:17, 5 November 2006 (UTC)",
+      "imageLicense": "CC BY-SA 2.5",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/91/Cherimoya_cut_hg.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "soursop",
+      "name": "Soursop",
+      "scientificName": "Annona muricata",
+      "origin": "Tropical Americas",
+      "location": {
+        "label": "Tropical Americas",
+        "countries": [
+          "Colombia"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          4.6,
+          -74.1
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 7,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Tropical sweetness with a sour edge",
+      "texture": "Creamy and fibrous",
+      "group": "custard-apple-relative",
+      "fact": "Soursop has a green, softly spiked rind and pale flesh often blended into drinks.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 4000,
+        "note": "Reported approximate whole-fruit weight of 4,000 g; size varies considerably and larger specimens exist.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Soursop"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Soursop"
+      ],
+      "image": "/burrow-assets/fruits/soursop.jpg",
+      "imageAlt": "Soursop fruit",
+      "sourceFile": "Annona muricata 1.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Annona_muricata_1.jpg",
+      "imageCreator": "Damien Boilley from suburbs of Paris, France",
+      "imageLicense": "CC BY 2.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Annona_muricata_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "sugar-apple",
+      "name": "Sugar Apple",
+      "scientificName": "Annona squamosa",
+      "origin": "Tropical Americas",
+      "location": {
+        "label": "Tropical Americas",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          19.0,
+          -96.1
+        ]
+      },
+      "sweetness": 10,
+      "tartness": 1,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Very sweet, like custard",
+      "texture": "Soft segments around dark seeds",
+      "group": "custard-apple-relative",
+      "fact": "A sugar apple's knobbly surface is made of sections that become easier to separate as it ripens.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 170,
+        "note": "Midpoint of the reported 100–240 g whole-fruit range.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Annona_squamosa"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Annona_squamosa"
+      ],
+      "image": "/burrow-assets/fruits/sugar-apple.jpg",
+      "imageAlt": "Sugar Apple fruit",
+      "sourceFile": "Sugar Apple deconstructed.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Sugar_Apple_deconstructed.jpg",
+      "imageCreator": "Pouletic",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Sugar_Apple_deconstructed.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "atemoya",
+      "name": "Atemoya",
+      "scientificName": "Annona squamosa × Annona cherimola",
+      "origin": "Hybrid first developed in Florida",
+      "location": {
+        "label": "Hybrid first developed in Florida",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          25.8,
+          -80.2
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 3,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Sweet, with a gentle tang",
+      "texture": "Juicy and custard-like",
+      "group": "custard-apple-relative",
+      "fact": "Atemoya is a cross between sugar apple and cherimoya; neither parent is a pineapple.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 450,
+        "note": "A whole-fruit example at the reported 450 g size; some varieties can be much larger.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Atemoya"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Atemoya"
+      ],
+      "image": "/burrow-assets/fruits/atemoya.jpg",
+      "imageAlt": "Atemoya fruit",
+      "sourceFile": "Webysther 20150411131320 - Atemoya.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Webysther_20150411131320_-_Atemoya.jpg",
+      "imageCreator": "Webysther Nunes",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/37/Webysther_20150411131320_-_Atemoya.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "salak",
+      "name": "Salak",
+      "scientificName": "Salacca zalacca",
+      "origin": "Java and Sumatra",
+      "location": {
+        "label": "Java and Sumatra",
+        "countries": [
+          "Indonesia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          -7.8,
+          110.4
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 5,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet, tart and sometimes puckering",
+      "texture": "Crunchy to crumbly segments",
+      "group": "palm-fruit",
+      "fact": "Salak is nicknamed snake fruit because its reddish-brown skin looks like scales.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Salak"
+      ],
+      "image": "/burrow-assets/fruits/salak.jpg",
+      "imageAlt": "Salak fruit",
+      "sourceFile": "Salak (Salacca zalacca), 2015-05-17.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Salak_(Salacca_zalacca),_2015-05-17.jpg",
+      "imageCreator": "Crisco 1492",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/92/Salak_%28Salacca_zalacca%29%2C_2015-05-17.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "langsat",
+      "name": "Langsat",
+      "scientificName": "Lansium domesticum",
+      "origin": "Southeast Asia",
+      "location": {
+        "label": "Southeast Asia",
+        "countries": [
+          "Malaysia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          5.4,
+          100.3
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 4,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet with a citrus-like tang",
+      "texture": "Translucent, juicy segments",
+      "group": "berry",
+      "fact": "Langsats hang in bunches and hide pale segments beneath thin yellowish skins.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Lansium_domesticum"
+      ],
+      "image": "/burrow-assets/fruits/langsat.jpg",
+      "imageAlt": "Langsat fruit",
+      "sourceFile": "Isi duku langsat.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Isi_duku_langsat.JPG",
+      "imageCreator": "Izham Alias",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Isi_duku_langsat.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "pulasan",
+      "name": "Pulasan",
+      "scientificName": "Nephelium ramboutan-ake",
+      "origin": "Southeast Asia",
+      "location": {
+        "label": "Southeast Asia",
+        "countries": [
+          "Malaysia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          3.1,
+          101.7
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 2,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Very sweet",
+      "texture": "Juicy flesh around a seed",
+      "group": "soapberry-relative",
+      "fact": "Pulasan resembles rambutan, but its rind has short, thick bumps instead of long soft hairs.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Pulasan"
+      ],
+      "image": "/burrow-assets/fruits/pulasan.jpg",
+      "imageAlt": "Pulasan fruit",
+      "sourceFile": "Pulasan Nephelium mutabile.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pulasan_Nephelium_mutabile.JPG",
+      "imageCreator": "Michael Hermann www.CropsfortheFuture.org",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Pulasan_Nephelium_mutabile.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "santol",
+      "name": "Santol",
+      "scientificName": "Sandoricum koetjape",
+      "origin": "Southeast Asia and New Guinea",
+      "location": {
+        "label": "Southeast Asia and New Guinea",
+        "countries": [
+          "Philippines"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          14.6,
+          121.0
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 6,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet to sour, depending on variety",
+      "texture": "Cottony white pulp",
+      "group": "berry",
+      "fact": "Santol is sometimes called cotton fruit because of the soft white pulp around its seeds.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Sandoricum_koetjape"
+      ],
+      "image": "/burrow-assets/fruits/santol.jpg",
+      "imageAlt": "Santol fruit",
+      "sourceFile": "Gratorn กระท้อน fruit, Santol.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Gratorn_%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%97%E0%B9%89%E0%B8%AD%E0%B8%99_fruit,_Santol.jpg",
+      "imageCreator": "Steve",
+      "imageLicense": "CC BY-SA 2.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/96/Gratorn_%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%97%E0%B9%89%E0%B8%AD%E0%B8%99_fruit%2C_Santol.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "jabuticaba",
+      "name": "Jabuticaba",
+      "scientificName": "Plinia cauliflora",
+      "origin": "Southeastern Brazil",
+      "location": {
+        "label": "Southeastern Brazil",
+        "countries": [
+          "Brazil"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -22.9,
+          -43.2
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 4,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet pulp with a tangy skin",
+      "texture": "Juicy, grape-like flesh",
+      "group": "berry",
+      "fact": "Jabuticabas grow right on the trunk and thick branches, making the tree look covered in dark beads.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Plinia_cauliflora"
+      ],
+      "image": "/burrow-assets/fruits/jabuticaba.jpg",
+      "imageAlt": "Jabuticaba fruit",
+      "sourceFile": "Jabuticaba (do tupi îabotikaba, 'gordura de jabuti') 07.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Jabuticaba_(do_tupi_%C3%AEabotikaba,_%27gordura_de_jabuti%27)_07.jpg",
+      "imageCreator": "Bageense",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Jabuticaba_%28do_tupi_%C3%AEabotikaba%2C_%27gordura_de_jabuti%27%29_07.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "cupuacu",
+      "name": "Cupuaçu",
+      "scientificName": "Theobroma grandiflorum",
+      "origin": "Amazon basin",
+      "location": {
+        "label": "Amazon basin",
+        "countries": [
+          "Brazil"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -3.1,
+          -60.0
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 7,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Fragrant, tropical and tart",
+      "texture": "Thick, creamy pulp",
+      "group": "cacao-relative",
+      "fact": "Cupuaçu is a relative of cacao, and its fragrant pulp is used in drinks and ice cream.",
+      "difficultyBand": "hard",
+      "weight": {
+        "grams": 1500,
+        "note": "Reported approximate mean whole-fruit weight of 1.5 kg, including husk and seeds.",
+        "sourceUrl": "https://unctad.org/system/files/official-document/poitcdcomd10.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Theobroma_grandiflorum",
+        "https://unctad.org/system/files/official-document/poitcdcomd10.pdf"
+      ],
+      "image": "/burrow-assets/fruits/cupuacu.jpg",
+      "imageAlt": "Cupuaçu fruit",
+      "sourceFile": "Cupuassu.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cupuassu.jpg",
+      "imageCreator": "CiXeL at English Wikipedia",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Cupuassu.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "feijoa",
+      "name": "Feijoa",
+      "scientificName": "Acca sellowiana",
+      "origin": "Southern South America",
+      "location": {
+        "label": "Southern South America",
+        "countries": [
+          "Uruguay"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -32.5,
+          -55.8
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 5,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Aromatic, sweet and tangy",
+      "texture": "Jelly-like center, grainy outer flesh",
+      "group": "berry",
+      "fact": "Feijoas usually stay green even when ripe, so their skin color is a poor ripeness clue.",
+      "difficultyBand": "medium",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Feijoa"
+      ],
+      "image": "/burrow-assets/fruits/feijoa.jpg",
+      "imageAlt": "Feijoa fruit",
+      "sourceFile": "Goiaba-serrana, ou guarobi (do guarani 'fruto verde'), Feijoa sellowiana, em Bagé, RS, Brasil - 55238473195.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Goiaba-serrana,_ou_guarobi_(do_guarani_%27fruto_verde%27),_Feijoa_sellowiana,_em_Bag%C3%A9,_RS,_Brasil_-_55238473195.jpg",
+      "imageCreator": "Gabriel Collares",
+      "imageLicense": "CC BY 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Goiaba-serrana%2C_ou_guarobi_%28do_guarani_%27fruto_verde%27%29%2C_Feijoa_sellowiana%2C_em_Bag%C3%A9%2C_RS%2C_Brasil_-_55238473195.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "sapodilla",
+      "name": "Sapodilla",
+      "scientificName": "Manilkara zapota",
+      "origin": "Southern Mexico and Central America",
+      "location": {
+        "label": "Southern Mexico and Central America",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          20.0,
+          -89.0
+        ]
+      },
+      "sweetness": 10,
+      "tartness": 1,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Brown-sugar-like sweetness",
+      "texture": "Soft and slightly grainy",
+      "group": "berry",
+      "fact": "Sapodilla trees produce chicle, a milky latex once widely used to make chewing gum.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 180,
+        "note": "Rounded midpoint of the 115–250 g range for Brown Sugar sapodilla in the UF/IFAS cultivar table; other cultivars differ.",
+        "sourceUrl": "https://ask.ifas.ufl.edu/publication/MG057"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Manilkara_zapota",
+        "https://ask.ifas.ufl.edu/publication/MG057"
+      ],
+      "image": "/burrow-assets/fruits/sapodilla.jpg",
+      "imageAlt": "Sapodilla fruit",
+      "sourceFile": "സപ്പോട്ട.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:%E0%B4%B8%E0%B4%AA%E0%B5%8D%E0%B4%AA%E0%B5%8B%E0%B4%9F%E0%B5%8D%E0%B4%9F.jpg",
+      "imageCreator": "Sugeesh at Malayalam Wikipedia",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/00/%E0%B4%B8%E0%B4%AA%E0%B5%8D%E0%B4%AA%E0%B5%8B%E0%B4%9F%E0%B5%8D%E0%B4%9F.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "mamey-sapote",
+      "name": "Mamey Sapote",
+      "scientificName": "Pouteria sapota",
+      "origin": "Southern Mexico and Central America",
+      "location": {
+        "label": "Southern Mexico and Central America",
+        "countries": [
+          "Guatemala"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          15.5,
+          -90.3
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 1,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Sweet, with pumpkin and almond-like notes",
+      "texture": "Thick and creamy",
+      "group": "berry",
+      "fact": "Mamey sapote's rough brown skin hides pink, orange or reddish flesh and a large shiny seed.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 1000,
+        "note": "A 1,000 g whole-fruit example within UF/IFAS’s 300–2,700 g range; actual fruit sizes vary.",
+        "sourceUrl": "https://ask.ifas.ufl.edu/publication/MG331"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Pouteria_sapota",
+        "https://ask.ifas.ufl.edu/publication/MG331"
+      ],
+      "image": "/burrow-assets/fruits/mamey-sapote.jpg",
+      "imageAlt": "Mamey Sapote fruit",
+      "sourceFile": "ARS- Pouteria sapota.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:ARS-_Pouteria_sapota.jpg",
+      "imageCreator": "Wikimedia Commons contributor",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e7/ARS-_Pouteria_sapota.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "black-sapote",
+      "name": "Black Sapote",
+      "scientificName": "Diospyros nigra",
+      "origin": "Mexico and Central America",
+      "location": {
+        "label": "Mexico and Central America",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          19.2,
+          -96.1
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 1,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Mildly sweet",
+      "texture": "Very soft, pudding-like pulp",
+      "group": "persimmon-relative",
+      "fact": "Black sapote is a persimmon relative whose ripe flesh becomes dark and pudding-like.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Diospyros_nigra"
+      ],
+      "image": "/burrow-assets/fruits/black-sapote.jpg",
+      "imageAlt": "Black Sapote fruit",
+      "sourceFile": "Black Sapote 1.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Black_Sapote_1.JPG",
+      "imageCreator": "Yonygg",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Black_Sapote_1.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "white-sapote",
+      "name": "White Sapote",
+      "scientificName": "Casimiroa edulis",
+      "origin": "Mexico and Central America",
+      "location": {
+        "label": "Mexico and Central America",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          20.5,
+          -98.9
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 1,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Mild sweetness with custard-like notes",
+      "texture": "Smooth and creamy",
+      "group": "citrus-relative",
+      "fact": "Despite its name, white sapote belongs to the citrus family, not the mamey sapote family.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/White_sapote"
+      ],
+      "image": "/burrow-assets/fruits/white-sapote.jpg",
+      "imageAlt": "White Sapote fruit",
+      "sourceFile": "White sapote2.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:White_sapote2.jpg",
+      "imageCreator": "Takoradee",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/39/White_sapote2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "canistel",
+      "name": "Canistel",
+      "scientificName": "Pouteria campechiana",
+      "origin": "Southern Mexico and Central America",
+      "location": {
+        "label": "Southern Mexico and Central America",
+        "countries": [
+          "Belize"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          17.2,
+          -88.7
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 1,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet and rich",
+      "texture": "Dense, like cooked egg yolk",
+      "group": "berry",
+      "fact": "Canistel is called eggfruit because its yellow flesh can feel like a cooked egg yolk.",
+      "difficultyBand": "hard",
+      "weight": {
+        "grams": 400,
+        "note": "A large-fruit example of approximately 400 g; the reference describes selected varieties producing fruit of 400 g and above.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Pouteria_campechiana"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Pouteria_campechiana"
+      ],
+      "image": "/burrow-assets/fruits/canistel.jpg",
+      "imageAlt": "Canistel fruit",
+      "sourceFile": "Egg fruit DS.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Egg_fruit_DS.jpg",
+      "imageCreator": "Augustus Binu : flickr",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Egg_fruit_DS.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "abiu",
+      "name": "Abiu",
+      "scientificName": "Pouteria caimito",
+      "origin": "Amazon region",
+      "location": {
+        "label": "Amazon region",
+        "countries": [
+          "Peru"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -3.7,
+          -73.3
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 1,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Mild, caramel-like sweetness",
+      "texture": "Soft, translucent pulp",
+      "group": "berry",
+      "fact": "A ripe abiu has bright yellow skin and pale, jelly-like flesh inside.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Pouteria_caimito"
+      ],
+      "image": "/burrow-assets/fruits/abiu.jpg",
+      "imageAlt": "Abiu fruit",
+      "sourceFile": "Abiu em fundo preto - Pouteria caimito.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Abiu_em_fundo_preto_-_Pouteria_caimito.jpg",
+      "imageCreator": "Rodrigo.Argenton",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/63/Abiu_em_fundo_preto_-_Pouteria_caimito.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "star-apple",
+      "name": "Star Apple",
+      "scientificName": "Chrysophyllum cainito",
+      "origin": "Central America; long grown in the Caribbean",
+      "location": {
+        "label": "Central America; long grown in the Caribbean",
+        "countries": [
+          "Panama"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          8.5,
+          -80.8
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 1,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Mild and sweet",
+      "texture": "Milky, jelly-like pulp",
+      "group": "berry",
+      "fact": "Cut a star apple across the middle and its seed pattern can look like a star.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Chrysophyllum_cainito"
+      ],
+      "image": "/burrow-assets/fruits/star-apple.jpg",
+      "imageAlt": "Star Apple fruit",
+      "sourceFile": "Chrusophyllum cainito.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Chrusophyllum_cainito.jpg",
+      "imageCreator": "No machine-readable author provided. Hans B.~commonswiki assumed (based on copyright claims).",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Chrusophyllum_cainito.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "lucuma",
+      "name": "Lucuma",
+      "scientificName": "Lucuma bifera (syn. Pouteria lucuma)",
+      "origin": "Andean valleys",
+      "location": {
+        "label": "Andean valleys",
+        "countries": [
+          "Peru"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -12.0,
+          -77.0
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 1,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet, with maple-like notes",
+      "texture": "Dry and floury",
+      "group": "berry",
+      "fact": "Lucuma's yellow flesh is often turned into powder or used to flavor ice cream in Peru.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Lucuma_bifera"
+      ],
+      "image": "/burrow-assets/fruits/lucuma.jpg",
+      "imageAlt": "Lucuma fruit",
+      "sourceFile": "Lúcuma.png",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:L%C3%BAcuma.png",
+      "imageCreator": "OtterAM",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bb/L%C3%BAcuma.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "tamarillo",
+      "name": "Tamarillo",
+      "scientificName": "Solanum betaceum",
+      "origin": "Andes of South America",
+      "location": {
+        "label": "Andes of South America",
+        "countries": [
+          "Ecuador"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -0.2,
+          -78.5
+        ]
+      },
+      "sweetness": 4,
+      "tartness": 8,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Tangy, fruity and tomato-like",
+      "texture": "Juicy pulp with seeds",
+      "group": "nightshade-fruit",
+      "fact": "Tamarillo is nicknamed tree tomato, although it grows on a woody shrub or small tree.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Tamarillo"
+      ],
+      "image": "/burrow-assets/fruits/tamarillo.jpg",
+      "imageAlt": "Tamarillo fruit",
+      "sourceFile": "Solanum betaceum-IMG 0242.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Solanum_betaceum-IMG_0242.jpg",
+      "imageCreator": "C T Johansson",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Solanum_betaceum-IMG_0242.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "cape-gooseberry",
+      "name": "Cape Gooseberry",
+      "scientificName": "Physalis peruviana",
+      "origin": "Andean South America",
+      "location": {
+        "label": "Andean South America",
+        "countries": [
+          "Peru"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -13.5,
+          -72.0
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 6,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Sweet with a bright tang",
+      "texture": "Juicy berry with tiny seeds",
+      "group": "nightshade-fruit",
+      "fact": "A cape gooseberry grows inside a papery husk that looks like a little lantern.",
+      "difficultyBand": "medium",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Physalis_peruviana"
+      ],
+      "image": "/burrow-assets/fruits/cape-gooseberry.jpg",
+      "imageAlt": "Cape Gooseberry fruit",
+      "sourceFile": "Uchuva 2005.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Uchuva_2005.jpg",
+      "imageCreator": "No machine-readable author provided. JuanseG~commonswiki assumed (based on copyright claims).",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/87/Uchuva_2005.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "naranjilla",
+      "name": "Naranjilla",
+      "scientificName": "Solanum quitoense",
+      "origin": "Northwestern South America",
+      "location": {
+        "label": "Northwestern South America",
+        "countries": [
+          "Ecuador"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -0.2,
+          -78.5
+        ]
+      },
+      "sweetness": 3,
+      "tartness": 9,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sharp, citrus-like flavor",
+      "texture": "Green, juicy pulp",
+      "group": "nightshade-fruit",
+      "fact": "Naranjilla looks orange outside, but its juicy flesh is green and very tangy.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Solanum_quitoense"
+      ],
+      "image": "/burrow-assets/fruits/naranjilla.jpg",
+      "imageAlt": "Naranjilla fruit",
+      "sourceFile": "Lulo.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Lulo.jpg",
+      "imageCreator": "Picture taken by Fibonacci.",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/Lulo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "cocona",
+      "name": "Cocona",
+      "scientificName": "Solanum sessiliflorum",
+      "origin": "Western Amazon region",
+      "location": {
+        "label": "Western Amazon region",
+        "countries": [
+          "Peru"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -8.4,
+          -74.6
+        ]
+      },
+      "sweetness": 3,
+      "tartness": 8,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Tart and tomato-like",
+      "texture": "Juicy, seedy flesh",
+      "group": "nightshade-fruit",
+      "fact": "Cocona belongs to the tomato family and can ripen yellow, orange or red.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Solanum_sessiliflorum"
+      ],
+      "image": "/burrow-assets/fruits/cocona.jpg",
+      "imageAlt": "Cocona fruit",
+      "sourceFile": "Cocona.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cocona.JPG",
+      "imageCreator": "Dtarazona",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Cocona.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "sweet-granadilla",
+      "name": "Sweet Granadilla",
+      "scientificName": "Passiflora ligularis",
+      "origin": "Tropical American highlands",
+      "location": {
+        "label": "Tropical American highlands",
+        "countries": [
+          "Colombia"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          4.7,
+          -74.1
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 2,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Sweet and gentle",
+      "texture": "Jelly-like pulp with crunchy seeds",
+      "group": "passionfruit",
+      "fact": "A sweet granadilla has a firm orange shell sprinkled with small pale dots.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Passiflora_ligularis"
+      ],
+      "image": "/burrow-assets/fruits/sweet-granadilla.jpg",
+      "imageAlt": "Sweet Granadilla fruit",
+      "sourceFile": "Sweet granadillas (Passiflora ligularis) - whole and cross section.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Sweet_granadillas_(Passiflora_ligularis)_-_whole_and_cross_section.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Sweet_granadillas_%28Passiflora_ligularis%29_-_whole_and_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "banana-passionfruit",
+      "name": "Banana Passionfruit",
+      "scientificName": "Passiflora tripartita",
+      "origin": "Andean valleys",
+      "location": {
+        "label": "Andean valleys",
+        "countries": [
+          "Bolivia"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -16.5,
+          -68.1
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 6,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet and tangy",
+      "texture": "Orange pulp with dark seeds",
+      "group": "passionfruit",
+      "fact": "Banana passionfruit is long and yellow outside, but it belongs to the passionflower family.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Passiflora_tripartita"
+      ],
+      "image": "/burrow-assets/fruits/banana-passionfruit.jpg",
+      "imageAlt": "Banana Passionfruit fruit",
+      "sourceFile": "Curuba.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Curuba.jpg",
+      "imageCreator": "No machine-readable author provided. Fibonacci assumed (based on copyright claims).",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Curuba.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "giant-granadilla",
+      "name": "Giant Granadilla",
+      "scientificName": "Passiflora quadrangularis",
+      "origin": "Tropical Americas",
+      "location": {
+        "label": "Tropical Americas",
+        "countries": [
+          "Colombia"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          6.2,
+          -75.6
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 3,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Mildly sweet",
+      "texture": "Thick flesh surrounding seedy pulp",
+      "group": "passionfruit",
+      "fact": "Giant granadilla produces the largest fruit in the passionflower genus.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Passiflora_quadrangularis"
+      ],
+      "image": "/burrow-assets/fruits/giant-granadilla.jpg",
+      "imageAlt": "Giant Granadilla fruit",
+      "sourceFile": "Badea.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Badea.jpg",
+      "imageCreator": "Wikimedia Commons contributor",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/61/Badea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "african-horned-melon",
+      "name": "African Horned Melon",
+      "scientificName": "Cucumis metuliferus",
+      "origin": "Southern Africa",
+      "location": {
+        "label": "Southern Africa",
+        "countries": [
+          "Namibia"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          -22.6,
+          17.1
+        ]
+      },
+      "sweetness": 3,
+      "tartness": 4,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Mild, cucumber-like with a tang",
+      "texture": "Green, jelly-like pulp",
+      "group": "melon",
+      "fact": "African horned melon has an orange spiky skin, but its slippery pulp is bright green.",
+      "difficultyBand": "medium",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Cucumis_metuliferus"
+      ],
+      "image": "/burrow-assets/fruits/african-horned-melon.jpg",
+      "imageAlt": "African Horned Melon fruit",
+      "sourceFile": "Cucumis metuliferus fruit - whole and cross section.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cucumis_metuliferus_fruit_-_whole_and_cross_section.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Cucumis_metuliferus_fruit_-_whole_and_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "baobab",
+      "name": "Baobab",
+      "scientificName": "Adansonia digitata",
+      "origin": "Sub-Saharan Africa and southern Arabia",
+      "location": {
+        "label": "Sub-Saharan Africa and southern Arabia",
+        "countries": [
+          "Senegal"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          14.5,
+          -14.5
+        ]
+      },
+      "sweetness": 3,
+      "tartness": 8,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sharp, citrus-like tang",
+      "texture": "Dry, powdery pulp",
+      "group": "capsule-fruit",
+      "fact": "Baobab pulp dries naturally inside a hard shell instead of staying juicy like many fruits.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Adansonia_digitata"
+      ],
+      "image": "/burrow-assets/fruits/baobab.jpg",
+      "imageAlt": "Baobab fruit",
+      "sourceFile": "Adansonia digitata (Fruit).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Adansonia_digitata_(Fruit).jpg",
+      "imageCreator": "Neelix at English WikipediaI am the originator of this photo. I hold the copyright. I release it to the public domain. This photo depicts a fruit.",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Adansonia_digitata_%28Fruit%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "marula",
+      "name": "Marula",
+      "scientificName": "Sclerocarya birrea",
+      "origin": "Sub-Saharan Africa",
+      "location": {
+        "label": "Sub-Saharan Africa",
+        "countries": [
+          "South Africa"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          -23.9,
+          31.4
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 7,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Tart and strongly aromatic",
+      "texture": "Juicy flesh around a hard stone",
+      "group": "stone-fruit",
+      "fact": "Marula fruits turn yellow when ripe and contain a hard stone with kernels inside.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Sclerocarya_birrea"
+      ],
+      "image": "/burrow-assets/fruits/marula.jpg",
+      "imageAlt": "Marula fruit",
+      "sourceFile": "Marula fruits Ongwediva March 2016.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Marula_fruits_Ongwediva_March_2016.jpg",
+      "imageCreator": "Pemba.mpimaji",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Marula_fruits_Ongwediva_March_2016.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "african-star-apple",
+      "name": "African Star Apple",
+      "scientificName": "Gambeya albida (syn. Chrysophyllum albidum)",
+      "origin": "Tropical West and Central Africa",
+      "location": {
+        "label": "Tropical West and Central Africa",
+        "countries": [
+          "Nigeria"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          6.5,
+          3.4
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 5,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet to tangy",
+      "texture": "Soft, slightly chewy pulp",
+      "group": "berry",
+      "fact": "African star apple is known as agbalumo in Yoruba and udara in Igbo.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Gambeya_albida"
+      ],
+      "image": "/burrow-assets/fruits/african-star-apple.jpg",
+      "imageAlt": "African Star Apple fruit",
+      "sourceFile": "Ụdara (cropped).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:%E1%BB%A4dara_(cropped).jpg",
+      "imageCreator": "Chrysella",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/%E1%BB%A4dara_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "safou",
+      "name": "Safou",
+      "scientificName": "Dacryodes edulis",
+      "origin": "West and Central Africa",
+      "location": {
+        "label": "West and Central Africa",
+        "countries": [
+          "Cameroon"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          3.9,
+          11.5
+        ]
+      },
+      "sweetness": 1,
+      "tartness": 3,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Rich and savory",
+      "texture": "Buttery after warming",
+      "group": "drupe",
+      "fact": "Safou is often called African pear, but its purple fruit has rich, oily flesh unlike an ordinary pear.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Dacryodes_edulis"
+      ],
+      "image": "/burrow-assets/fruits/safou.jpg",
+      "imageAlt": "Safou fruit",
+      "sourceFile": "Safoutier.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Safoutier.jpg",
+      "imageCreator": "Wikimedia Commons contributor",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/34/Safoutier.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "finger-lime",
+      "name": "Finger Lime",
+      "scientificName": "Citrus australasica",
+      "origin": "Eastern Australia",
+      "location": {
+        "label": "Eastern Australia",
+        "countries": [
+          "Australia"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -28.2,
+          153.4
+        ]
+      },
+      "sweetness": 1,
+      "tartness": 10,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Sharp lime flavor",
+      "texture": "Tiny popping juice pearls",
+      "group": "citrus",
+      "fact": "Finger lime pulp separates into little round juice sacs that look like citrus pearls.",
+      "difficultyBand": "medium",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Citrus_australasica"
+      ],
+      "image": "/burrow-assets/fruits/finger-lime.jpg",
+      "imageAlt": "Finger Lime fruit",
+      "sourceFile": "Finger lime with juice vesicles and seeds partially extracted.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Finger_lime_with_juice_vesicles_and_seeds_partially_extracted.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Finger_lime_with_juice_vesicles_and_seeds_partially_extracted.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "quandong",
+      "name": "Quandong",
+      "scientificName": "Santalum acuminatum",
+      "origin": "Dry regions of Australia",
+      "location": {
+        "label": "Dry regions of Australia",
+        "countries": [
+          "Australia"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -30.8,
+          121.5
+        ]
+      },
+      "sweetness": 4,
+      "tartness": 7,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Tart, fruity flavor",
+      "texture": "Thin flesh around a large stone",
+      "group": "stone-fruit",
+      "fact": "Quandong trees get some water and nutrients by connecting their roots to those of other plants.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Santalum_acuminatum"
+      ],
+      "image": "/burrow-assets/fruits/quandong.jpg",
+      "imageAlt": "Quandong fruit",
+      "sourceFile": "Santalum acuminatum fruit1.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Santalum_acuminatum_fruit1.JPG",
+      "imageCreator": "John Moss",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Santalum_acuminatum_fruit1.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "davidsons-plum",
+      "name": "Davidson's Plum",
+      "scientificName": "Davidsonia jerseyana",
+      "origin": "Northern New South Wales, Australia",
+      "location": {
+        "label": "Northern New South Wales, Australia",
+        "countries": [
+          "Australia"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -28.5,
+          153.5
+        ]
+      },
+      "sweetness": 1,
+      "tartness": 10,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Strongly sour",
+      "texture": "Soft, juicy flesh",
+      "group": "drupe",
+      "fact": "Davidson's plum grows its dark fruit directly on the trunk and is often used in jams and sauces.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Davidsonia_jerseyana"
+      ],
+      "image": "/burrow-assets/fruits/davidsons-plum.jpg",
+      "imageAlt": "Davidson's Plum fruit",
+      "sourceFile": "Davidsonia jerseyaqna fruit1.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Davidsonia_jerseyaqna_fruit1.jpg",
+      "imageCreator": "John Moss",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/68/Davidsonia_jerseyaqna_fruit1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "riberry",
+      "name": "Riberry",
+      "scientificName": "Syzygium luehmannii",
+      "origin": "Eastern Australian rainforests",
+      "location": {
+        "label": "Eastern Australian rainforests",
+        "countries": [
+          "Australia"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -26.7,
+          153.1
+        ]
+      },
+      "sweetness": 3,
+      "tartness": 8,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Tart, with a clove-like note",
+      "texture": "Firm, small berries",
+      "group": "berry",
+      "fact": "Riberries are small, pear-shaped red fruits with a spicy hint often compared to cloves.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Syzygium_luehmannii"
+      ],
+      "image": "/burrow-assets/fruits/riberry.jpg",
+      "imageAlt": "Riberry fruit",
+      "sourceFile": "Syzygium luehmannii fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Syzygium_luehmannii_fruit.jpg",
+      "imageCreator": "Poyt448 Peter Woodard",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/82/Syzygium_luehmannii_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "kakadu-plum",
+      "name": "Kakadu Plum",
+      "scientificName": "Terminalia ferdinandiana",
+      "origin": "Northern Australia",
+      "location": {
+        "label": "Northern Australia",
+        "countries": [
+          "Australia"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -12.5,
+          132.8
+        ]
+      },
+      "sweetness": 2,
+      "tartness": 8,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Sour and astringent",
+      "texture": "Firm, fibrous flesh",
+      "group": "drupe",
+      "fact": "Kakadu plum is a small Australian fruit known for its very high vitamin C content.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Terminalia_ferdinandiana"
+      ],
+      "image": "/burrow-assets/fruits/kakadu-plum.jpg",
+      "imageAlt": "Kakadu Plum fruit",
+      "sourceFile": "Terminalia ferdinandiana fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Terminalia_ferdinandiana_fruit.jpg",
+      "imageCreator": "Allthingsnative",
+      "imageLicense": "CC BY 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Terminalia_ferdinandiana_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "pawpaw",
+      "name": "Pawpaw",
+      "scientificName": "Asimina triloba",
+      "origin": "Eastern North America",
+      "location": {
+        "label": "Eastern North America",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          38.0,
+          -84.5
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 1,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet, banana-like flavor",
+      "texture": "Soft and custard-like",
+      "group": "custard-apple-relative",
+      "fact": "North America's pawpaw is related to tropical custard apples, but it grows where winters are cold.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 265,
+        "note": "Midpoint of the reported 20–510 g whole-fruit range, including peel and seeds.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Asimina_triloba"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Asimina_triloba"
+      ],
+      "image": "/burrow-assets/fruits/pawpaw.jpg",
+      "imageAlt": "Pawpaw fruit",
+      "sourceFile": "Asimina triloba3.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Asimina_triloba3.jpg",
+      "imageCreator": "Scott Bauer, USDA",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/15/Asimina_triloba3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "bilimbi",
+      "name": "Bilimbi",
+      "scientificName": "Averrhoa bilimbi",
+      "origin": "Maluku Islands and Sulawesi, Indonesia",
+      "location": {
+        "label": "Maluku Islands and Sulawesi, Indonesia",
+        "countries": [
+          "Indonesia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          -3.7,
+          128.2
+        ]
+      },
+      "sweetness": 1,
+      "tartness": 10,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Very sharply sour",
+      "texture": "Crisp and watery",
+      "group": "berry",
+      "fact": "Bilimbi fruits look like tiny cucumbers growing on a tree, but they are relatives of star fruit.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Averrhoa_bilimbi"
+      ],
+      "image": "/burrow-assets/fruits/bilimbi.jpg",
+      "imageAlt": "Bilimbi fruit",
+      "sourceFile": "Averrhoa bilimbi fruit by Sugeesh.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Averrhoa_bilimbi_fruit_by_Sugeesh.jpg",
+      "imageCreator": "Sugeesh",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Averrhoa_bilimbi_fruit_by_Sugeesh.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "serviceberry",
+      "name": "Serviceberry",
+      "scientificName": "Amelanchier alnifolia",
+      "origin": "Western North America",
+      "location": {
+        "label": "Western North America",
+        "countries": [
+          "Canada"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          52.1,
+          -106.7
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 2,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet and gently nutty",
+      "texture": "Juicy flesh with small seeds",
+      "group": "pome",
+      "fact": "A serviceberry looks like a blueberry, but botanically its fruit is closer to an apple.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Amelanchier_alnifolia"
+      ],
+      "image": "/burrow-assets/fruits/serviceberry.jpg",
+      "imageAlt": "Serviceberry fruit",
+      "sourceFile": "Saskatoon Berries in Alberta.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Saskatoon_Berries_in_Alberta.jpg",
+      "imageCreator": "Ken Eckert",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Saskatoon_Berries_in_Alberta.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "salal-berry",
+      "name": "Salal Berry",
+      "scientificName": "Gaultheria shallon",
+      "origin": "Pacific coast of North America",
+      "location": {
+        "label": "Pacific coast of North America",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          47.6,
+          -123.5
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 2,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Mild, earthy sweetness",
+      "texture": "Soft and slightly mealy",
+      "group": "berry-like-fruit",
+      "fact": "Salal berries have long been dried into cakes by Indigenous peoples of the Pacific Northwest.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Gaultheria_shallon"
+      ],
+      "image": "/burrow-assets/fruits/salal-berry.jpg",
+      "imageAlt": "Salal Berry fruit",
+      "sourceFile": "Salal berries.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Salal_berries.jpg",
+      "imageCreator": "Darren Giles",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Salal_berries.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "cloudberry",
+      "name": "Cloudberry",
+      "scientificName": "Rubus chamaemorus",
+      "origin": "Cool northern regions around the world",
+      "location": {
+        "label": "Cool northern regions around the world",
+        "countries": [
+          "Finland"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          68.4,
+          27.4
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 6,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Tart and aromatic",
+      "texture": "Soft, juicy clusters",
+      "group": "aggregate-fruit",
+      "fact": "Cloudberries turn amber as they ripen and can grow in chilly northern bogs and tundra.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Rubus_chamaemorus"
+      ],
+      "image": "/burrow-assets/fruits/cloudberry.jpg",
+      "imageAlt": "Cloudberry fruit",
+      "sourceFile": "Rubus chamaemorus, from Tromsø, August 2020.jpeg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Rubus_chamaemorus,_from_Troms%C3%B8,_August_2020.jpeg",
+      "imageCreator": "Moravice",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/20/Rubus_chamaemorus%2C_from_Troms%C3%B8%2C_August_2020.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "lingonberry",
+      "name": "Lingonberry",
+      "scientificName": "Vaccinium vitis-idaea",
+      "origin": "Northern forests and tundra",
+      "location": {
+        "label": "Northern forests and tundra",
+        "countries": [
+          "Sweden"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          66.6,
+          19.8
+        ]
+      },
+      "sweetness": 2,
+      "tartness": 9,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sharply tart",
+      "texture": "Firm, juicy berries",
+      "group": "berry",
+      "fact": "Lingonberries are small red fruits from an evergreen shrub that thrives in cold northern regions.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Vaccinium_vitis-idaea"
+      ],
+      "image": "/burrow-assets/fruits/lingonberry.jpg",
+      "imageAlt": "Lingonberry fruit",
+      "sourceFile": "Vaccinium vitis-idaea 20060824 003.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Vaccinium_vitis-idaea_20060824_003.jpg",
+      "imageCreator": "Jonas Bergsten",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Vaccinium_vitis-idaea_20060824_003.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "sea-buckthorn",
+      "name": "Sea Buckthorn",
+      "scientificName": "Hippophae rhamnoides",
+      "origin": "Temperate Europe and Asia",
+      "location": {
+        "label": "Temperate Europe and Asia",
+        "countries": [
+          "Finland"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          61.5,
+          21.8
+        ]
+      },
+      "sweetness": 2,
+      "tartness": 9,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Strongly tart",
+      "texture": "Juicy, thin-skinned berries",
+      "group": "berry-like-fruit",
+      "fact": "Sea buckthorn's bright orange fruits crowd tightly along thorny branches.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Sea_buckthorn"
+      ],
+      "image": "/burrow-assets/fruits/sea-buckthorn.jpg",
+      "imageAlt": "Sea Buckthorn fruit",
+      "sourceFile": "Tyrnin marjoja.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tyrnin_marjoja.jpg",
+      "imageCreator": "kallerna",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Tyrnin_marjoja.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "medlar",
+      "name": "Medlar",
+      "scientificName": "Mespilus germanica",
+      "origin": "Southeastern Europe and western Asia",
+      "location": {
+        "label": "Southeastern Europe and western Asia",
+        "countries": [
+          "Turkey"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          40.6,
+          35.8
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 3,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet-tart after softening",
+      "texture": "Soft and paste-like when bletted",
+      "group": "pome",
+      "fact": "Medlars are usually left to soften in a process called bletting before their flesh is eaten.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Mespilus_germanica"
+      ],
+      "image": "/burrow-assets/fruits/medlar.jpg",
+      "imageAlt": "Medlar fruit",
+      "sourceFile": "Medlar pomes and leaves.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Medlar_pomes_and_leaves.jpg",
+      "imageCreator": "Wikimedia Commons contributor",
+      "imageLicense": "CC BY-SA 2.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/99/Medlar_pomes_and_leaves.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "quince",
+      "name": "Quince",
+      "scientificName": "Cydonia oblonga",
+      "origin": "Caspian region of western Asia",
+      "location": {
+        "label": "Caspian region of western Asia",
+        "countries": [
+          "Iran"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          37.3,
+          49.6
+        ]
+      },
+      "sweetness": 2,
+      "tartness": 8,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Fragrant, tart and astringent raw",
+      "texture": "Hard raw, soft when cooked",
+      "group": "pome",
+      "fact": "Quince smells sweet but is usually hard and tart when raw, so it is commonly cooked.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 1000,
+        "note": "A large-fruit example at the reported upper size of 1,000 g, not a typical-fruit average.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Quince"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Quince"
+      ],
+      "image": "/burrow-assets/fruits/quince.jpg",
+      "imageAlt": "Quince fruit",
+      "sourceFile": "Cydonia oblonga 'Portugal' 5Dsr 2392.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cydonia_oblonga_%27Portugal%27_5Dsr_2392.jpg",
+      "imageCreator": "SAplants",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Cydonia_oblonga_%27Portugal%27_5Dsr_2392.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "strawberry-tree-fruit",
+      "name": "Strawberry Tree Fruit",
+      "scientificName": "Arbutus unedo",
+      "origin": "Mediterranean region and western Europe",
+      "location": {
+        "label": "Mediterranean region and western Europe",
+        "countries": [
+          "Portugal"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          37.2,
+          -8.3
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 2,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Mild sweetness",
+      "texture": "Soft and grainy",
+      "group": "berry",
+      "fact": "Strawberry tree fruits look bumpy and red, but the tree is not a strawberry plant.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Arbutus_unedo"
+      ],
+      "image": "/burrow-assets/fruits/strawberry-tree-fruit.jpg",
+      "imageAlt": "Strawberry Tree Fruit fruit",
+      "sourceFile": "Arbutus unedo off Bayshore Drive at Coal Harbour.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Arbutus_unedo_off_Bayshore_Drive_at_Coal_Harbour.jpg",
+      "imageCreator": "Wendy Cutler from Vancouver, Canada",
+      "imageLicense": "CC BY 2.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/13/Arbutus_unedo_off_Bayshore_Drive_at_Coal_Harbour.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "loquat",
+      "name": "Loquat",
+      "scientificName": "Eriobotrya japonica",
+      "origin": "South-central China",
+      "location": {
+        "label": "South-central China",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          29.6,
+          106.6
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 5,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Sweet with an apricot-like tang",
+      "texture": "Juicy flesh around large seeds",
+      "group": "pome",
+      "fact": "Loquat trees flower in the cooler months and can have ripe fruit in spring.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 70,
+        "note": "Reported approximate whole-fruit weight for the large Peluche cultivar; other loquats can be much smaller.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Loquat"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Loquat"
+      ],
+      "image": "/burrow-assets/fruits/loquat.jpg",
+      "imageAlt": "Loquat fruit",
+      "sourceFile": "Loquat-0.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Loquat-0.jpg",
+      "imageCreator": "Aftabbanoori",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/17/Loquat-0.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "jujube",
+      "name": "Jujube",
+      "scientificName": "Ziziphus jujuba",
+      "origin": "Southern and eastern Asia",
+      "location": {
+        "label": "Southern and eastern Asia",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          36.7,
+          117.0
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 2,
+      "availability": 4,
+      "availabilityBand": "Regional staple; traded abroad",
+      "flavor": "Apple-like fresh; sweeter when dried",
+      "texture": "Crisp fresh, chewy dried",
+      "group": "stone-fruit",
+      "fact": "A fresh jujube can be crisp like an apple, then becomes wrinkled and date-like as it dries.",
+      "difficultyBand": "medium",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Jujube"
+      ],
+      "image": "/burrow-assets/fruits/jujube.jpg",
+      "imageAlt": "Jujube fruit",
+      "sourceFile": "Ziziphus zizyphus fruit inside.jpeg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ziziphus_zizyphus_fruit_inside.jpeg",
+      "imageCreator": "Tirithel",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/63/Ziziphus_zizyphus_fruit_inside.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "indian-jujube",
+      "name": "Indian Jujube",
+      "scientificName": "Ziziphus mauritiana",
+      "origin": "Tropical Asia and Africa; native limits debated",
+      "location": {
+        "label": "Tropical Asia and Africa; native limits debated",
+        "countries": [
+          "India"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          26.9,
+          75.8
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 3,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet, apple-like flavor",
+      "texture": "Crisp to soft when ripe",
+      "group": "stone-fruit",
+      "fact": "Indian jujube is also called ber and is a different species from the Chinese jujube.",
+      "difficultyBand": "hard",
+      "weight": {
+        "grams": 15,
+        "note": "Rounded midpoint of the reported 14–17 g range for the Gola cultivar; other cultivars vary.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/indian_jujube.html"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Ziziphus_mauritiana",
+        "https://hort.purdue.edu/newcrop/morton/indian_jujube.html"
+      ],
+      "image": "/burrow-assets/fruits/indian-jujube.jpg",
+      "imageAlt": "Indian Jujube fruit",
+      "sourceFile": "Indian jujube (fruit).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Indian_jujube_(fruit).jpg",
+      "imageCreator": "Augustus Binu : flickr",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Indian_jujube_%28fruit%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "amla",
+      "name": "Amla",
+      "scientificName": "Phyllanthus emblica",
+      "origin": "Southern and tropical Asia",
+      "location": {
+        "label": "Southern and tropical Asia",
+        "countries": [
+          "India"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          25.4,
+          81.8
+        ]
+      },
+      "sweetness": 1,
+      "tartness": 9,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Sour, bitter and puckering",
+      "texture": "Firm and fibrous",
+      "group": "berry-like-fruit",
+      "fact": "Amla's pale green fruit has shallow vertical grooves and a strongly sour taste.",
+      "difficultyBand": "hard",
+      "weight": {
+        "grams": 42,
+        "note": "Rounded midpoint of the reported 28.4–56 g cultivated-fruit range; wild fruit can be much smaller.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Phyllanthus_emblica"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Phyllanthus_emblica"
+      ],
+      "image": "/burrow-assets/fruits/amla.jpg",
+      "imageAlt": "Amla fruit",
+      "sourceFile": "Phyllanthus officinalis.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Phyllanthus_officinalis.jpg",
+      "imageCreator": "L. Shyamal",
+      "imageLicense": "CC BY 2.5",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.5",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Phyllanthus_officinalis.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "bael",
+      "name": "Bael",
+      "scientificName": "Aegle marmelos",
+      "origin": "Indian subcontinent and Southeast Asia",
+      "location": {
+        "label": "Indian subcontinent and Southeast Asia",
+        "countries": [
+          "India"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          25.3,
+          83.0
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 4,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet and aromatic when ripe",
+      "texture": "Thick pulp inside a hard shell",
+      "group": "citrus-relative",
+      "fact": "Bael has such a hard shell that opening it can take more effort than peeling an orange.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Aegle_marmelos"
+      ],
+      "image": "/burrow-assets/fruits/bael.jpg",
+      "imageAlt": "Bael fruit",
+      "sourceFile": "Bael (Aegle marmelos) fruit at Narendrapur W IMG 4099.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Bael_(Aegle_marmelos)_fruit_at_Narendrapur_W_IMG_4099.jpg",
+      "imageCreator": "J.M.Garg",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Bael_%28Aegle_marmelos%29_fruit_at_Narendrapur_W_IMG_4099.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "wood-apple",
+      "name": "Wood Apple",
+      "scientificName": "Limonia acidissima",
+      "origin": "Indian subcontinent",
+      "location": {
+        "label": "Indian subcontinent",
+        "countries": [
+          "Sri Lanka"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          7.9,
+          80.8
+        ]
+      },
+      "sweetness": 4,
+      "tartness": 8,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet-sour and strongly aromatic",
+      "texture": "Sticky, seedy pulp",
+      "group": "citrus-relative",
+      "fact": "Wood apple hides brown, sticky pulp beneath a rough, hard shell.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Limonia_acidissima"
+      ],
+      "image": "/burrow-assets/fruits/wood-apple.jpg",
+      "imageAlt": "Wood Apple fruit",
+      "sourceFile": "Wood-apple dec2007.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Wood-apple_dec2007.jpg",
+      "imageCreator": "Seisfeldt at English Wikipedia",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Wood-apple_dec2007.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "jamun",
+      "name": "Jamun",
+      "scientificName": "Syzygium cumini",
+      "origin": "Indian subcontinent and Southeast Asia",
+      "location": {
+        "label": "Indian subcontinent and Southeast Asia",
+        "countries": [
+          "India"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          19.1,
+          72.9
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 6,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet, tart and astringent",
+      "texture": "Juicy, dark-colored flesh",
+      "group": "berry",
+      "fact": "Jamun can stain your tongue purple with juice from its dark skin and flesh.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Syzygium_cumini"
+      ],
+      "image": "/burrow-assets/fruits/jamun.jpg",
+      "imageAlt": "Jamun fruit",
+      "sourceFile": "Ripe jamun fruits.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ripe_jamun_fruits.jpg",
+      "imageCreator": "Rajesh dangi at English Wikipedia",
+      "imageLicense": "CC BY 2.5",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.5",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Ripe_jamun_fruits.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "rose-apple",
+      "name": "Rose Apple",
+      "scientificName": "Syzygium jambos",
+      "origin": "Southeast Asia",
+      "location": {
+        "label": "Southeast Asia",
+        "countries": [
+          "Malaysia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          4.2,
+          102.0
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 2,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Mild sweetness with a rose-like scent",
+      "texture": "Crisp with a hollow center",
+      "group": "berry",
+      "fact": "A ripe rose apple smells floral, and its loose seeds may rattle inside when it is shaken.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Syzygium_jambos"
+      ],
+      "image": "/burrow-assets/fruits/rose-apple.jpg",
+      "imageAlt": "Rose Apple fruit",
+      "sourceFile": "Rose-apples, ripe.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Rose-apples,_ripe.jpg",
+      "imageCreator": "Salil Kumar Mukherjee",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/03/Rose-apples%2C_ripe.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "wax-apple",
+      "name": "Wax Apple",
+      "scientificName": "Syzygium samarangense",
+      "origin": "Southeast Asia",
+      "location": {
+        "label": "Southeast Asia",
+        "countries": [
+          "Indonesia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          -6.2,
+          106.8
+        ]
+      },
+      "sweetness": 4,
+      "tartness": 2,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Mild and refreshing",
+      "texture": "Crisp, watery flesh",
+      "group": "berry",
+      "fact": "Wax apples look like shiny little bells and are not members of the apple family.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Syzygium_samarangense"
+      ],
+      "image": "/burrow-assets/fruits/wax-apple.jpg",
+      "imageAlt": "Wax Apple fruit",
+      "sourceFile": "Wax apple2.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Wax_apple2.jpg",
+      "imageCreator": "Original uploader was Allen Timothy Chang at en.wikipedia",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Wax_apple2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "ambarella",
+      "name": "Ambarella",
+      "scientificName": "Spondias dulcis",
+      "origin": "Melanesia and nearby Pacific islands",
+      "location": {
+        "label": "Melanesia and nearby Pacific islands",
+        "countries": [
+          "Fiji"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -17.7,
+          178.1
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 7,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Tangy, with pineapple-like notes",
+      "texture": "Crisp to soft around a fibrous stone",
+      "group": "stone-fruit",
+      "fact": "An ambarella's central stone is covered with tough fibers that reach into the flesh.",
+      "difficultyBand": "hard",
+      "weight": {
+        "grams": 500,
+        "note": "A large-fruit example of about 500 g; Morton reports some Pacific island fruit exceeding this size.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/ambarella_ars.html"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Spondias_dulcis",
+        "https://hort.purdue.edu/newcrop/morton/ambarella_ars.html"
+      ],
+      "image": "/burrow-assets/fruits/ambarella.jpg",
+      "imageAlt": "Ambarella fruit",
+      "sourceFile": "Spondias dulcis, June plum.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Spondias_dulcis,_June_plum.jpg",
+      "imageCreator": "Renjusplace",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/05/Spondias_dulcis%2C_June_plum.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "jocote",
+      "name": "Jocote",
+      "scientificName": "Spondias purpurea",
+      "origin": "Mexico and Central America",
+      "location": {
+        "label": "Mexico and Central America",
+        "countries": [
+          "El Salvador"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          13.7,
+          -89.2
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 6,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet-tart, depending on ripeness",
+      "texture": "Juicy flesh around a large stone",
+      "group": "stone-fruit",
+      "fact": "Jocotes can be red, yellow or purple when ripe and grow on thick, knobbly branches.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Spondias_purpurea"
+      ],
+      "image": "/burrow-assets/fruits/jocote.jpg",
+      "imageAlt": "Jocote fruit",
+      "sourceFile": "Jocote fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Jocote_fruit.jpg",
+      "imageCreator": "Elveoflight",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Jocote_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "tamarind",
+      "name": "Tamarind",
+      "scientificName": "Tamarindus indica",
+      "origin": "Tropical Africa",
+      "location": {
+        "label": "Tropical Africa",
+        "countries": [
+          "Tanzania"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          -6.0,
+          35.0
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 9,
+      "availability": 4,
+      "availabilityBand": "Regional staple; traded abroad",
+      "flavor": "Sweet and strongly sour",
+      "texture": "Sticky pulp inside a brittle pod",
+      "group": "pod-fruit",
+      "fact": "Tamarind is a fruit in a pod, making it a relative of peas and beans.",
+      "difficultyBand": "medium",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Tamarind"
+      ],
+      "image": "/burrow-assets/fruits/tamarind.jpg",
+      "imageAlt": "Tamarind fruit",
+      "sourceFile": "Tamarind fruits (Tamarindus indica 'Si Thong').jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tamarind_fruits_(Tamarindus_indica_%27Si_Thong%27).jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Tamarind_fruits_%28Tamarindus_indica_%27Si_Thong%27%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "cashew-apple",
+      "name": "Cashew Apple",
+      "scientificName": "Anacardium occidentale",
+      "origin": "Tropical South America",
+      "location": {
+        "label": "Tropical South America",
+        "countries": [
+          "Brazil"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -5.8,
+          -35.2
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 5,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet, tangy and astringent",
+      "texture": "Very juicy and fibrous",
+      "group": "accessory-fruit",
+      "fact": "The cashew nut grows below the swollen stalk called the cashew apple.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Cashew"
+      ],
+      "image": "/burrow-assets/fruits/cashew-apple.jpg",
+      "imageAlt": "Cashew Apple fruit",
+      "sourceFile": "Cashew apples.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cashew_apples.jpg",
+      "imageCreator": "Abhishek Jacob",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/64/Cashew_apples.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "surinam-cherry",
+      "name": "Surinam Cherry",
+      "scientificName": "Eugenia uniflora",
+      "origin": "Eastern South America",
+      "location": {
+        "label": "Eastern South America",
+        "countries": [
+          "Brazil"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -23.6,
+          -46.6
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 6,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Sweet-tart with a resinous note",
+      "texture": "Juicy, thin-skinned pulp",
+      "group": "berry",
+      "fact": "Surinam cherries have deep ribs that make them look like tiny pumpkins.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Eugenia_uniflora"
+      ],
+      "image": "/burrow-assets/fruits/surinam-cherry.jpg",
+      "imageAlt": "Surinam Cherry fruit",
+      "sourceFile": "Pitanga (do tupi 'ybapytanga) no pampa gaúcho 01.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pitanga_(do_tupi_%27ybapytanga)_no_pampa_ga%C3%BAcho_01.jpg",
+      "imageCreator": "Bageense",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/68/Pitanga_%28do_tupi_%27ybapytanga%29_no_pampa_ga%C3%BAcho_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "grumichama",
+      "name": "Grumichama",
+      "scientificName": "Eugenia brasiliensis",
+      "origin": "Southern and southeastern Brazil",
+      "location": {
+        "label": "Southern and southeastern Brazil",
+        "countries": [
+          "Brazil"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -26.3,
+          -48.9
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 3,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Sweet, cherry-like flavor",
+      "texture": "Soft, juicy pulp",
+      "group": "berry",
+      "fact": "Grumichama has dark purple skin and pale flesh, even though it is often called Brazil cherry.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Grumichama"
+      ],
+      "image": "/burrow-assets/fruits/grumichama.jpg",
+      "imageAlt": "Grumichama fruit",
+      "sourceFile": "Eugenia brasiliensis.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Eugenia_brasiliensis.JPG",
+      "imageCreator": "No machine-readable author provided. B.navez assumed (based on copyright claims).",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Eugenia_brasiliensis.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "acerola",
+      "name": "Acerola",
+      "scientificName": "Malpighia emarginata",
+      "origin": "Caribbean and tropical Americas",
+      "location": {
+        "label": "Caribbean and tropical Americas",
+        "countries": [
+          "Barbados"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          13.2,
+          -59.5
+        ]
+      },
+      "sweetness": 4,
+      "tartness": 8,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Bright, tart flavor",
+      "texture": "Juicy, delicate flesh",
+      "group": "berry-like-fruit",
+      "fact": "Acerola resembles a small cherry but belongs to a different plant family.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Malpighia_emarginata"
+      ],
+      "image": "/burrow-assets/fruits/acerola.jpg",
+      "imageAlt": "Acerola fruit",
+      "sourceFile": "Malpighia emarginata 2013 002.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Malpighia_emarginata_2013_002.JPG",
+      "imageCreator": "Veronidae",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Malpighia_emarginata_2013_002.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "miracle-fruit",
+      "name": "Miracle Fruit",
+      "scientificName": "Synsepalum dulcificum",
+      "origin": "Tropical West Africa",
+      "location": {
+        "label": "Tropical West Africa",
+        "countries": [
+          "Ghana"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          5.6,
+          -0.2
+        ]
+      },
+      "sweetness": 3,
+      "tartness": 2,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Mild sweetness of its own",
+      "texture": "Thin pulp around a large seed",
+      "group": "berry",
+      "fact": "Miracle fruit contains a protein that can temporarily make sour foods taste sweet.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Synsepalum_dulcificum"
+      ],
+      "image": "/burrow-assets/fruits/miracle-fruit.jpg",
+      "imageAlt": "Miracle Fruit fruit",
+      "sourceFile": "MiracleBerry.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:MiracleBerry.jpg",
+      "imageCreator": "Hamale Lyman",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f0/MiracleBerry.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "prickly-pear",
+      "name": "Prickly Pear",
+      "scientificName": "Opuntia ficus-indica",
+      "origin": "Mexico",
+      "location": {
+        "label": "Mexico",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          22.2,
+          -100.9
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 2,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Mild, melon-like sweetness",
+      "texture": "Juicy flesh with hard seeds",
+      "group": "cactus-fruit",
+      "fact": "Prickly pears grow on flat cactus pads and can carry tiny prickles even when the larger spines are absent.",
+      "difficultyBand": "medium",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Opuntia_ficus-indica"
+      ],
+      "image": "/burrow-assets/fruits/prickly-pear.jpg",
+      "imageAlt": "Prickly Pear fruit",
+      "sourceFile": "Opuntia ficus-indica fruit9.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Opuntia_ficus-indica_fruit9.jpg",
+      "imageCreator": "No machine-readable author provided. Hippocampus~commonswiki assumed (based on copyright claims).",
+      "imageLicense": "CC BY 2.5",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.5",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Opuntia_ficus-indica_fruit9.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "pepino",
+      "name": "Pepino",
+      "scientificName": "Solanum muricatum",
+      "origin": "Andean South America",
+      "location": {
+        "label": "Andean South America",
+        "countries": [
+          "Peru"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -13.5,
+          -72.0
+        ]
+      },
+      "sweetness": 4,
+      "tartness": 2,
+      "availability": 2,
+      "availabilityBand": "Mostly regional or seasonal",
+      "flavor": "Mild melon and cucumber notes",
+      "texture": "Soft and juicy",
+      "group": "nightshade-fruit",
+      "fact": "Pepino tastes a little like melon, but it belongs to the tomato and potato family.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Solanum_muricatum"
+      ],
+      "image": "/burrow-assets/fruits/pepino.jpg",
+      "imageAlt": "Pepino fruit",
+      "sourceFile": "Ripe pepinos.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ripe_pepinos.jpg",
+      "imageCreator": "Davidals",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/96/Ripe_pepinos.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "breadfruit",
+      "name": "Breadfruit",
+      "scientificName": "Artocarpus altilis",
+      "origin": "New Guinea and the Pacific; shaped by cultivation",
+      "location": {
+        "label": "New Guinea and the Pacific; shaped by cultivation",
+        "countries": [
+          "Papua New Guinea"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -6.3,
+          145.4
+        ]
+      },
+      "sweetness": 2,
+      "tartness": 1,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Starchy and potato-like when cooked mature",
+      "texture": "Firm and starchy before full ripeness",
+      "group": "multiple-fruit",
+      "fact": "Breadfruit gets its name from the bread-like texture of its cooked flesh.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 1500,
+        "note": "A 1,500 g whole-fruit example within the reported 250–6,000 g range. Firm mature breadfruit is commonly cooked before eating.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Breadfruit"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Breadfruit"
+      ],
+      "image": "/burrow-assets/fruits/breadfruit.jpg",
+      "imageAlt": "Breadfruit fruit",
+      "sourceFile": "Artocarpus altilis (fruit).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Artocarpus_altilis_(fruit).jpg",
+      "imageCreator": "Hans Hillewaert",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/57/Artocarpus_altilis_%28fruit%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    }
+  ]
+}
