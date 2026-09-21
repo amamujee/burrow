@@ -6,21 +6,22 @@ const format = (value) => value.toLocaleString("en-US");
 const missingWeight = "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero.";
 const ratingNote = "Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier.";
 
-if (source.cards.length !== 100 || new Set(source.cards.map((card) => card.id)).size !== 100) {
-  throw new Error("Fruits must contain exactly 100 distinct cards.");
+const fruitCount = source.cards.length;
+if (!fruitCount || new Set(source.cards.map((card) => card.id)).size !== fruitCount) {
+  throw new Error("Fruits must contain distinct cards with unique IDs.");
 }
 
 const pack = {
   $schema: "../pack.schema.json",
   id: "fruits",
   title: "Fruits",
-  summary: "Discover 100 fruits, from familiar favorites to rare regional treasures, through weight, flavor, growing regions and surprising facts.",
+  summary: `Discover ${fruitCount} fruits, from familiar favorites to rare regional treasures, through weight, flavor, growing regions and surprising facts.`,
   dataNote: Object.values(source.methodology).join(" "),
   primaryStat: { id: "weight-g", label: weightLabel },
   status: "playable",
   audience: { minAge: 6, maxAge: 11, readingLevel: "short fruit facts with scientific names in the field notes" },
   recommendedModes: ["trumps", "sort", "fact", "peek", "number", "odd", "geo"],
-  landing: { detail: "100 fruits, from sweet to surprising", image: "/burrow-assets/fruits/mangosteen.jpg", imageFit: "cover", order: 120 },
+  landing: { detail: `${fruitCount} fruits, from sweet to surprising`, image: "/burrow-assets/fruits/mangosteen.jpg", imageFit: "cover", order: 120 },
   sources: source.cards.flatMap((card) => card.sourceUrls.map((url, index) => ({
     label: `${card.name}${index ? " — weight reference" : " — fruit reference"}`,
     url,

@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "935268824f17fd4aa739",
-  "assetCount": 1161,
-  "totalBytes": 238340761,
+  "version": "14e2e1c49aaf86311e51",
+  "assetCount": 1186,
+  "totalBytes": 240633276,
   "assets": {
     "/burrow-assets/bridges-and-tunnels/1915-canakkale-bridge.jpg": {
       "bytes": 182945,
@@ -1816,9 +1816,17 @@
       "bytes": 108720,
       "revision": "4fbb4c19e72b0dbc119f"
     },
+    "/burrow-assets/fruits/asian-pear.jpg": {
+      "bytes": 105379,
+      "revision": "8a7c5ea1f6ffba9b959e"
+    },
     "/burrow-assets/fruits/atemoya.jpg": {
       "bytes": 120755,
       "revision": "4dcd5578ef35e8ae4f52"
+    },
+    "/burrow-assets/fruits/avocado.jpg": {
+      "bytes": 138705,
+      "revision": "cecbe0aa859ab286606b"
     },
     "/burrow-assets/fruits/bael.jpg": {
       "bytes": 37809,
@@ -1848,6 +1856,14 @@
       "bytes": 100392,
       "revision": "75389320ed8361123ab6"
     },
+    "/burrow-assets/fruits/blackcurrant.jpg": {
+      "bytes": 296006,
+      "revision": "9d124e1c6ea64af10f76"
+    },
+    "/burrow-assets/fruits/blood-orange.jpg": {
+      "bytes": 81470,
+      "revision": "2ca58400b7b6404e147f"
+    },
     "/burrow-assets/fruits/blueberry.jpg": {
       "bytes": 27368,
       "revision": "0243bbd0bd68f0cb9f69"
@@ -1859,6 +1875,10 @@
     "/burrow-assets/fruits/canistel.jpg": {
       "bytes": 30561,
       "revision": "23e05e06819efaa2d379"
+    },
+    "/burrow-assets/fruits/cantaloupe.jpg": {
+      "bytes": 151376,
+      "revision": "2053c7aaa4b4f4232137"
     },
     "/burrow-assets/fruits/cape-gooseberry.jpg": {
       "bytes": 37838,
@@ -1872,6 +1892,10 @@
       "bytes": 88468,
       "revision": "a0e57d7c07c9979f7fb4"
     },
+    "/burrow-assets/fruits/clementine.jpg": {
+      "bytes": 125953,
+      "revision": "59b2479f06b73eed2e4d"
+    },
     "/burrow-assets/fruits/cloudberry.jpg": {
       "bytes": 101068,
       "revision": "28e063c53eb833b2d164"
@@ -1884,9 +1908,17 @@
       "bytes": 85306,
       "revision": "0bc6cf8453abd1282075"
     },
+    "/burrow-assets/fruits/cranberry.jpg": {
+      "bytes": 63850,
+      "revision": "4d6a30387ad9eaf21160"
+    },
     "/burrow-assets/fruits/cupuacu.jpg": {
       "bytes": 109667,
       "revision": "fcd210485eebde7e0988"
+    },
+    "/burrow-assets/fruits/date.jpg": {
+      "bytes": 70861,
+      "revision": "917ca625d7c97db764a5"
     },
     "/burrow-assets/fruits/davidsons-plum.jpg": {
       "bytes": 66857,
@@ -1916,9 +1948,25 @@
       "bytes": 77897,
       "revision": "d18cdbb84bfa27500696"
     },
+    "/burrow-assets/fruits/golden-kiwifruit.jpg": {
+      "bytes": 57466,
+      "revision": "5ac33aef9d62e6a91da4"
+    },
+    "/burrow-assets/fruits/gooseberry.jpg": {
+      "bytes": 108985,
+      "revision": "b179a86b7edd17d09bc9"
+    },
     "/burrow-assets/fruits/grape.jpg": {
       "bytes": 101303,
       "revision": "7950dff349e476165a8d"
+    },
+    "/burrow-assets/fruits/grapefruit.jpg": {
+      "bytes": 80136,
+      "revision": "0b2ffab282c498b1b56c"
+    },
+    "/burrow-assets/fruits/greengage.jpg": {
+      "bytes": 54946,
+      "revision": "d1ba415ea886ebd32aa0"
     },
     "/burrow-assets/fruits/grumichama.jpg": {
       "bytes": 106783,
@@ -1927,6 +1975,10 @@
     "/burrow-assets/fruits/guava.jpg": {
       "bytes": 47574,
       "revision": "2728a486bd3603aed6c4"
+    },
+    "/burrow-assets/fruits/honeydew.jpg": {
+      "bytes": 49085,
+      "revision": "0991fdfefef891e7deaa"
     },
     "/burrow-assets/fruits/indian-jujube.jpg": {
       "bytes": 28192,
@@ -1964,6 +2016,10 @@
       "bytes": 97023,
       "revision": "288a317ddd281fec18de"
     },
+    "/burrow-assets/fruits/kumquat.jpg": {
+      "bytes": 74303,
+      "revision": "cbccdcf89da0c32455f1"
+    },
     "/burrow-assets/fruits/langsat.jpg": {
       "bytes": 54064,
       "revision": "e0d93edbedcfda7cb000"
@@ -1996,6 +2052,10 @@
       "bytes": 95077,
       "revision": "5325f95675e473ccf1d7"
     },
+    "/burrow-assets/fruits/mandarin.jpg": {
+      "bytes": 67012,
+      "revision": "067b0eebee2df6fb1a2f"
+    },
     "/burrow-assets/fruits/mango.jpg": {
       "bytes": 60588,
       "revision": "6d166097944af46f045e"
@@ -2016,9 +2076,21 @@
       "bytes": 92522,
       "revision": "e1d8d5a9d84d8ffceba9"
     },
+    "/burrow-assets/fruits/mulberry.jpg": {
+      "bytes": 149707,
+      "revision": "aa0334c9bb0ccec06102"
+    },
     "/burrow-assets/fruits/naranjilla.jpg": {
       "bytes": 99979,
       "revision": "cfa3fef5a90695e2656f"
+    },
+    "/burrow-assets/fruits/nectarine.jpg": {
+      "bytes": 60343,
+      "revision": "6187aa3757280e3cd5b4"
+    },
+    "/burrow-assets/fruits/olive.jpg": {
+      "bytes": 55192,
+      "revision": "40d8ff6166b7f0f9d98d"
     },
     "/burrow-assets/fruits/orange.jpg": {
       "bytes": 79401,
@@ -2048,6 +2120,10 @@
       "bytes": 73342,
       "revision": "47ef400ca4493b3348f8"
     },
+    "/burrow-assets/fruits/persian-lime.jpg": {
+      "bytes": 147633,
+      "revision": "1f1b8f66153f451eb9ad"
+    },
     "/burrow-assets/fruits/persimmon.jpg": {
       "bytes": 36414,
       "revision": "52d748daf68d5c0a2621"
@@ -2056,6 +2132,10 @@
       "bytes": 110609,
       "revision": "2c1a88c5dce88480a20d"
     },
+    "/burrow-assets/fruits/plantain.jpg": {
+      "bytes": 31198,
+      "revision": "f9c9307a03a50433349e"
+    },
     "/burrow-assets/fruits/plum.jpg": {
       "bytes": 74008,
       "revision": "73b96a3c4bbd84cdea20"
@@ -2063,6 +2143,10 @@
     "/burrow-assets/fruits/pomegranate.jpg": {
       "bytes": 76771,
       "revision": "2ab38f67bd440f3d5dee"
+    },
+    "/burrow-assets/fruits/pomelo.jpg": {
+      "bytes": 63842,
+      "revision": "495cba0750bbb4e3141a"
     },
     "/burrow-assets/fruits/prickly-pear.jpg": {
       "bytes": 62168,
@@ -2087,6 +2171,10 @@
     "/burrow-assets/fruits/raspberry.jpg": {
       "bytes": 101986,
       "revision": "91acda3a2031c8bb3813"
+    },
+    "/burrow-assets/fruits/redcurrant.jpg": {
+      "bytes": 59195,
+      "revision": "d35d0b75e8fde421cca3"
     },
     "/burrow-assets/fruits/riberry.jpg": {
       "bytes": 108671,
@@ -2116,6 +2204,10 @@
       "bytes": 132163,
       "revision": "7c622de46f5c34000e10"
     },
+    "/burrow-assets/fruits/satsuma.jpg": {
+      "bytes": 128660,
+      "revision": "b7e1b161a348b5ca653a"
+    },
     "/burrow-assets/fruits/sea-buckthorn.jpg": {
       "bytes": 161542,
       "revision": "75ecbf6b274701a4c881"
@@ -2123,6 +2215,10 @@
     "/burrow-assets/fruits/serviceberry.jpg": {
       "bytes": 80895,
       "revision": "ee66fba4f071d692242b"
+    },
+    "/burrow-assets/fruits/sour-cherry.jpg": {
+      "bytes": 17456,
+      "revision": "82c86d1b6ef33e42705d"
     },
     "/burrow-assets/fruits/soursop.jpg": {
       "bytes": 102050,
@@ -2167,6 +2263,10 @@
     "/burrow-assets/fruits/tamarind.jpg": {
       "bytes": 66431,
       "revision": "3cae1d4ee5acb1d645c1"
+    },
+    "/burrow-assets/fruits/tangerine.jpg": {
+      "bytes": 53756,
+      "revision": "a26ec4b74d4be0fa3ef0"
     },
     "/burrow-assets/fruits/watermelon.jpg": {
       "bytes": 147090,

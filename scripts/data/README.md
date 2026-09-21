@@ -17,6 +17,6 @@ See [the September 2026 audit](../../docs/bridges-and-tunnels-audit.md) for corr
 
 # Fruits
 
-`fruits.json` is the reviewed source for 100 Fruits cards, with scientific names, origin/heritage, flavor, texture, editorial flavor and availability ratings, factual references, and individual photo provenance. Forty cards have documented whole-fruit weight examples; the others explicitly leave weight unknown.
+`fruits.json` is the reviewed source for 125 Fruits cards, with scientific names, origin/heritage, flavor, texture, editorial flavor and availability ratings, factual references, and individual photo provenance. Sixty-five cards have documented whole-fruit weight examples; the others explicitly leave weight unknown.
 
 Regenerate with `node scripts/generate-fruits-pack.mjs`, then `npm run generate:offline-manifest`. Both commands work offline. See [the fruit content audit](../../docs/fruits-content-audit.md) for comparison rules and limitations.

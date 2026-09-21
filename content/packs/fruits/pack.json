@@ -2,8 +2,8 @@
   "$schema": "../pack.schema.json",
   "id": "fruits",
   "title": "Fruits",
-  "summary": "Discover 100 fruits, from familiar favorites to rare regional treasures, through weight, flavor, growing regions and surprising facts.",
-  "dataNote": "Whole-fruit examples in grams, including natural peel, shell and seeds unless noted. A source may report a range, cultivar or sample mean. Chosen examples are not species averages or record comparisons. Undocumented weights are null and excluded from arithmetic. Burrow editorial ratings from 1 to 10, interpreting descriptions of ripe fruit: 1 barely sweet/tart, 5 moderate, 10 very sweet/tart. Not Brix, sugar grams, laboratory acidity, health scores or tastiness judgments. Breadfruit is rated at the mature cooking stage. Cultivar, ripeness and personal perception change flavor. Burrow editorial findability bands, 1 to 5, for fresh fruit beyond its home region: 1 local harvest/specialist growers; 2 mostly regional/seasonal; 3 specialty markets; 4 regional staple traded abroad; 5 widely traded. Not a country count, current store inventory, conservation status or price. Based on described cultivation and trade, with no implied worldwide census. Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated. Individually credited Commons photos. Stored as resized JPEGs for offline play; no botanical drawings or generated substitutes.",
+  "summary": "Discover 125 fruits, from familiar favorites to rare regional treasures, through weight, flavor, growing regions and surprising facts.",
+  "dataNote": "Whole-fruit examples in grams, including natural peel, shell and seeds unless noted. A source may report a range, cultivar or sample mean. Chosen examples are not species averages or record comparisons. Undocumented weights are null and excluded from arithmetic. Burrow editorial ratings from 1 to 10, interpreting descriptions of ripe fruit: 1 barely sweet/tart, 5 moderate, 10 very sweet/tart. Not Brix, sugar grams, laboratory acidity, health scores or tastiness judgments. Breadfruit is rated at the mature cooking stage, plantain ripe and cooked, and olive after curing; weights remain whole fruits before cooking or curing. Cultivar, ripeness and personal perception change flavor. Burrow editorial findability bands, 1 to 5, for fresh fruit beyond its home region: 1 local harvest/specialist growers; 2 mostly regional/seasonal; 3 specialty markets; 4 regional staple traded abroad; 5 widely traded. Not a country count, current store inventory, conservation status or price. Based on described cultivation and trade, with no implied worldwide census. Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated. Individually credited Commons photos. Stored as resized JPEGs for offline play; no botanical drawings or generated substitutes. Fruit cards include distinct species and familiar market types or cultivar groups, such as nectarines, satsumas and golden kiwifruit; the card count is not a count of unique species.",
   "primaryStat": {
     "id": "weight-g",
     "label": "Example weight"
@@ -24,7 +24,7 @@
     "geo"
   ],
   "landing": {
-    "detail": "100 fruits, from sweet to surprising",
+    "detail": "125 fruits, from sweet to surprising",
     "image": "/burrow-assets/fruits/mangosteen.jpg",
     "imageFit": "cover",
     "order": 120
@@ -33,602 +33,827 @@
     {
       "label": "Apple — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Apple",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Apple — weight reference",
       "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
-      "note": "Reviewed 2026-09-20. Rounded from a measured whole-fruit sample mean of 156.2 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average."
+      "note": "Reviewed 2026-09-21. Rounded from a measured whole-fruit sample mean of 156.2 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average."
     },
     {
       "label": "Banana — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Banana",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Banana — weight reference",
       "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
-      "note": "Reviewed 2026-09-20. Rounded from a measured whole-fruit sample mean of 153.8 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average."
+      "note": "Reviewed 2026-09-21. Rounded from a measured whole-fruit sample mean of 153.8 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average."
     },
     {
       "label": "Orange — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Orange_%28fruit%29",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Orange — weight reference",
       "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
-      "note": "Reviewed 2026-09-20. Rounded from a measured whole-fruit sample mean of 218.6 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average."
+      "note": "Reviewed 2026-09-21. Rounded from a measured whole-fruit sample mean of 218.6 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average."
     },
     {
       "label": "Mango — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Mango",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Pineapple — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Pineapple",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Strawberry — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Strawberry",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Strawberry — weight reference",
       "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
-      "note": "Reviewed 2026-09-20. Rounded from a measured whole-fruit sample mean of 15.6 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average."
+      "note": "Reviewed 2026-09-21. Rounded from a measured whole-fruit sample mean of 15.6 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average."
     },
     {
       "label": "Grape — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Grape",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Grape — weight reference",
       "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
-      "note": "Reviewed 2026-09-20. Rounded from a measured whole-fruit sample mean of 6.1 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average. Green grapes."
+      "note": "Reviewed 2026-09-21. Rounded from a measured whole-fruit sample mean of 6.1 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average. Green grapes."
     },
     {
       "label": "Watermelon — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Watermelon",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Peach — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Peach",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Pear — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Pear",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Pear — weight reference",
       "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
-      "note": "Reviewed 2026-09-20. Rounded from a measured whole-fruit sample mean of 168.6 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average."
+      "note": "Reviewed 2026-09-21. Rounded from a measured whole-fruit sample mean of 168.6 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average."
     },
     {
       "label": "Plum — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Plum",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Apricot — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Apricot",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Sweet Cherry — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Prunus_avium",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Blueberry — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Blueberry",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Blueberry — weight reference",
       "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
-      "note": "Reviewed 2026-09-20. Rounded from a measured whole-fruit sample mean of 1.8 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average."
+      "note": "Reviewed 2026-09-21. Rounded from a measured whole-fruit sample mean of 1.8 g in the UK fruit and vegetable sampling report (2013). This is one survey sample, not a universal average."
     },
     {
       "label": "Raspberry — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Raspberry",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Blackberry — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Blackberry",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Lemon — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Lemon",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Key Lime — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Key_lime",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Coconut — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Coconut",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Pomegranate — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Pomegranate",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Fig — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Fig",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Fig — weight reference",
       "url": "https://hort.purdue.edu/newcrop/morton/fig.html",
-      "note": "Reviewed 2026-09-20. Reported weight of a Poona fig, one named cultivar; other fig varieties differ."
+      "note": "Reviewed 2026-09-21. Reported weight of a Poona fig, one named cultivar; other fig varieties differ."
     },
     {
       "label": "Kiwifruit — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Kiwifruit",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Persimmon — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Diospyros_kaki",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Guava — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Psidium_guajava",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Guava — weight reference",
       "url": "https://ask.ifas.ufl.edu/publication/MG045",
-      "note": "Reviewed 2026-09-20. A 250 g whole-fruit example within UF/IFAS’s reported 28–1,400 g range; guava cultivars vary widely."
+      "note": "Reviewed 2026-09-21. A 250 g whole-fruit example within UF/IFAS’s reported 28–1,400 g range; guava cultivars vary widely."
     },
     {
       "label": "Papaya — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Papaya",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Papaya — weight reference",
       "url": "https://hort.purdue.edu/newcrop/morton/papaya_ars.html",
-      "note": "Reviewed 2026-09-20. Midpoint of the reported 500–1,000 g whole-fruit range for Solo papayas; larger papaya varieties can be much heavier."
+      "note": "Reviewed 2026-09-21. Midpoint of the reported 500–1,000 g whole-fruit range for Solo papayas; larger papaya varieties can be much heavier."
     },
     {
       "label": "Rambutan — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Rambutan",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Rambutan — weight reference",
       "url": "https://rfcarchives.org.au/Next/Fruits/Rambutan/RambutanBig11-81.htm",
-      "note": "Reviewed 2026-09-20. Midpoint of the reported 20–60 g whole-fruit range, including skin and seed."
+      "note": "Reviewed 2026-09-21. Midpoint of the reported 20–60 g whole-fruit range, including skin and seed."
     },
     {
       "label": "Mangosteen — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Mangosteen",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Mangosteen — weight reference",
       "url": "https://www.doae.go.th/en/mangosteen-2/",
-      "note": "Reviewed 2026-09-20. Midpoint of the Thai Department of Agricultural Extension’s reported 70–110 g range, including the thick rind."
+      "note": "Reviewed 2026-09-21. Midpoint of the Thai Department of Agricultural Extension’s reported 70–110 g range, including the thick rind."
     },
     {
       "label": "Durian — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Durian",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Jackfruit — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Jackfruit",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Dragon Fruit — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Dragon_fruit",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Lychee — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Lychee",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Longan — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Longan",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Longan — weight reference",
       "url": "https://ask.ifas.ufl.edu/publication/MG049",
-      "note": "Reviewed 2026-09-20. Rounded midpoint of the UF/IFAS whole-fruit range of 6–19 g."
+      "note": "Reviewed 2026-09-21. Rounded midpoint of the UF/IFAS whole-fruit range of 6–19 g."
     },
     {
       "label": "Star Fruit — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Carambola",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Star Fruit — weight reference",
       "url": "https://academic.oup.com/ijfst/article/49/9/2101/7864427",
-      "note": "Reviewed 2026-09-20. Rounded from a measured whole-fruit study mean of 120.8 g; one study sample, not a universal average."
+      "note": "Reviewed 2026-09-21. Rounded from a measured whole-fruit study mean of 120.8 g; one study sample, not a universal average."
     },
     {
       "label": "Passion Fruit — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Passiflora_edulis",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Cherimoya — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Cherimoya",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Cherimoya — weight reference",
       "url": "https://hort.purdue.edu/newcrop/morton/cherimoya.html",
-      "note": "Reviewed 2026-09-20. Midpoint of the reported common 150–500 g whole-fruit range; exceptionally large fruit excluded."
+      "note": "Reviewed 2026-09-21. Midpoint of the reported common 150–500 g whole-fruit range; exceptionally large fruit excluded."
     },
     {
       "label": "Soursop — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Soursop",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Sugar Apple — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Annona_squamosa",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Atemoya — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Atemoya",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Salak — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Salak",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Langsat — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Lansium_domesticum",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Pulasan — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Pulasan",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Santol — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Sandoricum_koetjape",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Jabuticaba — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Plinia_cauliflora",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Cupuaçu — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Theobroma_grandiflorum",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Cupuaçu — weight reference",
       "url": "https://unctad.org/system/files/official-document/poitcdcomd10.pdf",
-      "note": "Reviewed 2026-09-20. Reported approximate mean whole-fruit weight of 1.5 kg, including husk and seeds."
+      "note": "Reviewed 2026-09-21. Reported approximate mean whole-fruit weight of 1.5 kg, including husk and seeds."
     },
     {
       "label": "Feijoa — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Feijoa",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Sapodilla — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Manilkara_zapota",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Sapodilla — weight reference",
       "url": "https://ask.ifas.ufl.edu/publication/MG057",
-      "note": "Reviewed 2026-09-20. Rounded midpoint of the 115–250 g range for Brown Sugar sapodilla in the UF/IFAS cultivar table; other cultivars differ."
+      "note": "Reviewed 2026-09-21. Rounded midpoint of the 115–250 g range for Brown Sugar sapodilla in the UF/IFAS cultivar table; other cultivars differ."
     },
     {
       "label": "Mamey Sapote — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Pouteria_sapota",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Mamey Sapote — weight reference",
       "url": "https://ask.ifas.ufl.edu/publication/MG331",
-      "note": "Reviewed 2026-09-20. A 1,000 g whole-fruit example within UF/IFAS’s 300–2,700 g range; actual fruit sizes vary."
+      "note": "Reviewed 2026-09-21. A 1,000 g whole-fruit example within UF/IFAS’s 300–2,700 g range; actual fruit sizes vary."
     },
     {
       "label": "Black Sapote — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Diospyros_nigra",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "White Sapote — fruit reference",
       "url": "https://en.wikipedia.org/wiki/White_sapote",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Canistel — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Pouteria_campechiana",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Abiu — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Pouteria_caimito",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Star Apple — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Chrysophyllum_cainito",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Lucuma — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Lucuma_bifera",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Tamarillo — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Tamarillo",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Cape Gooseberry — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Physalis_peruviana",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Naranjilla — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Solanum_quitoense",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Cocona — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Solanum_sessiliflorum",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Sweet Granadilla — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Passiflora_ligularis",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Banana Passionfruit — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Passiflora_tripartita",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Giant Granadilla — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Passiflora_quadrangularis",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "African Horned Melon — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Cucumis_metuliferus",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Baobab — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Adansonia_digitata",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Marula — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Sclerocarya_birrea",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "African Star Apple — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Gambeya_albida",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Safou — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Dacryodes_edulis",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Finger Lime — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Citrus_australasica",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Quandong — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Santalum_acuminatum",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Davidson's Plum — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Davidsonia_jerseyana",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Riberry — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Syzygium_luehmannii",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Kakadu Plum — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Terminalia_ferdinandiana",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Pawpaw — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Asimina_triloba",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Bilimbi — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Averrhoa_bilimbi",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Serviceberry — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Amelanchier_alnifolia",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Salal Berry — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Gaultheria_shallon",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Cloudberry — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Rubus_chamaemorus",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Lingonberry — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Vaccinium_vitis-idaea",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Sea Buckthorn — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Sea_buckthorn",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Medlar — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Mespilus_germanica",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Quince — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Quince",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Strawberry Tree Fruit — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Arbutus_unedo",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Loquat — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Loquat",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Jujube — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Jujube",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Indian Jujube — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Ziziphus_mauritiana",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Indian Jujube — weight reference",
       "url": "https://hort.purdue.edu/newcrop/morton/indian_jujube.html",
-      "note": "Reviewed 2026-09-20. Rounded midpoint of the reported 14–17 g range for the Gola cultivar; other cultivars vary."
+      "note": "Reviewed 2026-09-21. Rounded midpoint of the reported 14–17 g range for the Gola cultivar; other cultivars vary."
     },
     {
       "label": "Amla — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Phyllanthus_emblica",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Bael — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Aegle_marmelos",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Wood Apple — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Limonia_acidissima",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Jamun — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Syzygium_cumini",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Rose Apple — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Syzygium_jambos",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Wax Apple — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Syzygium_samarangense",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Ambarella — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Spondias_dulcis",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Ambarella — weight reference",
       "url": "https://hort.purdue.edu/newcrop/morton/ambarella_ars.html",
-      "note": "Reviewed 2026-09-20. A large-fruit example of about 500 g; Morton reports some Pacific island fruit exceeding this size."
+      "note": "Reviewed 2026-09-21. A large-fruit example of about 500 g; Morton reports some Pacific island fruit exceeding this size."
     },
     {
       "label": "Jocote — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Spondias_purpurea",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Tamarind — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Tamarind",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Cashew Apple — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Cashew",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Surinam Cherry — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Eugenia_uniflora",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Grumichama — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Grumichama",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Acerola — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Malpighia_emarginata",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Miracle Fruit — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Synsepalum_dulcificum",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Prickly Pear — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Opuntia_ficus-indica",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Pepino — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Solanum_muricatum",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
     },
     {
       "label": "Breadfruit — fruit reference",
       "url": "https://en.wikipedia.org/wiki/Breadfruit",
-      "note": "Reviewed 2026-09-20. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Grapefruit — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Grapefruit",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Grapefruit — weight reference",
+      "url": "https://calag.ucanr.edu/download_pdf.cfm?article=ca.v040n01p28",
+      "note": "Reviewed 2026-09-21. The Marsh grapefruit cultivar averaged 450 g at Lindcove in 1975–1983 in a UCANR comparison. A site and cultivar example, not a species average."
+    },
+    {
+      "label": "Pomelo — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Pomelo",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Mandarin — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Mandarin_orange",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Mandarin — weight reference",
+      "url": "https://citrusvariety.ucr.edu/sites/default/files/2021-06/usfurrusfurrstinjamerpomsoc2014.pdf",
+      "note": "Reviewed 2026-09-21. Rounded from 108.3 g for the US Furr mandarin cultivar sampled at Exeter on 17 October 2010. A cultivar sample, not an average for all mandarins."
+    },
+    {
+      "label": "Clementine — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Clementine",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Clementine — weight reference",
+      "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+      "note": "Reviewed 2026-09-21. Rounded from 77.9 g, the whole-fruit mean for sample 47.3 (loose clementines) in the UK 2013 sampling report. Includes peel and seeds; one retail sample."
+    },
+    {
+      "label": "Tangerine — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Tangerine",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Tangerine — weight reference",
+      "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+      "note": "Reviewed 2026-09-21. Rounded from 151.1 g, the whole-fruit mean for sample 47.1 (Jaffa juicy tangerines) in the UK 2013 sampling report. Includes peel and seeds; one retail sample."
+    },
+    {
+      "label": "Satsuma — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Citrus_unshiu",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Satsuma — weight reference",
+      "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+      "note": "Reviewed 2026-09-21. Rounded from 94.3 g, the whole-fruit mean for sample 47.7 (loose satsumas) in the UK 2013 sampling report. Includes peel; one retail sample."
+    },
+    {
+      "label": "Blood Orange — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Blood_orange",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Blood Orange — weight reference",
+      "url": "https://scijournals.onlinelibrary.wiley.com/doi/10.1002/jsfa.11636",
+      "note": "Reviewed 2026-09-21. A reported 196 g mean for the Moro blood-orange cultivar in a comparative study published in 2022. Other cultivars and harvests differ."
+    },
+    {
+      "label": "Kumquat — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Kumquat",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Nectarine — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Nectarine",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Nectarine — weight reference",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8228427/",
+      "note": "Reviewed 2026-09-21. A reported 170 g mean for the Nectaross nectarine cultivar in a 2021 fruit study. A cultivar sample, not an average for all nectarines."
+    },
+    {
+      "label": "Cantaloupe — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Cantaloupe",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Honeydew Melon — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Honeydew_(melon)",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Date — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Date_palm",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Date — weight reference",
+      "url": "https://journals.ekb.eg/article_451784_1ff7173b95475c111391bea217195f2e.pdf",
+      "note": "Reviewed 2026-09-21. Rounded from a reported 15.97 g whole-fruit mean for Medjool dates, including the seed, in an Egyptian horticultural study. Cultivar and ripening stage affect weight."
+    },
+    {
+      "label": "Cranberry — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Cranberry",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Cranberry — weight reference",
+      "url": "https://research.rutgers.edu/agricultural-products/cranberries/welker",
+      "note": "Reviewed 2026-09-21. Rutgers describes the Welker American cranberry cultivar as averaging 2 g per berry. A cultivar example; other cranberries differ."
+    },
+    {
+      "label": "Gooseberry — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Gooseberry",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Gooseberry — weight reference",
+      "url": "https://journal.subtropras.ru/en/archive/68/8/",
+      "note": "Reviewed 2026-09-21. Rounded from a 3.2 g mean for the Konsul gooseberry cultivar in a South Urals study published in 2019. A studied cultivar, not a species average."
+    },
+    {
+      "label": "Blackcurrant — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Blackcurrant",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Blackcurrant — weight reference",
+      "url": "https://agresearch.montana.edu/warc/research_current/berries/currants/variety-trials.html",
+      "note": "Reviewed 2026-09-21. The Titania blackcurrant cultivar averaged 1.0 g per berry in the 2017 Montana WARC trial. A harvest and cultivar example."
+    },
+    {
+      "label": "Redcurrant — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Redcurrant",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Redcurrant — weight reference",
+      "url": "https://agresearch.montana.edu/warc/research_current/berries/currants/variety-trials.html",
+      "note": "Reviewed 2026-09-21. Rounded to a whole gram from the Rovada redcurrant mean of 0.8 g in the 2017 Montana WARC trial. Coarse whole-gram rounding for a very small berry."
+    },
+    {
+      "label": "Mulberry — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Morus_nigra",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Mulberry — weight reference",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0926669018302164",
+      "note": "Reviewed 2026-09-21. Rounded from 3.85 g, the average fruit weight across studied black-mulberry genotypes in a 2018 paper; individual genotype means ranged from 1.79 to 5.69 g."
+    },
+    {
+      "label": "Avocado — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Avocado",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Olive — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Olive",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Olive — weight reference",
+      "url": "https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2026.1895003/full",
+      "note": "Reviewed 2026-09-21. The Manzanilla de Sevilla cultivar averaged 4.0 g per whole, uncured fruit in a study covering 2012–2020 harvests. Weight is before curing, unlike the flavor description."
+    },
+    {
+      "label": "Plantain — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Cooking_banana",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Plantain — weight reference",
+      "url": "https://www.celkau.in/Crops/fruits/banana/varieties.php",
+      "note": "Reviewed 2026-09-21. Kerala Agricultural University lists 250 g per fruit for the Big Ebanga plantain clone. A whole-fruit cultivar example; flavor ratings describe ripe cooked plantain."
+    },
+    {
+      "label": "Asian Pear — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Pyrus_pyrifolia",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Asian Pear — weight reference",
+      "url": "https://journals.ashs.org/downloadpdf/view/journals/jashs/119/3/article-p383.pdf",
+      "note": "Reviewed 2026-09-21. The Hosui Asian pear control group averaged 241 g per fruit in an irrigation study. A cultivar and treatment sample, not a universal average."
+    },
+    {
+      "label": "Sour Cherry — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Prunus_cerasus",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Sour Cherry — weight reference",
+      "url": "https://www.nationalfruitcollection.org.uk/full2.php?fruit=cherry&id=7824",
+      "note": "Reviewed 2026-09-21. Rounded from the National Fruit Collection measurement of 4.70 g for the Montmorency sour-cherry cultivar. Includes the stone."
+    },
+    {
+      "label": "Greengage — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Greengage",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Greengage — weight reference",
+      "url": "https://www.nationalfruitcollection.org.uk/full2.php?acc4=1962006&fruit=plum&varid=8016",
+      "note": "Reviewed 2026-09-21. Rounded from the National Fruit Collection measurement of 30.90 g for Belgian Greengage. A whole-fruit cultivar example."
+    },
+    {
+      "label": "Persian Lime — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Persian_lime",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Persian Lime — weight reference",
+      "url": "https://ask.ifas.ufl.edu/publication/CH093",
+      "note": "Reviewed 2026-09-21. UF/IFAS gives 1.9 oz (54 g) as the typical whole-fruit weight for Tahiti/Persian lime. Fruit size varies by crop and harvest."
+    },
+    {
+      "label": "Golden Kiwifruit — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Actinidia_chinensis",
+      "note": "Reviewed 2026-09-21. Identity, origin, appearance and flavor; scores are editorial interpretations, not measured sweetness or availability."
+    },
+    {
+      "label": "Golden Kiwifruit — weight reference",
+      "url": "https://patents.google.com/patent/USPP11066P/en",
+      "note": "Reviewed 2026-09-21. Rounded from 98.3 g, the mean of 1,940 Hort16A golden kiwifruit harvested in May 1995 in New Zealand and reported in the plant patent. A cultivar sample."
     }
   ],
   "cards": [
@@ -11729,6 +11954,2931 @@
       },
       "readingPrompts": [
         "Which clue would help you recognize Breadfruit?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "grapefruit",
+      "name": "Grapefruit",
+      "image": "/burrow-assets/fruits/grapefruit.jpg",
+      "imageAlt": "Grapefruit fruit",
+      "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Grapefruits - whole-halved-segments.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Grapefruits_-_whole-halved-segments.jpg",
+      "fact": "Grapefruit began as a cross between a pomelo and a sweet orange.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 450,
+          "unit": "g",
+          "display": "~450 g",
+          "direction": "higher",
+          "note": "The Marsh grapefruit cultivar averaged 450 g at Lindcove in 1975–1983 in a UCANR comparison. A site and cultivar example, not a species average."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 5,
+          "unit": "/10",
+          "display": "5/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 7,
+          "unit": "/10",
+          "display": "7/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 5,
+          "unit": "/5",
+          "display": "5/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Citrus × paradisi"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Barbados"
+        },
+        {
+          "label": "Flavor",
+          "value": "Tangy, bittersweet citrus"
+        },
+        {
+          "label": "Texture",
+          "value": "Juicy segments"
+        },
+        {
+          "label": "Finding it",
+          "value": "Widely traded"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "citrus",
+        "North America"
+      ],
+      "tags": [
+        "citrus",
+        "north-america"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "citrus",
+        "accuracyNote": "The Marsh grapefruit cultivar averaged 450 g at Lindcove in 1975–1983 in a UCANR comparison. A site and cultivar example, not a species average. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Barbados",
+          "countries": [
+            "Barbados"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            13.2,
+            -59.6
+          ]
+        },
+        "sources": [
+          {
+            "label": "Grapefruit — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Grapefruit",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Grapefruit — weight and fruit reference",
+            "url": "https://calag.ucanr.edu/download_pdf.cfm?article=ca.v040n01p28",
+            "note": "The Marsh grapefruit cultivar averaged 450 g at Lindcove in 1975–1983 in a UCANR comparison. A site and cultivar example, not a species average."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Grapefruit?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "pomelo",
+      "name": "Pomelo",
+      "image": "/burrow-assets/fruits/pomelo.jpg",
+      "imageAlt": "Pomelo fruit",
+      "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Pomelo fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pomelo_fruit.jpg",
+      "fact": "A pomelo has a thick, spongy layer of white pith under its skin.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 1000,
+          "unit": "g",
+          "display": "~1,000 g",
+          "direction": "higher",
+          "note": "A 1,000 g whole-fruit example within the reported 260–1,950 g cultivar range. Cultivars and growing conditions change size."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 4,
+          "unit": "/10",
+          "display": "4/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 4,
+          "unit": "/5",
+          "display": "4/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Citrus maxima"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Southeast Asia"
+        },
+        {
+          "label": "Flavor",
+          "value": "Gentle citrus sweetness with a tang"
+        },
+        {
+          "label": "Texture",
+          "value": "Large juice sacs beneath thick pith"
+        },
+        {
+          "label": "Finding it",
+          "value": "Regional staple traded abroad"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "citrus",
+        "Asia"
+      ],
+      "tags": [
+        "citrus",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "citrus",
+        "accuracyNote": "A 1,000 g whole-fruit example within the reported 260–1,950 g cultivar range. Cultivars and growing conditions change size. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Southeast Asia",
+          "countries": [
+            "Malaysia"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            4.2,
+            101.9
+          ]
+        },
+        "sources": [
+          {
+            "label": "Pomelo — weight and fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Pomelo",
+            "note": "A 1,000 g whole-fruit example within the reported 260–1,950 g cultivar range. Cultivars and growing conditions change size."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Pomelo?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "mandarin",
+      "name": "Mandarin",
+      "image": "/burrow-assets/fruits/mandarin.jpg",
+      "imageAlt": "Mandarin fruit",
+      "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Mandarins - whole and halved.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mandarins_-_whole_and_halved.jpg",
+      "fact": "Mandarins are ancestors of many other citrus fruits, including sweet oranges.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 108,
+          "unit": "g",
+          "display": "~108 g",
+          "direction": "higher",
+          "note": "Rounded from 108.3 g for the US Furr mandarin cultivar sampled at Exeter on 17 October 2010. A cultivar sample, not an average for all mandarins."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 3,
+          "unit": "/10",
+          "display": "3/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 5,
+          "unit": "/5",
+          "display": "5/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Citrus reticulata"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "China and nearby Southeast Asia"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet, fragrant citrus"
+        },
+        {
+          "label": "Texture",
+          "value": "Tender segments with a loose peel"
+        },
+        {
+          "label": "Finding it",
+          "value": "Widely traded"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "citrus",
+        "Asia"
+      ],
+      "tags": [
+        "citrus",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "citrus",
+        "accuracyNote": "Rounded from 108.3 g for the US Furr mandarin cultivar sampled at Exeter on 17 October 2010. A cultivar sample, not an average for all mandarins. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "China and nearby Southeast Asia",
+          "countries": [
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            23.1,
+            113.3
+          ]
+        },
+        "sources": [
+          {
+            "label": "Mandarin — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Mandarin_orange",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Mandarin — weight and fruit reference",
+            "url": "https://citrusvariety.ucr.edu/sites/default/files/2021-06/usfurrusfurrstinjamerpomsoc2014.pdf",
+            "note": "Rounded from 108.3 g for the US Furr mandarin cultivar sampled at Exeter on 17 October 2010. A cultivar sample, not an average for all mandarins."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Mandarin?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "clementine",
+      "name": "Clementine",
+      "image": "/burrow-assets/fruits/clementine.jpg",
+      "imageAlt": "Clementine fruit",
+      "imageCredit": "carol / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Clementines whole, peeled, half and sectioned.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Clementines_whole,_peeled,_half_and_sectioned.jpg",
+      "fact": "A clementine combines mandarin and sweet-orange ancestry. It is one of several kinds of easy-peeling citrus.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 78,
+          "unit": "g",
+          "display": "~78 g",
+          "direction": "higher",
+          "note": "Rounded from 77.9 g, the whole-fruit mean for sample 47.3 (loose clementines) in the UK 2013 sampling report. Includes peel and seeds; one retail sample."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 3,
+          "unit": "/10",
+          "display": "3/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 5,
+          "unit": "/5",
+          "display": "5/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Citrus × clementina"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Algerian cultivation heritage; mandarin and sweet-orange ancestry"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet citrus with a mild tang"
+        },
+        {
+          "label": "Texture",
+          "value": "Small, juicy, easy-peeling segments"
+        },
+        {
+          "label": "Finding it",
+          "value": "Widely traded"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "citrus",
+        "Africa"
+      ],
+      "tags": [
+        "citrus",
+        "africa"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "citrus",
+        "accuracyNote": "Rounded from 77.9 g, the whole-fruit mean for sample 47.3 (loose clementines) in the UK 2013 sampling report. Includes peel and seeds; one retail sample. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Algerian cultivation heritage; mandarin and sweet-orange ancestry",
+          "countries": [
+            "Algeria"
+          ],
+          "continents": [
+            "Africa"
+          ],
+          "coordinates": [
+            35.7,
+            -0.6
+          ]
+        },
+        "sources": [
+          {
+            "label": "Clementine — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Clementine",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Clementine — weight and fruit reference",
+            "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+            "note": "Rounded from 77.9 g, the whole-fruit mean for sample 47.3 (loose clementines) in the UK 2013 sampling report. Includes peel and seeds; one retail sample."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Clementine?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "tangerine",
+      "name": "Tangerine",
+      "image": "/burrow-assets/fruits/tangerine.jpg",
+      "imageAlt": "Tangerine fruit",
+      "imageCredit": "Barfooz (Brent Ramerth) / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: TangerineFruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:TangerineFruit.jpg",
+      "fact": "The name tangerine is linked to Tangier in Morocco, once an important port for shipping these fruits.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 151,
+          "unit": "g",
+          "display": "~151 g",
+          "direction": "higher",
+          "note": "Rounded from 151.1 g, the whole-fruit mean for sample 47.1 (Jaffa juicy tangerines) in the UK 2013 sampling report. Includes peel and seeds; one retail sample."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 4,
+          "unit": "/10",
+          "display": "4/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 5,
+          "unit": "/5",
+          "display": "5/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Citrus reticulata Tangerine Group"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Asian mandarin ancestry; name linked to Tangier trade"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet, lively citrus"
+        },
+        {
+          "label": "Texture",
+          "value": "Juicy segments under a loose rind"
+        },
+        {
+          "label": "Finding it",
+          "value": "Widely traded"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "citrus",
+        "Asia"
+      ],
+      "tags": [
+        "citrus",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "citrus",
+        "accuracyNote": "Rounded from 151.1 g, the whole-fruit mean for sample 47.1 (Jaffa juicy tangerines) in the UK 2013 sampling report. Includes peel and seeds; one retail sample. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Asian mandarin ancestry; name linked to Tangier trade",
+          "countries": [
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            23.1,
+            113.3
+          ]
+        },
+        "sources": [
+          {
+            "label": "Tangerine — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Tangerine",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Tangerine — weight and fruit reference",
+            "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+            "note": "Rounded from 151.1 g, the whole-fruit mean for sample 47.1 (Jaffa juicy tangerines) in the UK 2013 sampling report. Includes peel and seeds; one retail sample."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Tangerine?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "satsuma",
+      "name": "Satsuma",
+      "image": "/burrow-assets/fruits/satsuma.jpg",
+      "imageAlt": "Satsuma fruit",
+      "imageCredit": "Daderot / Wikimedia Commons / Public domain (CC0) (http://creativecommons.org/publicdomain/zero/1.0/deed.en). Resized as JPEG. Original: Satsuma mandarins - San Francisco, CA - DSC02398.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Satsuma_mandarins_-_San_Francisco,_CA_-_DSC02398.jpg",
+      "fact": "Satsumas are a type of mandarin, known for a very loose peel and fruit that is often seedless.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 94,
+          "unit": "g",
+          "display": "~94 g",
+          "direction": "higher",
+          "note": "Rounded from 94.3 g, the whole-fruit mean for sample 47.7 (loose satsumas) in the UK 2013 sampling report. Includes peel; one retail sample."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 3,
+          "unit": "/10",
+          "display": "3/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 5,
+          "unit": "/5",
+          "display": "5/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Citrus unshiu"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Japanese cultivation heritage; Asian citrus ancestry"
+        },
+        {
+          "label": "Flavor",
+          "value": "Mellow, sweet citrus"
+        },
+        {
+          "label": "Texture",
+          "value": "Tender, often seedless segments"
+        },
+        {
+          "label": "Finding it",
+          "value": "Widely traded"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "citrus",
+        "Asia"
+      ],
+      "tags": [
+        "citrus",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "citrus",
+        "accuracyNote": "Rounded from 94.3 g, the whole-fruit mean for sample 47.7 (loose satsumas) in the UK 2013 sampling report. Includes peel; one retail sample. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Japanese cultivation heritage; Asian citrus ancestry",
+          "countries": [
+            "Japan"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            31.6,
+            130.6
+          ]
+        },
+        "sources": [
+          {
+            "label": "Satsuma — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Citrus_unshiu",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Satsuma — weight and fruit reference",
+            "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+            "note": "Rounded from 94.3 g, the whole-fruit mean for sample 47.7 (loose satsumas) in the UK 2013 sampling report. Includes peel; one retail sample."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Satsuma?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "blood-orange",
+      "name": "Blood Orange",
+      "image": "/burrow-assets/fruits/blood-orange.jpg",
+      "imageAlt": "Blood Orange fruit",
+      "imageCredit": "Silentcynic / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: BloodOrange.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:BloodOrange.jpg",
+      "fact": "Blood oranges are sweet-orange varieties whose red flesh gets its color from anthocyanin pigments.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 196,
+          "unit": "g",
+          "display": "~196 g",
+          "direction": "higher",
+          "note": "A reported 196 g mean for the Moro blood-orange cultivar in a comparative study published in 2022. Other cultivars and harvests differ."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 7,
+          "unit": "/10",
+          "display": "7/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 5,
+          "unit": "/10",
+          "display": "5/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 4,
+          "unit": "/5",
+          "display": "4/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Citrus × sinensis, blood-orange varieties"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Mediterranean cultivation heritage, especially Sicily"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet-tart citrus, sometimes berry-like"
+        },
+        {
+          "label": "Texture",
+          "value": "Juicy segments with red-pigmented flesh"
+        },
+        {
+          "label": "Finding it",
+          "value": "Regional staple traded abroad"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "citrus",
+        "Europe"
+      ],
+      "tags": [
+        "citrus",
+        "europe"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "citrus",
+        "accuracyNote": "A reported 196 g mean for the Moro blood-orange cultivar in a comparative study published in 2022. Other cultivars and harvests differ. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Mediterranean cultivation heritage, especially Sicily",
+          "countries": [
+            "Italy"
+          ],
+          "continents": [
+            "Europe"
+          ],
+          "coordinates": [
+            37.5,
+            15.1
+          ]
+        },
+        "sources": [
+          {
+            "label": "Blood Orange — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Blood_orange",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Blood Orange — weight and fruit reference",
+            "url": "https://scijournals.onlinelibrary.wiley.com/doi/10.1002/jsfa.11636",
+            "note": "A reported 196 g mean for the Moro blood-orange cultivar in a comparative study published in 2022. Other cultivars and harvests differ."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Blood Orange?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "kumquat",
+      "name": "Kumquat",
+      "image": "/burrow-assets/fruits/kumquat.jpg",
+      "imageAlt": "Kumquat fruit",
+      "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Kumquat from Spain.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kumquat_from_Spain.jpg",
+      "fact": "A kumquat reverses the usual citrus surprise: its peel is sweet while the inside is much more tart.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 16,
+          "unit": "g",
+          "display": "~16 g",
+          "direction": "higher",
+          "note": "A rounded 16 g example within the reported 11–20 g range for the Puchimaru kumquat cultivar. This is a cultivar example, not a fixed size for every kumquat."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 5,
+          "unit": "/10",
+          "display": "5/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 4,
+          "unit": "/5",
+          "display": "4/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Citrus japonica"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Southern China"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet peel around a sour center"
+        },
+        {
+          "label": "Texture",
+          "value": "Thin edible peel and juicy pulp"
+        },
+        {
+          "label": "Finding it",
+          "value": "Regional staple traded abroad"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "citrus",
+        "Asia"
+      ],
+      "tags": [
+        "citrus",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "citrus",
+        "accuracyNote": "A rounded 16 g example within the reported 11–20 g range for the Puchimaru kumquat cultivar. This is a cultivar example, not a fixed size for every kumquat. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Southern China",
+          "countries": [
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            24.5,
+            118.1
+          ]
+        },
+        "sources": [
+          {
+            "label": "Kumquat — weight and fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Kumquat",
+            "note": "A rounded 16 g example within the reported 11–20 g range for the Puchimaru kumquat cultivar. This is a cultivar example, not a fixed size for every kumquat."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Kumquat?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "nectarine",
+      "name": "Nectarine",
+      "image": "/burrow-assets/fruits/nectarine.jpg",
+      "imageAlt": "Nectarine fruit",
+      "imageCredit": "Rhododendrites / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Nectarine on white.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Nectarine_on_white.jpg",
+      "fact": "A nectarine is a smooth-skinned peach, not a cross between a peach and a plum.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 170,
+          "unit": "g",
+          "display": "~170 g",
+          "direction": "higher",
+          "note": "A reported 170 g mean for the Nectaross nectarine cultivar in a 2021 fruit study. A cultivar sample, not an average for all nectarines."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 4,
+          "unit": "/10",
+          "display": "4/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 5,
+          "unit": "/5",
+          "display": "5/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Prunus persica, nectarine varieties"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "China; peach domestication heritage"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet and tangy, like a peach"
+        },
+        {
+          "label": "Texture",
+          "value": "Smooth skin with juicy flesh"
+        },
+        {
+          "label": "Finding it",
+          "value": "Widely traded"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "stone-fruit",
+        "Asia"
+      ],
+      "tags": [
+        "stone-fruit",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "stone-fruit",
+        "accuracyNote": "A reported 170 g mean for the Nectaross nectarine cultivar in a 2021 fruit study. A cultivar sample, not an average for all nectarines. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "China; peach domestication heritage",
+          "countries": [
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            30.3,
+            120.2
+          ]
+        },
+        "sources": [
+          {
+            "label": "Nectarine — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Nectarine",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Nectarine — weight and fruit reference",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8228427/",
+            "note": "A reported 170 g mean for the Nectaross nectarine cultivar in a 2021 fruit study. A cultivar sample, not an average for all nectarines."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Nectarine?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "cantaloupe",
+      "name": "Cantaloupe",
+      "image": "/burrow-assets/fruits/cantaloupe.jpg",
+      "imageAlt": "Cantaloupe fruit",
+      "imageCredit": "USDA photo by Scott Bauer. Image Number K7355-11. / Wikimedia Commons / Public domain (https://creativecommons.org/publicdomain/mark/1.0/). Resized as JPEG. Original: Cucumis melo var. reticulatus (photo by Scott Bauer).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cucumis_melo_var._reticulatus_(photo_by_Scott_Bauer).jpg",
+      "fact": "The netted melon often called cantaloupe in North America is a muskmelon; European cantaloupes can have a different rind.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 1500,
+          "unit": "g",
+          "display": "~1,500 g",
+          "direction": "higher",
+          "note": "A 1,500 g whole-fruit example within the reported 500–5,000 g cantaloupe range. Includes rind and seeds; varieties vary greatly."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 1,
+          "unit": "/10",
+          "display": "1/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 5,
+          "unit": "/5",
+          "display": "5/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Cucumis melo, Cantalupensis and Reticulatus Groups"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Long cultivation in West Asia; deeper melon origins debated"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet, fragrant orange flesh"
+        },
+        {
+          "label": "Texture",
+          "value": "Soft, juicy flesh inside a firm rind"
+        },
+        {
+          "label": "Finding it",
+          "value": "Widely traded"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "melon",
+        "Asia"
+      ],
+      "tags": [
+        "melon",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "melon",
+        "accuracyNote": "A 1,500 g whole-fruit example within the reported 500–5,000 g cantaloupe range. Includes rind and seeds; varieties vary greatly. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Long cultivation in West Asia; deeper melon origins debated",
+          "countries": [
+            "Iran"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            32.7,
+            51.7
+          ]
+        },
+        "sources": [
+          {
+            "label": "Cantaloupe — weight and fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Cantaloupe",
+            "note": "A 1,500 g whole-fruit example within the reported 500–5,000 g cantaloupe range. Includes rind and seeds; varieties vary greatly."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Cantaloupe?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "honeydew",
+      "name": "Honeydew Melon",
+      "image": "/burrow-assets/fruits/honeydew.jpg",
+      "imageAlt": "Honeydew Melon fruit",
+      "imageCredit": "Yotoen / Wikimedia Commons / Public domain (https://creativecommons.org/publicdomain/mark/1.0/). Resized as JPEG. Original: Honeydew.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Honeydew.jpg",
+      "fact": "Honeydew and cantaloupe are different groups of the same melon species.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 2700,
+          "unit": "g",
+          "display": "~2,700 g",
+          "direction": "higher",
+          "note": "A 2,700 g whole-fruit example within the reported 1,800–3,600 g honeydew range. Includes rind and seeds, not just edible flesh."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 1,
+          "unit": "/10",
+          "display": "1/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 5,
+          "unit": "/5",
+          "display": "5/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Cucumis melo, Inodorus Group"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "West Asian and Mediterranean cultivation heritage"
+        },
+        {
+          "label": "Flavor",
+          "value": "Mild, honey-like sweetness"
+        },
+        {
+          "label": "Texture",
+          "value": "Smooth rind around juicy, usually pale-green flesh"
+        },
+        {
+          "label": "Finding it",
+          "value": "Widely traded"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "melon",
+        "Asia"
+      ],
+      "tags": [
+        "melon",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "melon",
+        "accuracyNote": "A 2,700 g whole-fruit example within the reported 1,800–3,600 g honeydew range. Includes rind and seeds, not just edible flesh. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "West Asian and Mediterranean cultivation heritage",
+          "countries": [
+            "Iran"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            32.7,
+            51.7
+          ]
+        },
+        "sources": [
+          {
+            "label": "Honeydew Melon — weight and fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Honeydew_(melon)",
+            "note": "A 2,700 g whole-fruit example within the reported 1,800–3,600 g honeydew range. Includes rind and seeds, not just edible flesh."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Honeydew Melon?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "date",
+      "name": "Date",
+      "image": "/burrow-assets/fruits/date.jpg",
+      "imageAlt": "Date fruit",
+      "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Mazafati dates - whole, halved and seed.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mazafati_dates_-_whole,_halved_and_seed.jpg",
+      "fact": "Dates grow in large hanging clusters on palms; each fruit has one long, hard seed.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 16,
+          "unit": "g",
+          "display": "~16 g",
+          "direction": "higher",
+          "note": "Rounded from a reported 15.97 g whole-fruit mean for Medjool dates, including the seed, in an Egyptian horticultural study. Cultivar and ripening stage affect weight."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 10,
+          "unit": "/10",
+          "display": "10/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 1,
+          "unit": "/10",
+          "display": "1/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 4,
+          "unit": "/5",
+          "display": "4/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Phoenix dactylifera"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Middle East; ancient cultivation around the Persian Gulf"
+        },
+        {
+          "label": "Flavor",
+          "value": "Deep, caramel-like sweetness when fully ripe"
+        },
+        {
+          "label": "Texture",
+          "value": "Soft or chewy flesh around a hard seed"
+        },
+        {
+          "label": "Finding it",
+          "value": "Fresh ripe: regional staple traded abroad; dried dates are more widespread"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "stone-fruit",
+        "Asia"
+      ],
+      "tags": [
+        "stone-fruit",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "stone-fruit",
+        "accuracyNote": "Rounded from a reported 15.97 g whole-fruit mean for Medjool dates, including the seed, in an Egyptian horticultural study. Cultivar and ripening stage affect weight. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Middle East; ancient cultivation around the Persian Gulf",
+          "countries": [
+            "Iraq"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            30.5,
+            47.8
+          ]
+        },
+        "sources": [
+          {
+            "label": "Date — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Date_palm",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Date — weight and fruit reference",
+            "url": "https://journals.ekb.eg/article_451784_1ff7173b95475c111391bea217195f2e.pdf",
+            "note": "Rounded from a reported 15.97 g whole-fruit mean for Medjool dates, including the seed, in an Egyptian horticultural study. Cultivar and ripening stage affect weight."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Date?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "cranberry",
+      "name": "Cranberry",
+      "image": "/burrow-assets/fruits/cranberry.jpg",
+      "imageAlt": "Cranberry fruit",
+      "imageCredit": "Cjboffoli / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: Cranberries20101210.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cranberries20101210.jpg",
+      "fact": "American cranberries grow on low, trailing vines, rather than on trees.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 2,
+          "unit": "g",
+          "display": "~2 g",
+          "direction": "higher",
+          "note": "Rutgers describes the Welker American cranberry cultivar as averaging 2 g per berry. A cultivar example; other cranberries differ."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 2,
+          "unit": "/10",
+          "display": "2/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 10,
+          "unit": "/10",
+          "display": "10/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 4,
+          "unit": "/5",
+          "display": "4/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Vaccinium macrocarpon"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Northeastern North America"
+        },
+        {
+          "label": "Flavor",
+          "value": "Strongly tart with little sweetness"
+        },
+        {
+          "label": "Texture",
+          "value": "Firm skin and crisp, juicy flesh"
+        },
+        {
+          "label": "Finding it",
+          "value": "Regional staple traded abroad"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "berry",
+        "North America"
+      ],
+      "tags": [
+        "berry",
+        "north-america"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "berry",
+        "accuracyNote": "Rutgers describes the Welker American cranberry cultivar as averaging 2 g per berry. A cultivar example; other cranberries differ. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Northeastern North America",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            42,
+            -71
+          ]
+        },
+        "sources": [
+          {
+            "label": "Cranberry — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Cranberry",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Cranberry — weight and fruit reference",
+            "url": "https://research.rutgers.edu/agricultural-products/cranberries/welker",
+            "note": "Rutgers describes the Welker American cranberry cultivar as averaging 2 g per berry. A cultivar example; other cranberries differ."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Cranberry?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "gooseberry",
+      "name": "Gooseberry",
+      "image": "/burrow-assets/fruits/gooseberry.jpg",
+      "imageAlt": "Gooseberry fruit",
+      "imageCredit": "Kornelia und Hartmut Häfele / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Stachelbeeren.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Stachelbeeren.jpg",
+      "fact": "Despite their names, the gooseberry and Cape gooseberry belong to different plant families.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 3,
+          "unit": "g",
+          "display": "~3 g",
+          "direction": "higher",
+          "note": "Rounded from a 3.2 g mean for the Konsul gooseberry cultivar in a South Urals study published in 2019. A studied cultivar, not a species average."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 5,
+          "unit": "/10",
+          "display": "5/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 7,
+          "unit": "/10",
+          "display": "7/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 4,
+          "unit": "/5",
+          "display": "4/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Ribes uva-crispa"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Europe and western Asia"
+        },
+        {
+          "label": "Flavor",
+          "value": "Tangy, becoming sweeter when ripe"
+        },
+        {
+          "label": "Texture",
+          "value": "Thin skin and juicy flesh with small seeds"
+        },
+        {
+          "label": "Finding it",
+          "value": "Regional staple traded abroad"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "berry",
+        "Europe"
+      ],
+      "tags": [
+        "berry",
+        "europe"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 3,
+        "rarity": "common",
+        "taxonomyGroup": "berry",
+        "accuracyNote": "Rounded from a 3.2 g mean for the Konsul gooseberry cultivar in a South Urals study published in 2019. A studied cultivar, not a species average. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Europe and western Asia",
+          "countries": [
+            "United Kingdom"
+          ],
+          "continents": [
+            "Europe"
+          ],
+          "coordinates": [
+            52,
+            -1.5
+          ]
+        },
+        "sources": [
+          {
+            "label": "Gooseberry — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Gooseberry",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Gooseberry — weight and fruit reference",
+            "url": "https://journal.subtropras.ru/en/archive/68/8/",
+            "note": "Rounded from a 3.2 g mean for the Konsul gooseberry cultivar in a South Urals study published in 2019. A studied cultivar, not a species average."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Gooseberry?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "blackcurrant",
+      "name": "Blackcurrant",
+      "image": "/burrow-assets/fruits/blackcurrant.jpg",
+      "imageAlt": "Blackcurrant fruit",
+      "imageCredit": "George Chernilevsky / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Blackcurrant in basket 2021 G1.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Blackcurrant_in_basket_2021_G1.jpg",
+      "fact": "Blackcurrants are often turned into juice and jam, where their strong flavor stands out.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 1,
+          "unit": "g",
+          "display": "~1 g",
+          "direction": "higher",
+          "note": "The Titania blackcurrant cultivar averaged 1.0 g per berry in the 2017 Montana WARC trial. A harvest and cultivar example."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 4,
+          "unit": "/10",
+          "display": "4/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 4,
+          "unit": "/5",
+          "display": "4/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Ribes nigrum"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Europe and northern Asia"
+        },
+        {
+          "label": "Flavor",
+          "value": "Bold, aromatic and tart"
+        },
+        {
+          "label": "Texture",
+          "value": "Small, dark berries with juicy pulp"
+        },
+        {
+          "label": "Finding it",
+          "value": "Regional staple traded abroad"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "berry",
+        "Europe"
+      ],
+      "tags": [
+        "berry",
+        "europe"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 3,
+        "rarity": "common",
+        "taxonomyGroup": "berry",
+        "accuracyNote": "The Titania blackcurrant cultivar averaged 1.0 g per berry in the 2017 Montana WARC trial. A harvest and cultivar example. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Europe and northern Asia",
+          "countries": [
+            "United Kingdom"
+          ],
+          "continents": [
+            "Europe"
+          ],
+          "coordinates": [
+            53,
+            -2
+          ]
+        },
+        "sources": [
+          {
+            "label": "Blackcurrant — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Blackcurrant",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Blackcurrant — weight and fruit reference",
+            "url": "https://agresearch.montana.edu/warc/research_current/berries/currants/variety-trials.html",
+            "note": "The Titania blackcurrant cultivar averaged 1.0 g per berry in the 2017 Montana WARC trial. A harvest and cultivar example."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Blackcurrant?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "redcurrant",
+      "name": "Redcurrant",
+      "image": "/burrow-assets/fruits/redcurrant.jpg",
+      "imageAlt": "Redcurrant fruit",
+      "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Redcurrant (Ribes rubrum) fruits.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Redcurrant_(Ribes_rubrum)_fruits.jpg",
+      "fact": "Redcurrants hang in strings of translucent berries that can look like tiny red beads.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 1,
+          "unit": "g",
+          "display": "~1 g",
+          "direction": "higher",
+          "note": "Rounded to a whole gram from the Rovada redcurrant mean of 0.8 g in the 2017 Montana WARC trial. Coarse whole-gram rounding for a very small berry."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 4,
+          "unit": "/10",
+          "display": "4/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 4,
+          "unit": "/5",
+          "display": "4/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Ribes rubrum"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Western Europe"
+        },
+        {
+          "label": "Flavor",
+          "value": "Bright and sharply tart"
+        },
+        {
+          "label": "Texture",
+          "value": "Translucent skin and juicy pulp"
+        },
+        {
+          "label": "Finding it",
+          "value": "Regional staple traded abroad"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "berry",
+        "Europe"
+      ],
+      "tags": [
+        "berry",
+        "europe"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 3,
+        "rarity": "common",
+        "taxonomyGroup": "berry",
+        "accuracyNote": "Rounded to a whole gram from the Rovada redcurrant mean of 0.8 g in the 2017 Montana WARC trial. Coarse whole-gram rounding for a very small berry. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Western Europe",
+          "countries": [
+            "France"
+          ],
+          "continents": [
+            "Europe"
+          ],
+          "coordinates": [
+            48.9,
+            2.3
+          ]
+        },
+        "sources": [
+          {
+            "label": "Redcurrant — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Redcurrant",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Redcurrant — weight and fruit reference",
+            "url": "https://agresearch.montana.edu/warc/research_current/berries/currants/variety-trials.html",
+            "note": "Rounded to a whole gram from the Rovada redcurrant mean of 0.8 g in the 2017 Montana WARC trial. Coarse whole-gram rounding for a very small berry."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Redcurrant?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "mulberry",
+      "name": "Mulberry",
+      "image": "/burrow-assets/fruits/mulberry.jpg",
+      "imageAlt": "Mulberry fruit",
+      "imageCredit": "Miloslav Bahna / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Ripe fruit of morus nigra.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ripe_fruit_of_morus_nigra.JPG",
+      "fact": "Mulberries grow on trees, while similar-looking blackberries grow on canes.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 4,
+          "unit": "g",
+          "display": "~4 g",
+          "direction": "higher",
+          "note": "Rounded from 3.85 g, the average fruit weight across studied black-mulberry genotypes in a 2018 paper; individual genotype means ranged from 1.79 to 5.69 g."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 4,
+          "unit": "/10",
+          "display": "4/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 3,
+          "unit": "/5",
+          "display": "3/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Morus nigra"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Southwestern Asia; black-mulberry heritage"
+        },
+        {
+          "label": "Flavor",
+          "value": "Rich berry sweetness with a tang"
+        },
+        {
+          "label": "Texture",
+          "value": "Tender clustered fruit that stains easily"
+        },
+        {
+          "label": "Finding it",
+          "value": "Specialty markets"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "multiple-fruit",
+        "Asia"
+      ],
+      "tags": [
+        "multiple-fruit",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 3,
+        "rarity": "uncommon",
+        "taxonomyGroup": "multiple-fruit",
+        "accuracyNote": "Rounded from 3.85 g, the average fruit weight across studied black-mulberry genotypes in a 2018 paper; individual genotype means ranged from 1.79 to 5.69 g. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Southwestern Asia; black-mulberry heritage",
+          "countries": [
+            "Iran"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            35.7,
+            51.4
+          ]
+        },
+        "sources": [
+          {
+            "label": "Mulberry — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Morus_nigra",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Mulberry — weight and fruit reference",
+            "url": "https://www.sciencedirect.com/science/article/pii/S0926669018302164",
+            "note": "Rounded from 3.85 g, the average fruit weight across studied black-mulberry genotypes in a 2018 paper; individual genotype means ranged from 1.79 to 5.69 g."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Mulberry?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "avocado",
+      "name": "Avocado",
+      "image": "/burrow-assets/fruits/avocado.jpg",
+      "imageAlt": "Avocado fruit",
+      "imageCredit": "B.navez / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Persea americana fruit 2.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Persea_americana_fruit_2.JPG",
+      "fact": "An avocado is botanically a berry with one large seed, even though it is usually eaten in savory dishes.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 250,
+          "unit": "g",
+          "display": "~250 g",
+          "direction": "higher",
+          "note": "A 250 g whole-fruit example within the reported 100–1,000 g range. Includes skin and seed; cultivar sizes differ widely."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 1,
+          "unit": "/10",
+          "display": "1/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 1,
+          "unit": "/10",
+          "display": "1/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 5,
+          "unit": "/5",
+          "display": "5/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Persea americana"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Mexico and Central America"
+        },
+        {
+          "label": "Flavor",
+          "value": "Mild, rich and slightly nutty"
+        },
+        {
+          "label": "Texture",
+          "value": "Creamy flesh around one large seed"
+        },
+        {
+          "label": "Finding it",
+          "value": "Widely traded"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "berry",
+        "North America"
+      ],
+      "tags": [
+        "berry",
+        "north-america"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "berry",
+        "accuracyNote": "A 250 g whole-fruit example within the reported 100–1,000 g range. Includes skin and seed; cultivar sizes differ widely. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Mexico and Central America",
+          "countries": [
+            "Mexico"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            19.4,
+            -99.1
+          ]
+        },
+        "sources": [
+          {
+            "label": "Avocado — weight and fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Avocado",
+            "note": "A 250 g whole-fruit example within the reported 100–1,000 g range. Includes skin and seed; cultivar sizes differ widely."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Avocado?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "olive",
+      "name": "Olive",
+      "image": "/burrow-assets/fruits/olive.jpg",
+      "imageAlt": "Olive fruit",
+      "imageCredit": "en:User:Nickfraser / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Olivesfromjordan.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Olivesfromjordan.jpg",
+      "fact": "Olives are usually cured before eating to reduce their natural bitterness. Like cherries, they have a stone inside.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 4,
+          "unit": "g",
+          "display": "~4 g",
+          "direction": "higher",
+          "note": "The Manzanilla de Sevilla cultivar averaged 4.0 g per whole, uncured fruit in a study covering 2012–2020 harvests. Weight is before curing, unlike the flavor description."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 1,
+          "unit": "/10",
+          "display": "1/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 3,
+          "unit": "/10",
+          "display": "3/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 3,
+          "unit": "/5",
+          "display": "3/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Olea europaea"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Mediterranean and Near Eastern cultivation heritage"
+        },
+        {
+          "label": "Flavor",
+          "value": "Savory and tangy when cured; raw fruit is bitter"
+        },
+        {
+          "label": "Texture",
+          "value": "Firm to tender flesh around a hard stone"
+        },
+        {
+          "label": "Finding it",
+          "value": "Fresh: specialty markets; cured olives are widely traded"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "stone-fruit",
+        "Europe"
+      ],
+      "tags": [
+        "stone-fruit",
+        "europe"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "uncommon",
+        "taxonomyGroup": "stone-fruit",
+        "accuracyNote": "The Manzanilla de Sevilla cultivar averaged 4.0 g per whole, uncured fruit in a study covering 2012–2020 harvests. Weight is before curing, unlike the flavor description. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Mediterranean and Near Eastern cultivation heritage",
+          "countries": [
+            "Greece"
+          ],
+          "continents": [
+            "Europe"
+          ],
+          "coordinates": [
+            37.9,
+            23.7
+          ]
+        },
+        "sources": [
+          {
+            "label": "Olive — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Olive",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Olive — weight and fruit reference",
+            "url": "https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2026.1895003/full",
+            "note": "The Manzanilla de Sevilla cultivar averaged 4.0 g per whole, uncured fruit in a study covering 2012–2020 harvests. Weight is before curing, unlike the flavor description."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Olive?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "plantain",
+      "name": "Plantain",
+      "image": "/burrow-assets/fruits/plantain.jpg",
+      "imageAlt": "Plantain fruit",
+      "imageCredit": "Evan-Amos / Wikimedia Commons / Public domain (https://creativecommons.org/publicdomain/mark/1.0/). Resized as JPEG. Original: Plantain-Yellow.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Plantain-Yellow.jpg",
+      "fact": "Plantains are cooking bananas. As they ripen, some of their starch changes into sugar.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 250,
+          "unit": "g",
+          "display": "~250 g",
+          "direction": "higher",
+          "note": "Kerala Agricultural University lists 250 g per fruit for the Big Ebanga plantain clone. A whole-fruit cultivar example; flavor ratings describe ripe cooked plantain."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 7,
+          "unit": "/10",
+          "display": "7/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 1,
+          "unit": "/10",
+          "display": "1/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 4,
+          "unit": "/5",
+          "display": "4/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Musa hybrids, AAB Plantain Group"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Southeast Asian and New Guinean ancestry; staple in many tropical regions"
+        },
+        {
+          "label": "Flavor",
+          "value": "Starchy when green, sweeter when ripe and cooked"
+        },
+        {
+          "label": "Texture",
+          "value": "Firm raw flesh that softens with cooking"
+        },
+        {
+          "label": "Finding it",
+          "value": "Regional staple traded abroad"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "berry",
+        "Oceania"
+      ],
+      "tags": [
+        "berry",
+        "oceania"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "berry",
+        "accuracyNote": "Kerala Agricultural University lists 250 g per fruit for the Big Ebanga plantain clone. A whole-fruit cultivar example; flavor ratings describe ripe cooked plantain. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Southeast Asian and New Guinean ancestry; staple in many tropical regions",
+          "countries": [
+            "Papua New Guinea"
+          ],
+          "continents": [
+            "Oceania"
+          ],
+          "coordinates": [
+            -6.3,
+            145.4
+          ]
+        },
+        "sources": [
+          {
+            "label": "Plantain — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Cooking_banana",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Plantain — weight and fruit reference",
+            "url": "https://www.celkau.in/Crops/fruits/banana/varieties.php",
+            "note": "Kerala Agricultural University lists 250 g per fruit for the Big Ebanga plantain clone. A whole-fruit cultivar example; flavor ratings describe ripe cooked plantain."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Plantain?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "asian-pear",
+      "name": "Asian Pear",
+      "image": "/burrow-assets/fruits/asian-pear.jpg",
+      "imageAlt": "Asian Pear fruit",
+      "imageCredit": "Fir0002 / Wikimedia Commons / CC BY-SA 3.0 (http://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Nashi pear.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Nashi_pear.jpg",
+      "fact": "An Asian pear can look round like an apple, but it is a pear, not an apple-pear hybrid.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 241,
+          "unit": "g",
+          "display": "~241 g",
+          "direction": "higher",
+          "note": "The Hosui Asian pear control group averaged 241 g per fruit in an irrigation study. A cultivar and treatment sample, not a universal average."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 7,
+          "unit": "/10",
+          "display": "7/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 2,
+          "unit": "/10",
+          "display": "2/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 4,
+          "unit": "/5",
+          "display": "4/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Pyrus pyrifolia"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "China and East Asia"
+        },
+        {
+          "label": "Flavor",
+          "value": "Light, crisp sweetness"
+        },
+        {
+          "label": "Texture",
+          "value": "Crunchy and very juicy, even when ripe"
+        },
+        {
+          "label": "Finding it",
+          "value": "Regional staple traded abroad"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "pome",
+        "Asia"
+      ],
+      "tags": [
+        "pome",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "pome",
+        "accuracyNote": "The Hosui Asian pear control group averaged 241 g per fruit in an irrigation study. A cultivar and treatment sample, not a universal average. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "China and East Asia",
+          "countries": [
+            "China"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            30.6,
+            114.3
+          ]
+        },
+        "sources": [
+          {
+            "label": "Asian Pear — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Pyrus_pyrifolia",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Asian Pear — weight and fruit reference",
+            "url": "https://journals.ashs.org/downloadpdf/view/journals/jashs/119/3/article-p383.pdf",
+            "note": "The Hosui Asian pear control group averaged 241 g per fruit in an irrigation study. A cultivar and treatment sample, not a universal average."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Asian Pear?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "sour-cherry",
+      "name": "Sour Cherry",
+      "image": "/burrow-assets/fruits/sour-cherry.jpg",
+      "imageAlt": "Sour Cherry fruit",
+      "imageCredit": "Rklz2 (talk) / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Ripe sour cherries on a branch.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ripe_sour_cherries_on_a_branch.jpg",
+      "fact": "Sour cherries are especially popular in pies and preserves because their tart flavor balances added sweetness.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 5,
+          "unit": "g",
+          "display": "~5 g",
+          "direction": "higher",
+          "note": "Rounded from the National Fruit Collection measurement of 4.70 g for the Montmorency sour-cherry cultivar. Includes the stone."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 4,
+          "unit": "/10",
+          "display": "4/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 9,
+          "unit": "/10",
+          "display": "9/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 4,
+          "unit": "/5",
+          "display": "4/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Prunus cerasus"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Eastern Europe and western Asia"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sharply tart with some sweetness"
+        },
+        {
+          "label": "Texture",
+          "value": "Tender, juicy flesh around a hard stone"
+        },
+        {
+          "label": "Finding it",
+          "value": "Regional staple traded abroad"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "stone-fruit",
+        "Asia"
+      ],
+      "tags": [
+        "stone-fruit",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "stone-fruit",
+        "accuracyNote": "Rounded from the National Fruit Collection measurement of 4.70 g for the Montmorency sour-cherry cultivar. Includes the stone. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Eastern Europe and western Asia",
+          "countries": [
+            "Turkey"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            40,
+            35
+          ]
+        },
+        "sources": [
+          {
+            "label": "Sour Cherry — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Prunus_cerasus",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Sour Cherry — weight and fruit reference",
+            "url": "https://www.nationalfruitcollection.org.uk/full2.php?fruit=cherry&id=7824",
+            "note": "Rounded from the National Fruit Collection measurement of 4.70 g for the Montmorency sour-cherry cultivar. Includes the stone."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Sour Cherry?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "greengage",
+      "name": "Greengage",
+      "image": "/burrow-assets/fruits/greengage.jpg",
+      "imageAlt": "Greengage fruit",
+      "imageCredit": "No machine-readable author provided. Ranveig assumed (based on copyright claims). / Wikimedia Commons / Public domain (https://creativecommons.org/publicdomain/mark/1.0/). Resized as JPEG. Original: Greengages.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Greengages.jpg",
+      "fact": "Many greengages stay green even when ripe and sweet, so a green skin does not always mean an unripe plum.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 31,
+          "unit": "g",
+          "display": "~31 g",
+          "direction": "higher",
+          "note": "Rounded from the National Fruit Collection measurement of 30.90 g for Belgian Greengage. A whole-fruit cultivar example."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 9,
+          "unit": "/10",
+          "display": "9/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 3,
+          "unit": "/10",
+          "display": "3/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 4,
+          "unit": "/5",
+          "display": "4/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Prunus domestica, Greengage Group"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Middle Eastern ancestry; European cultivation heritage"
+        },
+        {
+          "label": "Flavor",
+          "value": "Rich, honey-like plum sweetness"
+        },
+        {
+          "label": "Texture",
+          "value": "Juicy, tender flesh around a stone"
+        },
+        {
+          "label": "Finding it",
+          "value": "Regional staple traded abroad"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "stone-fruit",
+        "Europe"
+      ],
+      "tags": [
+        "stone-fruit",
+        "europe"
+      ],
+      "metadata": {
+        "difficultyBand": "medium",
+        "recognition": 3,
+        "rarity": "common",
+        "taxonomyGroup": "stone-fruit",
+        "accuracyNote": "Rounded from the National Fruit Collection measurement of 30.90 g for Belgian Greengage. A whole-fruit cultivar example. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Middle Eastern ancestry; European cultivation heritage",
+          "countries": [
+            "France"
+          ],
+          "continents": [
+            "Europe"
+          ],
+          "coordinates": [
+            47.4,
+            0.7
+          ]
+        },
+        "sources": [
+          {
+            "label": "Greengage — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Greengage",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Greengage — weight and fruit reference",
+            "url": "https://www.nationalfruitcollection.org.uk/full2.php?acc4=1962006&fruit=plum&varid=8016",
+            "note": "Rounded from the National Fruit Collection measurement of 30.90 g for Belgian Greengage. A whole-fruit cultivar example."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Greengage?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "persian-lime",
+      "name": "Persian Lime",
+      "image": "/burrow-assets/fruits/persian-lime.jpg",
+      "imageAlt": "Persian Lime fruit",
+      "imageCredit": "Forest and Kim Starr / Wikimedia Commons / CC BY 3.0 us (https://creativecommons.org/licenses/by/3.0/us/deed.en). Resized as JPEG. Original: Starr-140117-3997-Citrus latifolia-Tahitian fruit and leaves-Hawea Pl Olinda-Maui (24612312943).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Starr-140117-3997-Citrus_latifolia-Tahitian_fruit_and_leaves-Hawea_Pl_Olinda-Maui_(24612312943).jpg",
+      "fact": "Persian limes, also called Tahiti limes, are usually larger and less seedy than Key limes.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 54,
+          "unit": "g",
+          "display": "~54 g",
+          "direction": "higher",
+          "note": "UF/IFAS gives 1.9 oz (54 g) as the typical whole-fruit weight for Tahiti/Persian lime. Fruit size varies by crop and harvest."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 1,
+          "unit": "/10",
+          "display": "1/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 10,
+          "unit": "/10",
+          "display": "10/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 5,
+          "unit": "/5",
+          "display": "5/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Citrus × latifolia"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Hybrid origin uncertain; Tahiti cultivation heritage"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sharp, fragrant citrus acidity"
+        },
+        {
+          "label": "Texture",
+          "value": "Juicy flesh under a thin green rind"
+        },
+        {
+          "label": "Finding it",
+          "value": "Widely traded"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "citrus",
+        "Oceania"
+      ],
+      "tags": [
+        "citrus",
+        "oceania"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "citrus",
+        "accuracyNote": "UF/IFAS gives 1.9 oz (54 g) as the typical whole-fruit weight for Tahiti/Persian lime. Fruit size varies by crop and harvest. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Hybrid origin uncertain; Tahiti cultivation heritage",
+          "countries": [
+            "French Polynesia"
+          ],
+          "continents": [
+            "Oceania"
+          ],
+          "coordinates": [
+            -17.7,
+            -149.4
+          ]
+        },
+        "sources": [
+          {
+            "label": "Persian Lime — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Persian_lime",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Persian Lime — weight and fruit reference",
+            "url": "https://ask.ifas.ufl.edu/publication/CH093",
+            "note": "UF/IFAS gives 1.9 oz (54 g) as the typical whole-fruit weight for Tahiti/Persian lime. Fruit size varies by crop and harvest."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Persian Lime?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "golden-kiwifruit",
+      "name": "Golden Kiwifruit",
+      "image": "/burrow-assets/fruits/golden-kiwifruit.jpg",
+      "imageAlt": "Golden Kiwifruit fruit",
+      "imageCredit": "Ivar Leidus / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Kiwifruit 'Gold' cross section.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kiwifruit_%27Gold%27_cross_section.jpg",
+      "fact": "Golden kiwifruit varieties have yellow flesh, unlike the familiar green-fleshed kiwifruit.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 98,
+          "unit": "g",
+          "display": "~98 g",
+          "direction": "higher",
+          "note": "Rounded from 98.3 g, the mean of 1,940 Hort16A golden kiwifruit harvested in May 1995 in New Zealand and reported in the plant patent. A cultivar sample."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 9,
+          "unit": "/10",
+          "display": "9/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 3,
+          "unit": "/10",
+          "display": "3/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 5,
+          "unit": "/5",
+          "display": "5/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Actinidia chinensis var. chinensis"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Chinese ancestry; modern New Zealand breeding heritage"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet with a gentle tropical tang"
+        },
+        {
+          "label": "Texture",
+          "value": "Soft yellow flesh with tiny black seeds"
+        },
+        {
+          "label": "Finding it",
+          "value": "Widely traded"
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Weights are examples of whole fruits, not fixed species averages. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "berry",
+        "Oceania"
+      ],
+      "tags": [
+        "berry",
+        "oceania"
+      ],
+      "metadata": {
+        "difficultyBand": "easy",
+        "recognition": 5,
+        "rarity": "common",
+        "taxonomyGroup": "berry",
+        "accuracyNote": "Rounded from 98.3 g, the mean of 1,940 Hort16A golden kiwifruit harvested in May 1995 in New Zealand and reported in the plant patent. A cultivar sample. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Chinese ancestry; modern New Zealand breeding heritage",
+          "countries": [
+            "New Zealand"
+          ],
+          "continents": [
+            "Oceania"
+          ],
+          "coordinates": [
+            -37.7,
+            176.2
+          ]
+        },
+        "sources": [
+          {
+            "label": "Golden Kiwifruit — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Actinidia_chinensis",
+            "note": "Identity, origin, appearance and flavor. Ratings are Burrow's editorial interpretations."
+          },
+          {
+            "label": "Golden Kiwifruit — weight and fruit reference",
+            "url": "https://patents.google.com/patent/USPP11066P/en",
+            "note": "Rounded from 98.3 g, the mean of 1,940 Hort16A golden kiwifruit harvested in May 1995 in New Zealand and reported in the plant patent. A cultivar sample."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Golden Kiwifruit?",
         "How can a fruit be both sweet and tart?"
       ]
     }

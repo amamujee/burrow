@@ -1,11 +1,12 @@
 {
-  "reviewedOn": "2026-09-20",
+  "reviewedOn": "2026-09-21",
   "methodology": {
     "weight": "Whole-fruit examples in grams, including natural peel, shell and seeds unless noted. A source may report a range, cultivar or sample mean. Chosen examples are not species averages or record comparisons. Undocumented weights are null and excluded from arithmetic.",
-    "flavorRatings": "Burrow editorial ratings from 1 to 10, interpreting descriptions of ripe fruit: 1 barely sweet/tart, 5 moderate, 10 very sweet/tart. Not Brix, sugar grams, laboratory acidity, health scores or tastiness judgments. Breadfruit is rated at the mature cooking stage. Cultivar, ripeness and personal perception change flavor.",
+    "flavorRatings": "Burrow editorial ratings from 1 to 10, interpreting descriptions of ripe fruit: 1 barely sweet/tart, 5 moderate, 10 very sweet/tart. Not Brix, sugar grams, laboratory acidity, health scores or tastiness judgments. Breadfruit is rated at the mature cooking stage, plantain ripe and cooked, and olive after curing; weights remain whole fruits before cooking or curing. Cultivar, ripeness and personal perception change flavor.",
     "availability": "Burrow editorial findability bands, 1 to 5, for fresh fruit beyond its home region: 1 local harvest/specialist growers; 2 mostly regional/seasonal; 3 specialty markets; 4 regional staple traded abroad; 5 widely traded. Not a country count, current store inventory, conservation status or price. Based on described cultivation and trade, with no implied worldwide census.",
     "geography": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated.",
-    "images": "Individually credited Commons photos. Stored as resized JPEGs for offline play; no botanical drawings or generated substitutes."
+    "images": "Individually credited Commons photos. Stored as resized JPEGs for offline play; no botanical drawings or generated substitutes.",
+    "catalog": "Fruit cards include distinct species and familiar market types or cultivar groups, such as nectarines, satsumas and golden kiwifruit; the card count is not a count of unique species."
   },
   "cards": [
     {
@@ -4187,6 +4188,1126 @@
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
       "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/57/Artocarpus_altilis_%28fruit%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "grapefruit",
+      "name": "Grapefruit",
+      "scientificName": "Citrus × paradisi",
+      "origin": "Barbados",
+      "location": {
+        "label": "Barbados",
+        "countries": [
+          "Barbados"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          13.2,
+          -59.6
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 7,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Tangy, bittersweet citrus",
+      "texture": "Juicy segments",
+      "group": "citrus",
+      "fact": "Grapefruit began as a cross between a pomelo and a sweet orange.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 450,
+        "note": "The Marsh grapefruit cultivar averaged 450 g at Lindcove in 1975–1983 in a UCANR comparison. A site and cultivar example, not a species average.",
+        "sourceUrl": "https://calag.ucanr.edu/download_pdf.cfm?article=ca.v040n01p28"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Grapefruit",
+        "https://calag.ucanr.edu/download_pdf.cfm?article=ca.v040n01p28"
+      ],
+      "image": "/burrow-assets/fruits/grapefruit.jpg",
+      "imageAlt": "Grapefruit fruit",
+      "sourceFile": "Grapefruits - whole-halved-segments.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Grapefruits_-_whole-halved-segments.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Grapefruits_-_whole-halved-segments.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "pomelo",
+      "name": "Pomelo",
+      "scientificName": "Citrus maxima",
+      "origin": "Southeast Asia",
+      "location": {
+        "label": "Southeast Asia",
+        "countries": [
+          "Malaysia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          4.2,
+          101.9
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 4,
+      "availability": 4,
+      "availabilityBand": "Regional staple traded abroad",
+      "flavor": "Gentle citrus sweetness with a tang",
+      "texture": "Large juice sacs beneath thick pith",
+      "group": "citrus",
+      "fact": "A pomelo has a thick, spongy layer of white pith under its skin.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 1000,
+        "note": "A 1,000 g whole-fruit example within the reported 260–1,950 g cultivar range. Cultivars and growing conditions change size.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Pomelo"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Pomelo"
+      ],
+      "image": "/burrow-assets/fruits/pomelo.jpg",
+      "imageAlt": "Pomelo fruit",
+      "sourceFile": "Pomelo fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pomelo_fruit.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Pomelo_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "mandarin",
+      "name": "Mandarin",
+      "scientificName": "Citrus reticulata",
+      "origin": "China and nearby Southeast Asia",
+      "location": {
+        "label": "China and nearby Southeast Asia",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          23.1,
+          113.3
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 3,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet, fragrant citrus",
+      "texture": "Tender segments with a loose peel",
+      "group": "citrus",
+      "fact": "Mandarins are ancestors of many other citrus fruits, including sweet oranges.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 108,
+        "note": "Rounded from 108.3 g for the US Furr mandarin cultivar sampled at Exeter on 17 October 2010. A cultivar sample, not an average for all mandarins.",
+        "sourceUrl": "https://citrusvariety.ucr.edu/sites/default/files/2021-06/usfurrusfurrstinjamerpomsoc2014.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Mandarin_orange",
+        "https://citrusvariety.ucr.edu/sites/default/files/2021-06/usfurrusfurrstinjamerpomsoc2014.pdf"
+      ],
+      "image": "/burrow-assets/fruits/mandarin.jpg",
+      "imageAlt": "Mandarin fruit",
+      "sourceFile": "Mandarins - whole and halved.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mandarins_-_whole_and_halved.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Mandarins_-_whole_and_halved.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "clementine",
+      "name": "Clementine",
+      "scientificName": "Citrus × clementina",
+      "origin": "Algerian cultivation heritage; mandarin and sweet-orange ancestry",
+      "location": {
+        "label": "Algerian cultivation heritage; mandarin and sweet-orange ancestry",
+        "countries": [
+          "Algeria"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          35.7,
+          -0.6
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 3,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet citrus with a mild tang",
+      "texture": "Small, juicy, easy-peeling segments",
+      "group": "citrus",
+      "fact": "A clementine combines mandarin and sweet-orange ancestry. It is one of several kinds of easy-peeling citrus.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 78,
+        "note": "Rounded from 77.9 g, the whole-fruit mean for sample 47.3 (loose clementines) in the UK 2013 sampling report. Includes peel and seeds; one retail sample.",
+        "sourceUrl": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Clementine",
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      ],
+      "image": "/burrow-assets/fruits/clementine.jpg",
+      "imageAlt": "Clementine fruit",
+      "sourceFile": "Clementines whole, peeled, half and sectioned.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Clementines_whole,_peeled,_half_and_sectioned.jpg",
+      "imageCreator": "carol",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Clementines_whole%2C_peeled%2C_half_and_sectioned.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "tangerine",
+      "name": "Tangerine",
+      "scientificName": "Citrus reticulata Tangerine Group",
+      "origin": "Asian mandarin ancestry; name linked to Tangier trade",
+      "location": {
+        "label": "Asian mandarin ancestry; name linked to Tangier trade",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          23.1,
+          113.3
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 4,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet, lively citrus",
+      "texture": "Juicy segments under a loose rind",
+      "group": "citrus",
+      "fact": "The name tangerine is linked to Tangier in Morocco, once an important port for shipping these fruits.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 151,
+        "note": "Rounded from 151.1 g, the whole-fruit mean for sample 47.1 (Jaffa juicy tangerines) in the UK 2013 sampling report. Includes peel and seeds; one retail sample.",
+        "sourceUrl": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Tangerine",
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      ],
+      "image": "/burrow-assets/fruits/tangerine.jpg",
+      "imageAlt": "Tangerine fruit",
+      "sourceFile": "TangerineFruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:TangerineFruit.jpg",
+      "imageCreator": "Barfooz (Brent Ramerth)",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2a/TangerineFruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "satsuma",
+      "name": "Satsuma",
+      "scientificName": "Citrus unshiu",
+      "origin": "Japanese cultivation heritage; Asian citrus ancestry",
+      "location": {
+        "label": "Japanese cultivation heritage; Asian citrus ancestry",
+        "countries": [
+          "Japan"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          31.6,
+          130.6
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 3,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Mellow, sweet citrus",
+      "texture": "Tender, often seedless segments",
+      "group": "citrus",
+      "fact": "Satsumas are a type of mandarin, known for a very loose peel and fruit that is often seedless.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 94,
+        "note": "Rounded from 94.3 g, the whole-fruit mean for sample 47.7 (loose satsumas) in the UK 2013 sampling report. Includes peel; one retail sample.",
+        "sourceUrl": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Citrus_unshiu",
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+      ],
+      "image": "/burrow-assets/fruits/satsuma.jpg",
+      "imageAlt": "Satsuma fruit",
+      "sourceFile": "Satsuma mandarins - San Francisco, CA - DSC02398.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Satsuma_mandarins_-_San_Francisco,_CA_-_DSC02398.jpg",
+      "imageCreator": "Daderot",
+      "imageLicense": "Public domain (CC0)",
+      "imageLicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Satsuma_mandarins_-_San_Francisco%2C_CA_-_DSC02398.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "blood-orange",
+      "name": "Blood Orange",
+      "scientificName": "Citrus × sinensis, blood-orange varieties",
+      "origin": "Mediterranean cultivation heritage, especially Sicily",
+      "location": {
+        "label": "Mediterranean cultivation heritage, especially Sicily",
+        "countries": [
+          "Italy"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          37.5,
+          15.1
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 5,
+      "availability": 4,
+      "availabilityBand": "Regional staple traded abroad",
+      "flavor": "Sweet-tart citrus, sometimes berry-like",
+      "texture": "Juicy segments with red-pigmented flesh",
+      "group": "citrus",
+      "fact": "Blood oranges are sweet-orange varieties whose red flesh gets its color from anthocyanin pigments.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 196,
+        "note": "A reported 196 g mean for the Moro blood-orange cultivar in a comparative study published in 2022. Other cultivars and harvests differ.",
+        "sourceUrl": "https://scijournals.onlinelibrary.wiley.com/doi/10.1002/jsfa.11636"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Blood_orange",
+        "https://scijournals.onlinelibrary.wiley.com/doi/10.1002/jsfa.11636"
+      ],
+      "image": "/burrow-assets/fruits/blood-orange.jpg",
+      "imageAlt": "Blood Orange fruit",
+      "sourceFile": "BloodOrange.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:BloodOrange.jpg",
+      "imageCreator": "Silentcynic",
+      "imageLicense": "CC BY 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5d/BloodOrange.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "kumquat",
+      "name": "Kumquat",
+      "scientificName": "Citrus japonica",
+      "origin": "Southern China",
+      "location": {
+        "label": "Southern China",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          24.5,
+          118.1
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 8,
+      "availability": 4,
+      "availabilityBand": "Regional staple traded abroad",
+      "flavor": "Sweet peel around a sour center",
+      "texture": "Thin edible peel and juicy pulp",
+      "group": "citrus",
+      "fact": "A kumquat reverses the usual citrus surprise: its peel is sweet while the inside is much more tart.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 16,
+        "note": "A rounded 16 g example within the reported 11–20 g range for the Puchimaru kumquat cultivar. This is a cultivar example, not a fixed size for every kumquat.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Kumquat"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Kumquat"
+      ],
+      "image": "/burrow-assets/fruits/kumquat.jpg",
+      "imageAlt": "Kumquat fruit",
+      "sourceFile": "Kumquat from Spain.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kumquat_from_Spain.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/72/Kumquat_from_Spain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "nectarine",
+      "name": "Nectarine",
+      "scientificName": "Prunus persica, nectarine varieties",
+      "origin": "China; peach domestication heritage",
+      "location": {
+        "label": "China; peach domestication heritage",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          30.3,
+          120.2
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 4,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet and tangy, like a peach",
+      "texture": "Smooth skin with juicy flesh",
+      "group": "stone-fruit",
+      "fact": "A nectarine is a smooth-skinned peach, not a cross between a peach and a plum.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 170,
+        "note": "A reported 170 g mean for the Nectaross nectarine cultivar in a 2021 fruit study. A cultivar sample, not an average for all nectarines.",
+        "sourceUrl": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8228427/"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Nectarine",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC8228427/"
+      ],
+      "image": "/burrow-assets/fruits/nectarine.jpg",
+      "imageAlt": "Nectarine fruit",
+      "sourceFile": "Nectarine on white.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Nectarine_on_white.jpg",
+      "imageCreator": "Rhododendrites",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Nectarine_on_white.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "cantaloupe",
+      "name": "Cantaloupe",
+      "scientificName": "Cucumis melo, Cantalupensis and Reticulatus Groups",
+      "origin": "Long cultivation in West Asia; deeper melon origins debated",
+      "location": {
+        "label": "Long cultivation in West Asia; deeper melon origins debated",
+        "countries": [
+          "Iran"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          32.7,
+          51.7
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 1,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet, fragrant orange flesh",
+      "texture": "Soft, juicy flesh inside a firm rind",
+      "group": "melon",
+      "fact": "The netted melon often called cantaloupe in North America is a muskmelon; European cantaloupes can have a different rind.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 1500,
+        "note": "A 1,500 g whole-fruit example within the reported 500–5,000 g cantaloupe range. Includes rind and seeds; varieties vary greatly.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Cantaloupe"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Cantaloupe"
+      ],
+      "image": "/burrow-assets/fruits/cantaloupe.jpg",
+      "imageAlt": "Cantaloupe fruit",
+      "sourceFile": "Cucumis melo var. reticulatus (photo by Scott Bauer).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cucumis_melo_var._reticulatus_(photo_by_Scott_Bauer).jpg",
+      "imageCreator": "USDA photo by Scott Bauer. Image Number K7355-11.",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Cucumis_melo_var._reticulatus_%28photo_by_Scott_Bauer%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "honeydew",
+      "name": "Honeydew Melon",
+      "scientificName": "Cucumis melo, Inodorus Group",
+      "origin": "West Asian and Mediterranean cultivation heritage",
+      "location": {
+        "label": "West Asian and Mediterranean cultivation heritage",
+        "countries": [
+          "Iran"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          32.7,
+          51.7
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 1,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Mild, honey-like sweetness",
+      "texture": "Smooth rind around juicy, usually pale-green flesh",
+      "group": "melon",
+      "fact": "Honeydew and cantaloupe are different groups of the same melon species.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 2700,
+        "note": "A 2,700 g whole-fruit example within the reported 1,800–3,600 g honeydew range. Includes rind and seeds, not just edible flesh.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Honeydew_(melon)"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Honeydew_(melon)"
+      ],
+      "image": "/burrow-assets/fruits/honeydew.jpg",
+      "imageAlt": "Honeydew Melon fruit",
+      "sourceFile": "Honeydew.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Honeydew.jpg",
+      "imageCreator": "Yotoen",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Honeydew.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "date",
+      "name": "Date",
+      "scientificName": "Phoenix dactylifera",
+      "origin": "Middle East; ancient cultivation around the Persian Gulf",
+      "location": {
+        "label": "Middle East; ancient cultivation around the Persian Gulf",
+        "countries": [
+          "Iraq"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          30.5,
+          47.8
+        ]
+      },
+      "sweetness": 10,
+      "tartness": 1,
+      "availability": 4,
+      "availabilityBand": "Fresh ripe: regional staple traded abroad; dried dates are more widespread",
+      "flavor": "Deep, caramel-like sweetness when fully ripe",
+      "texture": "Soft or chewy flesh around a hard seed",
+      "group": "stone-fruit",
+      "fact": "Dates grow in large hanging clusters on palms; each fruit has one long, hard seed.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 16,
+        "note": "Rounded from a reported 15.97 g whole-fruit mean for Medjool dates, including the seed, in an Egyptian horticultural study. Cultivar and ripening stage affect weight.",
+        "sourceUrl": "https://journals.ekb.eg/article_451784_1ff7173b95475c111391bea217195f2e.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Date_palm",
+        "https://journals.ekb.eg/article_451784_1ff7173b95475c111391bea217195f2e.pdf"
+      ],
+      "image": "/burrow-assets/fruits/date.jpg",
+      "imageAlt": "Date fruit",
+      "sourceFile": "Mazafati dates - whole, halved and seed.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mazafati_dates_-_whole,_halved_and_seed.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/38/Mazafati_dates_-_whole%2C_halved_and_seed.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "cranberry",
+      "name": "Cranberry",
+      "scientificName": "Vaccinium macrocarpon",
+      "origin": "Northeastern North America",
+      "location": {
+        "label": "Northeastern North America",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          42,
+          -71
+        ]
+      },
+      "sweetness": 2,
+      "tartness": 10,
+      "availability": 4,
+      "availabilityBand": "Regional staple traded abroad",
+      "flavor": "Strongly tart with little sweetness",
+      "texture": "Firm skin and crisp, juicy flesh",
+      "group": "berry",
+      "fact": "American cranberries grow on low, trailing vines, rather than on trees.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 2,
+        "note": "Rutgers describes the Welker American cranberry cultivar as averaging 2 g per berry. A cultivar example; other cranberries differ.",
+        "sourceUrl": "https://research.rutgers.edu/agricultural-products/cranberries/welker"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Cranberry",
+        "https://research.rutgers.edu/agricultural-products/cranberries/welker"
+      ],
+      "image": "/burrow-assets/fruits/cranberry.jpg",
+      "imageAlt": "Cranberry fruit",
+      "sourceFile": "Cranberries20101210.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cranberries20101210.jpg",
+      "imageCreator": "Cjboffoli",
+      "imageLicense": "CC BY 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/45/Cranberries20101210.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "gooseberry",
+      "name": "Gooseberry",
+      "scientificName": "Ribes uva-crispa",
+      "origin": "Europe and western Asia",
+      "location": {
+        "label": "Europe and western Asia",
+        "countries": [
+          "United Kingdom"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          52,
+          -1.5
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 7,
+      "availability": 4,
+      "availabilityBand": "Regional staple traded abroad",
+      "flavor": "Tangy, becoming sweeter when ripe",
+      "texture": "Thin skin and juicy flesh with small seeds",
+      "group": "berry",
+      "fact": "Despite their names, the gooseberry and Cape gooseberry belong to different plant families.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 3,
+        "note": "Rounded from a 3.2 g mean for the Konsul gooseberry cultivar in a South Urals study published in 2019. A studied cultivar, not a species average.",
+        "sourceUrl": "https://journal.subtropras.ru/en/archive/68/8/"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Gooseberry",
+        "https://journal.subtropras.ru/en/archive/68/8/"
+      ],
+      "image": "/burrow-assets/fruits/gooseberry.jpg",
+      "imageAlt": "Gooseberry fruit",
+      "sourceFile": "Stachelbeeren.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Stachelbeeren.jpg",
+      "imageCreator": "Kornelia und Hartmut Häfele",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Stachelbeeren.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "blackcurrant",
+      "name": "Blackcurrant",
+      "scientificName": "Ribes nigrum",
+      "origin": "Europe and northern Asia",
+      "location": {
+        "label": "Europe and northern Asia",
+        "countries": [
+          "United Kingdom"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          53,
+          -2
+        ]
+      },
+      "sweetness": 4,
+      "tartness": 8,
+      "availability": 4,
+      "availabilityBand": "Regional staple traded abroad",
+      "flavor": "Bold, aromatic and tart",
+      "texture": "Small, dark berries with juicy pulp",
+      "group": "berry",
+      "fact": "Blackcurrants are often turned into juice and jam, where their strong flavor stands out.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 1,
+        "note": "The Titania blackcurrant cultivar averaged 1.0 g per berry in the 2017 Montana WARC trial. A harvest and cultivar example.",
+        "sourceUrl": "https://agresearch.montana.edu/warc/research_current/berries/currants/variety-trials.html"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Blackcurrant",
+        "https://agresearch.montana.edu/warc/research_current/berries/currants/variety-trials.html"
+      ],
+      "image": "/burrow-assets/fruits/blackcurrant.jpg",
+      "imageAlt": "Blackcurrant fruit",
+      "sourceFile": "Blackcurrant in basket 2021 G1.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Blackcurrant_in_basket_2021_G1.jpg",
+      "imageCreator": "George Chernilevsky",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/41/Blackcurrant_in_basket_2021_G1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "redcurrant",
+      "name": "Redcurrant",
+      "scientificName": "Ribes rubrum",
+      "origin": "Western Europe",
+      "location": {
+        "label": "Western Europe",
+        "countries": [
+          "France"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          48.9,
+          2.3
+        ]
+      },
+      "sweetness": 4,
+      "tartness": 8,
+      "availability": 4,
+      "availabilityBand": "Regional staple traded abroad",
+      "flavor": "Bright and sharply tart",
+      "texture": "Translucent skin and juicy pulp",
+      "group": "berry",
+      "fact": "Redcurrants hang in strings of translucent berries that can look like tiny red beads.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 1,
+        "note": "Rounded to a whole gram from the Rovada redcurrant mean of 0.8 g in the 2017 Montana WARC trial. Coarse whole-gram rounding for a very small berry.",
+        "sourceUrl": "https://agresearch.montana.edu/warc/research_current/berries/currants/variety-trials.html"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Redcurrant",
+        "https://agresearch.montana.edu/warc/research_current/berries/currants/variety-trials.html"
+      ],
+      "image": "/burrow-assets/fruits/redcurrant.jpg",
+      "imageAlt": "Redcurrant fruit",
+      "sourceFile": "Redcurrant (Ribes rubrum) fruits.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Redcurrant_(Ribes_rubrum)_fruits.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Redcurrant_%28Ribes_rubrum%29_fruits.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "mulberry",
+      "name": "Mulberry",
+      "scientificName": "Morus nigra",
+      "origin": "Southwestern Asia; black-mulberry heritage",
+      "location": {
+        "label": "Southwestern Asia; black-mulberry heritage",
+        "countries": [
+          "Iran"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          35.7,
+          51.4
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 4,
+      "availability": 3,
+      "availabilityBand": "Specialty markets",
+      "flavor": "Rich berry sweetness with a tang",
+      "texture": "Tender clustered fruit that stains easily",
+      "group": "multiple-fruit",
+      "fact": "Mulberries grow on trees, while similar-looking blackberries grow on canes.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 4,
+        "note": "Rounded from 3.85 g, the average fruit weight across studied black-mulberry genotypes in a 2018 paper; individual genotype means ranged from 1.79 to 5.69 g.",
+        "sourceUrl": "https://www.sciencedirect.com/science/article/pii/S0926669018302164"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Morus_nigra",
+        "https://www.sciencedirect.com/science/article/pii/S0926669018302164"
+      ],
+      "image": "/burrow-assets/fruits/mulberry.jpg",
+      "imageAlt": "Mulberry fruit",
+      "sourceFile": "Ripe fruit of morus nigra.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ripe_fruit_of_morus_nigra.JPG",
+      "imageCreator": "Miloslav Bahna",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Ripe_fruit_of_morus_nigra.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "avocado",
+      "name": "Avocado",
+      "scientificName": "Persea americana",
+      "origin": "Mexico and Central America",
+      "location": {
+        "label": "Mexico and Central America",
+        "countries": [
+          "Mexico"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          19.4,
+          -99.1
+        ]
+      },
+      "sweetness": 1,
+      "tartness": 1,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Mild, rich and slightly nutty",
+      "texture": "Creamy flesh around one large seed",
+      "group": "berry",
+      "fact": "An avocado is botanically a berry with one large seed, even though it is usually eaten in savory dishes.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 250,
+        "note": "A 250 g whole-fruit example within the reported 100–1,000 g range. Includes skin and seed; cultivar sizes differ widely.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Avocado"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Avocado"
+      ],
+      "image": "/burrow-assets/fruits/avocado.jpg",
+      "imageAlt": "Avocado fruit",
+      "sourceFile": "Persea americana fruit 2.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Persea_americana_fruit_2.JPG",
+      "imageCreator": "B.navez",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Persea_americana_fruit_2.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "olive",
+      "name": "Olive",
+      "scientificName": "Olea europaea",
+      "origin": "Mediterranean and Near Eastern cultivation heritage",
+      "location": {
+        "label": "Mediterranean and Near Eastern cultivation heritage",
+        "countries": [
+          "Greece"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          37.9,
+          23.7
+        ]
+      },
+      "sweetness": 1,
+      "tartness": 3,
+      "availability": 3,
+      "availabilityBand": "Fresh: specialty markets; cured olives are widely traded",
+      "flavor": "Savory and tangy when cured; raw fruit is bitter",
+      "texture": "Firm to tender flesh around a hard stone",
+      "group": "stone-fruit",
+      "fact": "Olives are usually cured before eating to reduce their natural bitterness. Like cherries, they have a stone inside.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 4,
+        "note": "The Manzanilla de Sevilla cultivar averaged 4.0 g per whole, uncured fruit in a study covering 2012–2020 harvests. Weight is before curing, unlike the flavor description.",
+        "sourceUrl": "https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2026.1895003/full"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Olive",
+        "https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2026.1895003/full"
+      ],
+      "image": "/burrow-assets/fruits/olive.jpg",
+      "imageAlt": "Olive fruit",
+      "sourceFile": "Olivesfromjordan.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Olivesfromjordan.jpg",
+      "imageCreator": "en:User:Nickfraser",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/84/Olivesfromjordan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "plantain",
+      "name": "Plantain",
+      "scientificName": "Musa hybrids, AAB Plantain Group",
+      "origin": "Southeast Asian and New Guinean ancestry; staple in many tropical regions",
+      "location": {
+        "label": "Southeast Asian and New Guinean ancestry; staple in many tropical regions",
+        "countries": [
+          "Papua New Guinea"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -6.3,
+          145.4
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 1,
+      "availability": 4,
+      "availabilityBand": "Regional staple traded abroad",
+      "flavor": "Starchy when green, sweeter when ripe and cooked",
+      "texture": "Firm raw flesh that softens with cooking",
+      "group": "berry",
+      "fact": "Plantains are cooking bananas. As they ripen, some of their starch changes into sugar.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 250,
+        "note": "Kerala Agricultural University lists 250 g per fruit for the Big Ebanga plantain clone. A whole-fruit cultivar example; flavor ratings describe ripe cooked plantain.",
+        "sourceUrl": "https://www.celkau.in/Crops/fruits/banana/varieties.php"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Cooking_banana",
+        "https://www.celkau.in/Crops/fruits/banana/varieties.php"
+      ],
+      "image": "/burrow-assets/fruits/plantain.jpg",
+      "imageAlt": "Plantain fruit",
+      "sourceFile": "Plantain-Yellow.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Plantain-Yellow.jpg",
+      "imageCreator": "Evan-Amos",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/19/Plantain-Yellow.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "asian-pear",
+      "name": "Asian Pear",
+      "scientificName": "Pyrus pyrifolia",
+      "origin": "China and East Asia",
+      "location": {
+        "label": "China and East Asia",
+        "countries": [
+          "China"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          30.6,
+          114.3
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 2,
+      "availability": 4,
+      "availabilityBand": "Regional staple traded abroad",
+      "flavor": "Light, crisp sweetness",
+      "texture": "Crunchy and very juicy, even when ripe",
+      "group": "pome",
+      "fact": "An Asian pear can look round like an apple, but it is a pear, not an apple-pear hybrid.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 241,
+        "note": "The Hosui Asian pear control group averaged 241 g per fruit in an irrigation study. A cultivar and treatment sample, not a universal average.",
+        "sourceUrl": "https://journals.ashs.org/downloadpdf/view/journals/jashs/119/3/article-p383.pdf"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Pyrus_pyrifolia",
+        "https://journals.ashs.org/downloadpdf/view/journals/jashs/119/3/article-p383.pdf"
+      ],
+      "image": "/burrow-assets/fruits/asian-pear.jpg",
+      "imageAlt": "Asian Pear fruit",
+      "sourceFile": "Nashi pear.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Nashi_pear.jpg",
+      "imageCreator": "Fir0002",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/55/Nashi_pear.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "sour-cherry",
+      "name": "Sour Cherry",
+      "scientificName": "Prunus cerasus",
+      "origin": "Eastern Europe and western Asia",
+      "location": {
+        "label": "Eastern Europe and western Asia",
+        "countries": [
+          "Turkey"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          40,
+          35
+        ]
+      },
+      "sweetness": 4,
+      "tartness": 9,
+      "availability": 4,
+      "availabilityBand": "Regional staple traded abroad",
+      "flavor": "Sharply tart with some sweetness",
+      "texture": "Tender, juicy flesh around a hard stone",
+      "group": "stone-fruit",
+      "fact": "Sour cherries are especially popular in pies and preserves because their tart flavor balances added sweetness.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 5,
+        "note": "Rounded from the National Fruit Collection measurement of 4.70 g for the Montmorency sour-cherry cultivar. Includes the stone.",
+        "sourceUrl": "https://www.nationalfruitcollection.org.uk/full2.php?fruit=cherry&id=7824"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Prunus_cerasus",
+        "https://www.nationalfruitcollection.org.uk/full2.php?fruit=cherry&id=7824"
+      ],
+      "image": "/burrow-assets/fruits/sour-cherry.jpg",
+      "imageAlt": "Sour Cherry fruit",
+      "sourceFile": "Ripe sour cherries on a branch.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Ripe_sour_cherries_on_a_branch.jpg",
+      "imageCreator": "Rklz2 (talk)",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Ripe_sour_cherries_on_a_branch.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "greengage",
+      "name": "Greengage",
+      "scientificName": "Prunus domestica, Greengage Group",
+      "origin": "Middle Eastern ancestry; European cultivation heritage",
+      "location": {
+        "label": "Middle Eastern ancestry; European cultivation heritage",
+        "countries": [
+          "France"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          47.4,
+          0.7
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 3,
+      "availability": 4,
+      "availabilityBand": "Regional staple traded abroad",
+      "flavor": "Rich, honey-like plum sweetness",
+      "texture": "Juicy, tender flesh around a stone",
+      "group": "stone-fruit",
+      "fact": "Many greengages stay green even when ripe and sweet, so a green skin does not always mean an unripe plum.",
+      "difficultyBand": "medium",
+      "weight": {
+        "grams": 31,
+        "note": "Rounded from the National Fruit Collection measurement of 30.90 g for Belgian Greengage. A whole-fruit cultivar example.",
+        "sourceUrl": "https://www.nationalfruitcollection.org.uk/full2.php?acc4=1962006&fruit=plum&varid=8016"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Greengage",
+        "https://www.nationalfruitcollection.org.uk/full2.php?acc4=1962006&fruit=plum&varid=8016"
+      ],
+      "image": "/burrow-assets/fruits/greengage.jpg",
+      "imageAlt": "Greengage fruit",
+      "sourceFile": "Greengages.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Greengages.jpg",
+      "imageCreator": "No machine-readable author provided. Ranveig assumed (based on copyright claims).",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/20/Greengages.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "persian-lime",
+      "name": "Persian Lime",
+      "scientificName": "Citrus × latifolia",
+      "origin": "Hybrid origin uncertain; Tahiti cultivation heritage",
+      "location": {
+        "label": "Hybrid origin uncertain; Tahiti cultivation heritage",
+        "countries": [
+          "French Polynesia"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -17.7,
+          -149.4
+        ]
+      },
+      "sweetness": 1,
+      "tartness": 10,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sharp, fragrant citrus acidity",
+      "texture": "Juicy flesh under a thin green rind",
+      "group": "citrus",
+      "fact": "Persian limes, also called Tahiti limes, are usually larger and less seedy than Key limes.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 54,
+        "note": "UF/IFAS gives 1.9 oz (54 g) as the typical whole-fruit weight for Tahiti/Persian lime. Fruit size varies by crop and harvest.",
+        "sourceUrl": "https://ask.ifas.ufl.edu/publication/CH093"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Persian_lime",
+        "https://ask.ifas.ufl.edu/publication/CH093"
+      ],
+      "image": "/burrow-assets/fruits/persian-lime.jpg",
+      "imageAlt": "Persian Lime fruit",
+      "sourceFile": "Starr-140117-3997-Citrus latifolia-Tahitian fruit and leaves-Hawea Pl Olinda-Maui (24612312943).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Starr-140117-3997-Citrus_latifolia-Tahitian_fruit_and_leaves-Hawea_Pl_Olinda-Maui_(24612312943).jpg",
+      "imageCreator": "Forest and Kim Starr",
+      "imageLicense": "CC BY 3.0 us",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0/us/deed.en",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Starr-140117-3997-Citrus_latifolia-Tahitian_fruit_and_leaves-Hawea_Pl_Olinda-Maui_%2824612312943%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "golden-kiwifruit",
+      "name": "Golden Kiwifruit",
+      "scientificName": "Actinidia chinensis var. chinensis",
+      "origin": "Chinese ancestry; modern New Zealand breeding heritage",
+      "location": {
+        "label": "Chinese ancestry; modern New Zealand breeding heritage",
+        "countries": [
+          "New Zealand"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -37.7,
+          176.2
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 3,
+      "availability": 5,
+      "availabilityBand": "Widely traded",
+      "flavor": "Sweet with a gentle tropical tang",
+      "texture": "Soft yellow flesh with tiny black seeds",
+      "group": "berry",
+      "fact": "Golden kiwifruit varieties have yellow flesh, unlike the familiar green-fleshed kiwifruit.",
+      "difficultyBand": "easy",
+      "weight": {
+        "grams": 98,
+        "note": "Rounded from 98.3 g, the mean of 1,940 Hort16A golden kiwifruit harvested in May 1995 in New Zealand and reported in the plant patent. A cultivar sample.",
+        "sourceUrl": "https://patents.google.com/patent/USPP11066P/en"
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Actinidia_chinensis",
+        "https://patents.google.com/patent/USPP11066P/en"
+      ],
+      "image": "/burrow-assets/fruits/golden-kiwifruit.jpg",
+      "imageAlt": "Golden Kiwifruit fruit",
+      "sourceFile": "Kiwifruit 'Gold' cross section.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Kiwifruit_%27Gold%27_cross_section.jpg",
+      "imageCreator": "Ivar Leidus",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Kiwifruit_%27Gold%27_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
     }
   ]
 }
