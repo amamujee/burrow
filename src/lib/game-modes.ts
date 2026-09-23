@@ -70,6 +70,7 @@ export type KnowledgeCard = {
   statLabel: string;
   statValue: number;
   statDisplay: string;
+  collectionStat?: { label: string; value: number; display: string };
   collectionSortValue?: number;
   subStat: string;
   fact: string;
@@ -683,8 +684,8 @@ export const orderCollectionCardsForCategory = (cards: readonly KnowledgeCard[])
   if (cards.every((card) => card.topic === "peppers")) return orderCollectionCardsByScoville(cards);
   if (cards.every((card) => card.topic === "hot-sauces")) return orderCardsByScoville(cards);
   if (cards.every((card) => card.topic === "fruits")) return [...cards].sort((a, b) =>
-    (Number.isFinite(a.statValue) ? a.statValue : Number.POSITIVE_INFINITY)
-    - (Number.isFinite(b.statValue) ? b.statValue : Number.POSITIVE_INFINITY)
+    (Number.isFinite(a.collectionStat?.value) ? a.collectionStat!.value : Number.POSITIVE_INFINITY)
+    - (Number.isFinite(b.collectionStat?.value) ? b.collectionStat!.value : Number.POSITIVE_INFINITY)
     || a.title.localeCompare(b.title));
 
   const hasComparablePrimaryStat = comparableCollectionStatLabel(cards) !== null;
@@ -697,7 +698,7 @@ export const collectionOrderLabel = (cards: readonly KnowledgeCard[]): string =>
   if (cards.length === 0) return "No cards";
   if (cards.every((card) => card.topic === "hot-sauces")) return "Scoville references · lowest to highest";
   if (cards.every((card) => card.topic === "peppers")) return "Scoville · mildest to hottest";
-  if (cards.every((card) => card.topic === "fruits")) return "Example weight · lightest to heaviest";
+  if (cards.every((card) => card.topic === "fruits")) return "Size · smallest to largest";
   const statLabel = comparableCollectionStatLabel(cards);
   return statLabel
     ? `${statLabel} · highest to lowest`

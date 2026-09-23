@@ -1,4 +1,4 @@
-# Fruits content audit — 21 September 2026
+# Fruits content audit — updated 23 September 2026
 
 The Fruits pack adds 125 distinct fruit cards with photographs and representative origin or cultivation associations across six continents. Familiar fruits anchor the easier pool; regional fruits such as pulasan, safou, riberry, cupuaçu and salal add discovery at higher difficulties.
 
@@ -6,12 +6,13 @@ The latest expansion adds 25 familiar fruits and market types, including grapefr
 
 ## Comparison rules
 
+- **Example size:** all 125 fruits have a separately sourced longest body dimension in centimetres. Rounded illustrative examples, documented ranges and named cultivar scope are preserved; these are not species averages or measurements of the pictured fruit. The [size inventory and methodology](fruits-size-audit.md) records every example and source.
 - **Example weight:** 65 sourced whole-fruit values in grams, including natural peel, shell and seeds unless stated otherwise. Each note identifies whether the number is a rounded survey result, an example within a reported range, or a particular cultivar/large specimen. These are examples for arithmetic, not fixed species averages or records. The remaining 60 weights are unknown, shown as “Not documented” and excluded from numerical rounds. Cards remain available for photo recognition, geography and the shared Top Trumps ratings.
 - **Sweetness and tartness:** separate editorial game ratings from 1–10, based on ripe-fruit descriptions. They are not measured sugar content, Brix, acidity, health scores or objective tastiness. Breadfruit uses its mature cooking stage, plantain its ripe cooked stage, and olive its cured flavor; flavor varies by cultivar and ripeness.
 - **Availability:** an editorial 1–5 band for finding fresh fruit beyond its home region: local/specialist harvest, mostly regional/seasonal, specialty markets, regional staple traded abroad, widely traded. An exact count of countries where fruit is available would imply an unsupported global inventory.
 - **Geography:** the origin/heritage text retains broad or debated origins. Map pins represent a place within that region, not a verified birthplace or a complete distribution map.
 
-The Fruits collection sorts by example weight from lightest to heaviest, with alphabetical ties and undocumented weights at the end.
+The Fruits collection sorts by example size from smallest to largest, with alphabetical ties. Every card has a size, including all 60 without a documented weight. Size is the Collection headline; weight remains in the expanded profile and drives existing weight-based Sort and Numbers games. Size is also available as a shared Top Trumps comparison.
 
 The collection retains scientific name, flavor, texture, finding-it notes, measurement scope, references and the comparison guide. Weight arithmetic preserves the source examples to the gram; ratio questions compare equal total weight rather than suggesting one fruit physically fits inside another. Multiplication uses explicitly imagined baskets.
 

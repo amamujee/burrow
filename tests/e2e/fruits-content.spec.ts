@@ -6,6 +6,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { loadPlayablePacks } from "../../src/lib/pack-loader";
 import { packToPlayableDeck } from "../../src/lib/pack-adapter";
 import { buildLandingTopicCards } from "../../src/lib/landing-topics";
+import { collectionCardProfileDetails } from "../../src/lib/card-profile";
 import {
   buildFactRoundFromCards, buildGeoRoundFromCards, buildNumberRoundFromCards,
   buildOddRoundFromCards, buildRevealRoundFromCards, buildSortRoundFromCards,
@@ -55,7 +56,7 @@ test.describe("Fruits", { tag: "@logic" }, () => {
     }
   });
 
-  test("undocumented weight stays unknown, sorts last and never becomes a flavor-score weight", () => {
+  test("undocumented weight stays unknown and never becomes a size or flavor-score weight", () => {
     expect(weighted.size).toBe(65);
     for (const card of deck.cards) {
       expect(card.statLabel).toBe("Example weight");
@@ -68,15 +69,47 @@ test.describe("Fruits", { tag: "@logic" }, () => {
         expect(card.stats.some((stat) => stat.id === "weight-g")).toBe(false);
       }
     }
+  });
+
+  test("all 125 fruits have sourced sizes and Collection orders physical dimensions independently of weight", () => {
+    for (const record of source.cards) {
+      expect(record.size.centimeters, record.id).toBeGreaterThan(0);
+      expect(record.sourceUrls).toContain(record.size.sourceUrl);
+      expect(record.size.note, record.id).toBeTruthy();
+      expect(["length", "diameter"]).toContain(record.size.dimension);
+      if ("rangeCm" in record.size) {
+        expect(record.size.rangeCm).toHaveLength(2);
+        expect(record.size.centimeters).toBeGreaterThanOrEqual(record.size.rangeCm![0]);
+        expect(record.size.centimeters).toBeLessThanOrEqual(record.size.rangeCm![1]);
+      }
+      const card = deck.cards.find((candidate) => candidate.id === record.id)!;
+      expect(card.collectionStat).toEqual({ label: "Example size", value: record.size.centimeters, display: `~${record.size.centimeters} cm` });
+      expect(card.stats.find((stat) => stat.id === "size-cm")?.unit).toBe("cm");
+      const profile = collectionCardProfileDetails({ ...card, statLabel: card.collectionStat!.label, statDisplay: card.collectionStat!.display });
+      expect(profile.find((detail) => detail.label === "Example size note")?.value).toContain(record.size.note);
+      if (record.weight) expect(profile.find((detail) => detail.label === "Example weight")?.value).toBe(card.statDisplay);
+    }
+    const originalIds = deck.cards.map((card) => card.id);
     const sorted = orderCollectionCardsForCategory(deck.cards);
-    expect(sorted.slice(0, weighted.size).every((card) => weighted.has(card.id))).toBe(true);
-    expect(sorted.slice(weighted.size).every((card) => !weighted.has(card.id))).toBe(true);
-    expect(sorted.slice(0, weighted.size).map((card) => card.statValue)).toEqual([...weighted.values()].sort((a, b) => a - b));
-    expect(sorted.slice(weighted.size).map((card) => card.title)).toEqual(sorted.slice(weighted.size).map((card) => card.title).sort((a, b) => a.localeCompare(b)));
-    const tied = sorted.filter((card) => card.statValue === 1).map((card) => card.title);
-    expect(tied).toEqual([...tied].sort((a, b) => a.localeCompare(b)));
+    const expected = [...source.cards].sort((a, b) => a.size.centimeters - b.size.centimeters || a.name.localeCompare(b.name)).map((card) => card.id);
+    expect(sorted.map((card) => card.id)).toEqual(expected);
+    expect(deck.cards.map((card) => card.id)).toEqual(originalIds);
+    expect(sorted[0].id).toBe("sea-buckthorn");
+    expect(sorted.at(-1)?.id).toBe("jackfruit");
+    // A banana is longer than an orange but weighs less in our examples.
+    expect(weighted.get("banana")!).toBeLessThan(weighted.get("orange")!);
+    expect(expected.indexOf("orange")).toBeLessThan(expected.indexOf("banana"));
+    expect(expected.indexOf("finger-lime")).toBeLessThan(expected.indexOf("banana"));
     expect(orderCollectionCardsForCategory([...deck.cards].reverse()).map((card) => card.id)).toEqual(sorted.map((card) => card.id));
-    expect(collectionOrderLabel(sorted)).toBe("Example weight · lightest to heaviest");
+    expect(collectionOrderLabel(sorted)).toBe("Size · smallest to largest");
+    const tied = sorted.filter((card) => card.collectionStat?.value === 2).map((card) => card.title);
+    expect(tied.length).toBeGreaterThan(1);
+    expect(tied).toEqual([...tied].sort((a, b) => a.localeCompare(b)));
+    // A future card with no documented size must never fall back to weight.
+    const banana = deck.cards.find((card) => card.id === "banana")!;
+    expect(orderCollectionCardsForCategory([
+      { ...banana, collectionStat: undefined }, sorted.at(-1)!,
+    ]).map((card) => card.id)).toEqual(["jackfruit", "banana"]);
   });
 
   test("all difficulties generate fruit-only rounds with honest weights and matching comparisons", () => {
@@ -173,12 +206,13 @@ test("Fruits opens, plays, and displays sourced profiles on tablet and mobile", 
   const collection = page.getByLabel("Fruits card collection");
   await expect(collection).toBeVisible();
   await expect(collection.getByRole("button", { name: "Show all rarities (125 cards)" })).toBeVisible();
-  await expect(collection.getByText("Example weight · lightest to heaviest", { exact: true })).toBeVisible();
+  await expect(collection.getByText("Size · smallest to largest", { exact: true })).toBeVisible();
+  await expect(collection.getByText(/Approximate longest dimension in centimetres/)).toBeVisible();
   const titles = collection.locator("div.overflow-hidden.rounded-lg > div.p-2 > p:first-child");
   await expect(titles).toHaveText(orderCollectionCardsForCategory(deck.cards).map((card) => card.title));
   const newFruit = collection.locator("div.overflow-hidden.rounded-lg").filter({ has: page.getByText("Golden Kiwifruit", { exact: true }) });
   await newFruit.scrollIntoViewIfNeeded();
-  await expect(newFruit.getByText("~98 g", { exact: true })).toBeVisible();
+  await expect(newFruit.getByText("~7.9 cm", { exact: true })).toBeVisible();
   const newPhoto = newFruit.getByRole("img", { name: "Golden Kiwifruit fruit", exact: true });
   await expect.poll(() => newPhoto.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
   await newFruit.screenshot({ path: testInfo.outputPath("fruits-new-card.png") });
@@ -232,8 +266,11 @@ test("Fruits opens, plays, and displays sourced profiles on tablet and mobile", 
   await expect.poll(() => detailImage.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
   await dialog.getByRole("button", { name: "Close fruit photo" }).click();
   const lime = collection.locator("div.overflow-hidden.rounded-lg").filter({ has: page.getByText("Finger Lime", { exact: true }) });
-  await expect(lime.getByText("Not documented", { exact: true })).toBeVisible();
+  await expect(lime.getByText("~8 cm", { exact: true })).toBeVisible();
   await lime.locator("summary").click();
+  await expect(newFruit.getByText("~98 g", { exact: true })).toBeVisible();
+  await expect(lime.getByText(/No whole-fruit weight verified/).first()).toBeVisible();
+  await expect(lime.getByText(/botanical description gives about 8 cm/).first()).toBeVisible();
   await expect(lime.getByText("Citrus australasica", { exact: true })).toBeVisible();
   await expect(lime.getByText("Tiny popping juice pearls", { exact: true })).toBeVisible();
   const photo = lime.getByRole("img", { name: "Finger Lime fruit", exact: true });

@@ -37,6 +37,7 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
       const primary = pack.primaryStat
         ? card.stats.find((stat) => stat.id === pack.primaryStat!.id)
         : card.stats[0];
+      const collectionSize = pack.id === "fruits" ? card.stats.find((stat) => stat.id === "size-cm") : undefined;
       const qualityScore = Math.max(65, Math.min(95, 72 + card.stats.length * 4 + card.categories.length * 2));
       return {
         id: card.id,
@@ -48,6 +49,11 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
         statLabel: primary?.label ?? pack.primaryStat!.label,
         statValue: primary?.value ?? Number.NaN,
         statDisplay: primary ? statDisplay(primary) : "Not documented",
+        ...(pack.id === "fruits" ? { collectionStat: {
+          label: "Example size",
+          value: collectionSize?.value ?? Number.NaN,
+          display: collectionSize ? statDisplay(collectionSize) : "Not documented",
+        } } : {}),
         ...(primary && ["scoville", "pepper-scoville"].includes(primary.id) ? { collectionSortValue: primary.value } : {}),
         subStat: card.metadata?.location ? worldLocationDisplay(card.metadata.location) : card.categories[0] ?? pack.title,
         fact: card.fact,

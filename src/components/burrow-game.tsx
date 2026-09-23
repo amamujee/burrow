@@ -4600,6 +4600,7 @@ function CollectionBook({
               <p className="mt-1 text-[9px] font-bold text-[#5f6b5d]">{collectionOrderLabel(orderedCards)}</p>
             </div>
           </div>
+          {activeTopic.id === "fruits" && <p className="mt-3 text-xs font-semibold text-[#5f6b5d]">Approximate longest dimension in centimetres, without stems or leaves. Sizes vary by variety; open a card profile for the size reference.</p>}
           {availableRarities.length > 0 && (
             <div aria-label="Filter cards by rarity" className="mt-3 flex flex-wrap items-center gap-2 border-t-2 border-[#e4d8c2] pt-3">
               <span className="mr-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#72543e]">Rarity</span>
@@ -4634,7 +4635,9 @@ function CollectionBook({
         <div className={`grid gap-2 ${activeTopic.id === "fruits" ? "grid-cols-[repeat(auto-fill,minmax(min(100%,260px),1fr))]" : "grid-cols-2 md:grid-cols-3 lg:grid-cols-4"}`}>
           {visibleCards.map((card) => {
             const isUnlocked = isCardUnlocked(unlockedCardSet, card);
-            const profileDetails = collectionCardProfileDetails(card);
+            const statLabel = card.collectionStat?.label ?? card.statLabel;
+            const statDisplay = card.collectionStat?.display ?? card.statDisplay;
+            const profileDetails = collectionCardProfileDetails({ ...card, statLabel, statDisplay });
             return (
               <div key={`${card.topic}-${card.id}`} className="overflow-hidden rounded-lg border-2 border-[#092421] bg-white">
                 <div className={`relative flex ${card.topic === "fruits" ? "aspect-square" : "h-36"} overflow-hidden bg-[#e3efe4] ${isUnlocked ? "" : "grayscale"}`}>
@@ -4657,8 +4660,8 @@ function CollectionBook({
                       <span className="text-[10px] font-bold text-[#5f6b5d]">Tap photo to enlarge</span>
                     </div>
                   )}
-                  {isUnlocked && <p className="mt-2 text-[8px] font-black uppercase tracking-[0.14em] text-[#72543e]">{card.statLabel}</p>}
-                  <p className={`${isUnlocked ? "mt-0.5" : "mt-1"} text-sm font-black text-[#9f3f2b]`}>{isUnlocked ? card.statDisplay : "Win a round"}</p>
+                  {isUnlocked && <p className="mt-2 text-[8px] font-black uppercase tracking-[0.14em] text-[#72543e]">{statLabel}</p>}
+                  <p className={`${isUnlocked ? "mt-0.5" : "mt-1"} text-sm font-black text-[#9f3f2b]`}>{isUnlocked ? statDisplay : "Win a round"}</p>
                   {isUnlocked && <p className="mt-1 text-[10px] font-black uppercase tracking-[0.08em] text-[#72543e]">{card.subStat}</p>}
                   <p className="mt-1 min-h-8 text-xs font-semibold leading-tight text-[#5f6b5d]">{isUnlocked ? card.fact : "Answer correctly to add it here."}</p>
                   {isUnlocked && <p className="mt-2 break-words text-[9px] font-semibold leading-tight text-[#6b7468]">Image: {card.imageCredit}</p>}

@@ -6,7 +6,8 @@
     "availability": "Burrow editorial findability bands, 1 to 5, for fresh fruit beyond its home region: 1 local harvest/specialist growers; 2 mostly regional/seasonal; 3 specialty markets; 4 regional staple traded abroad; 5 widely traded. Not a country count, current store inventory, conservation status or price. Based on described cultivation and trade, with no implied worldwide census.",
     "geography": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated.",
     "images": "Individually credited Commons photos. Stored as resized JPEGs for offline play; no botanical drawings or generated substitutes.",
-    "catalog": "Fruit cards include distinct species and familiar market types or cultivar groups, such as nectarines, satsumas and golden kiwifruit; the card count is not a count of unique species."
+    "catalog": "Fruit cards include distinct species and familiar market types or cultivar groups, such as nectarines, satsumas and golden kiwifruit; the card count is not a count of unique species.",
+    "size": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
   },
   "cards": [
     {
@@ -52,7 +53,17 @@
       "imageCreator": "Dllu",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Golden_Delicious%2C_SweeTango%2C_Granny_Smith%2C_and_Gala_apples_3.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Golden_Delicious%2C_SweeTango%2C_Granny_Smith%2C_and_Gala_apples_3.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          2.5,
+          12.0
+        ],
+        "note": "A rounded apple example selected within the broad cultivar range, rather than an average for every apple.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Apple"
+      }
     },
     {
       "id": "banana",
@@ -88,7 +99,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Banana",
-        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+        "https://hort.purdue.edu/newcrop/morton/banana.html"
       ],
       "image": "/burrow-assets/fruits/banana-ef61e2694c71.jpg",
       "imageAlt": "A partially peeled banana against a white background",
@@ -97,7 +109,17 @@
       "imageCreator": "Filo gèn'",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Banana_on_whitebackground.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Banana_on_whitebackground.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 18.0,
+        "dimension": "length",
+        "rangeCm": [
+          6.4,
+          30.0
+        ],
+        "note": "The broad banana range includes many cultivars; 18 cm is an illustrative dessert-banana length, with the peel and without the stalk.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/banana.html"
+      }
     },
     {
       "id": "orange",
@@ -133,7 +155,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Orange_%28fruit%29",
-        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+        "https://hort.purdue.edu/newcrop/morton/orange.html"
       ],
       "image": "/burrow-assets/fruits/orange-89c06feb9e7a.jpg",
       "imageAlt": "Orange fruit",
@@ -142,7 +165,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Oranges_-_whole-halved-segment.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Oranges_-_whole-halved-segment.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 8.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          6.5,
+          9.5
+        ],
+        "note": "A rounded sweet-orange example; diameter is its longest body dimension.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/orange.html"
+      }
     },
     {
       "id": "mango",
@@ -177,7 +210,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Mango"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Mango"
+        "https://en.wikipedia.org/wiki/Mango",
+        "https://hort.purdue.edu/newcrop/morton/mango_ars.html"
       ],
       "image": "/burrow-assets/fruits/mango-bd061e7eae24.jpg",
       "imageAlt": "Mango fruit",
@@ -186,7 +220,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/74/Mangos_-_single_and_halved.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/74/Mangos_-_single_and_halved.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 12.0,
+        "dimension": "length",
+        "rangeCm": [
+          6.25,
+          25.0
+        ],
+        "note": "Whole-fruit length; 12 cm is an illustrative selection within a broad cultivar range.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/mango_ars.html"
+      }
     },
     {
       "id": "pineapple",
@@ -221,7 +265,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Pineapple"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Pineapple"
+        "https://en.wikipedia.org/wiki/Pineapple",
+        "https://hort.purdue.edu/newcrop/morton/pineapple.html"
       ],
       "image": "/burrow-assets/fruits/pineapple-9c337e00e7a4.jpg",
       "imageAlt": "Whole pineapple with patterned golden skin and a green leafy crown",
@@ -230,7 +275,13 @@
       "imageCreator": "Tim Reckmann from Hamm, Deutschland",
       "imageLicense": "CC BY 2.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Ananas_%2812163192435%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Ananas_%2812163192435%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 25.0,
+        "dimension": "length",
+        "note": "Morton describes fruit bodies reaching 30 cm or more; this 25 cm example excludes the leafy crown.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/pineapple.html"
+      }
     },
     {
       "id": "strawberry",
@@ -266,7 +317,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Strawberry",
-        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+        "https://www.infoflora.ch/fr/flore/fragaria-%C3%97ananassa.html"
       ],
       "image": "/burrow-assets/fruits/strawberry-afd5a49eefaf.jpg",
       "imageAlt": "Strawberry fruit",
@@ -275,7 +327,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Garden_strawberry_%28Fragaria_%C3%97_ananassa%29_single2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Garden_strawberry_%28Fragaria_%C3%97_ananassa%29_single2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.0,
+        "dimension": "length",
+        "rangeCm": [
+          2.5,
+          6.5
+        ],
+        "note": "Info Flora gives 2.5–6.5 cm for the cultivated strawberry; the leafy calyx is excluded.",
+        "sourceUrl": "https://www.infoflora.ch/fr/flore/fragaria-%C3%97ananassa.html"
+      }
     },
     {
       "id": "grape",
@@ -311,7 +373,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Grape",
-        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+        "https://plants.ces.ncsu.edu/plants/vitis-vinifera/"
       ],
       "image": "/burrow-assets/fruits/grape-8f9003cf2dbf.jpg",
       "imageAlt": "Grape fruit",
@@ -320,7 +383,13 @@
       "imageCreator": "Vyacheslav Argenberg",
       "imageLicense": "CC BY 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/53/Grapes%2C_Rostov-on-Don%2C_Russia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/53/Grapes%2C_Rostov-on-Don%2C_Russia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.0,
+        "dimension": "length",
+        "note": "NC State lists both fruit length and width below one inch (2.54 cm); 2 cm is an illustrative single-grape example, not a bunch.",
+        "sourceUrl": "https://plants.ces.ncsu.edu/plants/vitis-vinifera/"
+      }
     },
     {
       "id": "watermelon",
@@ -364,7 +433,17 @@
       "imageCreator": "USDAgov",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ae/K7241-7_%288454648710%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ae/K7241-7_%288454648710%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 30.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          28.0,
+          30.0
+        ],
+        "note": "A rounded Melitopolski cultivar example; larger and more elongated watermelon cultivars also exist.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Watermelon"
+      }
     },
     {
       "id": "peach",
@@ -404,7 +483,17 @@
       "imageCreator": "Takkk",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Prunus_persica_-_Peach_Hungary.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Prunus_persica_-_Peach_Hungary.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          5.0,
+          7.0
+        ],
+        "note": "The reference's usual cultivated-fruit diameter; unusually small or large specimens are excluded from this example.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Peach"
+      }
     },
     {
       "id": "pear",
@@ -449,7 +538,13 @@
       "imageCreator": "Keith Weller",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Pears.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Pears.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 10.0,
+        "dimension": "length",
+        "note": "The reference describes cultivated pears reaching 18 cm long; 10 cm is an illustrative pear-shaped example, excluding the stalk.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Pear"
+      }
     },
     {
       "id": "plum",
@@ -489,7 +584,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Plums_African_Rose_-_whole%2C_halved_and_slice.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Plums_African_Rose_-_whole%2C_halved_and_slice.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.5,
+        "dimension": "diameter",
+        "rangeCm": [
+          2.0,
+          7.0
+        ],
+        "note": "A rounded cultivated-plum example; the catalog covers multiple plum species.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Plum"
+      }
     },
     {
       "id": "apricot",
@@ -520,7 +625,8 @@
       "difficultyBand": "easy",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Apricot"
+        "https://en.wikipedia.org/wiki/Apricot",
+        "https://plants.ces.ncsu.edu/plants/prunus-armeniaca/"
       ],
       "image": "/burrow-assets/fruits/apricot-f08f1f0e1b0b.jpg",
       "imageAlt": "Apricot fruit",
@@ -529,7 +635,17 @@
       "imageCreator": "Silverije",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/29/Marelica_Ke%C4%8Dkemetska_ru%C5%BEa_-_zreli_plodovi_na_grani.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/29/Marelica_Ke%C4%8Dkemetska_ru%C5%BEa_-_zreli_plodovi_na_grani.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          2.54,
+          7.62
+        ],
+        "note": "NC State places fruit length and width in its 1–3 inch band; 4 cm is an illustrative rounded fruit within that broad band.",
+        "sourceUrl": "https://plants.ces.ncsu.edu/plants/prunus-armeniaca/"
+      }
     },
     {
       "id": "sweet-cherry",
@@ -569,7 +685,17 @@
       "imageCreator": "Hans Braxmeier",
       "imageLicense": "CC0",
       "imageLicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Cherry_sweet_cherry_red_fruit_167341.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Cherry_sweet_cherry_red_fruit_167341.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.5,
+        "dimension": "diameter",
+        "rangeCm": [
+          2.0,
+          3.0
+        ],
+        "note": "Diameter range for modern cultivated sweet cherries; the stalk is excluded.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Prunus_avium"
+      }
     },
     {
       "id": "blueberry",
@@ -614,7 +740,17 @@
       "imageCreator": "Darkone ( talk · contribs )",
       "imageLicense": "CC BY-SA 2.5",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Vaccinium_corymbosum_Beeren.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Vaccinium_corymbosum_Beeren.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 1.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          0.5,
+          1.6
+        ],
+        "note": "Diameter of one berry, excluding the crown; cultivars vary.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Blueberry"
+      }
     },
     {
       "id": "raspberry",
@@ -649,7 +785,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Raspberry"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Raspberry"
+        "https://en.wikipedia.org/wiki/Raspberry",
+        "https://plants.ces.ncsu.edu/plants/rubus-idaeus/"
       ],
       "image": "/burrow-assets/fruits/raspberry-21b4d8f89300.jpg",
       "imageAlt": "Raspberry fruit",
@@ -658,7 +795,13 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Raspberry_-_halved_%28Rubus_idaeus%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Raspberry_-_halved_%28Rubus_idaeus%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.0,
+        "dimension": "length",
+        "note": "NC State lists fruit length and width below one inch (2.54 cm); this is an illustrative 2 cm whole aggregate fruit.",
+        "sourceUrl": "https://plants.ces.ncsu.edu/plants/rubus-idaeus/"
+      }
     },
     {
       "id": "blackberry",
@@ -689,7 +832,8 @@
       "difficultyBand": "easy",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Blackberry"
+        "https://en.wikipedia.org/wiki/Blackberry",
+        "https://agriculture.vic.gov.au/biosecurity/weeds/weeds-information/blackberry"
       ],
       "image": "/burrow-assets/fruits/blackberry-5c88777fabc9.jpg",
       "imageAlt": "Blackberry fruit",
@@ -698,7 +842,17 @@
       "imageCreator": "Ragesoss",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/78/Ripe%2C_ripening%2C_and_green_blackberries.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/78/Ripe%2C_ripening%2C_and_green_blackberries.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          1.0,
+          3.0
+        ],
+        "note": "Agriculture Victoria's blackberry species-group description gives a 1–3 cm fruit diameter; cultivars vary.",
+        "sourceUrl": "https://agriculture.vic.gov.au/biosecurity/weeds/weeds-information/blackberry"
+      }
     },
     {
       "id": "lemon",
@@ -729,7 +883,8 @@
       "difficultyBand": "easy",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Lemon"
+        "https://en.wikipedia.org/wiki/Lemon",
+        "https://hort.purdue.edu/newcrop/morton/lemon.html"
       ],
       "image": "/burrow-assets/fruits/lemon-9a0ff6f84fb6.jpg",
       "imageAlt": "Lemon fruit",
@@ -738,7 +893,17 @@
       "imageCreator": "Elena Chochkova",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e4/P1030323.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e4/P1030323.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 9.5,
+        "dimension": "length",
+        "rangeCm": [
+          7.0,
+          12.0
+        ],
+        "note": "Whole-fruit length, including the end tip but excluding the stalk.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/lemon.html"
+      }
     },
     {
       "id": "key-lime",
@@ -769,7 +934,8 @@
       "difficultyBand": "easy",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Key_lime"
+        "https://en.wikipedia.org/wiki/Key_lime",
+        "https://hort.purdue.edu/newcrop/morton/mexican_lime.html"
       ],
       "image": "/burrow-assets/fruits/key-lime-65d8fac2a8a7.jpg",
       "imageAlt": "Key Lime fruit",
@@ -778,7 +944,17 @@
       "imageCreator": "Dinesh Valke from Thane, India",
       "imageLicense": "CC BY-SA 2.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/24/Citrus_%C3%97_aurantiifolia_%28Christm.%29_Swingle_%2851906868474%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/24/Citrus_%C3%97_aurantiifolia_%28Christm.%29_Swingle_%2851906868474%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          2.5,
+          5.0
+        ],
+        "note": "Diameter of a rounded whole-fruit example.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/mexican_lime.html"
+      }
     },
     {
       "id": "coconut",
@@ -813,7 +989,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Coconut"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Coconut"
+        "https://en.wikipedia.org/wiki/Coconut",
+        "https://research.fs.usda.gov/download/treesearch/45147.pdf"
       ],
       "image": "/burrow-assets/fruits/coconut-bf433117aecc.jpg",
       "imageAlt": "Coconut fruit",
@@ -822,7 +999,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Coconuts_-_single_and_cracked_open.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Coconuts_-_single_and_cracked_open.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 25.0,
+        "dimension": "length",
+        "rangeCm": [
+          20.0,
+          30.0
+        ],
+        "note": "USDA's whole-fruit length includes the fibrous outer husk; it is larger than the dehusked brown nut often sold in shops.",
+        "sourceUrl": "https://research.fs.usda.gov/download/treesearch/45147.pdf"
+      }
     },
     {
       "id": "pomegranate",
@@ -853,7 +1040,8 @@
       "difficultyBand": "easy",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Pomegranate"
+        "https://en.wikipedia.org/wiki/Pomegranate",
+        "https://hort.purdue.edu/newcrop/morton/pomegranate.html"
       ],
       "image": "/burrow-assets/fruits/pomegranate-1fbb79eeb0b9.jpg",
       "imageAlt": "Pomegranate fruit",
@@ -862,7 +1050,17 @@
       "imageCreator": "Augustus Binu : flickr",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Pomegranate_Juice_%282019%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Pomegranate_Juice_%282019%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 9.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          6.25,
+          12.5
+        ],
+        "note": "Diameter of the rounded fruit body, excluding the calyx crown.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/pomegranate.html"
+      }
     },
     {
       "id": "fig",
@@ -907,7 +1105,17 @@
       "imageCreator": "FrogsLegs71",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Fig_cut_open.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Fig_cut_open.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 5.0,
+        "dimension": "length",
+        "rangeCm": [
+          2.5,
+          10.0
+        ],
+        "note": "Fruit length; the stalk is excluded.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/fig.html"
+      }
     },
     {
       "id": "kiwifruit",
@@ -938,7 +1146,8 @@
       "difficultyBand": "easy",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Kiwifruit"
+        "https://en.wikipedia.org/wiki/Kiwifruit",
+        "https://hort.purdue.edu/newcrop/morton/kiwifruit_ars.html"
       ],
       "image": "/burrow-assets/fruits/kiwifruit-9523063b3ec0.jpg",
       "imageAlt": "Kiwifruit fruit",
@@ -947,7 +1156,13 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/Kiwifruit_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/de/Kiwifruit_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.0,
+        "dimension": "length",
+        "note": "Morton's fuzzy kiwifruit description reaches 6.25 cm long; this is a rounded 6 cm example.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/kiwifruit_ars.html"
+      }
     },
     {
       "id": "persimmon",
@@ -982,7 +1197,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Diospyros_kaki"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Diospyros_kaki"
+        "https://en.wikipedia.org/wiki/Diospyros_kaki",
+        "https://hort.purdue.edu/newcrop/morton/japanese_persimmon.html"
       ],
       "image": "/burrow-assets/fruits/persimmon-4230bf57d868.jpg",
       "imageAlt": "Whole Fuyu persimmon and a cut half showing orange flesh",
@@ -991,7 +1207,13 @@
       "imageCreator": "Frank Schulenburg",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/78/Fuyu_persimmon_fruits%2C_one_cut_open.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/78/Fuyu_persimmon_fruits%2C_one_cut_open.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.0,
+        "dimension": "diameter",
+        "note": "Morton's Fuyu example is 7 cm wide and 5 cm tall; the wider dimension is used.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/japanese_persimmon.html"
+      }
     },
     {
       "id": "guava",
@@ -1027,7 +1249,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Psidium_guajava",
-        "https://ask.ifas.ufl.edu/publication/MG045"
+        "https://ask.ifas.ufl.edu/publication/MG045",
+        "https://hort.purdue.edu/newcrop/morton/guava.html"
       ],
       "image": "/burrow-assets/fruits/guava-36f828f444e1.jpg",
       "imageAlt": "Whole green guavas and a cut half showing pink flesh and pale seeds",
@@ -1036,7 +1259,17 @@
       "imageCreator": "Victoria Rachitzky Hoch",
       "imageLicense": "CC BY 2.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/54/Goiaba%2C_Guaiaba%2C_Guava_%28270435530%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/54/Goiaba%2C_Guaiaba%2C_Guava_%28270435530%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.5,
+        "dimension": "length",
+        "rangeCm": [
+          5.0,
+          10.0
+        ],
+        "note": "Whole-fruit body length, excluding the stalk and floral remnants.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/guava.html"
+      }
     },
     {
       "id": "papaya",
@@ -1081,7 +1314,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/09/Papaya_-_longitudinal_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/09/Papaya_-_longitudinal_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 25.0,
+        "dimension": "length",
+        "rangeCm": [
+          15.0,
+          50.0
+        ],
+        "note": "Cultivated fruit-body length; 25 cm is one illustrative example within a very broad range.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/papaya_ars.html"
+      }
     },
     {
       "id": "rambutan",
@@ -1117,7 +1360,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Rambutan",
-        "https://rfcarchives.org.au/Next/Fruits/Rambutan/RambutanBig11-81.htm"
+        "https://rfcarchives.org.au/Next/Fruits/Rambutan/RambutanBig11-81.htm",
+        "https://hort.purdue.edu/newcrop/morton/rambutan.html"
       ],
       "image": "/burrow-assets/fruits/rambutan-5573b48ee1d1.jpg",
       "imageAlt": "Rambutan fruit",
@@ -1126,7 +1370,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Rambutans_with_seed.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Rambutans_with_seed.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 5.0,
+        "dimension": "length",
+        "rangeCm": [
+          3.4,
+          8.0
+        ],
+        "note": "Fruit-body length; the flexible hairs are not added to the body measurement.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/rambutan.html"
+      }
     },
     {
       "id": "mangosteen",
@@ -1162,7 +1416,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Mangosteen",
-        "https://www.doae.go.th/en/mangosteen-2/"
+        "https://www.doae.go.th/en/mangosteen-2/",
+        "https://hort.purdue.edu/newcrop/morton/mangosteen.html"
       ],
       "image": "/burrow-assets/fruits/mangosteen-487a94b3f8cc.jpg",
       "imageAlt": "Mangosteen fruit",
@@ -1171,7 +1426,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/93/Mangosteens_-_whole_and_opened.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/93/Mangosteens_-_whole_and_opened.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 5.5,
+        "dimension": "diameter",
+        "rangeCm": [
+          3.4,
+          7.5
+        ],
+        "note": "Diameter of the rounded body, including rind but excluding leafy sepals.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/mangosteen.html"
+      }
     },
     {
       "id": "durian",
@@ -1206,7 +1471,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Durian"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Durian"
+        "https://en.wikipedia.org/wiki/Durian",
+        "https://hort.purdue.edu/newcrop/morton/durian_ars.html"
       ],
       "image": "/burrow-assets/fruits/durian-bff335982540.jpg",
       "imageAlt": "Durian fruit",
@@ -1215,7 +1481,17 @@
       "imageCreator": "مانفی",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Durian_in_black.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Durian_in_black.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 22.5,
+        "dimension": "length",
+        "rangeCm": [
+          15.0,
+          30.0
+        ],
+        "note": "Whole fruit-body length; projecting spines are not added separately.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/durian_ars.html"
+      }
     },
     {
       "id": "jackfruit",
@@ -1250,7 +1526,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Jackfruit"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Jackfruit"
+        "https://en.wikipedia.org/wiki/Jackfruit",
+        "https://hort.purdue.edu/newcrop/morton/jackfruit_ars.html"
       ],
       "image": "/burrow-assets/fruits/jackfruit-41f3d4525739.jpg",
       "imageAlt": "Jackfruit fruit",
@@ -1259,7 +1536,17 @@
       "imageCreator": "This work was made by Tushar Hossain and released under the license(s) stated below. Please feel free to use it for any purpose as long as you credit Tushar Hossain as author and follow the terms of the chosen license. If you use this work outside of the Wikimedia projects, I would very much like to get a note from you. Thanks!",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3b/The_jackfruit_is_holding_on_to_the_tree.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3b/The_jackfruit_is_holding_on_to_the_tree.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 50.0,
+        "dimension": "length",
+        "rangeCm": [
+          20.0,
+          90.0
+        ],
+        "note": "Whole compound fruit, including its rind, rather than one edible bulb.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/jackfruit_ars.html"
+      }
     },
     {
       "id": "dragon-fruit",
@@ -1294,7 +1581,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Dragon_fruit"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Dragon_fruit"
+        "https://en.wikipedia.org/wiki/Dragon_fruit",
+        "https://hort.purdue.edu/newcrop/morton/strawberry_pear_ars.html"
       ],
       "image": "/burrow-assets/fruits/dragon-fruit-717269a62e69.jpg",
       "imageAlt": "Dragon Fruit fruit",
@@ -1303,7 +1591,13 @@
       "imageCreator": "SMasters",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/43/Pitaya_cross_section_ed2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/43/Pitaya_cross_section_ed2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 10.0,
+        "dimension": "length",
+        "note": "Morton's white-fleshed pitaya example reaches 10 cm long; leafy scale tips are not added to the body measurement.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/strawberry_pear_ars.html"
+      }
     },
     {
       "id": "lychee",
@@ -1338,7 +1632,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Lychee"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Lychee"
+        "https://en.wikipedia.org/wiki/Lychee",
+        "https://hort.purdue.edu/newcrop/morton/lychee.html"
       ],
       "image": "/burrow-assets/fruits/lychee-9157cb68ca37.jpg",
       "imageAlt": "Whole red lychees and peeled lychee showing translucent white flesh",
@@ -1347,7 +1642,13 @@
       "imageCreator": "Peggy Greb, USDA ARS",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e3/ARS_Litchi_chinensis.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e3/ARS_Litchi_chinensis.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.0,
+        "dimension": "length",
+        "note": "Morton describes fruit about 4 cm long and 2.5 cm wide; the longer axis is used.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/lychee.html"
+      }
     },
     {
       "id": "longan",
@@ -1383,7 +1684,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Longan",
-        "https://ask.ifas.ufl.edu/publication/MG049"
+        "https://ask.ifas.ufl.edu/publication/MG049",
+        "https://hort.purdue.edu/newcrop/morton/longan.html"
       ],
       "image": "/burrow-assets/fruits/longan-d943b1d3ba8d.jpg",
       "imageAlt": "Longan fruit",
@@ -1392,7 +1694,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/17/Longan_fruits_and_seed.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/17/Longan_fruits_and_seed.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          1.25,
+          2.5
+        ],
+        "note": "Diameter of one globose fruit with its shell.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/longan.html"
+      }
     },
     {
       "id": "star-fruit",
@@ -1428,7 +1740,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Carambola",
-        "https://academic.oup.com/ijfst/article/49/9/2101/7864427"
+        "https://academic.oup.com/ijfst/article/49/9/2101/7864427",
+        "https://hort.purdue.edu/newcrop/morton/carambola.html"
       ],
       "image": "/burrow-assets/fruits/star-fruit-052e2c95a1a6.jpg",
       "imageAlt": "Star Fruit fruit",
@@ -1437,7 +1750,17 @@
       "imageCreator": "SMasters",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Carambola_Starfruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Carambola_Starfruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 10.0,
+        "dimension": "length",
+        "rangeCm": [
+          6.35,
+          15.0
+        ],
+        "note": "Length along the whole fruit, rather than across a star-shaped slice.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/carambola.html"
+      }
     },
     {
       "id": "passion-fruit",
@@ -1472,7 +1795,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Passiflora_edulis"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Passiflora_edulis"
+        "https://en.wikipedia.org/wiki/Passiflora_edulis",
+        "https://hort.purdue.edu/newcrop/morton/passionfruit.html"
       ],
       "image": "/burrow-assets/fruits/passion-fruit-ab0eeae43fd3.jpg",
       "imageAlt": "Passion Fruit fruit",
@@ -1481,7 +1805,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/21/Passion_fruits_-_whole_and_halved.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/21/Passion_fruits_-_whole_and_halved.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          4.0,
+          7.5
+        ],
+        "note": "A rounded whole-fruit example, including its rind.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/passionfruit.html"
+      }
     },
     {
       "id": "cherimoya",
@@ -1526,7 +1860,17 @@
       "imageCreator": "Hannes Grobe 21:17, 5 November 2006 (UTC)",
       "imageLicense": "CC BY-SA 2.5",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/91/Cherimoya_cut_hg.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/91/Cherimoya_cut_hg.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 15.0,
+        "dimension": "length",
+        "rangeCm": [
+          10.0,
+          20.0
+        ],
+        "note": "Length of the whole conical or heart-shaped fruit.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/cherimoya.html"
+      }
     },
     {
       "id": "soursop",
@@ -1561,7 +1905,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Soursop"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Soursop"
+        "https://en.wikipedia.org/wiki/Soursop",
+        "https://hort.purdue.edu/newcrop/morton/soursop.html"
       ],
       "image": "/burrow-assets/fruits/soursop-90107f5874f1.jpg",
       "imageAlt": "Close-up of soursop showing its green skin and curved spines",
@@ -1570,7 +1915,17 @@
       "imageCreator": "Francisco Farriols Sarabia",
       "imageLicense": "CC BY 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Annona_muricata_1023046.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Annona_muricata_1023046.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 20.0,
+        "dimension": "length",
+        "rangeCm": [
+          10.0,
+          30.0
+        ],
+        "note": "Fruit-body length; soft projecting spines are not added to the measurement.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/soursop.html"
+      }
     },
     {
       "id": "sugar-apple",
@@ -1605,7 +1960,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Annona_squamosa"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Annona_squamosa"
+        "https://en.wikipedia.org/wiki/Annona_squamosa",
+        "https://hort.purdue.edu/newcrop/morton/sugar_apple.html"
       ],
       "image": "/burrow-assets/fruits/sugar-apple-3ef7981426a5.jpg",
       "imageAlt": "Sugar apple showing the rounded segments of its green skin",
@@ -1614,7 +1970,17 @@
       "imageCreator": "Filo gèn'",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Annona_squamosa_%28_Annonaceae_%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Annona_squamosa_%28_Annonaceae_%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 8.0,
+        "dimension": "length",
+        "rangeCm": [
+          6.0,
+          10.0
+        ],
+        "note": "Whole fruit body, including its knobbly rind.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/sugar_apple.html"
+      }
     },
     {
       "id": "atemoya",
@@ -1649,7 +2015,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Atemoya"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Atemoya"
+        "https://en.wikipedia.org/wiki/Atemoya",
+        "https://hort.purdue.edu/newcrop/morton/atemoya.html"
       ],
       "image": "/burrow-assets/fruits/atemoya-bac132abbac0.jpg",
       "imageAlt": "Atemoya fruit",
@@ -1658,7 +2025,13 @@
       "imageCreator": "Webysther Nunes",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/37/Webysther_20150411131320_-_Atemoya.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/37/Webysther_20150411131320_-_Atemoya.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 10.0,
+        "dimension": "length",
+        "note": "Morton describes fruit generally reaching 10 cm long; this example uses that stated length.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/atemoya.html"
+      }
     },
     {
       "id": "salak",
@@ -1689,7 +2062,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Salak"
+        "https://en.wikipedia.org/wiki/Salak",
+        "https://www.cifor-icraf.org/publications/pdf_files/Books/ethnobiology/EthnobiologyHandbook.pdf"
       ],
       "image": "/burrow-assets/fruits/salak-1ce1afde7a4e.jpg",
       "imageAlt": "Salak fruit",
@@ -1698,7 +2072,17 @@
       "imageCreator": "Crisco 1492",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/92/Salak_%28Salacca_zalacca%29%2C_2015-05-17.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/92/Salak_%28Salacca_zalacca%29%2C_2015-05-17.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.0,
+        "dimension": "length",
+        "rangeCm": [
+          5.0,
+          7.0
+        ],
+        "note": "The CIFOR ethnobiology handbook gives fruit dimensions of 5–7 by 5 cm; the longer axis is used.",
+        "sourceUrl": "https://www.cifor-icraf.org/publications/pdf_files/Books/ethnobiology/EthnobiologyHandbook.pdf"
+      }
     },
     {
       "id": "langsat",
@@ -1729,7 +2113,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Lansium_domesticum"
+        "https://en.wikipedia.org/wiki/Lansium_domesticum",
+        "https://hort.purdue.edu/newcrop/morton/langsat.html"
       ],
       "image": "/burrow-assets/fruits/langsat-95cc0c8db1be.jpg",
       "imageAlt": "Opened langsat showing pale translucent segments inside its thin skin",
@@ -1738,7 +2123,17 @@
       "imageCreator": "Dr. Alexey Yakovlev",
       "imageLicense": "CC BY-SA 2.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Lansium_domesticum_%28Meliaceae%29_%E2%80%93_langsat_%2849970785441%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Lansium_domesticum_%28Meliaceae%29_%E2%80%93_langsat_%2849970785441%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          2.5,
+          5.0
+        ],
+        "note": "A rounded whole-fruit example; elongated market forms also occur.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/langsat.html"
+      }
     },
     {
       "id": "pulasan",
@@ -1769,7 +2164,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Pulasan"
+        "https://en.wikipedia.org/wiki/Pulasan",
+        "https://hort.purdue.edu/newcrop/morton/pulasan.html"
       ],
       "image": "/burrow-assets/fruits/pulasan-7267f107a8ab.jpg",
       "imageAlt": "Whole and opened pulasan showing its blunt spines and pale flesh",
@@ -1778,7 +2174,17 @@
       "imageCreator": "Izhamwong",
       "imageLicense": "CC BY 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/37/Pulasan.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/37/Pulasan.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.0,
+        "dimension": "length",
+        "rangeCm": [
+          5.0,
+          7.5
+        ],
+        "note": "Fruit-body length; projecting rind spines are not added.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/pulasan.html"
+      }
     },
     {
       "id": "santol",
@@ -1809,7 +2215,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Sandoricum_koetjape"
+        "https://en.wikipedia.org/wiki/Sandoricum_koetjape",
+        "https://hort.purdue.edu/newcrop/morton/santol.html"
       ],
       "image": "/burrow-assets/fruits/santol-f92512502b1b.jpg",
       "imageAlt": "Santol fruit",
@@ -1818,7 +2225,17 @@
       "imageCreator": "Steve",
       "imageLicense": "CC BY-SA 2.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/96/Gratorn_%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%97%E0%B9%89%E0%B8%AD%E0%B8%99_fruit%2C_Santol.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/96/Gratorn_%E0%B8%81%E0%B8%A3%E0%B8%B0%E0%B8%97%E0%B9%89%E0%B8%AD%E0%B8%99_fruit%2C_Santol.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          4.0,
+          7.5
+        ],
+        "note": "Across a globose or flattened fruit, including its rind.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/santol.html"
+      }
     },
     {
       "id": "jabuticaba",
@@ -1849,7 +2266,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Plinia_cauliflora"
+        "https://en.wikipedia.org/wiki/Plinia_cauliflora",
+        "https://hort.purdue.edu/newcrop/morton/jaboticabas.html"
       ],
       "image": "/burrow-assets/fruits/jabuticaba-cababca9dc6b.jpg",
       "imageAlt": "Glossy dark jabuticaba fruits growing on a branch",
@@ -1858,7 +2276,17 @@
       "imageCreator": "Alexandre Campolina Campola",
       "imageLicense": "CC BY 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/63/Jabuticaba_fruto.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/63/Jabuticaba_fruto.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 3.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          1.6,
+          4.0
+        ],
+        "note": "Morton's range spans the main cultivated jabuticaba species, including M. cauliflora; it excludes tiny M. tenella.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/jaboticabas.html"
+      }
     },
     {
       "id": "cupuacu",
@@ -1894,7 +2322,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Theobroma_grandiflorum",
-        "https://unctad.org/system/files/official-document/poitcdcomd10.pdf"
+        "https://unctad.org/system/files/official-document/poitcdcomd10.pdf",
+        "https://www.esalq.usp.br/d-plant/node/3268"
       ],
       "image": "/burrow-assets/fruits/cupuacu-a78f2f943bf9.jpg",
       "imageAlt": "Fresh cupuaçu split open to show white fibrous pulp inside its brown shell",
@@ -1903,7 +2332,17 @@
       "imageCreator": "BjoernS",
       "imageLicense": "CC BY-SA 2.0 de",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/de/deed.en",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Cupuacu_fruit_opened.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Cupuacu_fruit_opened.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 20.0,
+        "dimension": "length",
+        "rangeCm": [
+          12.0,
+          25.0
+        ],
+        "note": "The University of São Paulo description gives a fruit length of 12–25 cm, including the shell.",
+        "sourceUrl": "https://www.esalq.usp.br/d-plant/node/3268"
+      }
     },
     {
       "id": "feijoa",
@@ -1934,7 +2373,8 @@
       "difficultyBand": "medium",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Feijoa"
+        "https://en.wikipedia.org/wiki/Feijoa",
+        "https://hort.purdue.edu/newcrop/morton/feijoa.html"
       ],
       "image": "/burrow-assets/fruits/feijoa-99917efd7668.jpg",
       "imageAlt": "Feijoa fruit",
@@ -1943,7 +2383,17 @@
       "imageCreator": "Gabriel Collares",
       "imageLicense": "CC BY 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Goiaba-serrana%2C_ou_guarobi_%28do_guarani_%27fruto_verde%27%29%2C_Feijoa_sellowiana%2C_em_Bag%C3%A9%2C_RS%2C_Brasil_-_55238473195.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Goiaba-serrana%2C_ou_guarobi_%28do_guarani_%27fruto_verde%27%29%2C_Feijoa_sellowiana%2C_em_Bag%C3%A9%2C_RS%2C_Brasil_-_55238473195.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 5.0,
+        "dimension": "length",
+        "rangeCm": [
+          4.0,
+          6.0
+        ],
+        "note": "Length of the oval body, excluding the persistent sepals.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/feijoa.html"
+      }
     },
     {
       "id": "sapodilla",
@@ -1979,7 +2429,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Manilkara_zapota",
-        "https://ask.ifas.ufl.edu/publication/MG057"
+        "https://ask.ifas.ufl.edu/publication/MG057",
+        "https://hort.purdue.edu/newcrop/morton/sapodilla.html"
       ],
       "image": "/burrow-assets/fruits/sapodilla-a02710415a3c.jpg",
       "imageAlt": "Sapodilla fruit",
@@ -1988,7 +2439,17 @@
       "imageCreator": "Sugeesh at Malayalam Wikipedia",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/00/%E0%B4%B8%E0%B4%AA%E0%B5%8D%E0%B4%AA%E0%B5%8B%E0%B4%9F%E0%B5%8D%E0%B4%9F.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/00/%E0%B4%B8%E0%B4%AA%E0%B5%8D%E0%B4%AA%E0%B5%8B%E0%B4%9F%E0%B5%8D%E0%B4%9F.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.5,
+        "dimension": "diameter",
+        "rangeCm": [
+          5.0,
+          10.0
+        ],
+        "note": "A round-fruited example from the published width range; elongated cultivars can have a longer axis.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/sapodilla.html"
+      }
     },
     {
       "id": "mamey-sapote",
@@ -2024,7 +2485,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Pouteria_sapota",
-        "https://ask.ifas.ufl.edu/publication/MG331"
+        "https://ask.ifas.ufl.edu/publication/MG331",
+        "https://hort.purdue.edu/newcrop/morton/sapote_ars.html"
       ],
       "image": "/burrow-assets/fruits/mamey-sapote-aeb375c0463b.jpg",
       "imageAlt": "Mamey Sapote fruit",
@@ -2033,7 +2495,17 @@
       "imageCreator": "Wikimedia Commons contributor",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e7/ARS-_Pouteria_sapota.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e7/ARS-_Pouteria_sapota.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 15.0,
+        "dimension": "length",
+        "rangeCm": [
+          7.5,
+          22.8
+        ],
+        "note": "Length of a whole fruit, including the skin.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/sapote_ars.html"
+      }
     },
     {
       "id": "black-sapote",
@@ -2064,7 +2536,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Diospyros_nigra"
+        "https://en.wikipedia.org/wiki/Diospyros_nigra",
+        "https://hort.purdue.edu/newcrop/morton/black_sapote.html"
       ],
       "image": "/burrow-assets/fruits/black-sapote-8fb22d4899c2.jpg",
       "imageAlt": "Black Sapote fruit",
@@ -2073,7 +2546,17 @@
       "imageCreator": "Yonygg",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Black_Sapote_1.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Black_Sapote_1.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 9.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          5.0,
+          12.5
+        ],
+        "note": "Across the round or flattened fruit body, excluding sepals.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/black_sapote.html"
+      }
     },
     {
       "id": "white-sapote",
@@ -2104,7 +2587,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/White_sapote"
+        "https://en.wikipedia.org/wiki/White_sapote",
+        "https://hort.purdue.edu/newcrop/morton/white_sapote.html"
       ],
       "image": "/burrow-assets/fruits/white-sapote-6fe7a57f87e7.jpg",
       "imageAlt": "White Sapote fruit",
@@ -2113,7 +2597,13 @@
       "imageCreator": "Takoradee",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/39/White_sapote2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/39/White_sapote2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.5,
+        "dimension": "diameter",
+        "note": "Morton's Coleman cultivar is oblate and reaches 7.5 cm across; this is a named cultivar example.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/white_sapote.html"
+      }
     },
     {
       "id": "canistel",
@@ -2148,7 +2638,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Pouteria_campechiana"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Pouteria_campechiana"
+        "https://en.wikipedia.org/wiki/Pouteria_campechiana",
+        "https://hort.purdue.edu/newcrop/morton/canistel.html"
       ],
       "image": "/burrow-assets/fruits/canistel-f9faade7be64.jpg",
       "imageAlt": "Canistel fruit",
@@ -2157,7 +2648,17 @@
       "imageCreator": "Augustus Binu : flickr",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Egg_fruit_DS.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Egg_fruit_DS.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 10.0,
+        "dimension": "length",
+        "rangeCm": [
+          7.5,
+          12.5
+        ],
+        "note": "Morton's main cultivated form; the much smaller palmeri form is excluded.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/canistel.html"
+      }
     },
     {
       "id": "abiu",
@@ -2188,7 +2689,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Pouteria_caimito"
+        "https://en.wikipedia.org/wiki/Pouteria_caimito",
+        "https://hort.purdue.edu/newcrop/morton/abiu.html"
       ],
       "image": "/burrow-assets/fruits/abiu-2b2abf348d91.jpg",
       "imageAlt": "Abiu fruit",
@@ -2197,7 +2699,17 @@
       "imageCreator": "Rodrigo.Argenton",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/63/Abiu_em_fundo_preto_-_Pouteria_caimito.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/63/Abiu_em_fundo_preto_-_Pouteria_caimito.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.0,
+        "dimension": "length",
+        "rangeCm": [
+          4.0,
+          10.0
+        ],
+        "note": "Whole-fruit body length, including its short end tip.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/abiu.html"
+      }
     },
     {
       "id": "star-apple",
@@ -2228,7 +2740,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Chrysophyllum_cainito"
+        "https://en.wikipedia.org/wiki/Chrysophyllum_cainito",
+        "https://hort.purdue.edu/newcrop/morton/star_apple.html"
       ],
       "image": "/burrow-assets/fruits/star-apple-df3099ff7618.jpg",
       "imageAlt": "Cut star apples showing the star-shaped seed pattern",
@@ -2237,7 +2750,17 @@
       "imageCreator": "TopTropicals.com",
       "imageLicense": "CC BY-SA 2.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Chrysophylum_caimito_-_Star_Apple_%2852334746354%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Chrysophylum_caimito_-_Star_Apple_%2852334746354%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.5,
+        "dimension": "diameter",
+        "rangeCm": [
+          5.0,
+          10.0
+        ],
+        "note": "Across a rounded whole-fruit example, including rind.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/star_apple.html"
+      }
     },
     {
       "id": "lucuma",
@@ -2268,7 +2791,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Lucuma_bifera"
+        "https://en.wikipedia.org/wiki/Lucuma_bifera",
+        "https://hort.purdue.edu/newcrop/morton/lucmo.html"
       ],
       "image": "/burrow-assets/fruits/lucuma-cd6015679e16.jpg",
       "imageAlt": "Lucuma fruit",
@@ -2277,7 +2801,17 @@
       "imageCreator": "OtterAM",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bb/L%C3%BAcuma.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bb/L%C3%BAcuma.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 9.0,
+        "dimension": "length",
+        "rangeCm": [
+          7.5,
+          10.0
+        ],
+        "note": "Whole-fruit body length.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/lucmo.html"
+      }
     },
     {
       "id": "tamarillo",
@@ -2308,7 +2842,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Tamarillo"
+        "https://en.wikipedia.org/wiki/Tamarillo",
+        "https://hort.purdue.edu/newcrop/morton/tree_tomato.html"
       ],
       "image": "/burrow-assets/fruits/tamarillo-34407d604c82.jpg",
       "imageAlt": "Tamarillo fruit",
@@ -2317,7 +2852,17 @@
       "imageCreator": "C T Johansson",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Solanum_betaceum-IMG_0242.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Solanum_betaceum-IMG_0242.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.5,
+        "dimension": "length",
+        "rangeCm": [
+          5.0,
+          10.0
+        ],
+        "note": "Length of the egg-shaped fruit body, excluding the stalk.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/tree_tomato.html"
+      }
     },
     {
       "id": "cape-gooseberry",
@@ -2348,7 +2893,8 @@
       "difficultyBand": "medium",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Physalis_peruviana"
+        "https://en.wikipedia.org/wiki/Physalis_peruviana",
+        "https://hort.purdue.edu/newcrop/morton/cape_gooseberry.html"
       ],
       "image": "/burrow-assets/fruits/cape-gooseberry-78768cd89a31.jpg",
       "imageAlt": "Orange Cape gooseberry inside its opened papery husk",
@@ -2357,7 +2903,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Physalis_peruviana_calix_open_close-up.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Physalis_peruviana_calix_open_close-up.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 1.6,
+        "dimension": "diameter",
+        "rangeCm": [
+          1.25,
+          2.0
+        ],
+        "note": "The berry alone, excluding its papery lantern-like husk.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/cape_gooseberry.html"
+      }
     },
     {
       "id": "naranjilla",
@@ -2388,7 +2944,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Solanum_quitoense"
+        "https://en.wikipedia.org/wiki/Solanum_quitoense",
+        "https://hort.purdue.edu/newcrop/morton/naranjilla_ars.html"
       ],
       "image": "/burrow-assets/fruits/naranjilla-e63d765a1a87.jpg",
       "imageAlt": "Naranjilla fruit",
@@ -2397,7 +2954,13 @@
       "imageCreator": "Picture taken by Fibonacci.",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/Lulo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/Lulo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.0,
+        "dimension": "diameter",
+        "note": "Morton describes fruit reaching 6.25 cm across; this is a rounded 6 cm example, excluding the calyx.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/naranjilla_ars.html"
+      }
     },
     {
       "id": "cocona",
@@ -2428,7 +2991,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Solanum_sessiliflorum"
+        "https://en.wikipedia.org/wiki/Solanum_sessiliflorum",
+        "https://hort.purdue.edu/newcrop/morton/cocona.html"
       ],
       "image": "/burrow-assets/fruits/cocona-3c7c2d3ed593.jpg",
       "imageAlt": "Cocona fruit",
@@ -2437,7 +3001,17 @@
       "imageCreator": "Dtarazona",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Cocona.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Cocona.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.0,
+        "dimension": "length",
+        "rangeCm": [
+          2.5,
+          10.0
+        ],
+        "note": "Fruit-body length; a 6 cm example is selected from the broad shape and size range.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/cocona.html"
+      }
     },
     {
       "id": "sweet-granadilla",
@@ -2468,7 +3042,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Passiflora_ligularis"
+        "https://en.wikipedia.org/wiki/Passiflora_ligularis",
+        "https://hort.purdue.edu/newcrop/morton/sweet_granadilla.html"
       ],
       "image": "/burrow-assets/fruits/sweet-granadilla-506cd0557163.jpg",
       "imageAlt": "Sweet Granadilla fruit",
@@ -2477,7 +3052,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Sweet_granadillas_%28Passiflora_ligularis%29_-_whole_and_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Sweet_granadillas_%28Passiflora_ligularis%29_-_whole_and_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.0,
+        "dimension": "length",
+        "rangeCm": [
+          6.0,
+          7.5
+        ],
+        "note": "Length of the broad elliptical fruit body.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/sweet_granadilla.html"
+      }
     },
     {
       "id": "banana-passionfruit",
@@ -2508,7 +3093,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Passiflora_tripartita"
+        "https://en.wikipedia.org/wiki/Passiflora_tripartita",
+        "https://hort.purdue.edu/newcrop/morton/banana_passion_fruit.html"
       ],
       "image": "/burrow-assets/fruits/banana-passionfruit-0c769b91ed60.jpg",
       "imageAlt": "Banana Passionfruit fruit",
@@ -2517,7 +3103,17 @@
       "imageCreator": "No machine-readable author provided. Fibonacci assumed (based on copyright claims).",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Curuba.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Curuba.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 8.5,
+        "dimension": "length",
+        "rangeCm": [
+          5.0,
+          12.0
+        ],
+        "note": "Length of the elongated fruit body.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/banana_passion_fruit.html"
+      }
     },
     {
       "id": "giant-granadilla",
@@ -2548,7 +3144,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Passiflora_quadrangularis"
+        "https://en.wikipedia.org/wiki/Passiflora_quadrangularis",
+        "https://hort.purdue.edu/newcrop/morton/giant_granadilla.html"
       ],
       "image": "/burrow-assets/fruits/giant-granadilla-d6f5c184b298.jpg",
       "imageAlt": "Giant Granadilla fruit",
@@ -2557,7 +3154,17 @@
       "imageCreator": "Wikimedia Commons contributor",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/61/Badea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/61/Badea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 25.0,
+        "dimension": "length",
+        "rangeCm": [
+          20.32,
+          30.48
+        ],
+        "note": "The published 8–12 inch length is converted to centimetres; the page's conflicting 10–30 cm parenthesis is not used.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/giant_granadilla.html"
+      }
     },
     {
       "id": "african-horned-melon",
@@ -2588,7 +3195,8 @@
       "difficultyBand": "medium",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Cucumis_metuliferus"
+        "https://en.wikipedia.org/wiki/Cucumis_metuliferus",
+        "https://www.nparks.gov.sg/florafaunaweb/flora/7/1/7116"
       ],
       "image": "/burrow-assets/fruits/african-horned-melon-c2775beae1a4.jpg",
       "imageAlt": "African Horned Melon fruit",
@@ -2597,7 +3205,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Cucumis_metuliferus_fruit_-_whole_and_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Cucumis_metuliferus_fruit_-_whole_and_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 10.0,
+        "dimension": "length",
+        "rangeCm": [
+          6.0,
+          15.0
+        ],
+        "note": "NParks gives body length 6–15 cm and width 3–6 cm; projecting horns are not added separately.",
+        "sourceUrl": "https://www.nparks.gov.sg/florafaunaweb/flora/7/1/7116"
+      }
     },
     {
       "id": "baobab",
@@ -2637,7 +3255,13 @@
       "imageCreator": "Neelix at English WikipediaI am the originator of this photo. I hold the copyright. I release it to the public domain. This photo depicts a fruit.",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Adansonia_digitata_%28Fruit%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Adansonia_digitata_%28Fruit%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 20.0,
+        "dimension": "length",
+        "note": "The reference describes baobab fruit reaching 25 cm long; this is an illustrative 20 cm whole pod with its shell.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Adansonia_digitata"
+      }
     },
     {
       "id": "marula",
@@ -2677,7 +3301,17 @@
       "imageCreator": "SAplants",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Sclerocarya_birrea_subsp._afra_5Dsr_4969.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Sclerocarya_birrea_subsp._afra_5Dsr_4969.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 3.5,
+        "dimension": "length",
+        "rangeCm": [
+          3.0,
+          4.0
+        ],
+        "note": "Longest dimension of an oval fruit; occasional 5 cm specimens are outside this example range.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Sclerocarya_birrea"
+      }
     },
     {
       "id": "african-star-apple",
@@ -2708,7 +3342,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Gambeya_albida"
+        "https://en.wikipedia.org/wiki/Gambeya_albida",
+        "https://cigrjournal.org/index.php/Ejounral/article/view/5797"
       ],
       "image": "/burrow-assets/fruits/african-star-apple-5ece228d78ea.jpg",
       "imageAlt": "African Star Apple fruit",
@@ -2717,7 +3352,17 @@
       "imageCreator": "Chrysella",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/%E1%BB%A4dara_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/%E1%BB%A4dara_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.5,
+        "dimension": "length",
+        "rangeCm": [
+          3.41,
+          5.53
+        ],
+        "note": "A physical-properties study reports lengths 3.41–5.53 cm, widths 3.31–5.08 cm and thicknesses 2.93–4.73 cm; this example uses the length axis.",
+        "sourceUrl": "https://cigrjournal.org/index.php/Ejounral/article/view/5797"
+      }
     },
     {
       "id": "safou",
@@ -2757,7 +3402,17 @@
       "imageCreator": "Benoît Prieur",
       "imageLicense": "CC0",
       "imageLicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/28/Grand_Frais_%28Beynost%29_safous_du_Cameroun_%28ao%C3%BBt_2023%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/28/Grand_Frais_%28Beynost%29_safous_du_Cameroun_%28ao%C3%BBt_2023%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 8.0,
+        "dimension": "length",
+        "rangeCm": [
+          4.0,
+          12.0
+        ],
+        "note": "Length of the elliptical whole fruit.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Dacryodes_edulis"
+      }
     },
     {
       "id": "finger-lime",
@@ -2797,7 +3452,13 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Finger_lime_with_juice_vesicles_and_seeds_partially_extracted.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Finger_lime_with_juice_vesicles_and_seeds_partially_extracted.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 8.0,
+        "dimension": "length",
+        "note": "The botanical description gives about 8 cm for the elongated fruit; other varieties may be shorter.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Citrus_australasica"
+      }
     },
     {
       "id": "quandong",
@@ -2837,7 +3498,17 @@
       "imageCreator": "John Moss",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Santalum_acuminatum_fruit1.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Santalum_acuminatum_fruit1.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 3.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          2.0,
+          4.0
+        ],
+        "note": "Diameter of the globose fruit, including its skin and stone.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Santalum_acuminatum"
+      }
     },
     {
       "id": "davidsons-plum",
@@ -2868,7 +3539,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Davidsonia_jerseyana"
+        "https://en.wikipedia.org/wiki/Davidsonia_jerseyana",
+        "https://www.agriculture.gov.au/sites/default/files/documents/d-jerseyana.pdf"
       ],
       "image": "/burrow-assets/fruits/davidsons-plum-1887054d3f08.jpg",
       "imageAlt": "Davidson’s plums growing directly from the tree trunk",
@@ -2877,7 +3549,17 @@
       "imageCreator": "SmallBiologie",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Mullumbimby_plum_%28Davidsonia_jerseyana%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Mullumbimby_plum_%28Davidsonia_jerseyana%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.0,
+        "dimension": "length",
+        "rangeCm": [
+          3.3,
+          4.5
+        ],
+        "note": "The national recovery plan for Davidsonia jerseyana gives length 33–45 mm, width 31–37 mm and depth 27–35 mm.",
+        "sourceUrl": "https://www.agriculture.gov.au/sites/default/files/documents/d-jerseyana.pdf"
+      }
     },
     {
       "id": "riberry",
@@ -2917,7 +3599,13 @@
       "imageCreator": "Poyt448 Peter Woodard",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/82/Syzygium_luehmannii_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/82/Syzygium_luehmannii_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 1.3,
+        "dimension": "length",
+        "note": "The reference gives fruit reaching 13 mm long; converted to 1.3 cm, excluding the stalk.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Syzygium_luehmannii"
+      }
     },
     {
       "id": "kakadu-plum",
@@ -2957,7 +3645,13 @@
       "imageCreator": "Allthingsnative",
       "imageLicense": "CC BY 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Terminalia_ferdinandiana_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Terminalia_ferdinandiana_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.0,
+        "dimension": "length",
+        "note": "The reference gives about 2 cm length and 1 cm width; the longer axis is used.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Terminalia_ferdinandiana"
+      }
     },
     {
       "id": "pawpaw",
@@ -3001,7 +3695,17 @@
       "imageCreator": "Scott Bauer, USDA",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/15/Asimina_triloba3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/15/Asimina_triloba3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 10.0,
+        "dimension": "length",
+        "rangeCm": [
+          5.0,
+          15.0
+        ],
+        "note": "Length of one whole fruit, excluding the stalk.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Asimina_triloba"
+      }
     },
     {
       "id": "bilimbi",
@@ -3032,7 +3736,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Averrhoa_bilimbi"
+        "https://en.wikipedia.org/wiki/Averrhoa_bilimbi",
+        "https://hort.purdue.edu/newcrop/morton/bilimbi.html"
       ],
       "image": "/burrow-assets/fruits/bilimbi-69493c8841dd.jpg",
       "imageAlt": "Bilimbi fruit",
@@ -3041,7 +3746,17 @@
       "imageCreator": "Sugeesh",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Averrhoa_bilimbi_fruit_by_Sugeesh.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Averrhoa_bilimbi_fruit_by_Sugeesh.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.0,
+        "dimension": "length",
+        "rangeCm": [
+          4.0,
+          10.0
+        ],
+        "note": "Fruit-body length, excluding the stalk.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/bilimbi.html"
+      }
     },
     {
       "id": "serviceberry",
@@ -3081,7 +3796,17 @@
       "imageCreator": "Ken Eckert",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Saskatoon_Berries_in_Alberta.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Saskatoon_Berries_in_Alberta.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 1.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          0.5,
+          1.5
+        ],
+        "note": "The source's 5–15 mm diameter converted to centimetres.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Amelanchier_alnifolia"
+      }
     },
     {
       "id": "salal-berry",
@@ -3121,7 +3846,17 @@
       "imageCreator": "John Rusk from Berkeley, CA, United States of America",
       "imageLicense": "CC BY 2.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b4/J20151022-0016%E2%80%94Gaultheria_shallon%E2%80%94RPBG_%2822315477618%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b4/J20151022-0016%E2%80%94Gaultheria_shallon%E2%80%94RPBG_%2822315477618%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 0.8,
+        "dimension": "diameter",
+        "rangeCm": [
+          0.6,
+          1.0
+        ],
+        "note": "The source's 6–10 mm diameter converted to centimetres.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Gaultheria_shallon"
+      }
     },
     {
       "id": "cloudberry",
@@ -3152,7 +3887,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Rubus_chamaemorus"
+        "https://en.wikipedia.org/wiki/Rubus_chamaemorus",
+        "https://www.worldfloraonline.org/taxon/wfo-0001014280"
       ],
       "image": "/burrow-assets/fruits/cloudberry-eb9804d39030.jpg",
       "imageAlt": "Close-up of a ripe orange cloudberry showing its rounded drupelets",
@@ -3161,7 +3897,13 @@
       "imageCreator": "Ryan Hodnett",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/90/Cloudberry_%28Rubus_chamaemorus%29_-_Eidfjord%2C_Norway_2021-07-25_%2801%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/90/Cloudberry_%28Rubus_chamaemorus%29_-_Eidfjord%2C_Norway_2021-07-25_%2801%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 1.0,
+        "dimension": "diameter",
+        "note": "Flora of China, reproduced by World Flora Online, describes the rounded aggregate fruit as about 1 cm across.",
+        "sourceUrl": "https://www.worldfloraonline.org/taxon/wfo-0001014280"
+      }
     },
     {
       "id": "lingonberry",
@@ -3201,7 +3943,17 @@
       "imageCreator": "Jonas Bergsten",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Vaccinium_vitis-idaea_20060824_003.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Vaccinium_vitis-idaea_20060824_003.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 0.8,
+        "dimension": "diameter",
+        "rangeCm": [
+          0.6,
+          1.0
+        ],
+        "note": "The source's 6–10 mm diameter converted to centimetres.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Vaccinium_vitis-idaea"
+      }
     },
     {
       "id": "sea-buckthorn",
@@ -3241,7 +3993,17 @@
       "imageCreator": "kallerna",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Tyrnin_marjoja.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Tyrnin_marjoja.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 0.7,
+        "dimension": "diameter",
+        "rangeCm": [
+          0.6,
+          0.8
+        ],
+        "note": "One rounded berry from the published 6–8 mm diameter range.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Sea_buckthorn"
+      }
     },
     {
       "id": "medlar",
@@ -3281,7 +4043,17 @@
       "imageCreator": "Wikimedia Commons contributor",
       "imageLicense": "CC BY-SA 2.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/99/Medlar_pomes_and_leaves.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/99/Medlar_pomes_and_leaves.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          3.0,
+          8.0
+        ],
+        "note": "A cultivated-fruit example; the persistent sepals are excluded.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Mespilus_germanica"
+      }
     },
     {
       "id": "quince",
@@ -3316,7 +4088,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Quince"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Quince"
+        "https://en.wikipedia.org/wiki/Quince",
+        "https://landscapeplants.oregonstate.edu/plants/cydonia-oblonga"
       ],
       "image": "/burrow-assets/fruits/quince-40b0dabcb888.jpg",
       "imageAlt": "Quince fruit",
@@ -3325,7 +4098,13 @@
       "imageCreator": "SAplants",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Cydonia_oblonga_%27Portugal%27_5Dsr_2392.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Cydonia_oblonga_%27Portugal%27_5Dsr_2392.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 8.0,
+        "dimension": "length",
+        "note": "Oregon State's description gives fruit about 8 cm long; the stalk is excluded.",
+        "sourceUrl": "https://landscapeplants.oregonstate.edu/plants/cydonia-oblonga"
+      }
     },
     {
       "id": "strawberry-tree-fruit",
@@ -3365,7 +4144,17 @@
       "imageCreator": "Martin Cooper from Ipswich, UK",
       "imageLicense": "CC BY 2.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cc/I_eat_only_one_%2823062368386%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cc/I_eat_only_one_%2823062368386%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 1.5,
+        "dimension": "diameter",
+        "rangeCm": [
+          0.7,
+          2.0
+        ],
+        "note": "The source's 7–20 mm diameter converted to centimetres.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Arbutus_unedo"
+      }
     },
     {
       "id": "loquat",
@@ -3400,7 +4189,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Loquat"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Loquat"
+        "https://en.wikipedia.org/wiki/Loquat",
+        "https://hort.purdue.edu/newcrop/morton/loquat.html"
       ],
       "image": "/burrow-assets/fruits/loquat-af43480516d4.jpg",
       "imageAlt": "Golden loquat fruit on a leafy branch",
@@ -3409,7 +4199,17 @@
       "imageCreator": "Katorisi",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Japanese_Loquat%2C_Minamiboso_city%2C_Japan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Japanese_Loquat%2C_Minamiboso_city%2C_Japan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.0,
+        "dimension": "length",
+        "rangeCm": [
+          2.5,
+          5.0
+        ],
+        "note": "Length of one whole fruit, excluding the stalk.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/loquat.html"
+      }
     },
     {
       "id": "jujube",
@@ -3449,7 +4249,17 @@
       "imageCreator": "Tirithel",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/63/Ziziphus_zizyphus_fruit_inside.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/63/Ziziphus_zizyphus_fruit_inside.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.5,
+        "dimension": "length",
+        "rangeCm": [
+          1.5,
+          3.0
+        ],
+        "note": "Longest dimension of one oval jujube; excluding its stalk.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Jujube"
+      }
     },
     {
       "id": "indian-jujube",
@@ -3494,7 +4304,13 @@
       "imageCreator": "Augustus Binu : flickr",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Indian_jujube_%28fruit%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Indian_jujube_%28fruit%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.0,
+        "dimension": "length",
+        "note": "Morton describes wild fruit 1.25–2.5 cm long and cultivated fruit reaching 6.25 cm; 4 cm is an illustrative cultivated example.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/indian_jujube.html"
+      }
     },
     {
       "id": "amla",
@@ -3529,7 +4345,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Phyllanthus_emblica"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Phyllanthus_emblica"
+        "https://en.wikipedia.org/wiki/Phyllanthus_emblica",
+        "https://hort.purdue.edu/newcrop/morton/emblic.html"
       ],
       "image": "/burrow-assets/fruits/amla-6f7a860e2b56.jpg",
       "imageAlt": "Whole amla fruits and a cut half showing the segmented flesh",
@@ -3538,7 +4355,13 @@
       "imageCreator": "Salil Kumar Mukherjee",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Phyllanthus_emblica_-_whole_and_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Phyllanthus_emblica_-_whole_and_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.5,
+        "dimension": "diameter",
+        "note": "Morton's Banarsi example is 4.5 cm wide and 4 cm long; the wider dimension is used.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/emblic.html"
+      }
     },
     {
       "id": "bael",
@@ -3569,7 +4392,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Aegle_marmelos"
+        "https://en.wikipedia.org/wiki/Aegle_marmelos",
+        "https://hort.purdue.edu/newcrop/morton/bael_fruit.html"
       ],
       "image": "/burrow-assets/fruits/bael-2a48ae39972f.jpg",
       "imageAlt": "Whole bael and a cut half showing its hard shell and orange pulp",
@@ -3578,7 +4402,17 @@
       "imageCreator": "Asit K. Ghosh Thaumaturgist",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Bael11_Mounts_Asit.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Bael11_Mounts_Asit.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 12.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          5.0,
+          20.0
+        ],
+        "note": "A rounded example, including the woody shell; fruit form and size vary widely.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/bael_fruit.html"
+      }
     },
     {
       "id": "wood-apple",
@@ -3609,7 +4443,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Limonia_acidissima"
+        "https://en.wikipedia.org/wiki/Limonia_acidissima",
+        "https://hort.purdue.edu/newcrop/morton/wood-apple.html"
       ],
       "image": "/burrow-assets/fruits/wood-apple-121db420007c.jpg",
       "imageAlt": "Wood Apple fruit",
@@ -3618,7 +4453,17 @@
       "imageCreator": "Seisfeldt at English Wikipedia",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Wood-apple_dec2007.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8d/Wood-apple_dec2007.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 9.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          5.0,
+          12.5
+        ],
+        "note": "A rounded example, including the woody shell.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/wood-apple.html"
+      }
     },
     {
       "id": "jamun",
@@ -3649,7 +4494,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Syzygium_cumini"
+        "https://en.wikipedia.org/wiki/Syzygium_cumini",
+        "https://hort.purdue.edu/newcrop/morton/jambolan.html"
       ],
       "image": "/burrow-assets/fruits/jamun-842bf174ccc6.jpg",
       "imageAlt": "Jamun fruit",
@@ -3658,7 +4504,17 @@
       "imageCreator": "Rajesh dangi at English Wikipedia",
       "imageLicense": "CC BY 2.5",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.5",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Ripe_jamun_fruits.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Ripe_jamun_fruits.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 3.0,
+        "dimension": "length",
+        "rangeCm": [
+          1.27,
+          5.08
+        ],
+        "note": "The published 0.5–2 inch length is converted to centimetres; the page's 'm' in the metric parenthesis is a unit typo.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/jambolan.html"
+      }
     },
     {
       "id": "rose-apple",
@@ -3689,7 +4545,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Syzygium_jambos"
+        "https://en.wikipedia.org/wiki/Syzygium_jambos",
+        "https://hort.purdue.edu/newcrop/morton/rose_apple.html"
       ],
       "image": "/burrow-assets/fruits/rose-apple-ba2e195b7b80.jpg",
       "imageAlt": "Rose Apple fruit",
@@ -3698,7 +4555,17 @@
       "imageCreator": "Salil Kumar Mukherjee",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/03/Rose-apples%2C_ripe.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/03/Rose-apples%2C_ripe.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.5,
+        "dimension": "length",
+        "rangeCm": [
+          4.0,
+          5.0
+        ],
+        "note": "Body length, excluding the leafy calyx.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/rose_apple.html"
+      }
     },
     {
       "id": "wax-apple",
@@ -3729,7 +4596,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Syzygium_samarangense"
+        "https://en.wikipedia.org/wiki/Syzygium_samarangense",
+        "https://hort.purdue.edu/newcrop/morton/java_apple.html"
       ],
       "image": "/burrow-assets/fruits/wax-apple-a26f6b171027.jpg",
       "imageAlt": "Pink wax apples and a cut half showing pale flesh",
@@ -3738,7 +4606,17 @@
       "imageCreator": "Basile Morin",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/13/Syzygium_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/13/Syzygium_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 5.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          4.5,
+          5.4
+        ],
+        "note": "The source gives width 4.5–5.4 cm and length 3.4–5 cm; the widest axis is used.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/java_apple.html"
+      }
     },
     {
       "id": "ambarella",
@@ -3783,7 +4661,17 @@
       "imageCreator": "Anagoria",
       "imageLicense": "CC BY 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/dc/2014-10-11_Spondias_dulcis_Goldpflaume_anagoria.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/dc/2014-10-11_Spondias_dulcis_Goldpflaume_anagoria.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.5,
+        "dimension": "length",
+        "rangeCm": [
+          6.25,
+          9.0
+        ],
+        "note": "Fruit-body length, excluding the stalk.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/ambarella_ars.html"
+      }
     },
     {
       "id": "jocote",
@@ -3814,7 +4702,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Spondias_purpurea"
+        "https://en.wikipedia.org/wiki/Spondias_purpurea",
+        "https://hort.purdue.edu/newcrop/morton/purple_mombin.html"
       ],
       "image": "/burrow-assets/fruits/jocote-25f4b48a3bc7.jpg",
       "imageAlt": "Jocote fruit",
@@ -3823,7 +4712,17 @@
       "imageCreator": "Elveoflight",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Jocote_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Jocote_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.0,
+        "dimension": "length",
+        "rangeCm": [
+          2.5,
+          5.0
+        ],
+        "note": "Length of a whole purple-mombin fruit.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/purple_mombin.html"
+      }
     },
     {
       "id": "tamarind",
@@ -3854,7 +4753,8 @@
       "difficultyBand": "medium",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Tamarind"
+        "https://en.wikipedia.org/wiki/Tamarind",
+        "https://hort.purdue.edu/newcrop/morton/tamarind.html"
       ],
       "image": "/burrow-assets/fruits/tamarind-71dba4bc5935.jpg",
       "imageAlt": "Tamarind fruit",
@@ -3863,7 +4763,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Tamarind_fruits_%28Tamarindus_indica_%27Si_Thong%27%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Tamarind_fruits_%28Tamarindus_indica_%27Si_Thong%27%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 11.0,
+        "dimension": "length",
+        "rangeCm": [
+          5.08,
+          17.78
+        ],
+        "note": "One complete pod; the published 2–7 inch range is converted using 2.54 cm per inch.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/tamarind.html"
+      }
     },
     {
       "id": "cashew-apple",
@@ -3894,7 +4804,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Cashew"
+        "https://en.wikipedia.org/wiki/Cashew",
+        "https://hort.purdue.edu/newcrop/morton/cashew_apple.html"
       ],
       "image": "/burrow-assets/fruits/cashew-apple-26f06c77f03c.jpg",
       "imageAlt": "Cashew Apple fruit",
@@ -3903,7 +4814,17 @@
       "imageCreator": "Abhishek Jacob",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/64/Cashew_apples.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/64/Cashew_apples.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 8.0,
+        "dimension": "length",
+        "rangeCm": [
+          5.0,
+          11.25
+        ],
+        "note": "The fleshy cashew apple only, excluding the attached nut and its shell.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/cashew_apple.html"
+      }
     },
     {
       "id": "surinam-cherry",
@@ -3934,7 +4855,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Eugenia_uniflora"
+        "https://en.wikipedia.org/wiki/Eugenia_uniflora",
+        "https://hort.purdue.edu/newcrop/morton/surinam_cherry.html"
       ],
       "image": "/burrow-assets/fruits/surinam-cherry-9779a685080a.jpg",
       "imageAlt": "Surinam Cherry fruit",
@@ -3943,7 +4865,17 @@
       "imageCreator": "Bageense",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/68/Pitanga_%28do_tupi_%27ybapytanga%29_no_pampa_ga%C3%BAcho_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/68/Pitanga_%28do_tupi_%27ybapytanga%29_no_pampa_ga%C3%BAcho_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 3.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          2.0,
+          4.0
+        ],
+        "note": "Across one flattened, ribbed fruit.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/surinam_cherry.html"
+      }
     },
     {
       "id": "grumichama",
@@ -3974,7 +4906,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Grumichama"
+        "https://en.wikipedia.org/wiki/Grumichama",
+        "https://hort.purdue.edu/newcrop/morton/grumichama.html"
       ],
       "image": "/burrow-assets/fruits/grumichama-c452cedc7757.jpg",
       "imageAlt": "Grumichama fruit",
@@ -3983,7 +4916,17 @@
       "imageCreator": "No machine-readable author provided. B.navez assumed (based on copyright claims).",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Eugenia_brasiliensis.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Eugenia_brasiliensis.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 1.6,
+        "dimension": "diameter",
+        "rangeCm": [
+          1.25,
+          2.0
+        ],
+        "note": "Across the flattened fruit body; the stalk and sepals are excluded.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/grumichama.html"
+      }
     },
     {
       "id": "acerola",
@@ -4014,7 +4957,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Malpighia_emarginata"
+        "https://en.wikipedia.org/wiki/Malpighia_emarginata",
+        "https://hort.purdue.edu/newcrop/morton/barbados_cherry.html"
       ],
       "image": "/burrow-assets/fruits/acerola-f1c089fbf679.jpg",
       "imageAlt": "Two bright red acerola fruits growing among green leaves",
@@ -4023,7 +4967,17 @@
       "imageCreator": "Wilfredor",
       "imageLicense": "CC0",
       "imageLicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/10/Malpighia_emarginata_in_Margarita_Island.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/10/Malpighia_emarginata_in_Margarita_Island.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          1.25,
+          2.5
+        ],
+        "note": "Across one whole lobed fruit, excluding the stalk.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/barbados_cherry.html"
+      }
     },
     {
       "id": "miracle-fruit",
@@ -4063,7 +5017,13 @@
       "imageCreator": "Hamale Lyman",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f0/MiracleBerry.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f0/MiracleBerry.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.0,
+        "dimension": "length",
+        "note": "The reference describes red fruits 2 cm long.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Synsepalum_dulcificum"
+      }
     },
     {
       "id": "prickly-pear",
@@ -4094,7 +5054,8 @@
       "difficultyBand": "medium",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Opuntia_ficus-indica"
+        "https://en.wikipedia.org/wiki/Opuntia_ficus-indica",
+        "https://powo.science.kew.org/taxon/urn%3Alsid%3Aipni.org%3Anames%3A1151735-2/general-information"
       ],
       "image": "/burrow-assets/fruits/prickly-pear-147e22e0d7e8.jpg",
       "imageAlt": "Prickly Pear fruit",
@@ -4103,7 +5064,17 @@
       "imageCreator": "No machine-readable author provided. Hippocampus~commonswiki assumed (based on copyright claims).",
       "imageLicense": "CC BY 2.5",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.5",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Opuntia_ficus-indica_fruit9.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Opuntia_ficus-indica_fruit9.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.0,
+        "dimension": "length",
+        "rangeCm": [
+          5.0,
+          9.0
+        ],
+        "note": "Kew's description gives length 5–9 cm and diameter 3–6 cm; projecting spines are excluded.",
+        "sourceUrl": "https://powo.science.kew.org/taxon/urn%3Alsid%3Aipni.org%3Anames%3A1151735-2/general-information"
+      }
     },
     {
       "id": "pepino",
@@ -4134,7 +5105,8 @@
       "difficultyBand": "hard",
       "weight": null,
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Solanum_muricatum"
+        "https://en.wikipedia.org/wiki/Solanum_muricatum",
+        "https://hortflora.rbg.vic.gov.au/taxon/ad9e2080-5340-11e7-b82b-005056b0018f"
       ],
       "image": "/burrow-assets/fruits/pepino-750e3c9d82e0.jpg",
       "imageAlt": "Whole pale pepino with purple stripes",
@@ -4143,7 +5115,13 @@
       "imageCreator": "Berthold Werner",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Solanum_muricatum_2012-08-07_16-07-45.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Solanum_muricatum_2012-08-07_16-07-45.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 8.0,
+        "dimension": "length",
+        "note": "Royal Botanic Gardens Victoria describes fruit reaching 10 cm long; 8 cm is an illustrative body-length example.",
+        "sourceUrl": "https://hortflora.rbg.vic.gov.au/taxon/ad9e2080-5340-11e7-b82b-005056b0018f"
+      }
     },
     {
       "id": "breadfruit",
@@ -4178,7 +5156,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Breadfruit"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Breadfruit"
+        "https://en.wikipedia.org/wiki/Breadfruit",
+        "https://hort.purdue.edu/newcrop/morton/breadfruit.html"
       ],
       "image": "/burrow-assets/fruits/breadfruit-41756b7abf96.jpg",
       "imageAlt": "Large green breadfruit showing its patterned skin on the tree",
@@ -4187,7 +5166,17 @@
       "imageCreator": "Forest & Kim Starr",
       "imageLicense": "CC BY 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/58/Starr_040318-0066_Artocarpus_altilis.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/58/Starr_040318-0066_Artocarpus_altilis.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 20.0,
+        "dimension": "length",
+        "rangeCm": [
+          9.0,
+          45.0
+        ],
+        "note": "The reference covers many shapes and cultivars; this is a 20 cm example, not an average.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/breadfruit.html"
+      }
     },
     {
       "id": "grapefruit",
@@ -4223,7 +5212,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Grapefruit",
-        "https://calag.ucanr.edu/download_pdf.cfm?article=ca.v040n01p28"
+        "https://calag.ucanr.edu/download_pdf.cfm?article=ca.v040n01p28",
+        "https://hort.purdue.edu/newcrop/morton/grapefruit.html"
       ],
       "image": "/burrow-assets/fruits/grapefruit-e8409486da21.jpg",
       "imageAlt": "Grapefruit fruit",
@@ -4232,7 +5222,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Grapefruits_-_whole-halved-segments.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Grapefruits_-_whole-halved-segments.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 12.5,
+        "dimension": "diameter",
+        "rangeCm": [
+          10.0,
+          15.0
+        ],
+        "note": "Diameter of a whole rounded grapefruit with its rind.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/grapefruit.html"
+      }
     },
     {
       "id": "pomelo",
@@ -4267,7 +5267,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Pomelo"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Pomelo"
+        "https://en.wikipedia.org/wiki/Pomelo",
+        "https://hort.purdue.edu/newcrop/morton/pummelo.html"
       ],
       "image": "/burrow-assets/fruits/pomelo-bac6186a993b.jpg",
       "imageAlt": "Pomelo fruit",
@@ -4276,7 +5277,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Pomelo_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Pomelo_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 20.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          10.0,
+          30.0
+        ],
+        "note": "A rounded pomelo example, including the thick rind.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/pummelo.html"
+      }
     },
     {
       "id": "mandarin",
@@ -4312,7 +5323,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Mandarin_orange",
-        "https://citrusvariety.ucr.edu/sites/default/files/2021-06/usfurrusfurrstinjamerpomsoc2014.pdf"
+        "https://citrusvariety.ucr.edu/sites/default/files/2021-06/usfurrusfurrstinjamerpomsoc2014.pdf",
+        "https://hort.purdue.edu/newcrop/morton/mandarin_orange.html"
       ],
       "image": "/burrow-assets/fruits/mandarin-5c7f2cd92eec.jpg",
       "imageAlt": "Mandarin fruit",
@@ -4321,7 +5333,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Mandarins_-_whole_and_halved.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Mandarins_-_whole_and_halved.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.0,
+        "dimension": "diameter",
+        "note": "Morton's Willow-leaf mandarin is 5–6.25 cm wide and 4.5–5.7 cm tall; the wider axis is used.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/mandarin_orange.html",
+        "rangeCm": [
+          5,
+          6.25
+        ]
+      }
     },
     {
       "id": "clementine",
@@ -4357,7 +5379,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Clementine",
-        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+        "https://hort.purdue.edu/newcrop/morton/mandarin_orange.html"
       ],
       "image": "/burrow-assets/fruits/clementine-75f1c468f02e.jpg",
       "imageAlt": "Clementine fruit",
@@ -4366,7 +5389,17 @@
       "imageCreator": "carol",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Clementines_whole%2C_peeled%2C_half_and_sectioned.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Clementines_whole%2C_peeled%2C_half_and_sectioned.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.0,
+        "dimension": "length",
+        "rangeCm": [
+          5.0,
+          7.0
+        ],
+        "note": "Morton's Clementine cultivar description gives height 5–7 cm and width 5–6.1 cm; the longer axis is used.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/mandarin_orange.html"
+      }
     },
     {
       "id": "tangerine",
@@ -4402,7 +5435,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Tangerine",
-        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+        "https://hort.purdue.edu/newcrop/morton/mandarin_orange.html"
       ],
       "image": "/burrow-assets/fruits/tangerine-c4f9b6c10cc3.jpg",
       "imageAlt": "Peeled tangerine halves showing their orange segments",
@@ -4411,7 +5445,17 @@
       "imageCreator": "多多123",
       "imageLicense": "CC BY 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/30/Tangerine_halves.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/30/Tangerine_halves.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.5,
+        "dimension": "diameter",
+        "rangeCm": [
+          5.7,
+          7.5
+        ],
+        "note": "Morton's Dancy tangerine example has width 5.7–7.5 cm and height 4–5.4 cm; the wider dimension is used.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/mandarin_orange.html"
+      }
     },
     {
       "id": "satsuma",
@@ -4447,7 +5491,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Citrus_unshiu",
-        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf"
+        "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/167943/Nutrient_analysis_of_fruit_and_vegetables_-_Sampling_Report.pdf",
+        "https://hort.purdue.edu/newcrop/morton/mandarin_orange.html"
       ],
       "image": "/burrow-assets/fruits/satsuma-9b6e0fc9c24a.jpg",
       "imageAlt": "Satsuma fruit",
@@ -4456,7 +5501,17 @@
       "imageCreator": "Daderot",
       "imageLicense": "Public domain (CC0)",
       "imageLicenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Satsuma_mandarins_-_San_Francisco%2C_CA_-_DSC02398.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Satsuma_mandarins_-_San_Francisco%2C_CA_-_DSC02398.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 5.5,
+        "dimension": "diameter",
+        "rangeCm": [
+          3.81,
+          6.985
+        ],
+        "note": "Morton's Owari satsuma is 1.5–2.75 inches wide and 1.5–2.5 inches tall. The wider axis is used; the inconsistent metric width conversion is replaced using 2.54 cm per inch.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/mandarin_orange.html"
+      }
     },
     {
       "id": "blood-orange",
@@ -4492,7 +5547,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Blood_orange",
-        "https://scijournals.onlinelibrary.wiley.com/doi/10.1002/jsfa.11636"
+        "https://scijournals.onlinelibrary.wiley.com/doi/10.1002/jsfa.11636",
+        "https://hort.purdue.edu/newcrop/morton/orange.html"
       ],
       "image": "/burrow-assets/fruits/blood-orange-4a7f482fcb56.jpg",
       "imageAlt": "Blood Orange fruit",
@@ -4501,7 +5557,17 @@
       "imageCreator": "Silentcynic",
       "imageLicense": "CC BY 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5d/BloodOrange.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5d/BloodOrange.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 8.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          6.5,
+          9.5
+        ],
+        "note": "Uses the sweet-orange species diameter range; this is an illustrative blood-orange example, not a blood-cultivar measurement.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/orange.html"
+      }
     },
     {
       "id": "kumquat",
@@ -4536,7 +5602,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Kumquat"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Kumquat"
+        "https://en.wikipedia.org/wiki/Kumquat",
+        "https://hort.purdue.edu/newcrop/morton/kumquat.html"
       ],
       "image": "/burrow-assets/fruits/kumquat-2cf38782d51c.jpg",
       "imageAlt": "Kumquat fruit",
@@ -4545,7 +5612,13 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/72/Kumquat_from_Spain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/72/Kumquat_from_Spain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.0,
+        "dimension": "diameter",
+        "note": "Morton's rounded Meiwa example is about 4 cm across; other kumquat types can be more elongated.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/kumquat.html"
+      }
     },
     {
       "id": "nectarine",
@@ -4581,7 +5654,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Nectarine",
-        "https://pmc.ncbi.nlm.nih.gov/articles/PMC8228427/"
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC8228427/",
+        "https://en.wikipedia.org/wiki/Peach"
       ],
       "image": "/burrow-assets/fruits/nectarine-cdd567876f08.jpg",
       "imageAlt": "Nectarine fruit",
@@ -4590,7 +5664,17 @@
       "imageCreator": "Rhododendrites",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Nectarine_on_white.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Nectarine_on_white.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          5.0,
+          7.0
+        ],
+        "note": "Uses the peach species' usual cultivated diameter range; nectarines are smooth-skinned peach varieties, not a separate size class.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Peach"
+      }
     },
     {
       "id": "cantaloupe",
@@ -4625,7 +5709,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Cantaloupe"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Cantaloupe"
+        "https://en.wikipedia.org/wiki/Cantaloupe",
+        "https://yardandgarden.extension.iastate.edu/how-to/vegetable-harvest-guide"
       ],
       "image": "/burrow-assets/fruits/cantaloupe-1cecfb14b5b2.jpg",
       "imageAlt": "Cantaloupe fruit",
@@ -4634,7 +5719,17 @@
       "imageCreator": "USDA photo by Scott Bauer. Image Number K7355-11.",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Cucumis_melo_var._reticulatus_%28photo_by_Scott_Bauer%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Cucumis_melo_var._reticulatus_%28photo_by_Scott_Bauer%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 18.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          12.7,
+          25.4
+        ],
+        "note": "Iowa State's harvest guide lists muskmelon/cantaloupe at 5–10 inches diameter; converted to centimetres for a rounded example.",
+        "sourceUrl": "https://yardandgarden.extension.iastate.edu/how-to/vegetable-harvest-guide"
+      }
     },
     {
       "id": "honeydew",
@@ -4678,7 +5773,17 @@
       "imageCreator": "Yotoen",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Honeydew.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Honeydew.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 18.0,
+        "dimension": "length",
+        "rangeCm": [
+          15.0,
+          22.0
+        ],
+        "note": "The longest body dimension of a round to slightly oval honeydew.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Honeydew_(melon)"
+      }
     },
     {
       "id": "date",
@@ -4714,7 +5819,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Date_palm",
-        "https://journals.ekb.eg/article_451784_1ff7173b95475c111391bea217195f2e.pdf"
+        "https://journals.ekb.eg/article_451784_1ff7173b95475c111391bea217195f2e.pdf",
+        "https://hort.purdue.edu/newcrop/morton/Date.html"
       ],
       "image": "/burrow-assets/fruits/date-210407924515.jpg",
       "imageAlt": "Date fruit",
@@ -4723,7 +5829,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/38/Mazafati_dates_-_whole%2C_halved_and_seed.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/38/Mazafati_dates_-_whole%2C_halved_and_seed.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 4.0,
+        "dimension": "length",
+        "rangeCm": [
+          2.5,
+          7.5
+        ],
+        "note": "One date fruit with its skin and stone, excluding the stalk.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/Date.html"
+      }
     },
     {
       "id": "cranberry",
@@ -4759,7 +5875,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Cranberry",
-        "https://research.rutgers.edu/agricultural-products/cranberries/welker"
+        "https://research.rutgers.edu/agricultural-products/cranberries/welker",
+        "https://plants.ces.ncsu.edu/plants/vaccinium-macrocarpon/"
       ],
       "image": "/burrow-assets/fruits/cranberry-3efd957f2ee9.jpg",
       "imageAlt": "Cranberry fruit",
@@ -4768,7 +5885,13 @@
       "imageCreator": "Cjboffoli",
       "imageLicense": "CC BY 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/45/Cranberries20101210.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/45/Cranberries20101210.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 1.3,
+        "dimension": "diameter",
+        "note": "NC State describes a half-inch round fruit; 1.27 cm is rounded to 1.3 cm. This is one berry, not a cluster.",
+        "sourceUrl": "https://plants.ces.ncsu.edu/plants/vaccinium-macrocarpon/"
+      }
     },
     {
       "id": "gooseberry",
@@ -4804,7 +5927,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Gooseberry",
-        "https://journal.subtropras.ru/en/archive/68/8/"
+        "https://journal.subtropras.ru/en/archive/68/8/",
+        "https://www.nzpcn.org.nz/flora/species/ribes-uva-crispa/"
       ],
       "image": "/burrow-assets/fruits/gooseberry-7d94e16fd6a5.jpg",
       "imageAlt": "Gooseberry fruit",
@@ -4813,7 +5937,13 @@
       "imageCreator": "Kornelia und Hartmut Häfele",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Stachelbeeren.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Stachelbeeren.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.0,
+        "dimension": "diameter",
+        "note": "The New Zealand Plant Conservation Network describes berries reaching about 25 mm across; this is an illustrative 2 cm example.",
+        "sourceUrl": "https://www.nzpcn.org.nz/flora/species/ribes-uva-crispa/"
+      }
     },
     {
       "id": "blackcurrant",
@@ -4849,7 +5979,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Blackcurrant",
-        "https://agresearch.montana.edu/warc/research_current/berries/currants/variety-trials.html"
+        "https://agresearch.montana.edu/warc/research_current/berries/currants/variety-trials.html",
+        "https://www.efloras.org/florataxon.aspx?flora_id=2&taxon_id=241000646"
       ],
       "image": "/burrow-assets/fruits/blackcurrant-7b3bd1e41bd2.jpg",
       "imageAlt": "Close-up of glossy blackcurrants in a cluster",
@@ -4858,7 +5989,17 @@
       "imageCreator": "Paolo Neo",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Black_currant.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Black_currant.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 1.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          0.8,
+          1.4
+        ],
+        "note": "Flora of China gives 0.8–1 cm, occasionally 1.4 cm, for the rounded fruit; one berry is compared.",
+        "sourceUrl": "https://www.efloras.org/florataxon.aspx?flora_id=2&taxon_id=241000646"
+      }
     },
     {
       "id": "redcurrant",
@@ -4903,7 +6044,17 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Redcurrant_%28Ribes_rubrum%29_fruits.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Redcurrant_%28Ribes_rubrum%29_fruits.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 1.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          0.8,
+          1.2
+        ],
+        "note": "One berry, using the published 8–12 mm range; not an entire strig.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Redcurrant"
+      }
     },
     {
       "id": "mulberry",
@@ -4948,7 +6099,13 @@
       "imageCreator": "Miloslav Bahna",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Ripe_fruit_of_morus_nigra.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Ripe_fruit_of_morus_nigra.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.5,
+        "dimension": "diameter",
+        "note": "The black-mulberry reference describes compound fruits about 2.5 cm across; other mulberry species differ.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Morus_nigra"
+      }
     },
     {
       "id": "avocado",
@@ -4983,7 +6140,8 @@
         "sourceUrl": "https://en.wikipedia.org/wiki/Avocado"
       },
       "sourceUrls": [
-        "https://en.wikipedia.org/wiki/Avocado"
+        "https://en.wikipedia.org/wiki/Avocado",
+        "https://hort.purdue.edu/newcrop/morton/avocado_ars.html"
       ],
       "image": "/burrow-assets/fruits/avocado-53d21bacaca1.jpg",
       "imageAlt": "Whole and halved avocado showing green flesh and a large brown seed",
@@ -4992,7 +6150,17 @@
       "imageCreator": "Edrean",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Branch_and_fruit_of_the_Maluma_avocado_cultivar.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Branch_and_fruit_of_the_Maluma_avocado_cultivar.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 12.0,
+        "dimension": "length",
+        "rangeCm": [
+          7.5,
+          33.0
+        ],
+        "note": "The species has a very broad cultivar range; 12 cm is an illustrative example, not a species mean.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/avocado_ars.html"
+      }
     },
     {
       "id": "olive",
@@ -5037,7 +6205,17 @@
       "imageCreator": "INRA DIST from France",
       "imageLicense": "CC BY 2.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Olives_%28DAHBIA%29_CL3._J_Weber_%2822852496640%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Olives_%28DAHBIA%29_CL3._J_Weber_%2822852496640%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.0,
+        "dimension": "length",
+        "rangeCm": [
+          1.0,
+          2.5
+        ],
+        "note": "Whole ripe-fruit length, including the stone; cultivars can differ.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Olive"
+      }
     },
     {
       "id": "plantain",
@@ -5073,7 +6251,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Cooking_banana",
-        "https://www.celkau.in/Crops/fruits/banana/varieties.php"
+        "https://www.celkau.in/Crops/fruits/banana/varieties.php",
+        "https://www.scielo.br/j/pab/a/jHQ7KkPmXKS3GW9bjCWmbTx/?format=pdf&lang=en"
       ],
       "image": "/burrow-assets/fruits/plantain-6a65972b4eaa.jpg",
       "imageAlt": "Plantain fruit",
@@ -5082,7 +6261,13 @@
       "imageCreator": "Evan-Amos",
       "imageLicense": "Public domain",
       "imageLicenseUrl": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/19/Plantain-Yellow.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/19/Plantain-Yellow.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 25.0,
+        "dimension": "length",
+        "note": "A Brazilian field study reports an average fruit length of 25 cm for its French plantain group; this is a study-specific example, including peel.",
+        "sourceUrl": "https://www.scielo.br/j/pab/a/jHQ7KkPmXKS3GW9bjCWmbTx/?format=pdf&lang=en"
+      }
     },
     {
       "id": "asian-pear",
@@ -5118,7 +6303,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Pyrus_pyrifolia",
-        "https://journals.ashs.org/downloadpdf/view/journals/jashs/119/3/article-p383.pdf"
+        "https://journals.ashs.org/downloadpdf/view/journals/jashs/119/3/article-p383.pdf",
+        "https://plants.ces.ncsu.edu/plants/pyrus-pyrifolia/"
       ],
       "image": "/burrow-assets/fruits/asian-pear-6a20ae66a06e.jpg",
       "imageAlt": "Asian Pear fruit",
@@ -5127,7 +6313,17 @@
       "imageCreator": "Fir0002",
       "imageLicense": "CC BY-SA 3.0",
       "imageLicenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/55/Nashi_pear.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/55/Nashi_pear.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 9.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          7.62,
+          10.16
+        ],
+        "note": "NC State describes 3–4 inch fruit; this is a rounded Asian-pear example with the stalk excluded.",
+        "sourceUrl": "https://plants.ces.ncsu.edu/plants/pyrus-pyrifolia/"
+      }
     },
     {
       "id": "sour-cherry",
@@ -5163,7 +6359,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Prunus_cerasus",
-        "https://www.nationalfruitcollection.org.uk/full2.php?fruit=cherry&id=7824"
+        "https://www.nationalfruitcollection.org.uk/full2.php?fruit=cherry&id=7824",
+        "https://plants.ces.ncsu.edu/plants/prunus-cerasus/"
       ],
       "image": "/burrow-assets/fruits/sour-cherry-6154b2f095d6.jpg",
       "imageAlt": "Red Morello sour cherries on stems with water droplets on their skins",
@@ -5172,7 +6369,13 @@
       "imageCreator": "Rod Waddington from Kergunyah, Australia",
       "imageLicense": "CC BY-SA 2.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Morello_Cherries_%2811530343543%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Morello_Cherries_%2811530343543%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 2.0,
+        "dimension": "diameter",
+        "note": "NC State describes round fruits with length and width below one inch (2.54 cm); 2 cm is an illustrative example, excluding the stalk.",
+        "sourceUrl": "https://plants.ces.ncsu.edu/plants/prunus-cerasus/"
+      }
     },
     {
       "id": "greengage",
@@ -5217,7 +6420,17 @@
       "imageCreator": "Filo gèn'",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/Prunus_on_white_background.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/Prunus_on_white_background.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 3.0,
+        "dimension": "diameter",
+        "rangeCm": [
+          2.0,
+          4.0
+        ],
+        "note": "Diameter of one round-oval greengage, excluding its stalk.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Greengage"
+      }
     },
     {
       "id": "persian-lime",
@@ -5253,7 +6466,8 @@
       },
       "sourceUrls": [
         "https://en.wikipedia.org/wiki/Persian_lime",
-        "https://ask.ifas.ufl.edu/publication/CH093"
+        "https://ask.ifas.ufl.edu/publication/CH093",
+        "https://hort.purdue.edu/newcrop/morton/tahiti_lime.html"
       ],
       "image": "/burrow-assets/fruits/persian-lime-6be2603f7701.jpg",
       "imageAlt": "Persian Lime fruit",
@@ -5262,7 +6476,17 @@
       "imageCreator": "Forest and Kim Starr",
       "imageLicense": "CC BY 3.0 us",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0/us/deed.en",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Starr-140117-3997-Citrus_latifolia-Tahitian_fruit_and_leaves-Hawea_Pl_Olinda-Maui_%2824612312943%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Starr-140117-3997-Citrus_latifolia-Tahitian_fruit_and_leaves-Hawea_Pl_Olinda-Maui_%2824612312943%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 6.0,
+        "dimension": "length",
+        "rangeCm": [
+          5.0,
+          7.5
+        ],
+        "note": "The source gives height 5–7.5 cm and width 4–6.25 cm; the example follows the longer axis.",
+        "sourceUrl": "https://hort.purdue.edu/newcrop/morton/tahiti_lime.html"
+      }
     },
     {
       "id": "golden-kiwifruit",
@@ -5307,7 +6531,14 @@
       "imageCreator": "Ivar Leidus",
       "imageLicense": "CC BY-SA 4.0",
       "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Kiwifruit_%27Gold%27_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Kiwifruit_%27Gold%27_cross_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "size": {
+        "centimeters": 7.9,
+        "dimension": "length",
+        "note": "The Hort16A patent gives fruit length 79.1 mm; rounded to 7.9 cm. This named cultivar example is not an average for all yellow-fleshed kiwifruit.",
+        "sourceUrl": "https://patents.google.com/patent/USPP11066P/en"
+      }
     }
-  ]
+  ],
+  "sizeReviewedOn": "2026-09-23"
 }
