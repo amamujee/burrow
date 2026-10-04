@@ -12,23 +12,11 @@ import { packToPlayableDeck } from "../../src/lib/pack-adapter";
 import { loadPlayablePacks } from "../../src/lib/pack-loader";
 import { discoveryShuffle } from "../../src/lib/random";
 
-test("Geo keeps the existing seeded world questions and choice order", { tag: "@logic" }, () => {
+test("Easy Geo keeps the existing seeded world questions and choice order", { tag: "@logic" }, () => {
   const fixtures = [
     {
       topic: "peppers", difficulty: 1, seed: 71, cardId: "sugar-rush-cream",
       choices: ["Wales, United Kingdom", "Japan", "Anaheim, United States", "Limpopo, South Africa"],
-    },
-    {
-      topic: "peppers", difficulty: 3, seed: 71, cardId: "moruga-red",
-      choices: ["Trinidad and Tobago", "Sindh, Pakistan", "Limpopo, South Africa", "North Queensland, Australia"],
-    },
-    {
-      topic: "countries", difficulty: 3, seed: 907, cardId: "country-mali",
-      choices: ["Mali", "Japan", "New Zealand", "Samoa"],
-    },
-    {
-      topic: "buildings", difficulty: 3, seed: 201, cardId: "30-hudson-yards",
-      choices: ["Mecca, Saudi Arabia", "Saint Petersburg, Russia", "New York City, United States", "Seoul, South Korea"],
     },
   ] as const;
 

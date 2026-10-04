@@ -3189,7 +3189,7 @@ function QuestionRun({
         </div>
 
         <GameChoiceGrid>
-          {choices.map((choice) => {
+          {choices.map((choice, index) => {
             const chosen = selected === choice || firstWrongChoice === choice;
             const correctChoice = answered && choice === question.answer;
             const heatChoice =
@@ -3206,7 +3206,7 @@ function QuestionRun({
               >
                 <span className="flex items-center justify-between gap-3">
                   <span className="flex min-w-0 items-center gap-2">
-                    <span>{choice}</span>
+                    <span>{question.kind === "country-location" && !answered ? `Pin ${String.fromCharCode(65 + index)}` : choice}</span>
                     {heatChoice && <HeatChoiceEmoji heat={heatChoice} />}
                   </span>
                   {correctChoice && <span className="shrink-0 text-2xl leading-none">+</span>}
@@ -3275,7 +3275,7 @@ function QuestionLocationStage({
                 : "quiet" as const
             : "default" as const,
         }))}
-        footer={answered ? `Answer: ${question.answer}` : "Tap a lettered pin, then match it to the place list."}
+        footer={answered ? `Answer: ${question.answer}` : question.kind === "country-location" ? "Find the country, then choose its lettered pin." : "Tap a lettered pin, then match it to the place list."}
         onSelect={onAnswer}
         disabled={answered}
       />
@@ -3828,7 +3828,7 @@ function GeoMode({
                 <span className="grid grid-cols-[2rem_1fr] items-center gap-2">
                   <span className="grid h-8 w-8 place-items-center rounded-md border-2 border-[#092421] bg-[#f0c84b] text-sm font-black text-[#102f36]">{letter}</span>
                   <span className="min-w-0">
-                    <span className={`block text-base font-black leading-tight text-[#102f36] ${answered ? "min-[760px]:text-sm" : ""}`}>{choice.label}</span>
+                    <span className={`block text-base font-black leading-tight text-[#102f36] ${answered ? "min-[760px]:text-sm" : ""}`}>{round.topic === "countries" && !answered ? `Pin ${letter}` : choice.label}</span>
                     <span className={`block text-[10px] font-black uppercase tracking-[0.1em] text-[#72543e] ${answered ? "min-[760px]:text-[9px] min-[760px]:leading-tight" : ""}`}>{choice.mapNote}</span>
                   </span>
                 </span>
@@ -3871,9 +3871,9 @@ function GeoLocatorStage({
   onAnswer: (choiceId: string) => void;
 }) {
   return (
-    <article data-geo-stage className="grid min-h-[540px] gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0 min-[760px]:grid-rows-[minmax(150px,.42fr)_minmax(0,.58fr)]">
-      <div className="relative min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec] min-[760px]:min-h-[150px]">
-        <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.card.topic} />
+    <article data-geo-stage className="grid min-h-[540px] gap-2 rounded-lg border-2 border-[#092421] bg-[#102f36] p-2 shadow-[4px_4px_0_#092421] min-[760px]:min-h-0 min-[760px]:grid-rows-[minmax(150px,1fr)_minmax(0,3fr)]">
+      <div className="relative flex min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec] min-[760px]:min-h-[150px]">
+        <MediaImage image={round.card.image} imageAlt={round.card.imageAlt} topic={round.card.topic} compact />
         <div className="absolute left-2 top-2 whitespace-nowrap rounded-lg border-2 border-[#092421] bg-[#f0c84b] px-2 py-1 text-[9px] font-black uppercase tracking-[0.14em] text-[#102f36] shadow-[2px_2px_0_#092421] min-[760px]:px-3 min-[760px]:py-1.5 min-[760px]:text-[11px]">
           Find this place
         </div>
@@ -3916,7 +3916,7 @@ function GeoMap({
               : "quiet" as const
           : "default" as const,
       }))}
-      footer={answered ? `Answer: ${round.answerLabel}` : "Tap a lettered pin, then match it to the place list."}
+      footer={answered ? `Answer: ${round.answerLabel}` : round.topic === "countries" ? "Find the country, then choose its lettered pin." : "Tap a lettered pin, then match it to the place list."}
       onSelect={onAnswer}
       disabled={answered}
       className="min-h-[320px] min-[760px]:min-h-0"

@@ -1,5 +1,7 @@
 "use client";
 
+import { ContinentMapSurface } from "./continent-map-surface";
+import { continentRegions, isContinentRegion, type MapRegion } from "@/lib/continent-map";
 import { useState } from "react";
 import type { WorldLocation } from "@/lib/card-metadata";
 import { isUsMapLocation, mapRegionForLocations, usMapPoint } from "@/lib/us-map";
@@ -27,22 +29,22 @@ export function WorldMapSurface({
   onSelect: (id: string) => void;
   disabled?: boolean;
   className?: string;
-  region?: "world" | "us";
+  region?: MapRegion;
 }) {
   const mapKey = `${region}:${markers.map((marker) => marker.id).join("|")}`;
-  const [view, setView] = useState<{ key: string; region: "world" | "us" } | null>(null);
+  const [view, setView] = useState<{ key: string; region: MapRegion } | null>(null);
   const usMarkers = markers.filter((marker) => isUsMapLocation(marker.location));
-  const activeRegion = usMarkers.length ? (view?.key === mapKey ? view.region : region) : "world";
-  const switcher = usMarkers.length > 0 && (
-    <div className="absolute right-2 top-2 z-20 flex rounded-lg border-2 border-[#092421] bg-white p-0.5 text-[10px] font-black shadow-[2px_2px_0_#092421]">
-      {(["world", "us"] as const).map((option) => (
-        <button key={option} type="button" aria-label={option === "us" ? "Show US view" : "Show world view"} aria-pressed={activeRegion === option}
-          onClick={() => setView({ key: mapKey, region: option })}
-          className={`min-h-8 rounded-md px-2 text-[#102f36] ${activeRegion === option ? "bg-[#f0c84b]" : "hover:bg-[#fff1bf]"}`}>
-          {option === "us" ? "United States" : "World"}
-        </button>
-      ))}
-    </div>
+  const activeRegion = view?.key === mapKey ? view.region : region;
+  const switcher = (
+    <select aria-label="Map view" value={activeRegion} onChange={(event) => setView({ key: mapKey, region: event.target.value as MapRegion })}
+      className="absolute right-2 top-2 z-20 min-h-9 max-w-36 rounded-lg border-2 border-[#092421] bg-white px-2 text-[11px] font-black text-[#102f36] shadow-[2px_2px_0_#092421]">
+      <option value="world">World</option>
+      {usMarkers.length > 0 && <option value="us">United States</option>}
+      {continentRegions.map((continent) => <option key={continent} value={continent}>{continent}</option>)}
+    </select>
+  );
+  if (isContinentRegion(activeRegion)) return (
+    <ContinentMapSurface key={`${mapKey}:${activeRegion}`} region={activeRegion} markers={markers} footer={footer} onSelect={onSelect} disabled={disabled} className={className} switcher={switcher} />
   );
 
   if (activeRegion === "us") return (
@@ -54,7 +56,7 @@ export function WorldMapSurface({
     { label: "Europe", left: "52%", top: "22%" },
     { label: "Africa", left: "54%", top: "49%" },
     { label: "Asia", left: "72%", top: "27%" },
-    { label: "Australia", left: "85%", top: "66%" },
+    { label: "Oceania", left: "85%", top: "66%" },
     { label: "Antarctica", left: "50%", top: "88%" },
   ];
 

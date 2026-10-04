@@ -23,6 +23,8 @@ import {
 } from "./game-data";
 import { scoreFeaturedContent } from "./content-quality";
 import { cardRarityLabels, cardRarityTier, worldLocationDisplay, type CardMetadata, type CardRarity, type WorldContinent, type WorldLocation } from "./card-metadata";
+import continentCountryAnchors from "./continent-country-anchors.json";
+import { continentForLocations, continentMapDistance, isContinentRegion, type MapRegion } from "./continent-map";
 import { isUsDetailLocation, usMapDistance } from "./us-map";
 import { cardDiscoveryIdentities } from "./card-discovery";
 import { questionDepthForSelection } from "./difficulty";
@@ -156,7 +158,7 @@ export type GeoChoice = {
 };
 
 export type GeoRound = {
-  mapRegion?: "world" | "us";
+  mapRegion?: MapRegion;
   id: string;
   topic: RoundTopic;
   prompt: string;
@@ -1878,8 +1880,10 @@ const geoChoiceCountForDifficulty = (difficulty: Difficulty) => {
   void difficulty;
   return 4;
 };
-export const geoChoiceSeparationForDifficulty = (difficulty: Difficulty, region: "world" | "us" = "world") => region === "us"
+export const geoChoiceSeparationForDifficulty = (difficulty: Difficulty, region: MapRegion = "world") => region === "us"
   ? { kilometers: 300, mapPercent: 16 }
+  : isContinentRegion(region)
+    ? { kilometers: difficulty === 3 ? 100 : 200, mapPercent: difficulty === 3 ? 8 : 12 }
   : difficulty === 1
   ? { kilometers: 2000, mapPercent: 14.5 }
   : difficulty === 2
@@ -2107,7 +2111,8 @@ export const geoChoiceForLocation = (location: WorldLocation): GeoChoice => {
     label: location.label,
     // Country/continent fallbacks are useful on the world map, but must not
     // masquerade as a precise city or landmark on the detailed US map.
-    location: { ...location, coordinates: location.coordinates ?? locationCoordinateOverrides[location.label] },
+    location: { ...location, coordinates: location.coordinates ?? locationCoordinateOverrides[location.label]
+      ?? (location.countries.length === 1 && location.label === location.countries[0] ? countryCoordinates[location.label] : undefined) },
     point,
     mapNote: location.states?.length ? location.states.join(" / ") : worldContinentLabel(location.continents),
   };
@@ -2128,7 +2133,7 @@ const diverseGeoChoices = (
   count: number,
   difficulty: Difficulty,
   seed: number,
-  region: "world" | "us" = "world",
+  region: MapRegion = "world",
 ) => {
   const minimum = geoChoiceSeparationForDifficulty(difficulty, region);
   const selected = [answer];
@@ -2139,7 +2144,7 @@ const diverseGeoChoices = (
       .map((choice, index) => {
         const separations = selected.map((selectedChoice) => ({
           kilometers: geoPointDistanceKm(choice.point, selectedChoice.point),
-          mapPercent: region === "us" ? usMapDistance(choice.location, selectedChoice.location) : geoPointMapDistance(choice.point, selectedChoice.point),
+          mapPercent: geoChoiceMapDistance(choice, selectedChoice, region),
         }));
         const qualifies = separations.every((separation) => separation.kilometers >= minimum.kilometers && separation.mapPercent >= minimum.mapPercent);
         const score = Math.min(...separations.map((separation) => Math.min(
@@ -2159,15 +2164,66 @@ const diverseGeoChoices = (
   return selected;
 };
 
+export const geoChoiceMapDistance = (first: GeoChoice, second: GeoChoice, region: MapRegion) =>
+  region === "us" ? usMapDistance(first.location, second.location)
+    : isContinentRegion(region) ? continentMapDistance(region, first.location, second.location)
+      : geoPointMapDistance(first.point, second.point);
+
+const countryChoices = countries.flatMap((country) => {
+  const location = country.metadata.location;
+  const anchor = (continentCountryAnchors as Record<string, number[]>)[country.name];
+  return location && anchor ? [geoChoiceForLocation({ ...location, coordinates: [anchor[0], anchor[1]] })] : [];
+});
+const countryChoicesByName = new Map(countryChoices.map((choice) => [choice.id, choice]));
+
+// A country round retains the source's precise/broad location in its explanation.
+// Multi-country origins and transcontinental entries are never narrowed by guesswork.
+const countryChoiceForLocation = (location: WorldLocation) => {
+  if (location.countries.length !== 1 || location.continents.length !== 1) return null;
+  const country = countryChoicesByName.get(location.countries[0]);
+  return country && continentForLocations([country.location]) === location.continents[0] ? country : null;
+};
+
+export const geoAnswerForLocation = (choices: readonly GeoChoice[], location: WorldLocation) =>
+  choices.find((choice) => choice.id === location.label)
+  ?? choices.find((choice) => location.countries.length === 1 && choice.id === location.countries[0])!;
+
+const continentGeoChoices = (answer: GeoChoice, difficulty: Difficulty, seed: number) => {
+  const countryAnswer = countryChoiceForLocation(answer.location);
+  const region = countryAnswer && continentForLocations([countryAnswer.location]);
+  if (!countryAnswer || !region || region === "Antarctica") return null;
+  const minimum = geoChoiceSeparationForDifficulty(difficulty, region);
+  const selected = [countryAnswer];
+  // Medium spreads four countries across this continent. Hard draws from nearby
+  // countries first. The map adds leader lines when touch targets need space.
+  const remaining = shuffle(countryChoices.filter((choice) => choice.id !== countryAnswer.id
+    && continentForLocations([choice.location]) === region), seed);
+  while (selected.length < 4) {
+    const eligible = remaining.filter((choice) => selected.every((other) =>
+      geoPointDistanceKm(choice.point, other.point) >= minimum.kilometers
+      && continentMapDistance(region, choice.location, other.location) >= minimum.mapPercent));
+    eligible.sort((a, b) => difficulty === 3
+      ? geoPointDistanceKm(a.point, countryAnswer.point) - geoPointDistanceKm(b.point, countryAnswer.point)
+      : Math.min(...selected.map((other) => geoChoiceMapDistance(b, other, region)))
+        - Math.min(...selected.map((other) => geoChoiceMapDistance(a, other, region))));
+    // Seeded variety within the nearest few countries keeps repeated origins fresh.
+    const next = eligible[difficulty === 3 ? Math.floor(seedRandom(seed + selected.length) * Math.min(3, eligible.length)) : 0];
+    if (!next) return null;
+    selected.push(next);
+    remaining.splice(remaining.indexOf(next), 1);
+  }
+  return { mapRegion: region, choices: selected };
+};
+
 const preferredGeoChoices = (answer: GeoChoice, candidates: readonly GeoChoice[], difficulty: Difficulty, seed: number) => {
   const count = geoChoiceCountForDifficulty(difficulty);
   const usChoices = isUsDetailLocation(answer.location)
     ? diverseGeoChoices(answer, candidates.filter((choice) => isUsDetailLocation(choice.location)), count, difficulty, seed, "us")
     : null;
-  return {
-    mapRegion: usChoices ? "us" as const : "world" as const,
-    choices: usChoices ?? diverseGeoChoices(answer, candidates, count, difficulty, seed),
-  };
+  if (usChoices) return { mapRegion: "us" as const, choices: usChoices };
+  const continental = difficulty > 1 ? continentGeoChoices(answer, difficulty, seed) : null;
+  if (continental) return continental;
+  return { mapRegion: "world" as const, choices: diverseGeoChoices(answer, candidates, count, difficulty, seed) };
 };
 
 export const buildGeoChoicesForLocations = (
@@ -2271,7 +2327,7 @@ export const buildGeoRoundFromCards = (
   const count = geoChoiceCountForDifficulty(difficulty);
   const { pool, choicesPool } = geoPoolPlanForCards(cards, difficulty);
   const orderedCards = discoveryShuffle(pool, seed + 1, unlockedTitles, cardDiscoveryIdentities);
-  let selected: { card: LocatedKnowledgeCard; mapRegion: "us" | "world"; choices: GeoChoice[] } | undefined;
+  let selected: { card: LocatedKnowledgeCard; mapRegion: MapRegion; choices: GeoChoice[] } | undefined;
   for (const [index, card] of orderedCards.entries()) {
     const answer = geoChoiceForLocation(card.metadata.location);
     const { choices, mapRegion } = preferredGeoChoices(answer, choicesPool, difficulty, seed + index);
@@ -2284,7 +2340,7 @@ export const buildGeoRoundFromCards = (
   const { card, choices: diverseChoices } = selected;
   const location = card.metadata.location;
   const point = pointForLocation(location);
-  const answer = geoChoiceForLocation(location);
+  const answer = geoAnswerForLocation(diverseChoices, location);
   const choices = shuffle(diverseChoices, seed + 3);
   const continentHint = location.continents.length > 1 ? location.continents.join(" and ") : location.continents[0];
 
@@ -2292,7 +2348,7 @@ export const buildGeoRoundFromCards = (
     id: `${seed}-geo-${card.topic}-${card.id}`,
     mapRegion: selected.mapRegion,
     topic: card.topic || topic,
-    prompt: `Where on the ${selected.mapRegion === "us" ? "US" : "world"} map does ${card.title} belong?`,
+    prompt: `Where on the ${selected.mapRegion === "us" ? "US" : selected.mapRegion} map does ${card.title} belong?`,
     card,
     choices,
     answerId: answer.id,
@@ -2301,6 +2357,8 @@ export const buildGeoRoundFromCards = (
     point,
     mapHint: selected.mapRegion === "us"
       ? `Find ${location.states?.length ? location.states.join(" and ") : location.label} on the US map. Tap a state to learn its name, then choose a lettered pin.`
+      : isContinentRegion(selected.mapRegion)
+        ? `All four choices are in ${selected.mapRegion}. Explore the country outlines, then choose a lettered pin.`
       : `${card.title} belongs in ${continentHint}. Look for a pin in the ${hemisphereLabel(point).toLowerCase()}.`,
     explanation: `${card.title} is connected with ${worldLocationLabelInProse(location.label)}, which is in ${continentHint}. ${card.fact}`,
   };
@@ -2370,11 +2428,11 @@ export const buildRevealRoundFromCards = (
       prompt: "Where in the world is this found?",
       card,
       choices: mapChoices.map((choice) => choice.label),
-      answer: location.label,
+      answer: geoAnswerForLocation(mapChoices, location).label,
       explanation: `${card.title} is connected with ${worldLocationLabelInProse(location.label)}. ${card.fact}`,
       map: {
         choices: mapChoices,
-        answerId: location.label,
+        answerId: geoAnswerForLocation(mapChoices, location).id,
       },
     };
   }

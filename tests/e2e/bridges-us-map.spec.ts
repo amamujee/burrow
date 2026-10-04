@@ -8,13 +8,13 @@ import usStates from "../../src/lib/us-map-data.json";
 const pack = loadPlayablePacks().find((pack) => pack.id === "bridges-and-tunnels")!;
 const deck = packToPlayableDeck(pack);
 
-test("US detail selection requires a mapped local place and keeps international choices on the world map", { tag: "@logic" }, () => {
+test("US detail selection requires a mapped local place and chooses the shared continent for international locations", { tag: "@logic" }, () => {
   const location = { label: "San Francisco, United States", countries: ["United States"], continents: ["North America" as const] };
   const city = geoChoiceForLocation(location).location;
   expect(city.states).toBeUndefined();
   expect(mapRegionForLocations([city])).toBe("us");
-  expect(mapRegionForLocations([city, { ...city, label: "Canada", countries: ["Canada"] }])).toBe("world");
-  expect(mapRegionForLocations([{ ...city, label: "United States" }])).toBe("world");
+  expect(mapRegionForLocations([city, { ...city, label: "Canada", countries: ["Canada"] }])).toBe("North America");
+  expect(mapRegionForLocations([{ ...city, label: "United States" }])).toBe("North America");
   expect(mapRegionForLocations([geoChoiceForLocation({ ...location, label: "Unknown US place" }).location])).toBe("world");
   expect(mapRegionForLocations([undefined])).toBe("world");
   expect(mapRegionForLocations([])).toBe("world");
@@ -143,9 +143,9 @@ test("US map explores states and grades the selected pin on desktop and mobile",
   }
   await page.screenshot({ path: testInfo.outputPath("us-map.png"), fullPage: true });
   const names = await pins.evaluateAll((pins) => pins.map((pin) => pin.getAttribute("aria-label")!));
-  await map.getByRole("button", { name: "Show world view" }).click();
+  await map.getByLabel("Map view", { exact: true }).selectOption("world");
   await expect(page.getByLabel("World map", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Show US view" }).click();
+  await page.getByLabel("Map view", { exact: true }).selectOption("us");
   expect(await pins.evaluateAll((pins) => pins.map((pin) => pin.getAttribute("aria-label")!))).toEqual(names);
   const prompt = await page.getByRole("heading", { name: /^Where on the US map/ }).innerText();
   const answerCard = pack.cards.find((card) => prompt.includes(`${card.name} belong?`))!;

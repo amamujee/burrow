@@ -26,10 +26,9 @@ const {
   collectionCards,
   geoChoiceSeparationForDifficulty,
   geoPointDistanceKm,
-  geoPointMapDistance,
+  geoChoiceMapDistance,
 } = jiti("./src/lib/game-modes.ts");
 const { packToPlayableDeck } = jiti("./src/lib/pack-adapter.ts");
-const { usMapDistance } = jiti("./src/lib/us-map.ts");
 const { buildHeadToHeadSession, buildSession } = jiti("./src/lib/questions.ts");
 const pepperScaleCatalog = JSON.parse(fs.readFileSync("src/lib/pepperscale-peppers.json", "utf8"));
 
@@ -426,7 +425,7 @@ const assertGeoChoiceSeparation = (roundName, round, difficulty) => {
       const firstChoice = round.choices[first];
       const secondChoice = round.choices[second];
       const kilometers = geoPointDistanceKm(firstChoice.point, secondChoice.point);
-      const mapPercent = round.mapRegion === "us" ? usMapDistance(firstChoice.location, secondChoice.location) : geoPointMapDistance(firstChoice.point, secondChoice.point);
+      const mapPercent = geoChoiceMapDistance(firstChoice, secondChoice, round.mapRegion ?? "world");
       if (kilometers < minimum.kilometers || mapPercent < minimum.mapPercent) {
         critical.push(`${roundName}: ${firstChoice.label} and ${secondChoice.label} are too close (${Math.round(kilometers)} km, ${mapPercent.toFixed(1)}% map distance)`);
       }

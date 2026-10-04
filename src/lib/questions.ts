@@ -28,6 +28,7 @@ import { discoveryShuffle, sample, seedRandom, shuffle } from "./random";
 import { worldLocationDisplay, type WorldLocation } from "./card-metadata";
 import {
   buildGeoChoicesForLocations,
+  geoAnswerForLocation,
   countryCapitalLabel,
   countryFactSentence,
   countryNameInProse,
@@ -997,20 +998,20 @@ const countryQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: r
     ? ["country-flag", "country-capital", "country-continent", "country-location", "country-flag"]
     : questionDepth === 2
       ? ["country-flag", "country-capital", "country-location", "country-population", "country-area"]
-      : ["country-population", "country-area", "country-neighbors", "country-highest-point", "country-population", "country-area"];
+      : ["country-population", "country-area", "country-neighbors", "country-highest-point", "country-location", "country-location"];
   const kind = sample(kinds, seed + 17);
 
   if (kind === "country-location") {
     const locatedPool = pool.filter(hasLocationMetadata);
     const locatedCountry = hasLocationMetadata(country) ? country : locatedPool[0];
-    const mapChoices = locationQuestionChoices(locatedCountry, locatedPool, questionDepth, seed + 21);
+    const mapChoices = locationQuestionChoices(locatedCountry, locatedPool, difficulty, seed + 21);
     if (!mapChoices) return countryQuestion(seed + 1, difficulty, unlockedTitles);
     const choices = mapChoices.map((choice) => choice.label);
     return {
       id: `${seed}-country-location-${locatedCountry.id}`,
       topic: "countries",
       kind,
-      prompt: `Where on the world map is ${countryNameInProse(locatedCountry)}?`,
+      prompt: `Where on the map is ${countryNameInProse(locatedCountry)}?`,
       image: locatedCountry.image,
       imageAlt: `Flag of ${locatedCountry.name}`,
       imageCredit: locatedCountry.imageCredit,
@@ -1140,7 +1141,7 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
   }))[0];
   const measuredPool = pool.filter(hasScovilleMeasurement).filter(isPepperFruit);
   const locationPool = pool.filter(hasLocationMetadata);
-  const locationIterator = locationQuestionCandidates(locationPool, questionDepth, seed + 5);
+  const locationIterator = locationQuestionCandidates(locationPool, difficulty, seed + 5);
   const firstLocationCandidate = locationIterator.next();
   const locationCandidates = firstLocationCandidate.done ? [] : [firstLocationCandidate.value];
   const baseKinds: QuestionKind[] = questionDepth === 1
@@ -1170,12 +1171,12 @@ const pepperQuestion = (seed: number, difficulty: Difficulty, unlockedTitles: re
       imageAlt: locatedPepper.name,
       imageCredit: locatedPepper.imageCredit,
       choices,
-      answer: locatedPepper.metadata.location.label,
+      answer: geoAnswerForLocation(mapChoices, locatedPepper.metadata.location).label,
       explanation: `${locatedPepper.name} is linked to ${worldLocationLabelInProse(locatedPepper.metadata.location.label)}. A pepper's location may describe its origin, namesake, or a strong regional food connection.`,
       locations: itemLocations(locatedPepper),
       map: {
         choices: mapChoices,
-        answerId: locatedPepper.metadata.location.label,
+        answerId: geoAnswerForLocation(mapChoices, locatedPepper.metadata.location).id,
       },
       heatMeter: heatMeter(locatedPepper.heat),
     };
@@ -1282,7 +1283,7 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
   const questionDepth = questionDepthForSelection(difficulty, seed);
   const building = sample(pool, seed);
   const locationPool = pool.filter(hasLocationMetadata);
-  const locationIterator = locationQuestionCandidates(locationPool, questionDepth, seed + 25);
+  const locationIterator = locationQuestionCandidates(locationPool, difficulty, seed + 25);
   const firstLocationCandidate = locationIterator.next();
   const locationCandidates = firstLocationCandidate.done ? [] : [firstLocationCandidate.value];
   const baseKinds: QuestionKind[] = questionDepth === 1
@@ -1303,17 +1304,17 @@ const buildingQuestion = (seed: number, difficulty: Difficulty): Question => {
       id: `${seed}-building-location-${locatedBuilding.id}`,
       topic: "buildings",
       kind,
-      prompt: promptVariant(seed + 24, [`In which city and country is ${locatedBuilding.name}?`, `Find the place linked to ${locatedBuilding.name}.`, `Read the location choices. Where is ${locatedBuilding.name}?`]),
+      prompt: promptVariant(seed + 24, [`Which place is home to ${locatedBuilding.name}?`, `Find the place linked to ${locatedBuilding.name}.`, `Read the location choices. Where is ${locatedBuilding.name}?`]),
       image: locatedBuilding.image,
       imageAlt: locatedBuilding.name,
       imageCredit: locatedBuilding.imageCredit,
       choices,
-      answer: locatedBuilding.metadata.location.label,
+      answer: geoAnswerForLocation(mapChoices, locatedBuilding.metadata.location).label,
       explanation: `${locatedBuilding.name} is in ${worldLocationLabelInProse(locatedBuilding.metadata.location.label)}.`,
       locations: itemLocations(locatedBuilding),
       map: {
         choices: mapChoices,
-        answerId: locatedBuilding.metadata.location.label,
+        answerId: geoAnswerForLocation(mapChoices, locatedBuilding.metadata.location).id,
       },
       numberLine: { label: "Height", value: locatedBuilding.heightFt, max: maxHeight, unit: "ft" },
     };

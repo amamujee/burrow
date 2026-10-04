@@ -1,4 +1,5 @@
 import type { WorldLocation } from "./card-metadata";
+import { continentForLocations, type MapRegion } from "./continent-map";
 import layout from "./us-map-layout.json";
 
 // The same bounds and frames are used to generate the Census state outlines.
@@ -25,8 +26,8 @@ export const isUsMapLocation = (location?: WorldLocation): location is WorldLoca
 export const isUsDetailLocation = (location?: WorldLocation) =>
   isUsMapLocation(location) && location.label !== "United States";
 
-export const mapRegionForLocations = (locations: readonly (WorldLocation | undefined)[]): "world" | "us" =>
-  locations.length > 0 && locations.every(isUsDetailLocation) ? "us" : "world";
+export const mapRegionForLocations = (locations: readonly (WorldLocation | undefined)[]): MapRegion =>
+  locations.length > 0 && locations.every(isUsDetailLocation) ? "us" : continentForLocations(locations) ?? "world";
 
 export const usMapDistance = (first: WorldLocation, second: WorldLocation) => {
   if (!isUsMapLocation(first) || !isUsMapLocation(second)) return 0;

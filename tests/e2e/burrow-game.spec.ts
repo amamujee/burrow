@@ -22,6 +22,7 @@ import {
   collectionOrderLabel,
   collectionCards,
   geoChoiceSeparationForDifficulty,
+  geoChoiceMapDistance,
   geoPointDistanceKm,
   geoPointMapDistance,
   isSortOrderCorrect,
@@ -35,7 +36,7 @@ import { packToPlayableDeck } from "../../src/lib/pack-adapter";
 import { loadPlayablePacks } from "../../src/lib/pack-loader";
 import { buildLandingTopicCards } from "../../src/lib/landing-topics";
 import { discoveryShuffle } from "../../src/lib/random";
-import { mapRegionForLocations, usMapDistance } from "../../src/lib/us-map";
+import { mapRegionForLocations } from "../../src/lib/us-map";
 import { migrateTopicSelection } from "../../src/lib/topic-selection";
 import {
   addLearningExposure,
@@ -636,13 +637,15 @@ test("every generated Quiz location question carries matching map choices", () =
             const firstChoice = question.map?.choices[first];
             const secondChoice = question.map?.choices[second];
             expect(geoPointDistanceKm(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.kilometers);
-            expect(region === "us" ? usMapDistance(firstChoice!.location, secondChoice!.location) : geoPointMapDistance(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.mapPercent);
+            expect(geoChoiceMapDistance(firstChoice!, secondChoice!, region)).toBeGreaterThanOrEqual(minimum.mapPercent);
           }
         }
       }
     }
   }
-  expect(regions).toEqual(new Set(["us", "world"]));
+  expect(regions.has("us")).toBe(true);
+  expect(regions.has("world")).toBe(true);
+  expect(regions.has("Asia")).toBe(true);
 });
 
 test("location-based True/False rounds carry claimed and actual map points", () => {
@@ -715,7 +718,7 @@ test("every generated Peek location question carries well-separated map choices"
           const firstChoice = round.map?.choices[first];
           const secondChoice = round.map?.choices[second];
           expect(geoPointDistanceKm(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.kilometers);
-          expect(region === "us" ? usMapDistance(firstChoice!.location, secondChoice!.location) : geoPointMapDistance(firstChoice!.point, secondChoice!.point)).toBeGreaterThanOrEqual(minimum.mapPercent);
+          expect(geoChoiceMapDistance(firstChoice!, secondChoice!, region)).toBeGreaterThanOrEqual(minimum.mapPercent);
         }
       }
     }
@@ -2911,12 +2914,12 @@ test("building answers keep location teaching in the round instead of repeating 
   await chooseOnlyBuiltInTopic(page, "Sky Scrapers");
 
   await expect(page.getByLabel("Where in the world")).toHaveCount(0);
-  await expect(page.getByLabel(/^(World|United States) map$/)).toBeVisible();
+  await expect(page.getByLabel(/^(World|United States|Africa|Asia|Europe|North America|South America|Oceania|Antarctica) map$/)).toBeVisible();
   await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
 
   await expect(page.getByLabel("Answer feedback")).toBeVisible();
   await expect(page.getByLabel("Where in the world")).toHaveCount(0);
-  await expect(page.getByLabel(/^(World|United States) map$/)).toHaveCount(1);
+  await expect(page.getByLabel(/^(World|United States|Africa|Asia|Europe|North America|South America|Oceania|Antarctica) map$/)).toHaveCount(1);
 });
 
 test("bridge pack feedback does not repeat a location recap", async ({ page }) => {
@@ -2929,7 +2932,7 @@ test("bridge pack feedback does not repeat a location recap", async ({ page }) =
   await expect(page.getByLabel("Where in the world")).toHaveCount(0);
 });
 
-test("Quiz automatically uses US and world maps with reachable pins", { tag: "@mobile" }, async ({ page }, testInfo) => {
+test("Quiz automatically uses US and continent maps with reachable pins", { tag: "@mobile" }, async ({ page }, testInfo) => {
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
   await chooseOnlyMode(page, "Quiz Run");
   await page.getByRole("button", { name: "Hard", exact: true }).click();
@@ -2957,9 +2960,9 @@ test("Quiz automatically uses US and world maps with reachable pins", { tag: "@m
   await expect(usMap.getByRole("button", { name: "Explore California", exact: true })).toHaveAttribute("aria-pressed", "true");
   const pinLabels = await pins.evaluateAll((pins) => pins.map((pin) => pin.getAttribute("aria-label")));
   await page.screenshot({ path: testInfo.outputPath("quiz-us-map.png"), fullPage: true });
-  await usMap.getByRole("button", { name: "Show world view" }).click();
+  await usMap.getByLabel("Map view", { exact: true }).selectOption("world");
   await expect(page.getByLabel("World map", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Show US view" }).click();
+  await page.getByLabel("Map view", { exact: true }).selectOption("us");
   expect(await pins.evaluateAll((pins) => pins.map((pin) => pin.getAttribute("aria-label")))).toEqual(pinLabels);
   const subject = await page.locator("[data-question-photo] img[data-original-src]").getAttribute("alt");
   const answer = peppers.find((pepper) => pepper.name === subject)!.metadata!.location!.label;
@@ -2970,15 +2973,15 @@ test("Quiz automatically uses US and world maps with reachable pins", { tag: "@m
     return saved.profiles.find((profile: { id: string }) => profile.id === saved.activeProfileId).progress.modeStats.quiz.correct;
   })).toBe(1);
   await page.getByRole("button", { name: /^(Next card|Finish round)/ }).click();
-  const worldMap = page.getByLabel("World map", { exact: true });
-  for (let attempt = 0; attempt < 40 && await worldMap.count() === 0; attempt++) {
+  const continentMap = page.getByLabel(/^(Africa|Asia|Europe|North America|South America|Oceania) map$/, { exact: true });
+  for (let attempt = 0; attempt < 40 && await continentMap.count() === 0; attempt++) {
     await page.getByRole("button", { name: "Skip question", exact: true }).click();
     await expect(page.getByLabel("Preparing the next round")).toBeHidden();
   }
-  await expect(worldMap).toBeVisible();
-  await expect(worldMap.getByRole("button", { name: /^Choose map pin/ })).toHaveCount(4);
-  for (const pin of await worldMap.getByRole("button", { name: /^Choose map pin/ }).all()) await pin.click({ trial: true });
-  await page.screenshot({ path: testInfo.outputPath("quiz-world-map.png"), fullPage: true });
+  await expect(continentMap).toBeVisible();
+  await expect(continentMap.getByRole("button", { name: /^Choose map pin/ })).toHaveCount(4);
+  for (const pin of await continentMap.getByRole("button", { name: /^Choose map pin/ }).all()) await pin.click({ trial: true });
+  await page.screenshot({ path: testInfo.outputPath("quiz-continent-map.png"), fullPage: true });
 });
 
 test("True/False shows the detailed US map without clipping it inside the photo", { tag: "@mobile" }, async ({ page }, testInfo) => {
@@ -2992,8 +2995,8 @@ test("True/False shows the detailed US map without clipping it inside the photo"
   await expect(map).toBeVisible();
   await map.getByLabel("Find a US state").selectOption("Virginia");
   await expect(map.getByRole("button", { name: "Explore Virginia", exact: true })).toHaveAttribute("aria-pressed", "true");
-  await map.getByRole("button", { name: "Show world view" }).click();
-  await page.getByRole("button", { name: "Show US view" }).click();
+  await map.getByLabel("Map view", { exact: true }).selectOption("world");
+  await page.getByLabel("Map view", { exact: true }).selectOption("us");
   await page.screenshot({ path: testInfo.outputPath("fact-us-map.png"), fullPage: true });
   await page.getByRole("button", { name: "False", exact: true }).click();
   await expect(page.getByLabel("Answer feedback")).toBeVisible();
