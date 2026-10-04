@@ -38,6 +38,7 @@ import {
   buildTopTrumpRound,
   collectionOrderLabel,
   collectionCards,
+  comparisonPromptForCards,
   canBuildGeoRoundFromCards,
   canBuildGeoRound,
   isSortOrderCorrect,
@@ -648,9 +649,7 @@ const buildPackHeadToHeadSession = (
       subStat: second.subStat, meterValue: secondStat.value, meterMax: maxByStat.get(secondStat.id) ?? secondStat.value,
     };
     const winnerLabel = winner.id === first.id ? "A" : "B";
-    const prompt = candidate.statId === "pepper-varieties"
-      ? "Which one lists more pepper types?"
-      : `Which one has the ${direction === "lower" ? "lower" : "higher"} ${firstStat.label.toLowerCase()}?`;
+    const prompt = comparisonPromptForCards(deck.id, [first, second], firstStat);
     return {
       id: `${sessionSeed + index}-pack-comparison-${deck.id}-${candidate.statId}-${first.id}-${second.id}`,
       topic: deck.id,
@@ -3700,7 +3699,7 @@ function RevealMode({
             <span>{round.map ? `${round.choices.length} places` : `${Math.round((visibleCount / totalTiles) * 100)}%`}</span>
           </div>
           {round.map ? (
-            <p className="mt-1 text-xs font-bold text-[#5f6b5d]">Read the subject name, then choose where it is found.</p>
+            <p className="mt-1 text-xs font-bold text-[#5f6b5d]">Use the picture and name to pick a place.</p>
           ) : (
             <div className="mt-2 h-3 overflow-hidden rounded-full bg-[#e6d7bc]">
               <div className="h-full bg-[#9f3f2b] transition-[width] duration-500 ease-out" style={{ width: `${Math.round((visibleCount / totalTiles) * 100)}%` }} />
@@ -3956,14 +3955,14 @@ function NumberMode({
       ? `${round.smallerValue.toLocaleString("en-US")} x ? = ${round.biggerValue.toLocaleString("en-US")}`
       : round.termValues.map((value) => value.toLocaleString("en-US")).join(` ${round.operator} `);
   const equationLabel = round.operation === "fit" ? expressionLabel : `${expressionLabel} = ?`;
-  const stageBadge = round.operation === "addition" ? "Stack case" : round.operation === "multiplication" ? round.visual?.badge ?? "Group case" : round.operation === "fit" ? "Fit case" : "Number case";
+  const stageBadge = round.operation === "addition" ? "Add" : round.operation === "multiplication" ? round.visual?.badge ?? "Multiply" : round.operation === "fit" ? "Compare" : "Subtract";
   const stageFooter =
     round.operation === "addition"
-      ? `${round.cards.map((card) => card.title).join(" + ")} stacked together`
+      ? round.cards.map((card) => card.title).join(" + ")
       : round.operation === "multiplication"
         ? `${round.biggerValue} ${round.visual?.groupPlural ?? "groups"} · ${round.smallerValue} ${round.visual?.itemPlural ?? round.unit} in every ${round.visual?.groupSingular ?? "group"}`
       : round.operation === "fit"
-        ? `${round.smallerLabel} repeated to reach ${round.biggerLabel}`
+        ? `Compare ${round.smallerLabel} and ${round.biggerLabel}`
       : `${round.biggerLabel} minus ${round.smallerLabel}`;
 
   return (
@@ -3980,6 +3979,9 @@ function NumberMode({
         </div>
 
         <h2 className="mt-2 text-2xl font-black leading-[1.06] text-[#102f36] min-[760px]:text-[clamp(1.2rem,2.6vw,2.25rem)]">{round.prompt}</h2>
+        {round.statLabel === "Rounded population" && (
+          <p className="mt-2 text-xs font-bold text-[#5f6b5d]">Populations are rounded for this puzzle.</p>
+        )}
         <p aria-label="Number equation" className="mt-3 whitespace-nowrap text-[clamp(2.25rem,3.5vw,3.25rem)] font-black leading-none tracking-[-0.04em] text-[#9f3f2b]">{equationLabel}</p>
 
         <div className="mt-3 grid shrink-0 gap-2 xl:grid-cols-2">
@@ -4212,7 +4214,7 @@ function TopTrumpsMode({
 
         <h2 className="mt-2 text-2xl font-black leading-[1.04] text-[#102f36] min-[760px]:text-[clamp(1.35rem,3vw,2.5rem)]">{round.prompt}</h2>
         <p className="mt-2 rounded-lg border-2 border-[#092421] bg-[#fff9ec] px-3 py-2 text-sm font-bold leading-snug text-[#5f6b5d] shadow-[3px_3px_0_#092421]">
-          Your card is face up. Pick the category you think beats the computer card.
+          Choose a category to beat the computer.
         </p>
 
         <div className="mt-3 grid shrink-0 gap-2 xl:grid-cols-2">

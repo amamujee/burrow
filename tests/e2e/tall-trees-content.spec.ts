@@ -90,6 +90,15 @@ test.describe("Tall Trees content quality", { tag: "@logic" }, () => {
         const number = buildNumberRoundFromCards(deck.cards, deck.id, difficulty, seed);
         expect(number.choices.filter((choice) => choice === number.answer)).toHaveLength(1);
         expect(number.cards.every((card) => cardIds.has(card.id))).toBe(true);
+        const numberSubject = deck.cards.find((card) => card.id === number.cards[0].id)!;
+        if (number.operation === "multiplication" && numberSubject.categories.includes("reference")) {
+          expect(number.visual?.itemPlural).toBe("models");
+          expect(number.prompt).not.toContain("branch");
+        }
+        if (number.operation === "fit") {
+          expect(number.prompt).toContain("times as tall");
+          expect(number.unit).toBe("times");
+        }
         const geo = buildGeoRoundFromCards(deck.cards, deck.id, difficulty, seed);
         expect(geo.choices.filter((choice) => choice.id === geo.answerId)).toHaveLength(1);
         expect(cardIds.has(geo.card.id)).toBe(true);

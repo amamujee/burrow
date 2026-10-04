@@ -190,7 +190,7 @@ test("Fruits opens, plays, and displays sourced profiles on tablet and mobile", 
   await expect(page.getByText("Sweetness rating", { exact: true }).first()).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("fruits-trumps.png"), fullPage: true });
   await onlyMode(page, "Sort");
-  await expect(page.getByText(/lowest example weight/)).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Order the cards from lightest to heaviest." })).toBeVisible();
   await page.getByRole("button", { name: "Skip question", exact: true }).click();
   await expect(page.getByLabel("Preparing the next round")).toBeHidden();
   await expect(page.getByLabel("Round could not load")).toHaveCount(0);

@@ -87,7 +87,7 @@ test.describe("gameplay audit regressions", { tag: ["@browser", "@mobile"] }, ()
 
   for (const { topic, promptPattern } of [
     { topic: "buildings", promptPattern: /^(?:About how tall|How tall|(?:About what|What) is .*(?:height|spire))/ },
-    { topic: "peppers", promptPattern: /Scoville score range|Which SHU range|Read every range/ },
+    { topic: "peppers", promptPattern: /Scoville range|SHU range/ },
   ]) {
     test(`${topic} numeric recall reveals the photo statistic only after answering`, async ({ page }) => {
       await openHardTopic(page, topic);

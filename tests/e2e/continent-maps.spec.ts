@@ -167,8 +167,8 @@ for (const viewport of [null, { width: 820, height: 1180 }, { width: 1280, heigh
     await expect(page.getByLabel("World map", { exact: true }).getByRole("button", { name: /^Choose map pin/ })).toHaveCount(4);
     await page.getByLabel("Map view", { exact: true }).selectOption(region);
     expect(await pins.evaluateAll((pins) => pins.map((pin) => pin.getAttribute("aria-label")!))).toEqual(names);
-    const heading = await page.getByRole("heading", { name: /^Where on the/ }).innerText();
-    const answer = countries.find((country) => heading.includes(`${country.name} belong?`))!;
+    const heading = await page.getByRole("heading", { name: /^Where is / }).innerText();
+    const answer = countries.find((country) => heading.endsWith(`${country.name}?`))!;
     await map.getByRole("button", { name: names.find((name) => name.endsWith(`: ${answer.name}`))!, exact: true }).click();
     await expect(page.getByLabel("Answer feedback")).toBeVisible();
     expect(await page.evaluate(() => { const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!); return saved.profiles.find((p: { id: string }) => p.id === saved.activeProfileId).progress.modeStats.geo.correct; })).toBe(1);

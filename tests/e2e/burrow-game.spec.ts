@@ -704,7 +704,7 @@ test("every generated Peek location question carries well-separated map choices"
     const locationRounds: ReturnType<typeof buildRevealRoundFromCards>[] = [];
     for (let seed = 0; seed < 60 && locationRounds.length < 8; seed += 1) {
       const round = buildRevealRoundFromCards(mappedCards, "buildings", difficulty, seed * 43);
-      if (round.prompt === "Where in the world is this found?") locationRounds.push(round);
+      if (round.map) locationRounds.push(round);
     }
     expect(locationRounds.length).toBeGreaterThan(0);
     for (const round of locationRounds) {
@@ -1937,7 +1937,7 @@ test("every topic offers sensible addition, subtraction, and multiplication roun
     jets: "jets",
   } as const;
   const packTopics = {
-    dinosaurs: "eggs",
+    dinosaurs: "models",
     "tallest-mountains": "climbers",
     "tall-trees": "birds",
     "bridges-and-tunnels": "lights",
@@ -3018,7 +3018,7 @@ test("Peek location rounds show the complete named subject before map feedback",
   await chooseOnlyMode(page, "Peek");
   await chooseOnlyBuiltInTopic(page, "Bridges & Tunnels");
 
-  const locationPrompt = page.getByRole("heading", { name: "Where in the world is this found?" });
+  const locationPrompt = page.getByRole("heading", { name: /^Where is .+\?$/ });
   for (let attempt = 0; attempt < 12 && await locationPrompt.count() === 0; attempt += 1) {
     await page.getByRole("button", { name: "Skip question" }).click();
   }
@@ -3050,7 +3050,7 @@ test("geo finder stays inside the selected topic", async ({ page }) => {
   const seenPrompts = new Set<string>();
   for (let round = 0; round < 6; round += 1) {
     await expect(page.getByText("Spicy Peppers", { exact: true })).toBeVisible();
-    const heading = page.getByRole("heading", { name: /^Where on the (world|US) map does/ });
+    const heading = page.getByRole("heading", { name: /^Which place is .+ associated with\?$/ });
     await expect(heading).toBeVisible();
     const prompt = await heading.textContent();
     expect(prompt).toBeTruthy();
@@ -3291,7 +3291,7 @@ test("Hot Sauces Head to Head compares the number of listed pepper types", async
   await chooseOnlyMode(page, "Head to Head");
   await chooseOnlyBuiltInTopic(page, "Hot Sauces");
 
-  await expect(page.getByRole("heading", { name: "Which one lists more pepper types?" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Which condiment lists more pepper types?" })).toBeVisible();
   await expect(page.getByText("Listed pepper types", { exact: true })).toHaveCount(2);
   await expect(page.getByLabel("Answer choices").getByRole("button")).toHaveCount(2);
 });
@@ -3325,7 +3325,7 @@ test("country Top Trumps offers four meaningful geography stats", async ({ page 
 test("top trumps lets player choose a category against the computer", async ({ page }) => {
   await chooseOnlyMode(page, "Top Trumps");
 
-  await expect(page.getByRole("heading", { name: "Choose the category that gives your card its strongest advantage." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Pick your best category." })).toBeVisible();
   await expect(page.locator("div").filter({ hasText: /^Player$/ })).toBeVisible();
   await expect(page.getByText("Computer card", { exact: true })).toBeVisible();
 
