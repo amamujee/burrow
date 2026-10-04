@@ -2933,6 +2933,7 @@ test("bridge pack feedback does not repeat a location recap", async ({ page }) =
 });
 
 test("Quiz automatically uses US and continent maps with reachable pins", { tag: "@mobile" }, async ({ page }, testInfo) => {
+  if (testInfo.project.name === "desktop") await page.setViewportSize({ width: 1280, height: 720 });
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
   await chooseOnlyMode(page, "Quiz Run");
   await page.getByRole("button", { name: "Hard", exact: true }).click();
@@ -2961,7 +2962,14 @@ test("Quiz automatically uses US and continent maps with reachable pins", { tag:
   const pinLabels = await pins.evaluateAll((pins) => pins.map((pin) => pin.getAttribute("aria-label")));
   await page.screenshot({ path: testInfo.outputPath("quiz-us-map.png"), fullPage: true });
   await usMap.getByLabel("Map view", { exact: true }).selectOption("world");
-  await expect(page.getByLabel("World map", { exact: true })).toBeVisible();
+  const world = page.getByLabel("World map", { exact: true });
+  await expect(world).toBeVisible();
+  const worldBox = (await world.boundingBox())!;
+  const mapFooter = (await world.getByText("Tap a lettered pin, then match it to the place list.", { exact: true }).boundingBox())!;
+  expect(mapFooter.y + mapFooter.height).toBeLessThanOrEqual(worldBox.y + worldBox.height);
+  const stageBox = (await page.locator("[data-question-photo]").boundingBox())!;
+  expect(mapFooter.y + mapFooter.height).toBeLessThanOrEqual(stageBox.y + stageBox.height);
+  await page.screenshot({ path: testInfo.outputPath("quiz-world-map.png"), fullPage: true });
   await page.getByLabel("Map view", { exact: true }).selectOption("us");
   expect(await pins.evaluateAll((pins) => pins.map((pin) => pin.getAttribute("aria-label")))).toEqual(pinLabels);
   const subject = await page.locator("[data-question-photo] img[data-original-src]").getAttribute("alt");
@@ -2985,6 +2993,7 @@ test("Quiz automatically uses US and continent maps with reachable pins", { tag:
 });
 
 test("True/False shows the detailed US map without clipping it inside the photo", { tag: "@mobile" }, async ({ page }, testInfo) => {
+  if (testInfo.project.name === "desktop") await page.setViewportSize({ width: 1280, height: 720 });
   await chooseOnlyBuiltInTopic(page, "Bridges & Tunnels");
   await chooseOnlyMode(page, "True/False");
   const map = page.getByLabel("United States map", { exact: true });
@@ -2997,6 +3006,11 @@ test("True/False shows the detailed US map without clipping it inside the photo"
   await expect(map.getByRole("button", { name: "Explore Virginia", exact: true })).toHaveAttribute("aria-pressed", "true");
   await map.getByLabel("Map view", { exact: true }).selectOption("world");
   await page.getByLabel("Map view", { exact: true }).selectOption("us");
+  await page.getByLabel("Map view", { exact: true }).selectOption("world");
+  const world = page.getByLabel("World map", { exact: true });
+  const worldBox = (await world.boundingBox())!;
+  const footerBox = (await world.getByText(/^The statement claims:/).boundingBox())!;
+  expect(footerBox.y + footerBox.height).toBeLessThanOrEqual(worldBox.y + worldBox.height);
   await page.screenshot({ path: testInfo.outputPath("fact-us-map.png"), fullPage: true });
   await page.getByRole("button", { name: "False", exact: true }).click();
   await expect(page.getByLabel("Answer feedback")).toBeVisible();

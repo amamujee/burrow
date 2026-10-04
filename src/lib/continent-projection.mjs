@@ -17,3 +17,10 @@ export function projectContinentPoint(bounds, coordinates, polar = false) {
   const scale = Math.min(92 / ((east - west) * cosine), 62 / (north - south));
   return { x: 50 + (longitude - middle) * cosine * scale, y: 35 - (latitude - (south + north) / 2) * scale };
 }
+
+// A padded 100 x 56 world plot. Keep the full date-line extent, including
+// both sides of Fiji/Russia, and preserve the 2:1 equirectangular aspect.
+export function projectWorldPoint(coordinates) {
+  const [latitude, longitude] = coordinates;
+  return { x: 4 + (longitude + 180) / 360 * 92, y: 5 + (90 - latitude) / 180 * 46 };
+}

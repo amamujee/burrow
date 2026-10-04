@@ -1,7 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 import { countries } from "../../src/lib/game-data";
 import type { WorldLocation } from "../../src/lib/card-metadata";
-import { continentForLocations, continentMapPoint, continentRegions, isContinentRegion } from "../../src/lib/continent-map";
+import { continentForLocations, continentMapPoint, continentRegions, isContinentRegion, worldMapPoint, spreadMapPins } from "../../src/lib/continent-map";
+import worldOutlines from "../../src/lib/world-map-data.json";
 import outlines from "../../src/lib/continent-map-data.json";
 import { mapRegionForLocations } from "../../src/lib/us-map";
 import { buildGeoChoicesForLocations, buildGeoRound, buildRevealRoundFromCards, collectionCards, geoAnswerForLocation, geoChoiceMapDistance, geoChoiceSeparationForDifficulty, geoPointDistanceKm, modeOptions } from "../../src/lib/game-modes";
@@ -64,6 +65,25 @@ test("all seven detailed maps include real outlines and handle the date line and
   expect(Math.abs(east.x - west.x)).toBeLessThan(3);
   expect(continentMapPoint("Antarctica", [-90, 0])).toEqual({ x: 50, y: 50 });
   expect(mapRegionForLocations([countryLocation("Japan"), countryLocation("France")])).toBe("world");
+});
+
+test("world outlines and pins share an undistorted projection, including the date line", { tag: "@logic" }, () => {
+  expect(worldOutlines.length).toBeGreaterThan(200);
+  for (const name of ["Japan", "Brazil", "Kenya", "France", "Fiji", "Antarctica"]) {
+    expect(worldOutlines.find((country) => country.name === name)?.path.length).toBeGreaterThan(10);
+  }
+  expect(worldMapPoint([0, 0])).toEqual({ x: 50, y: 50 });
+  const east = worldMapPoint([-17, 180]);
+  const west = worldMapPoint([-17, -180]);
+  expect(east.x).toBe(96);
+  expect(west.x).toBe(4);
+  expect(east.y).toBe(west.y);
+  const pins = spreadMapPins(Array.from({ length: 4 }, () => worldMapPoint([50, 10])), 56);
+  for (const pin of pins) {
+    expect(pin.x).toBeGreaterThanOrEqual(7);
+    expect(pin.x).toBeLessThanOrEqual(93);
+    for (const other of pins.filter((other) => other !== pin)) expect(Math.hypot(pin.x - other.x, (pin.y - other.y) * 0.56)).toBeGreaterThanOrEqual(16);
+  }
 });
 
 test("country answers grade consistently in Quiz, Geo and Peek while explanations keep the specific origin", { tag: "@logic" }, () => {
@@ -164,7 +184,24 @@ for (const viewport of [null, { width: 820, height: 1180 }, { width: 1280, heigh
     }
     await expect(page.getByText("Antarctica has no countries.", { exact: true })).toBeVisible();
     await page.getByLabel("Map view", { exact: true }).selectOption("world");
-    await expect(page.getByLabel("World map", { exact: true }).getByRole("button", { name: /^Choose map pin/ })).toHaveCount(4);
+    const world = page.getByLabel("World map", { exact: true });
+    const worldPins = world.getByRole("button", { name: /^Choose map pin/ });
+    await expect(worldPins).toHaveCount(4);
+    await expect(world.getByLabel("World country boundaries", { exact: true })).toBeVisible();
+    await expect(world.getByRole("button", { name: "Explore Japan", exact: true })).toBeVisible();
+    await world.getByLabel("Find a country").selectOption("Brazil");
+    await expect(world.getByRole("button", { name: "Explore Brazil", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByLabel("Answer feedback")).toHaveCount(0);
+    const worldBox = (await world.boundingBox())!;
+    const worldPlot = (await world.locator("[data-world-map-plot]").boundingBox())!;
+    expect(worldPlot.width).toBeGreaterThan(250);
+    expect(worldPlot.width / worldPlot.height).toBeCloseTo(100 / 56, 1);
+    const worldFooter = (await world.getByText("Find the country, then choose its lettered pin.", { exact: true }).boundingBox())!;
+    expect(worldFooter.y + worldFooter.height).toBeLessThanOrEqual(worldBox.y + worldBox.height);
+    const worldCenters = await worldPins.evaluateAll((pins) => pins.map((pin) => { const r = pin.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; }));
+    for (let i = 0; i < worldCenters.length; i++) for (let j = i + 1; j < worldCenters.length; j++) expect(Math.hypot(worldCenters[i][0] - worldCenters[j][0], worldCenters[i][1] - worldCenters[j][1])).toBeGreaterThan(40);
+    for (const pin of await worldPins.all()) await pin.click({ trial: true });
+    await page.screenshot({ path: testInfo.outputPath("world-map.png"), fullPage: true });
     await page.getByLabel("Map view", { exact: true }).selectOption(region);
     expect(await pins.evaluateAll((pins) => pins.map((pin) => pin.getAttribute("aria-label")!))).toEqual(names);
     const heading = await page.getByRole("heading", { name: /^Where is / }).innerText();
@@ -180,3 +217,22 @@ for (const viewport of [null, { width: 820, height: 1180 }, { width: 1280, heigh
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 }
+
+test("world country pins grade correctly and keep exploration separate from answering", { tag: ["@browser", "@mobile"] }, async ({ page }) => {
+  await chooseCountriesGeo(page);
+  await page.getByRole("button", { name: "Easy", exact: true }).click();
+  await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+  await page.getByLabel("Map view", { exact: true }).selectOption("world");
+  const world = page.getByLabel("World map", { exact: true });
+  await world.getByRole("button", { name: "Explore Brazil", exact: true }).focus();
+  await page.keyboard.press("Enter");
+  await expect(world.getByLabel("Find a country")).toHaveValue("Brazil");
+  await expect(page.getByLabel("Answer feedback")).toHaveCount(0);
+  const heading = await page.getByRole("heading", { name: /^Where is / }).innerText();
+  const answer = countries.find((country) => heading.endsWith(`${country.name}?`))!;
+  const pin = world.getByRole("button", { name: new RegExp(`^Choose map pin [A-D]: ${answer.name}$`) });
+  await pin.click();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  await expect(pin).toBeDisabled();
+  expect(await page.evaluate(() => { const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!); return saved.profiles.find((p: { id: string }) => p.id === saved.activeProfileId).progress.modeStats.geo.correct; })).toBe(1);
+});

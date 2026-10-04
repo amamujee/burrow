@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { projectContinentPoint } from "../src/lib/continent-projection.mjs";
+import { projectContinentPoint, projectWorldPoint } from "../src/lib/continent-projection.mjs";
 
 // Natural Earth v5.1.2, ne_50m_admin_0_countries.geojson, public domain.
 // Reproduce: curl -fL https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_admin_0_countries.geojson -o /tmp/continent-countries.geojson
@@ -44,3 +44,17 @@ for (const [region, bounds] of Object.entries(layouts)) {
 }
 await writeFile("src/lib/continent-map-data.json", JSON.stringify(result) + "\n");
 console.log(Object.fromEntries(Object.entries(result).map(([name, countries]) => [name, countries.length])));
+
+// The world view and its landing-page thumbnail use these same country borders.
+const world = source.features.map(({ properties: p, geometry }) => {
+  const polygons = geometry.type === "Polygon" ? [geometry.coordinates] : geometry.coordinates;
+  const anchor = projectWorldPoint([p.LABEL_Y, p.LABEL_X]);
+  return { id: p.ADM0_A3, name: countryName(p), continents: continentsByName.get(countryName(p)) ?? [p.CONTINENT],
+    anchor: [round(anchor.x), round(anchor.y)], path: polygons.flatMap((polygon) => polygon.map((ring) => ringPath(ring, projectWorldPoint))).join("") };
+}).sort((a, b) => a.name.localeCompare(b.name));
+await writeFile("src/lib/world-map-data.json", JSON.stringify(world) + "\n");
+await writeFile("public/world-map-land.svg", `<!-- Natural Earth v5.1.2, ne_50m_admin_0_countries.geojson, public domain: https://www.naturalearthdata.com/ -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 56">
+${world.map((country) => `<path d="${country.path}" fill="#e7d798" fill-rule="evenodd" stroke="#375b52" stroke-width="0.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>`).join("\n")}
+</svg>
+`);

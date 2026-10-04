@@ -3254,11 +3254,12 @@ function QuestionLocationStage({
   onAnswer: (choice: string) => void;
 }) {
   return (
-    <div className="grid h-full min-h-[540px] gap-2 bg-[#102f36] p-2 min-[760px]:min-h-0 min-[760px]:grid-rows-[minmax(150px,.34fr)_minmax(300px,.66fr)]">
-      <div className="min-h-[160px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
-        <MediaImage image={question.image} imageAlt={question.imageAlt} topic={question.topic} />
+    <div className="grid h-full min-h-[540px] gap-2 bg-[#102f36] p-2 min-[760px]:min-h-0 min-[760px]:grid-rows-[minmax(150px,1fr)_minmax(0,3fr)]">
+      <div className="relative flex min-h-[160px] min-[760px]:min-h-[150px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
+        <MediaImage compact image={question.image} imageAlt={question.imageAlt} topic={question.topic} />
       </div>
       <WorldMapSurface
+        className="min-h-[320px] min-[760px]:min-h-0"
         key={question.id}
         markers={question.map.choices.map((choice) => ({
           id: choice.id,
@@ -3489,11 +3490,12 @@ function FactLocationStage({ round, answered }: { round: FactRound & { map: NonN
       }];
 
   return (
-    <div className="grid h-full min-h-[510px] gap-2 bg-[#102f36] p-2 min-[760px]:min-h-0 min-[760px]:grid-rows-[minmax(145px,.32fr)_minmax(300px,.68fr)]">
-      <div className="min-h-[155px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
-        <MediaImage image={round.image} imageAlt={round.imageAlt} topic={round.topic} />
+    <div className="grid h-full min-h-[510px] gap-2 bg-[#102f36] p-2 min-[760px]:min-h-0 min-[760px]:grid-rows-[minmax(150px,1fr)_minmax(0,3fr)]">
+      <div className="relative flex min-h-[155px] min-[760px]:min-h-[150px] overflow-hidden rounded-lg border-2 border-[#092421] bg-[#fff9ec]">
+        <MediaImage compact image={round.image} imageAlt={round.imageAlt} topic={round.topic} />
       </div>
       <WorldMapSurface
+        className="min-h-[320px] min-[760px]:min-h-0"
         key={round.id}
         markers={markers}
         footer={answered ? `Actual place: ${round.map.actual.label}` : `The statement claims: ${round.map.claimed.label}`}
