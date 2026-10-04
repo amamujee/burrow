@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { loadPlayablePacks } from "../../src/lib/pack-loader";
 import { packToPlayableDeck } from "../../src/lib/pack-adapter";
 import { poolForDifficulty } from "../../src/lib/difficulty-pool";
-import { buildFactRoundFromCards, buildNumberRoundFromCards, buildOddRoundFromCards, buildSortRoundFromCards, buildTopTrumpRoundFromCards, orderCollectionCardsForCategory } from "../../src/lib/game-modes";
+import { buildFactRoundFromCards, buildNumberRoundFromCards, buildOddRoundFromCards, buildSortRoundFromCards, buildTopTrumpRoundFromCards, comparisonPromptForCards, orderCollectionCardsForCategory } from "../../src/lib/game-modes";
 
 const auditedIds = ["dinosaurs", "tallest-mountains", "hot-sauces", "bridges-and-tunnels"];
 const packs = loadPlayablePacks().filter((pack) => auditedIds.includes(pack.id));
@@ -15,6 +15,11 @@ test("audited packs retain card-level provenance and explicit measurement scope"
     for (const stat of card.stats) expect(stat.note, `${pack.id}/${card.id}/${stat.id} scope`).toBeTruthy();
   }
   const dinosaurs = packs.find((pack) => pack.id === "dinosaurs")!;
+  const dinosaurDeck = packToPlayableDeck(dinosaurs);
+  for (const card of dinosaurDeck.cards) {
+    const wingspan = card.stats.find((stat) => stat.id === "wingspan");
+    if (wingspan) expect(comparisonPromptForCards(dinosaurDeck.id, [card], wingspan)).toContain("wingspan");
+  }
   for (const card of dinosaurs.cards) {
     expect(card.stats.some((stat) => stat.id === "height")).toBe(false);
     expect(["herbivore", "carnivore", "omnivore"]).not.toContain(card.metadata!.taxonomyGroup);
@@ -42,6 +47,9 @@ test("unknown sauce heat stays unknown and ingredient heat is a separate compari
   const ingredient = pack.cards.find((card) => card.id === "habamix-sorrento")!;
   expect(ingredient.stats.find((stat) => stat.id === "pepper-scoville")?.note).toContain("not comparable");
   const deck = packToPlayableDeck(pack);
+  const ingredientCard = deck.cards.find((card) => card.id === ingredient.id)!;
+  const ingredientStat = ingredientCard.stats.find((stat) => stat.id === "pepper-scoville")!;
+  expect(comparisonPromptForCards(deck.id, [ingredientCard], ingredientStat)).toContain("pepper ingredient");
   expect(deck.cards).toHaveLength(pack.cards.length);
   const ordered = orderCollectionCardsForCategory(deck.cards);
   const numeric = ordered.filter((card) => card.collectionSortValue !== undefined);
@@ -68,7 +76,10 @@ test("pack comparisons never mix measurement types or duplicate unit conversions
       expect(primaryKeys(odd.cards).size).toBe(1);
       const fact = buildFactRoundFromCards(deck.cards, deck.id, difficulty, seed * 47);
       expect(fact.statement).not.toContain("undefined");
-      if (fact.map) expect(fact.statement).toMatch(/^The location listed for /);
+      if (fact.map) {
+        const subject = deck.cards.find((card) => fact.id.endsWith(`-${card.id}`))!;
+        expect(fact.statement).toContain(subject.title);
+      }
       if (pack.recommendedModes?.includes("number")) {
         const number = buildNumberRoundFromCards(deck.cards, deck.id, difficulty, seed * 53);
         expect(primaryKeys(number.cards).size).toBe(1);
@@ -107,5 +118,33 @@ test("Easy sauce comparisons keep singular pepper counts in the same measurement
   for (const card of deck.cards.filter((item) => pepperCount(item).value === 1)) {
     expect(deck.cards.some((other) => comparable(card, other)), `${card.id} can compete against a larger pepper count`).toBe(true);
     expect(pepperCount(card).display).not.toBe("1 types");
+  }
+});
+
+test("pack math describes the measurement and ratios without inventing plural names", { tag: "@logic" }, () => {
+  for (const pack of packs) {
+    const deck = packToPlayableDeck(pack);
+    const seen = new Set<string>();
+    for (let seed = 0; seed < 90; seed++) {
+      const round = buildNumberRoundFromCards(deck.cards, deck.id, 3, seed);
+      seen.add(round.operation);
+      if (round.operation === "fit" || round.operation === "subtraction") {
+        const text = round.prompt;
+        for (const card of round.cards) expect(text).toContain(card.title);
+        if (round.statLabel === "Length") expect(text).toContain("long.");
+        if (round.statLabel === "Elevation") expect(text).toContain("above sea level.");
+        if (round.statLabel === "Scoville") expect(text).toContain("Scoville scale.");
+      }
+      if (round.operation === "fit") {
+        expect(round.prompt).not.toContain("fit into");
+        expect(round.unit).toBe("times");
+        expect(round.answer).toBe(Math.max(2, Math.round(round.biggerValue / round.smallerValue)));
+      }
+      if (pack.id === "dinosaurs" && round.operation === "multiplication") {
+        expect(round.visual?.itemPlural).toBe("models");
+        expect(round.prompt).not.toMatch(/eggs|nests/);
+      }
+    }
+    expect(seen).toEqual(new Set(["addition", "subtraction", "multiplication", "fit"]));
   }
 });

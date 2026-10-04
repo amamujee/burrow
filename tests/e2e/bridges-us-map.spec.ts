@@ -147,8 +147,8 @@ test("US map explores states and grades the selected pin on desktop and mobile",
   await expect(page.getByLabel("World map", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Show US view" }).click();
   expect(await pins.evaluateAll((pins) => pins.map((pin) => pin.getAttribute("aria-label")!))).toEqual(names);
-  const prompt = await page.getByRole("heading", { name: /^Where on the US map/ }).innerText();
-  const answerCard = pack.cards.find((card) => prompt.includes(`${card.name} belong?`))!;
+  const prompt = await page.getByRole("heading", { name: /^Where is / }).innerText();
+  const answerCard = pack.cards.find((card) => prompt === `Where is ${card.name}?`)!;
   const wrongPin = names.find((name) => !name.endsWith(`: ${answerCard.metadata!.location!.label}`))!;
   await map.getByRole("button", { name: wrongPin, exact: true }).click();
   await expect(page.getByLabel("Answer feedback")).toBeVisible();

@@ -77,13 +77,17 @@ test("Easy core rounds do not leak hard cards after source-driven recognition ca
 
 test("space sorting compares physical quantities in common units and preserves real zero moon counts", { tag: "@logic" }, () => {
   const byId = new Map(spaceCards.map((card) => [card.id, card]));
+  const distanceDisplays = new Map<string, string>();
   for (let seed = 1; seed <= 300; seed++) {
     const round = buildSortRound("space", 3, seed * 53);
     for (const card of round.cards) {
       const item = byId.get(card.id)!;
       if (round.statLabel === "Size") expect(card.statValue).toBeCloseTo(item.diameterMiles ?? item.radiusSolar! * 864600, 5);
       if (round.statLabel === "Temperature") expect(card.statValue).toBeCloseTo(item.surfaceTempK ?? (item.meanSurfaceTempF! - 32) * 5 / 9 + 273.15, 5);
-      if (round.statLabel === "Distance") expect(card.statValue).toBeCloseTo(item.distanceFromSunMillionMiles ?? item.distanceLightYears! * 5878625.373, 1);
+      if (round.statLabel === "Distance") {
+        expect(card.statValue).toBeCloseTo(item.distanceFromSunMillionMiles ?? item.distanceLightYears! * 5878625.373, 1);
+        distanceDisplays.set(item.id, card.statDisplay);
+      }
       expect(Number.isFinite(card.statValue)).toBe(true);
     }
     const sorted = [...round.cards].sort((a, b) => a.statValue - b.statValue);
@@ -100,6 +104,44 @@ test("space sorting compares physical quantities in common units and preserves r
   const concept = collectionCards().find((card) => card.id === "black-hole")!;
   expect(concept.statLabel).toBe("Object type");
   expect(concept.statDisplay).toBe("Concept");
+  expect(distanceDisplays.get("andromeda-galaxy")).toBe("2,537,000 ly");
+});
+
+test("space True/False judges the displayed claim about the named object", { tag: "@logic" }, () => {
+  const trueFacts = new Set(spaceCards.map((card) => card.fact));
+  const seen = new Set<string>();
+  for (const difficulty of [1, 2, 3] as const) for (let seed = 0; seed < 400; seed++) {
+    const round = buildFactRound("space", difficulty, seed);
+    const card = spaceCards.find((item) => item.name === round.imageAlt)!;
+    if (round.answer === "False") {
+      expect(trueFacts.has(round.statement), round.statement).toBe(false);
+      expect(round.statement.toLowerCase(), round.statement).toContain(card.name.toLowerCase());
+    }
+    const distance = round.statement.match(/is about ([\d,.]+) (million miles|light-years) from (the Sun|Earth)\./);
+    const temperature = round.statement.match(/surface temperature is about ([-\d,.]+) (kelvins|degrees Fahrenheit)\./);
+    const classification = round.statement.match(/ is (a .+)\.$/);
+    if (distance) {
+      seen.add("distance");
+      expect(distance[2]).toBe(card.distanceFromSunMillionMiles === undefined ? "light-years" : "million miles");
+      expect(distance[3]).toBe(card.distanceFromSunMillionMiles === undefined ? "Earth" : "the Sun");
+      const accurate = Number(distance[1].replaceAll(",", "")) === (card.distanceFromSunMillionMiles ?? card.distanceLightYears);
+      expect(round.answer, round.statement).toBe(accurate ? "True" : "False");
+    } else if (temperature) {
+      seen.add("temperature");
+      expect(temperature[2]).toBe(card.surfaceTempK === undefined ? "degrees Fahrenheit" : "kelvins");
+      const accurate = Number(temperature[1].replaceAll(",", "")) === (card.surfaceTempK ?? card.meanSurfaceTempF);
+      expect(round.answer, round.statement).toBe(accurate ? "True" : "False");
+    } else if (classification && !trueFacts.has(round.statement)) {
+      seen.add("classification");
+      const actual = card.kind === "concept" ? "a space concept" : card.kind === "region" ? "a region of space" : `a ${card.kind}`;
+      expect(round.answer, round.statement).toBe(classification[1] === actual ? "True" : "False");
+    } else {
+      seen.add("fact");
+      expect(round.answer).toBe("True");
+      expect(round.statement).toBe(card.fact);
+    }
+  }
+  expect(seen).toEqual(new Set(["distance", "temperature", "classification", "fact"]));
 });
 
 
