@@ -1,5 +1,5 @@
-import { LearningLabs } from "@/components/experiments/learning-labs";
+import { redirect } from "next/navigation";
 
 export default function ExperimentsPage() {
-  return <LearningLabs />;
+  redirect("/play");
 }

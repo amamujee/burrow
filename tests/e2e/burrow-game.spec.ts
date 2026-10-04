@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { createServer, request } from "node:http";
 import { weightTopicsForAccuracy } from "../../src/lib/adaptive-topics";
 import { collectionCardProfileDetails } from "../../src/lib/card-profile";
 import { cardRarities } from "../../src/lib/card-metadata";
@@ -6,7 +7,7 @@ import { cardDiscoveryIdentities, cardUnlockKey, isCardUnlocked } from "../../sr
 import { buildings, countries, jets, peppers, sharks, spaceCards, topicPacks } from "../../src/lib/game-data";
 import pepperScaleCatalog from "../../src/lib/pepperscale-peppers.json";
 import { poolForDifficulty } from "../../src/lib/difficulty-pool";
-import { autoDifficulty, peekRevealSettings, questionDepthForSelection } from "../../src/lib/difficulty";
+import { peekRevealSettings, questionDepthForSelection } from "../../src/lib/difficulty";
 import {
   buildFactRound,
   buildFactRoundFromCards,
@@ -56,6 +57,37 @@ const topicsControl = (page: Page) => page.getByRole("button", { name: /^Topics/
 const modeTray = (page: Page) => page.getByLabel("Choose game types");
 const topicsTray = (page: Page) => page.getByLabel("Choose topics");
 const mixOption = (page: Page, label: string) => modeTray(page).getByRole("button", { name: label, exact: true });
+
+const startDisconnectableOrigin = async (upstreamURL: string) => {
+  const server = createServer((incoming, outgoing) => {
+    const target = new URL(incoming.url ?? "/", upstreamURL);
+    const upstream = request(target, {
+      method: incoming.method,
+      headers: { ...incoming.headers, host: target.host },
+    }, (response) => {
+      outgoing.writeHead(response.statusCode ?? 502, response.headers);
+      response.pipe(outgoing);
+    });
+    upstream.on("error", () => outgoing.destroy());
+    incoming.pipe(upstream);
+  });
+  await new Promise<void>((resolve, reject) => {
+    server.once("error", reject);
+    server.listen(0, "127.0.0.1", resolve);
+  });
+  const address = server.address();
+  if (!address || typeof address === "string") throw new Error("Missing test origin port");
+  return {
+    url: `http://127.0.0.1:${address.port}`,
+    stop: async () => {
+      if (!server.listening) return;
+      await new Promise<void>((resolve, reject) => {
+        server.close((error) => error ? reject(error) : resolve());
+        server.closeAllConnections();
+      });
+    },
+  };
+};
 
 const failNextRoundPreparation = async (page: Page, failures: number) => {
   // Throw inside generation, after its deferred loading state is displayed.
@@ -231,14 +263,6 @@ test("Hot Sauces ships 75 sourced cards with complete comparison metadata", () =
     expect(oil?.stats.find((stat) => stat.id === "pepper-scoville")?.display).toContain("pepper-based");
     expect(oil?.metadata?.difficultyBand).toBe("hard");
   }
-});
-
-test("difficulty progression gives Easy and Medium room before Hard", () => {
-  expect(autoDifficulty(1, true, 10, 10, 10)).toBe(1);
-  expect(autoDifficulty(1, true, 6, 16, 13)).toBe(2);
-  expect(autoDifficulty(2, true, 12, 30, 27)).toBe(2);
-  expect(autoDifficulty(2, true, 8, 45, 37)).toBe(3);
-  expect(autoDifficulty(3, false, 0, 20, 7)).toBe(2);
 });
 
 test("standard Quiz questions offer four distinct choices at every difficulty", () => {
@@ -1990,6 +2014,49 @@ test.beforeEach(async ({ page }) => {
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
 });
 
+test("manual Hard stays selected after a wrong answer with low lifetime accuracy", { tag: ["@mobile", "@webkit"] }, async ({ page }) => {
+  await page.evaluate(() => {
+    const state = JSON.parse(localStorage.getItem("burrow-profiles-v1")!);
+    const progress = state.profiles[0].progress;
+    Object.assign(progress, { difficulty: 3, answered: 20, correct: 2 });
+    localStorage.setItem("burrow-profiles-v1", JSON.stringify(state));
+  });
+  await page.reload();
+  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+  await chooseOnlyMode(page, "True/False");
+  let outcome = "";
+  for (let attempt = 0; attempt < 8; attempt++) {
+    await page.getByRole("button", { name: "True", exact: true }).click();
+    await expect(page.getByLabel("Answer feedback")).toBeVisible();
+    await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem("burrow-profiles-v1")!).profiles[0].progress.answered)).toBe(21 + attempt);
+    outcome = await page.evaluate(() => JSON.parse(localStorage.getItem("burrow-profiles-v1")!).profiles[0].progress.learningHistory[0].outcome);
+    if (outcome === "incorrect") break;
+    await page.locator("[data-sticky-next]").getByRole("button").click();
+  }
+  expect(outcome).toBe("incorrect");
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("burrow-profiles-v1")!).profiles[0].progress.difficulty)).toBe(3);
+});
+
+test("pack-only Quiz stays in scope and advances with four choices", { tag: ["@mobile", "@webkit"] }, async ({ page }) => {
+  await chooseOnlyBuiltInTopic(page, "Fruits");
+  await chooseOnlyMode(page, "Quiz Run");
+  await page.getByRole("button", { name: "Hard", exact: true }).click();
+  await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+  for (let attempt = 0; attempt < 8 && await page.getByText("Read this", { exact: true }).count() === 0; attempt++) {
+    await page.getByRole("button", { name: "Skip question", exact: true }).click();
+  }
+  await expect(page.getByText("Read this", { exact: true })).toBeVisible();
+  const choices = page.getByLabel("Answer choices").getByRole("button");
+  await expect(choices).toHaveCount(4);
+  await expect(page.locator('img[data-original-src*="/fruits/"]').first()).toBeVisible();
+  await choices.first().click();
+  await expect(page.getByLabel("Answer feedback")).toBeVisible();
+  await page.locator("[data-sticky-next]").getByRole("button").click();
+  await expect(page.getByLabel("Preparing the next round")).toBeHidden();
+  await expect(choices).toHaveCount(4);
+  await expect(page.locator('img[data-original-src*="/fruits/"]').first()).toBeVisible();
+});
+
 test("mobile keeps the question and first answer in the opening viewport", { tag: "@mobile" }, async ({ page, isMobile }) => {
   test.skip(!isMobile, "mobile viewport coverage");
   await chooseOnlyMode(page, "Quiz Run");
@@ -2106,6 +2173,38 @@ test("iPad Bridges and Tunnels loads Medium after Easy across available modes", 
   await expect(page.getByLabel("Answer feedback")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "True", exact: true })).toBeEnabled();
   expect(pageErrors).toEqual([]);
+});
+
+test("saving offline includes maps before any map has been opened", { tag: ["@mobile", "@webkit"] }, async ({ page, context, browserName, baseURL }) => {
+  test.setTimeout(60000);
+  // Playwright's WebKit offline emulation rejects service-worker responses:
+  // https://github.com/microsoft/playwright/issues/42775. Stop a real origin instead.
+  const origin = browserName === "webkit" ? await startDisconnectableOrigin(baseURL!) : undefined;
+  try {
+    if (origin) {
+      await page.goto(`${origin.url}/play`);
+      await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+    }
+    await chooseOnlyBuiltInTopic(page, "Countries & Flags");
+    await chooseOnlyMode(page, "Quiz Run");
+    await page.getByRole("button", { name: "More actions" }).click();
+    await page.getByRole("button", { name: "Setup", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Save offline", exact: true })).toBeEnabled();
+    await page.getByRole("button", { name: "Save offline", exact: true }).click();
+    await expect(page.getByRole("button", { name: "Saved", exact: true })).toBeVisible({ timeout: 45000 });
+    await page.getByRole("button", { name: "Close setup" }).click();
+    if (origin) await origin.stop();
+    else await context.setOffline(true);
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+    await chooseOnlyMode(page, "Geo Finder");
+    await expect(page.getByLabel("World country boundaries")).toBeVisible();
+    expect(await page.locator('img[data-original-src*="/countries/"]').first().evaluate((img) => (img as HTMLImageElement).naturalWidth > 0)).toBe(true);
+    await expect(page.getByRole("button", { name: "Reload map" })).toHaveCount(0);
+  } finally {
+    if (origin) await origin.stop();
+    else await context.setOffline(false);
+  }
 });
 
 test("offline saving stays in Setup and the app shell supports an offline reload", { tag: "@mobile" }, async ({ page, context }) => {
@@ -2579,7 +2678,7 @@ test("phone HUD is exactly two lines with identity removed and full-size actions
   await expect(page.getByLabel("Play controls").getByRole("button")).toHaveCount(4);
 });
 
-test("iPhone question scroll keeps Next card sticky and thumb-reachable", { tag: "@mobile" }, async ({ page, isMobile }) => {
+test("iPhone question scroll keeps Next card sticky and thumb-reachable", { tag: ["@mobile", "@webkit"] }, async ({ page, isMobile }) => {
   test.skip(!isMobile, "mobile viewport coverage");
   await chooseOnlyMode(page, "Quiz Run");
 
@@ -2601,7 +2700,7 @@ test("iPhone question scroll keeps Next card sticky and thumb-reachable", { tag:
   expect(box).not.toBeNull();
   expect(viewport).not.toBeNull();
   expect(box!.y).toBeGreaterThanOrEqual(0);
-  expect(box!.y + box!.height).toBeLessThanOrEqual(viewport!.height);
+  expect(box!.y + box!.height).toBeLessThanOrEqual(viewport!.height - 16);
   expect(box!.y + box!.height).toBeGreaterThanOrEqual(viewport!.height - 100);
 });
 
@@ -2976,7 +3075,7 @@ test("Quiz automatically uses US and continent maps with reachable pins", { tag:
   const answer = peppers.find((pepper) => pepper.name === subject)!.metadata!.location!.label;
   await usMap.getByRole("button", { name: pinLabels.find((label) => label?.endsWith(`: ${answer}`))!, exact: true }).click();
   await expect(page.getByLabel("Answer feedback")).toBeVisible();
-  expect(await page.evaluate(() => {
+  await expect.poll(() => page.evaluate(() => {
     const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!);
     return saved.profiles.find((profile: { id: string }) => profile.id === saved.activeProfileId).progress.modeStats.quiz.correct;
   })).toBe(1);
@@ -3071,6 +3170,7 @@ test("geo finder stays inside the selected topic", async ({ page }) => {
     expect(seenPrompts.has(prompt ?? "")).toBe(false);
     seenPrompts.add(prompt ?? "");
     await expect(page.getByText("Tallest Mountains", { exact: true })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /^Choose map pin/ })).toHaveCount(4);
     const pinBoxes = await page.getByRole("button", { name: /^Choose map pin/ }).evaluateAll((pins) => pins.map((pin) => {
       const box = pin.getBoundingClientRect();
       return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
@@ -3346,6 +3446,35 @@ test("top trumps lets player choose a category against the computer", async ({ p
   await page.locator("button").filter({ hasText: /higher wins|lower wins/ }).first().click();
   await expect(page.getByText(/Player wins the matchup|Computer wins the matchup|round is a tie/)).toBeVisible();
   await expect(page.getByText("Computer card", { exact: true })).not.toBeVisible();
+});
+
+test("a Top Trumps tie rewards play without counting as an incorrect answer", { tag: ["@mobile", "@webkit"] }, async ({ page }) => {
+  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+  await page.getByRole("button", { name: "Hard", exact: true }).click();
+  await chooseOnlyMode(page, "Top Trumps");
+  const readProgress = () => page.evaluate(() => {
+    const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!);
+    return saved.profiles.find((profile: { id: string }) => profile.id === saved.activeProfileId).progress;
+  });
+  let tied = false;
+  for (let attempt = 0; attempt < 12; attempt++) {
+    const before = await readProgress();
+    await page.getByRole("button", { name: /Rarity.*higher wins/ }).click();
+    await expect(page.getByLabel("Answer feedback")).toBeVisible();
+    await expect.poll(async () => (await readProgress()).xp).toBeGreaterThan(before.xp);
+    const after = await readProgress();
+    if (after.learningHistory[0].outcome === "tie") {
+      expect(after.answered).toBe(before.answered);
+      expect(after.correct).toBe(before.correct);
+      expect(after.streak).toBe(before.streak);
+      expect(after.topicStats.peppers).toEqual(before.topicStats.peppers);
+      expect(after.modeStats.trumps.answered).toBe(before.modeStats.trumps.answered);
+      tied = true;
+      break;
+    }
+    await page.locator("[data-sticky-next]").getByRole("button").click();
+  }
+  expect(tied).toBe(true);
 });
 
 test("pepper top trumps uses concrete plant stats", async ({ page }) => {

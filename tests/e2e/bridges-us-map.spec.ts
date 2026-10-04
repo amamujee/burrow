@@ -103,7 +103,7 @@ test("US geography rounds use separated crossing locations and support Alaska", 
   expect(usStates).toHaveLength(51);
 });
 
-test("US map explores states and grades the selected pin on desktop and mobile", { tag: ["@browser", "@mobile"] }, async ({ page }, testInfo) => {
+test("US map explores states and grades the selected pin on desktop and mobile", { tag: ["@browser", "@mobile", "@webkit"] }, async ({ page }, testInfo) => {
   await page.route("**/api/play-events", (route) => route.fulfill({ status: 200, contentType: "application/json", body: '{"ok":true,"accepted":1}' }));
   await page.goto("/play");
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
@@ -152,7 +152,7 @@ test("US map explores states and grades the selected pin on desktop and mobile",
   const wrongPin = names.find((name) => !name.endsWith(`: ${answerCard.metadata!.location!.label}`))!;
   await map.getByRole("button", { name: wrongPin, exact: true }).click();
   await expect(page.getByLabel("Answer feedback")).toBeVisible();
-  expect(await page.evaluate(() => {
+  await expect.poll(() => page.evaluate(() => {
     const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!);
     return saved.profiles.find((profile: { id: string }) => profile.id === saved.activeProfileId).progress.modeStats.geo.correct;
   })).toBe(0);

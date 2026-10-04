@@ -14,7 +14,7 @@ A category is ready only when all of these are true:
 - Every image is local, credited, traceable to its exact source, semantically correct, and visually reviewed as a set.
 - Shared stats and categories support the selected game modes.
 - Difficulty, recognition, geography, rarity, and other metadata are used consistently where they are meaningful.
-- The category appears automatically in topic selection, Collection, Challenge, and the landing page.
+- The category appears automatically in topic selection, Quiz, Collection, and the landing page.
 - Desktop and mobile play work across every recommended mode.
 - `npm run check:category -- --pack <pack-id>` and `npm run verify` pass.
 
@@ -172,6 +172,7 @@ Start with the generic modes the pack actually supports. Remove a mode when its 
 
 Before marking the pack playable, manually sample each recommended mode at Easy, Medium, and Hard. Confirm:
 
+- Quiz offers four distinct choices. Recognition and classification use the existing cards and taxonomy; curated reading questions in `src/lib/pack-quiz.ts` must be answerable from the card’s sourced fact, with three plausible incorrect choices. Keep the passage and prompt short.
 - Head to Head compares the intended measure.
 - Top Trumps offers useful choices rather than duplicate or meaningless stats.
 - Sort uses the displayed value and handles ties honestly.
@@ -182,7 +183,7 @@ Before marking the pack playable, manually sample each recommended mode at Easy,
 
 ## 8. Review Integration Exceptions
 
-Standard JSON packs automatically receive loading, topic selection, profile migration, adaptive tracking, collection cards, generic gameplay, Challenge campaigns, and landing-page registration.
+Standard JSON packs automatically receive loading, topic selection, profile migration, adaptive tracking, collection cards, generic gameplay, and landing-page registration. Challenge campaigns and the experimental trails are retired.
 
 Review these only when the generic behavior is insufficient:
 

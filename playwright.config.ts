@@ -8,7 +8,6 @@ export default defineConfig({
   reporter: [["list"]],
   use: {
     baseURL: `http://127.0.0.1:${testPort}`,
-    channel: "chrome",
     trace: "on-first-retry",
   },
   webServer: {
@@ -20,19 +19,24 @@ export default defineConfig({
   },
   projects: [
     {
+      name: "webkit",
+      grep: /@webkit/,
+      use: { ...devices["iPad Pro 11"], browserName: "webkit", viewport: { width: 1024, height: 768 } },
+    },
+    {
       name: "desktop",
       grep: /@browser/,
-      use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
+      use: { channel: "chrome", ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
     },
     {
       name: "mobile",
       grep: /@mobile/,
-      use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
+      use: { channel: "chrome", ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
     },
     {
       name: "mobile-full",
       grep: /@browser/,
-      use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
+      use: { channel: "chrome", ...devices["Pixel 7"], viewport: { width: 390, height: 844 } },
     },
   ],
 });

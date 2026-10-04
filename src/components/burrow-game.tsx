@@ -1,26 +1,27 @@
 "use client";
 
 import { track } from "@vercel/analytics";
-import Image from "next/image";
+import Image from "@/components/card-image";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { EqualGroupsBoard } from "@/components/equal-groups-board";
 import { CollectionPhotoDialog } from "@/components/collection-photo-dialog";
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid, GameQuestionCard, GameRoundLayout } from "@/components/game-question-ui";
 import { OfflineReady } from "@/components/offline-ready";
 import { SaveTransfer } from "@/components/save-transfer";
+import { profilesBackupKey, useProfileStore } from "@/components/use-profile-store";
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { useModalFocus } from "@/components/use-modal-focus";
-import { weightTopicsForAccuracy } from "@/lib/adaptive-topics";
+import { recentTopicStats, weightTopicsForAccuracy } from "@/lib/adaptive-topics";
 import { resolvedImagePresentation } from "@/lib/building-image-presentation";
 import { collectionCardProfileDetails } from "@/lib/card-profile";
 import { cardRarities, cardRarityLabels, type CardRarity } from "@/lib/card-metadata";
 import { heatBands, heatProfiles, topicCatalog, topicIds, topicPacks, type Difficulty, type HeatBand } from "@/lib/game-data";
 import { cardDiscoveryIdentities, cardUnlockKeysForSubjects, isCardUnlocked } from "@/lib/card-discovery";
-import { autoDifficulty, peekRevealSettings } from "@/lib/difficulty";
+import { peekRevealSettings } from "@/lib/difficulty";
 import { poolForDifficulty } from "@/lib/difficulty-pool";
 import { migrateTopicSelection } from "@/lib/topic-selection";
 import { useSoundEffects } from "@/lib/sound-effects";
-import { profilesKey, type LearnerProfile, type ProfilesState, type Progress } from "@/lib/profile-save";
+import { parseProfileSave, profilesKey, type LearnerProfile, type ProfilesState, type Progress } from "@/lib/profile-save";
 import {
   buildFactRoundFromCards,
   buildFactRound,
@@ -59,6 +60,8 @@ import {
   type TopicScope,
 } from "@/lib/game-modes";
 import { packToPlayableDeck, type PlayablePackDeck } from "@/lib/pack-adapter";
+import { packQuizCandidates } from "@/lib/pack-quiz";
+import { shuffle, seedRandom } from "@/lib/random";
 import type { Pack } from "@/lib/pack-types";
 import { buildHeadToHeadSession, buildSession, questionMemoryKey, type ComparisonCard, type Question } from "@/lib/questions";
 import type { WorldLocation } from "@/lib/card-metadata";
@@ -340,12 +343,15 @@ const loadProfiles = (availableTopics: readonly RoundTopic[] = allKnowledgeTopic
 
   const savedProfiles = window.localStorage.getItem(profilesKey) ?? window.localStorage.getItem(legacyProfilesKey);
   if (savedProfiles) {
-    try {
-      const normalized = normalizeProfiles(JSON.parse(savedProfiles) as Partial<ProfilesState>, availableTopics);
-      if (normalized) return normalized;
-    } catch {
-      // Fall through to legacy progress migration.
+    for (const contents of [savedProfiles, window.localStorage.getItem(profilesBackupKey)]) {
+      if (!contents) continue;
+      try {
+        const normalized = normalizeProfiles(JSON.parse(contents) as Partial<ProfilesState>, availableTopics);
+        if (normalized) return parseProfileSave(JSON.stringify({ format: "burrow-save", version: 1,
+          exportedAt: new Date().toISOString(), profilesState: normalized })).profilesState;
+      } catch { /* Try the last good save, but never overwrite damaged data with defaults. */ }
     }
+    throw new Error("Saved progress is damaged");
   }
 
   const savedProgress = window.localStorage.getItem(legacyProgressKey);
@@ -450,10 +456,12 @@ const shortTelemetryValue = (value: string) => value.slice(0, 120);
 
 const loadAnonymousInstallId = () => {
   if (typeof window === "undefined") return "server";
-  const saved = window.localStorage.getItem(anonymousInstallKey);
-  if (saved) return saved;
   const installId = makeBrowserId("install");
-  window.localStorage.setItem(anonymousInstallKey, installId);
+  try {
+    const saved = window.localStorage.getItem(anonymousInstallKey);
+    if (saved) return saved;
+    window.localStorage.setItem(anonymousInstallKey, installId);
+  } catch { /* Telemetry storage must never prevent play. */ }
   return installId;
 };
 
@@ -469,7 +477,7 @@ const loadPendingPlayEvents = (): PlayTelemetryEvent[] => {
 
 const writePendingPlayEvents = (events: PlayTelemetryEvent[]) => {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(pendingPlayEventsKey, JSON.stringify(events.slice(-playEventPendingLimit)));
+  try { window.localStorage.setItem(pendingPlayEventsKey, JSON.stringify(events.slice(-playEventPendingLimit))); } catch { /* Best-effort telemetry. */ }
 };
 
 const dropPendingPlayEvents = (eventIds: Set<string>) => {
@@ -516,7 +524,7 @@ const topicScopeFor = (topic: RoundTopic | "mixed", interests: RoundTopic[], ava
 const adaptiveTopicScopeFor = (topic: RoundTopic | "mixed", interests: RoundTopic[], progress: Progress, availableTopics: readonly RoundTopic[] = allKnowledgeTopics): PlayableTopicScope => {
   const baseScope = topicScopeFor(topic, interests, availableTopics);
   if (topic !== "mixed" || typeof baseScope === "string") return baseScope;
-  return weightTopicsForAccuracy(baseScope, progress.topicStats);
+  return weightTopicsForAccuracy(baseScope, recentTopicStats(progress.learningHistory));
 };
 
 const builtInScopeFor = (scope: PlayableTopicScope): TopicScope => {
@@ -748,14 +756,32 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const scopedTopics = scopeTopics(scope);
     const builtInTopics = scopedTopics.filter(isKnowledgeTopic);
     const packTopics = scopedTopics.filter((topicId) => packDeckById.has(topicId));
-    const shouldUsePackComparison = nextMode === "versus" || (nextMode === "mix" && !builtInTopics.length);
-    if (shouldUsePackComparison && packTopics.length) {
-      const selectedPackTopic = pickTopic(packTopics, sessionSeed);
-      const deck = packDeckById.get(selectedPackTopic);
-      if (deck) return buildPackHeadToHeadSession(deck, difficulty, sessionSeed, seenIds);
-    }
-    return buildQuestionRun(builtInScopeFor(scope), nextMode, difficulty, sessionSeed, seenIds, nextMixModes, unlockedTitles, history);
-  }, [packDeckById, pickTopic, scopeTopics]);
+    if (!packTopics.length) return buildQuestionRun(builtInScopeFor(scope), nextMode, difficulty, sessionSeed, seenIds, nextMixModes, unlockedTitles, history);
+    const builtInQuestions = builtInTopics.length
+      ? buildQuestionRun(builtInTopics, nextMode, difficulty, sessionSeed, seenIds, nextMixModes, unlockedTitles, history) : [];
+    const packComparisons = new Map<string, Question[]>();
+    const virtualHistory = [...history];
+    return Array.from({ length: 16 }, (_, index) => {
+      const topicId = scopedTopics[(index + Math.abs(sessionSeed - 20260430)) % scopedTopics.length];
+      const deck = packDeckById.get(topicId);
+      if (!deck) return builtInQuestions[index];
+      const questionMode = nextMode === "mix" ? nextMixModes[index % nextMixModes.length] : nextMode;
+      let question: Question;
+      if (questionMode === "versus") {
+        if (!packComparisons.has(deck.id)) packComparisons.set(deck.id, buildPackHeadToHeadSession(deck, difficulty, sessionSeed, seenIds));
+        question = packComparisons.get(deck.id)![index];
+      } else {
+        const seed = sessionSeed + index * 101;
+        const candidates = shuffle(packQuizCandidates(deck, difficulty, seed), seedRandom(seed));
+        // Give reading a regular chance alongside the much larger category
+        // pool. Variety scoring still rejects recent subjects and repeats.
+        if (difficulty > 1 && seed % 3 === 0) candidates.sort((a, b) => Number(b.kind === "pack-reading") - Number(a.kind === "pack-reading"));
+        question = chooseVariedCandidate(candidates, questionLearningIdentity, virtualHistory);
+      }
+      virtualHistory.unshift({ ...questionLearningIdentity(question), mode: "scheduled", topic: deck.id, outcome: "scheduled", sequence: -(index + 1) });
+      return question;
+    });
+  }, [packDeckById, scopeTopics]);
   const geoCapableTopicsByDifficulty = useMemo(() => new Map(
     ([1, 2, 3] as const).map((difficulty) => [
       difficulty,
@@ -835,7 +861,9 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       return deck ? buildTopTrumpRoundFromCards(deck.cards, topicId, difficulty, candidateSeed, unlockedTitles) : buildTopTrumpRound(topicId as KnowledgeTopic, difficulty, candidateSeed, unlockedTitles);
     });
   }, [packDeckById, pickTopic]);
-  const [profilesState, setProfilesState] = useState<ProfilesState>(() => defaultProfiles());
+  const readProfiles = useCallback(() => loadProfiles(playableTopics), [playableTopics]);
+  const { state: profilesState, update: setProfilesState, initialize: initializeProfiles, importState,
+    issue: saveIssue, retry: retrySave } = useProfileStore(defaultProfiles, readProfiles);
   const [profilesReady, setProfilesReady] = useState(false);
   const activeProfile = profilesState.profiles.find((profile) => profile.id === profilesState.activeProfileId) ?? profilesState.profiles[0];
   const activeInterests = normalizeInterests(activeProfile.interests, playableTopics);
@@ -892,13 +920,11 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const geoCapableTopics = geoCapableTopicsByDifficulty.get(difficulty) ?? new Set<RoundTopic>();
     const hasGeo = interests.some((interest) => geoCapableTopics.has(interest));
     const available = defaultMixPattern.filter((item) => {
-      if (!hasBuiltIn && item === "quiz") return false;
       if (!hasBuiltIn && !hasPack && item === "versus") return false;
       if (!hasGeo && item === "geo") return false;
       return true;
     });
     const selected = (requestedModes.length ? requestedModes : available)
-      .filter((item) => hasBuiltIn || item !== "quiz")
       .filter((item) => hasBuiltIn || hasPack || item !== "versus")
       .filter((item) => hasGeo || item !== "geo");
     return { available, selected, active: selected.length ? selected : ["peek" as const] };
@@ -1043,8 +1069,9 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const currentRoundContext = currentTopicLabel;
   const accuracy = progress.answered ? Math.round((progress.correct / progress.answered) * 100) : 0;
   const learningSummary = useMemo(() => summarizeLearningHistory(progress.learningHistory), [progress.learningHistory]);
+  const recentStats = recentTopicStats(progress.learningHistory);
   const learningTopicRows = activeInterests.map((id) => {
-    const stats = progress.topicStats[id] ?? { correct: 0, answered: 0 };
+    const stats = recentStats[id] ?? { correct: 0, answered: 0 };
     return {
       label: topicMeta(id).label,
       answered: stats.answered,
@@ -1113,11 +1140,13 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
 
   useEffect(() => {
     const loadSavedProfiles = window.setTimeout(() => {
-      const loadedProfiles = loadProfiles(playableTopics);
+      let loadedProfiles: ProfilesState;
+      try { loadedProfiles = readProfiles(); }
+      catch { loadedProfiles = defaultProfiles(undefined, [...playableTopics]); }
       const loadedProfile = loadedProfiles.profiles.find((profile) => profile.id === loadedProfiles.activeProfileId) ?? loadedProfiles.profiles[0];
       const loadedInterests = normalizeInterests(loadedProfile.interests, playableTopics);
       const loadedScope = adaptiveTopicScopeFor("mixed", loadedInterests, loadedProfile.progress, playableTopics);
-      setProfilesState(loadedProfiles);
+      initializeProfiles(loadedProfiles);
       prepareConfiguredRounds({
         scope: loadedScope,
         nextMode: "mix",
@@ -1133,16 +1162,15 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     }, 0);
 
     return () => window.clearTimeout(loadSavedProfiles);
-  }, [playableTopics, prepareConfiguredRounds]);
+  }, [playableTopics, prepareConfiguredRounds, initializeProfiles, readProfiles]);
 
   useEffect(() => {
     if (!profilesReady) return;
     document.documentElement.dataset.burrowProfilesReady = "true";
-    window.localStorage.setItem(profilesKey, JSON.stringify(profilesState));
     return () => {
       delete document.documentElement.dataset.burrowProfilesReady;
     };
-  }, [profilesReady, profilesState]);
+  }, [profilesReady]);
 
   const flushPlayEvents = useCallback(async () => {
     if (playFlushInFlightRef.current || typeof window === "undefined") return;
@@ -1455,7 +1483,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         return { ...profile, progress: normalizeProgress(nextProgress) };
       }),
     }));
-  }, [activeProfile.id]);
+  }, [activeProfile.id, setProfilesState]);
 
   const reward = ({
     correct,
@@ -1498,8 +1526,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
         streak: neutral ? current.streak : correct ? current.streak + 1 : 0,
         bestStreak: Math.max(current.bestStreak, correct ? current.streak + 1 : 0),
         correct: current.correct + (correct ? 1 : 0),
-        answered: current.answered + 1,
-        difficulty: neutral ? current.difficulty : autoDifficulty(current.difficulty, correct, correct ? current.streak + 1 : 0, current.answered + 1, current.correct + (correct ? 1 : 0)),
+        answered: current.answered + (neutral ? 0 : 1),
         seenIds: [seenId, ...current.seenIds].slice(0, 80),
         learningHistory: addLearningExposure(current.learningHistory, exposureIdentity, {
           mode: modeName ?? "quiz",
@@ -1513,7 +1540,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
               ...current.topicStats,
               [topicName]: {
                 correct: (current.topicStats[topicName]?.correct ?? 0) + (correct ? 1 : 0),
-                answered: (current.topicStats[topicName]?.answered ?? 0) + 1,
+                answered: (current.topicStats[topicName]?.answered ?? 0) + (neutral ? 0 : 1),
               },
             }
           : current.topicStats,
@@ -1528,7 +1555,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
               ...current.modeStats,
               [modeName]: {
                 correct: current.modeStats[modeName].correct + (correct ? 1 : 0),
-                answered: current.modeStats[modeName].answered + 1,
+                answered: current.modeStats[modeName].answered + (neutral ? 0 : 1),
                 collected: current.modeStats[modeName].collected + newlyCollected,
               },
             }
@@ -1631,13 +1658,12 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setCelebration(`${nextProfile.name}'s turn.`);
   };
 
-  const importProfiles = (saved: ProfilesState) => {
+  const importProfiles = async (saved: ProfilesState) => {
     const restored = normalizeProfiles(saved, playableTopics);
     if (!restored) throw new Error("No players to import");
     // Write first: a quota/storage failure must leave both the current save and UI intact.
-    window.localStorage.setItem(profilesKey, JSON.stringify(restored));
+    await importState(restored);
     const restoredProfile = restored.profiles.find((profile) => profile.id === restored.activeProfileId)!;
-    setProfilesState(restored);
     setShowCollection(false);
     setTopic("mixed");
     setMode("mix");
@@ -1696,7 +1722,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     const nextGeoCapableTopics = geoCapableTopicsByDifficulty.get(progress.difficulty) ?? new Set<RoundTopic>();
     const nextHasGeoInterests = safeInterests.some((item) => nextGeoCapableTopics.has(item));
     const nextHasPackInterests = nextInterests.some((interest) => packDeckById.has(interest));
-    const nextMode = (mode === "quiz" && !nextHasBuiltInInterests) || (mode === "versus" && !nextHasBuiltInInterests && !nextHasPackInterests) || (mode === "geo" && !nextHasGeoInterests)
+    const nextMode = (mode === "versus" && !nextHasBuiltInInterests && !nextHasPackInterests) || (mode === "geo" && !nextHasGeoInterests)
       ? "mix"
       : mode;
     const seed = freshSeed(seedBasis.length + safeInterests.length * 41);
@@ -1704,7 +1730,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
 
     setProfilesState((current) => ({
       ...current,
-      profiles: current.profiles.map((profile) => (profile.id === activeProfile.id ? nextProfile : profile)),
+      profiles: current.profiles.map((profile) => (profile.id === activeProfile.id ? { ...profile, interests: safeInterests } : profile)),
     }));
     setMode(nextMode);
     restartPlay(nextTopic, nextMode, nextProfile, seed);
@@ -2361,6 +2387,10 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
           saveTransfer={<SaveTransfer profilesState={profilesState} cards={allCards} ready={profilesReady} onImport={importProfiles} />}
         />
 
+        {saveIssue && <div role="alert" aria-label="Progress not saved" className="rounded-lg border-2 border-[#9f3f2b] bg-[#fff0ea] p-3 text-sm">
+          <p>{saveIssue}</p>
+          <button type="button" onClick={() => void retrySave()} className="mt-2 min-h-11 rounded-lg border-2 border-[#092421] px-3 font-bold">Retry save</button>
+        </div>}
         {roundsPreparing ? (
           <section
             role="status"
@@ -2884,7 +2914,7 @@ function HudProgress({
           </span>
           <span className="sr-only">{accuracy}% right</span>
         </span>
-      <span className="sr-only" aria-label={`${learningRecap.strongConcepts} strong concepts and ${learningRecap.reviewConcepts} recent concepts ready to review`}>
+      <span className="sr-only" aria-label={`${learningRecap.strongConcepts} strong concepts and ${learningRecap.reviewConcepts} concepts ready to review`}>
         {memoryLine}
       </span>
     </button>
@@ -3036,12 +3066,12 @@ function LearningRecapPanel({ recap }: { recap: LearningRecap }) {
         <div>
           <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#2f665d]">Learning recap</p>
           <p className="mt-1 text-lg font-black leading-tight text-[#102f36]">
-            {hasPractice ? `${recap.strongConcepts} strong · ${recap.reviewConcepts} ready to revisit` : "Ready for the first field note"}
+            {hasPractice ? `${recap.strongConcepts} strong · ${recap.reviewConcepts} ready to revisit` : "Ready for the first question"}
           </p>
           <p className="mt-1 text-xs font-bold leading-snug text-[#5f6b5d]">
             {hasPractice
               ? recap.reviewConcepts > 0
-                ? `Burrow will bring missed ideas back in a different way. Next focus: ${recap.focusLabel}${recap.focusAccuracy === null ? "" : ` at ${recap.focusAccuracy}%`}.`
+                ? `Missed ideas will return during normal play. Recent focus: ${recap.focusLabel}${recap.focusAccuracy === null ? "" : ` at ${recap.focusAccuracy}%`}.`
                 : `Nothing is waiting for review. Keep exploring ${recap.focusLabel}.`
               : "Correct answers and misses will shape what Burrow brings back next."}
           </p>
@@ -3060,7 +3090,7 @@ function LearningRecapPanel({ recap }: { recap: LearningRecap }) {
             <div key={item.label} className="flex items-center justify-between gap-3 rounded-md border border-[#89b6a6] bg-white/80 px-2 py-1.5">
               <div className="min-w-0">
                 <p className="truncate text-xs font-black text-[#102f36]">{item.label}</p>
-                <p className="text-[9px] font-bold text-[#5f6b5d]">{item.answered} answered</p>
+                <p className="text-[9px] font-bold text-[#5f6b5d]">Recent {item.answered} answers</p>
               </div>
               <p className="shrink-0 text-sm font-black text-[#2f665d]">{item.accuracy}%</p>
             </div>

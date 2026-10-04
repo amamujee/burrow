@@ -12,7 +12,7 @@ Burrow is a local-first learning game that turns a kid's current obsession into 
 - Keeps single-mode play available when a child wants to focus on one game type.
 - Ships with core catalogs plus repo-authored packs such as dinosaurs, mountains, bridges and tunnels, and hot sauces with pepper oils.
 - Uses real facts, comparable stats, maps, and credited local images to teach in context.
-- Adapts future questions using recent answers and revisits concepts that need more practice.
+- Keeps the selected difficulty fixed, adapts topic practice using recent graded answers, and occasionally revisits missed concepts. Top Trumps ties do not reduce accuracy.
 - Unlocks collection cards through correct answers while preserving separate progress for each player.
 - Stores player progress locally and caches the app shell and learning assets for offline use.
 
@@ -50,6 +50,8 @@ Open [http://localhost:3000](http://localhost:3000), or go directly to [http://l
 
 Saves include every player's progress, cards, learning history, topics, difficulty, and the active player. Play resumes with a new round. Sound preferences and downloaded offline assets stay device-specific. This is a manual transfer, not automatic cloud sync. Safari and the Home Screen app can have separate saves, so export and import inside the place you actually play.
 
+Save updates are serialized across tabs and retain a previous valid backup. If browser storage fails, play continues in memory with a retry and export reminder. Keep that tab open until the save succeeds or you export it.
+
 ## Useful Scripts
 
 ```bash
@@ -66,7 +68,9 @@ npm run test:e2e       # Build and run watchdog-bounded browser coverage
 npm run verify         # Run the complete pre-publish check
 ```
 
-Playwright runs use a process watchdog in `scripts/run-playwright.mjs`. Logic and browser projects stop after 60 seconds without output, with four- and five-minute overall limits respectively. An idle timeout gets one automatic retry with a single worker and a fresh local server port; normal test failures are not retried. Desktop coverage runs as four isolated shards, followed by the smaller mobile project, so any retry repeats only the affected shard. Each browser attempt owns its Next.js server, preventing a stalled run from silently holding the suite open or poisoning the next attempt with a stale server.
+Install browser test engines with `npx playwright install chrome webkit`.
+
+Playwright runs use a process watchdog in `scripts/run-playwright.mjs`. Logic and browser projects stop after 60 seconds without output, with four- and five-minute overall limits respectively. An idle timeout gets one automatic retry with a single worker and a fresh local server port; normal test failures are not retried. Desktop coverage runs as four isolated shards, followed by the mobile and iPad WebKit projects, so any retry repeats only the affected shard. Each browser attempt owns its Next.js server, preventing a stalled run from silently holding the suite open or poisoning the next attempt with a stale server.
 
 ## Make Your Own Pack
 

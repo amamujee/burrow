@@ -99,7 +99,10 @@ export type QuestionKind =
   | "country-area"
   | "country-neighbors"
   | "country-highest-point"
-  | "pack-comparison";
+  | "pack-comparison"
+  | "pack-reading"
+  | "pack-classification"
+  | "pack-name";
 
 export type ComparisonCard = {
   label: "A" | "B";

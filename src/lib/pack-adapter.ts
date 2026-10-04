@@ -57,6 +57,7 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
         ...(primary && ["scoville", "pepper-scoville"].includes(primary.id) ? { collectionSortValue: primary.value } : {}),
         subStat: card.metadata?.location ? worldLocationDisplay(card.metadata.location) : card.categories[0] ?? pack.title,
         fact: card.fact,
+        readingPrompts: card.readingPrompts,
         qualityScore,
         qualityFlags: [],
         categories: card.categories,

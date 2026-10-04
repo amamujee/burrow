@@ -85,7 +85,18 @@ self.addEventListener("activate", (event) => {
 const cacheFirst = async (request) => {
   const cached = await caches.match(request, { ignoreVary: true });
   if (cached) return cached;
-  const response = await fetch(request);
+  let response;
+  try {
+    response = await fetch(request);
+  } catch (error) {
+    // SVGs bypass the image optimizer. Their versioned URL must still be able
+    // to use the full-quality original saved for offline play.
+    if (new URL(request.url).pathname.startsWith("/burrow-assets/")) {
+      const original = await caches.match(request, { ignoreVary: true, ignoreSearch: true });
+      if (original) return original;
+    }
+    throw error;
+  }
   if (response.ok) {
     const cache = await caches.open(request.url.includes("/_next/static/") ? SHELL_CACHE : CONTENT_CACHE);
     await cache.put(request, response.clone());
@@ -95,13 +106,17 @@ const cacheFirst = async (request) => {
 
 const optimizedImageResponse = async (request) => {
   try {
-    return await cacheFirst(request);
+    const response = await cacheFirst(request);
+    if (response.ok) return response;
+    // An older open tab can request the previous image revision after deploy.
+    // The optimizer may reject it; the saved original is still usable.
+    throw new Error("Optimized image is unavailable");
   } catch {
     const optimizedUrl = new URL(request.url);
     const originalPath = optimizedUrl.searchParams.get("url");
     const originalUrl = originalPath ? sameOriginUrl(originalPath) : null;
     if (!originalUrl) return Response.error();
-    return (await caches.match(originalUrl.href, { ignoreVary: true })) ?? Response.error();
+    return (await caches.match(originalUrl.href, { ignoreVary: true, ignoreSearch: true })) ?? Response.error();
   }
 };
 
@@ -188,16 +203,20 @@ const fetchAndCacheContent = async (cache, index, entry) => {
   const cached = await cache.match(entry.url, { ignoreVary: true });
   if (cached && index[entry.url] === entry.revision) return { ok: true, cached: true, bytes: entry.bytes };
 
-  // A current page image can reach the content cache just before the warm-up message.
-  // The v2 activation removes legacy caches, so an unindexed response is safe to adopt.
-  if (cached && !index[entry.url]) {
-    index[entry.url] = entry.revision;
-    return { ok: true, cached: true, bytes: entry.bytes };
-  }
-
   try {
     const response = await fetch(new Request(entry.url, { cache: "reload" }));
     if (!response.ok) return { ok: false, cached: false, bytes: 0 };
+    // A filename can stay the same when its picture changes. Remove derived
+    // sizes as well; unindexed responses cannot be assumed to be current.
+    if (cached || index[entry.url]) {
+      const original = new URL(entry.url);
+      const requests = await cache.keys();
+      await Promise.all(requests.map((request) => {
+        const url = new URL(request.url);
+        const source = url.pathname === "/_next/image" ? sameOriginUrl(url.searchParams.get("url")) : url;
+        return source?.pathname === original.pathname ? cache.delete(request) : false;
+      }));
+    }
     await cache.put(entry.url, response.clone());
     index[entry.url] = entry.revision;
     return { ok: true, cached: false, bytes: entry.bytes };

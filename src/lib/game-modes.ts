@@ -256,6 +256,7 @@ export type TopTrumpRound = {
 };
 
 export type GenericKnowledgeCard = KnowledgeCard & {
+  readingPrompts?: string[];
   categories: string[];
   stats: TopTrumpStat[];
 };

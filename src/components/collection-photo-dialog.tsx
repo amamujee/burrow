@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/card-image";
 import { useEffect, useRef, useState } from "react";
 import { useModalFocus } from "@/components/use-modal-focus";
 import type { KnowledgeCard } from "@/lib/game-modes";

@@ -143,7 +143,7 @@ async function chooseCountriesGeo(page: Page) {
 }
 
 for (const viewport of [null, { width: 820, height: 1180 }, { width: 1280, height: 720 }] as const) {
-  test(`continent maps explore, switch, reset and grade country pins${viewport ? ` at ${viewport.width}x${viewport.height}` : ""}`, { tag: ["@browser", "@mobile"] }, async ({ page }, testInfo) => {
+  test(`continent maps explore, switch, reset and grade country pins${viewport ? ` at ${viewport.width}x${viewport.height}` : ""}`, { tag: ["@browser", "@mobile", "@webkit"] }, async ({ page }, testInfo) => {
     if (viewport) await page.setViewportSize(viewport);
     await chooseCountriesGeo(page);
     const maps = page.locator('[aria-label$=" map"]').filter({ has: page.locator("[data-continent-map-plot]") });
@@ -208,7 +208,7 @@ for (const viewport of [null, { width: 820, height: 1180 }, { width: 1280, heigh
     const answer = countries.find((country) => heading.endsWith(`${country.name}?`))!;
     await map.getByRole("button", { name: names.find((name) => name.endsWith(`: ${answer.name}`))!, exact: true }).click();
     await expect(page.getByLabel("Answer feedback")).toBeVisible();
-    expect(await page.evaluate(() => { const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!); return saved.profiles.find((p: { id: string }) => p.id === saved.activeProfileId).progress.modeStats.geo.correct; })).toBe(1);
+    await expect.poll(() => page.evaluate(() => { const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!); return saved.profiles.find((p: { id: string }) => p.id === saved.activeProfileId).progress.modeStats.geo.correct; })).toBe(1);
     await expect(pins.first()).toBeDisabled();
     await page.getByLabel("Map view", { exact: true }).selectOption("Antarctica");
     await page.getByRole("button", { name: /^(Next card|Finish round)/ }).click();
@@ -218,7 +218,7 @@ for (const viewport of [null, { width: 820, height: 1180 }, { width: 1280, heigh
   });
 }
 
-test("world country pins grade correctly and keep exploration separate from answering", { tag: ["@browser", "@mobile"] }, async ({ page }) => {
+test("world country pins grade correctly and keep exploration separate from answering", { tag: ["@browser", "@mobile", "@webkit"] }, async ({ page }) => {
   await chooseCountriesGeo(page);
   await page.getByRole("button", { name: "Easy", exact: true }).click();
   await expect(page.getByLabel("Preparing the next round")).toBeHidden();
@@ -234,5 +234,5 @@ test("world country pins grade correctly and keep exploration separate from answ
   await pin.click();
   await expect(page.getByLabel("Answer feedback")).toBeVisible();
   await expect(pin).toBeDisabled();
-  expect(await page.evaluate(() => { const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!); return saved.profiles.find((p: { id: string }) => p.id === saved.activeProfileId).progress.modeStats.geo.correct; })).toBe(1);
+  await expect.poll(() => page.evaluate(() => { const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!); return saved.profiles.find((p: { id: string }) => p.id === saved.activeProfileId).progress.modeStats.geo.correct; })).toBe(1);
 });

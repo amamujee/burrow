@@ -130,7 +130,7 @@ export function GameAnswerFeedback({
       </div>
       <div
         data-sticky-next
-        className={`burrow-next-dock fixed bottom-[calc(env(safe-area-inset-bottom)+8px)] left-6 right-6 z-30 bg-[#fffdf6]/95 px-1 pt-3 backdrop-blur ${compactOnDesktop ? "min-[760px]:pt-2" : ""}`}
+        className={`burrow-next-dock fixed bottom-[calc(env(safe-area-inset-bottom)+8px)] left-6 right-6 z-30 bg-[#fffdf6]/95 px-1 pb-2 pt-3 backdrop-blur ${compactOnDesktop ? "min-[760px]:pt-2" : ""}`}
       >
         <button type="button" onClick={() => onNext()} className={`min-h-12 w-full rounded-lg border-2 border-[#092421] bg-[#102f36] px-4 py-2.5 text-base font-black text-white shadow-[3px_3px_0_#092421] hover:bg-[#23564f] ${compactOnDesktop ? "min-[760px]:min-h-11 min-[760px]:py-2 min-[760px]:text-sm" : ""}`}>
           {nextLabel}

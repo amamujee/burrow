@@ -10,7 +10,7 @@ export function SaveTransfer({ profilesState, cards, ready, onImport }: {
   profilesState: ProfilesState;
   cards: readonly DiscoverableCard[];
   ready: boolean;
-  onImport: (state: ProfilesState) => void;
+  onImport: (state: ProfilesState) => void | Promise<void>;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const importButtonRef = useRef<HTMLButtonElement>(null);
@@ -68,16 +68,19 @@ export function SaveTransfer({ profilesState, cards, ready, onImport }: {
     }
   };
 
-  const importSave = () => {
+  const importSave = async () => {
     if (!pendingSave) return;
+    setBusy(true);
     try {
-      onImport(pendingSave.profilesState);
+      await onImport(pendingSave.profilesState);
       setPendingSave(null);
       setError("");
       setMessage("Save imported. Close Setup to play with your restored progress.");
       importButtonRef.current?.focus();
     } catch {
       setError("This device could not store the save. Your current progress is unchanged. Free some device storage and try again.");
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -113,8 +116,8 @@ export function SaveTransfer({ profilesState, cards, ready, onImport }: {
           </ul>
           <p className="mt-3 text-sm font-bold">This replaces all players and progress on this device. Export your current save first if you want to keep it.</p>
           <div className="mt-3 flex flex-wrap gap-2">
-            <button type="button" className={buttonClass} onClick={() => { setPendingSave(null); setError(""); importButtonRef.current?.focus(); }}>Cancel import</button>
-            <button type="button" className={`${buttonClass} !bg-[#f0c84b]`} onClick={importSave}>Replace players and import</button>
+            <button type="button" disabled={busy} className={buttonClass} onClick={() => { setPendingSave(null); setError(""); importButtonRef.current?.focus(); }}>Cancel import</button>
+            <button type="button" disabled={busy} className={`${buttonClass} !bg-[#f0c84b]`} onClick={() => void importSave()}>Replace players and import</button>
           </div>
         </div>
       )}

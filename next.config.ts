@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
+import { version } from "./public/offline-assets.json";
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1"],
+  images: {
+    localPatterns: [
+      { pathname: "/burrow-assets/**", search: `?v=${version}` },
+      { pathname: "/**", search: "" },
+    ],
+  },
   turbopack: {
     root: __dirname,
   },

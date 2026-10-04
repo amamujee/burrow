@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/card-image";
 import Link from "next/link";
 import { buildLandingTopicCards } from "@/lib/landing-topics";
 import { loadPlayablePacks } from "@/lib/pack-loader";

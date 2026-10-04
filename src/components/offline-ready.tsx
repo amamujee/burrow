@@ -1,5 +1,6 @@
 "use client";
 
+import { preloadMaps } from "./world-map-surface";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type OfflineAsset = {
@@ -144,7 +145,12 @@ export function OfflineReady({ selectedImageUrls, warmImageUrls, compact = false
         const total = message.total ?? selectedEntries.length;
         const cached = message.cached ?? 0;
         setShellReady(Boolean(message.shellReady));
-        setReady(Boolean(message.shellReady) && total > 0 && cached === total);
+        setReady(false);
+        if (message.shellReady && total > 0 && cached === total) {
+          // Cached pictures alone do not guarantee that this build's deferred
+          // map chunk is available, especially just after an app update.
+          void preloadMaps().then(() => { if (!cancelled) setReady(true); }).catch(() => undefined);
+        }
         setProgress({ completed: cached, total, cached, downloaded: 0, failed: 0 });
         return;
       }
@@ -228,6 +234,8 @@ export function OfflineReady({ selectedImageUrls, warmImageUrls, compact = false
       if ("storage" in navigator && "persist" in navigator.storage) await navigator.storage.persist();
       const registration = registrationRef.current ?? await navigator.serviceWorker.ready;
       if (!registration.active) throw new Error("Offline worker is not active");
+      // Load the deferred map chunk while online so every region works in flight.
+      await preloadMaps();
       registration.active.postMessage({ type: "CACHE_URLS", requestId: requestIdRef.current, entries: selectedEntries });
     } catch {
       setSaving(false);

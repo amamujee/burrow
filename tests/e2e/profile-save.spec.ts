@@ -79,7 +79,7 @@ const openSetup = async (page: Page) => {
 };
 const storedState = (page: Page): Promise<ProfilesState> => page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), profilesKey);
 
-test.describe("save transfer", { tag: ["@browser", "@mobile"] }, () => {
+test.describe("save transfer", { tag: ["@browser", "@mobile", "@webkit"] }, () => {
   test("exports to a file and restores all progress in a separate iPad-sized session", async ({ page, browser }, testInfo) => {
     await openGame(page);
     const existing = await storedState(page);
@@ -211,5 +211,83 @@ test.describe("save transfer", { tag: ["@browser", "@mobile"] }, () => {
     const download = await downloadEvent;
     expect(download.suggestedFilename()).toMatch(/^burrow-save-.*\.json$/);
     expect(await storedState(page)).toEqual(before);
+  });
+});
+
+
+test.describe("save resilience", { tag: ["@browser", "@mobile", "@webkit"] }, () => {
+  test("two tabs preserve simultaneous answers and keep separate selected players", async ({ page, context }) => {
+    await openGame(page);
+    const second = await context.newPage();
+    await openGame(second, page.url());
+    const initial = await storedState(page);
+    const id = initial.activeProfileId;
+    const answered = initial.profiles.find((profile) => profile.id === id)!.progress.answered;
+    await Promise.all([page, second].map((tab) => tab.getByLabel("Answer choices").getByRole("button", { name: "not spicy", exact: true }).click()));
+    await expect.poll(async () => (await storedState(page)).profiles.find((profile) => profile.id === id)!.progress.answered).toBe(answered + 2);
+    const dialog = await openSetup(second);
+    const otherId = initial.profiles.find((profile) => profile.id !== id)!.id;
+    await dialog.getByRole("combobox", { name: "Player", exact: true }).selectOption(otherId);
+    await expect.poll(async () => (await storedState(page)).activeProfileId).toBe(otherId);
+    expect((await storedState(page)).profiles.find((profile) => profile.id === id)!.progress.answered).toBe(answered + 2);
+    const firstDialog = await openSetup(page);
+    await expect(firstDialog.getByRole("combobox", { name: "Player", exact: true })).toHaveValue(id);
+    await second.close();
+  });
+
+  test("storage failures keep play usable and retry saves every pending answer", async ({ page }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await openGame(page);
+    const before = await storedState(page);
+    await page.evaluate((key) => {
+      const original = Storage.prototype.setItem;
+      Object.assign(window, { restoreStorage: () => { Storage.prototype.setItem = original; } });
+      Storage.prototype.setItem = function (name, value) {
+        if (name === key) throw new DOMException("Storage full", "QuotaExceededError");
+        original.call(this, name, value);
+      };
+    }, profilesKey);
+    await page.getByLabel("Answer choices").getByRole("button", { name: "not spicy", exact: true }).click();
+    await expect(page.getByRole("alert", { name: "Progress not saved" })).toBeVisible();
+    await expect(page.getByLabel("Answer feedback")).toBeVisible();
+    expect(await storedState(page)).toEqual(before);
+    await page.evaluate(() => (window as unknown as { restoreStorage: () => void }).restoreStorage());
+    await page.getByRole("button", { name: "Retry save" }).click();
+    await expect(page.getByRole("alert", { name: "Progress not saved" })).toHaveCount(0);
+    await expect.poll(async () => (await storedState(page)).profiles[0].progress.answered).toBe(before.profiles[0].progress.answered + 1);
+    await page.reload();
+    await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+    expect((await storedState(page)).profiles[0].progress.answered).toBe(before.profiles[0].progress.answered + 1);
+    expect(errors).toEqual([]);
+  });
+
+  test("unavailable browser storage still allows play without an uncaught error", async ({ page }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.addInitScript(() => {
+      Storage.prototype.getItem = () => { throw new DOMException("Storage unavailable", "SecurityError"); };
+      Storage.prototype.setItem = () => { throw new DOMException("Storage unavailable", "SecurityError"); };
+    });
+    await openGame(page);
+    await expect(page.getByRole("alert", { name: "Progress not saved" })).toBeVisible();
+    await page.getByLabel("Answer choices").getByRole("button", { name: "not spicy", exact: true }).click();
+    await expect(page.getByLabel("Answer feedback")).toBeVisible();
+    expect(errors).toEqual([]);
+  });
+
+  test("a damaged primary save recovers the last valid backup", async ({ page }) => {
+    await openGame(page);
+    const saved = await storedState(page);
+    saved.profiles[0].progress.xp = 360;
+    saved.profiles[0].progress.level = 4;
+    await page.evaluate(({ key, saved }) => {
+      localStorage.setItem(`${key}-backup`, JSON.stringify(saved));
+      localStorage.setItem(key, '{"profiles": broken');
+    }, { key: profilesKey, saved });
+    await page.reload();
+    await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+    await expect.poll(async () => (await storedState(page)).profiles[0].progress.xp).toBe(360);
+    await expect(page.getByRole("button", { name: /Level 4\. View progress stats/ })).toBeVisible();
   });
 });
