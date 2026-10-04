@@ -15,8 +15,8 @@ const references = (card) => card.sourceUrls.map((url) => {
     url,
     note: [
       isWeight && card.weight.note,
-      isSize && `Size reviewed ${source.sizeReviewedOn}. ${sizeNote(card)}`,
-      !measurements.length && `Reviewed ${source.reviewedOn}. Identity, origin, appearance and flavor; ratings are editorial interpretations.`,
+      isSize && `Size reviewed ${card.reviewedOn ?? source.sizeReviewedOn}. ${sizeNote(card)}`,
+      !measurements.length && `Reviewed ${card.reviewedOn ?? source.reviewedOn}. Identity, origin, appearance and flavor; ratings are editorial interpretations.`,
     ].filter(Boolean).join(" "),
   };
 });
@@ -63,7 +63,7 @@ const pack = {
       name: card.name,
       image: card.image,
       imageAlt: card.imageAlt,
-      imageCredit: `${card.imageCreator} / Wikimedia Commons / ${card.imageLicense} (${card.imageLicenseUrl}). Resized as JPEG. Original: ${card.sourceFile}`,
+      imageCredit: `${card.imageCreator} / Wikimedia Commons / ${card.imageLicense} (${card.imageLicenseUrl}). ${card.imageProcessing ?? "Resized as JPEG"}. Original: ${card.sourceFile}`,
       imageSourceUrl: card.imageSourceUrl,
       fact: card.fact,
       stats: [

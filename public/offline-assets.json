@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "version": "554630ec2a9d93ef99eb",
-  "assetCount": 1186,
-  "totalBytes": 256499047,
+  "version": "ad555485fdc0c94005fd",
+  "assetCount": 1211,
+  "totalBytes": 263737276,
   "assets": {
     "/burrow-assets/bridges-and-tunnels/1915-canakkale-bridge.jpg": {
       "bytes": 182945,
@@ -1800,9 +1800,17 @@
       "bytes": 88132,
       "revision": "5ece228d78ea54d5dfba"
     },
+    "/burrow-assets/fruits/akebi-bbf975dd60ed.jpg": {
+      "bytes": 81388,
+      "revision": "bbf975dd60edc2768216"
+    },
     "/burrow-assets/fruits/ambarella-b13cee6c0eb7.jpg": {
       "bytes": 229465,
       "revision": "b13cee6c0eb79854349f"
+    },
+    "/burrow-assets/fruits/american-persimmon-a2a3ffcdcab1.jpg": {
+      "bytes": 256025,
+      "revision": "a2a3ffcdcab127ba7e2a"
     },
     "/burrow-assets/fruits/amla-6f7a860e2b56.jpg": {
       "bytes": 135626,
@@ -1816,6 +1824,10 @@
       "bytes": 279103,
       "revision": "f08f1f0e1b0b7545c26a"
     },
+    "/burrow-assets/fruits/araza-c2e65c67e0ba.jpg": {
+      "bytes": 452547,
+      "revision": "c2e65c67e0ba6f80e012"
+    },
     "/burrow-assets/fruits/asian-pear-6a20ae66a06e.jpg": {
       "bytes": 152458,
       "revision": "6a20ae66a06eee2d6364"
@@ -1827,6 +1839,10 @@
     "/burrow-assets/fruits/avocado-53d21bacaca1.jpg": {
       "bytes": 199592,
       "revision": "53d21bacaca19d8d386f"
+    },
+    "/burrow-assets/fruits/bacuri-572d4110782b.jpg": {
+      "bytes": 280184,
+      "revision": "572d4110782bc88ad2ad"
     },
     "/burrow-assets/fruits/bael-2a48ae39972f.jpg": {
       "bytes": 404986,
@@ -1843,6 +1859,14 @@
     "/burrow-assets/fruits/baobab-d3669ca5c305.jpg": {
       "bytes": 183648,
       "revision": "d3669ca5c30596385832"
+    },
+    "/burrow-assets/fruits/beach-cherry-fcf713d7ba52.jpg": {
+      "bytes": 436716,
+      "revision": "fcf713d7ba521e071537"
+    },
+    "/burrow-assets/fruits/bignay-73b7b482a80e.jpg": {
+      "bytes": 351325,
+      "revision": "73b7b482a80e01ea25ee"
     },
     "/burrow-assets/fruits/bilimbi-69493c8841dd.jpg": {
       "bytes": 240016,
@@ -1864,6 +1888,10 @@
       "bytes": 104949,
       "revision": "4a7f482fcb56a9289353"
     },
+    "/burrow-assets/fruits/blue-quandong-ed62b3fc497d.jpg": {
+      "bytes": 308472,
+      "revision": "ed62b3fc497de44a6440"
+    },
     "/burrow-assets/fruits/blueberry-482269304b83.jpg": {
       "bytes": 102348,
       "revision": "482269304b83bcf05052"
@@ -1871,6 +1899,18 @@
     "/burrow-assets/fruits/breadfruit-41756b7abf96.jpg": {
       "bytes": 238595,
       "revision": "41756b7abf9690e1d388"
+    },
+    "/burrow-assets/fruits/buriti-274579c3628b.jpg": {
+      "bytes": 524915,
+      "revision": "274579c3628bada90d80"
+    },
+    "/burrow-assets/fruits/burmese-grape-3bc3b8465c94.jpg": {
+      "bytes": 224564,
+      "revision": "3bc3b8465c9484bf9fd0"
+    },
+    "/burrow-assets/fruits/camu-camu-44a0f35157d3.jpg": {
+      "bytes": 192093,
+      "revision": "44a0f35157d32ee09648"
     },
     "/burrow-assets/fruits/canistel-f9faade7be64.jpg": {
       "bytes": 81965,
@@ -1887,6 +1927,10 @@
     "/burrow-assets/fruits/cashew-apple-26f06c77f03c.jpg": {
       "bytes": 363242,
       "revision": "26f06c77f03c5c1cb568"
+    },
+    "/burrow-assets/fruits/cempedak-bd8911ae5512.jpg": {
+      "bytes": 379920,
+      "revision": "bd8911ae5512d16e0c4e"
     },
     "/burrow-assets/fruits/cherimoya-722294e6b807.jpg": {
       "bytes": 223759,
@@ -1907,6 +1951,10 @@
     "/burrow-assets/fruits/coconut-bf433117aecc.jpg": {
       "bytes": 229026,
       "revision": "bf433117aecc9cd7c0b5"
+    },
+    "/burrow-assets/fruits/cornelian-cherry-4ceb70f99fa6.jpg": {
+      "bytes": 165690,
+      "revision": "4ceb70f99fa67ec958df"
     },
     "/burrow-assets/fruits/cranberry-3efd957f2ee9.jpg": {
       "bytes": 102967,
@@ -1980,6 +2028,14 @@
       "bytes": 66088,
       "revision": "f9e4629c2a2dbf6e9a3b"
     },
+    "/burrow-assets/fruits/ice-cream-bean-1a030decee15.jpg": {
+      "bytes": 154739,
+      "revision": "1a030decee15d72dbb3b"
+    },
+    "/burrow-assets/fruits/imbe-685b72820c6e.jpg": {
+      "bytes": 363443,
+      "revision": "685b72820c6edfc63c15"
+    },
     "/burrow-assets/fruits/indian-jujube-a5bed3c7f599.jpg": {
       "bytes": 69525,
       "revision": "a5bed3c7f5991f8da919"
@@ -2007,6 +2063,10 @@
     "/burrow-assets/fruits/kakadu-plum-19a09ec2acb3.jpg": {
       "bytes": 314476,
       "revision": "19a09ec2acb33f59cb7d"
+    },
+    "/burrow-assets/fruits/kei-apple-aeef4d85c05f.jpg": {
+      "bytes": 108459,
+      "revision": "aeef4d85c05f7e370b03"
     },
     "/burrow-assets/fruits/key-lime-65d8fac2a8a7.jpg": {
       "bytes": 216792,
@@ -2048,6 +2108,10 @@
       "bytes": 220949,
       "revision": "9157cb68ca37d8f26c30"
     },
+    "/burrow-assets/fruits/mabolo-9395be7afcef.jpg": {
+      "bytes": 488857,
+      "revision": "9395be7afcefe0bb87d1"
+    },
     "/burrow-assets/fruits/mamey-sapote-aeb375c0463b.jpg": {
       "bytes": 239725,
       "revision": "aeb375c0463b17c06874"
@@ -2064,9 +2128,17 @@
       "bytes": 201040,
       "revision": "487a94b3f8cc4c20df6a"
     },
+    "/burrow-assets/fruits/marang-a42389842034.jpg": {
+      "bytes": 213093,
+      "revision": "a42389842034ba9f303c"
+    },
     "/burrow-assets/fruits/marula-5da9a73bf555.jpg": {
       "bytes": 152909,
       "revision": "5da9a73bf5550aba1cf3"
+    },
+    "/burrow-assets/fruits/maypop-394aa873330d.jpg": {
+      "bytes": 212741,
+      "revision": "394aa873330d941ca852"
     },
     "/burrow-assets/fruits/medlar-1f27b833ab11.jpg": {
       "bytes": 202498,
@@ -2076,6 +2148,10 @@
       "bytes": 175737,
       "revision": "6326e9bb7d537eb8e3db"
     },
+    "/burrow-assets/fruits/monkey-orange-d8805eeae92b.jpg": {
+      "bytes": 182338,
+      "revision": "d8805eeae92bd8249bdc"
+    },
     "/burrow-assets/fruits/mulberry-3d05dd894f20.jpg": {
       "bytes": 335532,
       "revision": "3d05dd894f20f9799123"
@@ -2083,6 +2159,10 @@
     "/burrow-assets/fruits/naranjilla-e63d765a1a87.jpg": {
       "bytes": 224158,
       "revision": "e63d765a1a877e564fd1"
+    },
+    "/burrow-assets/fruits/natal-plum-f3375da726cf.jpg": {
+      "bytes": 273807,
+      "revision": "f3375da726cfcb877f92"
     },
     "/burrow-assets/fruits/nectarine-cdd567876f08.jpg": {
       "bytes": 192602,
@@ -2112,6 +2192,10 @@
       "bytes": 234468,
       "revision": "ee0c15f2478f40a0533c"
     },
+    "/burrow-assets/fruits/peach-palm-e891fa24066c.jpg": {
+      "bytes": 337692,
+      "revision": "e891fa24066c3aaefd95"
+    },
     "/burrow-assets/fruits/pear-4bc1618749a1.jpg": {
       "bytes": 108884,
       "revision": "4bc1618749a1463ee954"
@@ -2131,6 +2215,10 @@
     "/burrow-assets/fruits/pineapple-9c337e00e7a4.jpg": {
       "bytes": 160832,
       "revision": "9c337e00e7a41235eac0"
+    },
+    "/burrow-assets/fruits/pitomba-c6198d1947e1.jpg": {
+      "bytes": 306162,
+      "revision": "c6198d1947e18a078dd0"
     },
     "/burrow-assets/fruits/plantain-6a65972b4eaa.jpg": {
       "bytes": 83046,
@@ -2268,6 +2356,14 @@
       "bytes": 111816,
       "revision": "c4f9b6c10cc30987c2af"
     },
+    "/burrow-assets/fruits/uvaia-af706454ccfa.jpg": {
+      "bytes": 147623,
+      "revision": "af706454ccfa5079e65c"
+    },
+    "/burrow-assets/fruits/velvet-tamarind-ade2ef284764.jpg": {
+      "bytes": 476994,
+      "revision": "ade2ef2847642c4189f7"
+    },
     "/burrow-assets/fruits/watermelon-a5a35b900301.jpg": {
       "bytes": 323954,
       "revision": "a5a35b900301158a5a67"
@@ -2283,6 +2379,10 @@
     "/burrow-assets/fruits/wood-apple-121db420007c.jpg": {
       "bytes": 258422,
       "revision": "121db420007c431391de"
+    },
+    "/burrow-assets/fruits/yangmei-d621b5c6988f.jpg": {
+      "bytes": 318442,
+      "revision": "d621b5c6988f00892d8f"
     },
     "/burrow-assets/hot-sauces/8-dragon.jpg": {
       "bytes": 218049,

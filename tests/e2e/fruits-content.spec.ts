@@ -20,10 +20,10 @@ const deck = packToPlayableDeck(pack);
 const weighted = new Map(source.cards.filter((card) => card.weight).map((card) => [card.id, card.weight!.grams]));
 
 test.describe("Fruits", { tag: "@logic" }, () => {
-  test("125 distinct fruit cards have detailed local photos, provenance and complete profiles across six continents", async () => {
-    expect(pack.cards).toHaveLength(125);
-    expect(new Set(pack.cards.map((card) => card.id)).size).toBe(125);
-    expect(new Set(pack.cards.map((card) => card.name)).size).toBe(125);
+  test("150 distinct fruit cards have detailed local photos, provenance and complete profiles across six continents", async () => {
+    expect(pack.cards).toHaveLength(150);
+    expect(new Set(pack.cards.map((card) => card.id)).size).toBe(150);
+    expect(new Set(pack.cards.map((card) => card.name)).size).toBe(150);
     expect(new Set(source.cards.map((card) => card.location.continents[0])).size).toBe(6);
     expect(buildLandingTopicCards([pack]).find((card) => card.id === "fruits")?.title).toBe("Fruits");
     const hashes = new Set<string>();
@@ -44,11 +44,41 @@ test.describe("Fruits", { tag: "@logic" }, () => {
       expect(card.sourceUrls.length).toBeGreaterThan(0);
       for (const field of [card.scientificName, card.origin, card.flavor, card.texture, card.availabilityBand, card.fact]) expect(field).toBeTruthy();
     }
-    expect(hashes.size).toBe(125);
+    expect(hashes.size).toBe(150);
     expect(pack.cards.map((card) => card.id)).toEqual(expect.arrayContaining([
       "grapefruit", "mandarin", "clementine", "nectarine", "cantaloupe", "honeydew",
       "date", "cranberry", "avocado", "olive", "plantain", "asian-pear", "golden-kiwifruit",
     ]));
+    const expansion = source.cards.filter((card) => "reviewedOn" in card && card.reviewedOn === "2026-10-04");
+    expect(expansion.map((card) => card.id)).toEqual([
+      "cempedak",
+      "marang",
+      "mabolo",
+      "bignay",
+      "burmese-grape",
+      "yangmei",
+      "akebi",
+      "kei-apple",
+      "natal-plum",
+      "imbe",
+      "velvet-tamarind",
+      "monkey-orange",
+      "ice-cream-bean",
+      "bacuri",
+      "buriti",
+      "camu-camu",
+      "uvaia",
+      "pitomba",
+      "araza",
+      "peach-palm",
+      "cornelian-cherry",
+      "maypop",
+      "american-persimmon",
+      "blue-quandong",
+      "beach-cherry",
+    ]);
+    expect(new Set(expansion.map((card) => card.location.continents[0])).size).toBe(6);
+    expect(new Set(source.cards.map((card) => card.imageSourceUrl)).size).toBe(150);
     for (const card of deck.cards) {
       expect(card.details?.map((detail) => detail.label)).toEqual(expect.arrayContaining(["Scientific name", "Origin / heritage", "Flavor", "Texture", "Finding it", "Comparison guide"]));
       expect(card.stats.filter((stat) => /rating/.test(stat.id))).toHaveLength(3);
@@ -57,7 +87,7 @@ test.describe("Fruits", { tag: "@logic" }, () => {
   });
 
   test("undocumented weight stays unknown and never becomes a size or flavor-score weight", () => {
-    expect(weighted.size).toBe(65);
+    expect(weighted.size).toBe(69);
     for (const card of deck.cards) {
       expect(card.statLabel).toBe("Example weight");
       if (weighted.has(card.id)) {
@@ -71,7 +101,7 @@ test.describe("Fruits", { tag: "@logic" }, () => {
     }
   });
 
-  test("all 125 fruits have sourced sizes and Collection orders physical dimensions independently of weight", () => {
+  test("all 150 fruits have sourced sizes and Collection orders physical dimensions independently of weight", () => {
     for (const record of source.cards) {
       expect(record.size.centimeters, record.id).toBeGreaterThan(0);
       expect(record.sourceUrls).toContain(record.size.sourceUrl);
@@ -95,7 +125,7 @@ test.describe("Fruits", { tag: "@logic" }, () => {
     expect(sorted.map((card) => card.id)).toEqual(expected);
     expect(deck.cards.map((card) => card.id)).toEqual(originalIds);
     expect(sorted[0].id).toBe("sea-buckthorn");
-    expect(sorted.at(-1)?.id).toBe("jackfruit");
+    expect(sorted.at(-1)?.id).toBe("ice-cream-bean");
     // A banana is longer than an orange but weighs less in our examples.
     expect(weighted.get("banana")!).toBeLessThan(weighted.get("orange")!);
     expect(expected.indexOf("orange")).toBeLessThan(expected.indexOf("banana"));
@@ -109,7 +139,7 @@ test.describe("Fruits", { tag: "@logic" }, () => {
     const banana = deck.cards.find((card) => card.id === "banana")!;
     expect(orderCollectionCardsForCategory([
       { ...banana, collectionStat: undefined }, sorted.at(-1)!,
-    ]).map((card) => card.id)).toEqual(["jackfruit", "banana"]);
+    ]).map((card) => card.id)).toEqual(["ice-cream-bean", "banana"]);
   });
 
   test("all difficulties generate fruit-only rounds with honest weights and matching comparisons", () => {
@@ -147,10 +177,10 @@ test.describe("Fruits", { tag: "@logic" }, () => {
         }
       }
     }
-    for (let seed = 120; seed < 1000 && seen.size < 125; seed++) {
+    for (let seed = 120; seed < 1000 && seen.size < 150; seed++) {
       seen.add(buildRevealRoundFromCards(deck.cards, deck.id, 3, seed).card.id);
     }
-    expect(seen.size).toBe(125);
+    expect(seen.size).toBe(150);
   });
 });
 
@@ -173,7 +203,7 @@ test("Fruits opens, plays, and displays sourced profiles on tablet and mobile", 
   page.on("pageerror", (error) => errors.push(error.message));
   await page.route("**/api/play-events", (route) => route.fulfill({ status: 200, contentType: "application/json", body: '{"ok":true,"accepted":1}' }));
   await page.goto("/");
-  await expect(page.getByText("125 fruits, from sweet to surprising", { exact: true })).toBeVisible();
+  await expect(page.getByText("150 fruits, from sweet to surprising", { exact: true })).toBeVisible();
   await page.goto("/play");
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await page.getByRole("button", { name: /^Topics/ }).click();
@@ -205,24 +235,24 @@ test("Fruits opens, plays, and displays sourced profiles on tablet and mobile", 
   await page.getByRole("button", { name: /^Collection/ }).click();
   const collection = page.getByLabel("Fruits card collection");
   await expect(collection).toBeVisible();
-  await expect(collection.getByRole("button", { name: "Show all rarities (125 cards)" })).toBeVisible();
+  await expect(collection.getByRole("button", { name: "Show all rarities (150 cards)" })).toBeVisible();
   await expect(collection.getByText("Size · smallest to largest", { exact: true })).toBeVisible();
   await expect(collection.getByText(/Approximate longest dimension in centimetres/)).toBeVisible();
   const titles = collection.locator("div.overflow-hidden.rounded-lg > div.p-2 > p:first-child");
   await expect(titles).toHaveText(orderCollectionCardsForCategory(deck.cards).map((card) => card.title));
-  const newFruit = collection.locator("div.overflow-hidden.rounded-lg").filter({ has: page.getByText("Golden Kiwifruit", { exact: true }) });
+  const newFruit = collection.locator("div.overflow-hidden.rounded-lg").filter({ has: page.getByText("Uvaia", { exact: true }) });
   await newFruit.scrollIntoViewIfNeeded();
-  await expect(newFruit.getByText("~7.9 cm", { exact: true })).toBeVisible();
-  const newPhoto = newFruit.getByRole("img", { name: "Golden Kiwifruit fruit", exact: true });
+  await expect(newFruit.getByText("~3.9 cm", { exact: true })).toBeVisible();
+  const newPhoto = newFruit.getByRole("img", { name: "Uvaia fruit", exact: true });
   await expect.poll(() => newPhoto.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
   await newFruit.screenshot({ path: testInfo.outputPath("fruits-new-card.png") });
-  const enlarge = newFruit.getByRole("button", { name: "Enlarge Golden Kiwifruit photo" });
+  const enlarge = newFruit.getByRole("button", { name: "Enlarge Uvaia photo" });
   const frame = (await enlarge.boundingBox())!;
   expect(frame.width).toBeGreaterThanOrEqual(260);
   expect(Math.abs(frame.width - frame.height)).toBeLessThan(2);
   await expect(newPhoto).toHaveCSS("object-fit", "contain");
   await enlarge.click();
-  const dialog = page.getByRole("dialog", { name: "Golden Kiwifruit" });
+  const dialog = page.getByRole("dialog", { name: "Uvaia" });
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole("button", { name: "Close fruit photo" })).toBeFocused();
   const detailImage = dialog.getByRole("img");
@@ -268,7 +298,7 @@ test("Fruits opens, plays, and displays sourced profiles on tablet and mobile", 
   const lime = collection.locator("div.overflow-hidden.rounded-lg").filter({ has: page.getByText("Finger Lime", { exact: true }) });
   await expect(lime.getByText("~8 cm", { exact: true })).toBeVisible();
   await lime.locator("summary").click();
-  await expect(newFruit.getByText("~98 g", { exact: true })).toBeVisible();
+  await expect(newFruit.getByText("~22 g", { exact: true })).toBeVisible();
   await expect(lime.getByText(/No whole-fruit weight verified/).first()).toBeVisible();
   await expect(lime.getByText(/botanical description gives about 8 cm/).first()).toBeVisible();
   await expect(lime.getByText("Citrus australasica", { exact: true })).toBeVisible();
