@@ -10,7 +10,6 @@ export type Progress = {
   sessions: number;
   correct: number;
   answered: number;
-  challengeMilestone: number;
   difficulty: Difficulty;
   seenIds: string[];
   learningHistory: LearningExposure[];
@@ -61,7 +60,7 @@ const isExposure = (value: unknown) => isRecord(value)
   && ["correct", "incorrect", "skip", "tie", "scheduled"].includes(value.outcome as string);
 
 const isProgress = (value: unknown): value is Progress => isRecord(value)
-  && ["xp", "level", "streak", "bestStreak", "sessions", "correct", "answered", "challengeMilestone"].every((key) => isCount(value[key]))
+  && ["xp", "level", "streak", "bestStreak", "sessions", "correct", "answered"].every((key) => isCount(value[key]))
   && (value.level as number) >= 1
   && (value.correct as number) <= (value.answered as number)
   && [1, 2, 3].includes(value.difficulty as number)

@@ -3,7 +3,6 @@ import { loadPlayablePacks } from "../../src/lib/pack-loader";
 import { packToPlayableDeck } from "../../src/lib/pack-adapter";
 import { buildGeoChoicesForLocations, buildGeoRoundFromCards, canBuildGeoRoundFromCards, geoChoiceForLocation, modeOptions } from "../../src/lib/game-modes";
 import { isUsMapLocation, mapRegionForLocations, usMapDistance, usMapPoint } from "../../src/lib/us-map";
-import { buildChallengeCampaignsForCategory } from "../../src/components/core-mini-challenge";
 import usStates from "../../src/lib/us-map-data.json";
 
 const pack = loadPlayablePacks().find((pack) => pack.id === "bridges-and-tunnels")!;
@@ -38,26 +37,6 @@ test("US rounds do not require a separate state field and fall back when four lo
   expect(choices).toHaveLength(4);
   expect(choices.some((choice) => choice.id === answer.label)).toBe(true);
   expect(mapRegionForLocations(choices.map((choice) => choice.location))).toBe("world");
-});
-
-test("bridge challenges use both US and world maps with separated US pins", { tag: "@logic" }, () => {
-  const regions = new Set<string>();
-  const campaigns = [deck.cards, [...deck.cards].reverse()].flatMap((cards) =>
-    buildChallengeCampaignsForCategory({ id: deck.id, label: deck.title, cards }));
-  for (const campaign of campaigns) {
-    const step = campaign.steps.find((step) => step.skill === "Geography");
-    expect(step?.skill).toBe("Geography");
-    if (step?.skill !== "Geography" || !step.map) throw new Error("Expected a geography map");
-    const locations = step.map.choices.map((choice) => choice.location!);
-    const region = mapRegionForLocations(locations);
-    regions.add(region);
-    expect(step.map.hint).toContain(region === "us" ? "US map" : "world map");
-    if (region !== "us") continue;
-    for (let i = 0; i < locations.length; i++) for (let j = i + 1; j < locations.length; j++) {
-      expect(usMapDistance(locations[i], locations[j])).toBeGreaterThanOrEqual(16);
-    }
-  }
-  expect(regions).toEqual(new Set(["us", "world"]));
 });
 
 test("audited crossings include 87 landmarks with complete geography and measurement notes", { tag: "@logic" }, () => {

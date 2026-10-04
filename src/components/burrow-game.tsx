@@ -3,12 +3,6 @@
 import { track } from "@vercel/analytics";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import {
-  ChallengeMode,
-  buildChallengeCampaignCatalog,
-  challengeCampaignFromCatalog,
-  challengeQuestionInterval,
-} from "@/components/core-mini-challenge";
 import { EqualGroupsBoard } from "@/components/equal-groups-board";
 import { CollectionPhotoDialog } from "@/components/collection-photo-dialog";
 import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid, GameQuestionCard, GameRoundLayout } from "@/components/game-question-ui";
@@ -181,7 +175,6 @@ const initialProgress: Progress = {
   sessions: 0,
   correct: 0,
   answered: 0,
-  challengeMilestone: 0,
   difficulty: 1,
   seenIds: [],
   learningHistory: [],
@@ -292,22 +285,9 @@ const freshProgress = (): Progress => ({
   unlockedCards: [],
 });
 
-const normalizedChallengeMilestone = (progress?: Partial<Progress>) => {
-  const answered = progress?.answered ?? 0;
-  const savedMilestone = progress?.challengeMilestone;
-  const currentMilestone = Math.floor(answered / challengeQuestionInterval) * challengeQuestionInterval;
-
-  // Migrate milestones saved by the previous 20- and 25-question schedules.
-  if (savedMilestone === undefined || savedMilestone > answered || savedMilestone % challengeQuestionInterval !== 0) {
-    return currentMilestone;
-  }
-  return savedMilestone;
-};
-
 const normalizeProgress = (progress?: Partial<Progress>): Progress => ({
   ...freshProgress(),
   ...progress,
-  challengeMilestone: normalizedChallengeMilestone(progress),
   topicWins: { ...emptyTopicCounts(), ...progress?.topicWins },
   topicStats: { ...emptyTopicStats(), ...(progress?.topicStats ?? {}) },
   modeWins: { ...initialProgress.modeWins, ...progress?.modeWins },
@@ -889,8 +869,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   const [miniRunCorrect, setMiniRunCorrect] = useState(0);
   const [celebration, setCelebration] = useState("Pick a mode and jump in.");
   const [lastResult, setLastResult] = useState<ResultState | null>(null);
-  const [miniChallengeActive, setMiniChallengeActive] = useState(false);
-  const [miniChallengePending, setMiniChallengePending] = useState(false);
   const [roundsPreparing, setRoundsPreparing] = useState(false);
   const [roundPreparationFailure, setRoundPreparationFailure] = useState<ConfiguredRoundOptions | null>(null);
   const anonymousInstallIdRef = useRef<string | null>(null);
@@ -1026,26 +1004,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     greatestDifficulty(cards.map(difficultyForCard))
   ), [difficultyForCard]);
   const activeTopicSet = useMemo(() => new Set(activeInterestKey.split("|").filter(Boolean)), [activeInterestKey]);
-  const miniChallengeCatalog = useMemo(() => buildChallengeCampaignCatalog(playableTopics.map((id) => ({
-    id,
-    label: topicMetaById.get(id)?.label ?? "Mixed topics",
-    cards: cardPoolsByTopic.get(id) ?? [],
-  }))), [cardPoolsByTopic, playableTopics, topicMetaById]);
-  const miniChallengeCatalogByTopic = useMemo(
-    () => new Map(miniChallengeCatalog.map((entry) => [entry.category.id, entry])),
-    [miniChallengeCatalog],
-  );
-  const activeMiniChallengeCatalog = useMemo(
-    () => activeInterestKey.split("|").flatMap((id) => {
-      const entry = miniChallengeCatalogByTopic.get(id);
-      return entry ? [entry] : [];
-    }),
-    [activeInterestKey, miniChallengeCatalogByTopic],
-  );
-  const miniChallengeCampaign = useMemo(
-    () => challengeCampaignFromCatalog(progress.answered, activeMiniChallengeCatalog),
-    [activeMiniChallengeCatalog, progress.answered],
-  );
   const selectedCards = useMemo(() => allCards.filter((card) => activeTopicSet.has(card.topic)), [activeTopicSet, allCards]);
   const unlockedCardSet = useMemo(() => new Set(progress.unlockedCards), [progress.unlockedCards]);
   const question = questions[questionIndex];
@@ -1579,10 +1537,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       };
     });
 
-    if (progress.answered + 1 >= progress.challengeMilestone + challengeQuestionInterval) {
-      setMiniChallengePending(true);
-    }
-
     return { correct: feedbackCorrect, xpGain, leveledUp: nextLevel > progress.level };
   };
 
@@ -1604,8 +1558,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const resetRunState = () => {
-    setMiniChallengeActive(false);
-    setMiniChallengePending(false);
     setQuestionIndex(0);
     setSelected(null);
     setSortPicked([]);
@@ -1620,13 +1572,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     setMiniRunAnswered(0);
     setMiniRunCorrect(0);
     setCelebration("Fresh round.");
-  };
-
-  const startPendingMiniChallenge = () => {
-    if (!miniChallengePending) return false;
-    setMiniChallengePending(false);
-    setMiniChallengeActive(true);
-    return true;
   };
 
   const freshSeed = (offset = 0) => {
@@ -1879,7 +1824,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const advanceMix = (history: readonly LearningExposure[] = progress.learningHistory) => {
-    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(101 + questionIndex);
     const nextQuestionIndex = questionIndex === questions.length - 1 ? 0 : questionIndex + 1;
     const nextMode = activeMixPattern[nextQuestionIndex % activeMixPattern.length];
@@ -1906,7 +1850,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const advance = (history: readonly LearningExposure[] = progress.learningHistory) => {
-    if (startPendingMiniChallenge()) return;
     if (mode === "mix") {
       advanceMix(history);
       return;
@@ -1964,7 +1907,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextSortRound = (history: readonly LearningExposure[] = progress.learningHistory) => {
-    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 13);
     setSortRound(buildSortForScope(currentTopicScope, progress.difficulty, seed, history));
     setSortPicked([]);
@@ -2025,7 +1967,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextFactRound = (history: readonly LearningExposure[] = progress.learningHistory) => {
-    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 19);
     setFactRound(buildFactForScope(currentTopicScope, progress.difficulty, seed, progress.unlockedCards, history));
     setFactSelected(null);
@@ -2087,7 +2028,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextRevealRound = (history: readonly LearningExposure[] = progress.learningHistory) => {
-    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 23);
     setRevealRound(buildRevealForScope(currentTopicScope, progress.difficulty, seed, progress.unlockedCards, history));
     setRevealSelected(null);
@@ -2147,7 +2087,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextGeoRound = (history: readonly LearningExposure[] = progress.learningHistory) => {
-    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 29);
     setGeoRound(buildGeoForScope(currentTopicScope, progress.difficulty, seed, progress.unlockedCards, history));
     setGeoSelected(null);
@@ -2207,7 +2146,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextNumberRound = (history: readonly LearningExposure[] = progress.learningHistory) => {
-    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 31);
     setNumberRound(buildNumberForScope(currentTopicScope, progress.difficulty, seed, history));
     setNumberSelected(null);
@@ -2269,7 +2207,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextOddRound = (history: readonly LearningExposure[] = progress.learningHistory) => {
-    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 37);
     setOddRound(buildOddForScope(currentTopicScope, progress.difficulty, seed, history));
     setOddSelected(null);
@@ -2341,7 +2278,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   };
 
   const nextTopTrumpRound = (history: readonly LearningExposure[] = progress.learningHistory) => {
-    if (startPendingMiniChallenge()) return;
     const seed = freshSeed(miniRunAnswered * 41);
     setTopTrumpRound(buildTopTrumpForScope(currentTopicScope, progress.difficulty, seed, progress.unlockedCards, history));
     setTopTrumpSelected(null);
@@ -2363,23 +2299,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
     });
     if (mode === "mix") advanceMix(history);
     else nextTopTrumpRound(history);
-  };
-
-  const finishMiniChallenge = () => {
-    setProgress((current) => ({ ...current, challengeMilestone: current.answered }));
-    setMiniChallengeActive(false);
-    if (mode === "mix") {
-      advanceMix();
-      return;
-    }
-    if (activeChallengeMode === "quiz" || activeChallengeMode === "versus") advance();
-    else if (activeChallengeMode === "sort") nextSortRound();
-    else if (activeChallengeMode === "fact") nextFactRound();
-    else if (activeChallengeMode === "peek") nextRevealRound();
-    else if (activeChallengeMode === "geo") nextGeoRound();
-    else if (activeChallengeMode === "number") nextNumberRound();
-    else if (activeChallengeMode === "odd") nextOddRound();
-    else nextTopTrumpRound();
   };
 
   const resetProgress = (confirmed = false) => {
@@ -2473,13 +2392,6 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
               </button>
             </div>
           </section>
-        ) : miniChallengeActive ? (
-          <ChallengeMode
-            campaign={miniChallengeCampaign}
-            milestone={progress.answered}
-            onComplete={finishMiniChallenge}
-            onAnswer={(correct) => soundEffects.play(correct ? "correct" : "wrong")}
-          />
         ) : (
           <>
 

@@ -5,7 +5,7 @@ import { modeOptions } from "../../src/lib/game-modes";
 import { createProfileSave, maxSaveBytes, parseProfileSave, profilesKey, type ProfilesState, type Progress } from "../../src/lib/profile-save";
 
 const progressFixture = (): Progress => ({
-  xp: 1234, level: 11, streak: 3, bestStreak: 9, sessions: 7, correct: 70, answered: 87, challengeMilestone: 80, difficulty: 2,
+  xp: 1234, level: 11, streak: 3, bestStreak: 9, sessions: 7, correct: 70, answered: 87, difficulty: 2,
   // Preserve both modern IDs and older card names, including unselected pack categories.
   seenIds: ["pepper-question"], unlockedCards: ["peppers:jalapeno", "Jalapeno", "Great White Shark", "Hyperion", "bridges-and-tunnels:golden-gate-bridge"],
   learningHistory: [{ exactKey: "pepper-question", conceptKey: "peppers:compare", subjectKeys: ["peppers:jalapeno"], mode: "quiz", topic: "peppers", outcome: "incorrect", sequence: 87 }],
@@ -30,6 +30,14 @@ test.describe("save validation", { tag: "@logic" }, () => {
     const file = createProfileSave(state);
     expect(file.name).toMatch(/^burrow-save-.*\.json$/);
     expect(parseProfileSave(await file.text()).profilesState).toEqual(state);
+  });
+
+  test("imports older saves containing the retired Challenge milestone", () => {
+    const state = stateFixture();
+    for (const profile of state.profiles) {
+      Object.assign(profile.progress, { challengeMilestone: 80 });
+    }
+    expect(parseProfileSave(saveContents(state)).profilesState).toEqual(state);
   });
 
   test("rejects unrelated, broken, oversized, future, and unsafe files", () => {

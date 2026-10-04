@@ -1,12 +1,4 @@
 import { expect, test, type Page } from "@playwright/test";
-import {
-  buildChallengeCampaignsForCategory,
-  challengeCampaignCountPerCategory,
-  challengeCampaignForMilestone,
-  challengeQuestionInterval,
-  pepperChallengeCampaignForMilestone,
-  pepperChallengeCampaigns,
-} from "../../src/components/core-mini-challenge";
 import { weightTopicsForAccuracy } from "../../src/lib/adaptive-topics";
 import { collectionCardProfileDetails } from "../../src/lib/card-profile";
 import { cardRarities } from "../../src/lib/card-metadata";
@@ -120,27 +112,6 @@ const chooseOnlyBuiltInTopic = async (page: Page, target: string) => {
   await expect(page.getByLabel("Preparing the next round")).toBeHidden();
 };
 
-const openChallengeAt = async (page: Page, milestone: number, topicLabel: string) => {
-  await page.evaluate(({ targetMilestone, interval }) => {
-    const key = "burrow-profiles-v1";
-    const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
-      activeProfileId: string;
-      profiles: { id: string; progress: { answered: number; challengeMilestone: number } }[];
-    };
-    const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
-    if (!active) throw new Error("Active profile was not saved");
-    active.progress.answered = targetMilestone - 1;
-    active.progress.challengeMilestone = targetMilestone - interval;
-    window.localStorage.setItem(key, JSON.stringify(profiles));
-  }, { targetMilestone: milestone, interval: challengeQuestionInterval });
-  await page.reload();
-  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
-  await chooseOnlyMode(page, "True/False");
-  await chooseOnlyBuiltInTopic(page, topicLabel);
-  await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
-  await page.getByRole("button", { name: /^(Next|Finish round)/ }).click();
-};
-
 const mathFixtureCards: GenericKnowledgeCard[] = [12, 20, 35, 48].map((value, index) => ({
   id: `math-card-${index}`,
   topic: "fixture",
@@ -159,7 +130,7 @@ const mathFixtureCards: GenericKnowledgeCard[] = [12, 20, 35, 48].map((value, in
   stats: [{ id: "length", label: "Length", value, display: `${value} ft`, direction: "higher" }],
 }));
 
-const playableChallengeCategories = [
+const playableCategories = [
   ...Object.values(topicPacks).map((pack) => ({
     id: pack.id,
     label: pack.label,
@@ -341,7 +312,7 @@ test("difficulty calibration expands subject breadth by about twenty-two percent
 });
 
 test("Hard retains every Easy subject and adds the rest of every category", () => {
-  for (const category of playableChallengeCategories) {
+  for (const category of playableCategories) {
     const easy = poolForDifficulty(category.cards, 1);
     const hard = poolForDifficulty(category.cards, 3);
     const hardIds = new Set(hard.map((card) => card.id));
@@ -379,7 +350,7 @@ test("Medium and Hard favor deeper questions while preserving retrieval practice
 });
 
 test("every collectible card can surface in Hard Peek play", () => {
-  for (const category of playableChallengeCategories) {
+  for (const category of playableCategories) {
     const unlockedTitles: string[] = [];
     const seenIds = new Set<string>();
     const builtIn = Object.prototype.hasOwnProperty.call(topicPacks, category.id);
@@ -1997,136 +1968,6 @@ test("hard multiplication stretches through sixteen-by-sixteen", () => {
   expect(round.termValues).toEqual([16, 16]);
 });
 
-test("every playable category has ten distinct single-subject Challenge deep dives", () => {
-  expect(new Set(playableChallengeCategories.map((category) => category.id)).size).toBe(playableChallengeCategories.length);
-
-  for (const category of playableChallengeCategories) {
-    const campaigns = buildChallengeCampaignsForCategory(category);
-    expect(campaigns, `${category.id} needs 10 campaigns`).toHaveLength(challengeCampaignCountPerCategory);
-    expect(new Set(campaigns.map((campaign) => campaign.id)).size).toBe(challengeCampaignCountPerCategory);
-
-    for (const skill of ["Reading", "Math", "Science", "Words"] as const) {
-      const steps = campaigns.map((campaign) => campaign.steps.find((step) => step.skill === skill)!);
-      const optionSignatures = steps.map((step) => `${step.clue}|${step.question}|${step.answer}`);
-      expect(new Set(optionSignatures).size, `${category.id}/${skill} needs 10 distinct options`).toBeGreaterThanOrEqual(10);
-      expect(new Set(steps.map((step) => step.image)).size, `${category.id}/${skill} needs 10 distinct subject images`).toBeGreaterThanOrEqual(10);
-    }
-    const mathSteps = campaigns.map((campaign) => campaign.steps.find((step) => step.skill === "Math")!);
-    expect(Math.max(...mathSteps.flatMap((step) => step.skill === "Math" ? [step.math.groups, step.math.each] : [])), `${category.id} math should stretch beyond 12 × 12`).toBe(15);
-    expect(mathSteps.reduce((total, step) => total + (step.skill === "Math" ? step.math.groups * step.math.each : 0), 0) / mathSteps.length, `${category.id} math should average about 21% larger`).toBeGreaterThanOrEqual(67);
-    const connectionSteps = campaigns.map((campaign) => campaign.steps.find((step) => step.skill === "Geography" || step.skill === "Classification")!);
-    expect(new Set(connectionSteps.map((step) => `${step.clue}|${step.question}|${step.answer}`)).size, `${category.id} needs 10 distinct map or classification stops`).toBeGreaterThanOrEqual(10);
-    expect(new Set(connectionSteps.map((step) => step.image)).size, `${category.id} needs 10 distinct map or classification images`).toBeGreaterThanOrEqual(10);
-
-    for (const campaign of campaigns) {
-      expect(campaign.steps).toHaveLength(5);
-      expect(new Set(campaign.steps.map((step) => step.skill)).has("Reading")).toBe(true);
-      expect(new Set(campaign.steps.map((step) => step.skill)).has("Math")).toBe(true);
-      expect(new Set(campaign.steps.map((step) => step.skill)).has("Science")).toBe(true);
-      expect(new Set(campaign.steps.map((step) => step.skill)).has("Words")).toBe(true);
-      expect(campaign.steps.filter((step) => step.skill === "Geography" || step.skill === "Classification")).toHaveLength(1);
-      expect(new Set(campaign.steps.map((step) => step.image)), `${campaign.id} must stay on one subject`).toEqual(new Set([campaign.image]));
-      expect(campaign.completionTitle).toBe(`${campaign.name} field journal`);
-      for (const step of campaign.steps) {
-        expect(`${step.title} ${step.clue} ${step.question} ${step.summary}`, `${step.id} must stay anchored to ${campaign.name}`).toContain(campaign.name);
-      }
-    }
-  }
-});
-
-test("every generated Challenge step is answerable and has a useful teaching stage", () => {
-  const campaigns = playableChallengeCategories.flatMap(buildChallengeCampaignsForCategory);
-  const stepIds = campaigns.flatMap((campaign) => campaign.steps.map((step) => step.id));
-  expect(new Set(stepIds).size).toBe(stepIds.length);
-
-  for (const campaign of campaigns) {
-    for (const step of campaign.steps) {
-      expect(step.clue.length, `${step.id} needs a useful clue`).toBeGreaterThan(20);
-      expect(step.summary.length, `${step.id} needs teaching feedback`).toBeGreaterThan(35);
-      expect(step.choices, `${step.id} must contain its answer`).toContain(step.answer);
-      if (step.skill === "Science") expect([2, 4], `${step.id} should be a genuine comparison or a four-choice interpretation`).toContain(step.choices.length);
-      else if (step.skill === "Classification") {
-        expect(step.choices.length, `${step.id} needs at least two real field-guide groups`).toBeGreaterThanOrEqual(2);
-        expect(step.choices.length, `${step.id} should stay concise`).toBeLessThanOrEqual(4);
-      } else expect(step.choices, `${step.id} needs four choices`).toHaveLength(4);
-      expect(new Set(step.choices).size, `${step.id} choices must be distinct`).toBe(step.choices.length);
-      expect(step.image, `${step.id} needs its own subject image`).toBeTruthy();
-      expect(step.choices.filter((choice) => ["Not enough information", "A different field note", "None of these", "All of these"].includes(choice)), `${step.id} should not need generic filler choices`).toEqual([]);
-
-      if (step.skill === "Reading") {
-        expect(step.choices).toContain(step.evidence);
-        expect(`${step.title} ${step.clue} ${step.question}`).not.toContain(step.answer);
-        expect(step.answer, `${step.id} should anonymize the subject name inside its correct field note`).not.toContain(campaign.name);
-      } else if (step.skill === "Geography") {
-        expect(step.map, `${step.id} must teach with a visible map`).toBeTruthy();
-        if (!step.map) throw new Error(`${step.id} is missing its map`);
-        expect(step.map.choices.map((choice) => choice.label)).toEqual(step.choices);
-        expect(step.answer).toMatch(/^Pin [A-D]$/);
-        expect(step.question).toMatch(/^Which pin marks .+\?$/);
-        expect(step.summary).toContain(step.answer);
-        if (campaign.topicId === "countries") {
-          expect(step.clue).toContain("is a country in");
-          expect(step.clue).not.toContain("is connected with");
-        }
-        for (const choice of step.map.choices) {
-          expect(choice.mapLabel).toBeTruthy();
-          expect(choice.x).toBeGreaterThanOrEqual(0);
-          expect(choice.x).toBeLessThanOrEqual(100);
-          expect(choice.y).toBeGreaterThanOrEqual(0);
-          expect(choice.y).toBeLessThanOrEqual(100);
-        }
-      } else if (step.skill === "Classification") {
-        expect(step.title).toMatch(/^Classify /);
-        expect(step.question).toContain("Which field-guide group best fits");
-        expect(`${step.title} ${step.clue} ${step.question}`).not.toContain(step.answer);
-        expect(step.summary).toContain("belongs in the field-guide group");
-      } else if (step.skill === "Math") {
-        expect(step.question).toBe(`${step.math.groups} × ${step.math.each} = ?`);
-        expect(Number.parseInt(step.answer.replaceAll(",", ""), 10)).toBe(step.math.groups * step.math.each);
-        expect(step.math.visual.ariaLabel).toContain(`${step.math.groups}`);
-        expect(step.math.visual.ariaLabel).toContain(`${step.math.each}`);
-      } else if (step.skill === "Science") {
-        expect(`${step.title} ${step.clue} ${step.question}`).not.toContain(step.answer);
-      }
-    }
-  }
-});
-
-test("Challenge copy keeps comparison subjects honest and space sizes in miles", () => {
-  const tallTrees = playableChallengeCategories.find((category) => category.id === "tall-trees")!;
-  const tallTreeCampaigns = buildChallengeCampaignsForCategory(tallTrees);
-  const dave = tallTreeCampaigns.find((campaign) => campaign.name === "Dave the Human")!;
-  expect(dave.steps.find((step) => step.skill === "Reading")?.question).toBe("Which field note belongs with this height subject?");
-  expect(dave.steps.find((step) => step.skill === "Classification")?.title).toBe("Classify Dave the Human");
-
-  const space = playableChallengeCategories.find((category) => category.id === "space")!;
-  const pluto = buildChallengeCampaignsForCategory(space).find((campaign) => campaign.name === "Pluto")!;
-  expect(pluto.steps.find((step) => step.skill === "Science")?.clue).toContain("1,477 mi");
-  expect(pluto.steps.find((step) => step.skill === "Words")?.clue).toContain("1,477 mi");
-
-  const hotSauces = playableChallengeCategories.find((category) => category.id === "hot-sauces")!;
-  const nandos = buildChallengeCampaignsForCategory(hotSauces).find((campaign) => campaign.name === "Nando's Hot PERi-PERi")!;
-  expect(nandos.steps.find((step) => step.skill === "Reading")?.question).toBe("Which field note belongs with this sauce?");
-  expect(nandos.steps.find((step) => step.skill === "Reading")?.answer).toBe("This sauce centers African bird's eye chillies, a pepper also called peri-peri or piri-piri.");
-  expect(nandos.steps.find((step) => step.skill === "Science")?.title).toBe("Interpret the listed pepper types");
-  expect(nandos.steps.find((step) => step.skill === "Science")?.answer).not.toBe(nandos.name);
-});
-
-test("Challenge selection rotates categories before repeating a category campaign", () => {
-  const categories = playableChallengeCategories.slice(0, 2);
-  const selected = [1, 2, 3, 4].map((index) => challengeCampaignForMilestone(index * challengeQuestionInterval, categories));
-  expect(selected.map((campaign) => campaign.topicId)).toEqual([
-    categories[0].id,
-    categories[1].id,
-    categories[0].id,
-    categories[1].id,
-  ]);
-  expect(selected[0].id).not.toBe(selected[2].id);
-  expect(selected[1].id).not.toBe(selected[3].id);
-  expect(new Set(Array.from({ length: 10 }, (_, index) => pepperChallengeCampaignForMilestone((index + 1) * challengeQuestionInterval).id)).size).toBe(10);
-  expect(pepperChallengeCampaigns).toHaveLength(10);
-});
-
 });
 
 test.describe("browser game flows", { tag: "@browser" }, () => {
@@ -2878,237 +2719,50 @@ test("Next builds a different round without passing the click event as learning 
   expect(pageErrors).toEqual([]);
 });
 
-test("every fortieth answer opens an automatic mini challenge and returns after its summary", { tag: "@mobile" }, async ({ page }) => {
-  const campaign = pepperChallengeCampaigns[0];
-  await page.evaluate(() => {
-    const key = "burrow-profiles-v1";
-    const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
-      activeProfileId: string;
-      profiles: { id: string; progress: { answered: number; challengeMilestone: number } }[];
-    };
-    const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
-    if (!active) throw new Error("Active profile was not saved");
-    active.progress.answered = 39;
-    active.progress.challengeMilestone = 0;
-    window.localStorage.setItem(key, JSON.stringify(profiles));
-  });
-  await page.reload();
-  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
-  await chooseOnlyMode(page, "True/False");
-  await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
+for (const scenario of [
+  { mode: "Quiz Run", answered: 39, milestone: undefined },
+  { mode: "True/False", answered: 39, milestone: 0 },
+  { mode: "True/False", answered: 119, milestone: 80 },
+]) {
+  test(`${scenario.mode} keeps playing past ${scenario.answered + 1} answers with ${scenario.milestone === undefined ? "current" : "legacy"} progress`, { tag: "@mobile" }, async ({ page }) => {
+    await page.evaluate(({ answered, milestone }) => {
+      const key = "burrow-profiles-v1";
+      const profiles = JSON.parse(window.localStorage.getItem(key)!);
+      const active = profiles.profiles.find((profile: { id: string }) => profile.id === profiles.activeProfileId);
+      active.progress.answered = answered;
+      // Older profiles may still contain the retired Challenge counter.
+      if (milestone !== undefined) active.progress.challengeMilestone = milestone;
+      window.localStorage.setItem(key, JSON.stringify(profiles));
+    }, scenario);
+    await page.reload();
+    await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+    await chooseOnlyMode(page, scenario.mode);
+    await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
 
-  await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
-  await expect(page.getByRole("button", { name: /^(Next|Finish round)/ })).toBeVisible();
-  await expect(page.getByLabel("Challenge Mode", { exact: true })).toHaveCount(0);
-  await page.getByRole("button", { name: /^(Next|Finish round)/ }).click();
-  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText(`Deep dive: ${campaign.name}`);
-
-  for (const [stepIndex, step] of campaign.steps.entries()) {
-    await expect(page.getByRole("heading", { name: step.title })).toBeVisible();
-    await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText(`Stop ${stepIndex + 1} of 5`);
-
-    if (step.skill === "Geography" && step.map) {
-      const mapChoiceIndex = step.map.choices.findIndex((choice) => choice.label === step.answer);
-      const mapChoice = step.map.choices[mapChoiceIndex];
-      await expect(page.getByLabel("Challenge map story")).toBeVisible();
-      await page.getByRole("button", { name: `Choose map pin ${String.fromCharCode(65 + mapChoiceIndex)}: ${mapChoice.mapLabel ?? mapChoice.label}` }).click();
-    } else {
-      const story = step.skill === "Math" ? page.getByLabel("Challenge math story") : page.getByLabel("Challenge picture story");
-      await expect(story.getByRole("img", { name: step.imageAlt })).toBeVisible();
-      if (step.skill === "Math") {
-        await expect(story.getByLabel(step.math.visual.ariaLabel)).toBeVisible();
+    const choices = scenario.mode === "True/False"
+      ? page.getByRole("button", { name: /^(True|False)$/ })
+      : page.getByLabel("Answer choices").getByRole("button");
+    const feedback = page.getByLabel("Answer feedback");
+    const secondChance = page.getByText("One more guess", { exact: true });
+    for (let answers = 1; answers <= 2; answers++) {
+      await choices.first().click();
+      await expect(feedback.or(secondChance)).toBeVisible();
+      if (await secondChance.isVisible()) await choices.and(page.locator(":enabled")).first().click();
+      await expect(feedback).toBeVisible();
+      await expect.poll(() => page.evaluate(() => {
+        const profiles = JSON.parse(window.localStorage.getItem("burrow-profiles-v1")!);
+        return profiles.profiles.find((profile: { id: string }) => profile.id === profiles.activeProfileId).progress.answered;
+      })).toBe(scenario.answered + answers);
+      await page.getByRole("button", { name: /^(Next|Finish round)/ }).click();
+      await expect(page.getByLabel("Challenge Mode", { exact: true })).toHaveCount(0);
+      await expect(feedback).toHaveCount(0);
+      await expect(choices.first()).toBeEnabled();
+      if (scenario.mode === "True/False") {
+        await expect(page.getByRole("button", { name: /^(True|False)$/ })).toHaveCount(2);
       }
-      await page.getByLabel("Answer choices").getByRole("button").filter({ hasText: step.answer }).click();
     }
-
-    await expect(page.getByLabel("Answer feedback")).toContainText(step.summary);
-    await page.getByRole("button", { name: stepIndex === campaign.steps.length - 1 ? "View challenge summary" : "Next question" }).click();
-  }
-
-  await expect(page.getByRole("heading", { name: campaign.completionTitle })).toBeVisible();
-  await expect(page.getByText("5/5 discoveries solved · all five notes collected")).toBeVisible();
-  await expect(page.getByText("Your next regular question is ready.")).toBeVisible();
-  await page.getByRole("button", { name: "Back to the game" }).click();
-  await expect(page.getByText("True or false?")).toBeVisible();
-  await expect(page.getByLabel("Challenge Mode", { exact: true })).toHaveCount(0);
-
-  await expect.poll(async () => page.evaluate(() => {
-    const profiles = JSON.parse(window.localStorage.getItem("burrow-profiles-v1") ?? "{}") as {
-      activeProfileId: string;
-      profiles: { id: string; progress: { challengeMilestone: number } }[];
-    };
-    return profiles.profiles.find((profile) => profile.id === profiles.activeProfileId)?.progress.challengeMilestone;
-  })).toBe(40);
-});
-
-test("mini challenges do not interrupt before the next milestone", async ({ page }) => {
-  await page.evaluate(() => {
-    const key = "burrow-profiles-v1";
-    const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
-      activeProfileId: string;
-      profiles: { id: string; progress: { answered: number; challengeMilestone: number } }[];
-    };
-    const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
-    if (!active) throw new Error("Active profile was not saved");
-    active.progress.answered = 38;
-    active.progress.challengeMilestone = 0;
-    window.localStorage.setItem(key, JSON.stringify(profiles));
   });
-  await page.reload();
-  await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
-  await chooseOnlyMode(page, "True/False");
-  await chooseOnlyBuiltInTopic(page, "Shark Tank");
-
-  await page.getByRole("button", { name: /^(True|False)$/ }).first().click();
-  await page.getByRole("button", { name: /Next|Finish round/ }).click();
-
-  await expect(page.getByLabel("Challenge Mode", { exact: true })).toHaveCount(0);
-  await expect(page.getByText("True or false?")).toBeVisible();
-});
-
-test("automatic Challenge Mode respects the selected category and keeps one subject between stops", async ({ page }) => {
-  const sharkCategory = playableChallengeCategories.find((category) => category.id === "sharks")!;
-  const campaign = buildChallengeCampaignsForCategory(sharkCategory)[0];
-  await openChallengeAt(page, challengeQuestionInterval, "Shark Tank");
-
-  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Shark Tank");
-  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText(campaign.name);
-  const reading = campaign.steps[0];
-  const geography = campaign.steps[1];
-  const readingStory = page.getByLabel("Challenge picture story");
-  await expect(readingStory.getByRole("img", { name: reading.imageAlt })).toBeVisible();
-  const firstImage = await readingStory.getByRole("img").getAttribute("src");
-  await page.getByRole("button", { name: reading.answer, exact: true }).click();
-  await page.getByRole("button", { name: "Next question" }).click();
-
-  if (geography.skill === "Geography" && geography.map) {
-    await expect(page.getByLabel("Challenge map story")).toBeVisible();
-  } else if (geography.skill === "Classification") {
-    const classificationStory = page.getByLabel("Challenge picture story");
-    await expect(classificationStory.getByRole("img", { name: geography.imageAlt })).toBeVisible();
-    await expect(classificationStory.getByRole("img")).toHaveAttribute("src", firstImage ?? "");
-  } else {
-    throw new Error("Second Challenge stop must be Geography or Classification");
-  }
-});
-
-test("Hot Sauces Challenge replaces the answer-giving Scoville prompt with a real comparison", { tag: "@mobile" }, async ({ page }) => {
-  const hotSauces = playableChallengeCategories.find((category) => category.id === "hot-sauces")!;
-  const campaigns = buildChallengeCampaignsForCategory(hotSauces);
-  // Use an available campaign with sourced heat; Nando's unverified SHU is intentionally absent.
-  const campaignIndex = campaigns.findIndex((campaign) => campaign.steps.some((step) => step.title === "Compare the Scoville rating"));
-  expect(campaignIndex).toBeGreaterThanOrEqual(0);
-  const campaign = campaigns[campaignIndex];
-  await openChallengeAt(page, (campaignIndex + 1) * challengeQuestionInterval, "Hot Sauces");
-
-  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText("Hot Sauces");
-  await expect(page.getByLabel("Challenge Mode", { exact: true })).toContainText(campaign.name);
-
-  for (const step of campaign.steps.slice(0, 3)) {
-    if (step.skill === "Geography" && step.map) {
-      const answerIndex = step.map.choices.findIndex((choice) => choice.label === step.answer);
-      const answerChoice = step.map.choices[answerIndex];
-      await page.getByRole("button", { name: `Choose map pin ${String.fromCharCode(65 + answerIndex)}: ${answerChoice.mapLabel ?? answerChoice.label}` }).click();
-    } else {
-      await page.getByLabel("Answer choices").getByRole("button", { name: step.answer, exact: true }).click();
-    }
-    await expect(page.getByLabel("Answer feedback")).toBeVisible();
-    await page.getByRole("button", { name: "Next question" }).click();
-  }
-
-  const science = campaign.steps.find((step) => step.skill === "Science")!;
-  expect(science.choices).toHaveLength(2);
-  expect(science.answer).not.toBe(campaign.name);
-  await expect(page.getByRole("heading", { name: "Compare the Scoville rating", exact: true })).toBeVisible();
-  await expect(page.getByText(science.clue, { exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Which statement is supported by the recorded values?", exact: true })).toBeVisible();
-  await expect(page.getByLabel("Answer choices").getByRole("button")).toHaveCount(2);
-  await expect(page.getByText("Which subject matches this measurement?", { exact: true })).toHaveCount(0);
-  await page.getByLabel("Answer choices").getByRole("button", { name: science.answer, exact: true }).click();
-  await expect(page.getByLabel("Answer feedback")).toContainText(science.summary);
-
-  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
-});
-
-test("Challenge Mode shares the iPad round layout and never scrolls its story panel", async ({ page }) => {
-  await page.setViewportSize({ width: 834, height: 1194 });
-  await openChallengeAt(page, challengeQuestionInterval, "Shark Tank");
-
-  const challenge = page.locator("[data-challenge-layout]");
-  const round = page.locator("[data-challenge-round]");
-  const story = page.locator("[data-challenge-story]");
-  const questionCard = page.locator("[data-question-card]");
-  const campaign = buildChallengeCampaignsForCategory(playableChallengeCategories.find((category) => category.id === "sharks")!)[0];
-
-  const expectSharedDesktopLayout = async () => {
-    await expect(challenge).toBeVisible();
-    await expect(round).toBeVisible();
-    await expect(story).toBeVisible();
-    await expect(questionCard).toBeVisible();
-
-    const measurements = await page.evaluate(() => {
-      const challengeElement = document.querySelector<HTMLElement>("[data-challenge-layout]");
-      const roundElement = document.querySelector<HTMLElement>("[data-challenge-round]");
-      const storyElement = document.querySelector<HTMLElement>("[data-challenge-story]");
-      const questionElement = document.querySelector<HTMLElement>("[data-question-card]");
-      if (!challengeElement || !roundElement || !storyElement || !questionElement) throw new Error("Challenge layout was not rendered");
-      const storyRect = storyElement.getBoundingClientRect();
-      const questionRect = questionElement.getBoundingClientRect();
-      return {
-        challengeOverflow: getComputedStyle(challengeElement).overflowY,
-        challengeClientHeight: challengeElement.clientHeight,
-        challengeScrollHeight: challengeElement.scrollHeight,
-        roundColumns: getComputedStyle(roundElement).gridTemplateColumns.split(" ").length,
-        storyOverflow: getComputedStyle(storyElement).overflowY,
-        storyClientHeight: storyElement.clientHeight,
-        storyScrollHeight: storyElement.scrollHeight,
-        topDifference: Math.abs(storyRect.top - questionRect.top),
-        bottomDifference: Math.abs(storyRect.bottom - questionRect.bottom),
-      };
-    });
-
-    expect(measurements.challengeOverflow).toBe("hidden");
-    expect(measurements.challengeScrollHeight).toBeLessThanOrEqual(measurements.challengeClientHeight + 1);
-    expect(measurements.roundColumns).toBe(2);
-    expect(["auto", "scroll"]).not.toContain(measurements.storyOverflow);
-    expect(measurements.storyScrollHeight).toBeLessThanOrEqual(measurements.storyClientHeight + 1);
-    expect(measurements.topDifference).toBeLessThanOrEqual(1);
-    expect(measurements.bottomDifference).toBeLessThanOrEqual(1);
-  };
-
-  for (const [stepIndex, step] of campaign.steps.entries()) {
-    await expectSharedDesktopLayout();
-
-    if (step.skill === "Geography" && step.map) {
-      const answerIndex = step.map.choices.findIndex((choice) => choice.label === step.answer);
-      const answerChoice = step.map.choices[answerIndex];
-      await page.getByRole("button", { name: `Choose map pin ${String.fromCharCode(65 + answerIndex)}: ${answerChoice.mapLabel ?? answerChoice.label}` }).click();
-    } else {
-      await page.getByLabel("Answer choices").getByRole("button").filter({ hasText: step.answer }).click();
-    }
-
-    await expect(page.getByLabel("Answer feedback")).toBeVisible();
-    await expectSharedDesktopLayout();
-
-    const nextAction = page.getByRole("button", { name: stepIndex === campaign.steps.length - 1 ? "View challenge summary" : "Next question" });
-    const nextBox = await nextAction.boundingBox();
-    const viewport = page.viewportSize();
-    expect(nextBox).not.toBeNull();
-    expect(viewport).not.toBeNull();
-    expect(await page.locator("[data-sticky-next]").evaluate((element) => getComputedStyle(element).position)).toBe("fixed");
-    expect(nextBox!.y).toBeGreaterThanOrEqual(0);
-    expect(nextBox!.y + nextBox!.height).toBeLessThanOrEqual(viewport!.height);
-
-    if (stepIndex === 0) {
-      await page.setViewportSize({ width: 1024, height: 768 });
-      await expectSharedDesktopLayout();
-    }
-
-    if (stepIndex < campaign.steps.length - 1) {
-      await page.getByRole("button", { name: "Next question" }).click();
-    }
-  }
-});
+}
 
 test("play removes the image-reporting control and uses XP-only feedback", async ({ page }) => {
   await expect(page.getByRole("button", { name: /Flag an issue/ })).toHaveCount(0);
