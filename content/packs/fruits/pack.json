@@ -2,7 +2,7 @@
   "$schema": "../pack.schema.json",
   "id": "fruits",
   "title": "Fruits",
-  "summary": "Discover 125 fruits, from familiar favorites to rare regional treasures, through size, weight, flavor, growing regions and surprising facts.",
+  "summary": "Discover 150 fruits, from familiar favorites to rare regional treasures, through size, weight, flavor, growing regions and surprising facts.",
   "dataNote": "Whole-fruit examples in grams, including natural peel, shell and seeds unless noted. A source may report a range, cultivar or sample mean. Chosen examples are not species averages or record comparisons. Undocumented weights are null and excluded from arithmetic. Burrow editorial ratings from 1 to 10, interpreting descriptions of ripe fruit: 1 barely sweet/tart, 5 moderate, 10 very sweet/tart. Not Brix, sugar grams, laboratory acidity, health scores or tastiness judgments. Breadfruit is rated at the mature cooking stage, plantain ripe and cooked, and olive after curing; weights remain whole fruits before cooking or curing. Cultivar, ripeness and personal perception change flavor. Burrow editorial findability bands, 1 to 5, for fresh fruit beyond its home region: 1 local harvest/specialist growers; 2 mostly regional/seasonal; 3 specialty markets; 4 regional staple traded abroad; 5 widely traded. Not a country count, current store inventory, conservation status or price. Based on described cultivation and trade, with no implied worldwide census. Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated. Individually credited Commons photos. Stored as resized JPEGs for offline play; no botanical drawings or generated substitutes. Fruit cards include distinct species and familiar market types or cultivar groups, such as nectarines, satsumas and golden kiwifruit; the card count is not a count of unique species. Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights.",
   "primaryStat": {
     "id": "weight-g",
@@ -24,7 +24,7 @@
     "geo"
   ],
   "landing": {
-    "detail": "125 fruits, from sweet to surprising",
+    "detail": "150 fruits, from sweet to surprising",
     "image": "/burrow-assets/fruits/mangosteen-487a94b3f8cc.jpg",
     "imageFit": "cover",
     "order": 120
@@ -1309,6 +1309,236 @@
       "label": "Golden Kiwifruit — weight and size reference",
       "url": "https://patents.google.com/patent/USPP11066P/en",
       "note": "Rounded from 98.3 g, the mean of 1,940 Hort16A golden kiwifruit harvested in May 1995 in New Zealand and reported in the plant patent. A cultivar sample. Size reviewed 2026-09-23. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. The Hort16A patent gives fruit length 79.1 mm; rounded to 7.9 cm. This named cultivar example is not an average for all yellow-fleshed kiwifruit."
+    },
+    {
+      "label": "Cempedak — size reference",
+      "url": "https://en.wikipedia.org/wiki/Artocarpus_integer",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 20–35 cm. Whole compound-fruit length, including the rind; not one edible bulb."
+    },
+    {
+      "label": "Marang — weight and size reference",
+      "url": "https://en.wikipedia.org/wiki/Artocarpus_odoratissimus",
+      "note": "The reference describes a whole marang weighing about 1 kg, converted to 1,000 g; not a species average. Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 15–20 cm. Length of the whole compound fruit, excluding projecting surface bristles."
+    },
+    {
+      "label": "Marang — fruit reference",
+      "url": "https://www.nparks.gov.sg/florafaunaweb/flora/3/5/3575",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Mabolo — size reference",
+      "url": "https://www.nparks.gov.sg/florafaunaweb/flora/2/8/2849",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 8–10 cm. Across a rounded example in the botanical description's 8–10 cm width; fruit shape and the 5–12 cm other axis vary."
+    },
+    {
+      "label": "Mabolo — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Diospyros_blancoi",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Bignay — size reference",
+      "url": "https://apps.worldagroforestry.org/treedb/AFTPDFS/Antidesma_bunius.pdf",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. One berry, using the Agroforestree description of fruit up to 8 mm across; not a whole bunch."
+    },
+    {
+      "label": "Bignay — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Antidesma_bunius",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Burmese Grape — size reference",
+      "url": "https://www.nparks.gov.sg/florafaunaweb/flora/3/5/3595",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. NParks describes the round to oval fruits as about 2.5 cm in diameter."
+    },
+    {
+      "label": "Burmese Grape — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Baccaurea_ramiflora",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Yangmei — size reference",
+      "url": "https://en.wikipedia.org/wiki/Myrica_rubra",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 1.5–2.5 cm. Example within the reference's usual diameter range; some cultivated varieties are larger."
+    },
+    {
+      "label": "Akebi — size reference",
+      "url": "https://plants.ces.ncsu.edu/plants/akebia-quinata/",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. NC State gives a 4-inch fruit; 10.16 cm is rounded to 10.2 cm. One follicle, not a cluster."
+    },
+    {
+      "label": "Akebi — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Akebia_quinata",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Kei Apple — size reference",
+      "url": "https://biodiversityadvisor.sanbi.org/search/detail/df309830-fbf0-435c-a780-947d5ff716a3",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 3–6 cm. Whole rounded fruit diameter from the SANBI botanical description."
+    },
+    {
+      "label": "Kei Apple — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Kei_apple",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Natal Plum — size reference",
+      "url": "https://landscapeplants.oregonstate.edu/plants/carissa-macrocarpa",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 2.5–4 cm. Length of one oval fruit, using Oregon State's botanical description."
+    },
+    {
+      "label": "Natal Plum — fruit reference",
+      "url": "https://plants.ces.ncsu.edu/plants/carissa-macrocarpa/",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Imbe — size reference",
+      "url": "https://pza.sanbi.org/garcinia-livingstonei",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 1–4 cm. SANBI gives a 10–40 mm diameter, converted to centimetres."
+    },
+    {
+      "label": "Imbe — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Garcinia_livingstonei",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Velvet Tamarind — size reference",
+      "url": "https://apps.worldagroforestry.org/treedb2/speciesprofile.php?Spid=673",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. A 2 cm example below the Agroforestree description's 2.5 cm upper diameter; includes the shell."
+    },
+    {
+      "label": "Velvet Tamarind — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Dialium_guineense",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Spiny Monkey Orange — size reference",
+      "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:547485-1/general-information",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 7–11 cm. Uses the 7–11 cm diameter in the Flora of Somalia treatment reproduced by Kew; other regional descriptions differ."
+    },
+    {
+      "label": "Spiny Monkey Orange — fruit reference",
+      "url": "https://pza.sanbi.org/strychnos-spinosa",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Spiny Monkey Orange — fruit reference",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8703348/",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Ice Cream Bean — size reference",
+      "url": "https://en.wikipedia.org/wiki/Inga_edulis",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. An illustrative 60 cm whole pod within a description reaching 1 m; measured along the pod, not one seed covering."
+    },
+    {
+      "label": "Bacuri — size reference",
+      "url": "https://en.wikipedia.org/wiki/Platonia",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 7–14 cm. Longest dimension of one round to oval fruit, including its thick rind."
+    },
+    {
+      "label": "Buriti — size reference",
+      "url": "https://www.nparks.gov.sg/florafaunaweb/flora/7/7/7798",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. NParks gives a diameter of about 5 cm for the round to ellipsoid fruit."
+    },
+    {
+      "label": "Buriti — fruit reference",
+      "url": "https://pesquisaescolar.fundaj.gov.br/en/artigo/buriti-tree/",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Camu Camu — weight and size reference",
+      "url": "https://www.esalq.usp.br/d-plant/node/568",
+      "note": "Illustrative whole-fruit example below the reference's reported 13.5 g upper weight; not a species average. Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. A 2.5 cm example below the ESALQ-USP description's 32 mm upper diameter."
+    },
+    {
+      "label": "Camu Camu — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Myrciaria_dubia",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Uvaia — weight and size reference",
+      "url": "https://www.scielo.br/j/rbf/a/zmKs9QLY8RYWDGFLRWXm8nf/?lang=en",
+      "note": "Mean whole-fruit weight of the large-fruit population harvested in Salesópolis, Brazil, in November 2014 (Table 1). The small-fruit population averaged 8.25 g; neither is a species-wide average. Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Rounded from the 3.92 cm transverse mean of the large-fruit population studied in Salesópolis, Brazil; its length mean was 3.08 cm."
+    },
+    {
+      "label": "Uvaia — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Eugenia_pyriformis",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Pitomba — size reference",
+      "url": "https://en.wikipedia.org/wiki/Talisia_esculenta",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 1.5–4 cm. One whole Talisia esculenta fruit; not Eugenia luschnathiana, which shares the name pitomba."
+    },
+    {
+      "label": "Arazá — weight and size reference",
+      "url": "https://en.wikipedia.org/wiki/Eugenia_stipitata",
+      "note": "A large cultivated-fruit example reported for selected material near Iquitos, Peru; not a typical wild fruit or species average. Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 2–12 cm. Example across a cultivated fruit; the botanical description gives 2–12 cm width. Wild and cultivated forms differ greatly."
+    },
+    {
+      "label": "Peach Palm Fruit — size reference",
+      "url": "https://en.wikipedia.org/wiki/Bactris_gasipaes",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 4–6 cm. One whole fruit before cooking; the reference gives 4–6 cm length and 3–5 cm width. Flavor ratings describe cooked flesh."
+    },
+    {
+      "label": "Cornelian Cherry — size reference",
+      "url": "https://plants.ces.ncsu.edu/plants/cornus-mas/",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 1.27–2.54 cm. NC State's 0.5–1 inch fruit length converted using 2.54 cm per inch."
+    },
+    {
+      "label": "Cornelian Cherry — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Cornus_mas",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Maypop — size reference",
+      "url": "https://plants.ces.ncsu.edu/plants/passiflora-incarnata/",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 2.54–7.62 cm. Illustrative example within NC State's broad 1–3 inch fruit-length band; not a precise species average."
+    },
+    {
+      "label": "Maypop — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Passiflora_incarnata",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "American Persimmon — size reference",
+      "url": "https://plants.ces.ncsu.edu/plants/diospyros-virginiana/",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 2.54–3.81 cm. NC State describes globular fruits 1–1.5 inches long, converted to centimetres."
+    },
+    {
+      "label": "American Persimmon — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Diospyros_virginiana",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Blue Quandong — size reference",
+      "url": "https://plantnet.rbgsyd.nsw.gov.au/cgi-bin/NSWfl.pl?lvl=sp&name=Elaeocarpus~grandis&page=nswfl",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 2–3 cm. Flora of NSW gives 20–30 mm diameter. Uses its Australian E. grandis treatment; some references include this tree in E. angustifolius."
+    },
+    {
+      "label": "Blue Quandong — fruit reference",
+      "url": "https://sown.com.au/elaeocarpus-grandis-elaeocarpaceae-blue-quandong/",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Blue Quandong — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Elaeocarpus_grandis",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Beach Cherry — size reference",
+      "url": "https://www.jcu.edu.au/discover-nature-at-jcu/plants/plants-by-scientific-name2/eugenia-reinwardtiana",
+      "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. James Cook University describes globular to elliptical fruits about 2 cm long."
+    },
+    {
+      "label": "Beach Cherry — fruit reference",
+      "url": "https://en.wikipedia.org/wiki/Eugenia_reinwardtiana",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+    },
+    {
+      "label": "Beach Cherry — fruit reference",
+      "url": "https://rfcarchives.org.au/Next/CaringForTrees/FruitTreesSpeciesList122-02.htm",
+      "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
     }
   ],
   "cards": [
@@ -17414,6 +17644,3199 @@
       },
       "readingPrompts": [
         "Which clue would help you recognize Golden Kiwifruit?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "cempedak",
+      "name": "Cempedak",
+      "image": "/burrow-assets/fruits/cempedak-bd8911ae5512.jpg",
+      "imageAlt": "Cempedak fruit",
+      "imageCredit": "Tu7uh / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: Artocarpus integer Fruit and Tree.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Artocarpus_integer_Fruit_and_Tree.JPG",
+      "fact": "Cempedak is related to jackfruit, with fragrant yellow-orange flesh tucked inside a patterned rind.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 28,
+          "unit": "cm",
+          "display": "~28 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 20–35 cm. Whole compound-fruit length, including the rind; not one edible bulb."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 9,
+          "unit": "/10",
+          "display": "9/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 2,
+          "unit": "/10",
+          "display": "2/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Artocarpus integer"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Southeast Asia, especially the Malay Archipelago"
+        },
+        {
+          "label": "Flavor",
+          "value": "Very sweet with a strong, musky aroma"
+        },
+        {
+          "label": "Texture",
+          "value": "Soft, slippery bulbs around large seeds"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "multiple-fruit",
+        "Asia"
+      ],
+      "tags": [
+        "multiple-fruit",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "multiple-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 20–35 cm. Whole compound-fruit length, including the rind; not one edible bulb. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Southeast Asia, especially the Malay Archipelago",
+          "countries": [
+            "Malaysia",
+            "Indonesia",
+            "Thailand"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            3.1,
+            101.7
+          ]
+        },
+        "sources": [
+          {
+            "label": "Cempedak — size reference",
+            "url": "https://en.wikipedia.org/wiki/Artocarpus_integer",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 20–35 cm. Whole compound-fruit length, including the rind; not one edible bulb."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Cempedak?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "marang",
+      "name": "Marang",
+      "image": "/burrow-assets/fruits/marang-a42389842034.jpg",
+      "imageAlt": "Marang fruit",
+      "imageCredit": "Enziee / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Tarap @ Timadang.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tarap_@_Timadang.jpg",
+      "fact": "Marang hides many white, juicy bulbs beneath its rough outer rind.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 1000,
+          "unit": "g",
+          "display": "~1,000 g",
+          "direction": "higher",
+          "note": "The reference describes a whole marang weighing about 1 kg, converted to 1,000 g; not a species average."
+        },
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 18,
+          "unit": "cm",
+          "display": "~18 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 15–20 cm. Length of the whole compound fruit, excluding projecting surface bristles."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 9,
+          "unit": "/10",
+          "display": "9/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 1,
+          "unit": "/10",
+          "display": "1/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Artocarpus odoratissimus"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Borneo; also cultivated in the Philippines"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet and strongly aromatic"
+        },
+        {
+          "label": "Texture",
+          "value": "Soft, juicy white bulbs"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "multiple-fruit",
+        "Asia"
+      ],
+      "tags": [
+        "multiple-fruit",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "multiple-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 15–20 cm. Length of the whole compound fruit, excluding projecting surface bristles. The reference describes a whole marang weighing about 1 kg, converted to 1,000 g; not a species average. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Borneo; also cultivated in the Philippines",
+          "countries": [
+            "Malaysia",
+            "Brunei",
+            "Indonesia",
+            "Philippines"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            5.9,
+            116.1
+          ]
+        },
+        "sources": [
+          {
+            "label": "Marang — weight and size reference",
+            "url": "https://en.wikipedia.org/wiki/Artocarpus_odoratissimus",
+            "note": "The reference describes a whole marang weighing about 1 kg, converted to 1,000 g; not a species average. Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 15–20 cm. Length of the whole compound fruit, excluding projecting surface bristles."
+          },
+          {
+            "label": "Marang — fruit reference",
+            "url": "https://www.nparks.gov.sg/florafaunaweb/flora/3/5/3575",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Marang?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "mabolo",
+      "name": "Mabolo",
+      "image": "/burrow-assets/fruits/mabolo-9395be7afcef.jpg",
+      "imageAlt": "Mabolo fruit",
+      "imageCredit": "Judgefloro / Wikimedia Commons / CC0 (https://creativecommons.org/publicdomain/zero/1.0/deed.en). Resized as JPEG. Original: 9447Diospyros blancoi Mabolo fruit 06.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:9447Diospyros_blancoi_Mabolo_fruit_06.jpg",
+      "fact": "Mabolo is also called velvet apple because fine hairs cover its reddish-brown skin.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 9,
+          "unit": "cm",
+          "display": "~9 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 8–10 cm. Across a rounded example in the botanical description's 8–10 cm width; fruit shape and the 5–12 cm other axis vary."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 2,
+          "unit": "/10",
+          "display": "2/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Diospyros blancoi"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "The Philippines and Taiwan"
+        },
+        {
+          "label": "Flavor",
+          "value": "Mildly sweet and aromatic"
+        },
+        {
+          "label": "Texture",
+          "value": "Creamy flesh beneath velvety skin"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "persimmon-relative",
+        "Asia"
+      ],
+      "tags": [
+        "persimmon-relative",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "persimmon-relative",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 8–10 cm. Across a rounded example in the botanical description's 8–10 cm width; fruit shape and the 5–12 cm other axis vary. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "The Philippines and Taiwan",
+          "countries": [
+            "Philippines",
+            "Taiwan"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            14.6,
+            121
+          ]
+        },
+        "sources": [
+          {
+            "label": "Mabolo — size reference",
+            "url": "https://www.nparks.gov.sg/florafaunaweb/flora/2/8/2849",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 8–10 cm. Across a rounded example in the botanical description's 8–10 cm width; fruit shape and the 5–12 cm other axis vary."
+          },
+          {
+            "label": "Mabolo — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Diospyros_blancoi",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Mabolo?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "bignay",
+      "name": "Bignay",
+      "image": "/burrow-assets/fruits/bignay-73b7b482a80e.jpg",
+      "imageAlt": "Bignay fruit",
+      "imageCredit": "LonNyoe / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Antidesma bunius madura.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Antidesma_bunius_madura.jpg",
+      "fact": "A single bignay bunch can carry pale, red and dark fruits because they ripen at different times.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 0.8,
+          "unit": "cm",
+          "display": "~0.8 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. One berry, using the Agroforestree description of fruit up to 8 mm across; not a whole bunch."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 5,
+          "unit": "/10",
+          "display": "5/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 7,
+          "unit": "/10",
+          "display": "7/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Antidesma bunius"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "South and Southeast Asia to northern Australia; Philippine food tradition"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet-tart when ripe"
+        },
+        {
+          "label": "Texture",
+          "value": "Juicy skin and soft pulp around one seed"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "small-fruit",
+        "Asia"
+      ],
+      "tags": [
+        "small-fruit",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "small-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. One berry, using the Agroforestree description of fruit up to 8 mm across; not a whole bunch. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "South and Southeast Asia to northern Australia; Philippine food tradition",
+          "countries": [
+            "Philippines",
+            "Indonesia",
+            "Australia"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            14.6,
+            121
+          ]
+        },
+        "sources": [
+          {
+            "label": "Bignay — size reference",
+            "url": "https://apps.worldagroforestry.org/treedb/AFTPDFS/Antidesma_bunius.pdf",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. One berry, using the Agroforestree description of fruit up to 8 mm across; not a whole bunch."
+          },
+          {
+            "label": "Bignay — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Antidesma_bunius",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Bignay?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "burmese-grape",
+      "name": "Burmese Grape",
+      "image": "/burrow-assets/fruits/burmese-grape-3bc3b8465c94.jpg",
+      "imageAlt": "Burmese Grape fruit",
+      "imageCredit": "Xufanc / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0). Resized as JPEG. Original: Mafai1619.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mafai1619.JPG",
+      "fact": "Burmese grape clusters can hang from old branches and even the trunk.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 2.5,
+          "unit": "cm",
+          "display": "~2.5 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. NParks describes the round to oval fruits as about 2.5 cm in diameter."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 5,
+          "unit": "/10",
+          "display": "5/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Baccaurea ramiflora"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "South and Southeast Asia, including Myanmar and Thailand"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet and sour"
+        },
+        {
+          "label": "Texture",
+          "value": "Juicy pulp around large seeds"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "tropical-fruit",
+        "Asia"
+      ],
+      "tags": [
+        "tropical-fruit",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "tropical-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. NParks describes the round to oval fruits as about 2.5 cm in diameter. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "South and Southeast Asia, including Myanmar and Thailand",
+          "countries": [
+            "Myanmar",
+            "Thailand",
+            "India"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            21.9,
+            96.1
+          ]
+        },
+        "sources": [
+          {
+            "label": "Burmese Grape — size reference",
+            "url": "https://www.nparks.gov.sg/florafaunaweb/flora/3/5/3595",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. NParks describes the round to oval fruits as about 2.5 cm in diameter."
+          },
+          {
+            "label": "Burmese Grape — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Baccaurea_ramiflora",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Burmese Grape?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "yangmei",
+      "name": "Yangmei",
+      "image": "/burrow-assets/fruits/yangmei-d621b5c6988f.jpg",
+      "imageAlt": "Yangmei fruit",
+      "imageCredit": "KENPEI / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/). Cropped and resized as JPEG. Original: Myrica rubra5.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Myrica_rubra5.jpg",
+      "fact": "Yangmei has a bumpy red surface and one stone hidden in its center.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 2,
+          "unit": "cm",
+          "display": "~2 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 1.5–2.5 cm. Example within the reference's usual diameter range; some cultivated varieties are larger."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 7,
+          "unit": "/10",
+          "display": "7/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Myrica rubra"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "East Asia, with a long cultivation history in China"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet with a sharp tang"
+        },
+        {
+          "label": "Texture",
+          "value": "Juicy, knobbly flesh around a central stone"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "stone-fruit",
+        "Asia"
+      ],
+      "tags": [
+        "stone-fruit",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "stone-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 1.5–2.5 cm. Example within the reference's usual diameter range; some cultivated varieties are larger. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "East Asia, with a long cultivation history in China",
+          "countries": [
+            "China",
+            "Japan"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            29.9,
+            121.5
+          ]
+        },
+        "sources": [
+          {
+            "label": "Yangmei — size reference",
+            "url": "https://en.wikipedia.org/wiki/Myrica_rubra",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 1.5–2.5 cm. Example within the reference's usual diameter range; some cultivated varieties are larger."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Yangmei?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "akebi",
+      "name": "Akebi",
+      "image": "/burrow-assets/fruits/akebi-bbf975dd60ed.jpg",
+      "imageAlt": "Akebi fruit",
+      "imageCredit": "Jpbrigand / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Akebia quinata fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Akebia_quinata_fruit.jpg",
+      "fact": "A ripe akebi splits open to reveal pale pulp dotted with dark seeds.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 10.2,
+          "unit": "cm",
+          "display": "~10.2 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. NC State gives a 4-inch fruit; 10.16 cm is rounded to 10.2 cm. One follicle, not a cluster."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 1,
+          "unit": "/10",
+          "display": "1/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Akebia quinata"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "China, Korea and Japan; seasonal fruit in Japan"
+        },
+        {
+          "label": "Flavor",
+          "value": "Mildly sweet, melon-like pulp"
+        },
+        {
+          "label": "Texture",
+          "value": "Soft jelly-like pulp with many dark seeds"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "vine-fruit",
+        "Asia"
+      ],
+      "tags": [
+        "vine-fruit",
+        "asia"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "vine-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. NC State gives a 4-inch fruit; 10.16 cm is rounded to 10.2 cm. One follicle, not a cluster. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "China, Korea and Japan; seasonal fruit in Japan",
+          "countries": [
+            "Japan",
+            "China",
+            "South Korea"
+          ],
+          "continents": [
+            "Asia"
+          ],
+          "coordinates": [
+            38.2,
+            140.3
+          ]
+        },
+        "sources": [
+          {
+            "label": "Akebi — size reference",
+            "url": "https://plants.ces.ncsu.edu/plants/akebia-quinata/",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. NC State gives a 4-inch fruit; 10.16 cm is rounded to 10.2 cm. One follicle, not a cluster."
+          },
+          {
+            "label": "Akebi — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Akebia_quinata",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Akebi?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "kei-apple",
+      "name": "Kei Apple",
+      "image": "/burrow-assets/fruits/kei-apple-aeef4d85c05f.jpg",
+      "imageAlt": "Kei Apple fruit",
+      "imageCredit": "SAplants / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Dovyalis afra 1DS-II 2277.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Dovyalis_afra_1DS-II_2277.jpg",
+      "fact": "Kei apples turn yellow as they ripen on a tree armed with long thorns.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 4,
+          "unit": "cm",
+          "display": "~4 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 3–6 cm. Whole rounded fruit diameter from the SANBI botanical description."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 3,
+          "unit": "/10",
+          "display": "3/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 9,
+          "unit": "/10",
+          "display": "9/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Dovyalis afra (syn. Dovyalis caffra)"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Southern Africa"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sharply acidic with some sweetness"
+        },
+        {
+          "label": "Texture",
+          "value": "Juicy yellow flesh"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "tropical-fruit",
+        "Africa"
+      ],
+      "tags": [
+        "tropical-fruit",
+        "africa"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "tropical-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 3–6 cm. Whole rounded fruit diameter from the SANBI botanical description. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Southern Africa",
+          "countries": [
+            "South Africa",
+            "Zimbabwe",
+            "Mozambique"
+          ],
+          "continents": [
+            "Africa"
+          ],
+          "coordinates": [
+            -32.8,
+            28
+          ]
+        },
+        "sources": [
+          {
+            "label": "Kei Apple — size reference",
+            "url": "https://biodiversityadvisor.sanbi.org/search/detail/df309830-fbf0-435c-a780-947d5ff716a3",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 3–6 cm. Whole rounded fruit diameter from the SANBI botanical description."
+          },
+          {
+            "label": "Kei Apple — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Kei_apple",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Kei Apple?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "natal-plum",
+      "name": "Natal Plum",
+      "image": "/burrow-assets/fruits/natal-plum-f3375da726cf.jpg",
+      "imageAlt": "Natal Plum fruit",
+      "imageCredit": "SAplants / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Carissa macrocarpa 5Dsr 8157.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Carissa_macrocarpa_5Dsr_8157.jpg",
+      "fact": "Natal plum has glossy red fruit and white, star-shaped flowers.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 3.5,
+          "unit": "cm",
+          "display": "~3.5 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 2.5–4 cm. Length of one oval fruit, using Oregon State's botanical description."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 5,
+          "unit": "/10",
+          "display": "5/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Carissa macrocarpa"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Coastal southern Africa"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet-tart ripe fruit, reminiscent of cranberry"
+        },
+        {
+          "label": "Texture",
+          "value": "Soft, juicy flesh"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "tropical-fruit",
+        "Africa"
+      ],
+      "tags": [
+        "tropical-fruit",
+        "africa"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "tropical-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 2.5–4 cm. Length of one oval fruit, using Oregon State's botanical description. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Coastal southern Africa",
+          "countries": [
+            "South Africa",
+            "Mozambique"
+          ],
+          "continents": [
+            "Africa"
+          ],
+          "coordinates": [
+            -29.9,
+            31
+          ]
+        },
+        "sources": [
+          {
+            "label": "Natal Plum — size reference",
+            "url": "https://landscapeplants.oregonstate.edu/plants/carissa-macrocarpa",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 2.5–4 cm. Length of one oval fruit, using Oregon State's botanical description."
+          },
+          {
+            "label": "Natal Plum — fruit reference",
+            "url": "https://plants.ces.ncsu.edu/plants/carissa-macrocarpa/",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Natal Plum?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "imbe",
+      "name": "Imbe",
+      "image": "/burrow-assets/fruits/imbe-685b72820c6e.jpg",
+      "imageAlt": "Imbe fruit",
+      "imageCredit": "JMK / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Garcinia livingstonei, vrugte, Manie van der Schijff BT, c.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Garcinia_livingstonei,_vrugte,_Manie_van_der_Schijff_BT,_c.jpg",
+      "fact": "Imbe is also called African mangosteen and ripens into a small orange fruit.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 3,
+          "unit": "cm",
+          "display": "~3 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 1–4 cm. SANBI gives a 10–40 mm diameter, converted to centimetres."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 5,
+          "unit": "/10",
+          "display": "5/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 1,
+          "unit": "/5",
+          "display": "1/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Garcinia livingstonei"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Tropical and southern Africa"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet and tangy"
+        },
+        {
+          "label": "Texture",
+          "value": "Sticky, juicy pulp around a large seed"
+        },
+        {
+          "label": "Finding it",
+          "value": "Local harvest or specialist growers"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "tropical-fruit",
+        "Africa"
+      ],
+      "tags": [
+        "tropical-fruit",
+        "africa"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "epic",
+        "taxonomyGroup": "tropical-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 1–4 cm. SANBI gives a 10–40 mm diameter, converted to centimetres. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Tropical and southern Africa",
+          "countries": [
+            "Mozambique",
+            "South Africa",
+            "Zimbabwe"
+          ],
+          "continents": [
+            "Africa"
+          ],
+          "coordinates": [
+            -25.9,
+            32.6
+          ]
+        },
+        "sources": [
+          {
+            "label": "Imbe — size reference",
+            "url": "https://pza.sanbi.org/garcinia-livingstonei",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 1–4 cm. SANBI gives a 10–40 mm diameter, converted to centimetres."
+          },
+          {
+            "label": "Imbe — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Garcinia_livingstonei",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Imbe?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "velvet-tamarind",
+      "name": "Velvet Tamarind",
+      "image": "/burrow-assets/fruits/velvet-tamarind-ade2ef284764.jpg",
+      "imageAlt": "Velvet Tamarind fruit",
+      "imageCredit": "Edithobayaa1 / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Velvet tamarind.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Velvet_tamarind.jpg",
+      "fact": "Velvet tamarind has a dark, velvety shell around dry, sweet-sour pulp.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 2,
+          "unit": "cm",
+          "display": "~2 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. A 2 cm example below the Agroforestree description's 2.5 cm upper diameter; includes the shell."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 7,
+          "unit": "/10",
+          "display": "7/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Dialium guineense"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "West and west-central Africa"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet and sour"
+        },
+        {
+          "label": "Texture",
+          "value": "Dry, powdery pulp in a brittle shell"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "pod-fruit",
+        "Africa"
+      ],
+      "tags": [
+        "pod-fruit",
+        "africa"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "pod-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. A 2 cm example below the Agroforestree description's 2.5 cm upper diameter; includes the shell. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "West and west-central Africa",
+          "countries": [
+            "Ghana",
+            "Nigeria",
+            "Senegal"
+          ],
+          "continents": [
+            "Africa"
+          ],
+          "coordinates": [
+            6.7,
+            -1.6
+          ]
+        },
+        "sources": [
+          {
+            "label": "Velvet Tamarind — size reference",
+            "url": "https://apps.worldagroforestry.org/treedb2/speciesprofile.php?Spid=673",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. A 2 cm example below the Agroforestree description's 2.5 cm upper diameter; includes the shell."
+          },
+          {
+            "label": "Velvet Tamarind — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Dialium_guineense",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Velvet Tamarind?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "monkey-orange",
+      "name": "Spiny Monkey Orange",
+      "image": "/burrow-assets/fruits/monkey-orange-d8805eeae92b.jpg",
+      "imageAlt": "Spiny Monkey Orange fruit",
+      "imageCredit": "Damien Farrell / Wikimedia Commons / CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/). Resized as JPEG. Original: Strychnos spinosa fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Strychnos_spinosa_fruit.jpg",
+      "fact": "Spiny monkey orange has a hard yellow shell. Only its ripe pulp is edible; its seeds are poisonous.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 9,
+          "unit": "cm",
+          "display": "~9 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 7–11 cm. Uses the 7–11 cm diameter in the Flora of Somalia treatment reproduced by Kew; other regional descriptions differ."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 1,
+          "unit": "/5",
+          "display": "1/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Strychnos spinosa"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Tropical and southern Africa"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet-sour ripe pulp"
+        },
+        {
+          "label": "Texture",
+          "value": "Soft pulp inside a hard shell"
+        },
+        {
+          "label": "Finding it",
+          "value": "Local harvest or specialist growers"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "tropical-fruit",
+        "Africa"
+      ],
+      "tags": [
+        "tropical-fruit",
+        "africa"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "epic",
+        "taxonomyGroup": "tropical-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 7–11 cm. Uses the 7–11 cm diameter in the Flora of Somalia treatment reproduced by Kew; other regional descriptions differ. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Tropical and southern Africa",
+          "countries": [
+            "Zimbabwe",
+            "South Africa",
+            "Tanzania"
+          ],
+          "continents": [
+            "Africa"
+          ],
+          "coordinates": [
+            -18,
+            31
+          ]
+        },
+        "sources": [
+          {
+            "label": "Spiny Monkey Orange — size reference",
+            "url": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:547485-1/general-information",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 7–11 cm. Uses the 7–11 cm diameter in the Flora of Somalia treatment reproduced by Kew; other regional descriptions differ."
+          },
+          {
+            "label": "Spiny Monkey Orange — fruit reference",
+            "url": "https://pza.sanbi.org/strychnos-spinosa",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          },
+          {
+            "label": "Spiny Monkey Orange — fruit reference",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8703348/",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Spiny Monkey Orange?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "ice-cream-bean",
+      "name": "Ice Cream Bean",
+      "image": "/burrow-assets/fruits/ice-cream-bean-1a030decee15.jpg",
+      "imageAlt": "Ice Cream Bean fruit",
+      "imageCredit": "Burkhard Mücke / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Inga edulis, fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Inga_edulis,_fruit.jpg",
+      "fact": "Ice cream bean gets its name from the sweet, cottony pulp inside its long pods.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 60,
+          "unit": "cm",
+          "display": "~60 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. An illustrative 60 cm whole pod within a description reaching 1 m; measured along the pod, not one seed covering."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 1,
+          "unit": "/10",
+          "display": "1/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Inga edulis"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Tropical South America, especially Amazonia"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet, reminiscent of vanilla ice cream"
+        },
+        {
+          "label": "Texture",
+          "value": "Fluffy white pulp around the seeds"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "pod-fruit",
+        "South America"
+      ],
+      "tags": [
+        "pod-fruit",
+        "south-america"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "pod-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. An illustrative 60 cm whole pod within a description reaching 1 m; measured along the pod, not one seed covering. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Tropical South America, especially Amazonia",
+          "countries": [
+            "Peru",
+            "Brazil",
+            "Colombia"
+          ],
+          "continents": [
+            "South America"
+          ],
+          "coordinates": [
+            -3.7,
+            -73.2
+          ]
+        },
+        "sources": [
+          {
+            "label": "Ice Cream Bean — size reference",
+            "url": "https://en.wikipedia.org/wiki/Inga_edulis",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. An illustrative 60 cm whole pod within a description reaching 1 m; measured along the pod, not one seed covering."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Ice Cream Bean?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "bacuri",
+      "name": "Bacuri",
+      "image": "/burrow-assets/fruits/bacuri-572d4110782b.jpg",
+      "imageAlt": "Halved bacuri with thick yellow rind and white pulp",
+      "imageCredit": "Hellen Perrone / Wikimedia Commons / Public domain (https://commons.wikimedia.org/wiki/Help:Public_domain). Resized as JPEG. Original: Bacuri, ''Platonia insignis''.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Bacuri,_%27%27Platonia_insignis%27%27.JPG",
+      "fact": "Bacuri has a thick yellow rind surrounding fragrant white pulp.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 10,
+          "unit": "cm",
+          "display": "~10 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 7–14 cm. Longest dimension of one round to oval fruit, including its thick rind."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 7,
+          "unit": "/10",
+          "display": "7/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Platonia insignis"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Northern and northeastern South America, especially Brazil"
+        },
+        {
+          "label": "Flavor",
+          "value": "Fragrant, sweet and sour"
+        },
+        {
+          "label": "Texture",
+          "value": "Sticky white pulp inside a thick rind"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "tropical-fruit",
+        "South America"
+      ],
+      "tags": [
+        "tropical-fruit",
+        "south-america"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "tropical-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 7–14 cm. Longest dimension of one round to oval fruit, including its thick rind. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Northern and northeastern South America, especially Brazil",
+          "countries": [
+            "Brazil",
+            "Suriname",
+            "Guyana"
+          ],
+          "continents": [
+            "South America"
+          ],
+          "coordinates": [
+            -1.5,
+            -48.5
+          ]
+        },
+        "sources": [
+          {
+            "label": "Bacuri — size reference",
+            "url": "https://en.wikipedia.org/wiki/Platonia",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 7–14 cm. Longest dimension of one round to oval fruit, including its thick rind."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Bacuri?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "buriti",
+      "name": "Buriti",
+      "image": "/burrow-assets/fruits/buriti-274579c3628b.jpg",
+      "imageAlt": "Buriti fruit",
+      "imageCredit": "Zimbres / Wikimedia Commons / CC BY-SA 2.5 (https://creativecommons.org/licenses/by-sa/2.5). Resized as JPEG. Original: Mauritia-flexuosa-fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mauritia-flexuosa-fruit.jpg",
+      "fact": "Buriti looks like a little pine cone because reddish-brown scales overlap across its skin.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 5,
+          "unit": "cm",
+          "display": "~5 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. NParks gives a diameter of about 5 cm for the round to ellipsoid fruit."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 4,
+          "unit": "/10",
+          "display": "4/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 4,
+          "unit": "/10",
+          "display": "4/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Mauritia flexuosa"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Tropical South American wetlands"
+        },
+        {
+          "label": "Flavor",
+          "value": "Rich, mildly sweet pulp"
+        },
+        {
+          "label": "Texture",
+          "value": "Orange flesh beneath overlapping scales"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "palm-fruit",
+        "South America"
+      ],
+      "tags": [
+        "palm-fruit",
+        "south-america"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "palm-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. NParks gives a diameter of about 5 cm for the round to ellipsoid fruit. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Tropical South American wetlands",
+          "countries": [
+            "Brazil",
+            "Peru",
+            "Colombia"
+          ],
+          "continents": [
+            "South America"
+          ],
+          "coordinates": [
+            -3.1,
+            -60
+          ]
+        },
+        "sources": [
+          {
+            "label": "Buriti — size reference",
+            "url": "https://www.nparks.gov.sg/florafaunaweb/flora/7/7/7798",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. NParks gives a diameter of about 5 cm for the round to ellipsoid fruit."
+          },
+          {
+            "label": "Buriti — fruit reference",
+            "url": "https://pesquisaescolar.fundaj.gov.br/en/artigo/buriti-tree/",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Buriti?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "camu-camu",
+      "name": "Camu Camu",
+      "image": "/burrow-assets/fruits/camu-camu-44a0f35157d3.jpg",
+      "imageAlt": "Camu Camu fruit",
+      "imageCredit": "Túllio F / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Fruto de Myrciaria dubia.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Fruto_de_Myrciaria_dubia.jpg",
+      "fact": "Camu camu grows along Amazonian rivers, where its shrubs can withstand flooding.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 13,
+          "unit": "g",
+          "display": "~13 g",
+          "direction": "higher",
+          "note": "Illustrative whole-fruit example below the reference's reported 13.5 g upper weight; not a species average."
+        },
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 2.5,
+          "unit": "cm",
+          "display": "~2.5 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. A 2.5 cm example below the ESALQ-USP description's 32 mm upper diameter."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 2,
+          "unit": "/10",
+          "display": "2/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 10,
+          "unit": "/10",
+          "display": "10/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Myrciaria dubia"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Western Amazonian floodplains"
+        },
+        {
+          "label": "Flavor",
+          "value": "Very sour"
+        },
+        {
+          "label": "Texture",
+          "value": "Juicy pulp beneath thin skin"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "small-fruit",
+        "South America"
+      ],
+      "tags": [
+        "small-fruit",
+        "south-america"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "small-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. A 2.5 cm example below the ESALQ-USP description's 32 mm upper diameter. Illustrative whole-fruit example below the reference's reported 13.5 g upper weight; not a species average. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Western Amazonian floodplains",
+          "countries": [
+            "Peru",
+            "Brazil",
+            "Colombia",
+            "Venezuela"
+          ],
+          "continents": [
+            "South America"
+          ],
+          "coordinates": [
+            -3.7,
+            -73.2
+          ]
+        },
+        "sources": [
+          {
+            "label": "Camu Camu — weight and size reference",
+            "url": "https://www.esalq.usp.br/d-plant/node/568",
+            "note": "Illustrative whole-fruit example below the reference's reported 13.5 g upper weight; not a species average. Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. A 2.5 cm example below the ESALQ-USP description's 32 mm upper diameter."
+          },
+          {
+            "label": "Camu Camu — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Myrciaria_dubia",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Camu Camu?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "uvaia",
+      "name": "Uvaia",
+      "image": "/burrow-assets/fruits/uvaia-af706454ccfa.jpg",
+      "imageAlt": "Uvaia fruit",
+      "imageCredit": "MATHIAS, M H from Guaratinguetá, Brasil / Wikimedia Commons / CC BY 2.0 (https://creativecommons.org/licenses/by/2.0). Resized as JPEG. Original: M. H. Mathias Uvaia - Eugenia pyriformis (29993547090).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:M._H._Mathias_Uvaia_-_Eugenia_pyriformis_(29993547090).jpg",
+      "fact": "Uvaia is a yellow-orange Atlantic Forest fruit whose soft flesh bruises easily.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 22,
+          "unit": "g",
+          "display": "~22 g",
+          "direction": "higher",
+          "note": "Mean whole-fruit weight of the large-fruit population harvested in Salesópolis, Brazil, in November 2014 (Table 1). The small-fruit population averaged 8.25 g; neither is a species-wide average."
+        },
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 3.9,
+          "unit": "cm",
+          "display": "~3.9 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Rounded from the 3.92 cm transverse mean of the large-fruit population studied in Salesópolis, Brazil; its length mean was 3.08 cm."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 5,
+          "unit": "/10",
+          "display": "5/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 7,
+          "unit": "/10",
+          "display": "7/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 1,
+          "unit": "/5",
+          "display": "1/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Eugenia pyriformis"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "South American Atlantic Forest, especially southern Brazil"
+        },
+        {
+          "label": "Flavor",
+          "value": "Aromatic, sweet and tart"
+        },
+        {
+          "label": "Texture",
+          "value": "Delicate, juicy flesh"
+        },
+        {
+          "label": "Finding it",
+          "value": "Local harvest or specialist growers"
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "tropical-fruit",
+        "South America"
+      ],
+      "tags": [
+        "tropical-fruit",
+        "south-america"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "epic",
+        "taxonomyGroup": "tropical-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Rounded from the 3.92 cm transverse mean of the large-fruit population studied in Salesópolis, Brazil; its length mean was 3.08 cm. Mean whole-fruit weight of the large-fruit population harvested in Salesópolis, Brazil, in November 2014 (Table 1). The small-fruit population averaged 8.25 g; neither is a species-wide average. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "South American Atlantic Forest, especially southern Brazil",
+          "countries": [
+            "Brazil",
+            "Paraguay",
+            "Argentina"
+          ],
+          "continents": [
+            "South America"
+          ],
+          "coordinates": [
+            -23.5,
+            -45.8
+          ]
+        },
+        "sources": [
+          {
+            "label": "Uvaia — weight and size reference",
+            "url": "https://www.scielo.br/j/rbf/a/zmKs9QLY8RYWDGFLRWXm8nf/?lang=en",
+            "note": "Mean whole-fruit weight of the large-fruit population harvested in Salesópolis, Brazil, in November 2014 (Table 1). The small-fruit population averaged 8.25 g; neither is a species-wide average. Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Rounded from the 3.92 cm transverse mean of the large-fruit population studied in Salesópolis, Brazil; its length mean was 3.08 cm."
+          },
+          {
+            "label": "Uvaia — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Eugenia_pyriformis",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Uvaia?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "pitomba",
+      "name": "Pitomba",
+      "image": "/burrow-assets/fruits/pitomba-c6198d1947e1.jpg",
+      "imageAlt": "Pitomba fruit",
+      "imageCredit": "Bdieu / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: Pitomba.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pitomba.jpg",
+      "fact": "Pitomba has pale, translucent pulp beneath its brownish peel. It is a relative of lychee.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 2.5,
+          "unit": "cm",
+          "display": "~2.5 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 1.5–4 cm. One whole Talisia esculenta fruit; not Eugenia luschnathiana, which shares the name pitomba."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 5,
+          "unit": "/10",
+          "display": "5/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Talisia esculenta"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Tropical South America, especially Brazil"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet and sour"
+        },
+        {
+          "label": "Texture",
+          "value": "Translucent pulp around one or two large seeds"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "tropical-fruit",
+        "South America"
+      ],
+      "tags": [
+        "tropical-fruit",
+        "south-america"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "tropical-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 1.5–4 cm. One whole Talisia esculenta fruit; not Eugenia luschnathiana, which shares the name pitomba. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Tropical South America, especially Brazil",
+          "countries": [
+            "Brazil",
+            "Bolivia",
+            "Paraguay"
+          ],
+          "continents": [
+            "South America"
+          ],
+          "coordinates": [
+            -8.1,
+            -34.9
+          ]
+        },
+        "sources": [
+          {
+            "label": "Pitomba — size reference",
+            "url": "https://en.wikipedia.org/wiki/Talisia_esculenta",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 1.5–4 cm. One whole Talisia esculenta fruit; not Eugenia luschnathiana, which shares the name pitomba."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Pitomba?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "araza",
+      "name": "Arazá",
+      "image": "/burrow-assets/fruits/araza-c2e65c67e0ba.jpg",
+      "imageAlt": "Green unripe arazá fruit hanging beside leaves",
+      "imageCredit": "Kristof Zyskowski & Yulia Bereshpolova / Wikimedia Commons / CC BY 2.0 (https://creativecommons.org/licenses/by/2.0). Resized as JPEG. Original: Myrtaceae- Eugenia stipitata (araçá).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Myrtaceae-_Eugenia_stipitata_(ara%C3%A7%C3%A1).jpg",
+      "fact": "Arazá is so tart that its fragrant pulp is often used in drinks and ice cream.",
+      "stats": [
+        {
+          "id": "weight-g",
+          "label": "Example weight",
+          "value": 740,
+          "unit": "g",
+          "display": "~740 g",
+          "direction": "higher",
+          "note": "A large cultivated-fruit example reported for selected material near Iquitos, Peru; not a typical wild fruit or species average."
+        },
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 8,
+          "unit": "cm",
+          "display": "~8 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 2–12 cm. Example across a cultivated fruit; the botanical description gives 2–12 cm width. Wild and cultivated forms differ greatly."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 2,
+          "unit": "/10",
+          "display": "2/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 9,
+          "unit": "/10",
+          "display": "9/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Eugenia stipitata"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Western Amazonia"
+        },
+        {
+          "label": "Flavor",
+          "value": "Very tart and fragrant"
+        },
+        {
+          "label": "Texture",
+          "value": "Soft, juicy pulp beneath thin yellow skin"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "tropical-fruit",
+        "South America"
+      ],
+      "tags": [
+        "tropical-fruit",
+        "south-america"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "tropical-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 2–12 cm. Example across a cultivated fruit; the botanical description gives 2–12 cm width. Wild and cultivated forms differ greatly. A large cultivated-fruit example reported for selected material near Iquitos, Peru; not a typical wild fruit or species average. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Western Amazonia",
+          "countries": [
+            "Peru",
+            "Brazil",
+            "Ecuador",
+            "Colombia"
+          ],
+          "continents": [
+            "South America"
+          ],
+          "coordinates": [
+            -3.7,
+            -73.2
+          ]
+        },
+        "sources": [
+          {
+            "label": "Arazá — weight and size reference",
+            "url": "https://en.wikipedia.org/wiki/Eugenia_stipitata",
+            "note": "A large cultivated-fruit example reported for selected material near Iquitos, Peru; not a typical wild fruit or species average. Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 2–12 cm. Example across a cultivated fruit; the botanical description gives 2–12 cm width. Wild and cultivated forms differ greatly."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Arazá?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "peach-palm",
+      "name": "Peach Palm Fruit",
+      "image": "/burrow-assets/fruits/peach-palm-e891fa24066c.jpg",
+      "imageAlt": "Green and orange peach palm fruits in harvested bunches",
+      "imageCredit": "INRA DIST from France / Wikimedia Commons / CC BY 2.0 (https://creativecommons.org/licenses/by/2.0). Resized as JPEG. Original: Parepoux fruit de Guyane Cl J Weber01 (23649199696).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Parepoux_fruit_de_Guyane_Cl_J_Weber01_(23649199696).jpg",
+      "fact": "Peach palm fruit is usually boiled before eating. Its orange or red skin surrounds starchy flesh.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 5,
+          "unit": "cm",
+          "display": "~5 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 4–6 cm. One whole fruit before cooking; the reference gives 4–6 cm length and 3–5 cm width. Flavor ratings describe cooked flesh."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 3,
+          "unit": "/10",
+          "display": "3/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 1,
+          "unit": "/10",
+          "display": "1/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Bactris gasipaes"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Tropical Central and South America; long cultivated by Indigenous peoples"
+        },
+        {
+          "label": "Flavor",
+          "value": "Mild, nutty and starchy when cooked"
+        },
+        {
+          "label": "Texture",
+          "value": "Firm flesh that becomes mealy after cooking"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "palm-fruit",
+        "South America"
+      ],
+      "tags": [
+        "palm-fruit",
+        "south-america"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "palm-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 4–6 cm. One whole fruit before cooking; the reference gives 4–6 cm length and 3–5 cm width. Flavor ratings describe cooked flesh. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Tropical Central and South America; long cultivated by Indigenous peoples",
+          "countries": [
+            "Brazil",
+            "Colombia",
+            "Costa Rica"
+          ],
+          "continents": [
+            "South America"
+          ],
+          "coordinates": [
+            -4.2,
+            -69.9
+          ]
+        },
+        "sources": [
+          {
+            "label": "Peach Palm Fruit — size reference",
+            "url": "https://en.wikipedia.org/wiki/Bactris_gasipaes",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 4–6 cm. One whole fruit before cooking; the reference gives 4–6 cm length and 3–5 cm width. Flavor ratings describe cooked flesh."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Peach Palm Fruit?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "cornelian-cherry",
+      "name": "Cornelian Cherry",
+      "image": "/burrow-assets/fruits/cornelian-cherry-4ceb70f99fa6.jpg",
+      "imageAlt": "Cornelian Cherry fruit",
+      "imageCredit": "Philipp Weigell / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: Cornus mas (5).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cornus_mas_(5).jpg",
+      "fact": "Cornelian cherry is a dogwood, with red olive-shaped fruits rather than true cherries.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 2,
+          "unit": "cm",
+          "display": "~2 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 1.27–2.54 cm. NC State's 0.5–1 inch fruit length converted using 2.54 cm per inch."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 4,
+          "unit": "/10",
+          "display": "4/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 8,
+          "unit": "/10",
+          "display": "8/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Cornus mas"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Southern and central Europe to western Asia"
+        },
+        {
+          "label": "Flavor",
+          "value": "Tart, becoming sweeter when fully ripe"
+        },
+        {
+          "label": "Texture",
+          "value": "Juicy flesh around one hard stone"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "stone-fruit",
+        "Europe"
+      ],
+      "tags": [
+        "stone-fruit",
+        "europe"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "stone-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 1.27–2.54 cm. NC State's 0.5–1 inch fruit length converted using 2.54 cm per inch. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Southern and central Europe to western Asia",
+          "countries": [
+            "Bulgaria",
+            "Romania",
+            "Turkey"
+          ],
+          "continents": [
+            "Europe"
+          ],
+          "coordinates": [
+            42.7,
+            25.5
+          ]
+        },
+        "sources": [
+          {
+            "label": "Cornelian Cherry — size reference",
+            "url": "https://plants.ces.ncsu.edu/plants/cornus-mas/",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 1.27–2.54 cm. NC State's 0.5–1 inch fruit length converted using 2.54 cm per inch."
+          },
+          {
+            "label": "Cornelian Cherry — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Cornus_mas",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Cornelian Cherry?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "maypop",
+      "name": "Maypop",
+      "image": "/burrow-assets/fruits/maypop-394aa873330d.jpg",
+      "imageAlt": "Green maypop fruit held beside the vine",
+      "imageCredit": "Angelo Ciacciulli. / Wikimedia Commons / CC BY 3.0 (https://creativecommons.org/licenses/by/3.0). Resized as JPEG. Original: Frutto passiflora incarnata.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Frutto_passiflora_incarnata.JPG",
+      "fact": "Maypop is a North American passionflower with egg-shaped fruits that can pop when crushed.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 5,
+          "unit": "cm",
+          "display": "~5 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 2.54–7.62 cm. Illustrative example within NC State's broad 1–3 inch fruit-length band; not a precise species average."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 6,
+          "unit": "/10",
+          "display": "6/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 1,
+          "unit": "/5",
+          "display": "1/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Passiflora incarnata"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Central and eastern United States"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet-tart ripe pulp"
+        },
+        {
+          "label": "Texture",
+          "value": "Jelly-like pulp around crunchy seeds"
+        },
+        {
+          "label": "Finding it",
+          "value": "Local harvest or specialist growers"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "vine-fruit",
+        "North America"
+      ],
+      "tags": [
+        "vine-fruit",
+        "north-america"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "epic",
+        "taxonomyGroup": "vine-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 2.54–7.62 cm. Illustrative example within NC State's broad 1–3 inch fruit-length band; not a precise species average. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Central and eastern United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            35.8,
+            -78.6
+          ]
+        },
+        "sources": [
+          {
+            "label": "Maypop — size reference",
+            "url": "https://plants.ces.ncsu.edu/plants/passiflora-incarnata/",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 2.54–7.62 cm. Illustrative example within NC State's broad 1–3 inch fruit-length band; not a precise species average."
+          },
+          {
+            "label": "Maypop — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Passiflora_incarnata",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Maypop?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "american-persimmon",
+      "name": "American Persimmon",
+      "image": "/burrow-assets/fruits/american-persimmon-a2a3ffcdcab1.jpg",
+      "imageAlt": "American Persimmon fruit",
+      "imageCredit": "Ryan Native Plant / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Diospyros virginiana American persimmon fruit in hand Native Plant Company.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Diospyros_virginiana_American_persimmon_fruit_in_hand_Native_Plant_Company.jpg",
+      "fact": "American persimmon is a different species from Asian persimmon; its fruit becomes sweet when fully ripe and soft.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 3.2,
+          "unit": "cm",
+          "display": "~3.2 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 2.54–3.81 cm. NC State describes globular fruits 1–1.5 inches long, converted to centimetres."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 9,
+          "unit": "/10",
+          "display": "9/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 2,
+          "unit": "/10",
+          "display": "2/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 2,
+          "unit": "/5",
+          "display": "2/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Diospyros virginiana"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Central and eastern United States"
+        },
+        {
+          "label": "Flavor",
+          "value": "Rich and sweet when fully soft; astringent before ripening"
+        },
+        {
+          "label": "Texture",
+          "value": "Very soft, custard-like ripe flesh"
+        },
+        {
+          "label": "Finding it",
+          "value": "Mostly regional and seasonal"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "persimmon-relative",
+        "North America"
+      ],
+      "tags": [
+        "persimmon-relative",
+        "north-america"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "rare",
+        "taxonomyGroup": "persimmon-relative",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 2.54–3.81 cm. NC State describes globular fruits 1–1.5 inches long, converted to centimetres. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Central and eastern United States",
+          "countries": [
+            "United States"
+          ],
+          "continents": [
+            "North America"
+          ],
+          "coordinates": [
+            37.5,
+            -78.5
+          ]
+        },
+        "sources": [
+          {
+            "label": "American Persimmon — size reference",
+            "url": "https://plants.ces.ncsu.edu/plants/diospyros-virginiana/",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference length range: 2.54–3.81 cm. NC State describes globular fruits 1–1.5 inches long, converted to centimetres."
+          },
+          {
+            "label": "American Persimmon — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Diospyros_virginiana",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize American Persimmon?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "blue-quandong",
+      "name": "Blue Quandong",
+      "image": "/burrow-assets/fruits/blue-quandong-ed62b3fc497d.jpg",
+      "imageAlt": "Blue quandong fruits and their patterned stones in a hand",
+      "imageCredit": "Steve Fitzgerald / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Resized as JPEG. Original: Elaeocarpus-grandis-SF25314-02.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Elaeocarpus-grandis-SF25314-02.jpg",
+      "fact": "Blue quandong has bright blue skin and a deeply patterned stone inside.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 2.5,
+          "unit": "cm",
+          "display": "~2.5 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 2–3 cm. Flora of NSW gives 20–30 mm diameter. Uses its Australian E. grandis treatment; some references include this tree in E. angustifolius."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 2,
+          "unit": "/10",
+          "display": "2/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 7,
+          "unit": "/10",
+          "display": "7/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 1,
+          "unit": "/5",
+          "display": "1/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Elaeocarpus grandis"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Eastern Australian rainforests"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sour, mild flesh"
+        },
+        {
+          "label": "Texture",
+          "value": "Thin flesh around a large, deeply patterned stone"
+        },
+        {
+          "label": "Finding it",
+          "value": "Local harvest or specialist growers"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "stone-fruit",
+        "Oceania"
+      ],
+      "tags": [
+        "stone-fruit",
+        "oceania"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "epic",
+        "taxonomyGroup": "stone-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 2–3 cm. Flora of NSW gives 20–30 mm diameter. Uses its Australian E. grandis treatment; some references include this tree in E. angustifolius. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Eastern Australian rainforests",
+          "countries": [
+            "Australia"
+          ],
+          "continents": [
+            "Oceania"
+          ],
+          "coordinates": [
+            -16.9,
+            145.8
+          ]
+        },
+        "sources": [
+          {
+            "label": "Blue Quandong — size reference",
+            "url": "https://plantnet.rbgsyd.nsw.gov.au/cgi-bin/NSWfl.pl?lvl=sp&name=Elaeocarpus~grandis&page=nswfl",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. Reference diameter range: 2–3 cm. Flora of NSW gives 20–30 mm diameter. Uses its Australian E. grandis treatment; some references include this tree in E. angustifolius."
+          },
+          {
+            "label": "Blue Quandong — fruit reference",
+            "url": "https://sown.com.au/elaeocarpus-grandis-elaeocarpaceae-blue-quandong/",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          },
+          {
+            "label": "Blue Quandong — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Elaeocarpus_grandis",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Blue Quandong?",
+        "How can a fruit be both sweet and tart?"
+      ]
+    },
+    {
+      "id": "beach-cherry",
+      "name": "Beach Cherry",
+      "image": "/burrow-assets/fruits/beach-cherry-fcf713d7ba52.jpg",
+      "imageAlt": "Beach Cherry fruit",
+      "imageCredit": "Steve Fitzgerald / Wikimedia Commons / CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0). Cropped and resized as JPEG. Original: Eugenia-reinwardtiana-SF24309-01.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Eugenia-reinwardtiana-SF24309-01.jpg",
+      "fact": "Beach cherry is also called Cedar Bay cherry and grows on shrubs in northern Australia.",
+      "stats": [
+        {
+          "id": "size-cm",
+          "label": "Example size",
+          "value": 2,
+          "unit": "cm",
+          "display": "~2 cm",
+          "direction": "higher",
+          "note": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. James Cook University describes globular to elliptical fruits about 2 cm long."
+        },
+        {
+          "id": "sweetness-rating",
+          "label": "Sweetness rating",
+          "value": 7,
+          "unit": "/10",
+          "display": "7/10",
+          "direction": "higher"
+        },
+        {
+          "id": "tartness-rating",
+          "label": "Tartness rating",
+          "value": 3,
+          "unit": "/10",
+          "display": "3/10",
+          "direction": "higher"
+        },
+        {
+          "id": "availability-rating",
+          "label": "Availability rating",
+          "value": 1,
+          "unit": "/5",
+          "display": "1/5",
+          "direction": "higher"
+        }
+      ],
+      "details": [
+        {
+          "label": "Scientific name",
+          "value": "Eugenia reinwardtiana"
+        },
+        {
+          "label": "Origin / heritage",
+          "value": "Northern Australia, parts of Southeast Asia and Pacific islands"
+        },
+        {
+          "label": "Flavor",
+          "value": "Sweet with a gentle tang"
+        },
+        {
+          "label": "Texture",
+          "value": "Juicy flesh around a large seed"
+        },
+        {
+          "label": "Finding it",
+          "value": "Local harvest or specialist growers"
+        },
+        {
+          "label": "Weight note",
+          "value": "No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero."
+        },
+        {
+          "label": "Size guide",
+          "value": "Approximate longest dimension of one whole fruit body in centimetres: length for elongated fruit, diameter for round or flattened fruit. Excludes stems, leaves, crowns and projecting hairs or spines. Coconut includes its outer husk; cape gooseberry excludes its papery husk; cashew apple excludes the attached nut. Rounded examples are editorial selections within documented dimensions or named cultivar measurements, not species averages, maximum-size rankings or measurements of the pictured specimens. Source ranges and cultivar scope remain in each profile. Size and weight examples may come from different specimens. Collection order uses size, with alphabetical ties; weight-based games continue to use documented weights."
+        },
+        {
+          "label": "Comparison guide",
+          "value": "Sizes and weights are examples, not fixed species averages, and may describe different specimens. Sweetness and tartness are game ratings, not sugar content or tastiness scores. Availability uses broad bands, not country counts."
+        },
+        {
+          "label": "Map note",
+          "value": "Origin or cultural/cultivation association, not an exhaustive distribution. Map pins mark representative places within the stated region, not a precisely known birthplace. Ancient origins and some species boundaries remain debated."
+        }
+      ],
+      "categories": [
+        "small-fruit",
+        "Oceania"
+      ],
+      "tags": [
+        "small-fruit",
+        "oceania"
+      ],
+      "metadata": {
+        "difficultyBand": "hard",
+        "recognition": 1,
+        "rarity": "epic",
+        "taxonomyGroup": "small-fruit",
+        "accuracyNote": "Approximate longest fruit-body dimension, not a species average or a measurement of this photo. James Cook University describes globular to elliptical fruits about 2 cm long. No whole-fruit weight verified in the cited references. Omitted from weight comparisons and arithmetic; not treated as zero. Burrow game rating, not a laboratory measurement. Flavor varies with variety and ripeness; higher does not mean tastier. Availability is an editorial band, not a country count. Origins can be uncertain; the map marks one representative place within the listed region.",
+        "location": {
+          "label": "Northern Australia, parts of Southeast Asia and Pacific islands",
+          "countries": [
+            "Australia",
+            "Indonesia"
+          ],
+          "continents": [
+            "Oceania"
+          ],
+          "coordinates": [
+            -16.1,
+            145.5
+          ]
+        },
+        "sources": [
+          {
+            "label": "Beach Cherry — size reference",
+            "url": "https://www.jcu.edu.au/discover-nature-at-jcu/plants/plants-by-scientific-name2/eugenia-reinwardtiana",
+            "note": "Size reviewed 2026-10-04. Approximate longest fruit-body dimension, not a species average or a measurement of this photo. James Cook University describes globular to elliptical fruits about 2 cm long."
+          },
+          {
+            "label": "Beach Cherry — fruit reference",
+            "url": "https://en.wikipedia.org/wiki/Eugenia_reinwardtiana",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          },
+          {
+            "label": "Beach Cherry — fruit reference",
+            "url": "https://rfcarchives.org.au/Next/CaringForTrees/FruitTreesSpeciesList122-02.htm",
+            "note": "Reviewed 2026-10-04. Identity, origin, appearance and flavor; ratings are editorial interpretations."
+          }
+        ]
+      },
+      "readingPrompts": [
+        "Which clue would help you recognize Beach Cherry?",
         "How can a fruit be both sweet and tart?"
       ]
     }

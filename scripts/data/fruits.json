@@ -6538,6 +6538,1327 @@
         "note": "The Hort16A patent gives fruit length 79.1 mm; rounded to 7.9 cm. This named cultivar example is not an average for all yellow-fleshed kiwifruit.",
         "sourceUrl": "https://patents.google.com/patent/USPP11066P/en"
       }
+    },
+    {
+      "id": "cempedak",
+      "name": "Cempedak",
+      "scientificName": "Artocarpus integer",
+      "origin": "Southeast Asia, especially the Malay Archipelago",
+      "location": {
+        "label": "Southeast Asia, especially the Malay Archipelago",
+        "countries": [
+          "Malaysia",
+          "Indonesia",
+          "Thailand"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          3.1,
+          101.7
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 2,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Very sweet with a strong, musky aroma",
+      "texture": "Soft, slippery bulbs around large seeds",
+      "group": "multiple-fruit",
+      "fact": "Cempedak is related to jackfruit, with fragrant yellow-orange flesh tucked inside a patterned rind.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Artocarpus_integer"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 28,
+        "dimension": "length",
+        "rangeCm": [
+          20,
+          35
+        ],
+        "note": "Whole compound-fruit length, including the rind; not one edible bulb.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Artocarpus_integer"
+      },
+      "image": "/burrow-assets/fruits/cempedak-bd8911ae5512.jpg",
+      "imageAlt": "Cempedak fruit",
+      "sourceFile": "Artocarpus integer Fruit and Tree.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Artocarpus_integer_Fruit_and_Tree.JPG",
+      "imageCreator": "Tu7uh",
+      "imageLicense": "CC BY 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/63/Artocarpus_integer_Fruit_and_Tree.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "marang",
+      "name": "Marang",
+      "scientificName": "Artocarpus odoratissimus",
+      "origin": "Borneo; also cultivated in the Philippines",
+      "location": {
+        "label": "Borneo; also cultivated in the Philippines",
+        "countries": [
+          "Malaysia",
+          "Brunei",
+          "Indonesia",
+          "Philippines"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          5.9,
+          116.1
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 1,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Sweet and strongly aromatic",
+      "texture": "Soft, juicy white bulbs",
+      "group": "multiple-fruit",
+      "fact": "Marang hides many white, juicy bulbs beneath its rough outer rind.",
+      "difficultyBand": "hard",
+      "weight": {
+        "grams": 1000,
+        "sourceUrl": "https://en.wikipedia.org/wiki/Artocarpus_odoratissimus",
+        "note": "The reference describes a whole marang weighing about 1 kg, converted to 1,000 g; not a species average."
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Artocarpus_odoratissimus",
+        "https://www.nparks.gov.sg/florafaunaweb/flora/3/5/3575"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 18,
+        "dimension": "length",
+        "rangeCm": [
+          15,
+          20
+        ],
+        "note": "Length of the whole compound fruit, excluding projecting surface bristles.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Artocarpus_odoratissimus"
+      },
+      "image": "/burrow-assets/fruits/marang-a42389842034.jpg",
+      "imageAlt": "Marang fruit",
+      "sourceFile": "Tarap @ Timadang.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Tarap_@_Timadang.jpg",
+      "imageCreator": "Enziee",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Tarap_%40_Timadang.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "mabolo",
+      "name": "Mabolo",
+      "scientificName": "Diospyros blancoi",
+      "origin": "The Philippines and Taiwan",
+      "location": {
+        "label": "The Philippines and Taiwan",
+        "countries": [
+          "Philippines",
+          "Taiwan"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          14.6,
+          121
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 2,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Mildly sweet and aromatic",
+      "texture": "Creamy flesh beneath velvety skin",
+      "group": "persimmon-relative",
+      "fact": "Mabolo is also called velvet apple because fine hairs cover its reddish-brown skin.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://www.nparks.gov.sg/florafaunaweb/flora/2/8/2849",
+        "https://en.wikipedia.org/wiki/Diospyros_blancoi"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 9,
+        "dimension": "diameter",
+        "rangeCm": [
+          8,
+          10
+        ],
+        "note": "Across a rounded example in the botanical description's 8–10 cm width; fruit shape and the 5–12 cm other axis vary.",
+        "sourceUrl": "https://www.nparks.gov.sg/florafaunaweb/flora/2/8/2849"
+      },
+      "image": "/burrow-assets/fruits/mabolo-9395be7afcef.jpg",
+      "imageAlt": "Mabolo fruit",
+      "sourceFile": "9447Diospyros blancoi Mabolo fruit 06.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:9447Diospyros_blancoi_Mabolo_fruit_06.jpg",
+      "imageCreator": "Judgefloro",
+      "imageLicense": "CC0",
+      "imageLicenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e7/9447Diospyros_blancoi_Mabolo_fruit_06.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "bignay",
+      "name": "Bignay",
+      "scientificName": "Antidesma bunius",
+      "origin": "South and Southeast Asia to northern Australia; Philippine food tradition",
+      "location": {
+        "label": "South and Southeast Asia to northern Australia; Philippine food tradition",
+        "countries": [
+          "Philippines",
+          "Indonesia",
+          "Australia"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          14.6,
+          121
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 7,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Sweet-tart when ripe",
+      "texture": "Juicy skin and soft pulp around one seed",
+      "group": "small-fruit",
+      "fact": "A single bignay bunch can carry pale, red and dark fruits because they ripen at different times.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://apps.worldagroforestry.org/treedb/AFTPDFS/Antidesma_bunius.pdf",
+        "https://en.wikipedia.org/wiki/Antidesma_bunius"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 0.8,
+        "dimension": "diameter",
+        "note": "One berry, using the Agroforestree description of fruit up to 8 mm across; not a whole bunch.",
+        "sourceUrl": "https://apps.worldagroforestry.org/treedb/AFTPDFS/Antidesma_bunius.pdf"
+      },
+      "image": "/burrow-assets/fruits/bignay-73b7b482a80e.jpg",
+      "imageAlt": "Bignay fruit",
+      "sourceFile": "Antidesma bunius madura.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Antidesma_bunius_madura.jpg",
+      "imageCreator": "LonNyoe",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Antidesma_bunius_madura.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "burmese-grape",
+      "name": "Burmese Grape",
+      "scientificName": "Baccaurea ramiflora",
+      "origin": "South and Southeast Asia, including Myanmar and Thailand",
+      "location": {
+        "label": "South and Southeast Asia, including Myanmar and Thailand",
+        "countries": [
+          "Myanmar",
+          "Thailand",
+          "India"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          21.9,
+          96.1
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 6,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Sweet and sour",
+      "texture": "Juicy pulp around large seeds",
+      "group": "tropical-fruit",
+      "fact": "Burmese grape clusters can hang from old branches and even the trunk.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://www.nparks.gov.sg/florafaunaweb/flora/3/5/3595",
+        "https://en.wikipedia.org/wiki/Baccaurea_ramiflora"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 2.5,
+        "dimension": "diameter",
+        "note": "NParks describes the round to oval fruits as about 2.5 cm in diameter.",
+        "sourceUrl": "https://www.nparks.gov.sg/florafaunaweb/flora/3/5/3595"
+      },
+      "image": "/burrow-assets/fruits/burmese-grape-3bc3b8465c94.jpg",
+      "imageAlt": "Burmese Grape fruit",
+      "sourceFile": "Mafai1619.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mafai1619.JPG",
+      "imageCreator": "Xufanc",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/78/Mafai1619.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "yangmei",
+      "name": "Yangmei",
+      "scientificName": "Myrica rubra",
+      "origin": "East Asia, with a long cultivation history in China",
+      "location": {
+        "label": "East Asia, with a long cultivation history in China",
+        "countries": [
+          "China",
+          "Japan"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          29.9,
+          121.5
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 8,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Sweet with a sharp tang",
+      "texture": "Juicy, knobbly flesh around a central stone",
+      "group": "stone-fruit",
+      "fact": "Yangmei has a bumpy red surface and one stone hidden in its center.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Myrica_rubra"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 2,
+        "dimension": "diameter",
+        "rangeCm": [
+          1.5,
+          2.5
+        ],
+        "note": "Example within the reference's usual diameter range; some cultivated varieties are larger.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Myrica_rubra"
+      },
+      "image": "/burrow-assets/fruits/yangmei-d621b5c6988f.jpg",
+      "imageAlt": "Yangmei fruit",
+      "sourceFile": "Myrica rubra5.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Myrica_rubra5.jpg",
+      "imageCreator": "KENPEI",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Myrica_rubra5.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "imageProcessing": "Cropped and resized as JPEG"
+    },
+    {
+      "id": "akebi",
+      "name": "Akebi",
+      "scientificName": "Akebia quinata",
+      "origin": "China, Korea and Japan; seasonal fruit in Japan",
+      "location": {
+        "label": "China, Korea and Japan; seasonal fruit in Japan",
+        "countries": [
+          "Japan",
+          "China",
+          "South Korea"
+        ],
+        "continents": [
+          "Asia"
+        ],
+        "coordinates": [
+          38.2,
+          140.3
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 1,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Mildly sweet, melon-like pulp",
+      "texture": "Soft jelly-like pulp with many dark seeds",
+      "group": "vine-fruit",
+      "fact": "A ripe akebi splits open to reveal pale pulp dotted with dark seeds.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://plants.ces.ncsu.edu/plants/akebia-quinata/",
+        "https://en.wikipedia.org/wiki/Akebia_quinata"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 10.2,
+        "dimension": "length",
+        "note": "NC State gives a 4-inch fruit; 10.16 cm is rounded to 10.2 cm. One follicle, not a cluster.",
+        "sourceUrl": "https://plants.ces.ncsu.edu/plants/akebia-quinata/"
+      },
+      "image": "/burrow-assets/fruits/akebi-bbf975dd60ed.jpg",
+      "imageAlt": "Akebi fruit",
+      "sourceFile": "Akebia quinata fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Akebia_quinata_fruit.jpg",
+      "imageCreator": "Jpbrigand",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/da/Akebia_quinata_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "kei-apple",
+      "name": "Kei Apple",
+      "scientificName": "Dovyalis afra (syn. Dovyalis caffra)",
+      "origin": "Southern Africa",
+      "location": {
+        "label": "Southern Africa",
+        "countries": [
+          "South Africa",
+          "Zimbabwe",
+          "Mozambique"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          -32.8,
+          28
+        ]
+      },
+      "sweetness": 3,
+      "tartness": 9,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Sharply acidic with some sweetness",
+      "texture": "Juicy yellow flesh",
+      "group": "tropical-fruit",
+      "fact": "Kei apples turn yellow as they ripen on a tree armed with long thorns.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://biodiversityadvisor.sanbi.org/search/detail/df309830-fbf0-435c-a780-947d5ff716a3",
+        "https://en.wikipedia.org/wiki/Kei_apple"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 4,
+        "dimension": "diameter",
+        "rangeCm": [
+          3,
+          6
+        ],
+        "note": "Whole rounded fruit diameter from the SANBI botanical description.",
+        "sourceUrl": "https://biodiversityadvisor.sanbi.org/search/detail/df309830-fbf0-435c-a780-947d5ff716a3"
+      },
+      "image": "/burrow-assets/fruits/kei-apple-aeef4d85c05f.jpg",
+      "imageAlt": "Kei Apple fruit",
+      "sourceFile": "Dovyalis afra 1DS-II 2277.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Dovyalis_afra_1DS-II_2277.jpg",
+      "imageCreator": "SAplants",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Dovyalis_afra_1DS-II_2277.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "natal-plum",
+      "name": "Natal Plum",
+      "scientificName": "Carissa macrocarpa",
+      "origin": "Coastal southern Africa",
+      "location": {
+        "label": "Coastal southern Africa",
+        "countries": [
+          "South Africa",
+          "Mozambique"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          -29.9,
+          31
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 6,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Sweet-tart ripe fruit, reminiscent of cranberry",
+      "texture": "Soft, juicy flesh",
+      "group": "tropical-fruit",
+      "fact": "Natal plum has glossy red fruit and white, star-shaped flowers.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://landscapeplants.oregonstate.edu/plants/carissa-macrocarpa",
+        "https://plants.ces.ncsu.edu/plants/carissa-macrocarpa/"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 3.5,
+        "dimension": "length",
+        "rangeCm": [
+          2.5,
+          4
+        ],
+        "note": "Length of one oval fruit, using Oregon State's botanical description.",
+        "sourceUrl": "https://landscapeplants.oregonstate.edu/plants/carissa-macrocarpa"
+      },
+      "image": "/burrow-assets/fruits/natal-plum-f3375da726cf.jpg",
+      "imageAlt": "Natal Plum fruit",
+      "sourceFile": "Carissa macrocarpa 5Dsr 8157.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Carissa_macrocarpa_5Dsr_8157.jpg",
+      "imageCreator": "SAplants",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/31/Carissa_macrocarpa_5Dsr_8157.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "imbe",
+      "name": "Imbe",
+      "scientificName": "Garcinia livingstonei",
+      "origin": "Tropical and southern Africa",
+      "location": {
+        "label": "Tropical and southern Africa",
+        "countries": [
+          "Mozambique",
+          "South Africa",
+          "Zimbabwe"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          -25.9,
+          32.6
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 6,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Sweet and tangy",
+      "texture": "Sticky, juicy pulp around a large seed",
+      "group": "tropical-fruit",
+      "fact": "Imbe is also called African mangosteen and ripens into a small orange fruit.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://pza.sanbi.org/garcinia-livingstonei",
+        "https://en.wikipedia.org/wiki/Garcinia_livingstonei"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 3,
+        "dimension": "diameter",
+        "rangeCm": [
+          1,
+          4
+        ],
+        "note": "SANBI gives a 10–40 mm diameter, converted to centimetres.",
+        "sourceUrl": "https://pza.sanbi.org/garcinia-livingstonei"
+      },
+      "image": "/burrow-assets/fruits/imbe-685b72820c6e.jpg",
+      "imageAlt": "Imbe fruit",
+      "sourceFile": "Garcinia livingstonei, vrugte, Manie van der Schijff BT, c.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Garcinia_livingstonei,_vrugte,_Manie_van_der_Schijff_BT,_c.jpg",
+      "imageCreator": "JMK",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/81/Garcinia_livingstonei%2C_vrugte%2C_Manie_van_der_Schijff_BT%2C_c.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "velvet-tamarind",
+      "name": "Velvet Tamarind",
+      "scientificName": "Dialium guineense",
+      "origin": "West and west-central Africa",
+      "location": {
+        "label": "West and west-central Africa",
+        "countries": [
+          "Ghana",
+          "Nigeria",
+          "Senegal"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          6.7,
+          -1.6
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 7,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Sweet and sour",
+      "texture": "Dry, powdery pulp in a brittle shell",
+      "group": "pod-fruit",
+      "fact": "Velvet tamarind has a dark, velvety shell around dry, sweet-sour pulp.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://apps.worldagroforestry.org/treedb2/speciesprofile.php?Spid=673",
+        "https://en.wikipedia.org/wiki/Dialium_guineense"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 2,
+        "dimension": "diameter",
+        "note": "A 2 cm example below the Agroforestree description's 2.5 cm upper diameter; includes the shell.",
+        "sourceUrl": "https://apps.worldagroforestry.org/treedb2/speciesprofile.php?Spid=673"
+      },
+      "image": "/burrow-assets/fruits/velvet-tamarind-ade2ef284764.jpg",
+      "imageAlt": "Velvet Tamarind fruit",
+      "sourceFile": "Velvet tamarind.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Velvet_tamarind.jpg",
+      "imageCreator": "Edithobayaa1",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/04/Velvet_tamarind.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "monkey-orange",
+      "name": "Spiny Monkey Orange",
+      "scientificName": "Strychnos spinosa",
+      "origin": "Tropical and southern Africa",
+      "location": {
+        "label": "Tropical and southern Africa",
+        "countries": [
+          "Zimbabwe",
+          "South Africa",
+          "Tanzania"
+        ],
+        "continents": [
+          "Africa"
+        ],
+        "coordinates": [
+          -18,
+          31
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 6,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Sweet-sour ripe pulp",
+      "texture": "Soft pulp inside a hard shell",
+      "group": "tropical-fruit",
+      "fact": "Spiny monkey orange has a hard yellow shell. Only its ripe pulp is edible; its seeds are poisonous.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:547485-1/general-information",
+        "https://pza.sanbi.org/strychnos-spinosa",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC8703348/"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 9,
+        "dimension": "diameter",
+        "rangeCm": [
+          7,
+          11
+        ],
+        "note": "Uses the 7–11 cm diameter in the Flora of Somalia treatment reproduced by Kew; other regional descriptions differ.",
+        "sourceUrl": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:547485-1/general-information"
+      },
+      "image": "/burrow-assets/fruits/monkey-orange-d8805eeae92b.jpg",
+      "imageAlt": "Spiny Monkey Orange fruit",
+      "sourceFile": "Strychnos spinosa fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Strychnos_spinosa_fruit.jpg",
+      "imageCreator": "Damien Farrell",
+      "imageLicense": "CC BY-SA 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Strychnos_spinosa_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "ice-cream-bean",
+      "name": "Ice Cream Bean",
+      "scientificName": "Inga edulis",
+      "origin": "Tropical South America, especially Amazonia",
+      "location": {
+        "label": "Tropical South America, especially Amazonia",
+        "countries": [
+          "Peru",
+          "Brazil",
+          "Colombia"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -3.7,
+          -73.2
+        ]
+      },
+      "sweetness": 8,
+      "tartness": 1,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Sweet, reminiscent of vanilla ice cream",
+      "texture": "Fluffy white pulp around the seeds",
+      "group": "pod-fruit",
+      "fact": "Ice cream bean gets its name from the sweet, cottony pulp inside its long pods.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Inga_edulis"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 60,
+        "dimension": "length",
+        "note": "An illustrative 60 cm whole pod within a description reaching 1 m; measured along the pod, not one seed covering.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Inga_edulis"
+      },
+      "image": "/burrow-assets/fruits/ice-cream-bean-1a030decee15.jpg",
+      "imageAlt": "Ice Cream Bean fruit",
+      "sourceFile": "Inga edulis, fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Inga_edulis,_fruit.jpg",
+      "imageCreator": "Burkhard Mücke",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Inga_edulis%2C_fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "bacuri",
+      "name": "Bacuri",
+      "scientificName": "Platonia insignis",
+      "origin": "Northern and northeastern South America, especially Brazil",
+      "location": {
+        "label": "Northern and northeastern South America, especially Brazil",
+        "countries": [
+          "Brazil",
+          "Suriname",
+          "Guyana"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -1.5,
+          -48.5
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 6,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Fragrant, sweet and sour",
+      "texture": "Sticky white pulp inside a thick rind",
+      "group": "tropical-fruit",
+      "fact": "Bacuri has a thick yellow rind surrounding fragrant white pulp.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Platonia"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 10,
+        "dimension": "length",
+        "rangeCm": [
+          7,
+          14
+        ],
+        "note": "Longest dimension of one round to oval fruit, including its thick rind.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Platonia"
+      },
+      "image": "/burrow-assets/fruits/bacuri-572d4110782b.jpg",
+      "imageAlt": "Halved bacuri with thick yellow rind and white pulp",
+      "sourceFile": "Bacuri, ''Platonia insignis''.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Bacuri,_%27%27Platonia_insignis%27%27.JPG",
+      "imageCreator": "Hellen Perrone",
+      "imageLicense": "Public domain",
+      "imageLicenseUrl": "https://commons.wikimedia.org/wiki/Help:Public_domain",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Bacuri%2C_%27%27Platonia_insignis%27%27.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "buriti",
+      "name": "Buriti",
+      "scientificName": "Mauritia flexuosa",
+      "origin": "Tropical South American wetlands",
+      "location": {
+        "label": "Tropical South American wetlands",
+        "countries": [
+          "Brazil",
+          "Peru",
+          "Colombia"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -3.1,
+          -60
+        ]
+      },
+      "sweetness": 4,
+      "tartness": 4,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Rich, mildly sweet pulp",
+      "texture": "Orange flesh beneath overlapping scales",
+      "group": "palm-fruit",
+      "fact": "Buriti looks like a little pine cone because reddish-brown scales overlap across its skin.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://www.nparks.gov.sg/florafaunaweb/flora/7/7/7798",
+        "https://pesquisaescolar.fundaj.gov.br/en/artigo/buriti-tree/"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 5,
+        "dimension": "diameter",
+        "note": "NParks gives a diameter of about 5 cm for the round to ellipsoid fruit.",
+        "sourceUrl": "https://www.nparks.gov.sg/florafaunaweb/flora/7/7/7798"
+      },
+      "image": "/burrow-assets/fruits/buriti-274579c3628b.jpg",
+      "imageAlt": "Buriti fruit",
+      "sourceFile": "Mauritia-flexuosa-fruit.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Mauritia-flexuosa-fruit.jpg",
+      "imageCreator": "Zimbres",
+      "imageLicense": "CC BY-SA 2.5",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/58/Mauritia-flexuosa-fruit.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "camu-camu",
+      "name": "Camu Camu",
+      "scientificName": "Myrciaria dubia",
+      "origin": "Western Amazonian floodplains",
+      "location": {
+        "label": "Western Amazonian floodplains",
+        "countries": [
+          "Peru",
+          "Brazil",
+          "Colombia",
+          "Venezuela"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -3.7,
+          -73.2
+        ]
+      },
+      "sweetness": 2,
+      "tartness": 10,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Very sour",
+      "texture": "Juicy pulp beneath thin skin",
+      "group": "small-fruit",
+      "fact": "Camu camu grows along Amazonian rivers, where its shrubs can withstand flooding.",
+      "difficultyBand": "hard",
+      "weight": {
+        "grams": 13,
+        "sourceUrl": "https://www.esalq.usp.br/d-plant/node/568",
+        "note": "Illustrative whole-fruit example below the reference's reported 13.5 g upper weight; not a species average."
+      },
+      "sourceUrls": [
+        "https://www.esalq.usp.br/d-plant/node/568",
+        "https://en.wikipedia.org/wiki/Myrciaria_dubia"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 2.5,
+        "dimension": "diameter",
+        "note": "A 2.5 cm example below the ESALQ-USP description's 32 mm upper diameter.",
+        "sourceUrl": "https://www.esalq.usp.br/d-plant/node/568"
+      },
+      "image": "/burrow-assets/fruits/camu-camu-44a0f35157d3.jpg",
+      "imageAlt": "Camu Camu fruit",
+      "sourceFile": "Fruto de Myrciaria dubia.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Fruto_de_Myrciaria_dubia.jpg",
+      "imageCreator": "Túllio F",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/90/Fruto_de_Myrciaria_dubia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "uvaia",
+      "name": "Uvaia",
+      "scientificName": "Eugenia pyriformis",
+      "origin": "South American Atlantic Forest, especially southern Brazil",
+      "location": {
+        "label": "South American Atlantic Forest, especially southern Brazil",
+        "countries": [
+          "Brazil",
+          "Paraguay",
+          "Argentina"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -23.5,
+          -45.8
+        ]
+      },
+      "sweetness": 5,
+      "tartness": 7,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Aromatic, sweet and tart",
+      "texture": "Delicate, juicy flesh",
+      "group": "tropical-fruit",
+      "fact": "Uvaia is a yellow-orange Atlantic Forest fruit whose soft flesh bruises easily.",
+      "difficultyBand": "hard",
+      "weight": {
+        "grams": 22,
+        "sourceUrl": "https://www.scielo.br/j/rbf/a/zmKs9QLY8RYWDGFLRWXm8nf/?lang=en",
+        "note": "Mean whole-fruit weight of the large-fruit population harvested in Salesópolis, Brazil, in November 2014 (Table 1). The small-fruit population averaged 8.25 g; neither is a species-wide average."
+      },
+      "sourceUrls": [
+        "https://www.scielo.br/j/rbf/a/zmKs9QLY8RYWDGFLRWXm8nf/?lang=en",
+        "https://en.wikipedia.org/wiki/Eugenia_pyriformis"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 3.9,
+        "dimension": "diameter",
+        "note": "Rounded from the 3.92 cm transverse mean of the large-fruit population studied in Salesópolis, Brazil; its length mean was 3.08 cm.",
+        "sourceUrl": "https://www.scielo.br/j/rbf/a/zmKs9QLY8RYWDGFLRWXm8nf/?lang=en"
+      },
+      "image": "/burrow-assets/fruits/uvaia-af706454ccfa.jpg",
+      "imageAlt": "Uvaia fruit",
+      "sourceFile": "M. H. Mathias Uvaia - Eugenia pyriformis (29993547090).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:M._H._Mathias_Uvaia_-_Eugenia_pyriformis_(29993547090).jpg",
+      "imageCreator": "MATHIAS, M H from Guaratinguetá, Brasil",
+      "imageLicense": "CC BY 2.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/28/M._H._Mathias_Uvaia_-_Eugenia_pyriformis_%2829993547090%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "pitomba",
+      "name": "Pitomba",
+      "scientificName": "Talisia esculenta",
+      "origin": "Tropical South America, especially Brazil",
+      "location": {
+        "label": "Tropical South America, especially Brazil",
+        "countries": [
+          "Brazil",
+          "Bolivia",
+          "Paraguay"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -8.1,
+          -34.9
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 5,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Sweet and sour",
+      "texture": "Translucent pulp around one or two large seeds",
+      "group": "tropical-fruit",
+      "fact": "Pitomba has pale, translucent pulp beneath its brownish peel. It is a relative of lychee.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Talisia_esculenta"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 2.5,
+        "dimension": "diameter",
+        "rangeCm": [
+          1.5,
+          4
+        ],
+        "note": "One whole Talisia esculenta fruit; not Eugenia luschnathiana, which shares the name pitomba.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Talisia_esculenta"
+      },
+      "image": "/burrow-assets/fruits/pitomba-c6198d1947e1.jpg",
+      "imageAlt": "Pitomba fruit",
+      "sourceFile": "Pitomba.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Pitomba.jpg",
+      "imageCreator": "Bdieu",
+      "imageLicense": "CC BY 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Pitomba.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "araza",
+      "name": "Arazá",
+      "scientificName": "Eugenia stipitata",
+      "origin": "Western Amazonia",
+      "location": {
+        "label": "Western Amazonia",
+        "countries": [
+          "Peru",
+          "Brazil",
+          "Ecuador",
+          "Colombia"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -3.7,
+          -73.2
+        ]
+      },
+      "sweetness": 2,
+      "tartness": 9,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Very tart and fragrant",
+      "texture": "Soft, juicy pulp beneath thin yellow skin",
+      "group": "tropical-fruit",
+      "fact": "Arazá is so tart that its fragrant pulp is often used in drinks and ice cream.",
+      "difficultyBand": "hard",
+      "weight": {
+        "grams": 740,
+        "sourceUrl": "https://en.wikipedia.org/wiki/Eugenia_stipitata",
+        "note": "A large cultivated-fruit example reported for selected material near Iquitos, Peru; not a typical wild fruit or species average."
+      },
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Eugenia_stipitata"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 8,
+        "dimension": "diameter",
+        "rangeCm": [
+          2,
+          12
+        ],
+        "note": "Example across a cultivated fruit; the botanical description gives 2–12 cm width. Wild and cultivated forms differ greatly.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Eugenia_stipitata"
+      },
+      "image": "/burrow-assets/fruits/araza-c2e65c67e0ba.jpg",
+      "imageAlt": "Green unripe arazá fruit hanging beside leaves",
+      "sourceFile": "Myrtaceae- Eugenia stipitata (araçá).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Myrtaceae-_Eugenia_stipitata_(ara%C3%A7%C3%A1).jpg",
+      "imageCreator": "Kristof Zyskowski & Yulia Bereshpolova",
+      "imageLicense": "CC BY 2.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/86/Myrtaceae-_Eugenia_stipitata_%28ara%C3%A7%C3%A1%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "peach-palm",
+      "name": "Peach Palm Fruit",
+      "scientificName": "Bactris gasipaes",
+      "origin": "Tropical Central and South America; long cultivated by Indigenous peoples",
+      "location": {
+        "label": "Tropical Central and South America; long cultivated by Indigenous peoples",
+        "countries": [
+          "Brazil",
+          "Colombia",
+          "Costa Rica"
+        ],
+        "continents": [
+          "South America"
+        ],
+        "coordinates": [
+          -4.2,
+          -69.9
+        ]
+      },
+      "sweetness": 3,
+      "tartness": 1,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Mild, nutty and starchy when cooked",
+      "texture": "Firm flesh that becomes mealy after cooking",
+      "group": "palm-fruit",
+      "fact": "Peach palm fruit is usually boiled before eating. Its orange or red skin surrounds starchy flesh.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://en.wikipedia.org/wiki/Bactris_gasipaes"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 5,
+        "dimension": "length",
+        "rangeCm": [
+          4,
+          6
+        ],
+        "note": "One whole fruit before cooking; the reference gives 4–6 cm length and 3–5 cm width. Flavor ratings describe cooked flesh.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Bactris_gasipaes"
+      },
+      "image": "/burrow-assets/fruits/peach-palm-e891fa24066c.jpg",
+      "imageAlt": "Green and orange peach palm fruits in harvested bunches",
+      "sourceFile": "Parepoux fruit de Guyane Cl J Weber01 (23649199696).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Parepoux_fruit_de_Guyane_Cl_J_Weber01_(23649199696).jpg",
+      "imageCreator": "INRA DIST from France",
+      "imageLicense": "CC BY 2.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/69/Parepoux_fruit_de_Guyane_Cl_J_Weber01_%2823649199696%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "cornelian-cherry",
+      "name": "Cornelian Cherry",
+      "scientificName": "Cornus mas",
+      "origin": "Southern and central Europe to western Asia",
+      "location": {
+        "label": "Southern and central Europe to western Asia",
+        "countries": [
+          "Bulgaria",
+          "Romania",
+          "Turkey"
+        ],
+        "continents": [
+          "Europe"
+        ],
+        "coordinates": [
+          42.7,
+          25.5
+        ]
+      },
+      "sweetness": 4,
+      "tartness": 8,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Tart, becoming sweeter when fully ripe",
+      "texture": "Juicy flesh around one hard stone",
+      "group": "stone-fruit",
+      "fact": "Cornelian cherry is a dogwood, with red olive-shaped fruits rather than true cherries.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://plants.ces.ncsu.edu/plants/cornus-mas/",
+        "https://en.wikipedia.org/wiki/Cornus_mas"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 2,
+        "dimension": "length",
+        "rangeCm": [
+          1.27,
+          2.54
+        ],
+        "note": "NC State's 0.5–1 inch fruit length converted using 2.54 cm per inch.",
+        "sourceUrl": "https://plants.ces.ncsu.edu/plants/cornus-mas/"
+      },
+      "image": "/burrow-assets/fruits/cornelian-cherry-4ceb70f99fa6.jpg",
+      "imageAlt": "Cornelian Cherry fruit",
+      "sourceFile": "Cornus mas (5).jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Cornus_mas_(5).jpg",
+      "imageCreator": "Philipp Weigell",
+      "imageLicense": "CC BY 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/46/Cornus_mas_%285%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "maypop",
+      "name": "Maypop",
+      "scientificName": "Passiflora incarnata",
+      "origin": "Central and eastern United States",
+      "location": {
+        "label": "Central and eastern United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          35.8,
+          -78.6
+        ]
+      },
+      "sweetness": 6,
+      "tartness": 6,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Sweet-tart ripe pulp",
+      "texture": "Jelly-like pulp around crunchy seeds",
+      "group": "vine-fruit",
+      "fact": "Maypop is a North American passionflower with egg-shaped fruits that can pop when crushed.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://plants.ces.ncsu.edu/plants/passiflora-incarnata/",
+        "https://en.wikipedia.org/wiki/Passiflora_incarnata"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 5,
+        "dimension": "length",
+        "rangeCm": [
+          2.54,
+          7.62
+        ],
+        "note": "Illustrative example within NC State's broad 1–3 inch fruit-length band; not a precise species average.",
+        "sourceUrl": "https://plants.ces.ncsu.edu/plants/passiflora-incarnata/"
+      },
+      "image": "/burrow-assets/fruits/maypop-394aa873330d.jpg",
+      "imageAlt": "Green maypop fruit held beside the vine",
+      "sourceFile": "Frutto passiflora incarnata.JPG",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Frutto_passiflora_incarnata.JPG",
+      "imageCreator": "Angelo Ciacciulli.",
+      "imageLicense": "CC BY 3.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/df/Frutto_passiflora_incarnata.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "american-persimmon",
+      "name": "American Persimmon",
+      "scientificName": "Diospyros virginiana",
+      "origin": "Central and eastern United States",
+      "location": {
+        "label": "Central and eastern United States",
+        "countries": [
+          "United States"
+        ],
+        "continents": [
+          "North America"
+        ],
+        "coordinates": [
+          37.5,
+          -78.5
+        ]
+      },
+      "sweetness": 9,
+      "tartness": 2,
+      "availability": 2,
+      "availabilityBand": "Mostly regional and seasonal",
+      "flavor": "Rich and sweet when fully soft; astringent before ripening",
+      "texture": "Very soft, custard-like ripe flesh",
+      "group": "persimmon-relative",
+      "fact": "American persimmon is a different species from Asian persimmon; its fruit becomes sweet when fully ripe and soft.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://plants.ces.ncsu.edu/plants/diospyros-virginiana/",
+        "https://en.wikipedia.org/wiki/Diospyros_virginiana"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 3.2,
+        "dimension": "length",
+        "rangeCm": [
+          2.54,
+          3.81
+        ],
+        "note": "NC State describes globular fruits 1–1.5 inches long, converted to centimetres.",
+        "sourceUrl": "https://plants.ces.ncsu.edu/plants/diospyros-virginiana/"
+      },
+      "image": "/burrow-assets/fruits/american-persimmon-a2a3ffcdcab1.jpg",
+      "imageAlt": "American Persimmon fruit",
+      "sourceFile": "Diospyros virginiana American persimmon fruit in hand Native Plant Company.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Diospyros_virginiana_American_persimmon_fruit_in_hand_Native_Plant_Company.jpg",
+      "imageCreator": "Ryan Native Plant",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Diospyros_virginiana_American_persimmon_fruit_in_hand_Native_Plant_Company.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "blue-quandong",
+      "name": "Blue Quandong",
+      "scientificName": "Elaeocarpus grandis",
+      "origin": "Eastern Australian rainforests",
+      "location": {
+        "label": "Eastern Australian rainforests",
+        "countries": [
+          "Australia"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -16.9,
+          145.8
+        ]
+      },
+      "sweetness": 2,
+      "tartness": 7,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Sour, mild flesh",
+      "texture": "Thin flesh around a large, deeply patterned stone",
+      "group": "stone-fruit",
+      "fact": "Blue quandong has bright blue skin and a deeply patterned stone inside.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://plantnet.rbgsyd.nsw.gov.au/cgi-bin/NSWfl.pl?lvl=sp&name=Elaeocarpus~grandis&page=nswfl",
+        "https://sown.com.au/elaeocarpus-grandis-elaeocarpaceae-blue-quandong/",
+        "https://en.wikipedia.org/wiki/Elaeocarpus_grandis"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 2.5,
+        "dimension": "diameter",
+        "rangeCm": [
+          2,
+          3
+        ],
+        "note": "Flora of NSW gives 20–30 mm diameter. Uses its Australian E. grandis treatment; some references include this tree in E. angustifolius.",
+        "sourceUrl": "https://plantnet.rbgsyd.nsw.gov.au/cgi-bin/NSWfl.pl?lvl=sp&name=Elaeocarpus~grandis&page=nswfl"
+      },
+      "image": "/burrow-assets/fruits/blue-quandong-ed62b3fc497d.jpg",
+      "imageAlt": "Blue quandong fruits and their patterned stones in a hand",
+      "sourceFile": "Elaeocarpus-grandis-SF25314-02.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Elaeocarpus-grandis-SF25314-02.jpg",
+      "imageCreator": "Steve Fitzgerald",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Elaeocarpus-grandis-SF25314-02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+    },
+    {
+      "id": "beach-cherry",
+      "name": "Beach Cherry",
+      "scientificName": "Eugenia reinwardtiana",
+      "origin": "Northern Australia, parts of Southeast Asia and Pacific islands",
+      "location": {
+        "label": "Northern Australia, parts of Southeast Asia and Pacific islands",
+        "countries": [
+          "Australia",
+          "Indonesia"
+        ],
+        "continents": [
+          "Oceania"
+        ],
+        "coordinates": [
+          -16.1,
+          145.5
+        ]
+      },
+      "sweetness": 7,
+      "tartness": 3,
+      "availability": 1,
+      "availabilityBand": "Local harvest or specialist growers",
+      "flavor": "Sweet with a gentle tang",
+      "texture": "Juicy flesh around a large seed",
+      "group": "small-fruit",
+      "fact": "Beach cherry is also called Cedar Bay cherry and grows on shrubs in northern Australia.",
+      "difficultyBand": "hard",
+      "weight": null,
+      "sourceUrls": [
+        "https://www.jcu.edu.au/discover-nature-at-jcu/plants/plants-by-scientific-name2/eugenia-reinwardtiana",
+        "https://en.wikipedia.org/wiki/Eugenia_reinwardtiana",
+        "https://rfcarchives.org.au/Next/CaringForTrees/FruitTreesSpeciesList122-02.htm"
+      ],
+      "reviewedOn": "2026-10-04",
+      "size": {
+        "centimeters": 2,
+        "dimension": "length",
+        "note": "James Cook University describes globular to elliptical fruits about 2 cm long.",
+        "sourceUrl": "https://www.jcu.edu.au/discover-nature-at-jcu/plants/plants-by-scientific-name2/eugenia-reinwardtiana"
+      },
+      "image": "/burrow-assets/fruits/beach-cherry-fcf713d7ba52.jpg",
+      "imageAlt": "Beach Cherry fruit",
+      "sourceFile": "Eugenia-reinwardtiana-SF24309-01.jpg",
+      "imageSourceUrl": "https://commons.wikimedia.org/wiki/File:Eugenia-reinwardtiana-SF24309-01.jpg",
+      "imageCreator": "Steve Fitzgerald",
+      "imageLicense": "CC BY-SA 4.0",
+      "imageLicenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "originalImageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Eugenia-reinwardtiana-SF24309-01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "imageProcessing": "Cropped and resized as JPEG"
     }
   ],
   "sizeReviewedOn": "2026-09-23"

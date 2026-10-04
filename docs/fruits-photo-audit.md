@@ -1,5 +1,7 @@
 # Fruit photograph audit — 21 September 2026
 
+The [4 October expansion](fruits-expansion-2026-10-04.md) adds 25 cards, bringing the current catalog to 150. This historical audit describes the previous 125.
+
 Reviewed every one of the 125 fruit photographs in before/after contact sheets, with direct enlargement checks for suspect and replacement images. Replaced 36 weak photographs and refreshed the remaining 89 from their credited originals. The audit prioritized recognizable fruit, visible skin or interior texture, clear focus, useful framing, correct identity, and reusable photographic sources.
 
 ## Findings and changes

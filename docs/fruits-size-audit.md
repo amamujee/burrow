@@ -1,5 +1,7 @@
 # Fruit size audit — 23 September 2026
 
+The [4 October expansion](fruits-expansion-2026-10-04.md) adds 25 cards, bringing the current catalog to 150. This historical audit describes the previous 125.
+
 All 125 fruit cards now have a physical size, measured in centimetres along the longest fruit-body dimension. Length is used for elongated fruits; diameter for rounded or flattened examples. This is a one-dimensional comparison, not volume or weight.
 
 Displayed values are deliberately approximate examples: editorial selections inside cited dimensions, rounded reference measurements, or named cultivar examples. They are not global species averages, maxima, or measurements of the photographed specimens. Many fruits overlap in size. Ties sort alphabetically. Size and weight references can describe different specimens.
