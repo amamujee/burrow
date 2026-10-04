@@ -304,6 +304,135 @@ export const sentenceStart = (value: string) => value.replace(/^./, (letter) => 
 export const countryCapitalLabel = (country: Pick<Country, "capital">) =>
   naturalList(country.capital.split(/\s*\/\s*/).filter(Boolean));
 export const countryFactSentence = (country: Pick<Country, "fact">) => country.fact;
+const countryCapitalStatement = (country: Country, capital: string) => {
+  const name = countryNameInProse(country);
+  if (capital === "No official capital") return `${sentenceStart(name)} has no official capital.`;
+  if (capital === "East Jerusalem (claimed); Ramallah (administrative)") {
+    return `${sentenceStart(name)} claims East Jerusalem as its capital and uses Ramallah as its administrative center.`;
+  }
+  const plural = capital.includes("/") || capital.includes(" and ");
+  return `The ${plural ? "capitals" : "capital"} of ${name} ${plural ? "are" : "is"} ${countryCapitalLabel({ capital }).replace(/\.$/, "")}.`;
+};
+
+type DescribedCard = Pick<KnowledgeCard, "topic" | "title"> & { categories?: readonly string[] };
+
+export const subjectNounForCards = (topic: RoundTopic, cards: readonly DescribedCard[]) => {
+  const everyCardHas = (category: string) => cards.length > 0 && cards.every((card) =>
+    card.categories?.some((value) => value.toLowerCase() === category));
+  if (topic === "countries") return "country";
+  if (topic === "fruits") return "fruit";
+  if (topic === "peppers") {
+    const condimentNames = new Set(peppers.filter((pepper) => pepper.isCondiment).map((pepper) => pepper.name));
+    if (cards.every((card) => !condimentNames.has(card.title))) return "pepper";
+    if (cards.every((card) => condimentNames.has(card.title))) return "condiment";
+    return "one";
+  }
+  if (topic === "buildings") return "building";
+  if (topic === "sharks") return cards.some((card) => sharkRecords.some((shark) =>
+    shark.name === card.title && shark.metadata?.taxonomyGroup?.includes("not sharks"))) ? "animal" : "shark";
+  if (topic === "jets") return "aircraft";
+  if (topic === "dinosaurs") return "prehistoric animal";
+  if (topic === "tallest-mountains" || topic === "mountains") return "mountain";
+  if (topic === "bridges-and-tunnels") {
+    if (everyCardHas("bridge")) return "bridge";
+    if (everyCardHas("tunnel")) return "tunnel";
+    return "bridge or tunnel";
+  }
+  if (topic === "tall-trees" && cards.length && cards.every((card) =>
+    !card.categories?.includes("reference"))) return "tree";
+  if (topic === "hot-sauces") return "condiment";
+  // Space includes concepts; the tree deck includes animals and buildings for scale.
+  return "one";
+};
+
+const revealPrompt = (topic: RoundTopic, cards: readonly DescribedCard[]) => {
+  if (topic === "countries") return "Which country has this flag?";
+  if (topic === "space") return "What does this space picture show?";
+  const noun = subjectNounForCards(topic, cards);
+  return noun === "one" ? "What is in the picture?" : `Which ${noun} is in the picture?`;
+};
+
+const locationPrompt = (card: Pick<KnowledgeCard, "topic" | "title">) => {
+  if (card.topic === "fruits" || card.topic === "hot-sauces") return `Select where ${card.title} comes from.`;
+  if (card.topic === "peppers") return `Which place is ${card.title} associated with?`;
+  if (card.topic === "tall-trees" || card.topic === "sharks") return `Where can you find ${card.title}?`;
+  if (card.topic === "jets") return `Where was ${card.title} developed?`;
+  const name = card.topic === "countries" ? countryNameInProse(card.title) : card.title;
+  return `Where is ${name}?`;
+};
+
+const statOrderWords = (statLabel: string): readonly [string, string] | undefined => {
+  const label = statLabel.toLowerCase();
+  if (label === "wingspan" || label === "pepper scoville") return undefined;
+  if (/length|span/.test(label)) return ["shortest", "longest"];
+  if (/height/.test(label)) return ["shortest", "tallest"];
+  if (/weight|mass/.test(label)) return ["lightest", "heaviest"];
+  if (/speed/.test(label)) return ["slowest", "fastest"];
+  if (/\bage\b/.test(label)) return ["youngest", "oldest"];
+  if (/scoville/.test(label)) return ["mildest", "hottest"];
+  if (/temperature/.test(label)) return ["coolest", "hottest"];
+  return undefined;
+};
+
+export const comparisonPromptForCards = (topic: RoundTopic, cards: readonly DescribedCard[], stat: TopTrumpStat) => {
+  const noun = subjectNounForCards(topic, cards);
+  const lower = stat.direction === "lower";
+  const multiple = cards.length > 2;
+  const lessMore = lower ? (multiple ? "fewest" : "fewer") : (multiple ? "most" : "more");
+  const label = stat.label.toLowerCase();
+  const order = statOrderWords(stat.label);
+  if (stat.id === "pepper-varieties") return `Which ${noun} lists ${multiple ? "the " : ""}${lessMore} pepper types?`;
+  if (stat.id === "pepper-scoville") return `Which ${noun} lists the ${lower ? "mildest" : "hottest"} pepper ingredient?`;
+  if (label === "wingspan") return `Which ${noun} has the ${lower ? (multiple ? "smallest" : "smaller") : (multiple ? "largest" : "larger")} wingspan?`;
+  if (label === "opened") return `Which ${noun} opened ${lower ? "earlier" : "more recently"}?`;
+  if (label === "recorded ascent") return `Which ${noun} has the ${lower ? "earlier" : "more recent"} recorded ascent?`;
+  if (label === "example size") return `Which ${noun} example is ${lower ? "smaller" : "larger"}?`;
+  if (label === "example weight") return `Which ${noun} example is ${multiple ? `the ${lower ? "lightest" : "heaviest"}` : lower ? "lighter" : "heavier"}?`;
+  if (label === "rarity") return `Which ${noun} is ${multiple ? `the ${lower ? "most common" : "rarest"}` : lower ? "more common" : "rarer"}?`;
+  if (label === "dave stacks" || label === "giraffe stacks") return `Which ${noun} takes ${multiple ? "the " : ""}${lessMore} ${label === "dave stacks" ? "Daves" : "giraffes"} stacked up to match its height?`;
+  if (order) return `Which ${noun} is the ${order[lower ? 0 : 1]}?`;
+  return `Which ${noun} has the ${lower ? (multiple ? "lowest" : "lower") : (multiple ? "highest" : "higher")} ${label}?`;
+};
+
+const primaryStatSentence = (card: Pick<KnowledgeCard, "title" | "statLabel">, display: string) => {
+  const value = display.replace(/^~\s*/, "about ");
+  const label = card.statLabel.toLowerCase();
+  if (label === "length") return `${card.title} is ${value} long.`;
+  if (label === "height") return `${card.title} is ${value} tall.`;
+  if (label === "elevation") return `${card.title} is ${value} above sea level.`;
+  if (label === "weight") return `${card.title} weighs ${value}.`;
+  if (label === "wingspan") return `${card.title} has a wingspan of ${value}.`;
+  if (label === "example weight") return `This ${card.title} example weighs ${value}.`;
+  if (label === "example size") return `This ${card.title} example measures ${value}.`;
+  if (label === "scoville") return `${card.title} measures ${value} on the Scoville scale.`;
+  return `${card.title}'s ${label} is ${value}.`;
+};
+
+const statDifferenceQuestion = (card: Pick<KnowledgeCard, "title" | "statLabel">, ratio: boolean) => {
+  const adjective: Record<string, string> = { length: "long", height: "tall", weight: "heavy" };
+  const comparative: Record<string, string> = { length: "longer", height: "taller", weight: "heavier" };
+  const label = card.statLabel.toLowerCase();
+  if (ratio) return adjective[label]
+    ? `About how many times as ${adjective[label]} is ${card.title}?`
+    : `About how many times greater is ${card.title}'s ${label === "scoville" ? "Scoville score" : label}?`;
+  return comparative[label] ? `How much ${comparative[label]} is ${card.title}?` : `What is the difference in ${label === "scoville" ? "Scoville scores" : label}?`;
+};
+
+const locationStatement = (card: Pick<KnowledgeCard, "topic" | "title">, location: WorldLocation) => {
+  const label = worldLocationLabelInProse(location.label);
+  if (card.topic === "fruits") {
+    return /uncertain|hybrid|ancestry|heritage|cultivation|debated/i.test(label)
+      ? `${card.title}'s origin is described as “${location.label}”.`
+      : `${card.title} comes from ${label}.`;
+  }
+  if (card.topic === "hot-sauces") return `${card.title} comes from ${label}.`;
+  if (card.topic === "tall-trees") {
+    if (/^Native-range example: /i.test(location.label)) return `${card.title} grows naturally in ${worldLocationLabelInProse(location.label.replace(/^Native-range example: /i, ""))}.`;
+    if (/^Native to /i.test(location.label)) return `${card.title} is native to ${location.label.replace(/^Native to /i, "")}.`;
+    return `${card.title} can be found in ${label}.`;
+  }
+  return `${card.title} is in ${label}.`;
+};
 
 const roundTo = (value: number, step: number) => Math.round(value / step) * step;
 const roundedSubtractionPair = (bigger: number, smaller: number, step: number) => {
@@ -463,7 +592,7 @@ const spaceComparableValue = (space: SpaceCard, metric: "distance" | "temperatur
 const spaceMetricDisplay = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons") => {
   const value = spaceMetricValue(space, metric);
   if (!Number.isFinite(value)) return "Not measured";
-  if (metric === "distance") return space.kind === "star" ? `${formatNumber(value)} ly` : `${formatNumber(value)}M mi`;
+  if (metric === "distance") return space.distanceFromSunMillionMiles === undefined ? `${formatNumber(value)} ly` : `${formatNumber(value)}M mi`;
   if (metric === "temperature") return space.kind === "star" ? `${formatNumber(value)} K` : `${formatNumber(value)}°F`;
   if (metric === "size") return space.kind === "star" ? `${formatNumber(value)}x Sun` : `${formatNumber(value)} mi`;
   return `${formatNumber(value)} moons`;
@@ -471,7 +600,7 @@ const spaceMetricDisplay = (space: SpaceCard, metric: "distance" | "temperature"
 const spaceMetricProse = (space: SpaceCard, metric: "distance" | "temperature" | "size" | "moons") => {
   const value = spaceMetricValue(space, metric);
   if (!Number.isFinite(value)) return "Not measured";
-  if (metric === "distance") return space.kind === "star" ? `${formatNumber(value)} light-years` : `${formatNumber(value)} million miles`;
+  if (metric === "distance") return space.distanceFromSunMillionMiles === undefined ? `${formatNumber(value)} light-years` : `${formatNumber(value)} million miles`;
   if (metric === "temperature") return space.kind === "star" ? `${formatNumber(value)} kelvins` : `${formatNumber(value)} degrees Fahrenheit`;
   if (metric === "size") return space.kind === "star" ? `${formatNumber(value)} times the Sun's radius` : `${formatNumber(value)} miles wide`;
   return `${formatNumber(value)} moons`;
@@ -1520,7 +1649,7 @@ export const buildTopTrumpRound = (topic: TopicScope, difficulty: Difficulty, se
   return {
     id: `${seed}-trumps-${currentTopic}-${player.id}-${computer.id}`,
     topic: currentTopic,
-    prompt: "Choose the category that gives your card its strongest advantage.",
+    prompt: "Pick your best category.",
     player: { ...player, stats: player.stats.filter((stat) => sharedStatIds.has(stat.id)) },
     computer: { ...computer, stats: computer.stats.filter((stat) => sharedStatIds.has(stat.id)) },
   };
@@ -1539,7 +1668,7 @@ export const buildRevealRound = (topic: TopicScope, difficulty: Difficulty, seed
   return {
     id: `${seed}-peek-${currentTopic}-${card.id}`,
     topic: currentTopic,
-    prompt: "Which subject is shown in the picture?",
+    prompt: revealPrompt(currentTopic, [card, ...topicCards.filter((item) => distractors.includes(item.title))]),
     card,
     choices: shuffle([card.title, ...distractors], seed + 3),
     answer: card.title,
@@ -1664,19 +1793,6 @@ const multiplicationScenarioForTopic = (topic: RoundTopic): MultiplicationScenar
         itemEmoji: "✈️",
         prompt: (title, groups, items) => `${thereAre(groups, "air-show team", "air-show teams")} Each team flies ${countLabel(items, `${title} jet`, `${title} jets`)}. How many jets fly altogether?`,
       };
-    case "dinosaurs":
-      return {
-        badge: "Nest case",
-        ariaLabel: "Math picture: equal dinosaur nest groups",
-        statLabel: "Eggs per nest",
-        groupSingular: "nest",
-        groupPlural: "nests",
-        groupEmoji: "🪺",
-        itemSingular: "egg",
-        itemPlural: "eggs",
-        itemEmoji: "🥚",
-        prompt: (title, groups, items) => `${thereAre(groups, `${title} nest`, `${title} nests`)} Each nest has ${countLabel(items, "egg", "eggs")}. How many eggs are there altogether?`,
-      };
     case "tallest-mountains":
       return {
         badge: "Climbing case",
@@ -1739,7 +1855,8 @@ const multiplicationRound = (
   difficulty: Difficulty,
   seed: number,
 ): NumberRound => {
-  const scenario = multiplicationScenarioForTopic(topic);
+  const referenceCard = "categories" in card && Array.isArray(card.categories) && card.categories.includes("reference");
+  const scenario = multiplicationScenarioForTopic(topic === "tall-trees" && referenceCard ? "mixed" : topic);
   const ranges = factorRangeForDifficulty(difficulty);
   const groups = pickFactor(ranges.groups, seed + 41);
   const itemsPerGroup = pickFactor(ranges.items, seed + 42);
@@ -1859,12 +1976,6 @@ const sameStatCard = (card: GenericKnowledgeCard, value: number): KnowledgeCard 
 });
 
 const shouldBuildFitRound = (difficulty: Difficulty, seed: number) => difficulty > 1 && seedRandom(seed + 21) > 0.48;
-
-const pluralTitle = (title: string) => {
-  if (title.endsWith("s")) return title;
-  if (title.endsWith("y")) return `${title.slice(0, -1)}ies`;
-  return `${title}s`;
-};
 
 const hasLocationMetadata = <T extends { metadata?: CardMetadata }>(card: T): card is T & { metadata: CardMetadata & { location: WorldLocation } } =>
   Boolean(card.metadata?.location);
@@ -2095,9 +2206,9 @@ const separatedFactLocationPartners = <T extends { id: string; metadata?: CardMe
   && geoLocationsAreSeparatedForFact(card.metadata.location, candidate.metadata.location));
 
 const hemisphereLabel = (point: GeoPoint) => {
-  const northSouth = point.lat >= 0 ? "Northern Hemisphere" : "Southern Hemisphere";
-  const eastWest = point.lon >= 0 ? "Eastern Hemisphere" : "Western Hemisphere";
-  return `${northSouth} · ${eastWest}`;
+  const northSouth = point.lat >= 0 ? "northern" : "southern";
+  const eastWest = point.lon >= 0 ? "eastern" : "western";
+  return `${northSouth} and ${eastWest} hemispheres`;
 };
 
 export const geoChoiceForLocation = (location: WorldLocation): GeoChoice => {
@@ -2286,13 +2397,13 @@ export const buildGeoRoundFromCards = (
   const point = pointForLocation(location);
   const answer = geoChoiceForLocation(location);
   const choices = shuffle(diverseChoices, seed + 3);
-  const continentHint = location.continents.length > 1 ? location.continents.join(" and ") : location.continents[0];
+  const continentHint = worldContinentLabel(location.continents);
 
   return {
     id: `${seed}-geo-${card.topic}-${card.id}`,
     mapRegion: selected.mapRegion,
     topic: card.topic || topic,
-    prompt: `Where on the ${selected.mapRegion === "us" ? "US" : "world"} map does ${card.title} belong?`,
+    prompt: locationPrompt(card),
     card,
     choices,
     answerId: answer.id,
@@ -2301,8 +2412,8 @@ export const buildGeoRoundFromCards = (
     point,
     mapHint: selected.mapRegion === "us"
       ? `Find ${location.states?.length ? location.states.join(" and ") : location.label} on the US map. Tap a state to learn its name, then choose a lettered pin.`
-      : `${card.title} belongs in ${continentHint}. Look for a pin in the ${hemisphereLabel(point).toLowerCase()}.`,
-    explanation: `${card.title} is connected with ${worldLocationLabelInProse(location.label)}, which is in ${continentHint}. ${card.fact}`,
+      : `Look in ${continentHint}, in the ${hemisphereLabel(point).toLowerCase()}.`,
+    explanation: `Location: ${location.label} (${continentHint}). ${card.fact}`,
   };
 };
 
@@ -2325,11 +2436,14 @@ export const buildSortRoundFromCards = (
   const selected = focusedStatCards(preferred, difficulty, seed + 1, count);
   if (selected.length < 3) throw new Error(`Need at least 3 distinct stat values to build a sort round for ${topic}`);
   const sorted = [...selected].sort((a, b) => a.statValue - b.statValue);
+  const orderWords = statOrderWords(selected[0].statLabel);
 
   return {
     id: `${seed}-sort-${topic}-${selected.map((card) => card.id).join("-")}`,
     topic,
-    prompt: `Tap the cards in order from the lowest ${selected[0].statLabel.toLowerCase()} to the highest.`,
+    prompt: orderWords
+      ? `Order the cards from ${orderWords.join(" to ")}.`
+      : `Order the cards by ${selected[0].statLabel.toLowerCase()}, lowest to highest.`,
     cards: shuffle(selected, seed + 2),
     answerIds: sorted.map((card) => card.id),
     explanation: sortOrderExplanation(sorted),
@@ -2367,11 +2481,11 @@ export const buildRevealRoundFromCards = (
     return {
       id: `${seed}-peek-location-${topic}-${card.id}`,
       topic,
-      prompt: "Where in the world is this found?",
+      prompt: locationPrompt(card),
       card,
       choices: mapChoices.map((choice) => choice.label),
       answer: location.label,
-      explanation: `${card.title} is connected with ${worldLocationLabelInProse(location.label)}. ${card.fact}`,
+      explanation: `Location: ${location.label}. ${card.fact}`,
       map: {
         choices: mapChoices,
         answerId: location.label,
@@ -2385,7 +2499,7 @@ export const buildRevealRoundFromCards = (
   return {
     id: `${seed}-peek-${topic}-${card.id}`,
     topic,
-    prompt: "Which subject is shown in the picture?",
+    prompt: revealPrompt(topic, [card, ...pool.filter((item) => distractors.includes(item.title))]),
     card,
     choices: shuffle([card.title, ...distractors], seed + 3),
     answer: card.title,
@@ -2415,21 +2529,18 @@ export const buildFactRoundFromCards = (
     const card = discoveryShuffle(eligibleLocationPool, seed + 12, unlockedTitles, cardDiscoveryIdentities)[0];
     const location = card.metadata.location;
     const fakeCard = truthful ? card : sample(separatedFactLocationPartners(card, locationPool), seed + 13);
-    const statement = truthful
-      ? `The location listed for ${card.title} is ${location.label}.`
-      : `The location listed for ${card.title} is ${fakeCard.metadata.location.label}.`;
     const claimedLocation = truthful ? location : fakeCard.metadata.location;
 
     return {
       id: `${seed}-fact-location-${topic}-${card.id}`,
       topic,
       prompt: "True or false?",
-      statement,
+      statement: locationStatement(card, claimedLocation),
       image: card.image,
       imageAlt: card.imageAlt,
       imageCredit: card.imageCredit,
       answer: truthful ? "True" : "False",
-      explanation: `The location on ${card.title}'s card is ${location.label}. ${card.fact}`,
+      explanation: `${locationStatement(card, location)} ${card.fact}`,
       locations: [location],
       map: {
         claimed: geoChoiceForLocation(claimedLocation),
@@ -2443,9 +2554,9 @@ export const buildFactRoundFromCards = (
   const useStat = questionDepth > 1 || seedRandom(seed + 14) > 0.45;
   const statement = truthful
     ? useStat
-      ? `The listed ${card.statLabel.toLowerCase()} for ${card.title} is ${card.statDisplay}.`
+      ? primaryStatSentence(card, card.statDisplay)
       : card.fact
-    : `The listed ${card.statLabel.toLowerCase()} for ${card.title} is ${fakeCard.statDisplay}.`;
+    : primaryStatSentence(card, fakeCard.statDisplay);
 
   return {
     id: `${seed}-fact-${topic}-${card.id}`,
@@ -2456,7 +2567,7 @@ export const buildFactRoundFromCards = (
     imageAlt: card.imageAlt,
     imageCredit: card.imageCredit,
     answer: truthful ? "True" : "False",
-    explanation: `${card.title}'s recorded ${card.statLabel.toLowerCase()} is ${card.statDisplay}. ${card.fact}`,
+    explanation: `${primaryStatSentence(card, card.statDisplay)} ${card.fact}`,
     locations: card.metadata?.location ? [card.metadata.location] : undefined,
   };
 };
@@ -2498,13 +2609,13 @@ export const buildNumberRoundFromCards = (
         operation: "fit",
         prompt: topic === "fruits"
           ? `The ${bigger.title} example weighs ${numberWithUnit(biggerValue, unit)}. The ${smaller.title} example weighs ${numberWithUnit(smallerValue, unit)}. About how many of the smaller fruits would weigh the same as one larger fruit?`
-          : `${bigger.title} has about ${numberWithUnit(biggerValue, unit)}. ${smaller.title} has about ${numberWithUnit(smallerValue, unit)}. About how many ${pluralTitle(smaller.title)} fit into ${bigger.title}?`,
+          : `${primaryStatSentence(bigger, `about ${numberWithUnit(biggerValue, unit)}`)} ${primaryStatSentence(smaller, `about ${numberWithUnit(smallerValue, unit)}`)} ${statDifferenceQuestion(bigger, true)}`,
         cards: [sameStatCard(smaller, smallerValue), sameStatCard(bigger, biggerValue)],
         statLabel: bigger.statLabel,
-        unit: topic === "fruits" ? "fruits" : "stacks",
+        unit: topic === "fruits" ? "fruits" : "times",
         operator: "x",
         termValues: [smallerValue, biggerValue],
-        resultLabel: topic === "fruits" ? "fruits of the same total weight" : "number that fit",
+        resultLabel: topic === "fruits" ? "fruits of the same total weight" : "ratio",
         biggerLabel: bigger.title,
         smallerLabel: smaller.title,
         biggerValue,
@@ -2526,7 +2637,7 @@ export const buildNumberRoundFromCards = (
       id: `${seed}-number-${topic}-add-${selected.map((card) => card.id).join("-")}`,
       topic,
       operation: "addition",
-      prompt: packAdditionPrompt(topic, count, selected[0].statLabel),
+      prompt: packAdditionPrompt(topic, selected[0].statLabel),
       cards: selected.map((card, index) => sameStatCard(card, termValues[index])),
       statLabel: selected[0].statLabel,
       unit,
@@ -2558,7 +2669,7 @@ export const buildNumberRoundFromCards = (
     operation: "subtraction",
     prompt: topic === "fruits"
       ? `The ${bigger.title} example weighs ${numberWithUnit(biggerValue, unit)}. The ${smaller.title} example weighs ${numberWithUnit(smallerValue, unit)}. What is the difference?`
-      : `${bigger.title} has ${numberWithUnit(biggerValue, unit)}. ${smaller.title} has ${numberWithUnit(smallerValue, unit)}. What is the difference?`,
+      : `${primaryStatSentence(bigger, numberWithUnit(biggerValue, unit))} ${primaryStatSentence(smaller, numberWithUnit(smallerValue, unit))} ${statDifferenceQuestion(bigger, false)}`,
     cards: [sameStatCard(bigger, biggerValue), sameStatCard(smaller, smallerValue)],
     statLabel: bigger.statLabel,
     unit,
@@ -2573,34 +2684,6 @@ export const buildNumberRoundFromCards = (
     choices: numberChoices(answer, gap, seed + 12),
     explanation: `Subtracting the smaller value from the larger gives ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)}${unit ? ` ${unit}` : ""}.`,
   };
-};
-
-const subjectNounForCards = (topic: RoundTopic, cards: readonly GenericKnowledgeCard[]) => {
-  const normalizedCategories = cards.map((card) => card.categories.map((category) => category.toLowerCase()));
-  const everyCardHas = (category: string) => normalizedCategories.every((categories) => categories.includes(category));
-
-  if (topic === "bridges-and-tunnels") {
-    if (everyCardHas("bridge")) return "bridge";
-    if (everyCardHas("tunnel")) return "tunnel";
-    return "bridge or tunnel";
-  }
-  if (topic === "dinosaurs") return "prehistoric animal";
-  if (topic === "tallest-mountains" || topic === "mountains") return "mountain";
-  if (topic === "tall-trees") return normalizedCategories.every((categories) => !categories.includes("reference")) ? "tree" : "subject";
-  if (topic === "hot-sauces") return "sauce or pepper oil";
-  return "subject";
-};
-
-const superlativeForStat = (statLabel: string) => {
-  const normalized = statLabel.toLowerCase();
-  if (/length|distance|range|span/.test(normalized)) return "longest";
-  if (/height/.test(normalized)) return "tallest";
-  if (/elevation|prominence/.test(normalized)) return "highest";
-  if (/speed/.test(normalized)) return "fastest";
-  if (/weight|mass/.test(normalized)) return "heaviest";
-  if (/age/.test(normalized)) return "oldest";
-  if (/temperature|heat/.test(normalized)) return "hottest";
-  return null;
 };
 
 export const buildOddRoundFromCards = (
@@ -2618,19 +2701,14 @@ export const buildOddRoundFromCards = (
   if (pool.length < 4) throw new Error(`Need at least 4 cards to build an odd-one round for ${topic}`);
   const odd = [...pool].sort((a, b) => b.statValue - a.statValue)[0];
   const subjectNoun = subjectNounForCards(topic, pool);
-  const superlative = superlativeForStat(odd.statLabel);
   return {
     id: `${seed}-odd-${topic}-stat-${odd.id}`,
     topic,
-    prompt: superlative
-      ? `Which ${subjectNoun} is the ${superlative}?`
-      : `Which ${subjectNoun} has the highest ${odd.statLabel.toLowerCase()}?`,
+    prompt: comparisonPromptForCards(topic, pool, { ...odd.stats[0], label: odd.statLabel, direction: "higher" }),
     cards: shuffle(pool, seed + 3),
     answerId: odd.id,
-    reason: `${odd.title} has ${odd.statDisplay}.`,
-    explanation: superlative
-      ? `Compare the ${odd.statLabel.toLowerCase()} shown for each ${subjectNoun}. ${odd.title} is the ${superlative}.`
-      : `Compare the ${odd.statLabel.toLowerCase()} shown for each ${subjectNoun}. ${odd.title} has the highest value.`,
+    reason: primaryStatSentence(odd, odd.statDisplay),
+    explanation: `Compare the ${odd.statLabel.toLowerCase()} of each ${subjectNoun}. ${primaryStatSentence(odd, odd.statDisplay)} That is the highest value.`,
   };
 };
 
@@ -2659,7 +2737,7 @@ export const buildTopTrumpRoundFromCards = (
   return {
     id: `${seed}-trumps-${topic}-${player.id}-${computer.id}`,
     topic,
-    prompt: "Choose the category that gives your card its strongest advantage.",
+    prompt: "Pick your best category.",
     player: { ...player, stats: playerStats },
     computer: { ...computer, stats: computerStats },
   };
@@ -2674,13 +2752,13 @@ const contextualCountRange = (difficulty: Difficulty) => difficulty === 1
 const additionPromptStart = (count: number) => count === 2 ? "Add these together" : "Add all three together";
 const stackedTotalLabel = (count: number) => count === 2 ? "stacked total" : "three-part total";
 const sumValues = (values: number[]) => values.reduce((total, value) => total + value, 0);
-const packAdditionPrompt = (topic: RoundTopic, count: number, statLabel: string) => {
-  if (topic === "fruits") return `${additionPromptStart(count)}. What is the total weight of these example fruits?`;
-  if (topic === "dinosaurs") return `${additionPromptStart(count)}. If these prehistoric animals lined up nose to tail, what is their total length?`;
-  if (topic === "tall-trees") return `${additionPromptStart(count)}. If these trees were placed end to end, what is their total height?`;
-  if (topic === "bridges-and-tunnels") return `${additionPromptStart(count)}. If these routes were joined end to end, what is their total length?`;
-  if (topic === "tallest-mountains") return `${additionPromptStart(count)}. In this number puzzle, what is the sum of their elevations?`;
-  return `${additionPromptStart(count)}. What is their total ${statLabel.toLowerCase()}?`;
+const packAdditionPrompt = (topic: RoundTopic, statLabel: string) => {
+  if (topic === "fruits") return "What is the total weight of these example fruits?";
+  if (statLabel === "Length" && topic === "dinosaurs") return "If these prehistoric animals lined up nose to tail, how long would the line be?";
+  if (statLabel === "Length" && topic === "bridges-and-tunnels") return "If these routes were joined end to end, how long would they be?";
+  if (statLabel === "Height") return "What is the sum of the heights shown on these cards?";
+  if (statLabel === "Elevation") return "What is the sum of these elevations?";
+  return `What is the sum of these ${statLabel === "Scoville" ? "Scoville scores" : `${statLabel.toLowerCase()} values`}?`;
 };
 
 export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed: number): NumberRound => {
@@ -2705,7 +2783,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         id: `${seed}-number-countries-add-${first.id}-${second.id}`,
         topic: currentTopic,
         operation: "addition",
-        prompt: `${sentenceStart(countryNameInProse(first))} has about ${formatNumber(firstMillions)} million people, and ${countryNameInProse(second)} has about ${formatNumber(secondMillions)} million. About how many million people is that altogether?`,
+        prompt: `${sentenceStart(countryNameInProse(first))} has ${formatNumber(firstMillions)} million people. ${sentenceStart(countryNameInProse(second))} has ${formatNumber(secondMillions)} million. How many people is that in total?`,
         cards: [roundedStatCard(countryCard(first), firstMillions, "million people"), roundedStatCard(countryCard(second), secondMillions, "million people")],
         statLabel: "Rounded population",
         unit: "million people",
@@ -2718,7 +2796,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
         smallerValue: secondMillions,
         answer,
         choices: numberChoices(answer, populationStep, seed + 3),
-        explanation: `Adding the rounded populations gives ${formatNumber(firstMillions)} + ${formatNumber(secondMillions)} = ${formatNumber(answer)} million people. The figures are rounded to make the mental math manageable.`,
+        explanation: `Adding the rounded populations gives ${formatNumber(firstMillions)} + ${formatNumber(secondMillions)} = ${formatNumber(answer)} million people. These populations are rounded for this puzzle.`,
       };
     }
 
@@ -2731,7 +2809,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       id: `${seed}-number-countries-difference-${bigger.id}-${smaller.id}`,
       topic: currentTopic,
       operation: "subtraction",
-      prompt: `${sentenceStart(countryNameInProse(bigger))} has about ${formatNumber(biggerValue)} million people. ${sentenceStart(countryNameInProse(smaller))} has about ${formatNumber(smallerValue)} million. About how many million more people live in ${countryNameInProse(bigger)}?`,
+      prompt: `${sentenceStart(countryNameInProse(bigger))} has ${formatNumber(biggerValue)} million people. ${sentenceStart(countryNameInProse(smaller))} has ${formatNumber(smallerValue)} million. How many more people live in ${countryNameInProse(bigger)}?`,
       cards: [roundedStatCard(countryCard(bigger), biggerValue, "million people"), roundedStatCard(countryCard(smaller), smallerValue, "million people")],
       statLabel: "Rounded population",
       unit: "million people",
@@ -2744,7 +2822,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       smallerValue,
       answer,
       choices: numberChoices(answer, populationStep, seed + 4),
-      explanation: `Subtracting the rounded populations gives ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} million people. The figures are rounded to make the mental math manageable.`,
+      explanation: `Subtracting the rounded populations gives ${formatNumber(biggerValue)} − ${formatNumber(smallerValue)} = ${formatNumber(answer)} million people. These populations are rounded for this puzzle.`,
     };
   }
 
@@ -2791,7 +2869,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       id: `${seed}-number-peppers-subtract-${first.id}-${second.id}`,
       topic: currentTopic,
       operation: "subtraction",
-      prompt: `In this garden, a ${first.name} plant has ${biggerCount} peppers and a ${second.name} plant has ${smallerCount}. How many more peppers does the ${first.name} plant have?`,
+      prompt: `One ${first.name} plant has ${biggerCount} peppers. One ${second.name} plant has ${smallerCount}. How many more peppers does the ${first.name} plant have?`,
       cards: [roundedStatCard(pepperCard(first), biggerCount, "peppers"), roundedStatCard(pepperCard(second), smallerCount, "peppers")],
       statLabel: "Garden count",
       unit: "peppers",
@@ -3001,7 +3079,7 @@ export const buildNumberRound = (topic: TopicScope, difficulty: Difficulty, seed
       id: `${seed}-number-sharks-add-${selected.map((shark) => shark.id).join("-")}`,
       topic: currentTopic,
       operation: "addition",
-      prompt: `${additionPromptStart(count)}. If these sharks lined up nose to tail, how long would the line be?`,
+      prompt: `If these ${subjectNounForCards("sharks", selected.map((shark) => sharkCard(shark)))}s lined up nose to tail, how long would the line be?`,
       cards: selected.map((shark, index) => roundedStatCard(sharkCard(shark), values[index], "ft")),
       statLabel: "Length",
       unit: "ft",
@@ -3059,7 +3137,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
     return {
       id: `${seed}-odd-countries-${continent}-${odd.id}`,
       topic: currentTopic,
-      prompt: "Which flag belongs to the country on a different continent from the other three?",
+      prompt: "Pick the country from a different continent.",
       cards: shuffle([...same.map((country) => countryCard(country)), countryCard(odd)], seed + 4),
       answerId: odd.id,
       reason: `${sentenceStart(countryNameInProse(odd))} is in ${worldContinentLabel(odd.continents)}, while the others are in ${continent}.`,
@@ -3093,7 +3171,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
     return {
       id: `${seed}-odd-peppers-${heat}-${odd.id}`,
       topic: currentTopic,
-      prompt: "Which pepper belongs to a different heat level from the other three?",
+      prompt: "Pick the pepper with a different heat level.",
       cards,
       answerId: odd.id,
       reason: `${odd.name} is ${odd.heat}; the others are ${heat}.`,
@@ -3237,7 +3315,7 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
     return {
       id: `${seed}-odd-jets-${category}-${odd.id}`,
       topic: currentTopic,
-      prompt: "Which jet belongs to a different mission category from the other three?",
+      prompt: "Pick the aircraft with a different mission.",
       cards,
       answerId: odd.id,
       reason: `${odd.name} is classified as ${jetCategoryWithArticle(odd.category)}, while the others are classified as ${jetCategoryWithArticle(category)}.`,
@@ -3257,11 +3335,11 @@ export const buildOddRound = (topic: TopicScope, difficulty: Difficulty, seed: n
   return {
     id: `${seed}-odd-sharks-${family}-${odd.id}`,
     topic: currentTopic,
-    prompt: "Which shark does not fit the family rule?",
+    prompt: `Pick the ${subjectNounForCards("sharks", cards)} from a different family.`,
     cards,
     answerId: odd.id,
     reason: `${odd.name} belongs to the ${odd.family} family, while the others belong to the ${family} family.`,
-    explanation: `The rule is shark family. ${odd.name} is the odd one out because it belongs to the ${odd.family} family.`,
+    explanation: `${odd.name} is the odd one out because it belongs to the ${odd.family} family.`,
   };
 };
 
@@ -3360,7 +3438,7 @@ export const buildSortRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   return {
     id: `${seed}-sort-sharks-${metric}`,
     topic: currentTopic,
-    prompt: metric === "length" ? "Tap the sharks in order from the shortest to the longest." : "Tap the sharks in order from the lowest power rating to the highest.",
+    prompt: metric === "length" ? `Order the ${subjectNounForCards("sharks", cards)}s from shortest to longest.` : `Order the ${subjectNounForCards("sharks", cards)}s from lowest to highest power rating.`,
     cards: shuffle(cards, seed + 8),
     answerIds,
     explanation: sortOrderExplanation([...cards].sort((a, b) => a.statValue - b.statValue)),
@@ -3400,13 +3478,13 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
     const claimedNeighbors = truthful ? country.landNeighborCount : alternate.landNeighborCount;
     const claimedHighestPoint = truthful ? country.highestPointName : alternate.highestPointName;
     const statement = factType === "capital"
-      ? `Capital of ${countryNameInProse(country)}: ${countryCapitalLabel({ capital: claimedCapital }).replace(/\.$/, "")}.`
+      ? countryCapitalStatement(country, claimedCapital)
       : factType === "continent"
         ? `${sentenceStart(countryNameInProse(country))} is in ${claimedContinent}.`
         : factType === "population"
           ? `${sentenceStart(countryNameInProse(country))} has about ${formatNumber(claimedPopulation)} people.`
           : factType === "area"
-            ? `${sentenceStart(countryNameInProse(country))} has about ${formatNumber(claimedArea)} square kilometers of area.`
+            ? `${sentenceStart(countryNameInProse(country))} covers about ${formatNumber(claimedArea)} square kilometers.`
             : factType === "neighbors"
               ? `${sentenceStart(countryNameInProse(country))} has ${formatNumber(claimedNeighbors)} land ${claimedNeighbors === 1 ? "neighbor" : "neighbors"}.`
               : `${claimedHighestPoint} is the highest point in ${countryNameInProse(country)}.`;
@@ -3557,44 +3635,39 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
   if (currentTopic === "space") {
     const pool = preferredPool(spaceCards, difficulty);
     const space = sample(pool, seed + 18);
+    const name = space.kind === "concept" ? `A ${space.name.toLowerCase()}`
+      : space.kind === "region" || space.id === "sun" || space.id === "moon" ? `The ${space.name}` : space.name;
     const factType = questionDepth === 1 ? "group" : sample(["group", "fact", "temperature", "distance"] as const, seed + 20);
-    const realTemperature = space.surfaceTempK ?? space.meanSurfaceTempF;
-    const realDistance = space.distanceFromSunMillionMiles ?? space.distanceLightYears;
-    const fakeGroup = sampleSafe(pool.filter((item) => item.id !== space.id && item.group !== space.group), pool.filter((item) => item.id !== space.id), seed + 19);
-    const fakeFact = sample(pool.filter((item) => item.id !== space.id), seed + 21);
-    const fakeTemperatureCard = sampleSafe(
-      pool.filter((item) => {
-        const value = item.surfaceTempK ?? item.meanSurfaceTempF;
-        return item.id !== space.id && value !== undefined && value !== realTemperature;
-      }),
-      pool.filter((item) => item.id !== space.id),
-      seed + 22,
-    );
-    const fakeDistanceCard = sampleSafe(
-      pool.filter((item) => {
-        const value = item.distanceFromSunMillionMiles ?? item.distanceLightYears;
-        return item.id !== space.id && value !== undefined && value !== realDistance;
-      }),
-      pool.filter((item) => item.id !== space.id),
-      seed + 23,
-    );
-    const fakeTemperature = fakeTemperatureCard.surfaceTempK ?? fakeTemperatureCard.meanSurfaceTempF;
-    const fakeDistance = fakeDistanceCard.distanceFromSunMillionMiles ?? fakeDistanceCard.distanceLightYears;
-    const statement = truthful
-      ? factType === "temperature" && realTemperature !== undefined
-        ? `${space.name} has a listed temperature of about ${spaceMetricProse(space, "temperature")}.`
-        : factType === "distance" && realDistance !== undefined
-          ? `${space.name} has a listed distance of about ${spaceMetricProse(space, "distance")}.`
-          : factType === "fact"
-            ? space.fact
-            : `${space.name} belongs to the ${space.group} group.`
-      : factType === "temperature" && fakeTemperature !== undefined
-        ? `${space.name} has a listed temperature of about ${spaceMetricProse(fakeTemperatureCard, "temperature")}.`
-        : factType === "distance" && fakeDistance !== undefined
-          ? `${space.name} has a listed distance of about ${spaceMetricProse(fakeDistanceCard, "distance")}.`
-          : factType === "fact"
-            ? fakeFact.fact
-            : `${space.name} belongs to the ${fakeGroup.group} group.`;
+    const fakeKind = sample(pool.filter((item) => item.kind !== space.kind && item.kind !== "concept" && item.kind !== "region"), seed + 19);
+    const kindDescription = (item: SpaceCard) => item.kind === "concept" ? "a space concept"
+      : item.kind === "region" ? "a region of space" : `a ${item.kind}`;
+    const classification = (item: SpaceCard) => item === space && (space.kind === "concept" || space.kind === "region")
+      ? space.fact : `${name} is ${kindDescription(item)}.`;
+    let statement = truthful ? classification(space) : classification(fakeKind);
+    let correction = classification(space);
+
+    if (factType === "fact" && truthful) {
+      statement = space.fact;
+      correction = space.fact;
+    } else if (factType === "temperature" || factType === "distance") {
+      const metric = factType;
+      const actualValue = spaceMetricValue(space, metric);
+      // Keep units and reference points alike, including galaxies measured from Earth.
+      const alternatives = pool.filter((item) => item.id !== space.id
+        && Number.isFinite(spaceMetricValue(item, metric))
+        && spaceMetricValue(item, metric) !== actualValue
+        && (metric === "temperature"
+          ? (item.surfaceTempK !== undefined) === (space.surfaceTempK !== undefined)
+          : (item.distanceFromSunMillionMiles !== undefined) === (space.distanceFromSunMillionMiles !== undefined)));
+      if (Number.isFinite(actualValue) && (truthful || alternatives.length)) {
+        const claimed = truthful ? space : sample(alternatives, seed + (metric === "temperature" ? 22 : 23));
+        const sentence = (valueCard: SpaceCard) => metric === "temperature"
+          ? `${name}'s surface temperature is about ${spaceMetricProse(valueCard, metric)}.`
+          : `${name} is about ${spaceMetricProse(valueCard, metric)} from ${space.distanceFromSunMillionMiles !== undefined ? "the Sun" : "Earth"}.`;
+        statement = sentence(claimed);
+        correction = sentence(space);
+      }
+    }
     return {
       id: `${seed}-fact-space-${space.id}`,
       topic: currentTopic,
@@ -3604,7 +3677,7 @@ export const buildFactRound = (topic: TopicScope, difficulty: Difficulty, seed: 
       imageAlt: space.name,
       imageCredit: space.imageCredit,
       answer: truthful ? "True" : "False",
-      explanation: `${space.name} is the subject of the statement. ${space.fact}`,
+      explanation: correction === space.fact ? space.fact : `${correction} ${space.fact}`,
     };
   }
 

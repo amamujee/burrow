@@ -45,8 +45,12 @@ test.describe("Audited country capitals", { tag: "@logic" }, () => {
       observed.add(kind);
       let accurate = true;
       if (kind === "capital") {
-        accurate = round.statement.endsWith(`: ${countryCapitalLabel(country).replace(/\.$/, "")}.`);
-        expect(round.statement).not.toMatch(/No official capital is|Disputed is|\.\./);
+        accurate = country.capital === "No official capital"
+          ? round.statement.endsWith("has no official capital.")
+          : country.code === "PS"
+            ? round.statement.includes("claims East Jerusalem as its capital and uses Ramallah as its administrative center")
+            : round.statement.endsWith(`${country.capital.includes(" and ") || country.capital.includes("/") ? "are" : "is"} ${countryCapitalLabel(country).replace(/\.$/, "")}.`);
+        expect(round.statement).not.toMatch(/is No official capital|No official capital is|Disputed is|Capital of .+:|\.\./);
       } else if (kind === "neighbors") {
         accurate = Number(round.statement.match(/has (\d+) land/)?.[1]) === country.landNeighborCount;
       } else if (kind === "population" || kind === "area") {
