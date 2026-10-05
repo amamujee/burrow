@@ -43,8 +43,12 @@ export function useProfileStore(initial: () => ProfilesState, read: () => Profil
       setIssue(null);
     };
     try {
-      if (navigator.locks) await navigator.locks.request(profilesKey, write);
-      else write(); // The read/write pair is synchronous on older browsers.
+      do {
+        if (navigator.locks) await navigator.locks.request(profilesKey, write);
+        else write(); // The read/write pair is synchronous on older browsers.
+        // Input can arrive after write() but before the lock promise settles.
+        // Drain those operations too; their update() already saw a flush in flight.
+      } while (pending.current.length);
     } catch {
       setIssue("Progress is only saved in this tab for now. Keep it open and retry, or export a save from Setup.");
     } finally {

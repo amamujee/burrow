@@ -77,7 +77,11 @@ const openSetup = async (page: Page) => {
   await page.getByRole("button", { name: "Setup", exact: true }).click();
   return page.getByRole("dialog", { name: "Setup", exact: true });
 };
-const storedState = (page: Page): Promise<ProfilesState> => page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), profilesKey);
+const storedState = async (page: Page): Promise<ProfilesState> => {
+  // The UI can be ready while the first asynchronous save is still acquiring its lock.
+  await page.waitForFunction((key) => localStorage.getItem(key) !== null, profilesKey);
+  return page.evaluate((key) => JSON.parse(localStorage.getItem(key)!), profilesKey);
+};
 
 test.describe("save transfer", { tag: ["@browser", "@mobile", "@webkit"] }, () => {
   test("exports to a file and restores all progress in a separate iPad-sized session", async ({ page, browser }, testInfo) => {
@@ -216,6 +220,30 @@ test.describe("save transfer", { tag: ["@browser", "@mobile", "@webkit"] }, () =
 
 
 test.describe("save resilience", { tag: ["@browser", "@mobile", "@webkit"] }, () => {
+  test("an answer queued while a previous save is finishing is persisted without another action", async ({ page }) => {
+    await page.addInitScript((key) => {
+      const original = navigator.locks.request.bind(navigator.locks);
+      let held = false;
+      Object.defineProperty(Object.getPrototypeOf(navigator.locks), "request", { value: async (name: string, callback: LockGrantedCallback<unknown>) => {
+        const result = await original(name, callback);
+        if (name === key && !held) {
+          held = true;
+          // Hold completion after the write, reproducing another input arriving
+          // before the browser reports that the preceding lock was released.
+          await new Promise<void>((resolve) => Object.assign(window, { finishPreviousSave: resolve }));
+        }
+        return result;
+      } });
+    }, profilesKey);
+    await openGame(page);
+    await page.waitForFunction(() => "finishPreviousSave" in window);
+    const before = await storedState(page);
+    await page.getByLabel("Answer choices").getByRole("button", { name: "not spicy", exact: true }).click();
+    await expect(page.getByLabel("Answer feedback")).toBeVisible();
+    await page.evaluate(() => (window as unknown as { finishPreviousSave: () => void }).finishPreviousSave());
+    await expect.poll(async () => (await storedState(page)).profiles[0].progress.answered).toBe(before.profiles[0].progress.answered + 1);
+  });
+
   test("two tabs preserve simultaneous answers and keep separate selected players", async ({ page, context }) => {
     await openGame(page);
     const second = await context.newPage();
