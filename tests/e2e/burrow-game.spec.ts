@@ -2178,37 +2178,56 @@ test("iPad Bridges and Tunnels loads Medium after Easy across available modes", 
   expect(pageErrors).toEqual([]);
 });
 
-test("saving offline includes maps before any map has been opened", { tag: ["@mobile", "@webkit"] }, async ({ page, context, browserName, baseURL }) => {
-  test.setTimeout(60000);
-  // Playwright's WebKit offline emulation rejects service-worker responses:
-  // https://github.com/microsoft/playwright/issues/42775. Stop a real origin instead.
-  const origin = browserName === "webkit" ? await startDisconnectableOrigin(baseURL!) : undefined;
-  try {
-    if (origin) {
-      await page.goto(`${origin.url}/play`);
+for (const openMapFirst of [false, true]) {
+  test(`saving offline includes maps ${openMapFirst ? "loaded before offline setup" : "before any map has been opened"}`, { tag: ["@mobile", "@webkit"] }, async ({ page, context, browserName, baseURL }) => {
+    test.setTimeout(60000);
+    // A warm HTTP cache can hide missing service-worker entries. Routing disables
+    // that cache while requests controlled by the service worker remain untouched.
+    await context.route("**/*", (route) => route.continue());
+    // Playwright's WebKit offline emulation rejects service-worker responses:
+    // https://github.com/microsoft/playwright/issues/42775. Stop a real origin instead.
+    const origin = browserName === "webkit" ? await startDisconnectableOrigin(baseURL!) : undefined;
+    const scriptUrls = new Set<string>();
+    page.on("request", (request) => {
+      if (request.resourceType() === "script" && new URL(request.url()).pathname.startsWith("/_next/static/")) scriptUrls.add(request.url());
+    });
+    try {
+      if (origin) {
+        await page.goto(`${origin.url}/play`);
+        await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+      }
+      await chooseOnlyBuiltInTopic(page, "Countries & Flags");
+      if (openMapFirst) {
+        expect(await page.evaluate(() => navigator.serviceWorker.controller)).toBeNull();
+        await chooseOnlyMode(page, "Geo Finder");
+        await expect(page.getByLabel("Map view")).toBeVisible();
+      }
+      await chooseOnlyMode(page, "Quiz Run");
+      await page.getByRole("button", { name: "More actions" }).click();
+      await page.getByRole("button", { name: "Setup", exact: true }).click();
+      await expect(page.getByRole("button", { name: "Save offline", exact: true })).toBeEnabled();
+      await page.getByRole("button", { name: "Save offline", exact: true }).click();
+      await expect(page.getByRole("button", { name: "Saved", exact: true })).toBeVisible({ timeout: 45000 });
+      const missingScripts = await page.evaluate(async (urls) => {
+        const localUrls = urls.filter((url) => new URL(url).origin === location.origin);
+        return (await Promise.all(localUrls.map(async (url) => await caches.match(url) ? null : url))).filter(Boolean);
+      }, [...scriptUrls]);
+      expect(missingScripts, "Loaded map code must be in the offline cache, not only browser memory").toEqual([]);
+      await page.getByRole("button", { name: "Close setup" }).click();
+      if (origin) await origin.stop();
+      else await context.setOffline(true);
+      await page.reload({ waitUntil: "domcontentloaded" });
       await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+      await chooseOnlyMode(page, "Geo Finder");
+      await expect(page.getByLabel("World country boundaries")).toBeVisible();
+      expect(await page.locator('img[data-original-src*="/countries/"]').first().evaluate((img) => (img as HTMLImageElement).naturalWidth > 0)).toBe(true);
+      await expect(page.getByRole("button", { name: "Reload map" })).toHaveCount(0);
+    } finally {
+      if (origin) await origin.stop();
+      else await context.setOffline(false);
     }
-    await chooseOnlyBuiltInTopic(page, "Countries & Flags");
-    await chooseOnlyMode(page, "Quiz Run");
-    await page.getByRole("button", { name: "More actions" }).click();
-    await page.getByRole("button", { name: "Setup", exact: true }).click();
-    await expect(page.getByRole("button", { name: "Save offline", exact: true })).toBeEnabled();
-    await page.getByRole("button", { name: "Save offline", exact: true }).click();
-    await expect(page.getByRole("button", { name: "Saved", exact: true })).toBeVisible({ timeout: 45000 });
-    await page.getByRole("button", { name: "Close setup" }).click();
-    if (origin) await origin.stop();
-    else await context.setOffline(true);
-    await page.reload({ waitUntil: "domcontentloaded" });
-    await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
-    await chooseOnlyMode(page, "Geo Finder");
-    await expect(page.getByLabel("World country boundaries")).toBeVisible();
-    expect(await page.locator('img[data-original-src*="/countries/"]').first().evaluate((img) => (img as HTMLImageElement).naturalWidth > 0)).toBe(true);
-    await expect(page.getByRole("button", { name: "Reload map" })).toHaveCount(0);
-  } finally {
-    if (origin) await origin.stop();
-    else await context.setOffline(false);
-  }
-});
+  });
+}
 
 test("offline saving stays in Setup and the app shell supports an offline reload", { tag: "@mobile" }, async ({ page, context }) => {
   try {
