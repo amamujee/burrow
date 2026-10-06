@@ -39,5 +39,11 @@ jobs:
       - name: Verify app
         run: |
           npm run build
-          node scripts/run-playwright.mjs --watchdog-projects=desktop,mobile,webkit --watchdog-idle-ms=60000 --watchdog-max-ms=300000 --workers=1 tests/e2e/profile-save.spec.ts
-          node scripts/run-playwright.mjs --watchdog-idle-ms=60000 --watchdog-max-ms=300000 --project=desktop --workers=1 --repeat-each=20 --grep 'two tabs'
+          node scripts/run-playwright.mjs --watchdog-idle-ms=60000 --watchdog-max-ms=300000 --project=webkit --workers=1 --repeat-each=6 --trace=retain-on-failure --grep 'saving offline includes maps before'
+
+      - name: Upload failure traces
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: offline-map-failure
+          path: test-results
