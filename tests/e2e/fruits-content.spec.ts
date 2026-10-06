@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import sharp from "sharp";
+import { useLegacyProfileFixture } from "./profile-fixtures";
 import { expect, test, type Page } from "@playwright/test";
 import { loadPlayablePacks } from "../../src/lib/pack-loader";
 import { packToPlayableDeck } from "../../src/lib/pack-adapter";
@@ -230,6 +231,7 @@ test("Fruits opens, plays, and displays sourced profiles on tablet and mobile", 
     active.progress.unlockedCards = fruitIds;
     localStorage.setItem("burrow-profiles-v1", JSON.stringify(saved));
   }, deck.cards.map((card) => `fruits:${card.id}`));
+  await useLegacyProfileFixture(page);
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await page.getByRole("button", { name: /^Collection/ }).click();

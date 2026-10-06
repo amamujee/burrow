@@ -9,6 +9,7 @@ import { GameAnswerFeedback, GameChoiceButton, GameChoiceGrid, GameQuestionCard,
 import { OfflineReady } from "@/components/offline-ready";
 import { SaveTransfer } from "@/components/save-transfer";
 import { profilesBackupKey, useProfileStore } from "@/components/use-profile-store";
+import { readProfileDatabase } from "@/lib/profile-persistence";
 import { WorldMapSurface } from "@/components/world-map-surface";
 import { useModalFocus } from "@/components/use-modal-focus";
 import { recentTopicStats, weightTopicsForAccuracy } from "@/lib/adaptive-topics";
@@ -861,7 +862,12 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       return deck ? buildTopTrumpRoundFromCards(deck.cards, topicId, difficulty, candidateSeed, unlockedTitles) : buildTopTrumpRound(topicId as KnowledgeTopic, difficulty, candidateSeed, unlockedTitles);
     });
   }, [packDeckById, pickTopic]);
-  const readProfiles = useCallback(() => loadProfiles(playableTopics), [playableTopics]);
+  const readProfiles = useCallback((stored?: ProfilesState) => {
+    if (!stored) return loadProfiles(playableTopics);
+    const normalized = normalizeProfiles(stored, playableTopics);
+    if (!normalized) throw new Error("Saved progress is damaged");
+    return normalized;
+  }, [playableTopics]);
   const { state: profilesState, update: setProfilesState, initialize: initializeProfiles, importState,
     issue: saveIssue, retry: retrySave } = useProfileStore(defaultProfiles, readProfiles);
   const [profilesReady, setProfilesReady] = useState(false);
@@ -1139,10 +1145,15 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
   }, []);
 
   useEffect(() => {
-    const loadSavedProfiles = window.setTimeout(() => {
+    let cancelled = false;
+    const loadSavedProfiles = window.setTimeout(async () => {
       let loadedProfiles: ProfilesState;
-      try { loadedProfiles = readProfiles(); }
-      catch { loadedProfiles = defaultProfiles(undefined, [...playableTopics]); }
+      try { loadedProfiles = readProfiles(await readProfileDatabase()); }
+      catch {
+        try { loadedProfiles = readProfiles(); }
+        catch { loadedProfiles = defaultProfiles(undefined, [...playableTopics]); }
+      }
+      if (cancelled) return;
       const loadedProfile = loadedProfiles.profiles.find((profile) => profile.id === loadedProfiles.activeProfileId) ?? loadedProfiles.profiles[0];
       const loadedInterests = normalizeInterests(loadedProfile.interests, playableTopics);
       const loadedScope = adaptiveTopicScopeFor("mixed", loadedInterests, loadedProfile.progress, playableTopics);
@@ -1161,7 +1172,7 @@ export function BurrowGame({ packs = [] }: { packs?: Pack[] }) {
       setProfilesReady(true);
     }, 0);
 
-    return () => window.clearTimeout(loadSavedProfiles);
+    return () => { cancelled = true; window.clearTimeout(loadSavedProfiles); };
   }, [playableTopics, prepareConfiguredRounds, initializeProfiles, readProfiles]);
 
   useEffect(() => {
