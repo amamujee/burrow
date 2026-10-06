@@ -309,6 +309,21 @@ self.addEventListener("message", (event) => {
   const message = event.data;
   if (!message || typeof message !== "object") return;
 
+  if (message.type === "CACHE_APP_ASSETS") {
+    event.waitUntil((async () => {
+      try {
+        const cache = await caches.open(SHELL_CACHE);
+        const entries = normalizeEntries(message.urls).filter((entry) => new URL(entry.url).pathname.startsWith("/_next/static/"));
+        const results = await Promise.all(entries.map(async (entry) =>
+          Boolean(await cache.match(entry.url, { ignoreVary: true })) || await fetchAndCacheShell(cache, entry.url)));
+        event.ports[0]?.postMessage({ ok: results.length > 0 && results.every(Boolean) });
+      } catch {
+        event.ports[0]?.postMessage({ ok: false });
+      }
+    })());
+    return;
+  }
+
   if (message.type === "CHECK_OFFLINE_STATUS") {
     event.waitUntil(queueContentTask(async () => {
       const shellCache = await caches.open(SHELL_CACHE);

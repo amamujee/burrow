@@ -85,6 +85,34 @@ const waitForActivation = (worker: ServiceWorker) => {
   });
 };
 
+const cacheOfflineMaps = async (worker: ServiceWorker) => {
+  await preloadMaps();
+  // An import can already be in memory from before the service worker took
+  // control. Explicitly cache loaded app assets instead of relying on a fetch.
+  const loadedUrls = [
+    ...Array.from(document.scripts, (script) => script.src),
+    ...performance.getEntriesByType("resource").map((entry) => entry.name),
+  ];
+  const urls = Array.from(new Set(loadedUrls.filter((value) => {
+    if (!value) return false;
+    const url = new URL(value, window.location.href);
+    return url.origin === window.location.origin && url.pathname.startsWith("/_next/static/");
+  })));
+  await new Promise<void>((resolve, reject) => {
+    const channel = new MessageChannel();
+    const finish = (ok: boolean) => {
+      window.clearTimeout(timeout);
+      channel.port1.close();
+      if (ok) resolve();
+      else reject(new Error("The map could not be saved offline."));
+    };
+    const timeout = window.setTimeout(() => finish(false), 15000);
+    channel.port1.onmessage = (event) => finish(event.data?.ok === true);
+    try { worker.postMessage({ type: "CACHE_APP_ASSETS", urls }, [channel.port2]); }
+    catch { finish(false); }
+  });
+};
+
 export function OfflineReady({ selectedImageUrls, warmImageUrls, compact = false }: { selectedImageUrls: readonly string[]; warmImageUrls: readonly string[]; compact?: boolean }) {
   const selectedUrls = useMemo(() => uniqueLocalUrls(selectedImageUrls), [selectedImageUrls]);
   const [manifest, setManifest] = useState<OfflineAssetManifest | null>(null);
@@ -149,7 +177,8 @@ export function OfflineReady({ selectedImageUrls, warmImageUrls, compact = false
         if (message.shellReady && total > 0 && cached === total) {
           // Cached pictures alone do not guarantee that this build's deferred
           // map chunk is available, especially just after an app update.
-          void preloadMaps().then(() => { if (!cancelled) setReady(true); }).catch(() => undefined);
+          const worker = registrationRef.current?.active;
+          if (worker) void cacheOfflineMaps(worker).then(() => { if (!cancelled) setReady(true); }).catch(() => undefined);
         }
         setProgress({ completed: cached, total, cached, downloaded: 0, failed: 0 });
         return;
@@ -234,8 +263,8 @@ export function OfflineReady({ selectedImageUrls, warmImageUrls, compact = false
       if ("storage" in navigator && "persist" in navigator.storage) await navigator.storage.persist();
       const registration = registrationRef.current ?? await navigator.serviceWorker.ready;
       if (!registration.active) throw new Error("Offline worker is not active");
-      // Load the deferred map chunk while online so every region works in flight.
-      await preloadMaps();
+      // Confirm the deferred map code is stored before reporting offline ready.
+      await cacheOfflineMaps(registration.active);
       registration.active.postMessage({ type: "CACHE_URLS", requestId: requestIdRef.current, entries: selectedEntries });
     } catch {
       setSaving(false);
