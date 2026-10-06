@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - codex/ci-save-diagnostics
   pull_request:
 
 jobs:
@@ -36,4 +37,4 @@ jobs:
         run: npx playwright install --with-deps chrome webkit
 
       - name: Verify app
-        run: npm run verify
+        run: npm run build && node scripts/run-playwright.mjs --watchdog-idle-ms=60000 --watchdog-max-ms=300000 --project=desktop --workers=1 --repeat-each=30 --grep 'two tabs preserve'

@@ -245,6 +245,22 @@ test.describe("save resilience", { tag: ["@browser", "@mobile", "@webkit"] }, ()
   });
 
   test("two tabs preserve simultaneous answers and keep separate selected players", async ({ page, context }) => {
+    await context.addInitScript((key) => {
+      const events: unknown[] = [];
+      Object.assign(window, { saveTrace: events });
+      const read = Storage.prototype.getItem;
+      const write = Storage.prototype.setItem;
+      const trace = (type: string, value: string | null) => events.push({ at: Date.now(), type, answered: value ? JSON.parse(value).profiles?.map((profile: { progress: { answered: number } }) => profile.progress.answered) : null });
+      Storage.prototype.getItem = function (name) { const value = read.call(this, name); if (name === key) trace("read", value); return value; };
+      Storage.prototype.setItem = function (name, value) { if (name === key) trace("write", value); return write.call(this, name, value); };
+      window.addEventListener("storage", (event) => { if (event.key === key) trace("storage event", event.newValue); });
+      document.addEventListener("click", (event) => events.push({ at: Date.now(), type: "click", target: (event.target as Element).textContent }), true);
+      const request = navigator.locks.request.bind(navigator.locks);
+      Object.defineProperty(Object.getPrototypeOf(navigator.locks), "request", { value: (name: string, callback: LockGrantedCallback<unknown>) => request(name, (lock) => {
+        if (name === key) events.push({ at: Date.now(), type: "lock" });
+        return callback(lock);
+      }) });
+    }, profilesKey);
     await openGame(page);
     const second = await context.newPage();
     await openGame(second, page.url());
@@ -252,7 +268,12 @@ test.describe("save resilience", { tag: ["@browser", "@mobile", "@webkit"] }, ()
     const id = initial.activeProfileId;
     const answered = initial.profiles.find((profile) => profile.id === id)!.progress.answered;
     await Promise.all([page, second].map((tab) => tab.getByLabel("Answer choices").getByRole("button", { name: "not spicy", exact: true }).click()));
-    await expect.poll(async () => (await storedState(page)).profiles.find((profile) => profile.id === id)!.progress.answered).toBe(answered + 2);
+    try {
+      await expect.poll(async () => (await storedState(page)).profiles.find((profile) => profile.id === id)!.progress.answered).toBe(answered + 2);
+    } catch (error) {
+      console.log(JSON.stringify(await Promise.all([page, second].map((tab) => tab.evaluate(() => ({ trace: (window as unknown as { saveTrace: unknown[] }).saveTrace, feedback: document.querySelector('[aria-label="Answer feedback"]')?.textContent, page: document.body.innerText }))))));
+      throw error;
+    }
     const dialog = await openSetup(second);
     const otherId = initial.profiles.find((profile) => profile.id !== id)!.id;
     await dialog.getByRole("combobox", { name: "Player", exact: true }).selectOption(otherId);
