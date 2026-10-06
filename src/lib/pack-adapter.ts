@@ -67,7 +67,10 @@ export const packToPlayableDeck = (pack: Pack): PlayablePackDeck => {
         // in comparisons rather than duplicate ways to win the same round.
         stats: card.stats.filter((stat, index, stats) =>
           stats.findIndex((candidate) => candidate.label === stat.label) === index).map(toTopTrumpStat),
-        details: [
+        details: pack.id === "fruits" ? [
+          ...(card.details ?? []),
+          ...(primary ? [{ label: primary.label, value: statDisplay(primary) }] : []),
+        ] : [
           ...(card.details ?? []),
           ...card.stats.map((stat) => ({
             label: card.stats.filter((candidate) => candidate.label === stat.label).length > 1 && stat.unit

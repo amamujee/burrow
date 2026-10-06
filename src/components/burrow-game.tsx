@@ -4557,7 +4557,7 @@ function CollectionBook({
               <p className="mt-1 text-[9px] font-bold text-[#5f6b5d]">{collectionOrderLabel(orderedCards)}</p>
             </div>
           </div>
-          {activeTopic.id === "fruits" && <p className="mt-3 text-xs font-semibold text-[#5f6b5d]">Approximate longest dimension in centimetres, without stems or leaves. Sizes vary by variety; open a card profile for the size reference.</p>}
+          {activeTopic.id === "fruits" && <p className="mt-3 text-xs font-semibold text-[#5f6b5d]">Size: longest dimension, without stems or leaves.</p>}
           {availableRarities.length > 0 && (
             <div aria-label="Filter cards by rarity" className="mt-3 flex flex-wrap items-center gap-2 border-t-2 border-[#e4d8c2] pt-3">
               <span className="mr-1 text-[9px] font-black uppercase tracking-[0.16em] text-[#72543e]">Rarity</span>

@@ -81,7 +81,7 @@ test.describe("Fruits", { tag: "@logic" }, () => {
     expect(new Set(expansion.map((card) => card.location.continents[0])).size).toBe(6);
     expect(new Set(source.cards.map((card) => card.imageSourceUrl)).size).toBe(150);
     for (const card of deck.cards) {
-      expect(card.details?.map((detail) => detail.label)).toEqual(expect.arrayContaining(["Scientific name", "Origin / heritage", "Flavor", "Texture", "Finding it", "Comparison guide"]));
+      expect(card.details?.map((detail) => detail.label)).toEqual(expect.arrayContaining(["Scientific name", "Origin / heritage", "Flavor", "Texture", "Finding it"]));
       expect(card.stats.filter((stat) => /rating/.test(stat.id))).toHaveLength(3);
       expect(card.stats.some((stat) => /countries|tastiness|brix/i.test(stat.label))).toBe(false);
     }
@@ -94,6 +94,7 @@ test.describe("Fruits", { tag: "@logic" }, () => {
       if (weighted.has(card.id)) {
         expect(card.statValue).toBe(weighted.get(card.id));
         expect(card.stats[0].unit).toBe("g");
+        expect(card.statDisplay).toBe(`${weighted.get(card.id)!.toLocaleString("en-US")} g`);
       } else {
         expect(Number.isNaN(card.statValue), card.id).toBe(true);
         expect(card.statDisplay).toBe("Not documented");
@@ -117,7 +118,10 @@ test.describe("Fruits", { tag: "@logic" }, () => {
       expect(card.collectionStat).toEqual({ label: "Example size", value: record.size.centimeters, display: `~${record.size.centimeters} cm` });
       expect(card.stats.find((stat) => stat.id === "size-cm")?.unit).toBe("cm");
       const profile = collectionCardProfileDetails({ ...card, statLabel: card.collectionStat!.label, statDisplay: card.collectionStat!.display });
-      expect(profile.find((detail) => detail.label === "Example size note")?.value).toContain(record.size.note);
+      expect(profile.map((detail) => detail.label)).toEqual([
+        "Scientific name", "Flavor", "Texture", "Finding it", ...(record.weight ? ["Example weight"] : []),
+      ]);
+      expect(card.metadata?.sources?.some((reference) => reference.note?.includes(record.size.note))).toBe(true);
       if (record.weight) expect(profile.find((detail) => detail.label === "Example weight")?.value).toBe(card.statDisplay);
     }
     const originalIds = deck.cards.map((card) => card.id);
@@ -239,7 +243,7 @@ test("Fruits opens, plays, and displays sourced profiles on tablet and mobile", 
   await expect(collection).toBeVisible();
   await expect(collection.getByRole("button", { name: "Show all rarities (150 cards)" })).toBeVisible();
   await expect(collection.getByText("Size · smallest to largest", { exact: true })).toBeVisible();
-  await expect(collection.getByText(/Approximate longest dimension in centimetres/)).toBeVisible();
+  await expect(collection.getByText("Size: longest dimension, without stems or leaves.", { exact: true })).toBeVisible();
   const titles = collection.locator("div.overflow-hidden.rounded-lg > div.p-2 > p:first-child");
   await expect(titles).toHaveText(orderCollectionCardsForCategory(deck.cards).map((card) => card.title));
   const newFruit = collection.locator("div.overflow-hidden.rounded-lg").filter({ has: page.getByText("Uvaia", { exact: true }) });
@@ -300,9 +304,8 @@ test("Fruits opens, plays, and displays sourced profiles on tablet and mobile", 
   const lime = collection.locator("div.overflow-hidden.rounded-lg").filter({ has: page.getByText("Finger Lime", { exact: true }) });
   await expect(lime.getByText("~8 cm", { exact: true })).toBeVisible();
   await lime.locator("summary").click();
-  await expect(newFruit.getByText("~22 g", { exact: true })).toBeVisible();
-  await expect(lime.getByText(/No whole-fruit weight verified/).first()).toBeVisible();
-  await expect(lime.getByText(/botanical description gives about 8 cm/).first()).toBeVisible();
+  await expect(newFruit.getByText("22 g", { exact: true })).toBeVisible();
+  await expect(lime.locator("dt")).toHaveText(["Scientific name", "Flavor", "Texture", "Finding it"]);
   await expect(lime.getByText("Citrus australasica", { exact: true })).toBeVisible();
   await expect(lime.getByText("Tiny popping juice pearls", { exact: true })).toBeVisible();
   const photo = lime.getByRole("img", { name: "Finger Lime fruit", exact: true });
