@@ -50,7 +50,7 @@ Open [http://localhost:3000](http://localhost:3000), or go directly to [http://l
 
 Saves include every player's progress, cards, learning history, topics, difficulty, and the active player. Play resumes with a new round. Sound preferences and downloaded offline assets stay device-specific. This is a manual transfer, not automatic cloud sync. Safari and the Home Screen app can have separate saves, so export and import inside the place you actually play.
 
-Save updates are serialized across tabs and retain a previous valid backup. If browser storage fails, play continues in memory with a retry and export reminder. Keep that tab open until the save succeeds or you export it.
+Save updates use IndexedDB transactions across tabs and retain a previous valid backup. Existing localStorage saves migrate automatically, and a localStorage recovery copy is maintained. If browser storage fails, play continues in memory with a retry and export reminder. Keep that tab open until the save succeeds or you export it.
 
 ## Useful Scripts
 

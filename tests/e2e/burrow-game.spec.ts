@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { createServer, request } from "node:http";
+import { useLegacyProfileFixture } from "./profile-fixtures";
 import { weightTopicsForAccuracy } from "../../src/lib/adaptive-topics";
 import { collectionCardProfileDetails } from "../../src/lib/card-profile";
 import { cardRarities } from "../../src/lib/card-metadata";
@@ -2012,6 +2013,7 @@ test.beforeEach(async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Burrow" })).toBeVisible();
   await page.waitForFunction(() => document.documentElement.dataset.burrowHydrated === "true");
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+  await page.waitForFunction(() => localStorage.getItem("burrow-profiles-v1") !== null);
 });
 
 test("manual Hard stays selected after a wrong answer with low lifetime accuracy", { tag: ["@mobile", "@webkit"] }, async ({ page }) => {
@@ -2021,6 +2023,7 @@ test("manual Hard stays selected after a wrong answer with low lifetime accuracy
     Object.assign(progress, { difficulty: 3, answered: 20, correct: 2 });
     localStorage.setItem("burrow-profiles-v1", JSON.stringify(state));
   });
+  await useLegacyProfileFixture(page);
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await chooseOnlyMode(page, "True/False");
@@ -2735,6 +2738,7 @@ test("fresh and existing profiles automatically select newly added topics", asyn
       }],
     }));
   });
+  await useLegacyProfileFixture(page);
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await expect(topicsControl(page)).toHaveText(/Topics/);
@@ -2836,6 +2840,7 @@ for (const scenario of [
       if (milestone !== undefined) active.progress.challengeMilestone = milestone;
       window.localStorage.setItem(key, JSON.stringify(profiles));
     }, scenario);
+    await useLegacyProfileFixture(page);
     await page.reload();
     await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
     await chooseOnlyMode(page, scenario.mode);
@@ -3044,6 +3049,7 @@ test("Quiz automatically uses US and continent maps with reachable pins", { tag:
     saved.profiles.find((profile: { id: string }) => profile.id === saved.activeProfileId).progress.unlockedCards = unlockedCards;
     localStorage.setItem("burrow-profiles-v1", JSON.stringify(saved));
   }, peppers.filter((pepper) => pepper.id !== "carolina-reaper").map((pepper) => cardUnlockKey("peppers", pepper.id)));
+  await useLegacyProfileFixture(page);
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await chooseOnlyMode(page, "Quiz Run");
@@ -3207,6 +3213,7 @@ test("collection only shows selected topics", async ({ page }) => {
     ];
     window.localStorage.setItem(key, JSON.stringify(profiles));
   });
+  await useLegacyProfileFixture(page);
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await page.getByRole("button", { name: /^Collection/ }).click();
@@ -3269,6 +3276,7 @@ test("collection category picker shows one category album at a time", { tag: "@m
     active.progress.unlockedCards = ["Bell Pepper", "Great White Shark"];
     window.localStorage.setItem(key, JSON.stringify(profiles));
   });
+  await useLegacyProfileFixture(page);
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await page.getByRole("button", { name: /^Collection/ }).click();

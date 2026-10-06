@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { readTransactionalProfileFixture, useLegacyProfileFixture } from "./profile-fixtures";
 import { expect, test, type Page } from "@playwright/test";
 import { topicIds } from "../../src/lib/game-data";
 import { modeOptions } from "../../src/lib/game-modes";
@@ -89,6 +90,7 @@ test.describe("save transfer", { tag: ["@browser", "@mobile", "@webkit"] }, () =
     const existing = await storedState(page);
     const fixture = { ...stateFixture(), knownTopics: existing.knownTopics };
     await page.evaluate(({ key, state }) => localStorage.setItem(key, JSON.stringify(state)), { key: profilesKey, state: fixture });
+    await useLegacyProfileFixture(page);
     await page.reload();
     await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
     const original = await storedState(page);
@@ -220,6 +222,45 @@ test.describe("save transfer", { tag: ["@browser", "@mobile", "@webkit"] }, () =
 
 
 test.describe("save resilience", { tag: ["@browser", "@mobile", "@webkit"] }, () => {
+  test("two tabs retain both answers even with stale localStorage caches and no Web Locks", async ({ page, context }) => {
+    await openGame(page);
+    const second = await context.newPage();
+    await openGame(second, page.url());
+    const initial = await readTransactionalProfileFixture(page);
+    await Promise.all([page, second].map((tab) => tab.evaluate(({ key, snapshot }) => {
+      const original = Storage.prototype.getItem;
+      Storage.prototype.getItem = function (name) { return name === key ? snapshot : original.call(this, name); };
+      Object.defineProperty(navigator, "locks", { value: undefined });
+    }, { key: profilesKey, snapshot: JSON.stringify(initial) })));
+    await Promise.all([page, second].map((tab) => tab.getByLabel("Answer choices").getByRole("button", { name: "not spicy", exact: true }).click()));
+    await expect.poll(async () => (await readTransactionalProfileFixture(page)).profiles[0].progress.answered).toBe(initial.profiles[0].progress.answered + 2);
+    await page.reload();
+    await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
+    expect((await readTransactionalProfileFixture(page)).profiles[0].progress.answered).toBe(initial.profiles[0].progress.answered + 2);
+    await second.close();
+  });
+
+  test("an aborted database transaction rolls back the recovery copy and retries the answer once", async ({ page }) => {
+    await openGame(page);
+    const initial = await readTransactionalProfileFixture(page);
+    await page.evaluate(() => {
+      const original = IDBObjectStore.prototype.put;
+      Object.assign(window, { restoreDatabase: () => { IDBObjectStore.prototype.put = original; } });
+      IDBObjectStore.prototype.put = function (...args) {
+        if (this.name === "profiles") throw new DOMException("Storage full", "QuotaExceededError");
+        return original.apply(this, args);
+      };
+    });
+    await page.getByLabel("Answer choices").getByRole("button", { name: "not spicy", exact: true }).click();
+    await expect(page.getByRole("alert", { name: "Progress not saved" })).toBeVisible();
+    expect(await storedState(page)).toEqual(initial);
+    expect(await readTransactionalProfileFixture(page)).toEqual(initial);
+    await page.evaluate(() => (window as unknown as { restoreDatabase: () => void }).restoreDatabase());
+    await page.getByRole("button", { name: "Retry save" }).click();
+    await expect(page.getByRole("alert", { name: "Progress not saved" })).toHaveCount(0);
+    expect((await readTransactionalProfileFixture(page)).profiles[0].progress.answered).toBe(initial.profiles[0].progress.answered + 1);
+  });
+
   test("an answer queued while a previous save is finishing is persisted without another action", async ({ page }) => {
     await page.addInitScript((key) => {
       const original = navigator.locks.request.bind(navigator.locks);
@@ -245,22 +286,6 @@ test.describe("save resilience", { tag: ["@browser", "@mobile", "@webkit"] }, ()
   });
 
   test("two tabs preserve simultaneous answers and keep separate selected players", async ({ page, context }) => {
-    await context.addInitScript((key) => {
-      const events: unknown[] = [];
-      Object.assign(window, { saveTrace: events });
-      const read = Storage.prototype.getItem;
-      const write = Storage.prototype.setItem;
-      const trace = (type: string, value: string | null) => events.push({ at: Date.now(), type, answered: value ? JSON.parse(value).profiles?.map((profile: { progress: { answered: number } }) => profile.progress.answered) : null });
-      Storage.prototype.getItem = function (name) { const value = read.call(this, name); if (name === key) trace("read", value); return value; };
-      Storage.prototype.setItem = function (name, value) { if (name === key) trace("write", value); return write.call(this, name, value); };
-      window.addEventListener("storage", (event) => { if (event.key === key) trace("storage event", event.newValue); });
-      document.addEventListener("click", (event) => events.push({ at: Date.now(), type: "click", target: (event.target as Element).textContent }), true);
-      const request = navigator.locks.request.bind(navigator.locks);
-      Object.defineProperty(Object.getPrototypeOf(navigator.locks), "request", { value: (name: string, callback: LockGrantedCallback<unknown>) => request(name, (lock) => {
-        if (name === key) events.push({ at: Date.now(), type: "lock" });
-        return callback(lock);
-      }) });
-    }, profilesKey);
     await openGame(page);
     const second = await context.newPage();
     await openGame(second, page.url());
@@ -268,12 +293,7 @@ test.describe("save resilience", { tag: ["@browser", "@mobile", "@webkit"] }, ()
     const id = initial.activeProfileId;
     const answered = initial.profiles.find((profile) => profile.id === id)!.progress.answered;
     await Promise.all([page, second].map((tab) => tab.getByLabel("Answer choices").getByRole("button", { name: "not spicy", exact: true }).click()));
-    try {
-      await expect.poll(async () => (await storedState(page)).profiles.find((profile) => profile.id === id)!.progress.answered).toBe(answered + 2);
-    } catch (error) {
-      console.log(JSON.stringify(await Promise.all([page, second].map((tab) => tab.evaluate(() => ({ trace: (window as unknown as { saveTrace: unknown[] }).saveTrace, feedback: document.querySelector('[aria-label="Answer feedback"]')?.textContent, page: document.body.innerText }))))));
-      throw error;
-    }
+    await expect.poll(async () => (await storedState(page)).profiles.find((profile) => profile.id === id)!.progress.answered).toBe(answered + 2);
     const dialog = await openSetup(second);
     const otherId = initial.profiles.find((profile) => profile.id !== id)!.id;
     await dialog.getByRole("combobox", { name: "Player", exact: true }).selectOption(otherId);
@@ -334,6 +354,7 @@ test.describe("save resilience", { tag: ["@browser", "@mobile", "@webkit"] }, ()
       localStorage.setItem(`${key}-backup`, JSON.stringify(saved));
       localStorage.setItem(key, '{"profiles": broken');
     }, { key: profilesKey, saved });
+    await useLegacyProfileFixture(page);
     await page.reload();
     await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
     await expect.poll(async () => (await storedState(page)).profiles[0].progress.xp).toBe(360);
