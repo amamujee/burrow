@@ -89,8 +89,7 @@ test.describe("save transfer", { tag: ["@browser", "@mobile", "@webkit"] }, () =
     await openGame(page);
     const existing = await storedState(page);
     const fixture = { ...stateFixture(), knownTopics: existing.knownTopics };
-    await page.evaluate(({ key, state }) => localStorage.setItem(key, JSON.stringify(state)), { key: profilesKey, state: fixture });
-    await useLegacyProfileFixture(page);
+    await useLegacyProfileFixture(page, JSON.stringify(fixture));
     await page.reload();
     await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
     const original = await storedState(page);
@@ -350,11 +349,7 @@ test.describe("save resilience", { tag: ["@browser", "@mobile", "@webkit"] }, ()
     const saved = await storedState(page);
     saved.profiles[0].progress.xp = 360;
     saved.profiles[0].progress.level = 4;
-    await page.evaluate(({ key, saved }) => {
-      localStorage.setItem(`${key}-backup`, JSON.stringify(saved));
-      localStorage.setItem(key, '{"profiles": broken');
-    }, { key: profilesKey, saved });
-    await useLegacyProfileFixture(page);
+    await useLegacyProfileFixture(page, '{"profiles": broken', JSON.stringify(saved));
     await page.reload();
     await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
     await expect.poll(async () => (await storedState(page)).profiles[0].progress.xp).toBe(360);

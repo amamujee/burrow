@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
-import { profilesDatabaseName } from "../../src/lib/profile-persistence";
+import { randomUUID } from "node:crypto";
+import { profilesBackupKey, profilesDatabaseName } from "../../src/lib/profile-persistence";
 import { profilesKey, type ProfilesState } from "../../src/lib/profile-save";
 
 export async function readTransactionalProfileFixture(page: Page): Promise<ProfilesState> {
@@ -16,12 +17,15 @@ export async function readTransactionalProfileFixture(page: Page): Promise<Profi
   }), { name: profilesDatabaseName, key: profilesKey });
 }
 
-// Fixture writes to localStorage represent saves from releases before IndexedDB.
-// Remove the transactional copy so the next load exercises that migration.
-export async function useLegacyProfileFixture(page: Page) {
-  await page.evaluate((name) => new Promise<void>((resolve, reject) => {
-    const request = indexedDB.deleteDatabase(name);
-    request.onsuccess = () => resolve();
-    request.onerror = () => reject(request.error);
-  }), profilesDatabaseName);
+// Seed once in the next document, after the old app has stopped writing. The
+// database deletion is queued before the new app opens it, exercising migration.
+export async function useLegacyProfileFixture(page: Page, contents: string, backup: string | null = null) {
+  await page.addInitScript(({ name, key, backupKey, contents, backup, marker }) => {
+    if (sessionStorage.getItem(marker)) return;
+    sessionStorage.setItem(marker, "true");
+    localStorage.setItem(key, contents);
+    if (backup === null) localStorage.removeItem(backupKey);
+    else localStorage.setItem(backupKey, backup);
+    indexedDB.deleteDatabase(name);
+  }, { name: profilesDatabaseName, key: profilesKey, backupKey: profilesBackupKey, contents, backup, marker: `burrow-fixture-${randomUUID()}` });
 }
