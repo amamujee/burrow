@@ -2017,13 +2017,13 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("manual Hard stays selected after a wrong answer with low lifetime accuracy", { tag: ["@mobile", "@webkit"] }, async ({ page }) => {
-  await page.evaluate(() => {
+  const legacySave = await page.evaluate(() => {
     const state = JSON.parse(localStorage.getItem("burrow-profiles-v1")!);
     const progress = state.profiles[0].progress;
     Object.assign(progress, { difficulty: 3, answered: 20, correct: 2 });
-    localStorage.setItem("burrow-profiles-v1", JSON.stringify(state));
+    return JSON.stringify(state);
   });
-  await useLegacyProfileFixture(page);
+  await useLegacyProfileFixture(page, legacySave);
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await chooseOnlyMode(page, "True/False");
@@ -2727,8 +2727,8 @@ test("fresh and existing profiles automatically select newly added topics", asyn
     await expect(topicsTray(page).getByRole("button", { name: label, exact: true })).toHaveAttribute("aria-pressed", "true");
   }
 
-  await page.evaluate(() => {
-    window.localStorage.setItem("burrow-profiles-v1", JSON.stringify({
+  const legacySave = await page.evaluate(() => {
+    return JSON.stringify({
       activeProfileId: "player-1",
       profiles: [{
         id: "player-1",
@@ -2736,9 +2736,9 @@ test("fresh and existing profiles automatically select newly added topics", asyn
         interests: ["peppers", "buildings", "sharks", "space", "jets", "dinosaurs", "tallest-mountains", "tall-trees", "bridges-and-tunnels"],
         progress: {},
       }],
-    }));
+    });
   });
-  await useLegacyProfileFixture(page);
+  await useLegacyProfileFixture(page, legacySave);
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await expect(topicsControl(page)).toHaveText(/Topics/);
@@ -2831,16 +2831,16 @@ for (const scenario of [
   { mode: "True/False", answered: 119, milestone: 80 },
 ]) {
   test(`${scenario.mode} keeps playing past ${scenario.answered + 1} answers with ${scenario.milestone === undefined ? "current" : "legacy"} progress`, { tag: "@mobile" }, async ({ page }) => {
-    await page.evaluate(({ answered, milestone }) => {
+    const legacySave = await page.evaluate(({ answered, milestone }) => {
       const key = "burrow-profiles-v1";
       const profiles = JSON.parse(window.localStorage.getItem(key)!);
       const active = profiles.profiles.find((profile: { id: string }) => profile.id === profiles.activeProfileId);
       active.progress.answered = answered;
       // Older profiles may still contain the retired Challenge counter.
       if (milestone !== undefined) active.progress.challengeMilestone = milestone;
-      window.localStorage.setItem(key, JSON.stringify(profiles));
+      return JSON.stringify(profiles);
     }, scenario);
-    await useLegacyProfileFixture(page);
+    await useLegacyProfileFixture(page, legacySave);
     await page.reload();
     await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
     await chooseOnlyMode(page, scenario.mode);
@@ -3044,12 +3044,12 @@ test("Quiz automatically uses US and continent maps with reachable pins", { tag:
   await expect(page.getByLabel("Preparing the next round")).toBeHidden();
   // Keep one US subject undiscovered so this tests its real Quiz selection
   // without depending on how often it appears among hundreds of peppers.
-  await page.evaluate((unlockedCards) => {
+  const legacySave = await page.evaluate((unlockedCards) => {
     const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!);
     saved.profiles.find((profile: { id: string }) => profile.id === saved.activeProfileId).progress.unlockedCards = unlockedCards;
-    localStorage.setItem("burrow-profiles-v1", JSON.stringify(saved));
+    return JSON.stringify(saved);
   }, peppers.filter((pepper) => pepper.id !== "carolina-reaper").map((pepper) => cardUnlockKey("peppers", pepper.id)));
-  await useLegacyProfileFixture(page);
+  await useLegacyProfileFixture(page, legacySave);
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await chooseOnlyMode(page, "Quiz Run");
@@ -3193,7 +3193,7 @@ test("geo finder stays inside the selected topic", async ({ page }) => {
 
 test("collection only shows selected topics", async ({ page }) => {
   await chooseOnlyBuiltInTopic(page, "Spicy Peppers");
-  await page.evaluate(() => {
+  const legacySave = await page.evaluate(() => {
     const key = "burrow-profiles-v1";
     const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
       activeProfileId: string;
@@ -3211,9 +3211,9 @@ test("collection only shows selected topics", async ({ page }) => {
       "Ghost Breath",
       "Pepper X",
     ];
-    window.localStorage.setItem(key, JSON.stringify(profiles));
+    return JSON.stringify(profiles);
   });
-  await useLegacyProfileFixture(page);
+  await useLegacyProfileFixture(page, legacySave);
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await page.getByRole("button", { name: /^Collection/ }).click();
@@ -3265,7 +3265,7 @@ test("collection only shows selected topics", async ({ page }) => {
 });
 
 test("collection category picker shows one category album at a time", { tag: "@mobile" }, async ({ page }) => {
-  await page.evaluate(() => {
+  const legacySave = await page.evaluate(() => {
     const key = "burrow-profiles-v1";
     const profiles = JSON.parse(window.localStorage.getItem(key) ?? "{}") as {
       activeProfileId: string;
@@ -3274,9 +3274,9 @@ test("collection category picker shows one category album at a time", { tag: "@m
     const active = profiles.profiles.find((profile) => profile.id === profiles.activeProfileId);
     if (!active) throw new Error("Active profile was not saved");
     active.progress.unlockedCards = ["Bell Pepper", "Great White Shark"];
-    window.localStorage.setItem(key, JSON.stringify(profiles));
+    return JSON.stringify(profiles);
   });
-  await useLegacyProfileFixture(page);
+  await useLegacyProfileFixture(page, legacySave);
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await page.getByRole("button", { name: /^Collection/ }).click();

@@ -225,13 +225,13 @@ test("Fruits opens, plays, and displays sourced profiles on tablet and mobile", 
   await page.getByRole("button", { name: "Skip question", exact: true }).click();
   await expect(page.getByLabel("Preparing the next round")).toBeHidden();
   await expect(page.getByLabel("Round could not load")).toHaveCount(0);
-  await page.evaluate((fruitIds) => {
+  const legacySave = await page.evaluate((fruitIds) => {
     const saved = JSON.parse(localStorage.getItem("burrow-profiles-v1")!);
     const active = saved.profiles.find((profile: { id: string }) => profile.id === saved.activeProfileId);
     active.progress.unlockedCards = fruitIds;
-    localStorage.setItem("burrow-profiles-v1", JSON.stringify(saved));
+    return JSON.stringify(saved);
   }, deck.cards.map((card) => `fruits:${card.id}`));
-  await useLegacyProfileFixture(page);
+  await useLegacyProfileFixture(page, legacySave);
   await page.reload();
   await page.waitForFunction(() => document.documentElement.dataset.burrowProfilesReady === "true");
   await page.getByRole("button", { name: /^Collection/ }).click();
