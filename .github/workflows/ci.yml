@@ -39,7 +39,7 @@ jobs:
       - name: Verify app
         run: |
           npm run build
-          node scripts/run-playwright.mjs --watchdog-idle-ms=60000 --watchdog-max-ms=300000 --project=webkit --workers=1 --repeat-each=6 --trace=retain-on-failure --grep 'saving offline includes maps before'
+          node scripts/run-playwright.mjs --watchdog-idle-ms=60000 --watchdog-max-ms=420000 --project=webkit --workers=1 --repeat-each=6 --trace=retain-on-failure --grep 'saving offline includes maps'
 
       - name: Upload failure traces
         if: failure()
